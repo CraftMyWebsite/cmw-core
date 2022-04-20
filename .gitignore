@@ -1,0 +1,3 @@
+# Exclude environment variables
+.env
+.idea
