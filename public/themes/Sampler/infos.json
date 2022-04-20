@@ -1,0 +1,6 @@
+{
+  "creator": "CraftMyWebsite",
+  "name": "Sampler",
+  "version": "0.0.1",
+  "packages": ["core", "menus", "pages", "users"]
+}
