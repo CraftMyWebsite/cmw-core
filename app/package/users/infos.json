@@ -14,7 +14,14 @@
     "Add":"users/add",
     "Roles":"roles/list"
   },
+  "permissions": {
+    "Afficher la liste des utilisateurs": "users.show",
+    "Ajouts d'un utilisateur": "users.add",
+    "Modification d'un utilisateur": "users.edit",
+    "Suppression d'un utilisateur": "users.delete",
+    "Gestion des rôles": "users.roles"
+  },
   "description": "Gérer et afficher les utilisateurs du site",
   "version": "1.0.0",
-  "author": "LoGuardiaN"
+  "author": "LoGuardiaN & Teyir"
 }

@@ -18,6 +18,8 @@ class pagesController extends coreController
 {
     public function adminPagesList()
     {
+        usersController::isUserHasPermission("pages.show");
+
         $pagesModel = new pagesModel();
         $pagesList = $pagesModel->fetchAll();
 

@@ -12,6 +12,12 @@
     "List":"pages/list",
     "Add":"pages/add"
   },
+  "permissions": {
+    "Afficher la liste des pages": "pages.show",
+    "Ajouts d'une page": "pages.add",
+    "Modification d'une page": "pages.edit",
+    "Suppression d'une page": "pages.delete"
+},
   "description": "Gérer les pages du site",
   "version": "1.0.0",
   "author": "LoGuardiaN"

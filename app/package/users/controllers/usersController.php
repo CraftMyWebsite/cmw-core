@@ -197,4 +197,22 @@ class usersController extends coreController
         header("location: ../users/list");
         die();
     }
+
+    /*
+        Manage user with roles
+    */
+    public static function isUserHasPermission(string $permName): void
+    {
+        if (usersModel::getLoggedUser() !== -1) {
+            $user = new usersModel();
+            $user->fetch($_SESSION['cmwUserId']);
+            if ($user->roleId !== 10) {
+                header('Location: ' . getenv('PATH_SUBFOLDER'));
+                exit();
+            }
+        } else {
+            header('Location: ' . getenv('PATH_SUBFOLDER'));
+            exit();
+        }
+    }
 }
