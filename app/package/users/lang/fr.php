@@ -13,6 +13,8 @@ const USERS_LIST_TITLE = "Utilisateurs | Liste";
 const USERS_LIST_DESC = "Liste des utilisateurs inscrits sur le site";
 const USERS_LIST_CARD_TITLE = "Liste des utilisateurs inscrits";
 
+const USERS_ROLES_LIST_CARD_TITLE = "Liste des rôles";
+
 /* USER EDIT */
 const USERS_EDIT_TITLE = "Utilisateurs | Edition";
 const USERS_EDIT_DESC = "Editez les comptes de vos utilisateurs";
@@ -26,8 +28,17 @@ const USERS_EDIT_TOASTER_PASS_ERROR = "Une erreur est survenue dans la modificat
 
 /* USER ADD */
 const USERS_ADD_TITLE = "Utilisateurs | Ajouter";
-const USERS_ADD_DESC = "Créer un nouveal utilisateur sur le site";
+const USERS_ADD_DESC = "Créer un nouvel utilisateur sur le site";
 const USERS_ADD_CARD_TITLE = "Ajouter un utilisateur";
+
+/* ROLES ADD */
+const USERS_ROLE_ADD = "Ajouter un rôle";
+const USERS_ROLE_ADD_TITLE = "Rôles | Ajouter";
+const USERS_ROLE_ADD_DESC = "Créer un nouveau rôle sur le site";
+const USERS_ROLE_PERMISSIONS_LIST = "Liste des permissions";
+const USERS_ROLE_ADD_TOASTER_SUCCESS = "Rôle créé avec succès !";
+const USERS_ROLE_EDIT_TOASTER_SUCCESS = "Rôle modifié avec succès !";
+const USERS_ROLE_DELETE_TOASTER_SUCCESS = "Rôle supprimé avec succès !";
 
 /* USER DELETE */
 const USERS_DELETE_TOASTER_ERROR = "Vous ne pouvez pas supprimer le compte avec lequel vous êtes connecté.";
@@ -49,6 +60,7 @@ const USERS_ROLE = "Rôle";
 const USERS_CREATION = "Date de création";
 const USERS_LAST_EDIT = "Date de modification";
 const USERS_LAST_CONNECTION = "Dernière connexion au site";
+const USERS_ROLE_DESCRIPTION = "Description";
 
 const USERS_PASS = "Mot de passe";
 const USERS_NEW_PASS = "Modifier le mot de passe";

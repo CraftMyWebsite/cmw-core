@@ -17,7 +17,7 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a
-                                        href="<?= getenv("PATH_SUBFOLDER") ?>cms-admin">CraftMyWebsite</a></li>
+                                        href="<?= getenv("PATH_SUBFOLDER") ?>cmw-admin">CraftMyWebsite</a></li>
                             <li class="breadcrumb-item active"><?= $title ?></li>
                         </ol>
                     </div>

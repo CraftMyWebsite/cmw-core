@@ -1,5 +1,6 @@
 <?php
 
+use CMW\Controller\Roles\rolesController;
 use CMW\Controller\users\usersController;
 use CMW\Router\router;
 
@@ -34,4 +35,18 @@ $router->scope('/cmw-admin/users', function($router) {
 
 $router->scope('/cmw-admin/roles', function($router) {
     $router->get('/list', "roles#adminRolesList");
+
+    $router->get('/add', "roles#adminRolesAdd");
+    $router->post('/add', "roles#adminRolesAddPost");
+
+    $router->get('/edit/:id', function($id) {
+        (new rolesController)->adminRolesEdit($id);
+    })->with('id', '[0-9]+');
+    $router->post('/edit/:id', function($id) {
+        (new rolesController)->adminRolesEditPost($id);
+    })->with('id', '[0-9]+');
+
+    $router->get('/delete/:id', function($id) {
+        (new rolesController())->adminRolesDelete($id);
+    })->with('id', '[0-9]+');
 });

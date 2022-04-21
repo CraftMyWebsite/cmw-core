@@ -3,6 +3,10 @@
   "name_menu": "Dashboard",
   "icon_menu": "fas fa-th",
   "url_menu": "dashboard",
+  "permissions": {
+    "Accès au dashboard admin": "core.dashboard",
+    "Obtiens toutes les permissions": "*"
+  },
   "description": "Gère le coeur du CMS",
   "version": "1.0.0",
   "author": "LoGuardiaN, Teyir, CraftMyWebsite"

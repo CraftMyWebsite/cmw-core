@@ -17,14 +17,14 @@ class usersModel extends manager
     public ?string $userPseudo;
     public ?string $userFirstname;
     public ?string $userLastname;
-    private string $userPassword;
     public int $userState;
     public int $roleId;
     public string $userRoleName;
-    private string $userKey;
     public string $userCreated;
     public string $userUpdated;
     public string $userLogged;
+    private string $userPassword;
+    private string $userKey;
 
     public function __construct($user_id = null)
     {
@@ -34,6 +34,54 @@ class usersModel extends manager
     public static function getLoggedUser(): int
     {
         return $_SESSION['cmwUserId'] ?? -1;
+    }
+
+    public static function logIn($info, $cookie = false)
+    {
+        $password = $info["password"];
+        $var = array(
+            "user_email" => $info["email"]
+        );
+        $sql = "SELECT user_id, role_id, user_password"
+            . " FROM cmw_users"
+            . " WHERE user_state=1"
+            . " AND user_email" . "=:user_email";
+
+        $db = manager::dbConnect();
+        $req = $db->prepare($sql);
+
+        if ($req->execute($var)) {
+            $result = $req->fetch();
+            if ($result) {
+                if (password_verify($password, $result["user_password"])) {
+                    $id = $result["user_id"];
+
+                    $_SESSION['cmwUserId'] = $id;
+                    if ($cookie) {
+                        setcookie('cmw_cookies_user_id', $id, time() + 60 * 60 * 24 * 30, "/");
+                    }
+
+                    return $id;
+                }
+
+                return -1; // Password does not match
+            }
+
+            return -2; // Non-existent user
+        }
+
+        return -3; // SQL error
+    }
+
+    public static function logout(): void
+    {
+        $_SESSION = array();
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000,
+            $params["path"], $params["domain"],
+            $params["secure"], $params["httponly"]
+        );
+        session_destroy();
     }
 
     public function create()
@@ -103,43 +151,6 @@ class usersModel extends manager
         return [];
     }
 
-    public static function logIn($info, $cookie = false)
-    {
-        $password = $info["password"];
-        $var = array(
-            "user_email" => $info["email"]
-        );
-        $sql = "SELECT user_id, role_id, user_password"
-            . " FROM cmw_users"
-            . " WHERE user_state=1"
-            . " AND user_email" . "=:user_email";
-
-        $db = manager::dbConnect();
-        $req = $db->prepare($sql);
-
-        if ($req->execute($var)) {
-            $result = $req->fetch();
-            if ($result) {
-                if (password_verify($password, $result["user_password"])) {
-                    $id = $result["user_id"];
-
-                    $_SESSION['cmwUserId'] = $id;
-                    if ($cookie) {
-                        setcookie('cmw_cookies_user_id', $id, time() + 60 * 60 * 24 * 30, "/");
-                    }
-
-                    return $id;
-                }
-
-                return -1; // Password does not match
-            }
-
-            return -2; // Non-existent user
-        }
-
-        return -3; // SQL error
-    }
-
     public function update(): void
     {
         $var = array(
@@ -164,6 +175,21 @@ class usersModel extends manager
         $req->execute($var);
 
         $this->updateEditTime();
+    }
+
+    public function updateEditTime(): void
+    {
+        $var = array(
+            "user_id" => $this->userId,
+        );
+
+        $sql = "UPDATE cmw_users SET "
+            . "user_updated" . "=CURRENT_TIMESTAMP"
+            . " WHERE " . "user_id" . "=:user_id";
+
+        $db = manager::dbConnect();
+        $req = $db->prepare($sql);
+        $req->execute($var);
     }
 
     public function setPassword($password): void
@@ -221,32 +247,6 @@ class usersModel extends manager
         $req->execute($var);
     }
 
-    public static function logout(): void
-    {
-        $_SESSION = array();
-        $params = session_get_cookie_params();
-        setcookie(session_name(), '', time() - 42000,
-            $params["path"], $params["domain"],
-            $params["secure"], $params["httponly"]
-        );
-        session_destroy();
-    }
-
-    public function updateEditTime(): void
-    {
-        $var = array(
-            "user_id" => $this->userId,
-        );
-
-        $sql = "UPDATE cmww_users SET "
-            . "user_updated" . "=CURRENT_TIMESTAMP"
-            . " WHERE " . "user_id" . "=:user_id";
-
-        $db = manager::dbConnect();
-        $req = $db->prepare($sql);
-        $req->execute($var);
-    }
-
     public function updateLoggedTime(): void
     {
         $var = array(
@@ -260,5 +260,30 @@ class usersModel extends manager
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
+    }
+
+    public function hasPermission(int $userId, string $permCode): int
+    {
+        $var = array(
+            "user_id" => $userId,
+            "perm_code" => $permCode
+        );
+
+        $sql = "SELECT cmw_permissions.permission_code FROM cmw_permissions 
+                    JOIN cmw_roles ON cmw_permissions.role_id = cmw_roles.role_id
+                    JOIN cmw_users ON cmw_roles.role_id = cmw_users.role_id
+                    WHERE cmw_users.user_id = :user_id AND cmw_permissions.permission_code = :perm_code";
+
+        $db = manager::dbConnect();
+        $req = $db->prepare($sql);
+
+        if($req->execute($var))
+        {
+            $lines = $req->fetchAll();
+
+            return count($lines);
+        }
+
+        return -1;
     }
 }

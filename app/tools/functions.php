@@ -50,3 +50,22 @@ function bigToaster(): string
     }
     return $toasters;
 }
+
+/**
+ * @throws JsonException
+ * @desc Get all packages installed
+ */
+function getAllPackagesInstalled(): array
+{
+    $dir = "app/package";
+    $dirFoldersNames = array_slice(scandir($dir), 2); //For remove '.' '..'
+    $res = [];
+
+    foreach ($dirFoldersNames as $folder):
+        $jsonFile = file_get_contents("app/package/$folder/infos.json");
+        $obj = json_decode($jsonFile,true, 512, JSON_THROW_ON_ERROR);
+        $res[] = $obj['name'];
+    endforeach;
+
+    return $res;
+}
