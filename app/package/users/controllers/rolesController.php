@@ -18,6 +18,8 @@ class rolesController extends coreController
 {
     public function adminRolesList(): void
     {
+        usersController::isUserHasPermission("users.roles");
+
         $rolesModel = new rolesModel();
         $rolesList = $rolesModel->fetchAll();
 
@@ -26,6 +28,8 @@ class rolesController extends coreController
 
     public function adminRolesAdd(): void
     {
+        usersController::isUserHasPermission("users.roles");
+
         $rolesModel = new rolesModel();
         $permissionsList = $rolesModel->fetchAllPermissions();
 
@@ -34,7 +38,7 @@ class rolesController extends coreController
 
     public function adminRolesAddPost(): void
     {
-        usersController::isAdminLogged();
+        usersController::isUserHasPermission("users.roles");
 
         $role = new rolesModel();
         $role->roleName = filter_input(INPUT_POST, "name");
@@ -67,7 +71,7 @@ class rolesController extends coreController
 
     public function adminRolesEditPost($id): void
     {
-        usersController::isAdminLogged();
+        usersController::isUserHasPermission("users.roles");
 
         $role = new rolesModel();
         $role->roleName = filter_input(INPUT_POST, "name");
@@ -87,7 +91,7 @@ class rolesController extends coreController
 
     public function adminRolesDelete($id): void
     {
-        usersController::isAdminLogged();
+        usersController::isUserHasPermission("users.roles");
 
         $role = new rolesModel();
         $role->roleId = $id;

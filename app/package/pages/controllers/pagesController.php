@@ -18,7 +18,7 @@ class pagesController extends coreController
 {
     public function adminPagesList()
     {
-        usersController::isUserHasPermission("test.add");
+        usersController::isUserHasPermission("pages.show");
 
         $pagesModel = new pagesModel();
         $pagesList = $pagesModel->fetchAll();
@@ -28,12 +28,14 @@ class pagesController extends coreController
 
     public function adminPagesAdd(): void
     {
+        usersController::isUserHasPermission("pages.add");
+
         view('pages', 'add.admin', [], 'admin');
     }
 
     public function adminPagesAddPost(): void
     {
-        usersController::isAdminLogged();
+        usersController::isUserHasPermission("pages.add");
 
         $user = new usersModel();
 
@@ -51,6 +53,8 @@ class pagesController extends coreController
 
     public function adminPagesEdit($id): void
     {
+        usersController::isUserHasPermission("pages.edit");
+
         $page = new pagesModel();
         $page->pageId = $id;
         $page->fetch();
@@ -62,7 +66,7 @@ class pagesController extends coreController
 
     public function adminPagesEditPost(): void
     {
-        usersController::isAdminLogged();
+        usersController::isUserHasPermission("pages.edit");
 
         $page = new pagesModel();
         $page->pageId = filter_input(INPUT_POST, "news_id");
@@ -78,6 +82,8 @@ class pagesController extends coreController
 
     public function adminPagesDelete(): void
     {
+        usersController::isUserHasPermission("pages.delete");
+
         $page = new pagesModel();
         $page->pageId = filter_input(INPUT_POST, "id");
         $page->delete();
