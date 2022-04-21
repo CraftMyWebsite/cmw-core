@@ -20,7 +20,8 @@ class usersController extends coreController
         if (usersModel::getLoggedUser() !== -1) {
             $user = new usersModel();
             $user->fetch($_SESSION['cmwUserId']);
-            if ($user->roleId !== 10) {
+
+            if (!$user->hasPermission($_SESSION['cmwUserId'], "*") && !$user->hasPermission($_SESSION['cmwUserId'], "core.dashboard")) {
                 header('Location: ' . getenv('PATH_SUBFOLDER'));
                 exit();
             }
@@ -199,14 +200,14 @@ class usersController extends coreController
     }
 
     /*
-        Manage user with roles
+        Manage user with permissions (role permissions)
     */
-    public static function isUserHasPermission(string $permName): void
+    public static function isUserHasPermission(string $permCode): void
     {
         if (usersModel::getLoggedUser() !== -1) {
             $user = new usersModel();
-            $user->fetch($_SESSION['cmwUserId']);
-            if ($user->roleId !== 10) {
+
+            if ($user->hasPermission($_SESSION['cmwUserId'], $permCode) <= 0 || !$user->hasPermission($_SESSION['cmwUserId'], "*")) {
                 header('Location: ' . getenv('PATH_SUBFOLDER'));
                 exit();
             }

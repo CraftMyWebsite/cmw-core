@@ -42,13 +42,6 @@ CREATE TABLE `cmw_roles`
     `role_description` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `cmw_roles` (`role_id`, `role_name`, `role_description`)
-VALUES (0, 'Visiteur', NULL),
-       (1, 'Utilisateur', NULL),
-       (2, 'Editeur', NULL),
-       (3, 'Modérateur', NULL),
-       (10, 'Administrateur', NULL);
-
 
 CREATE TABLE `cmw_users`
 (
@@ -84,13 +77,22 @@ ALTER TABLE `cmw_permissions`
   ADD KEY `permission_role_id` (`role_id`);
 
 ALTER TABLE `cmw_roles`
-    ADD UNIQUE KEY `role_id` (`role_id`);
+    ADD PRIMARY KEY (`role_id`);
+
+ALTER TABLE `cmw_roles`
+    MODIFY `role_id` INT (11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `cmw_permissions`
+    MODIFY `permission_id` INT (11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `cmw_users`
     ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `user_email` (`user_email`),
-  ADD UNIQUE KEY `user_pseudo` (`user_pseudo`),
-  ADD KEY `role_id` (`role_id`);
+    ADD UNIQUE KEY `user_email` (`user_email`),
+    ADD UNIQUE KEY `user_pseudo` (`user_pseudo`),
+    ADD KEY `role_id` (`role_id`);
+
+ALTER TABLE `cmw_users`
+    MODIFY `user_id` INT (11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `cmw_menus`
     MODIFY `menu_id` int (11) NOT NULL AUTO_INCREMENT;
@@ -107,3 +109,26 @@ ALTER TABLE `cmw_permissions`
 ALTER TABLE `cmw_users`
     ADD CONSTRAINT `fk_users_roles` FOREIGN KEY (`role_id`) REFERENCES `cmw_roles` (`role_id`);
 COMMIT;
+
+
+INSERT INTO `cmw_roles` (`role_name`, `role_description`)
+VALUES  ('Visiteur', 'Rôle pour les visiteurs'),
+        ('Utilisateur', 'Rôle pour les utilisateurs'),
+        ('Editeur', 'Rôle pour les éditeurs'),
+        ('Modérateur', 'Rôle pour les modérateurs'),
+        ('Administrateur', 'Rôle pour les administrateurs');
+
+INSERT INTO `cmw_permissions` (`permission_code`, `permission_description`, `role_id`)
+VALUES  ('*', 'Obtiens toutes les permissions', 5),
+        ('pages.show', 'Afficher la liste des pages', 3),
+        ('pages.add', 'Ajouts d''une page', 3),
+        ('pages.edit', 'Modification d''une page', 3),
+        ('pages.delete', 'Suppression d''une page', 3),
+        ('core.dashboard', 'Accès au dashboard admin', 3),
+        ('core.dashboard', 'Accès au dashboard admin', 4),
+        ('users.show', 'Afficher la liste des utilisateurs', 4),
+        ('users.add', 'Ajouts d''un utilisateur', 4),
+        ('users.edit', 'Modification d''un utilisateur', 4),
+        ('users.delete', 'Suppression d''un utilisateur', 4),
+        ('users.roles', 'Gestion des rôles', 4);
+

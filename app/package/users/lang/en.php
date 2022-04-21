@@ -14,6 +14,8 @@ const USERS_LIST_TITLE = "Users | List";
 const USERS_LIST_DESC = "List of users registered on the site";
 const USERS_LIST_CARD_TITLE = "List of registered users";
 
+const USERS_ROLES_LIST_CARD_TITLE = "List of roles";
+
 /* USER EDIT */
 const USERS_EDIT_TITLE = "Users | Edition";
 const USERS_EDIT_DESC = "Edit the accounts of your users";
@@ -29,6 +31,15 @@ const USERS_EDIT_TOASTER_PASS_ERROR = "An error occurred in changing the passwor
 const USERS_ADD_TITLE = "Users | Add";
 const USERS_ADD_DESC = "Create a new user on the site";
 const USERS_ADD_CARD_TITLE = "Add a user";
+
+/* ROLES ADD */
+const USERS_ROLE_ADD = "Add a role";
+const USERS_ROLE_ADD_TITLE = "Roles | Add";
+const USERS_ROLE_ADD_DESC = "Create a new role on the site";
+const USERS_ROLE_PERMISSIONS_LIST = "List of all permissions";
+const USERS_ROLE_ADD_TOASTER_SUCCESS = "The role has been created !";
+const USERS_ROLE_EDIT_TOASTER_SUCCESS = "The role has been edited !";
+const USERS_ROLE_DELETE_TOASTER_SUCCESS = "The role has been deleted !";
 
 /* USER DELETE */
 const USERS_DELETE_TOASTER_ERROR = "You cannot delete the account you are logged in with.";
