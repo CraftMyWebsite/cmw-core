@@ -31,6 +31,21 @@ class usersController extends coreController
         }
     }
 
+    public static function isAdminLoggedBool(): bool
+    {
+        if (usersModel::getLoggedUser() !== -1) {
+            $user = new usersModel();
+            $user->fetch($_SESSION['cmwUserId']);
+
+            if (!$user->hasPermission($_SESSION['cmwUserId'], "*") && !$user->hasPermission($_SESSION['cmwUserId'], "core.dashboard")) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        return true;
+    }
     public function adminLogin(): void
     {
         if (usersModel::getLoggedUser() !== -1) {
@@ -72,7 +87,7 @@ class usersController extends coreController
 
     public function adminUsersList(): void
     {
-        usersController::isUserHasPermission("users.show");
+        self::isUserHasPermission("users.show");
 
         $usersModel = new usersModel();
         $userList = $usersModel->fetchAll();
@@ -82,7 +97,7 @@ class usersController extends coreController
 
     public function adminUsersEdit($id): void
     {
-        usersController::isUserHasPermission("users.edit");
+        self::isUserHasPermission("users.edit");
 
         $user = new usersModel();
         $user->fetch($id);
@@ -95,7 +110,7 @@ class usersController extends coreController
 
     public function adminUsersEditPost($id): void
     {
-        usersController::isUserHasPermission("users.edit");
+        self::isUserHasPermission("users.edit");
 
         $user = new usersModel();
         $user->userId = $id;
@@ -128,7 +143,7 @@ class usersController extends coreController
 
     public function adminUsersAdd(): void
     {
-        usersController::isUserHasPermission("users.add");
+        self::isUserHasPermission("users.add");
 
         $roles = new rolesModel();
         $roles = $roles->fetchAll();
@@ -138,7 +153,7 @@ class usersController extends coreController
 
     public function adminUsersAddPost(): void
     {
-        usersController::isUserHasPermission("users.add");
+        self::isUserHasPermission("users.add");
 
         $user = new usersModel();
         $user->userEmail = filter_input(INPUT_POST, "email");
@@ -156,7 +171,7 @@ class usersController extends coreController
 
     public function adminUserState(): void
     {
-        usersController::isUserHasPermission("users.edit");
+        self::isUserHasPermission("users.edit");
 
         if (usersModel::getLoggedUser() == filter_input(INPUT_POST, "id")) {
             $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE_ERROR;
@@ -183,7 +198,7 @@ class usersController extends coreController
 
     public function adminUsersDelete(): void
     {
-        usersController::isUserHasPermission("users.delete");
+        self::isUserHasPermission("users.delete");
 
         if (usersModel::getLoggedUser() == filter_input(INPUT_POST, "id")) {
             $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE_ERROR;
@@ -213,7 +228,7 @@ class usersController extends coreController
         if (usersModel::getLoggedUser() !== -1) {
             $user = new usersModel();
 
-            if ($user->hasPermission($_SESSION['cmwUserId'], $permCode) <= 0 || !$user->hasPermission($_SESSION['cmwUserId'], "*")) {
+            if (self::isAdminLoggedBool() == 0 || $user->hasPermission($_SESSION['cmwUserId'], $permCode) > 0) {
                 header('Location: ' . getenv('PATH_SUBFOLDER'));
                 exit();
             }
