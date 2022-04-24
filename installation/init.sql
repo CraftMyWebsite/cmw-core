@@ -1,21 +1,21 @@
-CREATE TABLE `cmw_core_options`
+CREATE TABLE IF NOT EXISTS `cmw_core_options`
 (
     `option_id`      int(11) NOT NULL,
     `option_value`   varchar(255) NOT NULL,
     `option_name`    varchar(255) NOT NULL,
     `option_updated` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `cmw_menus`
+CREATE TABLE IF NOT EXISTS `cmw_menus`
 (
     `menu_id`        int(11) NOT NULL,
     `menu_name`      varchar(255) NOT NULL,
     `menu_url`       varchar(255) NOT NULL,
     `menu_level`     int(1) NOT NULL,
     `menu_parent_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `cmw_pages`
+CREATE TABLE IF NOT EXISTS `cmw_pages`
 (
     `page_id`      int(11) NOT NULL,
     `user_id`      int(11) NOT NULL,
@@ -25,25 +25,25 @@ CREATE TABLE `cmw_pages`
     `page_created` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `page_updated` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `page_slug`    varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `cmw_permissions`
+CREATE TABLE IF NOT EXISTS `cmw_permissions`
 (
     `permission_id`          int(11) NOT NULL,
     `permission_code`        varchar(255) NOT NULL,
     `permission_description` varchar(255) NOT NULL,
     `role_id`                int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `cmw_roles`
+CREATE TABLE IF NOT EXISTS `cmw_roles`
 (
     `role_id`          int(11) DEFAULT NULL,
     `role_name`        tinytext NOT NULL,
     `role_description` text
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-CREATE TABLE `cmw_users`
+CREATE TABLE IF NOT EXISTS `cmw_users`
 (
     `user_id`        int(11) NOT NULL,
     `user_email`     varchar(255) NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE `cmw_users`
     `user_created`   timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `user_updated`   timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `user_logged`    timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 ALTER TABLE `cmw_core_options`
