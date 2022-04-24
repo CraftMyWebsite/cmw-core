@@ -65,6 +65,7 @@ if (isset($_POST['update_env'])):
     $dbName = filter_input(INPUT_POST, "bdd_name");
 
     $db = new PDO("mysql:host=".$dbAdress,$dbLogin,$dbPassword);
+    $db->exec("SET CHARACTER SET utf8");
     $db->exec("CREATE DATABASE IF NOT EXISTS ".$dbName.";");
     $db->exec("USE ".$dbName.";");
 
