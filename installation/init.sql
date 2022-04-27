@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `cmw_users`
 
 ALTER TABLE `cmw_core_options`
     ADD PRIMARY KEY (`option_id`),
-  ADD UNIQUE KEY `option_name` (`option_name`);
+    ADD UNIQUE KEY `option_name` (`option_name`);
 
 ALTER TABLE `cmw_menus`
     ADD PRIMARY KEY (`menu_id`);
@@ -109,6 +109,13 @@ ALTER TABLE `cmw_permissions`
 ALTER TABLE `cmw_users`
     ADD CONSTRAINT `fk_users_roles` FOREIGN KEY (`role_id`) REFERENCES `cmw_roles` (`role_id`);
 COMMIT;
+
+ALTER TABLE `cmw_core_options`
+    MODIFY `option_id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+INSERT INTO `cmw_core_options` (`option_id`, `option_value`, `option_name`, `option_updated`)
+VALUES (1, 'Sampler', 'theme', NOW());
 
 
 INSERT INTO `cmw_roles` (`role_name`, `role_description`)
