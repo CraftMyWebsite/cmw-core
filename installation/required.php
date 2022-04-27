@@ -5,9 +5,8 @@
 /// / ! \ CMW Require php 7.4 or higher / ! \
 ///
 
-$currentPHPVersion = phpversion();
 
-if ($currentPHPVersion <= 7.4){
+if (phpversion() <= "7.4"){
 
     include "required.view.php";
 
