@@ -1,4 +1,4 @@
-CREATE TABLE `cmw_pages` (
+CREATE TABLE IF NOT EXISTS `cmw_pages` (
     `page_id` int(11) NOT NULL,
     `user_id` int(11) NOT NULL,
     `page_title` varchar(255) NOT NULL,

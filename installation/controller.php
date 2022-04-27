@@ -112,7 +112,7 @@ if (isset($_POST['create_admin'])):
         'user_pseudo' => filter_input(INPUT_POST, "pseudo"),
         'user_password' => $userPassword,
         'user_state' => 1,
-        'role_id' => 10,
+        'role_id' => 5, //Default administrator role id
         'user_key' => uniqid('', true)
     ));
 
