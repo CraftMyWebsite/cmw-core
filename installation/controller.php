@@ -98,6 +98,24 @@ if (isset($_POST['update_env'])):
     die();
 endif;
 
+/* CHOOSE GAME */
+if (isset($_POST['game'])):
+
+    $selGame = filter_input(INPUT_POST, "game");
+    $game = new games();
+
+    //If the current 'game' choose is personal we don't make any change.
+    if($selGame === "Personal"):
+        header('Location: index.php?step=3');
+        die();
+    else:
+        $game->installGame($selGame);
+        header('Location: index.php?step=3');
+        die();
+    endif;
+
+endif;
+
 /* ADMIN CREATION */
 if (isset($_POST['create_admin'])):
     $db = new PDO("mysql:host=".getenv('DB_HOST').";dbname=".getenv('DB_NAME')."", getenv('DB_USERNAME'), getenv('DB_PASSWORD'));
@@ -122,6 +140,6 @@ if (isset($_POST['create_admin'])):
         'STATUS=0', 'STATUS=1', file_get_contents($path)
     ));
 
-    header('Location: index.php?step=3&finish_step');
+    header('Location: index.php?step=4&finish_step');
     die();
 endif;
