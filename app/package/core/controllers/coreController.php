@@ -115,7 +115,7 @@ class coreController
      */
     public function cmwFooter(): string
     {
-        return "<p>Un site fierement propuslé par <a href='https://craftmewebsite.com/'>CrafyMyWebsite</a></p>";
+        return "<p>Un site fierement propuslé par <a href='https://craftmywebsite.com/'>CrafyMyWebsite</a></p>";
     }
 }
 

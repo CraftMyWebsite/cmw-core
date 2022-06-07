@@ -18,4 +18,6 @@ const DATABASE_ERROR_MSG = "Database error: ";
 const CORE_TOASTER_TITLE = "Information";
 const CORE_TOASTER_CONFIG_EDIT_SUCCESS = "Configuration edit with success !";
 
+const CORE_DASHBOARD = "Dashboard";
+
 const BTN_SAVE = "Save";

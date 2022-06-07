@@ -1,6 +1,6 @@
 {
   "name": "core",
-  "name_menu": "Dashboard",
+  "name_menu": "Général",
   "icon_menu": "fas fa-th",
   "url_menu": "",
   "urls_submenu": {
