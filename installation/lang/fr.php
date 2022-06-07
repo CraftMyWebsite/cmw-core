@@ -53,3 +53,5 @@ const INSTALL_INFOS_SUCESS = "Félicitation";
 const INSTALL_INFOS_TEXT = "Votre fichier de configuration a été créé";
 const INSTALL_INFOS_ERROR = "erreur";
 const INSTALL_INFOS_EMPTY = "vide";
+
+const INSTALL_GAME = "Jeux";

@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<?php session_start();
+<?php
+
+use INSTALLTION\GamesController\games;
+
+session_start();
 require_once("required.php");
 require_once("../app/envBuilder.php");
 if (file_exists("../.env")) {
@@ -236,8 +240,7 @@ require_once("resources/functions/games.php")
 
                                         <div class="row">
 
-                                            <?php $games = new games();
-                                            foreach ($games->availableGames as $game):?>
+                                            <?php foreach (games::$availableGames as $game):?>
                                             <div class="game-container">
 
                                                 <label class="game-label">
@@ -376,6 +379,11 @@ require_once("resources/functions/games.php")
                                     <b><?= INSTALL_INFO_HOST ?></b><?= php_uname('n'); ?><br>
                                     <b><?= INSTALL_INFO_IP ?></b><?= $_SERVER['SERVER_ADDR']; ?>:<?= $_SERVER['SERVER_PORT']; ?>
                                 </p>
+                                <?php if($_GET['step'] > 2):?>
+                                    <p>
+                                        <b><?= INSTALL_GAME ?>:</b> <?= getenv("GAME") ?>
+                                    </p>
+                                <?php endif;?>
                             <?php endif ?>
 
                         </div>

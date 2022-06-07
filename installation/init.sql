@@ -1,8 +1,8 @@
 CREATE TABLE IF NOT EXISTS `cmw_core_options`
 (
     `option_id`      int(11) NOT NULL,
-    `option_value`   varchar(255) NOT NULL,
     `option_name`    varchar(255) NOT NULL,
+    `option_value`   varchar(255) NOT NULL,
     `option_updated` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -77,8 +77,8 @@ ALTER TABLE `cmw_core_options`
     MODIFY `option_id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
-INSERT INTO `cmw_core_options` (`option_id`, `option_value`, `option_name`, `option_updated`)
-VALUES (1, 'Sampler', 'theme', NOW());
+INSERT INTO `cmw_core_options` (`option_id`, `option_name`, `option_value`, `option_updated`)
+VALUES (1, 'theme', 'Sampler', NOW());
 
 
 INSERT INTO `cmw_roles` (`role_name`, `role_description`)
