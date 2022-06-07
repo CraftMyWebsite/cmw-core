@@ -61,7 +61,6 @@ if (isset($_POST['update_env'])):
         $txt = "DEV_MODE=$devMode\n";fwrite($envFile, $txt);
         $txt = "LOCALE=$locale\n";fwrite($envFile, $txt);
         $txt = "TIMEZONE=$timezone\n";fwrite($envFile, $txt);
-        $txt = "STATUS=0\n";fwrite($envFile, $txt);
         fclose($envFile);
     }
 
@@ -152,10 +151,36 @@ if (isset($_POST['create_admin'])):
 
     $db = null;
 
-    file_put_contents($path, str_replace(
-        'STATUS=0', 'STATUS=1', file_get_contents($path)
+    header('Location: index.php?step=4');
+    die();
+endif;
+
+/* WEBSITE CONFIGURATION */
+if (isset($_POST['website_config'])):
+
+    $db = new PDO("mysql:host=".getenv('DB_HOST').";dbname=".getenv('DB_NAME')."", getenv('DB_USERNAME'), getenv('DB_PASSWORD'));
+    $query = $db->prepare("INSERT INTO cmw_core_options (option_name, option_value, option_updated) VALUES (:option_name, :option_value, NOW())");
+
+    $query->execute(array(
+        "option_name" => "name",
+        "option_value" => filter_input(INPUT_POST, "config_name")
     ));
 
-    header('Location: index.php?step=4&finish_step');
+    $query->execute(array(
+        "option_name" => "description",
+        "option_value" => filter_input(INPUT_POST, "config_description")
+    ));
+
+
+    //Game Minecraft
+    if(getenv("GAME") === "Minecraft") {
+        $query->execute(array(
+            "option_name" => "ip",
+            "option_value" => filter_input(INPUT_POST, "config_minecraft_ip")
+        ));
+    }
+
+
+    header('Location: index.php?step=5&finish_step');
     die();
 endif;

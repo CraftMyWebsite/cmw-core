@@ -40,9 +40,14 @@ const INSTALL_ADMIN_EMAIL = "Adresse email";
 const INSTALL_ADMIN_USERNAME = "Identifiant";
 const INSTALL_ADMIN_PASS = "Mot de passe";
 
+const INSTALL_CONFIG_TITLE = "Configuration de votre site";
+const INSTALL_CONFIG_NAME = "Nom de votre site";
+const INSTALL_CONFIG_DESCRIPTION = "Description de votre site";
+const INSTALL_CONFIG_IP = "Addresse IP de votre serveur";
+
 const INSTALL_SAVE = "Enregistrer";
 
-const INSTALL_THANKS = "CraftMyWebsite est installé. Merci de l'utiliser et profitez bien de votre site !";
+const INSTALL_THANKS = "CraftMyWebsite est bien installé. Merci de l'utiliser et profitez bien de votre tout nouveau site !";
 const INSTALL_WARNING_TITLE = "Attention";
 const INSTALL_WARNING_FOLDER = "Supprimez le dossier installation !";
 const INSTALL_WARNING_ENV = "Un fichier de configuration est déjà présent.<br>Veuillez supprimer le fichier <code class='dark'>.env</code> et vider votre base de données si nécéssaire avant d'effectuer une nouvelle installation.";
