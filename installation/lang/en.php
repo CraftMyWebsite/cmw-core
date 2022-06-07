@@ -40,6 +40,11 @@ const INSTALL_ADMIN_EMAIL = "Email";
 const INSTALL_ADMIN_USERNAME = "Login";
 const INSTALL_ADMIN_PASS = "Password";
 
+const INSTALL_CONFIG_TITLE = "Configure your website";
+const INSTALL_CONFIG_NAME = "Website name";
+const INSTALL_CONFIG_DESCRIPTION = "Website description";
+const INSTALL_CONFIG_IP = "IP address of your server";
+
 const INSTALL_SAVE = "Save";
 
 const INSTALL_THANKS = "CraftMyWebsite is installed. Thanks for using it and enjoy your site!";

@@ -27,7 +27,7 @@ if(getenv("DEV_MODE")) {
 date_default_timezone_set(getenv("TIMEZONE"));
 
 /* Loading global lang file */
-require_once("admin/resources/lang/" . getenv("LOCALE") . ".php");
+require_once ("admin/resources/lang/" . getenv("LOCALE") . ".php");
 
 /* Insert Global functions */
 require_once ("app/tools/builder.php");
@@ -59,6 +59,9 @@ require_once("app/manager.php");
 require_once("app/__model.php");
 require_once("app/__controller.php");
 require_once("app/__routes.php");
+
+/* Loading global const file */
+require_once ("app/globalConst.php");
 
 /* router Display route */
 try {

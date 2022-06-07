@@ -7,6 +7,11 @@ $description = "page d'accueil de CraftMyWebsite"; ?>
 
 <main>
     <a href="./cmw-admin/">Accès rapide à l'administration</a>
+
+    <p>
+        Bienvenue sur le site de <b><?= GET_NAME ?></b>
+    </p>
+
 </main>
 
 <?php $content = ob_get_clean(); ?>

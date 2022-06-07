@@ -106,31 +106,38 @@ require_once("resources/functions/games.php")
                     </div>
                 </div>
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                    <?php if (!file_exists("../.env") || getenv("STATUS") == 0 || (isset($_GET['finish_step']) && $_GET['step'] == 4)) : ?>
-                    <li class="nav-item">
-                        <a class="nav-link <?= (!isset($_GET['step']) || $_GET['step'] == 1) ? "active" : ""; ?>">
-                            <i class="nav-icon fas fa-hourglass-start"></i>
-                            <p><?=INSTALL_STEP?> 1</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= (isset($_GET['step']) && $_GET['step'] == 2) ? "active" : ""; ?>">
-                            <i class="nav-icon fas fa-hourglass-half"></i>
-                            <p><?=INSTALL_STEP?> 2</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?= (isset($_GET['step']) && $_GET['step'] == 3) ? "active" : ""; ?>">
-                            <i class="nav-icon fas fa-hourglass-end"></i>
-                            <p><?=INSTALL_STEP?> 3</p>
-                        </a>
-                    </li>
+                    <?php if (!file_exists("../.env") || (isset($_GET['finish_step']) && $_GET['step'] == 5)) : ?>
+                        <li class="nav-item">
+                            <a class="nav-link <?= (!isset($_GET['step']) || $_GET['step'] == 1) ? "active" : ""; ?>">
+                                <i class="nav-icon fas fa-hourglass-start"></i>
+                                <p><?=INSTALL_STEP?> 1</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <?= (isset($_GET['step']) && $_GET['step'] == 2) ? "active" : ""; ?>">
+                                <i class="nav-icon fas fa-hourglass-half"></i>
+                                <p><?=INSTALL_STEP?> 2</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link <?= (isset($_GET['step']) && $_GET['step'] == 3) ? "active" : ""; ?>">
+                                <i class="nav-icon fas fa-hourglass-end"></i>
+                                <p><?=INSTALL_STEP?> 3</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link <?= (isset($_GET['step']) && $_GET['step'] == 4) ? "active" : ""; ?>">
                                 <i class="nav-icon fas fa-hourglass-end"></i>
                                 <p><?=INSTALL_STEP?> 4</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link <?= (isset($_GET['step']) && $_GET['step'] == 5) ? "active" : ""; ?>">
+                                <i class="nav-icon fas fa-hourglass-end"></i>
+                                <p><?=INSTALL_STEP?> 5</p>
+                            </a>
+                        </li>
+
                     <?php else : ?>
                         <li class="nav-item">
                             <a class="nav-link active">
@@ -280,7 +287,7 @@ require_once("resources/functions/games.php")
                                     <div class="card-body">
                                         <div class="form-group">
                                             <label for="email"><?=INSTALL_ADMIN_EMAIL?></label>
-                                            <input type="text" name="email" class="form-control" id="email" required>
+                                            <input type="email" name="email" class="form-control" id="email" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="pseudo"><?=INSTALL_ADMIN_USERNAME?></label>
@@ -307,9 +314,47 @@ require_once("resources/functions/games.php")
                             </div>
                         <?php endif; ?>
 
+                        <!-- WEBSITE CONFIGURATION -->
+
+                        <?php if (isset($_GET['step']) && $_GET['step'] == 4) : ?>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title"><?=INSTALL_CONFIG_TITLE?></h3>
+                                </div>
+                                <!-- form start -->
+                                <form action="controller.php" role="form" method="post">
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="config_name"><?=INSTALL_CONFIG_NAME?></label>
+                                            <input type="text" name="config_name" class="form-control" id="config_name" maxlength="255" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="config_description"><?=INSTALL_CONFIG_DESCRIPTION?></label>
+                                            <input type="text" name="config_description" class="form-control" id="config_description" maxlength="255" required>
+                                        </div>
+
+                                        <?php //Minecraft config section
+                                            if(getenv("GAME") === "Minecraft"):?>
+
+                                                <div class="form-group">
+                                                    <label for="config_minecraft_ip"><?=INSTALL_CONFIG_IP?></label>
+                                                    <input type="text" name="config_minecraft_ip" class="form-control" id="config_minecraft_ip" maxlength="255" required>
+                                                </div>
+
+                                            <?php endif; ?>
+                                    </div>
+                                    <!-- /.card-body -->
+                                    <div class="card-footer">
+                                        <button type="submit" name="website_config" class="btn btn-primary"><?=INSTALL_SAVE?>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        <?php endif; ?>
+
                     <!-- FINAL SCREEN INSTALLATION COMPLETE -->
 
-                        <?php if (isset($_GET['step']) && $_GET['step'] == 4 && isset($_GET['finish_step'])) : ?>
+                        <?php if (isset($_GET['step']) && $_GET['step'] == 5 && isset($_GET['finish_step'])) : ?>
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title"><?=INSTALL_SUCCESS?> !</h3>

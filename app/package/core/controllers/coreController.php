@@ -29,7 +29,27 @@ class coreController
         view('core', 'dashboard.admin', [], 'admin');
     }
 
-    /* FRONT */
+    public function adminConfiguration()
+    {
+        view('core', 'configuration.admin', [], 'admin');
+    }
+
+    public function adminConfigurationPost()
+    {
+        usersController::isUserHasPermission("core.configuration");
+
+        foreach ($_POST as $option_name => $option_value):
+            coreModel::updateOption($option_name, $option_value);
+        endforeach;
+
+        $_SESSION['toaster'][0]['title'] = CORE_TOASTER_TITLE;
+        $_SESSION['toaster'][0]['type'] = "bg-success";
+        $_SESSION['toaster'][0]['body'] = CORE_TOASTER_CONFIG_EDIT_SUCCESS;
+
+        header("location: configuration");
+    }
+
+    /* PUBLIC FRONT */
     public function frontHome()
     {
         $core = new coreController();
