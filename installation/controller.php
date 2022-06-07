@@ -1,4 +1,7 @@
 <?php
+
+use INSTALLTION\GamesController\games;
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -10,16 +13,19 @@ if(file_exists($path)) {
     (new Env($path))->load();
 }
 
+function changeEnvironmentVariable($key,$value,$path) {
+    $old = getenv($key);
+    file_put_contents($path, str_replace(
+        "$key=".$old,
+        "$key=".$value,
+        file_get_contents($path)
+    ));
+}
+
+
 /* UPDATE DATABASE */
 if (isset($_POST['update_env'])):
-    function changeEnvironmentVariable($key,$value,$path) {
-        $old = getenv($key);
-        file_put_contents($path, str_replace(
-            "$key=".$old,
-            "$key=".$value,
-            file_get_contents($path)
-        ));
-    }
+
 
     $dev = isset($_POST['dev_mode']) ? 1 : 0;
 
@@ -98,6 +104,34 @@ if (isset($_POST['update_env'])):
     die();
 endif;
 
+
+/* CHOOSE GAME */
+require_once ("resources/functions/games.php");
+
+if (isset($_POST['game'])):
+
+    $selGame = filter_input(INPUT_POST, "game");
+
+    //Set env var for the game
+    $currentEnv = file_get_contents($path);
+
+    $envFile = fopen($path, 'wb') or die("Unable to open file!");
+
+    $txt = $currentEnv;fwrite($envFile, $txt);
+    $txt = "GAME=$selGame\n";fwrite($envFile, $txt);
+
+    //If the current 'game' choose is personal we don't make any change.
+    if($selGame === "Personal"):
+        header('Location: index.php?step=3');
+        die();
+    else:
+        games::installGame($selGame);
+        header('Location: index.php?step=3');
+        die();
+    endif;
+
+endif;
+
 /* ADMIN CREATION */
 if (isset($_POST['create_admin'])):
     $db = new PDO("mysql:host=".getenv('DB_HOST').";dbname=".getenv('DB_NAME')."", getenv('DB_USERNAME'), getenv('DB_PASSWORD'));
@@ -112,7 +146,7 @@ if (isset($_POST['create_admin'])):
         'user_pseudo' => filter_input(INPUT_POST, "pseudo"),
         'user_password' => $userPassword,
         'user_state' => 1,
-        'role_id' => 10,
+        'role_id' => 5, //Default administrator role id
         'user_key' => uniqid('', true)
     ));
 
@@ -122,6 +156,6 @@ if (isset($_POST['create_admin'])):
         'STATUS=0', 'STATUS=1', file_get_contents($path)
     ));
 
-    header('Location: index.php?step=3&finish_step');
+    header('Location: index.php?step=4&finish_step');
     die();
 endif;

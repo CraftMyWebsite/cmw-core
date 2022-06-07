@@ -1,31 +1,11 @@
 CREATE TABLE IF NOT EXISTS `cmw_core_options`
 (
     `option_id`      int(11) NOT NULL,
-    `option_value`   varchar(255) NOT NULL,
     `option_name`    varchar(255) NOT NULL,
+    `option_value`   varchar(255) NOT NULL,
     `option_updated` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `cmw_menus`
-(
-    `menu_id`        int(11) NOT NULL,
-    `menu_name`      varchar(255) NOT NULL,
-    `menu_url`       varchar(255) NOT NULL,
-    `menu_level`     int(1) NOT NULL,
-    `menu_parent_id` int(11) DEFAULT NULL
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE TABLE IF NOT EXISTS `cmw_pages`
-(
-    `page_id`      int(11) NOT NULL,
-    `user_id`      int(11) NOT NULL,
-    `page_title`   varchar(255) NOT NULL,
-    `page_content` longtext     NOT NULL,
-    `page_state`   int(1) NOT NULL,
-    `page_created` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `page_updated` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `page_slug`    varchar(255) NOT NULL
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `cmw_permissions`
 (
@@ -62,15 +42,7 @@ CREATE TABLE IF NOT EXISTS `cmw_users`
 
 ALTER TABLE `cmw_core_options`
     ADD PRIMARY KEY (`option_id`),
-  ADD UNIQUE KEY `option_name` (`option_name`);
-
-ALTER TABLE `cmw_menus`
-    ADD PRIMARY KEY (`menu_id`);
-
-ALTER TABLE `cmw_pages`
-    ADD PRIMARY KEY (`page_id`),
-  ADD UNIQUE KEY `page_slug` (`page_slug`),
-  ADD KEY `fk_pages_users` (`user_id`);
+    ADD UNIQUE KEY `option_name` (`option_name`);
 
 ALTER TABLE `cmw_permissions`
     ADD PRIMARY KEY (`permission_id`),
@@ -94,21 +66,19 @@ ALTER TABLE `cmw_users`
 ALTER TABLE `cmw_users`
     MODIFY `user_id` INT (11) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE `cmw_menus`
-    MODIFY `menu_id` int (11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `cmw_pages`
-    MODIFY `page_id` int (11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `cmw_pages`
-    ADD CONSTRAINT `fk_pages_users` FOREIGN KEY (`user_id`) REFERENCES `cmw_users` (`user_id`);
-
 ALTER TABLE `cmw_permissions`
     ADD CONSTRAINT `cmw_permissions_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `cmw_roles` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `cmw_users`
     ADD CONSTRAINT `fk_users_roles` FOREIGN KEY (`role_id`) REFERENCES `cmw_roles` (`role_id`);
 COMMIT;
+
+ALTER TABLE `cmw_core_options`
+    MODIFY `option_id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
+
+INSERT INTO `cmw_core_options` (`option_id`, `option_name`, `option_value`, `option_updated`)
+VALUES (1, 'theme', 'Sampler', NOW());
 
 
 INSERT INTO `cmw_roles` (`role_name`, `role_description`)

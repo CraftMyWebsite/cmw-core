@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<?php session_start();
+<?php
+
+use INSTALLTION\GamesController\games;
+
+session_start();
 require_once("required.php");
 require_once("../app/envBuilder.php");
 if (file_exists("../.env")) {
@@ -17,6 +21,8 @@ endif;
 
 require_once("lang/$lang.php");
 require_once("../admin/resources/lang/$lang.php");
+
+require_once("resources/functions/games.php")
 ?>
 <html lang="<?=$lang?>">
 <head>
@@ -37,6 +43,8 @@ require_once("../admin/resources/lang/$lang.php");
     <link rel="stylesheet" href="../admin/resources/css/adminlte.min.css">
 
     <link rel="stylesheet" href="../admin/resources/css/main.css">
+
+    <link rel="stylesheet" href="resources/css/style.css">
 
     <script src="../admin/resources/vendors/jquery/jquery.min.js"></script>
 
@@ -98,7 +106,7 @@ require_once("../admin/resources/lang/$lang.php");
                     </div>
                 </div>
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                    <?php if (!file_exists("../.env") || getenv("STATUS") == 0 || (isset($_GET['finish_step']) && $_GET['step'] == 3)) : ?>
+                    <?php if (!file_exists("../.env") || getenv("STATUS") == 0 || (isset($_GET['finish_step']) && $_GET['step'] == 4)) : ?>
                     <li class="nav-item">
                         <a class="nav-link <?= (!isset($_GET['step']) || $_GET['step'] == 1) ? "active" : ""; ?>">
                             <i class="nav-icon fas fa-hourglass-start"></i>
@@ -117,6 +125,12 @@ require_once("../admin/resources/lang/$lang.php");
                             <p><?=INSTALL_STEP?> 3</p>
                         </a>
                     </li>
+                        <li class="nav-item">
+                            <a class="nav-link <?= (isset($_GET['step']) && $_GET['step'] == 4) ? "active" : ""; ?>">
+                                <i class="nav-icon fas fa-hourglass-end"></i>
+                                <p><?=INSTALL_STEP?> 4</p>
+                            </a>
+                        </li>
                     <?php else : ?>
                         <li class="nav-item">
                             <a class="nav-link active">
@@ -152,7 +166,8 @@ require_once("../admin/resources/lang/$lang.php");
         <div class="container-fluid">
             <div class="row">
                 <div class="col-7">
-                    <?php if (!file_exists("../.env") || getenv("STATUS") == 0 || (isset($_GET['finish_step']) && $_GET['step'] == 3)) : ?>
+                    <?php if (!file_exists("../.env") || getenv("STATUS") == 0 || (isset($_GET['finish_step']) && $_GET['step'] == 4)) : ?>
+                    <!-- DATABASE INSTALLATION -->
                         <?php if (!isset($_GET['step']) || $_GET['step'] == 1) : ?>
                             <div class="card">
                                 <div class="card-header">
@@ -211,7 +226,51 @@ require_once("../admin/resources/lang/$lang.php");
                                 </form>
                             </div>
                         <?php endif; ?>
+
+                    <!-- GAME SELECTION -->
+
                         <?php if (isset($_GET['step']) && $_GET['step'] == 2) : ?>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Selection du jeux</h3>
+                                </div>
+                                <!-- form start -->
+                                <form action="controller.php" role="form" method="post">
+                                    <div class="card-body">
+
+                                        <div class="row">
+
+                                            <?php foreach (games::$availableGames as $game):?>
+                                            <div class="game-container">
+
+                                                <label class="game-label">
+                                                    <input type="radio" name="game" value="<?= $game ?>">
+
+                                                    <img src='resources/img/<?= $game ?>-logo.png'
+                                                         class="rounded mx-auto"
+                                                         style="max-height: 150px; max-width: 150px"
+                                                         alt="Logo <?= $game ?>">
+                                                </label>
+
+                                                <span class="game-name"><?= $game ?></span>
+
+                                            </div>
+                                            <?php endforeach; ?>
+
+                                        </div>
+                                    </div>
+                                    <!-- /.card-body -->
+                                    <div class="card-footer">
+                                        <button type="submit" name="create_admin" class="btn btn-primary"><?=INSTALL_SAVE?>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        <?php endif; ?>
+
+                    <!-- ADMIN ACCOUNT CREATION -->
+
+                        <?php if (isset($_GET['step']) && $_GET['step'] == 3) : ?>
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title"><?=INSTALL_ADMIN_TITLE?></h3>
@@ -247,7 +306,10 @@ require_once("../admin/resources/lang/$lang.php");
                                 </form>
                             </div>
                         <?php endif; ?>
-                        <?php if (isset($_GET['step']) && $_GET['step'] == 3 && isset($_GET['finish_step'])) : ?>
+
+                    <!-- FINAL SCREEN INSTALLATION COMPLETE -->
+
+                        <?php if (isset($_GET['step']) && $_GET['step'] == 4 && isset($_GET['finish_step'])) : ?>
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title"><?=INSTALL_SUCCESS?> !</h3>
@@ -317,6 +379,11 @@ require_once("../admin/resources/lang/$lang.php");
                                     <b><?= INSTALL_INFO_HOST ?></b><?= php_uname('n'); ?><br>
                                     <b><?= INSTALL_INFO_IP ?></b><?= $_SERVER['SERVER_ADDR']; ?>:<?= $_SERVER['SERVER_PORT']; ?>
                                 </p>
+                                <?php if($_GET['step'] > 2):?>
+                                    <p>
+                                        <b><?= INSTALL_GAME ?>:</b> <?= getenv("GAME") ?>
+                                    </p>
+                                <?php endif;?>
                             <?php endif ?>
 
                         </div>
