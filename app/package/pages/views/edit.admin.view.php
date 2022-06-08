@@ -1,7 +1,7 @@
-<?php use CMW\Model\Pages\pagesModel;
+<?php
 
-$title = PAGES_ADD_TITLE;
-$description = PAGES_ADD_DESC; ?>
+$title = PAGES_EDIT_TITLE;
+$description = PAGES_EDIT_DESC; ?>
 
 <?php $scripts = '<script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script><!-- Header -->
 
@@ -121,7 +121,7 @@ $description = PAGES_ADD_DESC; ?>
         editor.save()
         .then((savedData) => {
             $.ajax({
-                url : "' . getenv("PATH_SUBFOLDER") . 'cms-admin/pages/edit",
+                url : "' . getenv("PATH_SUBFOLDER") . 'cmw-admin/pages/edit",
                 type : "POST",
                 data : {
                     "news_id" : jQuery("#page_id").val(),
@@ -205,7 +205,7 @@ $description = PAGES_ADD_DESC; ?>
                         <div class="btn btn-block btn-primary" id="saveButton">
                             <?= CORE_BTN_SAVE ?>
                         </div>
-                        <form action="/cms-admin/pages/delete" method="post">
+                        <form action="/cmw-admin/pages/delete" method="post">
                             <input type="hidden" name="id" value="<?= $page->pageId ?>">
                             <button class="mt-3 btn btn-danger btn-block" id="deleteButton">
                                 <?= CORE_BTN_DELETE ?>

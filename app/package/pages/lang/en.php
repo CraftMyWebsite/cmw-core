@@ -3,6 +3,9 @@
 const PAGES_ADD_TITLE = "Pages | Create";
 const PAGES_ADD_DESC = "Create new page";
 
+const PAGES_EDIT_TITLE = "Pages | Editing";
+const PAGES_EDIT_DESC = "Edite your page";
+
 const PAGES_ADD_CARD_TITLE = "Page content";
 
 const PAGES_LIST_TITLE = "Pages | List";
