@@ -13,6 +13,6 @@ ALTER TABLE `cmw_users_uuid`
     ADD CONSTRAINT `fk_uuid_users` FOREIGN KEY (`user_id`) REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
-
+INSERT INTO `cmw_core_options` (option_name, option_value, option_updated) VALUES ('minecraft_register_premium', 'false', NOW());
 
 

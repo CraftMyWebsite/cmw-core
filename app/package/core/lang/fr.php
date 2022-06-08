@@ -12,6 +12,7 @@ const CORE_LANG_DESC = "Configurez les langues de votre site CMW !";
 const CORE_WEBSITE_NAME = "Nom de votre site";
 const CORE_WEBSITE_DESCRIPTION = "Description de votre site";
 const CORE_MINECRAFT_IP = "Addresse IP de votre serveur";
+const CORE_MINECRAFT_REGISTER_PREMIUM = "Autorisez uniquement les comptes Minecraft PREMIUM à s'inscrire sur votre site";
 
 const DATABASE_ERROR_MSG = "Erreur base de donnée: ";
 

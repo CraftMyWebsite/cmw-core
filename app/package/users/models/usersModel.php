@@ -7,7 +7,7 @@ use CMW\Model\manager;
 /**
  * Class: @usersModel
  * @package Users
- * @author LoGuardian | <loguardian@hotmail.com>
+ * @author LoGuardian & Teyir | <loguardian@hotmail.com>
  * @version 1.0
  */
 class usersModel extends manager
@@ -84,7 +84,7 @@ class usersModel extends manager
         session_destroy();
     }
 
-    public function create()
+    public function create(): int
     {
         $var = array(
             'user_email' => $this->userEmail,
@@ -286,4 +286,53 @@ class usersModel extends manager
 
         return -1;
     }
+
+    public function checkMinecraftPseudo($pseudo): int
+    {
+        $req = file_get_contents("https://api.mojang.com/users/profiles/minecraft/$pseudo");
+
+        if ($req != NULL) {
+            return 0;
+        } else{
+            return 1;
+        }
+    }
+
+
+    public function checkPseudo($pseudo): int
+    {
+        $var = array(
+            "pseudo" => $pseudo
+        );
+
+        $sql = "SELECT * FROM `cmw_users` WHERE user_pseudo = :pseudo";
+
+        $db = manager::dbConnect();
+        $req = $db->prepare($sql);
+
+        if ($req->execute($var)){
+            return count($req->fetchAll());
+        }
+
+        return 0;
+    }
+
+    public function checkEmail($email): int
+    {
+        $var = array(
+            "email" => $email
+        );
+
+        $sql = "SELECT * FROM `cmw_users` WHERE user_email = :email";
+
+        $db = manager::dbConnect();
+        $req = $db->prepare($sql);
+
+        if ($req->execute($var)){
+            return count($req->fetchAll());
+        }
+
+        return 0;
+    }
+
 }

@@ -12,7 +12,7 @@ class coreModel extends manager
 {
     public string $theme;
     public array $menu;
-    public static string $ip;
+    public static string $minecraft_ip;
     public static string $name;
     public static string $description;
 

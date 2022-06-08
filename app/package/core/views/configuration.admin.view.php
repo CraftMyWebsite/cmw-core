@@ -41,16 +41,28 @@ $description = CORE_CONFIG_DESC; ?>
 
                                 <?php //Minecraft config section
                                     if(getenv("GAME") === "Minecraft"):?>
-                                    <div class="form-group">
-                                        <label for="ip"><?= CORE_MINECRAFT_IP ?></label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fas fa-network-wired"></i></span>
+                                        <div class="form-group">
+                                            <label for="minecraft_ip"><?= CORE_MINECRAFT_IP ?></label>
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-network-wired"></i></span>
+                                                </div>
+                                                <input type="text" name="minecraft_ip" id="minecraft_ip"
+                                                       class="form-control" value="<?= coreModel::getOptionValue("minecraft_ip") ?>"
+                                                       placeholder="<?=CORE_MINECRAFT_IP?>" required>
                                             </div>
-                                            <input type="text" name="ip" class="form-control" value="<?= coreModel::getOptionValue("ip") ?>"
-                                                   placeholder="<?=CORE_MINECRAFT_IP?>" required>
                                         </div>
-                                    </div>
+
+                                        <div class="form-group">
+                                            <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                                <input type="checkbox" class="custom-control-input"
+                                                       name="minecraft_register_premium" id="minecraft_register_premium"
+                                                       value="true" <?= coreModel::getOptionValue("minecraft_register_premium") === "true" ? "checked" : "" ?>>
+                                                <label class="custom-control-label" for="minecraft_register_premium">
+                                                    <?= CORE_MINECRAFT_REGISTER_PREMIUM ?>
+                                                </label>
+                                            </div>
+                                        </div>
                                 <?php endif; ?>
 
                             </div>
