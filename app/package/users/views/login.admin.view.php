@@ -13,7 +13,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
     <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo mb-4">
-        <img src="<?= getenv("PATH_SUBFOLDER") ?>admin/resources/images/identity/logo_compact.png" alt="<?= ALT_LOGO ?>"
+        <img src="<?= getenv("PATH_SUBFOLDER") ?>admin/resources/images/identity/logo_compact.png" alt="<?= CORE_ALT_LOGO ?>"
              width="100px">
     </div>
     <!-- /.login-logo -->

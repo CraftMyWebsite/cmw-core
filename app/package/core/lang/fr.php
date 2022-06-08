@@ -19,6 +19,7 @@ const DATABASE_ERROR_MSG = "Erreur base de donnée: ";
 
 const CORE_TOASTER_TITLE = "Information";
 const CORE_TOASTER_CONFIG_EDIT_SUCCESS = "Configuration modifiée avec succès !";
+const CORE_TOASTER_DELETE_SUCCESS = "Supprimé avec succès !";
 
 const CORE_DASHBOARD = "Dashboard";
 

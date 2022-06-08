@@ -226,7 +226,7 @@ class usersController extends coreController
         if (usersModel::getLoggedUser() !== -1) {
             $user = new usersModel();
 
-            if (self::isAdminLoggedBool() == 0 || $user->hasPermission($_SESSION['cmwUserId'], $permCode) > 0) {
+            if (self::isAdminLoggedBool() == 0 || $user->hasPermission($_SESSION['cmwUserId'], $permCode) < 0) {
                 header('Location: ' . getenv('PATH_SUBFOLDER'));
                 exit();
             }

@@ -88,9 +88,9 @@ class pagesController extends coreController
         $page->pageId = filter_input(INPUT_POST, "id");
         $page->delete();
 
-        $_SESSION['toaster'][0]['title'] = TOASTER_TITLE_INFORMATION;
+        $_SESSION['toaster'][0]['title'] = CORE_TOASTER_TITLE;
         $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = TOASTER_TOASTER_DELETE_SUCCESS;
+        $_SESSION['toaster'][0]['body'] = CORE_TOASTER_DELETE_SUCCESS;
 
         header("location: ../pages/list");
         die();
