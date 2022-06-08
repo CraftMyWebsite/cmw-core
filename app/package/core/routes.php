@@ -12,6 +12,9 @@ $router->scope('/cmw-admin', function($router) {
 
     $router->get('/configuration', "core#adminConfiguration");
     $router->post('/configuration', "core#adminConfigurationPost");
+
+    $router->get('/languages', "core#adminLanguages");
+    $router->post('/languages', "core#adminLanguagesPost");
 });
 
 /* Basics pages of CMS (PUBLIC) */

@@ -20,7 +20,7 @@ else :
 endif;
 
 require_once("lang/$lang.php");
-require_once("../admin/resources/lang/$lang.php");
+require_once("../app/package/core/lang/$lang.php");
 
 require_once("resources/functions/games.php")
 ?>
@@ -88,7 +88,7 @@ require_once("resources/functions/games.php")
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
         <a class="brand-link">
-            <img src="../admin/resources/images/identity/logo_compact.png" alt="<?= ALT_LOGO ?>"
+            <img src="../admin/resources/images/identity/logo_compact.png" alt="<?= CORE_ALT_LOGO ?>"
                  class="brand-image img-circle elevation-3">
             <span class="brand-text font-weight-light">Craft My Website</span>
         </a>

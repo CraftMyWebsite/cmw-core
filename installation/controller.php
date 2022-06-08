@@ -175,7 +175,7 @@ if (isset($_POST['website_config'])):
     //Game Minecraft
     if(getenv("GAME") === "Minecraft") {
         $query->execute(array(
-            "option_name" => "ip",
+            "option_name" => "minecraft_ip",
             "option_value" => filter_input(INPUT_POST, "config_minecraft_ip")
         ));
     }

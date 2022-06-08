@@ -61,6 +61,7 @@ const USERS_CREATION = "Date de création";
 const USERS_LAST_EDIT = "Date de modification";
 const USERS_LAST_CONNECTION = "Dernière connexion au site";
 const USERS_ROLE_DESCRIPTION = "Description";
+const USERS_ROLE_NAME = "Nom";
 
 const USERS_PASS = "Mot de passe";
 const USERS_NEW_PASS = "Modifier le mot de passe";
@@ -68,3 +69,5 @@ const USERS_REPEAT_PASS = "Retaper le mot de passe";
 
 const USERS_TOASTER_TITLE = "Information";
 const USERS_TOASTER_TITLE_ERROR = "Attention";
+
+const USERS_LOGOUT = "Déconnexion";

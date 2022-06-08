@@ -18,25 +18,25 @@ $description = USERS_LIST_DESC; ?>
             "lengthChange": false, 
             "autoWidth": false,
             language: {
-                processing:     "'.DATATABLES_LIST_PROCESSING.'",
-                search:         "'.DATATABLES_LIST_SEARCH.'",
-                lengthMenu:    "'.DATATABLES_LIST_LENGTHMENU.'",
-                info:           "'.DATATABLES_LIST_INFO.'",
-                infoEmpty:      "'.DATATABLES_LIST_INFOEMPTY.'",
-                infoFiltered:   "'.DATATABLES_LIST_INFOFILTERED.'",
-                infoPostFix:    "'.DATATABLES_LIST_INFOPOSTFIX.'",
-                loadingRecords: "'.DATATABLES_LIST_LOADINGRECORDS.'",
-                zeroRecords:    "'.DATATABLES_LIST_ZERORECORDS.'",
-                emptyTable:     "'.DATATABLES_LIST_EMPTYTABLE.'",
+                processing:     "'.CORE_DATATABLES_LIST_PROCESSING.'",
+                search:         "'.CORE_DATATABLES_LIST_SEARCH.'",
+                lengthMenu:    "'.CORE_DATATABLES_LIST_LENGTHMENU.'",
+                info:           "'.CORE_DATATABLES_LIST_INFO.'",
+                infoEmpty:      "'.CORE_DATATABLES_LIST_INFOEMPTY.'",
+                infoFiltered:   "'.CORE_DATATABLES_LIST_INFOFILTERED.'",
+                infoPostFix:    "'.CORE_DATATABLES_LIST_INFOPOSTFIX.'",
+                loadingRecords: "'.CORE_DATATABLES_LIST_LOADINGRECORDS.'",
+                zeroRecords:    "'.CORE_DATATABLES_LIST_ZERORECORDS.'",
+                emptyTable:     "'.CORE_DATATABLES_LIST_EMPTYTABLE.'",
                 paginate: {
-                    first:      "'.DATATABLES_LIST_FIRST.'",
-                    previous:   "'.DATATABLES_LIST_PREVIOUS.'",
-                    next:       "'.DATATABLES_LIST_NEXT.'",
-                    last:       "'.DATATABLES_LIST_LAST.'"
+                    first:      "'.CORE_DATATABLES_LIST_FIRST.'",
+                    previous:   "'.CORE_DATATABLES_LIST_PREVIOUS.'",
+                    next:       "'.CORE_DATATABLES_LIST_NEXT.'",
+                    last:       "'.CORE_DATATABLES_LIST_LAST.'"
                 },
                 aria: {
-                    sortAscending:  "'.DATATABLES_LIST_SORTASCENDING.'",
-                    sortDescending: "'.DATATABLES_LIST_SORTDESCENDING.'"
+                    sortAscending:  "'.CORE_DATATABLES_LIST_SORTASCENDING.'",
+                    sortDescending: "'.CORE_DATATABLES_LIST_SORTDESCENDING.'"
                 }
             },
         });
@@ -64,8 +64,8 @@ $description = USERS_LIST_DESC; ?>
                             <table id="roles_table" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
-                                    <th>Nom</th>
-                                    <th>Description</th>
+                                    <th><?= USERS_ROLE_NAME ?></th>
+                                    <th><?= USERS_ROLE_DESCRIPTION ?></th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -76,14 +76,14 @@ $description = USERS_LIST_DESC; ?>
                                         <td><?= $role['role_name'] ?></td>
                                         <td><?= $role['role_description'] ?></td>
                                         <td><a href="../roles/edit/<?=$role['role_id']?>"><i class="fa fa-cog"></i></a>
-                                        <a href="../roles/delete/<?= $role['role_id'] ?>" class="text-danger float-right"><i class="fas fa-trash-alt"></i></a></td>
+                                            <a href="../roles/delete/<?= $role['role_id'] ?>" class="text-danger float-right"><i class="fas fa-trash-alt"></i></a></td>
                                     </tr>
                                 <?php endforeach; ?>
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <th>Nom</th>
-                                    <th>Description</th>
+                                    <th><?= USERS_ROLE_NAME ?></th>
+                                    <th><?= USERS_ROLE_DESCRIPTION ?></th>
                                     <th></th>
                                 </tr>
                                 </tfoot>

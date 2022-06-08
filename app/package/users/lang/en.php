@@ -4,7 +4,6 @@
 const USERS_LOGIN_TITLE = "Login";
 const USERS_LOGIN_DESC = "Login to access the administration panel";
 
-const USERS_LOGIN_TITLE = "Administration area";
 const USERS_LOGIN_REMEMBER = "Remember me";
 const USERS_LOGIN_SIGNIN = "Login";
 const USERS_LOGIN_LOST_PASSWORD = "I have lost my password";
@@ -61,6 +60,8 @@ const USERS_ROLE = "Role";
 const USERS_CREATION = "Creation date";
 const USERS_LAST_EDIT = "Modification date";
 const USERS_LAST_CONNECTION = "Last login to the site";
+const USERS_ROLE_DESCRIPTION = "Description";
+const USERS_ROLE_NAME = "Name";
 
 const USERS_PASS = "Password";
 const USERS_NEW_PASS = "Change your password";
@@ -68,3 +69,5 @@ const USERS_REPEAT_PASS = "Retype password";
 
 const USERS_TOASTER_TITLE = "Information";
 const USERS_TOASTER_TITLE_ERROR = "Warning";
+
+const USERS_LOGOUT = "Logout";

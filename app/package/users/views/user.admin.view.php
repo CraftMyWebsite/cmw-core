@@ -66,7 +66,8 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                                         </div>
                                         <input type="password" name="pass" class="form-control" placeholder="******">
                                         <div class="input-group-append">
-                                            <a class="input-group-text" href="#"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                                            <a class="input-group-text" href="#"><i class="fa fa-eye-slash"
+                                                                                    aria-hidden="true"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -79,7 +80,8 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                                         <input type="password" name="pass_verif" class="form-control"
                                                placeholder="*****">
                                         <div class="input-group-append">
-                                            <a class="input-group-text" href="#"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                                            <a class="input-group-text" href="#"><i class="fa fa-eye-slash"
+                                                                                    aria-hidden="true"></i></a>
                                         </div>
                                     </div>
                                 </div>
