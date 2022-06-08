@@ -120,7 +120,7 @@ $description = PAGES_ADD_DESC; ?>
         .then((savedData) => {
             if(jQuery("#page_id").val()) {
                 $.ajax({
-                    url : "' . getenv("PATH_SUBFOLDER") . 'cms-admin/pages/edit",
+                    url : "' . getenv("PATH_SUBFOLDER") . 'cmw-admin/pages/edit",
                     type : "POST",
                     data : {
                         "news_id" : jQuery("#page_id").val(),
@@ -141,7 +141,7 @@ $description = PAGES_ADD_DESC; ?>
             }
             else {
                 $.ajax({
-                    url : "' . getenv("PATH_SUBFOLDER") . 'cms-admin/pages/add",
+                    url : "' . getenv("PATH_SUBFOLDER") . 'cmw-admin/pages/add",
                     type : "POST",
                     data : {
                         "news_title" : jQuery("#title").val(),

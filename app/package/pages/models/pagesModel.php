@@ -67,29 +67,39 @@ class pagesModel extends manager
     {
         $var = $is_slug ? array("page_slug" => $this->pageSlug) : array("page_id" => $this->pageId);
 
-        $sql = "SELECT page_id, page_title, page_slug, user_id, page_content, page_state, DATE_FORMAT(page_created, '%d/%m/%Y à %H:%i:%s') AS 'page_created', DATE_FORMAT(page_updated, '%d/%m/%Y à %H:%i:%s') AS 'page_updated'"
-            . " FROM cmw_pages";
+        $sql = "SELECT page_id, page_title, page_slug, user_id, page_content, page_state, 
+                DATE_FORMAT(page_created, '%d/%m/%Y à %H:%i:%s') AS 'page_created', 
+                DATE_FORMAT(page_updated, '%d/%m/%Y à %H:%i:%s') AS 'page_updated' FROM cmw_pages";
         $sql .= $is_slug ? " WHERE page_slug=:page_slug" : " WHERE page_id=:page_id";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
+
             $result = $req->fetch(PDO::FETCH_ASSOC);
 
-            $this->pageId = $result['page_id'];
-            $this->pageSlug = $result['page_slug'];
-            $this->pageTitle = $result['page_title'];
-            $this->pageContent = $result['page_content'];
-            $this->pageCreated = $result['page_created'];
-            $this->pageUpdated = $result['page_updated'];
-            $this->pageState = $result['page_state'];
+            //If we have the slug in the db we can continue
+            if(!empty($result)):
 
-            $this->translatePage();
+                $this->pageId = $result['page_id'];
+                $this->pageSlug = $result['page_slug'];
+                $this->pageTitle = $result['page_title'];
+                $this->pageContent = $result['page_content'];
+                $this->pageCreated = $result['page_created'];
+                $this->pageUpdated = $result['page_updated'];
+                $this->pageState = $result['page_state'];
 
-            $user = new usersModel();
-            $user->fetch($result['user_id']);
-            $this->user = $user;
+                $this->translatePage();
+
+                $user = new usersModel();
+                $user->fetch($result['user_id']);
+                $this->user = $user;
+
+                //Redirect to the home page
+            else:
+                header("location: " . getenv("PATH_SUBFOLDER"));
+            endif;
         }
     }
 

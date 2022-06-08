@@ -46,6 +46,8 @@ class pagesController extends coreController
         $page->pageState = filter_input(INPUT_POST, "page_state");
         $page->userId = $user->getLoggedUser();
 
+        var_dump($page->pageContent);
+
         $page->create();
 
         echo $page->pageId;
