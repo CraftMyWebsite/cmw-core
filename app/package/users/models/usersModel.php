@@ -42,10 +42,7 @@ class usersModel extends manager
         $var = array(
             "user_email" => $info["email"]
         );
-        $sql = "SELECT user_id, role_id, user_password"
-            . " FROM cmw_users"
-            . " WHERE user_state=1"
-            . " AND user_email" . "=:user_email";
+        $sql = "SELECT user_id, user_password FROM cmw_users WHERE user_state=1 AND user_email=:user_email";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
