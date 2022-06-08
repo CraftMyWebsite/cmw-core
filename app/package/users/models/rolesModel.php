@@ -7,7 +7,7 @@ use CMW\Model\manager;
 /**
  * Class: @rolesModel
  * @package Users
- * @author LoGuardian | <loguardian@hotmail.com>
+ * @author Teyir
  * @version 1.0
  */
 class rolesModel extends manager {
@@ -223,6 +223,22 @@ class rolesModel extends manager {
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
+    }
+
+    public static function playerHasRole(int $user_id, int $role_id): bool
+    {
+        $sql = "SELECT cmw_roles.role_name FROM cmw_users
+                    JOIN cmw_users_roles ON cmw_users.user_id = cmw_users_roles.user_id
+                    JOIN cmw_roles on cmw_users_roles.role_id = cmw_roles.role_id
+                    WHERE cmw_users.user_id = :user_id AND cmw_roles.role_id = :role_id";
+
+        $db = manager::dbConnect();
+        $req = $db->prepare($sql);
+
+        if($req->execute(array("user_id" => $user_id, "role_id" => $role_id))){
+            return count($req->fetchAll()) > 0;
+        }
+        return false;
     }
 
 }

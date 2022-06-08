@@ -392,7 +392,7 @@ require_once("resources/functions/games.php")
                         </div>
                         <div class="card-body">
                             <p><?= '<b>'.INSTALL_PHP_VERSION_INFOS.' PHP :</b> ' . phpversion();?></p>
-                            <?php if (PHP_VERSION_ID < 70400) : ?>
+                            <?php if (PHP_VERSION_ID < 80000) : ?>
                                 <div class="alert alert-danger alert-dismissible">
                                     <p class="info-box-text font-weight-bold"><i class="fas fa-exclamation-triangle"></i> <?=INSTALL_ALERT_VERSION_TITLE?></p>
                                     <?=INSTALL_ALERT_VERSION_INFOS?>

@@ -18,13 +18,13 @@ class usersModel extends manager
     public ?string $userFirstname;
     public ?string $userLastname;
     public int $userState;
-    public int $roleId;
     public string $userRoleName;
     public string $userCreated;
     public string $userUpdated;
     public string $userLogged;
     private string $userPassword;
     private string $userKey;
+    public array $userRoles;
 
     public function __construct($user_id = null)
     {
@@ -84,7 +84,7 @@ class usersModel extends manager
         session_destroy();
     }
 
-    public function create(): int
+    public function create(array $roles): int
     {
         $var = array(
             'user_email' => $this->userEmail,
@@ -92,21 +92,38 @@ class usersModel extends manager
             'user_firstname' => $this->userFirstname,
             'user_lastname' => $this->userLastname,
             'user_state' => 1,
-            'role_id' => $this->roleId,
             'user_key' => uniqid('', true)
         );
 
-        $sql = "INSERT INTO cmw_users (user_email, user_pseudo, user_firstname, user_lastname, user_state, role_id, user_key, user_created, user_updated) VALUES (:user_email, :user_pseudo, :user_firstname, :user_lastname,:user_state, :role_id, :user_key, NOW(), NOW())";
+        $sql = "INSERT INTO cmw_users (user_email, user_pseudo, user_firstname, user_lastname, user_state, user_key, user_created, user_updated) VALUES (:user_email, :user_pseudo, :user_firstname, :user_lastname, :user_state, :user_key, NOW(), NOW())";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
             $this->userId = $db->lastInsertId();
+            $this->addRole($roles);
             return $this->userId;
         }
 
         return -1;
+    }
+
+    public function addRole(array $roles): void
+    {
+        foreach ($roles as $role):
+
+            $var = array(
+                "user_id" => $this->userId,
+                "role_id" => $role
+            );
+
+            $sql = "INSERT INTO cmw_users_roles (user_id, role_id) VALUES (:user_id, :role_id)";
+
+            $db = manager::dbConnect();
+            $req = $db->prepare($sql);
+            $req->execute($var);
+        endforeach;
     }
 
     public function fetch($user_id): void
@@ -115,7 +132,11 @@ class usersModel extends manager
             "user_id" => $user_id
         );
 
-        $sql = "SELECT user_id, user_email, user_pseudo, user_firstname, user_lastname, user_state, cmw_users.role_id, DATE_FORMAT(user_created, '%d/%m/%Y à %H:%i:%s') AS 'user_created', DATE_FORMAT(user_updated, '%d/%m/%Y à %H:%i:%s') AS 'user_updated', DATE_FORMAT(user_logged, '%d/%m/%Y à %H:%i:%s') AS 'user_logged', cr.role_name as user_role_name FROM cmw_users INNER JOIN cmw_roles cr on cmw_users.role_id = cr.role_id WHERE user_id=:user_id";
+        $sql = "SELECT user_id, user_email, user_pseudo, user_firstname, user_lastname, user_state, DATE_FORMAT(user_created, '%d/%m/%Y à %H:%i:%s')
+                AS 'user_created', DATE_FORMAT(user_updated, '%d/%m/%Y à %H:%i:%s')
+                AS 'user_updated', DATE_FORMAT(user_logged, '%d/%m/%Y à %H:%i:%s')
+                AS 'user_logged'
+                FROM cmw_users WHERE user_id=:user_id";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
@@ -141,7 +162,7 @@ class usersModel extends manager
 
     public function fetchAll(): array
     {
-        $sql = "SELECT user_id, user_email, user_pseudo, user_firstname, user_lastname, user_state, DATE_FORMAT(user_created, '%d/%m/%Y à %H:%i:%s') AS 'user_created', DATE_FORMAT(user_updated, '%d/%m/%Y à %H:%i:%s') AS 'user_updated', DATE_FORMAT(user_logged, '%d/%m/%Y à %H:%i:%s') AS 'user_logged', cr.role_name as user_role_name FROM cmw_users INNER JOIN cmw_roles cr on cmw_users.role_id = cr.role_id";
+        $sql = "SELECT user_id, user_email, user_pseudo, user_firstname, user_lastname, user_state, DATE_FORMAT(user_created, '%d/%m/%Y à %H:%i:%s') AS 'user_created', DATE_FORMAT(user_updated, '%d/%m/%Y à %H:%i:%s') AS 'user_updated', DATE_FORMAT(user_logged, '%d/%m/%Y à %H:%i:%s') AS 'user_logged' FROM cmw_users";
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
 
@@ -151,30 +172,24 @@ class usersModel extends manager
         return [];
     }
 
-    public function update(): void
+    public function update(array $roles): void
     {
         $var = array(
             "user_id" => $this->userId,
             "user_email" => $this->userEmail,
             "user_pseudo" => mb_strimwidth($this->userPseudo, 0, 255),
             "user_firstname" => mb_strimwidth($this->userFirstname, 0, 255),
-            "user_lastname" => mb_strimwidth($this->userLastname, 0, 255),
-            "role_id" => $this->roleId
+            "user_lastname" => mb_strimwidth($this->userLastname, 0, 255)
         );
 
-        $sql = "UPDATE cmw_users SET "
-            . "user_email" . "=:user_email,"
-            . "user_pseudo" . "=:user_pseudo,"
-            . "user_firstname" . "=:user_firstname,"
-            . "user_lastname" . "=:user_lastname,"
-            . "role_id" . "=:role_id"
-            . " WHERE " . "user_id" . "=:user_id";
+        $sql = "UPDATE cmw_users SET user_email=:user_email,user_pseudo=:user_pseudo,user_firstname=:user_firstname,user_lastname=:user_lastname WHERE user_id=:user_id";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
 
         $this->updateEditTime();
+        $this->updateRoles($roles);
     }
 
     public function updateEditTime(): void
@@ -183,13 +198,28 @@ class usersModel extends manager
             "user_id" => $this->userId,
         );
 
-        $sql = "UPDATE cmw_users SET "
-            . "user_updated" . "=CURRENT_TIMESTAMP"
-            . " WHERE " . "user_id" . "=:user_id";
+        $sql = "UPDATE cmw_users SET user_updated=CURRENT_TIMESTAMP WHERE user_id=:user_id";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
+    }
+
+    public function updateRoles(array $roles): void
+    {
+        //Delete all the roles of the players
+        $var = array(
+            "user_id" => $this->userId
+        );
+
+        $sql = "DELETE FROM cmw_users_roles WHERE user_id = :user_id";
+
+        $db = manager::dbConnect();
+        $req = $db->prepare($sql);
+        $req->execute($var);
+
+        //Add all the new roles
+        $this->addRole($roles);
     }
 
     public function setPassword($password): void
@@ -204,9 +234,7 @@ class usersModel extends manager
             "user_password" => $this->userPassword
         );
 
-        $sql = "UPDATE cmw_users SET "
-            . "user_password" . "=:user_password"
-            . " WHERE " . "user_id" . "=:user_id";
+        $sql = "UPDATE cmw_users SET user_password=:user_password WHERE user_id=:user_id";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
@@ -222,9 +250,7 @@ class usersModel extends manager
             "user_state" => $this->userState,
         );
 
-        $sql = "UPDATE cmw_users SET "
-            . "user_state" . "=:user_state"
-            . " WHERE " . "user_id" . "=:user_id";
+        $sql = "UPDATE cmw_users SET user_state=:user_state WHERE user_id=:user_id";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
@@ -253,9 +279,7 @@ class usersModel extends manager
             "user_id" => $this->userId,
         );
 
-        $sql = "UPDATE cmw_users SET "
-            . "user_logged" . "=CURRENT_TIMESTAMP"
-            . " WHERE " . "user_id" . "=:user_id";
+        $sql = "UPDATE cmw_users SET user_logged=CURRENT_TIMESTAMP WHERE user_id=:user_id";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
@@ -269,10 +293,10 @@ class usersModel extends manager
             "perm_code" => $permCode
         );
 
-        $sql = "SELECT cmw_permissions.permission_code FROM cmw_permissions 
+        $sql = "SELECT cmw_permissions.permission_code FROM cmw_permissions
                     JOIN cmw_roles ON cmw_permissions.role_id = cmw_roles.role_id
-                    JOIN cmw_users ON cmw_roles.role_id = cmw_users.role_id
-                    WHERE cmw_users.user_id = :user_id AND cmw_permissions.permission_code = :perm_code";
+                    JOIN cmw_users_roles on cmw_roles.role_id = cmw_users_roles.role_id
+                    WHERE cmw_users_roles.user_id = :user_id AND cmw_permissions.permission_code = :perm_code";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
@@ -285,6 +309,23 @@ class usersModel extends manager
         }
 
         return -1;
+    }
+
+    public static function getPlayerRoles(int $userId): array
+    {
+        $sql = "SELECT cmw_roles.role_name FROM cmw_users_roles
+                    JOIN cmw_users on cmw_users.user_id = cmw_users_roles.user_id
+                    JOIN cmw_roles on cmw_users_roles.role_id = cmw_roles.role_id
+                    WHERE cmw_users.user_id = :user_id";
+
+        $db = manager::dbConnect();
+        $req = $db->prepare($sql);
+
+        if($req->execute(array("user_id" => $userId))){
+            return $req->fetchAll();
+        }
+
+        return [];
     }
 
     public function checkMinecraftPseudo($pseudo): int

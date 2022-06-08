@@ -139,14 +139,21 @@ if (isset($_POST['create_admin'])):
     $userUsername = filter_input(INPUT_POST, "pseudo");
     $userPassword = password_hash(filter_input(INPUT_POST, "password"), PASSWORD_BCRYPT);
 
-    $query = $db->prepare('INSERT INTO cmw_users (user_email, user_pseudo, user_password, user_state, role_id, user_key, user_created, user_updated) VALUES (:user_email, :user_pseudo, :user_password, :user_state, :role_id, :user_key, NOW(), NOW())');
+    $query = $db->prepare('INSERT INTO cmw_users (user_email, user_pseudo, user_password, user_state, user_key, user_created, user_updated) VALUES (:user_email, :user_pseudo, :user_password, :user_state, :user_key, NOW(), NOW())');
     $query->execute(array(
         'user_email' => filter_input(INPUT_POST, "email"),
         'user_pseudo' => filter_input(INPUT_POST, "pseudo"),
         'user_password' => $userPassword,
         'user_state' => 1,
-        'role_id' => 5, //Default administrator role id
         'user_key' => uniqid('', true)
+    ));
+
+    //Set Administrator role
+
+    $query = $db->prepare("INSERT INTO cmw_users_roles (user_id, role_id) VALUES (:user_id, :role_id)");
+    $query->execute(array(
+        "user_id" => $db->lastInsertId(),
+        "role_id" => 5 //Default administrator id is 5
     ));
 
     $db = null;

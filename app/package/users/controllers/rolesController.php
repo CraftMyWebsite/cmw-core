@@ -11,7 +11,7 @@ use http\Client\Curl\User;
 /**
  * Class: @rolesController
  * @package Users
- * @author LoGuardian | <loguardian@hotmail.com>
+ * @author LoGuardian et Teyir
  * @version 1.0
  */
 class rolesController extends coreController
