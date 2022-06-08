@@ -6,7 +6,7 @@
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="<?= getenv('PATH_SUBFOLDER') ?>cmw-admin/logout" class="nav-link"><?= LOGOUT ?></a>
+            <a href="<?= getenv('PATH_SUBFOLDER') ?>cmw-admin/logout" class="nav-link"><?= USERS_LOGOUT ?></a>
         </li>
     </ul>
 

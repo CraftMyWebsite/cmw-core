@@ -60,4 +60,13 @@ class coreModel extends manager
         $req = $db->prepare('UPDATE cmw_core_options SET option_value=:option_value, option_updated=now() WHERE option_name=:option_name');
         $req->execute(array("option_name" => $option_name, "option_value" => $option_value));
     }
+
+    public static function getLanguages(string $prefix): array|string
+    {
+        foreach (get_defined_constants(false) as $key=>$value)
+            if (str_starts_with($key, mb_strtoupper($prefix, 'UTF-8')))  $dump[$key] = $value;
+
+
+        return !empty($dump) ? $dump : "Error: No Constants found with prefix '".$prefix."'";
+    }
 }

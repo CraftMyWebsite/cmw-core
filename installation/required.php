@@ -2,11 +2,11 @@
 
 /// DETECT THE PHP VERSION
 ///
-/// / ! \ CMW Require php 7.4 or higher / ! \
+/// / ! \ CMW Require php 8.0 or higher / ! \
 ///
 
 
-if (phpversion() <= "7.4"){
+if (phpversion() <= "8.0"){
 
     include "required.view.php";
 

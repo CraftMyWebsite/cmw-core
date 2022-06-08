@@ -3,14 +3,14 @@
 $title = PAGES_LIST_TITLE;
 $description = PAGES_LIST_DESC; ?>
 
-<?php $styles = '<link rel="stylesheet" href="'.getenv("PATH_SUBFOLDER").'admin/resources/vendors/datatables-bs4/css/dataTables.bootstrap4.min.css">
-<link rel="stylesheet" href="'.getenv("PATH_SUBFOLDER").'admin/resources/vendors/datatables-responsive/css/responsive.bootstrap4.min.css">';?>
+<?php $styles = '<link rel="stylesheet" href="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-responsive/css/responsive.bootstrap4.min.css">'; ?>
 
-<?php $scripts = '<script src="'.getenv("PATH_SUBFOLDER").'admin/resources/vendors/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="'.getenv("PATH_SUBFOLDER").'admin/resources/vendors/datatables/jquery.dataTables.min.js"></script>
-<script src="'.getenv("PATH_SUBFOLDER").'admin/resources/vendors/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="'.getenv("PATH_SUBFOLDER").'admin/resources/vendors/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="'.getenv("PATH_SUBFOLDER").'admin/resources/vendors/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<?php $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables/jquery.dataTables.min.js"></script>
+<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 <script>
     $(function () {
         $("#users_table").DataTable({
@@ -18,30 +18,30 @@ $description = PAGES_LIST_DESC; ?>
             "lengthChange": false, 
             "autoWidth": false,
             language: {
-                processing:     "'.DATATABLES_LIST_PROCESSING.'",
-                search:         "'.DATATABLES_LIST_SEARCH.'",
-                lengthMenu:    "'.DATATABLES_LIST_LENGTHMENU.'",
-                info:           "'.DATATABLES_LIST_INFO.'",
-                infoEmpty:      "'.DATATABLES_LIST_INFOEMPTY.'",
-                infoFiltered:   "'.DATATABLES_LIST_INFOFILTERED.'",
-                infoPostFix:    "'.DATATABLES_LIST_INFOPOSTFIX.'",
-                loadingRecords: "'.DATATABLES_LIST_LOADINGRECORDS.'",
-                zeroRecords:    "'.DATATABLES_LIST_ZERORECORDS.'",
-                emptyTable:     "'.DATATABLES_LIST_EMPTYTABLE.'",
+                processing:     "' . CORE_DATATABLES_LIST_PROCESSING . '",
+                search:         "' . CORE_DATATABLES_LIST_SEARCH . '",
+                lengthMenu:    "' . CORE_DATATABLES_LIST_LENGTHMENU . '",
+                info:           "' . CORE_DATATABLES_LIST_INFO . '",
+                infoEmpty:      "' . CORE_DATATABLES_LIST_INFOEMPTY . '",
+                infoFiltered:   "' . CORE_DATATABLES_LIST_INFOFILTERED . '",
+                infoPostFix:    "' . CORE_DATATABLES_LIST_INFOPOSTFIX . '",
+                loadingRecords: "' . CORE_DATATABLES_LIST_LOADINGRECORDS . '",
+                zeroRecords:    "' . CORE_DATATABLES_LIST_ZERORECORDS . '",
+                emptyTable:     "' . CORE_DATATABLES_LIST_EMPTYTABLE . '",
                 paginate: {
-                    first:      "'.DATATABLES_LIST_FIRST.'",
-                    previous:   "'.DATATABLES_LIST_PREVIOUS.'",
-                    next:       "'.DATATABLES_LIST_NEXT.'",
-                    last:       "'.DATATABLES_LIST_LAST.'"
+                    first:      "' . CORE_DATATABLES_LIST_FIRST . '",
+                    previous:   "' . CORE_DATATABLES_LIST_PREVIOUS . '",
+                    next:       "' . CORE_DATATABLES_LIST_NEXT . '",
+                    last:       "' . CORE_DATATABLES_LIST_LAST . '"
                 },
                 aria: {
-                    sortAscending:  "'.DATATABLES_LIST_SORTASCENDING.'",
-                    sortDescending: "'.DATATABLES_LIST_SORTDESCENDING.'"
+                    sortAscending:  "' . CORE_DATATABLES_LIST_SORTASCENDING . '",
+                    sortDescending: "' . CORE_DATATABLES_LIST_SORTDESCENDING . '"
                 }
             },
         });
     });
-</script>';?>
+</script>'; ?>
 
 <?php ob_start(); ?>
     <!-- main-content -->
@@ -52,16 +52,16 @@ $description = PAGES_LIST_DESC; ?>
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title"><?=USERS_LIST_CARD_TITLE?></h3>
+                            <h3 class="card-title"><?= USERS_LIST_CARD_TITLE ?></h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
                             <table id="users_table" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
-                                    <th>Titre</th>
-                                    <th>Auteur</th>
-                                    <th>Date de création</th>
+                                    <th><?= PAGES_TITLE ?></th>
+                                    <th><?= PAGES_AUTHOR ?></th>
+                                    <th><?= PAGES_CREATION_DATE ?></th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -69,18 +69,19 @@ $description = PAGES_LIST_DESC; ?>
                                 <?php /** @var pagesModel[] $pagesList */
                                 foreach ($pagesList as $page) : ?>
                                     <tr>
-                                        <td><?=$page->pageTitle?></td>
-                                        <td><?=$page->user->userPseudo?></td>
-                                        <td><?=$page->pageCreated?></td>
-                                        <td><a href="../pages/edit/<?=$page->pageId?>"><i class="fa fa-cog"></i></a></td>
+                                        <td><?= $page->pageTitle ?></td>
+                                        <td><?= $page->user->userPseudo ?></td>
+                                        <td><?= $page->pageCreated ?></td>
+                                        <td><a href="../pages/edit/<?= $page->pageId ?>"><i class="fa fa-cog"></i></a>
+                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <th>Titre</th>
-                                    <th>Auteur</th>
-                                    <th>Date de création</th>
+                                    <th><?= PAGES_TITLE ?></th>
+                                    <th><?= PAGES_AUTHOR ?></th>
+                                    <th><?= PAGES_CREATION_DATE ?></th>
                                     <th></th>
                                 </tr>
                                 </tfoot>

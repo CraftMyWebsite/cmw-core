@@ -40,25 +40,24 @@ $description = USERS_ROLE_ADD_DESC;
                                         //Foreach all permissions
                                         foreach ($permissionsList as $perms):
                                             foreach ($perms as $permName => $permCode):
-                                                 ?>
+                                                ?>
 
-                                                    <div class="col-lg-3 col-md-3">
-                                                        <div class="form-group">
-                                                            <div class="custom-control custom-checkbox">
-                                                                <input class="custom-control-input" type="checkbox"
-                                                                       id="<?= ($permCode == "*" ? "*" : "perms[$permName][$permCode]") ?>"
-                                                                       name="<?= ($permCode == "*" ? "perms[$permName][$permCode]" : "perms[$permName][$permCode]") ?>"
-                                                                       value="<?= $permCode ?>"
-                                                                        <?= ($role->roleHasPermission($role->roleId, $permCode) ? "checked" : "") ?>
-                                                                        <?= ($permCode == "*" ? "" : "disabled") ?>>
-                                                                <label for="<?= ($permCode == "*" ? "*" : "perms[$permName][$permCode]") ?>"
-                                                                       class="custom-control-label">
-                                                                    <?= $permName ?>
-                                                                </label>
-                                                            </div>
+                                                <div class="col-lg-3 col-md-3">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input class="custom-control-input" type="checkbox"
+                                                                   id="<?= ($permCode == "*" ? "*" : "perms[$permName][$permCode]") ?>"
+                                                                   name="<?= ($permCode == "*" ? "perms[$permName][$permCode]" : "perms[$permName][$permCode]") ?>"
+                                                                   value="<?= $permCode ?>"
+                                                                <?= ($role->roleHasPermission($role->roleId, $permCode) ? "checked" : "") ?>
+                                                                <?= ($permCode == "*" ? "" : "disabled") ?>>
+                                                            <label for="<?= ($permCode == "*" ? "*" : "perms[$permName][$permCode]") ?>"
+                                                                   class="custom-control-label">
+                                                                <?= $permName ?>
+                                                            </label>
                                                         </div>
                                                     </div>
-
+                                                </div>
 
 
                                             <?php endforeach; ?>
@@ -86,7 +85,7 @@ $description = USERS_ROLE_ADD_DESC;
         checkbox.addEventListener('change', (event) => {
             if (event.currentTarget.checked) {
                 $(':checkbox').each(function () {
-                    if(this.id !== "*") {
+                    if (this.id !== "*") {
                         this.disabled = true;
                         this.checked = false;
                     }

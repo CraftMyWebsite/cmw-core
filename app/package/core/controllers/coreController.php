@@ -45,16 +45,20 @@ class coreController
         //Options with nullables options (checkbox ...)
         if(empty($_POST['minecraft_register_premium']) && getenv("GAME") === "Minecraft"){
             coreModel::updateOption("minecraft_register_premium", "false");
-            echo "minecraft_register_premium false";
         }
-
-        var_dump($_POST);
 
         $_SESSION['toaster'][0]['title'] = CORE_TOASTER_TITLE;
         $_SESSION['toaster'][0]['type'] = "bg-success";
         $_SESSION['toaster'][0]['body'] = CORE_TOASTER_CONFIG_EDIT_SUCCESS;
 
         header("location: configuration");
+    }
+
+    public function adminLanguages()
+    {
+
+
+        view('core', 'languages.admin', [], 'admin');
     }
 
     /* PUBLIC FRONT */

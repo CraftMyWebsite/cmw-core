@@ -45,9 +45,10 @@ $description = USERS_ROLE_ADD_DESC;
                                                                    id="<?= ($permCode == "*" ? "*" : "perms[$permName][$permCode]") ?>"
                                                                    name="<?= ($permCode == "*" ? "*" : "perms[$permName][$permCode]") ?>"
                                                                    value="<?= $permCode ?>">
-                                                            <label for="<?= ($permCode == "*" ? "*" : "perms[$permName][$permCode]") ?>" class="custom-control-label">
+                                                            <label for="<?= ($permCode == "*" ? "*" : "perms[$permName][$permCode]") ?>"
+                                                                   class="custom-control-label">
                                                                 <?= $permName ?>
-                                                                </label>
+                                                            </label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -63,20 +64,20 @@ $description = USERS_ROLE_ADD_DESC;
                             <button type="submit"
                                     class="btn btn-primary float-right"><?= USERS_LIST_BUTTON_SAVE ?></button>
                         </div>
-                        </div>
+                </div>
                 </form>
             </div>
         </div>
     </div>
 
-<!-- Trigger perm * and disabled all others perms checkbox -->
+    <!-- Trigger perm * and disabled all others perms checkbox -->
     <script>
         const checkbox = document.getElementById("*");
 
         checkbox.addEventListener('change', (event) => {
             if (event.currentTarget.checked) {
                 $(':checkbox').each(function () {
-                    if(this.id !== "*") {
+                    if (this.id !== "*") {
                         this.disabled = true;
                         this.checked = false;
                     }

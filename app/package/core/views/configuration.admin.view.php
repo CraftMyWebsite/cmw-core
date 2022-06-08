@@ -11,7 +11,7 @@ $description = CORE_CONFIG_DESC; ?>
                     <form action="" method="post">
                         <div class="card card-primary">
                             <div class="card-header">
-                                <h3 class="card-title"><?=USERS_ADD_CARD_TITLE?> :</h3>
+                                <h3 class="card-title"><?= CORE_CONFIG_TITLE ?> :</h3>
                             </div>
                             <div class="card-body">
 
@@ -23,8 +23,9 @@ $description = CORE_CONFIG_DESC; ?>
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-signature"></i></span>
                                         </div>
-                                        <input type="text" name="name" class="form-control" value="<?= coreModel::getOptionValue("name") ?>"
-                                               placeholder="<?=CORE_WEBSITE_NAME?>" required>
+                                        <input type="text" name="name" class="form-control"
+                                               value="<?= coreModel::getOptionValue("name") ?>"
+                                               placeholder="<?= CORE_WEBSITE_NAME ?>" required>
                                     </div>
                                 </div>
 
@@ -34,41 +35,44 @@ $description = CORE_CONFIG_DESC; ?>
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fa fa-paragraph"></i></span>
                                         </div>
-                                        <input type="text" name="description" class="form-control" value="<?= coreModel::getOptionValue("description") ?>"
-                                               placeholder="<?=CORE_WEBSITE_DESCRIPTION?>" required>
+                                        <input type="text" name="description" class="form-control"
+                                               value="<?= coreModel::getOptionValue("description") ?>"
+                                               placeholder="<?= CORE_WEBSITE_DESCRIPTION ?>" required>
                                     </div>
                                 </div>
 
                                 <?php //Minecraft config section
-                                    if(getenv("GAME") === "Minecraft"):?>
-                                        <div class="form-group">
-                                            <label for="minecraft_ip"><?= CORE_MINECRAFT_IP ?></label>
-                                            <div class="input-group mb-3">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i class="fas fa-network-wired"></i></span>
-                                                </div>
-                                                <input type="text" name="minecraft_ip" id="minecraft_ip"
-                                                       class="form-control" value="<?= coreModel::getOptionValue("minecraft_ip") ?>"
-                                                       placeholder="<?=CORE_MINECRAFT_IP?>" required>
+                                if (getenv("GAME") === "Minecraft"):?>
+                                    <div class="form-group">
+                                        <label for="minecraft_ip"><?= CORE_MINECRAFT_IP ?></label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i
+                                                            class="fas fa-network-wired"></i></span>
                                             </div>
+                                            <input type="text" name="minecraft_ip" id="minecraft_ip"
+                                                   class="form-control"
+                                                   value="<?= coreModel::getOptionValue("minecraft_ip") ?>"
+                                                   placeholder="<?= CORE_MINECRAFT_IP ?>" required>
                                         </div>
+                                    </div>
 
-                                        <div class="form-group">
-                                            <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                                <input type="checkbox" class="custom-control-input"
-                                                       name="minecraft_register_premium" id="minecraft_register_premium"
-                                                       value="true" <?= coreModel::getOptionValue("minecraft_register_premium") === "true" ? "checked" : "" ?>>
-                                                <label class="custom-control-label" for="minecraft_register_premium">
-                                                    <?= CORE_MINECRAFT_REGISTER_PREMIUM ?>
-                                                </label>
-                                            </div>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                                            <input type="checkbox" class="custom-control-input"
+                                                   name="minecraft_register_premium" id="minecraft_register_premium"
+                                                   value="true" <?= coreModel::getOptionValue("minecraft_register_premium") === "true" ? "checked" : "" ?>>
+                                            <label class="custom-control-label" for="minecraft_register_premium">
+                                                <?= CORE_MINECRAFT_REGISTER_PREMIUM ?>
+                                            </label>
                                         </div>
+                                    </div>
                                 <?php endif; ?>
 
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary float-right"><?=BTN_SAVE?></button>
+                                <button type="submit" class="btn btn-primary float-right"><?= CORE_BTN_SAVE ?></button>
                             </div>
                         </div>
                     </form>

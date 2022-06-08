@@ -17,12 +17,12 @@ $description = PAGES_ADD_DESC; ?>
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/marker@latest"></script><!-- Marker -->
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/underline@latest"></script><!-- Underline -->
 
-    <script src="'.getenv("PATH_SUBFOLDER").'admin/resources/vendors/editorjs/plugins/drag-drop.js"></script><!-- DragDrop -->
-    <script src="'.getenv("PATH_SUBFOLDER").'admin/resources/vendors/editorjs/plugins/undo.js"></script><!-- Undo -->
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/drag-drop.js"></script><!-- DragDrop -->
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/undo.js"></script><!-- Undo -->
 
 
     <!-- Load Editor.js Core -->
-    <script src="'.getenv("PATH_SUBFOLDER").'admin/resources/vendors/editorjs/editor.js"></script>
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/editor.js"></script>
     <!-- Initialization -->
     <script>
     let editor = new EditorJS({
@@ -49,7 +49,7 @@ $description = PAGES_ADD_DESC; ?>
                         uploadByFile(file) {
                         let formData = new FormData();
                         formData.append("file", file, file["name"]);
-                        return fetch("'.getenv("PATH_SUBFOLDER").'admin/resources/vendors/editorjs/upload_file.php", {
+                        return fetch("' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/upload_file.php", {
                             method:"POST",
                             body:formData
                         }).then(res=>res.json())
@@ -57,7 +57,7 @@ $description = PAGES_ADD_DESC; ?>
                                 return {
                                     success: 1,
                                     file: {
-                                        url: "'.getenv("PATH_SUBFOLDER").'public/uploads/"+response
+                                        url: "' . getenv("PATH_SUBFOLDER") . 'public/uploads/"+response
                                     }
                                 }
                             })
@@ -120,7 +120,7 @@ $description = PAGES_ADD_DESC; ?>
         .then((savedData) => {
             if(jQuery("#page_id").val()) {
                 $.ajax({
-                    url : "'.getenv("PATH_SUBFOLDER").'cms-admin/pages/edit",
+                    url : "' . getenv("PATH_SUBFOLDER") . 'cms-admin/pages/edit",
                     type : "POST",
                     data : {
                         "news_id" : jQuery("#page_id").val(),
@@ -141,7 +141,7 @@ $description = PAGES_ADD_DESC; ?>
             }
             else {
                 $.ajax({
-                    url : "'.getenv("PATH_SUBFOLDER").'cms-admin/pages/add",
+                    url : "' . getenv("PATH_SUBFOLDER") . 'cms-admin/pages/add",
                     type : "POST",
                     data : {
                         "news_title" : jQuery("#title").val(),
@@ -173,67 +173,71 @@ $description = PAGES_ADD_DESC; ?>
 <?php ob_start(); ?>
 <style>
     .ce-block__content, .ce-toolbar__content {
-        max-width: 80%!important;
+        max-width: 80% !important;
     }
+
     .page-title {
         width: 80%;
         margin: 0 10%;
         font-size: 30px;
         border: 0;
     }
+
     .page-slug {
         width: 80%;
         margin: 0 10%;
     }
-    input:focus{
+
+    input:focus {
         outline: none;
     }
 </style>
-    <!-- main-content -->
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-9">
-                    <div class="card card-primary">
-                        <div class="card-body">
-                            <input type="hidden" id="page_id" name="page_id">
-                            <input class="page-title" type="text" id="title" placeholder="Titre de la page">
-                            <p class="page-slug text-blue mb-3 d-flex"><?php echo "http://" . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER"); ?> <input class="border-0 text-blue p-0 w-100 page-slug-input" type="text" id="slug"></p>
-                            <div>
-                                <div id="editorjs"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Publication de la page</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="custom-control custom-switch mb-2">
-                                <input type="checkbox" class="custom-control-input" id="draft" name="draft">
-                                <label class="custom-control-label" for="draft">Brouillon</label>
-                            </div>
-                            <div class="btn btn-block btn-primary" id="saveButton">
-                                <?=BUTTON_SAVE?>
-                            </div>
+<!-- main-content -->
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-9">
+                <div class="card card-primary">
+                    <div class="card-body">
+                        <input type="hidden" id="page_id" name="page_id">
+                        <input class="page-title" type="text" id="title" placeholder="Titre de la page">
+                        <p class="page-slug text-blue mb-3 d-flex"><?php echo "http://" . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER"); ?>
+                            <input class="border-0 text-blue p-0 w-100 page-slug-input" type="text" id="slug"></p>
+                        <div>
+                            <div id="editorjs"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- /.row -->
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><?= PAGES_PUBLISH ?></h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="custom-control custom-switch mb-2">
+                            <input type="checkbox" class="custom-control-input" id="draft" name="draft">
+                            <label class="custom-control-label" for="draft"><?= PAGES_DRAFT ?></label>
+                        </div>
+                        <div class="btn btn-block btn-primary" id="saveButton">
+                            <?= CORE_BTN_SAVE ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+        <!-- /.row -->
     </div>
-    <script>
-        $('#title').on('keyup', function() {
-            let val = $(this).val();
-            val=val.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-            val=val.replace(/[^\w\s]/gi, '');
-            val=val.replace(/ /g,"-");
-            $('#slug').val(val);
-        });
-    </script>
+</div>
+<script>
+    $('#title').on('keyup', function () {
+        let val = $(this).val();
+        val = val.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        val = val.replace(/[^\w\s]/gi, '');
+        val = val.replace(/ /g, "-");
+        $('#slug').val(val);
+    });
+</script>
 
-    <!-- /.main-content -->
+<!-- /.main-content -->
 <?php $content = ob_get_clean(); ?>
