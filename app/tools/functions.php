@@ -69,3 +69,14 @@ function getAllPackagesInstalled(): array
 
     return $res;
 }
+
+/***
+ * @param array $arr
+ * @desc Return a pretty array
+ */
+function debugR(array $arr): void
+{
+    echo "<pre>";
+    print_r($arr);
+    echo "</pre>";
+}
