@@ -44,7 +44,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                                 </div>
                                 <div class="form-group">
                                     <label><?=USERS_ROLE?></label>
-                                    <select name="role" class="form-control">
+                                    <select name="roles[]" class="form-control" multiple>
                                         <?php
                                         foreach ($roles as $role) : ?>
                                             <option value="<?=$role['role_id']?>"><?=$role['role_name']?></option>

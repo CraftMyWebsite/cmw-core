@@ -10,7 +10,7 @@ use CMW\Model\Users\usersModel;
 /**
  * Class: @usersController
  * @package Users
- * @author LoGuardian | <loguardian@hotmail.com>
+ * @author LoGuardian et Teyir
  * @version 1.0
  */
 class usersController extends coreController
@@ -118,8 +118,7 @@ class usersController extends coreController
         $user->userPseudo = filter_input(INPUT_POST, "pseudo");
         $user->userFirstname = filter_input(INPUT_POST, "name");
         $user->userLastname = filter_input(INPUT_POST, "lastname");
-        $user->roleId = filter_input(INPUT_POST, "role");
-        $user->update();
+        $user->update($_POST['roles']);
 
         $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;
         $_SESSION['toaster'][0]['type'] = "bg-success";
@@ -160,8 +159,7 @@ class usersController extends coreController
         $user->userPseudo = filter_input(INPUT_POST, "pseudo");
         $user->userFirstname = filter_input(INPUT_POST, "name");
         $user->userLastname = filter_input(INPUT_POST, "lastname");
-        $user->roleId = filter_input(INPUT_POST, "role");
-        $user->create();
+        $user->create($_POST['roles']);
 
         $user->setPassword(password_hash(filter_input(INPUT_POST, "pass"), PASSWORD_BCRYPT));
         $user->updatePass();
