@@ -71,6 +71,7 @@ $description = USERS_LIST_DESC; ?>
                                 </thead>
                                 <tbody>
                                 <?php /** @var usersModel[] $userList */
+                                debugR($userList);
                                 foreach ($userList as $user) : ?>
                                     <tr>
                                         <td><?= $user['user_email'] ?></td>
