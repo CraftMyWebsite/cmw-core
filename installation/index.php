@@ -109,46 +109,36 @@ require_once("resources/functions/games.php")
                 </div>
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                     data-accordion="false">
-                    <?php if ((isset($_GET['finish_step']) && $_GET['step'] == 5) || !file_exists("../.env")) : ?>
                         <li class="nav-item">
                             <a class="nav-link <?= (!isset($_GET['step']) || $_GET['step'] == 1) ? "active" : "" ?>">
-                                <i class="nav-icon fas fa-hourglass-start"></i>
+                                <i class="nav-icon fas fa-<?= (!isset($_GET['step'])) ? "spinner" : "check" ?>"></i>
                                 <p><?= INSTALL_STEP ?> 1</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link <?= (isset($_GET['step']) && $_GET['step'] == 2) ? "active" : "" ?>">
-                                <i class="nav-icon fas fa-hourglass-half"></i>
+                                <i class="nav-icon fas fa-<?= (isset($_GET['step']) && $_GET['step'] > 2) ? "check" : "spinner" ?>"></i>
                                 <p><?= INSTALL_STEP ?> 2</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link <?= (isset($_GET['step']) && $_GET['step'] == 3) ? "active" : "" ?>">
-                                <i class="nav-icon fas fa-hourglass-end"></i>
+                                <i class="nav-icon fas fa-<?= (isset($_GET['step']) && $_GET['step'] > 3) ? "check" : "spinner" ?>"></i>
                                 <p><?= INSTALL_STEP ?> 3</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link <?= (isset($_GET['step']) && $_GET['step'] == 4) ? "active" : "" ?>">
-                                <i class="nav-icon fas fa-hourglass-end"></i>
+                                <i class="nav-icon fas fa-<?= (isset($_GET['step']) && $_GET['step'] > 4) ? "check" : "spinner" ?>"></i>
                                 <p><?= INSTALL_STEP ?> 4</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link <?= (isset($_GET['step']) && $_GET['step'] == 5) ? "active" : "" ?>">
-                                <i class="nav-icon fas fa-hourglass-end"></i>
+                                <i class="nav-icon fas fa-<?= (isset($_GET['step']) && $_GET['step'] > 5) ? "check" : "spinner" ?>"></i>
                                 <p><?= INSTALL_STEP ?> 5</p>
                             </a>
                         </li>
-
-                    <?php else : ?>
-                        <li class="nav-item">
-                            <a class="nav-link active">
-                                <i class="nav-icon fas fa-exclamation-triangle"></i>
-                                <p><?= INSTALL_ERROR ?></p>
-                            </a>
-                        </li>
-                    <?php endif; ?>
                 </ul>
             </nav>
             <!-- /.sidebar-menu -->
@@ -177,7 +167,7 @@ require_once("resources/functions/games.php")
         <div class="container-fluid">
             <div class="row">
                 <div class="col-7">
-                    <?php if ((isset($_GET['finish_step']) && $_GET['step'] == 4) || !file_exists("../.env") || getenv("STATUS") == 0) : ?>
+                    <?php if ((isset($_GET['finish_step']) && $_GET['step'] == 4) || !file_exists("../.env")) : ?>
                         <!-- DATABASE INSTALLATION -->
                         <?php if (!isset($_GET['step']) || $_GET['step'] == 1) : ?>
                             <div class="card">
@@ -445,7 +435,7 @@ require_once("resources/functions/games.php")
                                     <b><?= INSTALL_INFO_IP ?></b><?= $_SERVER['SERVER_ADDR'] ?>
                                     :<?= $_SERVER['SERVER_PORT'] ?>
                                 </p>
-                                <?php if ($_GET['step'] > 2): ?>
+                                <?php if (isset($_GET['step']) > 2): ?>
                                     <p>
                                         <b><?= INSTALL_GAME ?>:</b> <?= getenv("GAME") ?>
                                     </p>
