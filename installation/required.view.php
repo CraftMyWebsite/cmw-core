@@ -26,8 +26,10 @@
 
     <h1 class="text-danger text-center">Erreur</h1>
 
+    <?php //TODO SET THAT TO LANG PART VERSION  ?>
+
     <p>CraftMyWebsite ne supporte pas votre version de PHP, merci de changer pour pouvoir installer le CMS.</p>
-    <p>Votre version: <strong><?=phpversion()?></strong></p>
+    <p>Votre version: <strong><?= PHP_VERSION ?></strong></p>
     <p>Version minimum <strong>7.4</strong></p>
 
     <div class="text-center mt-4">

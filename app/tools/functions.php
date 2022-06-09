@@ -1,6 +1,7 @@
 <?php
 /* Installation cleaner */
-function deleteDirectory($dir) {
+function deleteDirectory($dir): bool
+{
     if (!file_exists($dir)) {
         return true;
     }
@@ -10,7 +11,7 @@ function deleteDirectory($dir) {
     }
 
     foreach (scandir($dir) as $item) {
-        if ($item == '.' || $item == '..') {
+        if ($item === '.' || $item === '..') {
             continue;
         }
 
@@ -36,6 +37,8 @@ function cmwPackageInfo(string $package): array
 /*
  * Error management
  */
+
+//TODO A refaire...
 function bigToaster(): string
 {
     $toasters = "";
@@ -61,22 +64,20 @@ function getAllPackagesInstalled(): array
     $dirFoldersNames = array_slice(scandir($dir), 2); //For remove '.' '..'
     $res = [];
 
-    foreach ($dirFoldersNames as $folder):
+    foreach ($dirFoldersNames as $folder) {
         $jsonFile = file_get_contents("app/package/$folder/infos.json");
-        $obj = json_decode($jsonFile,true, 512, JSON_THROW_ON_ERROR);
+        $obj = json_decode($jsonFile, true, 512, JSON_THROW_ON_ERROR);
         $res[] = $obj['name'];
-    endforeach;
+    }
 
     return $res;
 }
 
 /***
- * @param array $arr
+ * @param $arr
  * @desc Return a pretty array
  */
-function debugR(array $arr): void
+function debugR($arr): void
 {
-    echo "<pre>";
-    print_r($arr);
-    echo "</pre>";
+    echo "<pre>" . print_r($arr) . "</pre>";
 }

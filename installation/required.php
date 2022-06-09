@@ -6,7 +6,7 @@
 ///
 
 
-if (phpversion() <= "8.0"){
+if (PHP_VERSION <= "8.0"){
 
     include "required.view.php";
 

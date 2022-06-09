@@ -7,21 +7,22 @@ use CMW\Controller\Menus\menusController;
 use CMW\Controller\Users\usersController;
 use CMW\Model\Pages\pagesModel;
 use CMW\Model\Users\usersModel;
+use JetBrains\PhpStorm\NoReturn;
 
 /**
  * Class: @pagesController
  * @package Pages
- * @author LoGuardiaN | <loguardian@hotmail.com>
+ * @author LoGuardiaN
  * @version 1.0
  */
 class pagesController extends coreController
 {
-    public function adminPagesList()
+    public function adminPagesList(): void
     {
         usersController::isUserHasPermission("pages.show");
 
         $pagesModel = new pagesModel();
-        $pagesList = $pagesModel->fetchAll();
+        $pagesList = $pagesModel::fetchAll();
 
         view('pages', 'list.admin', ["pagesList" => $pagesList], 'admin');
     }
@@ -44,9 +45,7 @@ class pagesController extends coreController
         $page->pageSlug = filter_input(INPUT_POST, "news_slug");
         $page->pageContent = filter_input(INPUT_POST, "news_content");
         $page->pageState = filter_input(INPUT_POST, "page_state");
-        $page->userId = $user->getLoggedUser();
-
-        var_dump($page->pageContent);
+        $page->userId = $user::getLoggedUser();
 
         $page->create();
 
@@ -63,7 +62,7 @@ class pagesController extends coreController
 
         $pageContent = $page->pageContent;
 
-        view('pages', 'edit.admin', ["page"=> $page, "pageContent" => $pageContent], 'admin');
+        view('pages', 'edit.admin', ["page" => $page, "pageContent" => $pageContent], 'admin');
     }
 
     public function adminPagesEditPost(): void
@@ -82,7 +81,7 @@ class pagesController extends coreController
         echo $page->pageId;
     }
 
-    public function adminPagesDelete(): void
+    #[NoReturn] public function adminPagesDelete(): void
     {
         usersController::isUserHasPermission("pages.delete");
 
@@ -90,6 +89,7 @@ class pagesController extends coreController
         $page->pageId = filter_input(INPUT_POST, "id");
         $page->delete();
 
+        //Todo try to remove that
         $_SESSION['toaster'][0]['title'] = CORE_TOASTER_TITLE;
         $_SESSION['toaster'][0]['type'] = "bg-success";
         $_SESSION['toaster'][0]['body'] = CORE_TOASTER_DELETE_SUCCESS;
@@ -99,7 +99,6 @@ class pagesController extends coreController
     }
 
 
-
     /* Public section */
     public function publicShowPage($slug): void
     {
@@ -107,7 +106,6 @@ class pagesController extends coreController
         //Default controllers (important)
         $core = new coreController();
         $menu = new menusController();
-
         $page = new pagesModel();
 
         $page->pageSlug = $slug;
@@ -116,10 +114,9 @@ class pagesController extends coreController
 
 
         //Include the public view file ("public/themes/$themePath/views/wiki/main.view.php")
-        view('pages', 'main', ["page" => $page,"pageContent" => $pageContent,
-            "slug" => $slug , "core" => $core, "menu" => $menu], 'public');
+        view('pages', 'main', ["page" => $page, "pageContent" => $pageContent,
+            "slug" => $slug, "core" => $core, "menu" => $menu], 'public');
     }
-
 
 
 }

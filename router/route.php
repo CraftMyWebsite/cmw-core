@@ -5,7 +5,7 @@ namespace CMW\Router;
 /**
  * Class: @route
  * @package Core
- * @author CraftMywebsite <contact@craftmywebsite>
+ * @author CraftMywebsite <contact@craftmywebsite.fr>
  * @version 1.0
  */
 class route
@@ -37,7 +37,7 @@ class route
     public function match($url): bool
     {
         $url = trim($url, '/');
-        $path = preg_replace_callback('#:([\w]+)#', [$this, 'paramMatch'], $this->path);
+        $path = preg_replace_callback('#:(\w+)#', [$this, 'paramMatch'], $this->path);
         $regex = "#^$path$#i";
 
         if (!preg_match($regex, $url, $matches)) {
@@ -73,7 +73,7 @@ class route
         return call_user_func_array($this->callable, $this->matches);
     }
 
-    public function getUrl($params)
+    public function getUrl($params): array|string
     {
         $path = $this->path;
         foreach ($params as $k => $v) {

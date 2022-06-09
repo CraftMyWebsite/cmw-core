@@ -7,17 +7,19 @@ use Closure;
 /**
  * Class: @router
  * @package Core
- * @author CraftMywebsite <contact@craftmywebsite>
+ * @author CraftMywebsite <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class router {
+class router
+{
 
     private string $url;
     private array $routes = [];
     private array $namedRoutes = [];
     private string $groupPattern;
 
-    public function __construct($url){
+    public function __construct($url)
+    {
         $this->url = $url;
     }
 
@@ -33,47 +35,51 @@ class router {
 
     private function add($path, $callable, $name, $method): route
     {
-        if(!empty($this->groupPattern)){
-            $path = $this->groupPattern.$path;
+        if (!empty($this->groupPattern)) {
+            $path = $this->groupPattern . $path;
         }
         $route = new route($path, $callable);
         $this->routes[$method][] = $route;
-        if(is_string($callable) && $name === null){
+        if (is_string($callable) && $name === null) {
             $name = $callable;
         }
-        if($name){
+        if ($name) {
             $this->namedRoutes[$name] = $route;
         }
         return $route;
     }
 
-    public function scope($GroupPattern, Closure $routes): void
+    public function scope($groupPattern, Closure $routes): void
     {
-        $this->groupPattern = $GroupPattern;
+        $this->groupPattern = $groupPattern;
         $routes($this);
         unset($this->groupPattern);
     }
 
     /**
-     * @throws \CMW\Router\routerException
+     * @throws routerException
      */
-    public function listen(){
-        if(!isset($this->routes[$_SERVER['REQUEST_METHOD']])){
+    public function listen()
+    {
+        if (!isset($this->routes[$_SERVER['REQUEST_METHOD']])) {
             throw new routerException('REQUEST_METHOD does not exist');
         }
-        foreach($this->routes[$_SERVER['REQUEST_METHOD']] as $route){
-            if($route->match($this->url)){
+        foreach ($this->routes[$_SERVER['REQUEST_METHOD']] as $route) {
+            if ($route->match($this->url)) {
                 return $route->call();
             }
         }
+        //TODO ERROR PAGE
         throw new routerException('No matching routes');
     }
 
     /**
-     * @throws \CMW\Router\routerException
+     * @throws routerException
      */
-    public function url($name, $params = []){
-        if(!isset($this->namedRoutes[$name])){
+    public function url($name, $params = [])
+    {
+        if (!isset($this->namedRoutes[$name])) {
+            //TODO ERROR PAGE
             throw new routerException('No route matches this name');
         }
         return $this->namedRoutes[$name]->getUrl($params);

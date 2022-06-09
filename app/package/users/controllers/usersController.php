@@ -3,14 +3,14 @@
 namespace CMW\Controller\Users;
 
 use CMW\Controller\coreController;
-use CMW\Controller\Menus\menusController;
 use CMW\Model\Roles\rolesModel;
 use CMW\Model\Users\usersModel;
+use JetBrains\PhpStorm\NoReturn;
 
 /**
  * Class: @usersController
  * @package Users
- * @author LoGuardian et Teyir
+ * @author LoGuardian & Teyir
  * @version 1.0
  */
 class usersController extends coreController
@@ -46,6 +46,7 @@ class usersController extends coreController
 
         return true;
     }
+
     public function adminLogin(): void
     {
         if (usersModel::getLoggedUser() !== -1) {
@@ -108,7 +109,7 @@ class usersController extends coreController
         view('users', 'user.admin', ["user" => $user, "roles" => $roles], 'admin');
     }
 
-    public function adminUsersEditPost($id): void
+    #[NoReturn] public function adminUsersEditPost($id): void
     {
         self::isUserHasPermission("users.edit");
 
@@ -120,6 +121,7 @@ class usersController extends coreController
         $user->userLastname = filter_input(INPUT_POST, "lastname");
         $user->update($_POST['roles']);
 
+        //Todo Try to edit that
         $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;
         $_SESSION['toaster'][0]['type'] = "bg-success";
         $_SESSION['toaster'][0]['body'] = USERS_EDIT_TOASTER_SUCCESS;
@@ -128,10 +130,13 @@ class usersController extends coreController
             if (filter_input(INPUT_POST, "pass") === filter_input(INPUT_POST, "pass_verif")) {
                 $user->setPassword(password_hash(filter_input(INPUT_POST, "pass"), PASSWORD_BCRYPT));
                 $user->updatePass();
+
             } else {
+                //Todo Try to edit that
                 $_SESSION['toaster'][1]['title'] = USERS_TOASTER_TITLE_ERROR;
                 $_SESSION['toaster'][1]['type'] = "bg-danger";
                 $_SESSION['toaster'][1]['body'] = USERS_EDIT_TOASTER_PASS_ERROR;
+
             }
 
         }
@@ -167,7 +172,7 @@ class usersController extends coreController
         header("location: ../users/list");
     }
 
-    public function adminUserState(): void
+    #[NoReturn] public function adminUserState(): void
     {
         self::isUserHasPermission("users.edit");
 
@@ -194,11 +199,13 @@ class usersController extends coreController
         die();
     }
 
-    public function adminUsersDelete(): void
+    #[NoReturn] public function adminUsersDelete(): void
     {
         self::isUserHasPermission("users.delete");
 
         if (usersModel::getLoggedUser() == filter_input(INPUT_POST, "id")) {
+
+            //Todo Try to remove that
             $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE_ERROR;
             $_SESSION['toaster'][0]['type'] = "bg-danger";
             $_SESSION['toaster'][0]['body'] = USERS_DELETE_TOASTER_ERROR;
@@ -210,6 +217,7 @@ class usersController extends coreController
         $user->userId = filter_input(INPUT_POST, "id");
         $user->delete();
 
+        //Todo Try to remove that
         $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;
         $_SESSION['toaster'][0]['type'] = "bg-success";
         $_SESSION['toaster'][0]['body'] = USERS_DELETE_TOASTER_SUCCESS;
@@ -226,7 +234,7 @@ class usersController extends coreController
         if (usersModel::getLoggedUser() !== -1) {
             $user = new usersModel();
 
-            if (self::isAdminLoggedBool() == 0 || $user->hasPermission($_SESSION['cmwUserId'], $permCode) < 0) {
+            if (!self::isAdminLoggedBool() || $user->hasPermission($_SESSION['cmwUserId'], $permCode) < 0) {
                 header('Location: ' . getenv('PATH_SUBFOLDER'));
                 exit();
             }

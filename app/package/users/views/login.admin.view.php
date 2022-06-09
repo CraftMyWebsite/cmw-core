@@ -4,9 +4,6 @@ $description = USERS_LOGIN_DESC;
 $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main.js"></script>';
 
 ?>
-
-<?php use CMW\Controller\coreController; ?>
-
 <?php $noBody = 1; ?>
 
 <?php ob_start(); ?>

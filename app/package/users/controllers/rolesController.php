@@ -5,13 +5,13 @@ namespace CMW\Controller\Roles;
 use CMW\Controller\coreController;
 use CMW\Controller\Users\usersController;
 use CMW\Model\Roles\rolesModel;
-use CMW\Model\Users\usersModel;
-use http\Client\Curl\User;
+use JetBrains\PhpStorm\NoReturn;
+use JsonException;
 
 /**
  * Class: @rolesController
  * @package Users
- * @author LoGuardian et Teyir
+ * @author LoGuardian & Teyir
  * @version 1.0
  */
 class rolesController extends coreController
@@ -26,6 +26,9 @@ class rolesController extends coreController
         view('users', 'roles.list.admin', ["rolesList" => $rolesList], 'admin');
     }
 
+    /**
+     * @throws JsonException
+     */
     public function adminRolesAdd(): void
     {
         usersController::isUserHasPermission("users.roles");
@@ -36,7 +39,7 @@ class rolesController extends coreController
         view('users', 'roles.add.admin', ["permissionsList" => $permissionsList], 'admin');
     }
 
-    public function adminRolesAddPost(): void
+    #[NoReturn] public function adminRolesAddPost(): void
     {
         usersController::isUserHasPermission("users.roles");
 
@@ -56,7 +59,7 @@ class rolesController extends coreController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function adminRolesEdit($id): void
     {
@@ -69,7 +72,7 @@ class rolesController extends coreController
             "permissionsList" => $permissionsList], 'admin');
     }
 
-    public function adminRolesEditPost($id): void
+    #[NoReturn] public function adminRolesEditPost($id): void
     {
         usersController::isUserHasPermission("users.roles");
 
@@ -81,6 +84,7 @@ class rolesController extends coreController
         $role->roleId = $id;
         $role->updateRole();
 
+        //Todo Try to remove that
         $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;
         $_SESSION['toaster'][0]['type'] = "bg-success";
         $_SESSION['toaster'][0]['body'] = USERS_ROLE_EDIT_TOASTER_SUCCESS;
@@ -89,7 +93,7 @@ class rolesController extends coreController
         die();
     }
 
-    public function adminRolesDelete($id): void
+    #[NoReturn] public function adminRolesDelete($id): void
     {
         usersController::isUserHasPermission("users.roles");
 
@@ -97,6 +101,7 @@ class rolesController extends coreController
         $role->roleId = $id;
         $role->deleteRole();
 
+        //Todo Try to remove that
         $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;
         $_SESSION['toaster'][0]['type'] = "bg-success";
         $_SESSION['toaster'][0]['body'] = USERS_ROLE_EDIT_TOASTER_SUCCESS;

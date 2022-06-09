@@ -7,7 +7,7 @@ use CMW\Model\manager;
 /**
  * Class: @menusModel
  * @package Menus
- * @author LoGuardiaN | <loguardian@hotmail.com>
+ * @author LoGuardiaN
  * @version 1.0
  */
 class menusModel extends manager {

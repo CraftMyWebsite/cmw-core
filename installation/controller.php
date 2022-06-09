@@ -6,32 +6,33 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-$path ='../.env';
+$path = '../.env';
 
 require_once("../app/envBuilder.php");
-if(file_exists($path)) {
+if (file_exists($path)) {
     (new Env($path))->load();
 }
 
-function changeEnvironmentVariable($key,$value,$path) {
+function changeEnvironmentVariable($key, $value, $path): void
+{
     $old = getenv($key);
     file_put_contents($path, str_replace(
-        "$key=".$old,
-        "$key=".$value,
+        "$key=" . $old,
+        "$key=" . $value,
         file_get_contents($path)
     ));
 }
 
 
 /* UPDATE DATABASE */
-if (isset($_POST['update_env'])):
+if (isset($_POST['update_env'])) {
 
 
     $dev = isset($_POST['dev_mode']) ? 1 : 0;
 
     $host = filter_input(INPUT_POST, "bdd_address");
     $username = filter_input(INPUT_POST, "bdd_login");
-    $password= filter_input(INPUT_POST, "bdd_pass");
+    $password = filter_input(INPUT_POST, "bdd_pass");
     $db = filter_input(INPUT_POST, "bdd_name");
     $subFolder = filter_input(INPUT_POST, "install_folder");
     $devMode = $dev;
@@ -39,7 +40,7 @@ if (isset($_POST['update_env'])):
     $timezone = date_default_timezone_get();
 
 
-    if(file_exists($path)) {
+    if (file_exists($path)) {
         changeEnvironmentVariable("DB_HOST", $host, $path);
         changeEnvironmentVariable("DB_USERNAME", $username, $path);
         changeEnvironmentVariable("DB_PASSWORD", $password, $path);
@@ -48,19 +49,27 @@ if (isset($_POST['update_env'])):
         changeEnvironmentVariable("PATH_SUBFOLDER", $subFolder, $path);
         changeEnvironmentVariable("LOCALE", $locale, $path);
         changeEnvironmentVariable("TIMEZONE", $timezone, $path);
-    }
-    else {
+    } else {
         $envFile = fopen($path, 'wb') or die("Unable to open file!");
 
-        $txt = "DB_HOST=$host\n";fwrite($envFile, $txt);
-        $txt = "DB_USERNAME=$username\n";fwrite($envFile, $txt);
-        $txt = "DB_PASSWORD=$password\n";fwrite($envFile, $txt);
-        $txt = "DB_NAME=$db\n";fwrite($envFile, $txt);
-        $txt = "PATH_ADMIN_VIEW=admin/resources/views/\n";fwrite($envFile, $txt);
-        $txt = "PATH_SUBFOLDER=$subFolder\n";fwrite($envFile, $txt);
-        $txt = "DEV_MODE=$devMode\n";fwrite($envFile, $txt);
-        $txt = "LOCALE=$locale\n";fwrite($envFile, $txt);
-        $txt = "TIMEZONE=$timezone\n";fwrite($envFile, $txt);
+        $txt = "DB_HOST=$host\n";
+        fwrite($envFile, $txt);
+        $txt = "DB_USERNAME=$username\n";
+        fwrite($envFile, $txt);
+        $txt = "DB_PASSWORD=$password\n";
+        fwrite($envFile, $txt);
+        $txt = "DB_NAME=$db\n";
+        fwrite($envFile, $txt);
+        $txt = "PATH_ADMIN_VIEW=admin/resources/views/\n";
+        fwrite($envFile, $txt);
+        $txt = "PATH_SUBFOLDER=$subFolder\n";
+        fwrite($envFile, $txt);
+        $txt = "DEV_MODE=$devMode\n";
+        fwrite($envFile, $txt);
+        $txt = "LOCALE=$locale\n";
+        fwrite($envFile, $txt);
+        $txt = "TIMEZONE=$timezone\n";
+        fwrite($envFile, $txt);
         fclose($envFile);
     }
 
@@ -69,11 +78,10 @@ if (isset($_POST['update_env'])):
     $dbPassword = filter_input(INPUT_POST, "bdd_pass");
     $dbName = filter_input(INPUT_POST, "bdd_name");
 
-    $db = new PDO("mysql:host=".$dbAdress,$dbLogin,$dbPassword);
+    $db = new PDO("mysql:host=" . $dbAdress, $dbLogin, $dbPassword);
     $db->exec("SET CHARACTER SET utf8");
-    $db->exec("CREATE DATABASE IF NOT EXISTS ".$dbName.";");
-    $db->exec("USE ".$dbName.";");
-
+    $db->exec("CREATE DATABASE IF NOT EXISTS " . $dbName . ";");
+    $db->exec("USE " . $dbName . ";");
 
 
     $query = file_get_contents("init.sql");
@@ -84,30 +92,30 @@ if (isset($_POST['update_env'])):
     $packageFolder = '../app/package/';
     $scannedDirectory = array_diff(scandir($packageFolder), array('..', '.'));
 
-    foreach ($scannedDirectory as $package) :
+    foreach ($scannedDirectory as $package) {
         $packageSqlFile = "../app/package/$package/init.sql";
-        if(file_exists($packageSqlFile)) {
+        if (file_exists($packageSqlFile)) {
             $query_package = file_get_contents($packageSqlFile);
             $stmt_package = $db->prepare($query_package);
             $stmt_package->execute();
             $stmt_package->closeCursor();
-            if($devMode === 0) {
+            if ($devMode === 0) {
                 unlink($packageSqlFile);
             }
         }
-    endforeach;
+    }
 
     $db = null;
 
     header('Location: index.php?step=2');
     die();
-endif;
+}
 
 
 /* CHOOSE GAME */
-require_once ("resources/functions/games.php");
+require_once("resources/functions/games.php");
 
-if (isset($_POST['game'])):
+if (isset($_POST['game'])) {
 
     $selGame = filter_input(INPUT_POST, "game");
 
@@ -116,24 +124,23 @@ if (isset($_POST['game'])):
 
     $envFile = fopen($path, 'wb') or die("Unable to open file!");
 
-    $txt = $currentEnv;fwrite($envFile, $txt);
-    $txt = "GAME=$selGame\n";fwrite($envFile, $txt);
+    $txt = $currentEnv;
+    fwrite($envFile, $txt);
+    $txt = "GAME=$selGame\n";
+    fwrite($envFile, $txt);
 
     //If the current 'game' choose is personal we don't make any change.
-    if($selGame === "Personal"):
-        header('Location: index.php?step=3');
-        die();
-    else:
+    if ($selGame !== "Personal") {
         games::installGame($selGame);
-        header('Location: index.php?step=3');
-        die();
-    endif;
+    }
+    header('Location: index.php?step=3');
+    die();
 
-endif;
+}
 
 /* ADMIN CREATION */
-if (isset($_POST['create_admin'])):
-    $db = new PDO("mysql:host=".getenv('DB_HOST').";dbname=".getenv('DB_NAME')."", getenv('DB_USERNAME'), getenv('DB_PASSWORD'));
+if (isset($_POST['create_admin'])) {
+    $db = new PDO("mysql:host=" . getenv('DB_HOST') . ";dbname=" . getenv('DB_NAME') . "", getenv('DB_USERNAME'), getenv('DB_PASSWORD'));
 
     $userEmail = filter_input(INPUT_POST, "email");
     $userUsername = filter_input(INPUT_POST, "pseudo");
@@ -156,16 +163,17 @@ if (isset($_POST['create_admin'])):
         "role_id" => 5 //Default administrator id is 5
     ));
 
+    //WHY ?
     $db = null;
 
     header('Location: index.php?step=4');
     die();
-endif;
+}
 
 /* WEBSITE CONFIGURATION */
-if (isset($_POST['website_config'])):
+if (isset($_POST['website_config'])) {
 
-    $db = new PDO("mysql:host=".getenv('DB_HOST').";dbname=".getenv('DB_NAME')."", getenv('DB_USERNAME'), getenv('DB_PASSWORD'));
+    $db = new PDO("mysql:host=" . getenv('DB_HOST') . ";dbname=" . getenv('DB_NAME') . "", getenv('DB_USERNAME'), getenv('DB_PASSWORD'));
     $query = $db->prepare("INSERT INTO cmw_core_options (option_name, option_value, option_updated) VALUES (:option_name, :option_value, NOW())");
 
     $query->execute(array(
@@ -180,7 +188,7 @@ if (isset($_POST['website_config'])):
 
 
     //Game Minecraft
-    if(getenv("GAME") === "Minecraft") {
+    if (getenv("GAME") === "Minecraft") {
         $query->execute(array(
             "option_name" => "minecraft_ip",
             "option_value" => filter_input(INPUT_POST, "config_minecraft_ip")
@@ -190,4 +198,4 @@ if (isset($_POST['website_config'])):
 
     header('Location: index.php?step=5&finish_step');
     die();
-endif;
+}

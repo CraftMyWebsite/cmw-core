@@ -4,17 +4,14 @@
   "icon_menu": "fas fa-th",
   "url_menu": "",
   "urls_submenu": {
-    "Configuration": "configuration",
-    "Langages": "languages"
+    "Configuration": "configuration"
   },
   "urls_submenu_en": {
-    "Configuration": "configuration",
-    "Languages": "languages"
+    "Configuration": "configuration"
   },
   "permissions": {
     "Accès au dashboard admin": "core.dashboard",
     "Gestion des paramètres du site": "core.configuration",
-    "Gestion des langues du site": "core.languages",
     "Obtiens toutes les permissions": "*"
   },
   "description": "Gère le coeur du CMS",
