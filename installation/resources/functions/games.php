@@ -3,8 +3,8 @@
 namespace INSTALLTION\GamesController;
 
 use CMW\Model\manager;
-use Exception;
-use PDO;
+
+require_once ("../app/manager.php");
 
 class games extends manager {
 
