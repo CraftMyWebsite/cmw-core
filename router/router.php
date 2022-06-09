@@ -49,9 +49,9 @@ class router
         return $route;
     }
 
-    public function scope($GroupPattern, Closure $routes): void
+    public function scope($groupPattern, Closure $routes): void
     {
-        $this->groupPattern = $GroupPattern;
+        $this->groupPattern = $groupPattern;
         $routes($this);
         unset($this->groupPattern);
     }
@@ -69,6 +69,7 @@ class router
                 return $route->call();
             }
         }
+        //TODO ERROR PAGE
         throw new routerException('No matching routes');
     }
 
@@ -78,6 +79,7 @@ class router
     public function url($name, $params = [])
     {
         if (!isset($this->namedRoutes[$name])) {
+            //TODO ERROR PAGE
             throw new routerException('No route matches this name');
         }
         return $this->namedRoutes[$name]->getUrl($params);
