@@ -55,13 +55,6 @@ class coreController
         header("location: configuration");
     }
 
-    public function adminLanguages(): void
-    {
-
-
-        view('core', 'languages.admin', [], 'admin');
-    }
-
     /* PUBLIC FRONT */
     public function frontHome(): void
     {

@@ -2,7 +2,7 @@
 
 use CMW\Router\router;
 //Todo Try to remove that...
-require_once('Lang/'.getenv("LOCALE").'.php');
+require_once('lang/'.getenv("LOCALE").'.php');
 
 /** @var $router router Main router */
 
@@ -12,9 +12,6 @@ $router->scope('/cmw-admin', function($router) {
 
     $router->get('/configuration', "core#adminConfiguration");
     $router->post('/configuration', "core#adminConfigurationPost");
-
-    $router->get('/languages', "core#adminLanguages");
-    $router->post('/languages', "core#adminLanguagesPost");
 });
 
 /* Basics pages of CMS (PUBLIC) */
