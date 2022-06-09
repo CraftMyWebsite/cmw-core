@@ -44,12 +44,7 @@ require_once("router/routerException.php");
 use CMW\Router\routerException;
 
 /* router Creation */
-if(isset($_GET['url'])) {
-    $router = new router($_GET['url']);
-}
-else {
-    $router = new router("");
-}
+$router = new router($_GET['url'] ?? "");
 
 /* Insert all packages */
 require_once("app/manager.php");

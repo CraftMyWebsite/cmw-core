@@ -5,20 +5,20 @@ namespace CMW\Model;
 /**
  * Class: @coreController
  * @package Core
- * @author LoGuardiaN & Teyir | <loguardian@hotmail.com>
+ * @author LoGuardiaN & Teyir
  * @version 1.0
  */
 class coreModel extends manager
 {
     public string $theme;
     public array $menu;
-    public static string $minecraft_ip;
+    public static string $minecraft_ip; //Useless ?
     public static string $name;
     public static string $description;
 
     public function fetchOption($option): void
     {
-        $db = $this->dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare('SELECT option_value FROM cmw_core_options WHERE option_name = ?');
         $req->execute(array($option));
         $option = $req->fetch();
@@ -36,11 +36,8 @@ class coreModel extends manager
         $db = self::dbConnect();
         $req = $db->prepare('SELECT option_value FROM cmw_core_options WHERE option_name = ?');
         $req->execute(array($option));
-        if($req->execute()) {
-            return $req->fetch()["option_value"];
-        }
 
-        return "";
+        return ($req->execute()) ? $req->fetch()["option_value"] : "";
     }
 
     public function fetchOptions(): array
@@ -51,7 +48,8 @@ class coreModel extends manager
         if($req->execute()) {
             return $req->fetchAll();
         }
-        return [];
+
+        return ($req->execute()) ? $req->fetchAll() : [];
     }
 
     public static function updateOption(string $option_name, string $option_value): void
@@ -63,10 +61,13 @@ class coreModel extends manager
 
     public static function getLanguages(string $prefix): array|string
     {
-        foreach (get_defined_constants(false) as $key=>$value)
-            if (str_starts_with($key, mb_strtoupper($prefix, 'UTF-8')))  $dump[$key] = $value;
+        foreach (get_defined_constants(false) as $key=>$value) {
+            if (str_starts_with($key, mb_strtoupper($prefix, 'UTF-8'))) {
+                $dump[$key] = $value;
+            }
+        }
 
-
+        //Todo Error Manager.
         return !empty($dump) ? $dump : "Error: No Constants found with prefix '".$prefix."'";
     }
 }

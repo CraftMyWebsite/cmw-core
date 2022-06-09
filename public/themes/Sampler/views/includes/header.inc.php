@@ -1,5 +1,6 @@
 <?php use CMW\Controller\Menus\menusController;
-use CMW\Controller\coreController; ?>
+
+?>
 
 <header>
     <nav>
@@ -9,7 +10,11 @@ use CMW\Controller\coreController; ?>
 
             $menu = $menu->cmwMenu();
             foreach ($menu as $item) :
-                echo "<li><a href='$item->menu_url'>$item->menu_name</a></li>";
+                echo <<<HTML
+                    <li>
+                        <a href='$item->menu_url'>$item->menu_name</a>
+                    </li>
+                HTML;
             endforeach; ?>
         </ul>
     </nav>

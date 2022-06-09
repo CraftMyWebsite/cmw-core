@@ -21,7 +21,8 @@ $description = CORE_LANG_DESC; ?>
                                            aria-controls="tab-<?= $package ?>"
                                            aria-selected="<?= $i == 1 ? "true" : "" ?>"><?= $package ?></a>
                                     </li>
-                                    <?php $i++; endforeach; ?>
+                                    <?php $i++;
+                                endforeach; ?>
                             </ul>
                         </div>
 
@@ -46,7 +47,8 @@ $description = CORE_LANG_DESC; ?>
                                                        value="<?= htmlspecialchars($item) ?>">
 
                                                 <span class="input-group-append">
-                                                    <button type="button" class="btn btn-info btn-flat"><?= CORE_BTN_SAVE ?></button>
+                                                    <button type="button"
+                                                            class="btn btn-info btn-flat"><?= CORE_BTN_SAVE ?></button>
                                                 </span>
                                             </div>
 

@@ -11,7 +11,7 @@ use JsonException;
 /**
  * Class: @coreController
  * @package Core
- * @author LoGuardiaN | <loguardian@hotmail.com>
+ * @author LoGuardiaN
  * @version 1.0
  */
 class coreController
@@ -24,17 +24,17 @@ class coreController
     }
 
     /* ADMINISTRATION */
-    public function adminDashboard()
+    public function adminDashboard(): void
     {
         view('core', 'dashboard.admin', [], 'admin');
     }
 
-    public function adminConfiguration()
+    public function adminConfiguration(): void
     {
         view('core', 'configuration.admin', [], 'admin');
     }
 
-    public function adminConfigurationPost()
+    public function adminConfigurationPost(): void
     {
         usersController::isUserHasPermission("core.configuration");
 
@@ -43,10 +43,11 @@ class coreController
         endforeach;
 
         //Options with nullables options (checkbox ...)
-        if(empty($_POST['minecraft_register_premium']) && getenv("GAME") === "Minecraft"){
+        if (empty($_POST['minecraft_register_premium']) && getenv("GAME") === "Minecraft") {
             coreModel::updateOption("minecraft_register_premium", "false");
         }
 
+        //TODO Remove that
         $_SESSION['toaster'][0]['title'] = CORE_TOASTER_TITLE;
         $_SESSION['toaster'][0]['type'] = "bg-success";
         $_SESSION['toaster'][0]['body'] = CORE_TOASTER_CONFIG_EDIT_SUCCESS;
@@ -54,7 +55,7 @@ class coreController
         header("location: configuration");
     }
 
-    public function adminLanguages()
+    public function adminLanguages(): void
     {
 
 
@@ -62,7 +63,7 @@ class coreController
     }
 
     /* PUBLIC FRONT */
-    public function frontHome()
+    public function frontHome(): void
     {
         $core = new coreController();
         $menu = new menusController();
@@ -101,12 +102,13 @@ class coreController
     /* Security Warning */
     public function cmwWarn(): ?string
     {
-        if( is_dir( "installation" ) ) {
-            return "<p class='security-warning'>ATTENTION - Votre dossier d'installation n'a pas encore été supprimé. Pour des questions de sécurité, vous devez supprimer le dossier installation situé à la racine de votre site.</p>";
+        if (is_dir("installation")) {
+            //Todo Set that in lang file
+            return <<<HTML
+            <p class='security-warning'>ATTENTION - Votre dossier d'installation n'a pas encore été supprimé. Pour des questions de sécurité, vous devez supprimer le dossier installation situé à la racine de votre site.</p>
+            HTML;
         }
-        else {
-            return null;
-        }
+        return null;
     }
 
     /*
@@ -114,12 +116,13 @@ class coreController
      */
     public function cmwHead($title, $description): string
     {
-        $head = "<meta charset='utf-8'>";
-        $head .= "<meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>";
-        $head .= "<title>$title</title>";
-        $head .= "<meta name='description' content='$description'>";
-        $head .= "<meta name='author' content='CraftMyWebsite, Teyir, Vladort'>";
-        return $head;
+        return <<<HTML
+            <meta charset='utf-8'>
+            <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+            <title>$title</title>
+            <meta name='description' content='$description'>
+            <meta name='author' content='CraftMyWebsite'>
+        HTML;
     }
 
     /*
@@ -127,7 +130,10 @@ class coreController
      */
     public function cmwFooter(): string
     {
-        return "<p>Un site fierement propuslé par <a href='https://craftmywebsite.com/'>CrafyMyWebsite</a></p>";
+        //Todo Set that in lang
+        return <<<HTML
+            <p>Un site fièrement propulsé par <a href='https://craftmywebsite.com/'>CraftMyWebsite</a></p>
+        HTML;
     }
 }
 

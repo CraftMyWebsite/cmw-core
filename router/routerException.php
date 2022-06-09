@@ -7,7 +7,7 @@ use Exception;
 /**
  * Class: @routerException
  * @package Core
- * @author CraftMywebsite <contact@craftmywebsite>
+ * @author CraftMywebsite <contact@craftmywebsite.fr>
  * @version 1.0
  */
 class routerException extends Exception {

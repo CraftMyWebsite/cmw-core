@@ -10,15 +10,16 @@ use CMW\Model\manager;
  * @author Teyir
  * @version 1.0
  */
-class rolesModel extends manager {
+class rolesModel extends manager
+{
     //Roles
     public int $roleId;
     public string $roleName;
     public ?string $roleDescription;
     //Perms
-    public string $permissionId;
-    public string $permissionCode;
-    public string $permissionDescription;
+    public string $permissionId; //Useless ?
+    public string $permissionCode; //Useless ?
+    public string $permissionDescription; //Useless ?
     public ?array $permList;
 
 
@@ -28,7 +29,7 @@ class rolesModel extends manager {
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
 
-        if($req->execute()) {
+        if ($req->execute()) {
             return $req->fetchAll();
         }
 
@@ -42,12 +43,14 @@ class rolesModel extends manager {
     public function fetchAllPermissions(): array
     {
         $res = [];
-        foreach (getAllPackagesInstalled() as $package):
+        foreach (getAllPackagesInstalled() as $package) {
+
             $obj = cmwPackageInfo($package);
-            if(!empty($obj['permissions'])) {
+            if (!empty($obj['permissions'])) {
                 $res[] = $obj['permissions'];
             }
-        endforeach;
+
+        }
 
         return $res;
     }
@@ -78,7 +81,7 @@ class rolesModel extends manager {
     public function addPermissions(): void
     {
 
-        foreach ($this->permList as $permDesc => $permCode):
+        foreach ($this->permList as $permDesc => $permCode) {
 
             $var = array(
                 "permission_code" => array_keys($permCode)[0],
@@ -93,14 +96,14 @@ class rolesModel extends manager {
             $req = $db->prepare($sql);
             $req->execute($var);
 
-        endforeach;
+        }
 
     }
 
     public function fetchRole($id): void
     {
         $var = array(
-          "role_id" => $id
+            "role_id" => $id
         );
 
         $sql = "SELECT * FROM cmw_roles WHERE role_id = :role_id";
@@ -120,7 +123,7 @@ class rolesModel extends manager {
                 array_unshift($key, $firstElement);
                 $key = implode('', $key);
 
-                if (property_exists(rolesModel::class, $key)) {
+                if (property_exists(__CLASS__, $key)) {
                     $this->$key = $property;
                 }
             }
@@ -159,8 +162,7 @@ class rolesModel extends manager {
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
 
-        if($req->execute($var))
-        {
+        if ($req->execute($var)) {
             $lines = $req->fetchAll();
 
             return count($lines);
@@ -198,7 +200,7 @@ class rolesModel extends manager {
     {
         //Delete permissions
         $var = array(
-          "role_id" => $this->roleId
+            "role_id" => $this->roleId
         );
 
         $sql = "DELETE FROM cmw_permissions WHERE role_id = :role_id";
@@ -215,7 +217,7 @@ class rolesModel extends manager {
     public function deleteRole(): void
     {
         $var = array(
-          "role_id" => $this->roleId
+            "role_id" => $this->roleId
         );
 
         $sql = "DELETE FROM cmw_roles WHERE role_id = :role_id";
@@ -235,7 +237,7 @@ class rolesModel extends manager {
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
 
-        if($req->execute(array("user_id" => $user_id, "role_id" => $role_id))){
+        if ($req->execute(array("user_id" => $user_id, "role_id" => $role_id))) {
             return count($req->fetchAll()) > 0;
         }
         return false;

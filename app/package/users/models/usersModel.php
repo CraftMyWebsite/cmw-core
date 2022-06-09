@@ -18,17 +18,16 @@ class usersModel extends manager
     public ?string $userFirstname;
     public ?string $userLastname;
     public int $userState;
-    public string $userRoleName;
+    public string $userRoleName; //Useless ?
     public string $userCreated;
     public string $userUpdated;
     public string $userLogged;
     private string $userPassword;
-    private string $userKey;
-    public array $userRoles;
+    private string $userKey; //Useless ?
+    public array $userRoles; //Useless ?
 
     public function __construct($user_id = null)
     {
-
     }
 
     public static function getLoggedUser(): int
@@ -108,7 +107,7 @@ class usersModel extends manager
 
     public function addRole(array $roles): void
     {
-        foreach ($roles as $role):
+        foreach ($roles as $role) {
 
             $var = array(
                 "user_id" => $this->userId,
@@ -120,7 +119,7 @@ class usersModel extends manager
             $db = manager::dbConnect();
             $req = $db->prepare($sql);
             $req->execute($var);
-        endforeach;
+        }
     }
 
     public function fetch($user_id): void
@@ -261,9 +260,7 @@ class usersModel extends manager
         $var = array(
             "user_id" => $this->userId,
         );
-        $sql = "DELETE"
-            . " FROM cmw_users"
-            . " WHERE user_id=:user_id";
+        $sql = "DELETE FROM cmw_users WHERE user_id=:user_id";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
@@ -298,8 +295,7 @@ class usersModel extends manager
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
 
-        if($req->execute($var))
-        {
+        if ($req->execute($var)) {
             $lines = $req->fetchAll();
 
             return count($lines);
@@ -318,7 +314,7 @@ class usersModel extends manager
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
 
-        if($req->execute(array("user_id" => $userId))){
+        if ($req->execute(array("user_id" => $userId))) {
             return $req->fetchAll();
         }
 
@@ -329,11 +325,7 @@ class usersModel extends manager
     {
         $req = file_get_contents("https://api.mojang.com/users/profiles/minecraft/$pseudo");
 
-        if ($req != NULL) {
-            return 0;
-        } else{
-            return 1;
-        }
+        return (int)($req === "NULL");
     }
 
 
@@ -348,7 +340,7 @@ class usersModel extends manager
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
 
-        if ($req->execute($var)){
+        if ($req->execute($var)) {
             return count($req->fetchAll());
         }
 
@@ -366,7 +358,7 @@ class usersModel extends manager
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
 
-        if ($req->execute($var)){
+        if ($req->execute($var)) {
             return count($req->fetchAll());
         }
 

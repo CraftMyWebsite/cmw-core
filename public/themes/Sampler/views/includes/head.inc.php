@@ -1,4 +1,10 @@
-<?php use CMW\Controller\coreController; ?>
+<?php use CMW\Controller\coreController;
+
+/* @var \CMW\Controller\coreController $core */
+/* @var string $title */
+/* @var string $description */
+
+?>
 
 <!DOCTYPE html>
 <html lang="fr-FR">
