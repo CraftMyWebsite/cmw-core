@@ -1,7 +1,12 @@
 <?php
 
 $title = PAGES_EDIT_TITLE;
-$description = PAGES_EDIT_DESC; ?>
+$description = PAGES_EDIT_DESC;
+
+/* @var pagesController[] $page
+ * @var pagesController[] $pageContent
+ */
+?>
 
 <?php $scripts = '<script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script><!-- Header -->
 
@@ -39,7 +44,7 @@ $description = PAGES_EDIT_DESC; ?>
             header: {
                 class: Header,
                 config: {
-                    placeholder: "Entrer un titre",
+                    placeholder: "Entrez un titre",
                     levels: [2, 3, 4],
                     defaultLevel: 2
                 }  
@@ -182,7 +187,7 @@ $description = PAGES_EDIT_DESC; ?>
                         <input type="hidden" id="page_id" name="page_id" value="<?= $page->pageId ?>">
                         <input class="page-title" type="text" id="title" placeholder="Titre de la page"
                                value="<?= $page->pageTitle ?>">
-                        <p class="page-slug text-blue mb-3 d-flex"><?php echo "http://" . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER"); ?>
+                        <p class="page-slug text-blue mb-3 d-flex"><?php echo "http://" . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . "p/"; ?>
                             <input class="border-0 text-blue p-0 w-100 page-slug-input" type="text" id="slug"
                                    value="<?= $page->pageSlug ?>"></p>
                         <div>

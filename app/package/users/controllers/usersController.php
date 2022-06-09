@@ -46,6 +46,7 @@ class usersController extends coreController
 
         return true;
     }
+
     public function adminLogin(): void
     {
         if (usersModel::getLoggedUser() !== -1) {

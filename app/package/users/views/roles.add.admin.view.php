@@ -1,7 +1,6 @@
 <?php
 $title = USERS_ROLE_ADD_TITLE;
 $description = USERS_ROLE_ADD_DESC;
-
 ?>
 
 <?php ob_start(); ?>

@@ -1,5 +1,12 @@
-<?php $title = PAGES_ADD_TITLE;
-$description = PAGES_ADD_DESC; ?>
+<?php
+
+$title = PAGES_ADD_TITLE;
+$description = PAGES_ADD_DESC;
+
+/* @var pagesController[] $page
+ * @var pagesController[] $pageContent
+ */
+?>
 
 <?php $scripts = '<script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script><!-- Header -->
 
@@ -37,7 +44,7 @@ $description = PAGES_ADD_DESC; ?>
             header: {
                 class: Header,
                 config: {
-                    placeholder: "Entrer un titre",
+                    placeholder: "Entrez un titre",
                     levels: [2, 3, 4],
                     defaultLevel: 2
                 }  
@@ -201,7 +208,7 @@ $description = PAGES_ADD_DESC; ?>
                     <div class="card-body">
                         <input type="hidden" id="page_id" name="page_id">
                         <input class="page-title" type="text" id="title" placeholder="Titre de la page">
-                        <p class="page-slug text-blue mb-3 d-flex"><?php echo "http://" . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER"); ?>
+                        <p class="page-slug text-blue mb-3 d-flex"><?php echo "http://" . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . "p/"; ?>
                             <input class="border-0 text-blue p-0 w-100 page-slug-input" type="text" id="slug"></p>
                         <div>
                             <div id="editorjs"></div>

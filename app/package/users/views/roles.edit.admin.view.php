@@ -1,7 +1,10 @@
 <?php
+
+use CMW\Controller\Users\usersController;
+
 $title = USERS_ROLE_ADD_TITLE;
 $description = USERS_ROLE_ADD_DESC;
-/* @var $role */
+/* @var usersController $role */
 ?>
 
 <?php ob_start(); ?>

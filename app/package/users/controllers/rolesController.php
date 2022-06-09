@@ -5,9 +5,8 @@ namespace CMW\Controller\Roles;
 use CMW\Controller\coreController;
 use CMW\Controller\Users\usersController;
 use CMW\Model\Roles\rolesModel;
-use CMW\Model\Users\usersModel;
-use http\Client\Curl\User;
 use JetBrains\PhpStorm\NoReturn;
+use JsonException;
 
 /**
  * Class: @rolesController
@@ -28,7 +27,7 @@ class rolesController extends coreController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function adminRolesAdd(): void
     {
@@ -60,7 +59,7 @@ class rolesController extends coreController
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function adminRolesEdit($id): void
     {

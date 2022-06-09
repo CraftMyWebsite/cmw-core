@@ -77,9 +77,10 @@ $description = USERS_LIST_DESC; ?>
                                         <td><?= $user['user_pseudo'] ?></td>
                                         <td><?= $user['user_firstname'] ?></td>
                                         <td><?= $user['user_lastname'] ?></td>
-                                        <td><?php $i = 1; foreach (usersModel::getPlayerRoles($user['user_id']) as $role): ?>
+                                        <td><?php $i = 1;
+                                            foreach (usersModel::getPlayerRoles($user['user_id']) as $role): ?>
                                                 <?= $i != 1 ? ", " . $role['role_name'] : $role['role_name'] ?>
-                                            <?php $i++; endforeach; ?>
+                                                <?php $i++; endforeach; ?>
                                         </td>
                                         <td><?= $user['user_created'] ?></td>
                                         <td><?= $user['user_updated'] ?></td>

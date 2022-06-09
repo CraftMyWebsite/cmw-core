@@ -3,6 +3,7 @@
 namespace CMW\Model\Roles;
 
 use CMW\Model\manager;
+use JsonException;
 
 /**
  * Class: @rolesModel
@@ -17,9 +18,9 @@ class rolesModel extends manager
     public string $roleName;
     public ?string $roleDescription;
     //Perms
-    public string $permissionId; //Useless ?
-    public string $permissionCode; //Useless ?
-    public string $permissionDescription; //Useless ?
+    public string $permissionId;
+    public string $permissionCode;
+    public string $permissionDescription;
     public ?array $permList;
 
 
@@ -37,7 +38,7 @@ class rolesModel extends manager
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      * @desc Get all permissions names and code on all installed packages
      */
     public function fetchAllPermissions(): array

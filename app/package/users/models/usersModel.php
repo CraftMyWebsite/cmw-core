@@ -18,13 +18,13 @@ class usersModel extends manager
     public ?string $userFirstname;
     public ?string $userLastname;
     public int $userState;
-    public string $userRoleName; //Useless ?
+    public string $userHighestRoleName;
     public string $userCreated;
     public string $userUpdated;
     public string $userLogged;
     private string $userPassword;
-    private string $userKey; //Useless ?
-    public array $userRoles; //Useless ?
+    private string $userKey;
+    public array $userRoles;
 
     public function __construct($user_id = null)
     {

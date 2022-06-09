@@ -80,7 +80,7 @@ class pagesModel extends manager
             $result = $req->fetch(PDO::FETCH_ASSOC);
 
             //If we have the slug in the db we can continue
-            if(!empty($result)):
+            if (!empty($result)):
 
                 $this->pageId = $result['page_id'];
                 $this->pageSlug = $result['page_slug'];
@@ -96,7 +96,7 @@ class pagesModel extends manager
                 $user->fetch($result['user_id']);
                 $this->user = $user;
 
-                //Redirect to the home page
+            //Redirect to the home page
             else:
                 header("location: " . getenv("PATH_SUBFOLDER"));
             endif;
@@ -107,8 +107,9 @@ class pagesModel extends manager
     {
         $return = [];
 
-        $sql = "SELECT page_id, page_title, page_slug, user_id, page_content, page_state, DATE_FORMAT(page_created, '%d/%m/%Y à %H:%i:%s') AS 'page_created', DATE_FORMAT(page_updated, '%d/%m/%Y à %H:%i:%s') AS 'page_updated'"
-            . " FROM cmw_pages ";
+        $sql = "SELECT page_id, page_title, page_slug, user_id, page_content, page_state, 
+                    DATE_FORMAT(page_created, '%d/%m/%Y à %H:%i:%s') AS 'page_created', 
+                    DATE_FORMAT(page_updated, '%d/%m/%Y à %H:%i:%s') AS 'page_updated' FROM cmw_pages ";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
@@ -148,12 +149,8 @@ class pagesModel extends manager
             "page_state" => $this->pageState
         );
 
-        $sql = "UPDATE cmw_pages SET "
-            . "page_slug" . "=:page_slug,"
-            . "page_title" . "=:page_title,"
-            . "page_content" . "=:page_content,"
-            . "page_state" . "=:page_state"
-            . " WHERE " . "page_id" . "=:page_id";
+        $sql = "UPDATE cmw_pages SET page_slug=:page_slug, page_title=:page_title,
+                     page_content=:page_content, page_state=:page_state WHERE page_id=:page_id";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
@@ -167,9 +164,7 @@ class pagesModel extends manager
         $var = array(
             "page_id" => $this->pageId,
         );
-        $sql = "DELETE"
-            . " FROM cmw_pages"
-            . " WHERE page_id=:page_id";
+        $sql = "DELETE FROM cmw_pages WHERE page_id=:page_id";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
@@ -182,9 +177,7 @@ class pagesModel extends manager
             "page_id" => $this->pageId,
         );
 
-        $sql = "UPDATE cmw_pages SET "
-            . "page_updated" . "=CURRENT_TIMESTAMP"
-            . " WHERE " . "page_id" . "=:page_id";
+        $sql = "UPDATE cmw_pages SET page_updated = CURRENT_TIMESTAMP WHERE page_id=:page_id";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);

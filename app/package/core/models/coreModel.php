@@ -12,7 +12,6 @@ class coreModel extends manager
 {
     public string $theme;
     public array $menu;
-    public static string $minecraft_ip; //Useless ?
     public static string $name;
     public static string $description;
 
@@ -45,7 +44,7 @@ class coreModel extends manager
         $db = $this->dbConnect();
         $req = $db->prepare('SELECT * FROM cmw_core_options');
 
-        if($req->execute()) {
+        if ($req->execute()) {
             return $req->fetchAll();
         }
 
@@ -61,13 +60,13 @@ class coreModel extends manager
 
     public static function getLanguages(string $prefix): array|string
     {
-        foreach (get_defined_constants(false) as $key=>$value) {
+        foreach (get_defined_constants(false) as $key => $value) {
             if (str_starts_with($key, mb_strtoupper($prefix, 'UTF-8'))) {
                 $dump[$key] = $value;
             }
         }
 
         //Todo Error Manager.
-        return !empty($dump) ? $dump : "Error: No Constants found with prefix '".$prefix."'";
+        return !empty($dump) ? $dump : "Error: No Constants found with prefix '" . $prefix . "'";
     }
 }

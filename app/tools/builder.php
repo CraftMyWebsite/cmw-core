@@ -9,16 +9,15 @@ function view(string $module, string $view, ?array $data, string $type, ?string 
 
     extract($data, EXTR_OVERWRITE);
 
-    if($type === 'admin'){
-        if(is_null($noAdminControl)) {
+    if ($type === 'admin') {
+        if (is_null($noAdminControl)) {
             usersController::isAdminLogged();
         }
 
         $path = "app/package/$module/views/$view.view.php";
         require_once($path);
-        require_once(getenv("PATH_ADMIN_VIEW").'template.php');
-    }
-    else {
+        require_once(getenv("PATH_ADMIN_VIEW") . 'template.php');
+    } else {
         $coreController = new coreController();
         $theme = $coreController->cmwThemePath();
 

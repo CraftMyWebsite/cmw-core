@@ -62,7 +62,7 @@ class pagesController extends coreController
 
         $pageContent = $page->pageContent;
 
-        view('pages', 'edit.admin', ["page"=> $page, "pageContent" => $pageContent], 'admin');
+        view('pages', 'edit.admin', ["page" => $page, "pageContent" => $pageContent], 'admin');
     }
 
     public function adminPagesEditPost(): void
@@ -99,7 +99,6 @@ class pagesController extends coreController
     }
 
 
-
     /* Public section */
     public function publicShowPage($slug): void
     {
@@ -115,10 +114,9 @@ class pagesController extends coreController
 
 
         //Include the public view file ("public/themes/$themePath/views/wiki/main.view.php")
-        view('pages', 'main', ["page" => $page,"pageContent" => $pageContent,
-            "slug" => $slug , "core" => $core, "menu" => $menu], 'public');
+        view('pages', 'main', ["page" => $page, "pageContent" => $pageContent,
+            "slug" => $slug, "core" => $core, "menu" => $menu], 'public');
     }
-
 
 
 }
