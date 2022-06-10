@@ -1,5 +1,5 @@
 <?php
-const ALT_LOGO = "Logo CMW";
+const CORE_ALT_LOGO = "Logo CMW";
 
 const CORE_DASHBOARD_TITLE = "Dashboard";
 const CORE_DASHBOARD_DESC = "Welcome to your administration panel!";
@@ -22,6 +22,8 @@ const CORE_TOASTER_CONFIG_EDIT_SUCCESS = "Configuration edit with success !";
 const CORE_TOASTER_DELETE_SUCCESS = "Delete with success !";
 
 const CORE_DASHBOARD = "Dashboard";
+
+const CORE_CHANGE_LANG = "Change the website locale";
 
 /* Datatables */
 const CORE_DATATABLES_LIST_PROCESSING = "Treatment in progress...";

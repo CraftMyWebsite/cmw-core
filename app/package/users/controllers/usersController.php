@@ -10,7 +10,7 @@ use JetBrains\PhpStorm\NoReturn;
 /**
  * Class: @usersController
  * @package Users
- * @author LoGuardian & Teyir
+ * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
 class usersController extends coreController

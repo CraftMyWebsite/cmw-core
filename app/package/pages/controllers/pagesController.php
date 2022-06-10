@@ -12,7 +12,7 @@ use JetBrains\PhpStorm\NoReturn;
 /**
  * Class: @pagesController
  * @package Pages
- * @author LoGuardiaN
+ * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
 class pagesController extends coreController

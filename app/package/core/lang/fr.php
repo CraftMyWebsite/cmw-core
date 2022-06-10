@@ -23,6 +23,8 @@ const CORE_TOASTER_DELETE_SUCCESS = "Supprimé avec succès !";
 
 const CORE_DASHBOARD = "Dashboard";
 
+const CORE_CHANGE_LANG = "Changez la langue du site";
+
 /* Datatables */
 const CORE_DATATABLES_LIST_PROCESSING = "Traitement en cours...";
 const CORE_DATATABLES_LIST_SEARCH = "Rechercher&nbsp;:";

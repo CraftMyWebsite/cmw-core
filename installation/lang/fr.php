@@ -43,7 +43,10 @@ const INSTALL_ADMIN_PASS = "Mot de passe";
 const INSTALL_CONFIG_TITLE = "Configuration de votre site";
 const INSTALL_CONFIG_NAME = "Nom de votre site";
 const INSTALL_CONFIG_DESCRIPTION = "Description de votre site";
+const INSTALL_CONFIG_DESCRIPTION_PLACEHOLDER = "Description de votre site";
 const INSTALL_CONFIG_IP = "Addresse IP de votre serveur";
+
+const INSTALL_GAME_SELECTION_TITLE = "Sélection du jeu";
 
 const INSTALL_SAVE = "Enregistrer";
 
@@ -54,9 +57,9 @@ const INSTALL_WARNING_ENV = "Un fichier de configuration est déjà présent.<br
 const INSTALL_LOCATION = "Aller voir mon site !";
 
 const INSTALL_INFOS_TITLE = "A propos de votre installation";
-const INSTALL_INFOS_SUCESS = "Félicitation";
+const INSTALL_INFOS_SUCCESS = "Félicitation";
 const INSTALL_INFOS_TEXT = "Votre fichier de configuration a été créé";
 const INSTALL_INFOS_ERROR = "erreur";
 const INSTALL_INFOS_EMPTY = "vide";
 
-const INSTALL_GAME = "Jeux";
+const INSTALL_GAME = "Jeu";

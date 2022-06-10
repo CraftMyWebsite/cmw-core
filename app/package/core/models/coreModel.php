@@ -5,7 +5,7 @@ namespace CMW\Model;
 /**
  * Class: @coreController
  * @package Core
- * @author LoGuardiaN & Teyir
+ * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
 class coreModel extends manager

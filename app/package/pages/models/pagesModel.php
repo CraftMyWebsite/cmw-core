@@ -9,7 +9,7 @@ use PDO;
 /**
  * Class: @pagesModel
  * @package Pages
- * @author LoGuardiaN | <loguardian@hotmail.com>
+ * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
 class pagesModel extends manager

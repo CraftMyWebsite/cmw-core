@@ -7,7 +7,7 @@ use CMW\Model\manager;
 /**
  * Class: @menusModel
  * @package Menus
- * @author LoGuardiaN
+ * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
 class menusModel extends manager {

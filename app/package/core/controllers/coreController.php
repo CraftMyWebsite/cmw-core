@@ -6,17 +6,19 @@ use CMW\Controller\Menus\menusController;
 use CMW\Controller\Users\usersController;
 
 use CMW\Model\coreModel;
+use CMW\Utils\Utils;
 use JsonException;
 
 /**
  * Class: @coreController
  * @package Core
- * @author LoGuardiaN
+ * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
 class coreController
 {
     public static string $themePath;
+    public static array $avalaiblesLocales = ['fr' => 'Français', 'en' => 'English'];
 
     public function __construct($theme_path = null)
     {
@@ -39,11 +41,14 @@ class coreController
         usersController::isUserHasPermission("core.configuration");
 
         foreach ($_POST as $option_name => $option_value):
+            if($option_name === "locale")
+                Utils::getEnv()->editValue("LOCALE", $option_value);
+
             coreModel::updateOption($option_name, $option_value);
         endforeach;
 
         //Options with nullables options (checkbox ...)
-        if (empty($_POST['minecraft_register_premium']) && getenv("GAME") === "Minecraft") {
+        if (empty($_POST['minecraft_register_premium']) && getenv("GAME") === "minecraft") {
             coreModel::updateOption("minecraft_register_premium", "false");
         }
 

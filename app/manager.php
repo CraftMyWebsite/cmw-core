@@ -7,7 +7,7 @@ use PDO;
 /**
  * Class: @manager
  * @package Core
- * @author CraftMywebsite <contact@craftmywebsite>
+ * @author CraftMywebsite <contact@craftmywebsite.fr>
  * @version 1.0
  */
 class manager {

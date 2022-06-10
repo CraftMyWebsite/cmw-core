@@ -1,10 +1,9 @@
 <?php
 
-use CMW\Router\router;
+global $router;
+
 //Todo Try to remove that...
 require_once('lang/'.getenv("LOCALE").'.php');
-
-/** @var $router router Main router */
 
 /* Administration scope of package */
 $router->scope('/cmw-admin', function($router) {

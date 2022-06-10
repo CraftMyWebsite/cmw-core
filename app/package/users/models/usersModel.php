@@ -7,7 +7,7 @@ use CMW\Model\manager;
 /**
  * Class: @usersModel
  * @package Users
- * @author LoGuardian & Teyir | <loguardian@hotmail.com>
+ * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
 class usersModel extends manager
