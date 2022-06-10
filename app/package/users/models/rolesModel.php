@@ -17,6 +17,7 @@ class rolesModel extends manager
     public int $roleId;
     public string $roleName;
     public ?string $roleDescription;
+    public int $roleWeight;
     //Perms
     public string $permissionId;
     public string $permissionCode;
@@ -26,7 +27,7 @@ class rolesModel extends manager
 
     public function fetchAll(): array
     {
-        $sql = "SELECT role_id, role_name, role_description FROM cmw_roles";
+        $sql = "SELECT role_id, role_name, role_description, role_weight FROM cmw_roles";
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
 
@@ -48,7 +49,7 @@ class rolesModel extends manager
 
             $obj = cmwPackageInfo($package);
             if (!empty($obj['permissions'])) {
-                $res[] = $obj['permissions'];
+                $res[$package] = $obj['permissions'];
             }
 
         }
@@ -61,10 +62,11 @@ class rolesModel extends manager
         //Create role & return roleId
         $var = array(
             "role_name" => $this->roleName,
-            "role_description" => $this->roleDescription
+            "role_description" => $this->roleDescription,
+            "role_weight" => $this->roleWeight
         );
 
-        $sql = "INSERT INTO cmw_roles (role_name, role_description) VALUES(:role_name, :role_description)";
+        $sql = "INSERT INTO cmw_roles (role_name, role_description, role_weight) VALUES (:role_name, :role_description, :role_weight)";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
@@ -178,10 +180,11 @@ class rolesModel extends manager
         $var = array(
             "role_name" => $this->roleName,
             "role_description" => $this->roleDescription,
-            "role_id" => $this->roleId
+            "role_id" => $this->roleId,
+            "role_weight" => $this->roleWeight
         );
 
-        $sql = "UPDATE cmw_roles SET role_name = :role_name, role_description = :role_description WHERE role_id = :role_id";
+        $sql = "UPDATE cmw_roles SET role_name = :role_name, role_description = :role_description, role_weight = :role_weight WHERE role_id = :role_id";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);

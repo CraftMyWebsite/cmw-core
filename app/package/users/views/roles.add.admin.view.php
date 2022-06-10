@@ -29,30 +29,37 @@ $description = USERS_ROLE_ADD_DESC;
                                            placeholder="<?= USERS_ROLE_DESCRIPTION ?>" required>
                                 </div>
 
+                                <input type="number" name="weight" class="form-control" placeholder="<?= USERS_WEIGHT ?>"
+                                       required>
+
                                 <!-- PERMISSIONS -->
                                 <h3 class="mt-4"><?= USERS_ROLE_PERMISSIONS_LIST ?></h3>
                                 <hr>
-                                <div class="container">
+                                <div class="container-fluid">
                                     <div class="row justify-content-center">
                                         <?php /* @var $permissionsList */
-                                        foreach ($permissionsList as $perms):
-                                            foreach ($perms as $permName => $permCode): ?>
-                                                <div class="col-lg-3 col-md-3">
-                                                    <div class="form-group">
-                                                        <div class="custom-control custom-checkbox">
-                                                            <input class="custom-control-input" type="checkbox"
-                                                                   id="<?= ($permCode == "*" ? "*" : "perms[$permName][$permCode]") ?>"
-                                                                   name="<?= ($permCode == "*" ? "*" : "perms[$permName][$permCode]") ?>"
-                                                                   value="<?= $permCode ?>">
-                                                            <label for="<?= ($permCode == "*" ? "*" : "perms[$permName][$permCode]") ?>"
-                                                                   class="custom-control-label">
-                                                                <?= $permName ?>
-                                                            </label>
+                                        foreach ($permissionsList as $package => $perms):
+                                            echo "<div class='mb-2 mr-5'> <span>$package</span> <hr>";
+                                                foreach ($perms as $permName => $permCode): ?>
+
+                                                    <div class="">
+                                                        <div class="form-group">
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input class="custom-control-input" type="checkbox"
+                                                                       id="<?= ($permCode == "*" ? "*" : "perms[$permName][$permCode]") ?>"
+                                                                       name="<?= ($permCode == "*" ? "*" : "perms[$permName][$permCode]") ?>"
+                                                                       value="<?= $permCode ?>">
+                                                                <label for="<?= ($permCode == "*" ? "*" : "perms[$permName][$permCode]") ?>"
+                                                                       class="custom-control-label <?= ($permCode == "*" ? "text-danger" : "") ?>">
+                                                                    <?= $permName ?>
+                                                                </label>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            <?php endforeach; ?>
-                                        <?php endforeach; ?>
+
+                                                <?php endforeach;
+                                            echo "</div>";
+                                         endforeach; ?>
                                     </div>
                                 </div>
 

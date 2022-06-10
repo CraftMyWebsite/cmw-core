@@ -79,5 +79,7 @@ function getAllPackagesInstalled(): array
  */
 function debugR($arr): void
 {
-    echo "<pre>" . print_r($arr) . "</pre>";
+    echo "<pre>";
+    echo print_r($arr);
+    echo "</pre>";
 }
