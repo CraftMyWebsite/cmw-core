@@ -1,4 +1,5 @@
-<?php use CMW\Model\coreModel;
+<?php use CMW\Controller\coreController;
+use CMW\Model\coreModel;
 
 $title = CORE_CONFIG_TITLE;
 $description = CORE_CONFIG_DESC; ?>
@@ -39,6 +40,17 @@ $description = CORE_CONFIG_DESC; ?>
                                                value="<?= coreModel::getOptionValue("description") ?>"
                                                placeholder="<?= CORE_WEBSITE_DESCRIPTION ?>" required>
                                     </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label><?= CORE_CHANGE_LANG ?></label>
+                                    <select class="form-control" name="locale">
+                                        <?php foreach (coreController::$avalaiblesLocales as $code => $name): ?>
+                                        <option value="<?= $code ?>" <?= $code === getenv("LOCALE") ? "selected" : "" ?>>
+                                            <?= $name ?>
+                                        </option>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
 
                                 <?php //Minecraft config section

@@ -6,6 +6,7 @@ use CMW\Controller\Menus\menusController;
 use CMW\Controller\Users\usersController;
 
 use CMW\Model\coreModel;
+use CMW\Utils\Utils;
 use JsonException;
 
 /**
@@ -17,6 +18,7 @@ use JsonException;
 class coreController
 {
     public static string $themePath;
+    public static array $avalaiblesLocales = ['fr' => 'Français', 'en' => 'English'];
 
     public function __construct($theme_path = null)
     {
@@ -39,6 +41,9 @@ class coreController
         usersController::isUserHasPermission("core.configuration");
 
         foreach ($_POST as $option_name => $option_value):
+            if($option_name === "locale")
+                Utils::getEnv()->editValue("LOCALE", $option_value);
+
             coreModel::updateOption($option_name, $option_value);
         endforeach;
 
