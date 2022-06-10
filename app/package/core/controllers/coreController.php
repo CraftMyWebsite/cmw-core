@@ -43,7 +43,7 @@ class coreController
         endforeach;
 
         //Options with nullables options (checkbox ...)
-        if (empty($_POST['minecraft_register_premium']) && getenv("GAME") === "Minecraft") {
+        if (empty($_POST['minecraft_register_premium']) && getenv("GAME") === "minecraft") {
             coreModel::updateOption("minecraft_register_premium", "false");
         }
 

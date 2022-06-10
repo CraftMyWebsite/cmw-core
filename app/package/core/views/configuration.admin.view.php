@@ -42,7 +42,7 @@ $description = CORE_CONFIG_DESC; ?>
                                 </div>
 
                                 <?php //Minecraft config section
-                                if (getenv("GAME") === "Minecraft"):?>
+                                if (getenv("GAME") === "minecraft"):?>
                                     <div class="form-group">
                                         <label for="minecraft_ip"><?= CORE_MINECRAFT_IP ?></label>
                                         <div class="input-group mb-3">
