@@ -11,7 +11,7 @@ use JsonException;
 /**
  * Class: @coreController
  * @package Core
- * @author LoGuardiaN
+ * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
 class coreController

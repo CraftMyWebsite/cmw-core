@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS `cmw_users_uuid`
     `user_id`    int(11)     NOT NULL,
     `user_uuid`  varchar(32) NOT NULL,
     `user_uuidf` varchar(36) NOT NULL
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE `cmw_users_uuid`
     ADD PRIMARY KEY (`user_id`),
@@ -14,5 +14,3 @@ ALTER TABLE `cmw_users_uuid`
 COMMIT;
 
 INSERT INTO `cmw_core_options` (option_name, option_value, option_updated) VALUES ('minecraft_register_premium', 'false', NOW());
-
-

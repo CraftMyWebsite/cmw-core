@@ -54,9 +54,9 @@ const INSTALL_WARNING_ENV = "Un fichier de configuration est déjà présent.<br
 const INSTALL_LOCATION = "Aller voir mon site !";
 
 const INSTALL_INFOS_TITLE = "A propos de votre installation";
-const INSTALL_INFOS_SUCESS = "Félicitation";
+const INSTALL_INFOS_SUCCESS = "Félicitation";
 const INSTALL_INFOS_TEXT = "Votre fichier de configuration a été créé";
 const INSTALL_INFOS_ERROR = "erreur";
 const INSTALL_INFOS_EMPTY = "vide";
 
-const INSTALL_GAME = "Jeux";
+const INSTALL_GAME = "Jeu";

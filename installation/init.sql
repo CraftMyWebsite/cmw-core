@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS `cmw_core_options`
     `option_name`    varchar(255) NOT NULL,
     `option_value`   varchar(255) NOT NULL,
     `option_updated` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 CREATE TABLE IF NOT EXISTS `cmw_permissions`
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `cmw_permissions`
     `permission_code`        varchar(255) NOT NULL,
     `permission_description` varchar(255) NOT NULL,
     `role_id`                int(11) DEFAULT NULL
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `cmw_roles`
 (
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `cmw_roles`
     `role_name`        tinytext NOT NULL,
     `role_description` text,
     `weight`           int  DEFAULT 0
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 CREATE TABLE IF NOT EXISTS `cmw_users`
@@ -36,9 +36,9 @@ CREATE TABLE IF NOT EXISTS `cmw_users`
     `user_created`   timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `user_updated`   timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `user_logged`    timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `cmw_users_roles`
+CREATE TABLE IF NOT EXISTS `cmw_users_roles`
 (
     `id` int(11) NOT NULL,
     `user_id` int(11) NOT NULL,
@@ -51,7 +51,7 @@ ALTER TABLE `cmw_core_options`
 
 ALTER TABLE `cmw_permissions`
     ADD PRIMARY KEY (`permission_id`),
-  ADD KEY `permission_role_id` (`role_id`);
+    ADD KEY `permission_role_id` (`role_id`);
 
 ALTER TABLE `cmw_roles`
     ADD PRIMARY KEY (`role_id`);

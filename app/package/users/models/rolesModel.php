@@ -8,7 +8,7 @@ use JsonException;
 /**
  * Class: @rolesModel
  * @package Users
- * @author Teyir
+ * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
 class rolesModel extends manager

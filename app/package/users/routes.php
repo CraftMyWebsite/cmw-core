@@ -1,12 +1,13 @@
 <?php
 
-use CMW\Controller\Roles\rolesController;
-use CMW\Controller\users\usersController;
-use CMW\Router\router;
+global $router;
 
+use CMW\Controller\Roles\rolesController;
+use CMW\Controller\Users\usersController;
+
+//Todo Try to remove that...
 require_once('Lang/'.getenv("LOCALE").'.php');
 
-/** @var $router router Main router */
 
 /* Administration scope of package */
 $router->scope('/cmw-admin', function($router) {
@@ -40,6 +41,7 @@ $router->scope('/cmw-admin/roles', function($router) {
     $router->post('/add', "roles#adminRolesAddPost");
 
     $router->get('/edit/:id', function($id) {
+        //TODO need to try catch here.
         (new rolesController)->adminRolesEdit($id);
     })->with('id', '[0-9]+');
     $router->post('/edit/:id', function($id) {

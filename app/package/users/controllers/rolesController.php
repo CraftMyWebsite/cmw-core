@@ -11,7 +11,7 @@ use JsonException;
 /**
  * Class: @rolesController
  * @package Users
- * @author LoGuardian & Teyir
+ * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
 class rolesController extends coreController
