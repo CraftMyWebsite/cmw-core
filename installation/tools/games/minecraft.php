@@ -65,7 +65,8 @@ class minecraft extends Games
             <div class="form-group">
                 <label for="config_minecraft_ip">$msg</label>
                 <input type="text" name="config_minecraft_ip" class="form-control"
-                           id="config_minecraft_ip" maxlength="255" required>
+                           id="config_minecraft_ip" maxlength="255"
+                           placeholder="mc.hypixel.net" required>
             </div>
         HTML;
     }

@@ -43,7 +43,10 @@ const INSTALL_ADMIN_PASS = "Mot de passe";
 const INSTALL_CONFIG_TITLE = "Configuration de votre site";
 const INSTALL_CONFIG_NAME = "Nom de votre site";
 const INSTALL_CONFIG_DESCRIPTION = "Description de votre site";
+const INSTALL_CONFIG_DESCRIPTION_PLACEHOLDER = "Description de votre site";
 const INSTALL_CONFIG_IP = "Addresse IP de votre serveur";
+
+const INSTALL_GAME_SELECTION_TITLE = "Sélection du jeu";
 
 const INSTALL_SAVE = "Enregistrer";
 

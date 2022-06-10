@@ -8,12 +8,14 @@
             <div class="form-group">
                 <label for="bdd_name"><?= INSTALL_BDD_NAME ?></label>
                 <input type="text" name="bdd_name" class="form-control" id="bdd_name"
+                       placeholder="craftmywebsite"
                        required>
                 <small class="text-muted"><?= INSTALL_BDD_NAME_ABOUT ?></small>
             </div>
             <div class="form-group">
                 <label for="bdd_login"><?= INSTALL_BDD_USER ?></label>
                 <input type="text" name="bdd_login" class="form-control" id="bdd_login"
+                       placeholder="root"
                        required>
                 <small class="text-muted"><?= INSTALL_BDD_USER_ABOUT ?></small>
             </div>
@@ -21,6 +23,7 @@
                 <label for="bdd_pass"><?= INSTALL_BDD_PASS ?></label>
                 <div class="input-group" id="showHidePassword">
                     <input type="password" name="bdd_pass" class="form-control"
+                           placeholder="********"
                            id="bdd_pass">
                     <div class="input-group-append">
                         <a class="input-group-text" href="#"><i class="fa fa-eye-slash"
@@ -32,7 +35,8 @@
             <div class="form-group">
                 <label for="bdd_address"><?= INSTALL_BDD_ADDRESS ?></label>
                 <input type="text" name="bdd_address" class="form-control" id="bdd_address"
-                       required value="localhost">
+                       placeholder="localhost"
+                       value="localhost" required>
                 <small class="text-muted"><?= INSTALL_BDD_ADDRESS_ABOUT ?></small>
             </div>
             <hr>
@@ -40,7 +44,9 @@
             <div class="form-group">
                 <label for="install_folder"><?= INSTALL_SITE_FOLDER ?></label>
                 <input type="text" name="install_folder" class="form-control"
-                       id="install_folder" required value="/">
+                       id="install_folder"
+                       placeholder="/"
+                       value="/" required>
                 <small class="text-muted"><?= INSTALL_SITE_FOLDER_ABOUT ?></small>
             </div>
             <div class="form-check">
@@ -54,7 +60,6 @@
         </div>
         <!-- /.card-body -->
         <div class="card-footer">
-            <input type="hidden" name="lang" id="lang" value="<?= $_GET['lang'] ?? 'fr' ?>"> <!-- todo to change -->
             <button type="submit" id="submitFirstInstall" name="submitFirstInstall"
                     class="btn btn-primary"><?= INSTALL_SAVE ?></button>
         </div>

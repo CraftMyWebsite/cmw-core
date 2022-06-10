@@ -23,6 +23,6 @@ $install->endInstallation();
     </div>
     <!-- /.card-body -->
     <div class="card-footer">
-        <a href="../" class="btn btn-primary"><?= INSTALL_LOCATION ?></a>
+        <a href="<?= getenv("PATH_SUBFOLDER") ?>" class="btn btn-primary"><?= INSTALL_LOCATION ?></a>
     </div>
 </div>

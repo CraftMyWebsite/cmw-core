@@ -48,7 +48,7 @@ $dbName = $_UTILS::getEnv()->getValue("DB_NAME") ?? "<span class='text-danger'>"
             </p>
             <?php if ($_UTILS::getEnv()->getValue("installStep") > 1): ?>
                 <p>
-                    <b><?= INSTALL_GAME ?>:</b> <?= getenv("GAME") ?>
+                    <b><?= INSTALL_GAME ?>:</b> <?= ucfirst(getenv("GAME")) ?>
                 </p>
             <?php endif; ?>
 

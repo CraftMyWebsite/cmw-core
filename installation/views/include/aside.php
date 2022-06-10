@@ -16,11 +16,11 @@
         <nav class="mt-2">
             <div class="row mb-3 justify-content-center">
                 <div class="col-3">
-                    <a href="./?lang=fr"><img src="admin/resources/vendors/flag-icon-css/flags/fr.svg"
+                    <a href="installer/lang/fr"><img src="admin/resources/vendors/flag-icon-css/flags/fr.svg"
                                               class="flag-icon" alt="Passer le site en Français"></a>
                 </div>
                 <div class="col-3">
-                    <a href="./?lang=en"><img src="admin/resources/vendors/flag-icon-css/flags/gb.svg"
+                    <a href="installer/lang/en"><img src="admin/resources/vendors/flag-icon-css/flags/gb.svg"
                                               class="flag-icon" alt="Switch the site to English"></a>
                 </div>
             </div>

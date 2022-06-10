@@ -14,11 +14,14 @@ global $_UTILS;
             <div class="form-group">
                 <label for="config_name"><?= INSTALL_CONFIG_NAME ?></label>
                 <input type="text" name="config_name" class="form-control" id="config_name"
+                       placeholder="Hypixel"
+                       autocomplete="organization"
                        maxlength="255" required>
             </div>
             <div class="form-group">
                 <label for="config_description"><?= INSTALL_CONFIG_DESCRIPTION ?></label>
                 <input type="text" name="config_description" class="form-control"
+                       placeholder="<?= INSTALL_CONFIG_DESCRIPTION_PLACEHOLDER ?>"
                        id="config_description" maxlength="255" required>
             </div>
 

@@ -32,6 +32,12 @@ class installerController
         require_once($this->Utils::getEnv()->getValue("dir") . "/installation/lang/$lang.php");
     }
 
+    public function changeLang(string $code): void
+    {
+        $this->Utils::getEnv()->setOrEditValue("LOCALE", $code);
+        header("location: ../../installer");
+    }
+
     private function loadView(string $filename): void
     {
         $install = new installerController();
@@ -55,7 +61,7 @@ class installerController
 
     public function setCheckOnStep(int $step): string
     {
-        return (($this->getInstallationStep() > $step)) ? "check" : "spinner";
+        return (($this->getInstallationStep() > $step) || $this->getInstallationStep() == -1) ? "check" : "spinner";
     }
 
     public function getGameList(): array
@@ -104,7 +110,6 @@ class installerController
 
         $subFolder = filter_input(INPUT_POST, "install_folder");
         $devMode = isset($_POST['dev_mode']);
-        $locale = filter_input(INPUT_POST, "lang");
         $timezone = date_default_timezone_get();
 
         if (!installerModel::tryDatabaseConnection($host, $db, $username, $password)) {
@@ -113,10 +118,10 @@ class installerController
         }
 
         $this->firstInstallSetDatabase($host, $db, $username, $password);
-        $this->firstInstallSetInfos($subFolder, $locale, $timezone, $devMode);
+        $this->firstInstallSetInfos($subFolder, $timezone, $devMode);
 
         $this->Utils::getEnv()->setOrEditValue("PATH_SUBFOLDER", $subFolder);
-        $this->Utils::getEnv()->setOrEditValue("LOCALE", $locale);
+        $this->Utils::getEnv()->setOrEditValue("PATH_ADMIN_VIEW", "admin/resources/views/");
         $this->Utils::getEnv()->setOrEditValue("TIMEZONE", $timezone);
         $this->Utils::getEnv()->setOrEditValue("DEVMODE", $devMode);
 
@@ -200,10 +205,9 @@ class installerController
         $this->Utils::getEnv()->setOrEditValue("DB_PASSWORD", $password);
     }
 
-    private function firstInstallSetInfos(string $subFolder, string $locale, string $timezone, bool $devMode): void
+    private function firstInstallSetInfos(string $subFolder, string $timezone, bool $devMode): void
     {
         $this->Utils::getEnv()->setOrEditValue("PATH_SUBFOLDER", $subFolder);
-        $this->Utils::getEnv()->setOrEditValue("LOCALE", $locale);
         $this->Utils::getEnv()->setOrEditValue("TIMEZONE", $timezone);
         $this->Utils::getEnv()->setOrEditValue("DEVMODE", $devMode);
     }

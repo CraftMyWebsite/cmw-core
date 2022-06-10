@@ -1,5 +1,5 @@
 <?php
-const ALT_LOGO = "Logo CMW";
+const CORE_ALT_LOGO = "Logo CMW";
 
 const CORE_DASHBOARD_TITLE = "Dashboard";
 const CORE_DASHBOARD_DESC = "Welcome to your administration panel!";
