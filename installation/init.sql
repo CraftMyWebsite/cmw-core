@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `cmw_roles`
     `role_id`          int(11) DEFAULT NULL,
     `role_name`        tinytext NOT NULL,
     `role_description` text,
-    `weight`           int  DEFAULT 0
+    `role_weight`           int  DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
@@ -91,7 +91,7 @@ INSERT INTO `cmw_core_options` (`option_name`, `option_value`, `option_updated`)
 VALUES ('theme', 'Sampler', NOW());
 
 
-INSERT INTO `cmw_roles` (`role_name`, `role_description`, `weight`)
+INSERT INTO `cmw_roles` (`role_name`, `role_description`, `role_weight`)
 VALUES  ('Visiteur', 'Rôle pour les visiteurs', 0),
         ('Utilisateur', 'Rôle pour les utilisateurs', 1),
         ('Editeur', 'Rôle pour les éditeurs', 5),

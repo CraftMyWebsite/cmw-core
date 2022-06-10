@@ -47,6 +47,7 @@ class rolesController extends coreController
         $role->roleName = filter_input(INPUT_POST, "name");
         $role->roleDescription = filter_input(INPUT_POST, "description");
         $role->permList = $_POST['perms'];
+        $role->roleWeight = filter_input(INPUT_POST, "weight");
         $role->createRole();
 
 
@@ -80,6 +81,7 @@ class rolesController extends coreController
         $role->roleName = filter_input(INPUT_POST, "name");
         $role->roleDescription = filter_input(INPUT_POST, "description");
         $role->permList = $_POST['perms'];
+        $role->roleWeight = filter_input(INPUT_POST, "weight");
 
         $role->roleId = $id;
         $role->updateRole();

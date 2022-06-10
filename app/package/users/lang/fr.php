@@ -57,6 +57,7 @@ const USERS_PSEUDO = "Surnom";
 const USERS_FIRSTNAME = "Prénom";
 const USERS_SURNAME = "Nom";
 const USERS_ROLE = "Rôles";
+const USERS_WEIGHT= "Poids";
 const USERS_CREATION = "Date de création";
 const USERS_LAST_EDIT = "Date de modification";
 const USERS_LAST_CONNECTION = "Dernière connexion au site";
