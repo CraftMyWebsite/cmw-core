@@ -1,31 +1,28 @@
-//Show / Hide input type password
-$(document).ready(function() {
-    $("#showHidePassword a").on('click', function(event) {
-        event.preventDefault();
-        if($('#showHidePassword input').attr("type") == "text"){
-            $('#showHidePassword input').attr('type', 'password');
-            $('#showHidePassword i').addClass( "fa-eye-slash" );
-            $('#showHidePassword i').removeClass( "fa-eye" );
-        }else if($('#showHidePassword input').attr("type") == "password"){
-            $('#showHidePassword input').attr('type', 'text');
-            $('#showHidePassword i').removeClass( "fa-eye-slash" );
-            $('#showHidePassword i').addClass( "fa-eye" );
-        }
-    });
-});
+const passwordInput = (...inputId) => {
+    for (const IdName of inputId) {
 
-//If we have 2 password, this is for the second (verify)
-$(document).ready(function() {
-    $("#showHidePasswordR a").on('click', function(event) {
-        event.preventDefault();
-        if($('#showHidePasswordR input').attr("type") == "text"){
-            $('#showHidePasswordR input').attr('type', 'password');
-            $('#showHidePasswordR i').addClass( "fa-eye-slash" );
-            $('#showHidePasswordR i').removeClass( "fa-eye" );
-        }else if($('#showHidePasswordR input').attr("type") == "password"){
-            $('#showHidePasswordR input').attr('type', 'text');
-            $('#showHidePasswordR i').removeClass( "fa-eye-slash" );
-            $('#showHidePasswordR i').addClass( "fa-eye" );
+        const inputElement  = document.querySelector(`#${IdName} input`),
+              buttonElement = document.querySelector(`#${IdName} a`),
+              iElement      = document.querySelector(`#${IdName} i`);
+
+        if (inputElement === null || iElement === null || buttonElement === null) return;
+
+        buttonElement.onclick = (event) => {
+
+            event.preventDefault();
+            if (inputElement.getAttribute("type") === "text") {
+                inputElement.setAttribute("type", "password");
+                inputElement.classList.add("fa-eye-slash");
+                inputElement.classList.remove("fa-eye-slash");
+                return;
+            }
+
+            inputElement.setAttribute("type", "text");
+            inputElement.classList.add("fa-eye-slash");
+            inputElement.classList.remove("fa-eye-slash");
         }
-    });
-});
+
+    }
+}
+
+passwordInput("showHidePassword", "showHidePasswordR");

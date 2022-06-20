@@ -6,6 +6,7 @@ use CMW\Controller\Menus\menusController;
 use CMW\Controller\Users\usersController;
 
 use CMW\Model\coreModel;
+use CMW\Model\Users\usersModel;
 use CMW\Utils\Utils;
 use JsonException;
 
@@ -41,12 +42,14 @@ class coreController
         usersController::isUserHasPermission("core.configuration");
 
         foreach ($_POST as $option_name => $option_value):
-            if($option_name === "locale")
+            if ($option_name === "locale")
                 Utils::getEnv()->editValue("LOCALE", $option_value);
 
             coreModel::updateOption($option_name, $option_value);
         endforeach;
 
+
+        //Todo review that
         //Options with nullables options (checkbox ...)
         if (empty($_POST['minecraft_register_premium']) && getenv("GAME") === "minecraft") {
             coreModel::updateOption("minecraft_register_premium", "false");

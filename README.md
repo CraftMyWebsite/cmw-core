@@ -1,6 +1,8 @@
 Projet CraftMyWebsite - CMS multi-gaming
 =================================================
 
+### ATTENTION : Le projet est toujours en stade de développement.
+
 Ce projet a pour ambition de proposer à l'ensemble des administrateurs de serveurs de jeux de mettre à disposition de ses joueurs une plateforme web performante et pertinente.
 
 [![License](https://img.shields.io/badge/License-GNU%20GPL-%239f9f9f)](https://www.gnu.org/licenses/gpl-3.0.fr.html)
@@ -10,7 +12,7 @@ Ce projet a pour ambition de proposer à l'ensemble des administrateurs de serve
 Introduction
 ------------
 
-A ce stade du projet, seul le jeu Minecraft sera utilisable avec CraftMyWebsite et uniquement les langues françaises et anglaises sont disponibles. 
+À ce stade du projet, seul le jeu Minecraft sera utilisable avec CraftMyWebsite et uniquement les langues françaises et anglaises sont disponibles. 
 
 Installation
 ------------
@@ -30,26 +32,26 @@ location / {
 ```
 
 Une fois les fichiers du site téléchargés, accédez à votre site. Vous serez automatiquement redirigé vers l'installateur de CraftMyWebsite.
-Pensez à supprimer le dossier `/installation` une fois le CMS configuré si il n'est pas supprimé automatiquement.
+Pensez à supprimer le dossier `/installation` une fois le CMS configuré s'il n'est pas supprimé automatiquement.
 
 
 Support, infos et communauté
 ------------
 
 Liens utiles :
-- Discord: https://discord.gg/tscRZCU
-- Forum: https://craftmywebsite.fr/forum
-- Contact: https://craftmywebsite.fr/contactez/nous
-- Twitter: https://twitter.com/CraftMyWebsite
-- Demo: http://demo.craftmywebsite.fr
+- **Discord**: https://discord.gg/tscRZCU
+- **Forum**: https://craftmywebsite.fr/forum
+- **Contact**: https://craftmywebsite.fr/contactez/nous
+- **Twitter**: https://twitter.com/CraftMyWebsite
+- **Demo**: http://demo.craftmywebsite.fr
 
 
 Nos partenaires
 ------------
 
-- [WebStrator.fr](WebStrator.fr): Hébergeur web
-- [MineStrator.com](MineStrator.com): Hébergeur de serveurs Minecraft
-- [Serveurs-minecraft.net](Serveurs-minecraft.net): Référencement de serveurs Minecraft
+- [WebStrator.fr](https://www.webstrator.fr): Hébergeur web
+- [MineStrator.com](https://www.minestrator.com): Hébergeur de serveurs Minecraft
+- [Serveurs-minecraft.net](https://www.serveurs-minecraft.net): Référencement de serveurs Minecraft
 
 Copyright
 ------------

@@ -65,6 +65,7 @@ function getAllPackagesInstalled(): array
     $res = [];
 
     foreach ($dirFoldersNames as $folder) {
+
         $jsonFile = file_get_contents("app/package/$folder/infos.json");
         $obj = json_decode($jsonFile, true, 512, JSON_THROW_ON_ERROR);
         $res[] = $obj['name'];

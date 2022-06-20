@@ -27,9 +27,11 @@ const CORE_CHANGE_LANG = "Changez la langue du site";
 
 /* Datatables */
 const CORE_DATATABLES_LIST_PROCESSING = "Traitement en cours...";
-const CORE_DATATABLES_LIST_SEARCH = "Rechercher&nbsp;:";
+const CORE_DATATABLES_LIST_SEARCH = "Rechercher&nbsp; ";
 const CORE_DATATABLES_LIST_LENGTHMENU = "Afficher _MENU_ &eacute;l&eacute;ments";
+const CORE_DATATABLES_LIST_SETLIMIT = "Afficher {select} &eacute;lement par page";
 const CORE_DATATABLES_LIST_INFO = "Affichage de l\'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments";
+const CORE_DATATABLES_LIST_INFO__VANILLA = "Affichage des &eacute;lements {start} &agrave; {end} sur {rows} &eacute;l&eacute;ments";
 const CORE_DATATABLES_LIST_INFOEMPTY = "Affichage de l\'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments";
 const CORE_DATATABLES_LIST_INFOFILTERED = "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)";
 const CORE_DATATABLES_LIST_INFOPOSTFIX = "";

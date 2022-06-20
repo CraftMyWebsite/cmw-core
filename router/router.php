@@ -23,6 +23,14 @@ class router
         $this->url = $url;
     }
 
+    /**
+     * @return route[]
+     */
+    public function getAndPost($path, $callableGet, $callablePost): array
+    {
+        return [$this->get($path, $callableGet), $this->post($path, $callablePost)];
+    }
+
     public function get($path, $callable, $name = null): route
     {
         return $this->add($path, $callable, $name, 'GET');

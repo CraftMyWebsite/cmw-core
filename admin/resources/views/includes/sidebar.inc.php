@@ -1,11 +1,13 @@
-<?php use CMW\Model\Users\usersModel; ?>
+<?php /* @var \CMW\Model\Users\usersModel $userAdmin */
+/* @var \CMW\Controller\coreController $coreAdmin */
+$userAdmin->fetch($_SESSION['cmwUserId']); ?>
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="<?= getenv("PATH_SUBFOLDER") ?>cmw-admin/" class="brand-link">
         <img src="<?= getenv("PATH_SUBFOLDER") ?>admin/resources/images/identity/logo_compact.png"
              alt="<?= CORE_ALT_LOGO ?>" class="brand-image elevation-3">
-        <span class="brand-text font-weight-light">Craft My Website</span>
+        <span class="brand-text font-weight-light">CMW - ADMIN</span>
     </a>
 
     <!-- Sidebar -->
@@ -17,9 +19,7 @@
                      class="elevation-2" alt="<?= CORE_ALT_LOGO ?>">
             </div>
             <div class="info">
-                <a href="#" class="d-block"><?php $user = new usersModel;
-                    $user->fetch($_SESSION['cmwUserId']);
-                    echo $user->userPseudo; ?></a>
+                <a href="#" class="d-block"><?= $userAdmin->userPseudo ?></a>
             </div>
         </div>
 
@@ -75,6 +75,7 @@
                         </li>
                     <?php endif; ?>
                 <?php endforeach; ?>
+
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
