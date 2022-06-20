@@ -1,8 +1,10 @@
 <?php
+global $_UTILS;
 
 $packageFolder = 'app/package/';
 $scannedDirectory = array_diff(scandir($packageFolder), array('..', '.'));
+$dir = $_UTILS::getEnv()->getValue("dir");
 
 foreach ($scannedDirectory as $package) {
-    require("package/$package/routes.php");
+    require($dir . "app/package/$package/routes.php");
 }
