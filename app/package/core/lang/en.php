@@ -47,6 +47,8 @@ const CORE_DATATABLES_LIST_SORTDESCENDING = ": activate to sort the column in de
 define("CORE_FOOTER_LEFT", "Copyright &copy; 2014 - " . date("Y") . " All right reserved.");
 const CORE_FOOTER_RIGHT = "Thank you for using <a href='https://craftmywebsite.com/'>CraftMyWebsite</a>.";
 
+const CORE_NAV_THEMES = "Themes";
+
 /* BTN */
 const CORE_BTN_SAVE = "Save";
 const CORE_BTN_DELETE = "Delete";

@@ -47,6 +47,8 @@ const CORE_DATATABLES_LIST_SORTDESCENDING = ": activer pour trier la colonne par
 define("CORE_FOOTER_LEFT", "Copyright &copy; 2014 - " . date("Y") . " Tous droits réservés.");
 const CORE_FOOTER_RIGHT = "Merci d'utiliser <a href='https://craftmywebsite.com/'>CraftMyWebsite</a>.";
 
+const CORE_NAV_THEMES = "Thèmes";
+
 /* BTN */
 const CORE_BTN_SAVE = "Sauvegarder";
 const CORE_BTN_DELETE = "Supprimer";

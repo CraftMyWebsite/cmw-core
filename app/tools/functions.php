@@ -33,6 +33,10 @@ function cmwPackageInfo(string $package): array
     return json_decode($jsonFile, true, 512, JSON_THROW_ON_ERROR);
 }
 
+function packageIsInstalled(string $package): bool
+{
+    return file_exists("app/package/" . strtolower($package) . "/infos.json");
+}
 
 /*
  * Error management

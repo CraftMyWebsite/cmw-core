@@ -9,6 +9,14 @@
   "urls_submenu_en": {
     "Configuration": "configuration"
   },
+  "urls_submenu_fr_themes": {
+    "Liste des Thèmes": "themes/list",
+    "Configurez vos thèmes": "themes/configuration"
+},
+  "urls_submenu_en_themes": {
+    "Themes list": "themes/list",
+    "Configure your themes": "themes/configuration"
+  },
   "permissions": {
     "Accès au dashboard admin": "core.dashboard",
     "Gestion des paramètres du site": "core.configuration",

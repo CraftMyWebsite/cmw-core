@@ -75,6 +75,35 @@
                         </li>
                     <?php endif; ?>
                 <?php endforeach; ?>
+
+                <!-- Theme configuration section -->
+                <?php
+                $coreFile = file_get_contents("app/package/core/infos.json");
+
+                try {
+                    $packageCore = json_decode($coreFile, true, 512, JSON_THROW_ON_ERROR);
+                } catch (JsonException $e) {
+                }
+                $urlsSubMenu = $packageCore["urls_submenu_" . getenv("LOCALE") . "_themes"] ?? CORE_NAV_THEMES;
+                ?>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-paint-brush"></i>
+                        <p><?= CORE_NAV_THEMES ?><i class="right fas fa-angle-left"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <?php foreach ($urlsSubMenu as $subMenuName => $subMenuUrl) : ?>
+                            <li class="nav-item">
+                                <a href="<?= getenv("PATH_SUBFOLDER") ?>cmw-admin/<?= $subMenuUrl ?>"
+                                   class="nav-link">
+                                    <p><?= $subMenuName ?></p>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </li>
+
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
