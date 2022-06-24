@@ -25,7 +25,7 @@ $router = $loader->loadRouter();
 $loader->loadPackages();
 
 /*=> Load Functions */
-$loader->loadFunctions();
+//$loader->loadFunctions();
 
 /*=> Load Global Constants */
 $loader->loadGlobalConstants(); //TODO MODIF THAT

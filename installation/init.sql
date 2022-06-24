@@ -111,4 +111,3 @@ VALUES  ('*', 'Obtiens toutes les permissions', 5),
         ('users.edit', 'Modification d''un utilisateur', 4),
         ('users.delete', 'Suppression d''un utilisateur', 4),
         ('users.roles', 'Gestion des rôles', 4);
-

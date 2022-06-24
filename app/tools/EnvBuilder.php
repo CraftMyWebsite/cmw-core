@@ -155,10 +155,8 @@ class EnvBuilder
 
     private function setDefaultValues(): void
     {
-        $this->addValue("CMS", "CraftMyWebsite");
         $this->addValue("installStep", 0);
         $this->addValue("dir", $this->absPath);
-        $this->addValue("theme", "default");
         $this->addValue("devMode", 0);
     }
 
