@@ -5,6 +5,7 @@ namespace CMW\Controller\pages;
 use CMW\Controller\coreController;
 use CMW\Controller\Menus\menusController;
 use CMW\Controller\Users\usersController;
+use CMW\Entity\Pages\pagesEntity;
 use CMW\Model\Pages\pagesModel;
 use CMW\Model\Users\usersModel;
 use JetBrains\PhpStorm\NoReturn;
@@ -17,14 +18,23 @@ use JetBrains\PhpStorm\NoReturn;
  */
 class pagesController extends coreController
 {
+
+    private pagesModel $pagesModel;
+
+    public function __construct($theme_path = null)
+    {
+        parent::__construct($theme_path);
+        $this->pagesModel = new pagesModel();
+    }
+
     public function adminPagesList(): void
     {
         usersController::isUserHasPermission("pages.show");
 
-        $pagesModel = new pagesModel();
-        $pagesList = $pagesModel::fetchAll();
+        $pages = new pagesModel();
+        $users = new usersModel();
 
-        view('pages', 'list.admin', ["pagesList" => $pagesList], 'admin');
+        view('pages', 'list.admin', ["pages" => $pages, "users" => $users], 'admin');
     }
 
     public function adminPagesAdd(): void
@@ -41,28 +51,23 @@ class pagesController extends coreController
         $user = new usersModel();
 
         $page = new pagesModel();
-        $page->pageTitle = filter_input(INPUT_POST, "news_title");
-        $page->pageSlug = filter_input(INPUT_POST, "news_slug");
-        $page->pageContent = filter_input(INPUT_POST, "news_content");
-        $page->pageState = filter_input(INPUT_POST, "page_state");
-        $page->userId = $user::getLoggedUser();
+        $pageTitle = filter_input(INPUT_POST, "news_title");
+        $pageSlug = filter_input(INPUT_POST, "news_slug");
+        $pageContent = filter_input(INPUT_POST, "news_content");
+        $pageState = filter_input(INPUT_POST, "page_state");
+        $userId = $user::getLoggedUser();
 
-        $page->create();
-
-        echo $page->pageId;
+        $page->create($pageSlug, $userId, $pageTitle, $pageContent, $pageState);
     }
 
-    public function adminPagesEdit($id): void
+    public function adminPagesEdit($slug): void
     {
         usersController::isUserHasPermission("pages.edit");
 
         $page = new pagesModel();
-        $page->pageId = $id;
-        $page->fetch();
+        $page->getPage($slug);
 
-        $pageContent = $page->pageContent;
-
-        view('pages', 'edit.admin', ["page" => $page, "pageContent" => $pageContent], 'admin');
+        view('pages', 'edit.admin', ["page" => $page, "slug" => $slug], 'admin');
     }
 
     public function adminPagesEditPost(): void
@@ -70,15 +75,13 @@ class pagesController extends coreController
         usersController::isUserHasPermission("pages.edit");
 
         $page = new pagesModel();
-        $page->pageId = filter_input(INPUT_POST, "news_id");
-        $page->pageTitle = filter_input(INPUT_POST, "news_title");
-        $page->pageSlug = filter_input(INPUT_POST, "news_slug");
-        $page->pageContent = filter_input(INPUT_POST, "news_content");
-        $page->pageState = filter_input(INPUT_POST, "page_state");
+        $pageTitle = filter_input(INPUT_POST, "news_title");
+        $pageSlug = filter_input(INPUT_POST, "news_slug");
+        $pageContent = filter_input(INPUT_POST, "news_content");
+        $pageState = filter_input(INPUT_POST, "page_state");
+        $pageId = filter_input(INPUT_POST, "news_id");
 
-        $page->update();
-
-        echo $page->pageId;
+        $page->update($pageSlug, $pageTitle, $pageContent, $pageState, $pageId);
     }
 
     #[NoReturn] public function adminPagesDelete(): void
@@ -86,8 +89,8 @@ class pagesController extends coreController
         usersController::isUserHasPermission("pages.delete");
 
         $page = new pagesModel();
-        $page->pageId = filter_input(INPUT_POST, "id");
-        $page->delete();
+        $pageId = filter_input(INPUT_POST, "id");
+        $page->delete($pageId);
 
         //Todo try to remove that
         $_SESSION['toaster'][0]['title'] = CORE_TOASTER_TITLE;
@@ -108,13 +111,10 @@ class pagesController extends coreController
         $menu = new menusController();
         $page = new pagesModel();
 
-        $page->pageSlug = $slug;
-        $page->fetch($page->pageSlug);
-        $pageContent = $page->pageContent;
+        $page->getPage($slug);
 
-
-        //Include the public view file ("public/themes/$themePath/views/wiki/main.view.php")
-        view('pages', 'main', ["page" => $page, "pageContent" => $pageContent,
+        //Include the public view file ("public/themes/$themePath/views/pages/main.view.php")
+        view('pages', 'main', ["page" => $page,
             "slug" => $slug, "core" => $core, "menu" => $menu], 'public');
     }
 

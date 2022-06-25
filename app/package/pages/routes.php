@@ -2,6 +2,10 @@
 
 global $router;
 
+
+use CMW\Controller\pages\pagesController;
+use CMW\Router\router;
+
 //Todo Try to remove that...
 require_once('Lang/' . getenv("LOCALE") . '.php');
 
@@ -12,9 +16,9 @@ require_once('Lang/' . getenv("LOCALE") . '.php');
 $router->scope('/cmw-admin/pages', function ($router) {
     $router->get('/list', "pages#adminPagesList");
 
-    $router->get('/edit/:id', function ($id) {
-        (new pagesController)->adminPagesEdit($id);
-    })->with('id', '[0-9]+');
+    $router->get('/edit/:slug', function ($slug) {
+        (new pagesController)->adminPagesEdit($slug);
+    })->with('slug', '.*?');
     $router->post('/edit', "pages#adminPagesEditPost");
 
     $router->get('/add', "pages#adminPagesAdd");
