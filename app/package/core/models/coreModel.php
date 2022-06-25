@@ -10,19 +10,15 @@ namespace CMW\Model;
  */
 class coreModel extends manager
 {
-    public string $theme;
-    public array $menu;
-    public static string $name;
-    public static string $description;
 
-    public function fetchOption($option): void
+    public function fetchOption($option): string
     {
         $db = self::dbConnect();
         $req = $db->prepare('SELECT option_value FROM cmw_core_options WHERE option_name = ?');
         $req->execute(array($option));
         $option = $req->fetch();
 
-        $this->theme = $option['option_value'];
+        return $option['option_value'];
     }
 
     /***

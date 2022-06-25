@@ -45,7 +45,7 @@ $description = CORE_CONFIG_DESC; ?>
                                 <div class="form-group">
                                     <label><?= CORE_CHANGE_LANG ?></label>
                                     <select class="form-control" name="locale">
-                                        <?php foreach (coreController::$avalaiblesLocales as $code => $name): ?>
+                                        <?php foreach (coreController::$availableLocales as $code => $name): ?>
                                         <option value="<?= $code ?>" <?= $code === getenv("LOCALE") ? "selected" : "" ?>>
                                             <?= $name ?>
                                         </option>
