@@ -103,7 +103,7 @@ class coreController
     /* Security Warning */
     public function cmwWarn(): ?string
     {
-        if (is_dir("installation")) {
+        if (is_dir("installation") && getenv("DEVMODE") != 1 ) {
             //Todo Set that in lang file
             return <<<HTML
             <p class='security-warning'>ATTENTION - Votre dossier d'installation n'a pas encore été supprimé. Pour des questions de sécurité, vous devez supprimer le dossier installation situé à la racine de votre site.</p>
