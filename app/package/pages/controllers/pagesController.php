@@ -5,6 +5,7 @@ namespace CMW\Controller\pages;
 use CMW\Controller\coreController;
 use CMW\Controller\Menus\menusController;
 use CMW\Controller\Users\usersController;
+use CMW\Entity\Pages\pagesEntity;
 use CMW\Model\Pages\pagesModel;
 use CMW\Model\Users\usersModel;
 use JetBrains\PhpStorm\NoReturn;
@@ -17,6 +18,15 @@ use JetBrains\PhpStorm\NoReturn;
  */
 class pagesController extends coreController
 {
+
+    private pagesModel $pagesModel;
+
+    public function __construct($theme_path = null)
+    {
+        parent::__construct($theme_path);
+        $this->pagesModel = new pagesModel();
+    }
+
     public function adminPagesList(): void
     {
         usersController::isUserHasPermission("pages.show");
@@ -24,7 +34,7 @@ class pagesController extends coreController
         $pagesModel = new pagesModel();
         $pagesList = $pagesModel->getPages();
 
-        view('pages', 'list.admin', ["pagesList" => $pagesList], 'admin');
+        view('pages', 'list.admin', ["pages" => $pages, "users" => $users], 'admin');
     }
 
     public function adminPagesAdd(): void
@@ -50,15 +60,17 @@ class pagesController extends coreController
         $pageEntity = $page->createPage($pageTitle, $pageSlug, $pageContent, $userId, $pageState);
 
         echo $pageEntity?->getId() ?? -1;
+
     }
 
-    public function adminPagesEdit($id): void
+    public function adminPagesEdit($slug): void
     {
         usersController::isUserHasPermission("pages.edit");
 
         $page = (new pagesModel())->getPageById($id);
 
         view('pages', 'edit.admin', ["page" => $page], 'admin');
+
     }
 
     public function adminPagesEditPost(): void
@@ -66,6 +78,7 @@ class pagesController extends coreController
         usersController::isUserHasPermission("pages.edit");
 
         $page = new pagesModel();
+      
         $id = filter_input(INPUT_POST, "news_id");
         $title = filter_input(INPUT_POST, "news_title");
         $slug = filter_input(INPUT_POST, "news_slug");
@@ -82,8 +95,10 @@ class pagesController extends coreController
         usersController::isUserHasPermission("pages.delete");
 
         $page = new pagesModel();
+      
         $id = filter_input(INPUT_POST, "id");
         $page->deletePage($id);
+
 
         //Todo try to remove that
         $_SESSION['toaster'][0]['title'] = CORE_TOASTER_TITLE;
@@ -106,9 +121,9 @@ class pagesController extends coreController
 
         $pageEntity = $page->getPageBySlug($slug);
 
-
         //Include the public view file ("public/themes/$themePath/views/wiki/main.view.php")
         view('pages', 'main', ["pages" => $page, "page" => $pageEntity, "core" => $core, "menu" => $menu], 'public');
+
     }
 
 

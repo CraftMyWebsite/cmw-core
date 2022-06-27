@@ -12,17 +12,28 @@ use CMW\Model\Menus\menusModel;
  * @version 1.0
  */
 class menusController extends coreController {
+
+    private menusModel $menusModel;
+
+
     /* //////////////////////////////////////////////////////////////////////////// */
     /* GLOBALS FUNCTIONS */
     /*
      * Retrieving the menu saved in the database
      */
+
+
+    public function __construct($theme_path = null)
+    {
+        parent::__construct($theme_path);
+        $this->menusModel = new menusModel();
+    }
+
     public function cmwMenu(): array
     {
         $coreModel = new menusModel();
-        $coreModel->fetchMenu();
 
-        return $coreModel->menu;
+        return $coreModel->fetchMenu();
     }
 
     public function adminMenus() : void {

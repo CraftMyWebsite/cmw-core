@@ -1,4 +1,5 @@
 <?php
+
 /* @var \CMW\Entity\Pages\pageEntity $page */
 /* @var \CMW\Model\Pages\pagesModel $pages */
 /* @var \CMW\Controller\coreController $core */
@@ -7,6 +8,7 @@
 $title = ucfirst($page->getTitle());
 $description = "Description de votre page";
 ob_start(); ?>
+
 
     <section>
         <div class="container">

@@ -7,6 +7,7 @@ use CMW\Controller\Users\usersController;
 
 use CMW\Model\coreModel;
 use CMW\Model\Users\usersModel;
+use CMW\Entity\Core\optionsEntity;
 use CMW\Utils\Utils;
 use JsonException;
 
@@ -19,11 +20,13 @@ use JsonException;
 class coreController
 {
     public static string $themePath;
-    public static array $avalaiblesLocales = ['fr' => 'Français', 'en' => 'English'];
+    public static array $availableLocales = ['fr' => 'Français', 'en' => 'English'];
+    private coreModel $coreModel;
 
     public function __construct($theme_path = null)
     {
         self::$themePath = $this->cmwThemePath();
+        $this->coreModel = new coreModel();
     }
 
     /* ADMINISTRATION */
@@ -75,9 +78,7 @@ class coreController
     public function cmwThemePath(): string
     {
         $coreModel = new coreModel();
-        $coreModel->fetchOption("theme");
-
-        return $coreModel->theme;
+        return $coreModel->fetchOption("theme");
     }
 
     /**
@@ -103,7 +104,7 @@ class coreController
     /* Security Warning */
     public function cmwWarn(): ?string
     {
-        if (is_dir("installation")) {
+        if (is_dir("installation") && getenv("DEVMODE") != 1 ) {
             //Todo Set that in lang file
             return <<<HTML
             <p class='security-warning'>ATTENTION - Votre dossier d'installation n'a pas encore été supprimé. Pour des questions de sécurité, vous devez supprimer le dossier installation situé à la racine de votre site.</p>
