@@ -1,17 +1,18 @@
 <?php
-/* @var  $page*/
+/* @var \CMW\Entity\Pages\pageEntity $page */
+/* @var \CMW\Model\Pages\pagesModel $pages */
+/* @var \CMW\Controller\coreController $core */
+/* @var \CMW\Controller\Menus\menusController $menu */
 
-$title = ucfirst($page->pageTitle);
+$title = ucfirst($page->getTitle());
 $description = "Description de votre page";
-ob_start();?>
+ob_start(); ?>
 
-<section>
-    <div class="container">
-            <?= $page->pageContentTranslated ?>
-    </div>
-</section>
-
-
+    <section>
+        <div class="container">
+            <?= $page->getConverted() ?>
+        </div>
+    </section>
 
 
 <?php $content = ob_get_clean(); ?>

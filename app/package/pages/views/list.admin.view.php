@@ -1,4 +1,4 @@
-<?php use CMW\Model\Pages\pagesModel;
+<?php
 
 $title = PAGES_LIST_TITLE;
 $description = PAGES_LIST_DESC; ?>
@@ -66,13 +66,13 @@ $description = PAGES_LIST_DESC; ?>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php /** @var pagesModel[] $pagesList */
+                                <?php /** @var \CMW\Entity\Pages\pageEntity[] $pagesList */
                                 foreach ($pagesList as $page) : ?>
                                     <tr>
-                                        <td><?= $page->pageTitle ?></td>
-                                        <td><?= $page->user->userPseudo ?></td>
-                                        <td><?= $page->pageCreated ?></td>
-                                        <td><a href="../pages/edit/<?= $page->pageId ?>"><i class="fa fa-cog"></i></a>
+                                        <td><?= $page->getTitle() ?></td>
+                                        <td><?= $page->getUser()->userPseudo ?></td>
+                                        <td><?= $page->getCreated() ?></td>
+                                        <td><a href="../pages/edit/<?= $page->getId() ?>"><i class="fa fa-cog"></i></a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

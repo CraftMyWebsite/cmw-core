@@ -3,8 +3,9 @@
 global $router;
 
 //Todo Try to remove that...
-require_once('Lang/' . getenv("LOCALE") . '.php');
+use CMW\Controller\pages\pagesController;
 
+require_once('Lang/' . getenv("LOCALE") . '.php');
 
 /* Fronts pages of CMS */
 

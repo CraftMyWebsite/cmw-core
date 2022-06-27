@@ -3,29 +3,29 @@
 $title = PAGES_EDIT_TITLE;
 $description = PAGES_EDIT_DESC;
 
-/* @var pagesController[] $page
- * @var pagesController[] $pageContent
+/* @var \CMW\Entity\Pages\pageEntity $page
  */
 ?>
 
-<?php $scripts = '<script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script><!-- Header -->
+<?php $scripts = '
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/header.js"></script>
+    
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/image.js"></script>
+    
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/delimiter.js"></script>
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/list.js"></script>
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/quote.js"></script>
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/code.js"></script>
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/table.js"></script>
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/link.js"></script>
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/warning.js"></script>
+    
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/embed.js"></script>
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/marker.js"></script>
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/underline.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/image@latest"></script><!-- Image -->
-
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/delimiter@latest"></script><!-- Delimiter -->
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script><!-- List -->
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest"></script><!-- Quote -->
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/code@latest"></script><!-- Code -->
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/table@latest"></script><!-- Table -->
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/link@latest"></script><!-- Link -->
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/warning@latest"></script><!-- Warning -->
-
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script><!-- Embed -->
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/marker@latest"></script><!-- Marker -->
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/underline@latest"></script><!-- Underline -->
-
-    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/drag-drop.js"></script><!-- DragDrop -->
-    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/undo.js"></script><!-- Undo -->
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/drag-drop.js"></script> 
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/undo.js"></script>
 
 
     <!-- Load Editor.js Core -->
@@ -101,7 +101,7 @@ $description = PAGES_EDIT_DESC;
         /**
          * Initial Editor data
          */
-        data: ' . $pageContent . ',
+        data: ' . $page->getContent() . ',
         onReady: function(){
             new Undo({ editor });
             const undo = new Undo({ editor });
@@ -184,12 +184,12 @@ $description = PAGES_EDIT_DESC;
             <div class="col-9">
                 <div class="card card-primary">
                     <div class="card-body">
-                        <input type="hidden" id="page_id" name="page_id" value="<?= $page->pageId ?>">
+                        <input type="hidden" id="page_id" name="page_id" value="<?= $page->getId() ?>">
                         <input class="page-title" type="text" id="title" placeholder="Titre de la page"
-                               value="<?= $page->pageTitle ?>">
+                               value="<?= $page->getTitle() ?>">
                         <p class="page-slug text-blue mb-3 d-flex"><?php echo "http://" . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . "p/"; ?>
                             <input class="border-0 text-blue p-0 w-100 page-slug-input" type="text" id="slug"
-                                   value="<?= $page->pageSlug ?>"></p>
+                                   value="<?= $page->getSlug() ?>"></p>
                         <div>
                             <div id="editorjs"></div>
                         </div>
@@ -204,14 +204,14 @@ $description = PAGES_EDIT_DESC;
                     <div class="card-body">
                         <div class="custom-control custom-switch mb-2">
                             <input type="checkbox" class="custom-control-input" id="draft"
-                                   name="draft" <?= $page->pageState == 2 ? "checked" : ""; ?>>
+                                   name="draft" <?= $page->getState() === 2 ? "checked" : ""; ?>>
                             <label class="custom-control-label" for="draft"><?= PAGES_DRAFT ?></label>
                         </div>
                         <div class="btn btn-block btn-primary" id="saveButton">
                             <?= CORE_BTN_SAVE ?>
                         </div>
                         <form action="/cmw-admin/pages/delete" method="post">
-                            <input type="hidden" name="id" value="<?= $page->pageId ?>">
+                            <input type="hidden" name="id" value="<?= $page->getId() ?>">
                             <button class="mt-3 btn btn-danger btn-block" id="deleteButton">
                                 <?= CORE_BTN_DELETE ?>
                             </button>
