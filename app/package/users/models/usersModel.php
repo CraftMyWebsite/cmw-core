@@ -2,6 +2,8 @@
 
 namespace CMW\Model\Users;
 
+use CMW\Entity\Roles\roleEntity;
+use CMW\Entity\Users\userEntity;
 use CMW\Model\manager;
 
 /**
@@ -12,27 +14,78 @@ use CMW\Model\manager;
  */
 class usersModel extends manager
 {
-    public int $userId;
-    public string $userEmail;
-    public ?string $userPseudo;
-    public ?string $userFirstname;
-    public ?string $userLastname;
-    public int $userState;
-    public string $userHighestRoleName;
-    public string $userCreated;
-    public string $userUpdated;
-    public string $userLogged;
-    private string $userPassword;
-    private string $userKey;
-    public array $userRoles;
+    public function getUserById($id): ?userEntity {
+        $sql = "select * from cmw_users where user_id = :user_id";
 
-    public function __construct($user_id = null)
-    {
+        $db = manager::dbConnect();
+
+        $res = $db->prepare($sql);
+
+        if (!$res->execute(array("user_id" => $id))) {
+            return null;
+        }
+
+        $roles = array();
+
+        $roleSql = "select * from cmw_users_roles where user_id = :user_id";
+        $roleRes = $db->prepare($roleSql);
+
+        if ($res->execute(array("user_id" => $id))) {
+
+            $roleRes = $roleRes->fetchAll();
+
+            foreach ($roleRes as $role) {
+
+                $roles[] = new roleEntity(
+                    $role["role_id"],
+                    $role["role_name"],
+                    $role["role_description"],
+                    $role["role_weight"]
+                );
+
+            }
+
+        }
+
+        $res = $res->fetch();
+
+        return new userEntity(
+            $res["user_id"],
+            $res["user_email"],
+            $res["user_pseudo"],
+            $res["user_firstname"] ?? "",
+            $res["user_lastname"] ?? "",
+            $res["user_state"],
+            $res["user_logged"],
+            $roles,
+            $res["user_created"],
+            $res["user_updated"],
+        );
     }
+
+    public function getUsers(): array {
+        $sql = "select user_id from cmw_users";
+        $db = manager::dbConnect();
+
+        $res = $db->prepare($sql);
+
+        if (!$res->execute()) {
+            return array();
+        }
+
+        $toReturn = array();
+
+        while ($user = $res->fetch()) {
+            $toReturn[] = $this->getUserById($user["user_id"]);
+        }
+
+        return $toReturn;
+    }
+
 
     public static function getLoggedUser(): int
     {
-        return $_SESSION['cmwUserId'] ?? -1;
+        return $_SESSION['cmwUserId'] ?: -1;
     }
 
     public static function logIn($info, $cookie = false)
@@ -69,7 +122,7 @@ class usersModel extends manager
         return -3; // SQL error
     }
 
-    public static function logout(): void
+    public static function logOut(): void
     {
         $_SESSION = array();
         $params = session_get_cookie_params();
@@ -80,38 +133,39 @@ class usersModel extends manager
         session_destroy();
     }
 
-    public function create(array $roles): int
+    public function createUser(string $mail, string $username, string $firstName, string $lastName, array $roles): ?userEntity
     {
         $var = array(
-            'user_email' => $this->userEmail,
-            'user_pseudo' => $this->userPseudo,
-            'user_firstname' => $this->userFirstname,
-            'user_lastname' => $this->userLastname,
+            'user_email' => $mail,
+            'user_pseudo' => $username,
+            'user_firstname' => $firstName,
+            'user_lastname' => $lastName,
             'user_state' => 1,
             'user_key' => uniqid('', true)
         );
 
-        $sql = "INSERT INTO cmw_users (user_email, user_pseudo, user_firstname, user_lastname, user_state, user_key, user_created, user_updated) VALUES (:user_email, :user_pseudo, :user_firstname, :user_lastname, :user_state, :user_key, NOW(), NOW())";
+        $sql = "INSERT INTO cmw_users (user_email, user_pseudo, user_firstname, user_lastname, user_state, user_key) 
+                VALUES (:user_email, :user_pseudo, :user_firstname, :user_lastname, :user_state, :user_key)";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
-            $this->userId = $db->lastInsertId();
-            $this->addRole($roles);
-            return $this->userId;
+            $id = $db->lastInsertId();
+            $this->addRole($id, $roles);
+            return $this->getUserById($id);
         }
 
-        return -1;
+        return null;
     }
 
-    public function addRole(array $roles): void
+    public function addRole(int $id, array $rolesId): void
     {
-        foreach ($roles as $role) {
+        foreach ($rolesId as $roleId) {
 
             $var = array(
-                "user_id" => $this->userId,
-                "role_id" => $role
+                "user_id" => $id,
+                "role_id" => $roleId
             );
 
             $sql = "INSERT INTO cmw_users_roles (user_id, role_id) VALUES (:user_id, :role_id)";
@@ -122,60 +176,14 @@ class usersModel extends manager
         }
     }
 
-    public function fetch($user_id): void
+    public function updateUser(int $id, string $mail, string $username, string $firstname, string $lastname, array $roles): ?userEntity
     {
         $var = array(
-            "user_id" => $user_id
-        );
-
-        $sql = "SELECT user_id, user_email, user_pseudo, user_firstname, user_lastname, user_state, DATE_FORMAT(user_created, '%d/%m/%Y à %H:%i:%s')
-                AS 'user_created', DATE_FORMAT(user_updated, '%d/%m/%Y à %H:%i:%s')
-                AS 'user_updated', DATE_FORMAT(user_logged, '%d/%m/%Y à %H:%i:%s')
-                AS 'user_logged'
-                FROM cmw_users WHERE user_id=:user_id";
-
-        $db = manager::dbConnect();
-        $req = $db->prepare($sql);
-
-        if ($req->execute($var)) {
-            $result = $req->fetch();
-
-            foreach ($result as $key => $property) {
-
-                //to camel case all keys (role_id => roleId (for $this->>roleId))
-                $key = explode('_', $key);
-                $firstElement = array_shift($key);
-                $key = array_map('ucfirst', $key);
-                array_unshift($key, $firstElement);
-                $key = implode('', $key);
-
-                if (property_exists(usersModel::class, $key)) {
-                    $this->$key = $property;
-                }
-            }
-        }
-    }
-
-    public function fetchAll(): array
-    {
-        $sql = "SELECT user_id, user_email, user_pseudo, user_firstname, user_lastname, user_state, DATE_FORMAT(user_created, '%d/%m/%Y à %H:%i:%s') AS 'user_created', DATE_FORMAT(user_updated, '%d/%m/%Y à %H:%i:%s') AS 'user_updated', DATE_FORMAT(user_logged, '%d/%m/%Y à %H:%i:%s') AS 'user_logged' FROM cmw_users";
-        $db = manager::dbConnect();
-        $req = $db->prepare($sql);
-
-        if ($req->execute()) {
-            return $req->fetchAll();
-        }
-        return [];
-    }
-
-    public function update(array $roles): void
-    {
-        $var = array(
-            "user_id" => $this->userId,
-            "user_email" => $this->userEmail,
-            "user_pseudo" => mb_strimwidth($this->userPseudo, 0, 255),
-            "user_firstname" => mb_strimwidth($this->userFirstname, 0, 255),
-            "user_lastname" => mb_strimwidth($this->userLastname, 0, 255)
+            "user_id" => $id,
+            "user_email" => $mail,
+            "user_pseudo" => mb_strimwidth($username, 0, 255),
+            "user_firstname" => mb_strimwidth($firstname, 0, 255),
+            "user_lastname" => mb_strimwidth($lastname, 0, 255)
         );
 
         $sql = "UPDATE cmw_users SET user_email=:user_email,user_pseudo=:user_pseudo,user_firstname=:user_firstname,user_lastname=:user_lastname WHERE user_id=:user_id";
@@ -184,28 +192,30 @@ class usersModel extends manager
         $req = $db->prepare($sql);
         $req->execute($var);
 
-        $this->updateEditTime();
-        $this->updateRoles($roles);
+        $this->updateEditTime($id);
+        $this->updateRoles($id, $roles);
+
+        return $this->getUserById($id);
     }
 
-    public function updateEditTime(): void
+    public function updateEditTime(int $id): void
     {
         $var = array(
-            "user_id" => $this->userId,
+            "user_id" => $id,
         );
 
-        $sql = "UPDATE cmw_users SET user_updated=CURRENT_TIMESTAMP WHERE user_id=:user_id";
+        $sql = "UPDATE cmw_users SET user_updated=NOW() WHERE user_id=:user_id";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
 
-    public function updateRoles(array $roles): void
+    public function updateRoles(int $id, array $roles): void
     {
         //Delete all the roles of the players
         $var = array(
-            "user_id" => $this->userId
+            "user_id" => $id
         );
 
         $sql = "DELETE FROM cmw_users_roles WHERE user_id = :user_id";
@@ -215,19 +225,14 @@ class usersModel extends manager
         $req->execute($var);
 
         //Add all the new roles
-        $this->addRole($roles);
+        $this->addRole($id, $roles);
     }
 
-    public function setPassword($password): void
-    {
-        $this->userPassword = $password;
-    }
-
-    public function updatePass(): void
+    public function updatePass($id, $password): void
     {
         $var = array(
-            "user_id" => $this->userId,
-            "user_password" => $this->userPassword
+            "user_id" => $id,
+            "user_password" => $password
         );
 
         $sql = "UPDATE cmw_users SET user_password=:user_password WHERE user_id=:user_id";
@@ -236,14 +241,14 @@ class usersModel extends manager
         $req = $db->prepare($sql);
         $req->execute($var);
 
-        $this->updateEditTime();
+        $this->updateEditTime($id);
     }
 
-    public function changeState(): void
+    public function changeState(int $id, int $state): void
     {
         $var = array(
-            "user_id" => $this->userId,
-            "user_state" => $this->userState,
+            "user_id" => $id,
+            "user_state" => $state,
         );
 
         $sql = "UPDATE cmw_users SET user_state=:user_state WHERE user_id=:user_id";
@@ -252,13 +257,13 @@ class usersModel extends manager
         $req = $db->prepare($sql);
         $req->execute($var);
 
-        $this->updateEditTime();
+        $this->updateEditTime($id);
     }
 
-    public function delete(): void
+    public function delete(int $id): void
     {
         $var = array(
-            "user_id" => $this->userId,
+            "user_id" => $id,
         );
         $sql = "DELETE FROM cmw_users WHERE user_id=:user_id";
 
@@ -267,13 +272,13 @@ class usersModel extends manager
         $req->execute($var);
     }
 
-    public function updateLoggedTime(): void
+    public function updateLoggedTime(int $id): void
     {
         $var = array(
-            "user_id" => $this->userId,
+            "user_id" => $id,
         );
 
-        $sql = "UPDATE cmw_users SET user_logged=CURRENT_TIMESTAMP WHERE user_id=:user_id";
+        $sql = "UPDATE cmw_users SET user_logged=NOW() WHERE user_id=:user_id";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
@@ -304,7 +309,12 @@ class usersModel extends manager
         return -1;
     }
 
-    public static function getPlayerRoles(int $userId): array
+
+    /**
+     * @param int $userId
+     * @return \CMW\Entity\Roles\roleEntity[]
+     */
+    public static function getUserRoles(int $userId): array
     {
         $sql = "SELECT cmw_roles.role_name FROM cmw_users_roles
                     JOIN cmw_users on cmw_users.user_id = cmw_users_roles.user_id
@@ -314,20 +324,32 @@ class usersModel extends manager
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
 
-        if ($req->execute(array("user_id" => $userId))) {
-            return $req->fetchAll();
+        if (!$req->execute(array("user_id" => $userId))) {
+            return array();
         }
 
-        return [];
+        $res = $req->fetchAll();
+        $toReturn = array();
+
+        foreach ($res as $role) {
+            $toReturn[] = new roleEntity(
+                $role["role_id"],
+                $role["role_name"],
+                $role["role_description"],
+                $role["role_weight"],
+            );
+        }
+
+        return $toReturn;
     }
 
+    //TODO set that in other class (try on installation to generate Controller for games ?)
     public function checkMinecraftPseudo($pseudo): int
     {
         $req = file_get_contents("https://api.mojang.com/users/profiles/minecraft/$pseudo");
 
         return (int)($req === "NULL");
     }
-
 
     public function checkPseudo($pseudo): int
     {

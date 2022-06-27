@@ -1,4 +1,4 @@
-<?php use CMW\Model\Users\usersModel;
+<?php
 
 $title = USERS_LIST_TITLE;
 $description = USERS_LIST_DESC; ?>
@@ -70,21 +70,22 @@ $description = USERS_LIST_DESC; ?>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php /** @var usersModel[] $userList */
+                                <?php /** @var \CMW\Entity\Users\userEntity[] $userList */
                                 foreach ($userList as $user) : ?>
                                     <tr>
-                                        <td><?= $user['user_email'] ?></td>
-                                        <td><?= $user['user_pseudo'] ?></td>
-                                        <td><?= $user['user_firstname'] ?></td>
-                                        <td><?= $user['user_lastname'] ?></td>
+                                        <td><?= $user->getMail() ?></td>
+                                        <td><?= $user->getUsername() ?></td>
+                                        <td><?= $user->getFirstName() ?></td>
+                                        <td><?= $user->getLastName() ?></td>
                                         <td><?php $i = 1;
-                                            foreach (usersModel::getPlayerRoles($user['user_id']) as $role): ?>
-                                                <?= $i != 1 ? ", " . $role['role_name'] : $role['role_name'] ?>
-                                                <?php $i++; endforeach; ?>
+                                            foreach ($user->getRoles() as $role): ?>
+                                                <?= $i != 1 ? ", {$role->getName()}" : $role->getName() ?>
+                                                <?php $i++;
+                                            endforeach; ?>
                                         </td>
-                                        <td><?= $user['user_created'] ?></td>
-                                        <td><?= $user['user_updated'] ?></td>
-                                        <td><a href="../users/edit/<?= $user['user_id'] ?>"><i
+                                        <td><?= $user->getCreated() ?></td>
+                                        <td><?= $user->getUpdated() ?></td>
+                                        <td><a href="../users/edit/<?= $user->getId() ?>"><i
                                                         class="fa fa-cog"></i></a></td>
                                     </tr>
                                 <?php endforeach; ?>

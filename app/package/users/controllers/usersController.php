@@ -15,13 +15,24 @@ use JetBrains\PhpStorm\NoReturn;
  */
 class usersController extends coreController
 {
+    private usersModel $userModel;
+    private rolesModel $roleModel;
+
+    public function __construct($theme_path = null)
+    {
+        parent::__construct($theme_path);
+        $this->userModel = new usersModel();
+        $this->roleModel = new rolesModel();
+    }
+
     public static function isAdminLogged(): void
     {
         if (usersModel::getLoggedUser() !== -1) {
             $user = new usersModel();
-            $user->fetch($_SESSION['cmwUserId']);
+            $userEntity = $user->getUserById($_SESSION['cmwUserId']);
 
-            if (!$user->hasPermission($_SESSION['cmwUserId'], "*") && !$user->hasPermission($_SESSION['cmwUserId'], "core.dashboard")) {
+            if (!$user->hasPermission($userEntity?->getId(), "*")
+                && !$user->hasPermission($userEntity?->getId(), "core.dashboard")) {
                 header('Location: ' . getenv('PATH_SUBFOLDER'));
                 exit();
             }
@@ -35,9 +46,9 @@ class usersController extends coreController
     {
         if (usersModel::getLoggedUser() !== -1) {
             $user = new usersModel();
-            $user->fetch($_SESSION['cmwUserId']);
+            $userEntity = $user->getUserById($_SESSION['cmwUserId']);
 
-            if (!$user->hasPermission($_SESSION['cmwUserId'], "*") && !$user->hasPermission($_SESSION['cmwUserId'], "core.dashboard")) {
+            if (!$user->hasPermission($userEntity?->getId(), "*") && !$user->hasPermission($userEntity?->getId(), "core.dashboard")) {
                 return false;
             }
         } else {
@@ -68,30 +79,28 @@ class usersController extends coreController
         }
         $userId = usersModel::logIn($infos, $cookie);
         if ($userId > 0 && $userId !== "ERROR") {
-            $user = new usersModel();
-            $user->userId = $userId;
-            $user->updateLoggedTime();
+            $this->userModel->updateLoggedTime($userId);
             header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
+
         } else {
             $_SESSION['toaster'][0]['title'] = "Désolé";
             $_SESSION['toaster'][0]['body'] = "Cette combinaison email/mot de passe est erronée";
             $_SESSION['toaster'][0]['type'] = "bg-danger";
             header('Location: ' . $_SERVER['HTTP_REFERER']);
+
         }
     }
 
     public function adminLogOut(): void
     {
-        usersModel::logout();
+        usersModel::logOut();
         header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin');
     }
 
     public function adminUsersList(): void
     {
         self::isUserHasPermission("users.show");
-
-        $usersModel = new usersModel();
-        $userList = $usersModel->fetchAll();
+        $userList = $this->userModel->getUsers();
 
         view('users', 'list.admin', ["userList" => $userList], 'admin');
     }
@@ -100,26 +109,22 @@ class usersController extends coreController
     {
         self::isUserHasPermission("users.edit");
 
-        $user = new usersModel();
-        $user->fetch($id);
+        $userEntity = $this->userModel->getUserById($id);
 
-        $roles = new rolesModel();
-        $roles = $roles->fetchAll();
+        $roles = $this->roleModel->fetchAll();
 
-        view('users', 'user.admin', ["user" => $user, "roles" => $roles], 'admin');
+        view('users', 'user.admin', ["user" => $userEntity, "roles" => $roles], 'admin');
     }
 
     #[NoReturn] public function adminUsersEditPost($id): void
     {
         self::isUserHasPermission("users.edit");
 
-        $user = new usersModel();
-        $user->userId = $id;
-        $user->userEmail = filter_input(INPUT_POST, "email");
-        $user->userPseudo = filter_input(INPUT_POST, "pseudo");
-        $user->userFirstname = filter_input(INPUT_POST, "name");
-        $user->userLastname = filter_input(INPUT_POST, "lastname");
-        $user->update($_POST['roles']);
+        $mail = filter_input(INPUT_POST, "email");
+        $username = filter_input(INPUT_POST, "pseudo");
+        $firstname = filter_input(INPUT_POST, "name");
+        $lastname = filter_input(INPUT_POST, "lastname");
+        $this->userModel->updateUser($id, $mail, $username, $firstname, $lastname, $_POST['roles']);
 
         //Todo Try to edit that
         $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;
@@ -128,9 +133,7 @@ class usersController extends coreController
 
         if (!empty(filter_input(INPUT_POST, "pass"))) {
             if (filter_input(INPUT_POST, "pass") === filter_input(INPUT_POST, "pass_verif")) {
-                $user->setPassword(password_hash(filter_input(INPUT_POST, "pass"), PASSWORD_BCRYPT));
-                $user->updatePass();
-
+                $this->userModel->updatePass($id, password_hash(filter_input(INPUT_POST, "pass"), PASSWORD_BCRYPT));
             } else {
                 //Todo Try to edit that
                 $_SESSION['toaster'][1]['title'] = USERS_TOASTER_TITLE_ERROR;
@@ -149,8 +152,7 @@ class usersController extends coreController
     {
         self::isUserHasPermission("users.add");
 
-        $roles = new rolesModel();
-        $roles = $roles->fetchAll();
+        $roles = $this->roleModel->fetchAll();
 
         view('users', 'add.admin', ["roles" => $roles], 'admin');
     }
@@ -159,15 +161,13 @@ class usersController extends coreController
     {
         self::isUserHasPermission("users.add");
 
-        $user = new usersModel();
-        $user->userEmail = filter_input(INPUT_POST, "email");
-        $user->userPseudo = filter_input(INPUT_POST, "pseudo");
-        $user->userFirstname = filter_input(INPUT_POST, "name");
-        $user->userLastname = filter_input(INPUT_POST, "lastname");
-        $user->create($_POST['roles']);
+        $mail = filter_input(INPUT_POST, "email");
+        $username = filter_input(INPUT_POST, "pseudo");
+        $firstname = filter_input(INPUT_POST, "name");
+        $lastname = filter_input(INPUT_POST, "lastname");
+        $userEntity = $this->userModel->createUser($mail, $username, $firstname, $lastname, $_POST['roles']);
 
-        $user->setPassword(password_hash(filter_input(INPUT_POST, "pass"), PASSWORD_BCRYPT));
-        $user->updatePass();
+        $this->userModel->updatePass($userEntity?->getId(), password_hash(filter_input(INPUT_POST, "pass"), PASSWORD_BCRYPT));
 
         header("location: ../users/list");
     }
@@ -184,12 +184,10 @@ class usersController extends coreController
             die();
         }
 
+        $id = filter_input(INPUT_POST, "id");
         $state = (filter_input(INPUT_POST, "actual_state")) ? 0 : 1;
 
-        $user = new usersModel();
-        $user->userId = filter_input(INPUT_POST, "id");
-        $user->userState = $state;
-        $user->changeState();
+        $this->userModel->changeState($id, $state);
 
         $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;
         $_SESSION['toaster'][0]['type'] = "bg-success";
@@ -213,9 +211,8 @@ class usersController extends coreController
             die();
         }
 
-        $user = new usersModel();
-        $user->userId = filter_input(INPUT_POST, "id");
-        $user->delete();
+        $id = filter_input(INPUT_POST, "id");
+        $this->userModel->delete($id);
 
         //Todo Try to remove that
         $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;

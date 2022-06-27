@@ -1,12 +1,13 @@
-<?php use CMW\Model\Roles\rolesModel;
-use CMW\Model\Users\usersModel;
+<?php
+
+use CMW\Model\Roles\rolesModel;
 
 $title = USERS_EDIT_TITLE;
 $description = USERS_EDIT_DESC;
 
 $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main.js"></script>';
 
-/** @var usersModel $user */
+/** @var \CMW\Entity\Users\userEntity $user */
 ?>
 
 <?php ob_start(); ?>
@@ -18,7 +19,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                     <form action="" method="post">
                         <div class="card card-primary">
                             <div class="card-header">
-                                <h3 class="card-title"><?= USERS_USER ?> : <?= $user->userPseudo ?></h3>
+                                <h3 class="card-title"><?= USERS_USER ?> : <?= $user->getUsername() ?></h3>
                             </div>
                             <div class="card-body">
                                 <div class="input-group mb-3">
@@ -26,28 +27,28 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                                         <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                     </div>
                                     <input type="email" name="email" class="form-control"
-                                           placeholder="<?= USERS_MAIL ?>" value="<?= $user->userEmail ?>">
+                                           placeholder="<?= USERS_MAIL ?>" value="<?= $user->getMail() ?>">
                                 </div>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-signature"></i></span>
                                     </div>
                                     <input type="text" name="pseudo" class="form-control"
-                                           placeholder="<?= USERS_PSEUDO ?>" value="<?= $user->userPseudo ?>">
+                                           placeholder="<?= USERS_PSEUDO ?>" value="<?= $user->getUsername() ?>">
                                 </div>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-id-card"></i></span>
                                     </div>
                                     <input type="text" name="name" class="form-control"
-                                           placeholder="<?= USERS_FIRSTNAME ?>" value="<?= $user->userFirstname ?>">
+                                           placeholder="<?= USERS_FIRSTNAME ?>" value="<?= $user->getFirstName() ?>">
                                 </div>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-id-card"></i></span>
                                     </div>
                                     <input type="text" name="lastname" class="form-control"
-                                           placeholder="<?= USERS_SURNAME ?>" value="<?= $user->userLastname ?>">
+                                           placeholder="<?= USERS_SURNAME ?>" value="<?= $user->getLastName() ?>">
                                 </div>
                                 <div class="form-group">
                                     <label><?= USERS_ROLE ?></label>
@@ -55,7 +56,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                                         <?php /** @var rolesModel[] $roles */
                                         foreach ($roles as $role) : ?>
                                             <option value="<?= $role['role_id'] ?>"
-                                                <?= (rolesModel::playerHasRole($user->userId, $role['role_id']) ? "selected" : "") ?>><?= $role['role_name'] ?>
+                                                <?= (rolesModel::playerHasRole($user->getId(), $role['role_id']) ? "selected" : "") ?>><?= $role['role_name'] ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
@@ -102,14 +103,14 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                             <h3 class="card-title"><?= USERS_ABOUT ?></h3>
                         </div>
                         <div class="card-body">
-                            <p><b><?= USERS_CREATION ?> :</b> <?= $user->userCreated ?></p>
-                            <p><b><?= USERS_LAST_EDIT ?> :</b> <?= $user->userUpdated ?></p>
-                            <p><b><?= USERS_LAST_CONNECTION ?> :</b> <?= $user->userLogged ?></p>
+                            <p><b><?= USERS_CREATION ?> :</b> <?= $user->getCreated() ?></p>
+                            <p><b><?= USERS_LAST_EDIT ?> :</b> <?= $user->getUpdated() ?></p>
+                            <p><b><?= USERS_LAST_CONNECTION ?> :</b> <?= $user->getLastConnection() ?></p>
                             <div>
                                 <form action="../edit-state" method="post" class="d-inline-block">
-                                    <input type="hidden" value="<?= $user->userId ?>" name="id">
-                                    <input type="hidden" value="<?= $user->userState ?>" name="actual_state">
-                                    <?php if ($user->userState) : ?>
+                                    <input type="hidden" value="<?= $user->getId() ?>" name="id">
+                                    <input type="hidden" value="<?= $user->getState() ?>" name="actual_state">
+                                    <?php if ($user->getState()) : ?>
                                         <button type="submit" class="btn btn-warning"><i
                                                     class="fa fa-user-slash"></i> <?= USERS_EDIT_DISABLE_ACCOUNT ?>
                                         </button>
@@ -119,7 +120,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                                     <?php endif; ?>
                                 </form>
                                 <form action="../delete" method="post" class="d-inline-block">
-                                    <input type="hidden" value="<?= $user->userId ?>" name="id">
+                                    <input type="hidden" value="<?= $user->getId() ?>" name="id">
                                     <button type="submit" class="btn btn-danger"><i
                                                 class="fa fa-user-times"></i> <?= USERS_EDIT_DELETE_ACCOUNT ?></button>
                                 </form>
