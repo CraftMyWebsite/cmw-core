@@ -31,10 +31,9 @@ class pagesController extends coreController
     {
         usersController::isUserHasPermission("pages.show");
 
-        $pagesModel = new pagesModel();
-        $pagesList = $pagesModel->getPages();
+        $pagesList = $this->pagesModel->getPages();
 
-        view('pages', 'list.admin', ["pages" => $pages, "users" => $users], 'admin');
+        view('pages', 'list.admin', ["pagesList" => $pagesList], 'admin');
     }
 
     public function adminPagesAdd(): void
@@ -67,7 +66,7 @@ class pagesController extends coreController
     {
         usersController::isUserHasPermission("pages.edit");
 
-        $page = (new pagesModel())->getPageById($id);
+        $page = $this->pagesModel->getPageBySlug($slug);
 
         view('pages', 'edit.admin', ["page" => $page], 'admin');
 
@@ -93,11 +92,9 @@ class pagesController extends coreController
     #[NoReturn] public function adminPagesDelete(): void
     {
         usersController::isUserHasPermission("pages.delete");
-
-        $page = new pagesModel();
       
         $id = filter_input(INPUT_POST, "id");
-        $page->deletePage($id);
+        $this->pagesModel->deletePage($id);
 
 
         //Todo try to remove that
@@ -121,7 +118,7 @@ class pagesController extends coreController
 
         $pageEntity = $page->getPageBySlug($slug);
 
-        //Include the public view file ("public/themes/$themePath/views/wiki/main.view.php")
+        //Include the public view file ("public/themes/$themePath/views/pages/main.view.php")
         view('pages', 'main', ["pages" => $page, "page" => $pageEntity, "core" => $core, "menu" => $menu], 'public');
 
     }
