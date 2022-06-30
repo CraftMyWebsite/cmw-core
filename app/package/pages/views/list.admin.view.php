@@ -1,12 +1,7 @@
-<?php use CMW\Model\Pages\pagesModel;
+<?php
 
 $title = PAGES_LIST_TITLE;
-$description = PAGES_LIST_DESC;
-
-/* @var \CMW\Model\Pages\pagesModel $pages */
-/* @var \CMW\Model\Users\usersModel $users */
-
-?>
+$description = PAGES_LIST_DESC; ?>
 
 <?php $styles = '<link rel="stylesheet" href="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-responsive/css/responsive.bootstrap4.min.css">'; ?>
@@ -71,15 +66,13 @@ $description = PAGES_LIST_DESC;
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php
-                                foreach ($pages->getPages() as $page) : ?>
+                                <?php /** @var \CMW\Entity\Pages\pageEntity[] $pagesList */
+                                foreach ($pagesList as $page) : ?>
                                     <tr>
-                                        <td><?= $page->getPageTitle() ?></td>
-                                        <!-- TODO Add user entity feature -->
-                                        <td><?= $users->fetch($page->getUserId()) ?></td>
-                                        <td><?= $page->getPageCreated() ?></td>
-                                        <td><a href="../pages/edit/<?= $page->getPageSlug() ?>"><i class="fa fa-cog"></i></a>
-                                        </td>
+                                        <td><?= $page->getTitle() ?></td>
+                                        <td><?= $page->getUser()->getUsername() ?></td>
+                                        <td><?= $page->getCreated() ?></td>
+                                        <td><a href="../pages/edit/<?= $page->getId() ?>"><i class="fa fa-cog"></i></a></td>
                                     </tr>
                                 <?php endforeach; ?>
                                 </tbody>

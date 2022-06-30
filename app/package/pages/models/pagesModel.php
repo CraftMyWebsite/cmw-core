@@ -2,10 +2,11 @@
 
 namespace CMW\Model\Pages;
 
+use CMW\Entity\Pages\pageEntity;
 use CMW\Model\manager;
 use CMW\Model\Users\usersModel;
-use CMW\Entity\Pages\pagesEntity;
 use PDO;
+use PDOStatement;
 
 /**
  * Class: @pagesModel
@@ -15,124 +16,120 @@ use PDO;
  */
 class pagesModel extends manager
 {
+    private string $dateFormat = '%d/%m/%Y à %H:%i:%s';
 
-    public static function exist($var, $is_slug = null)
+    /*=> GET */
+
+    public function getPageById(int $id): ?pageEntity
     {
-        $var = $is_slug ? array("page_slug" => $var) : array("page_id" => $var);
-
-        $sql = "SELECT COUNT(page_id) as exist"
-            . " FROM cmw_pages";
-
-        $sql .= $is_slug ? " WHERE page_slug=:page_slug" : " WHERE page_id=:page_id";
-
-        $db = manager::dbConnect();
-        $req = $db->prepare($sql);
-        $req->execute($var);
-
-        return $req->fetchColumn();
-    }
-
-    /***
-     * @param string $pageSlug
-     * @param int $userId
-     * @param string $pageTitle
-     * @param string $pageContent
-     * @param bool $pageState
-     * @return int
-     */
-    public function create(string $pageSlug, int $userId, string $pageTitle, string $pageContent, bool $pageState): int
-    {
-        $var = array(
-            "page_slug" => $pageSlug,
-            "user_id" => $userId,
-            "page_title" => mb_strimwidth($pageTitle, 0, 255),
-            "page_content" => $pageContent,
-            "page_state" => $pageState
-        );
-        $sql = "INSERT INTO cmw_pages(page_slug, user_id, page_title, page_content, page_state) VALUES (:page_slug, :user_id, :page_title, :page_content, :page_state)";
-
-        $db = manager::dbConnect();
-        $req = $db->prepare($sql);
-
-        if ($req->execute($var)) {
-            return $db->lastInsertId();
-        }
-
-        return -1;
-    }
-
-    public function getPage($slug): ?pagesEntity
-    {
-
         $sql = "SELECT page_id, page_title, page_slug, user_id, page_content, page_state, 
                 DATE_FORMAT(page_created, '%d/%m/%Y à %H:%i:%s') AS 'page_created', 
-                DATE_FORMAT(page_updated, '%d/%m/%Y à %H:%i:%s') AS 'page_updated' FROM cmw_pages WHERE page_slug=:page_slug";
+                DATE_FORMAT(page_updated, '%d/%m/%Y à %H:%i:%s') AS 'page_updated' FROM cmw_pages
+                WHERE page_id = :page_id";
 
         $db = manager::dbConnect();
-        $req = $db->prepare($sql);
 
-        if (!$req->execute(array("page_slug" => $slug))) {
+        $res = $db->prepare($sql);
+
+        if (!$res->execute(array("page_id" => $id))) {
             return null;
         }
 
-        $res = $req->fetch(PDO::FETCH_ASSOC);
-
-        //If we don't have the slug in the db we can continue
-        if (empty($res)){
-            header("location: " . getenv("PATH_SUBFOLDER")); // redirect to the home page
-            return null;
-        }
-
-            return new pagesEntity(
-                        $res['page_id'],
-                        $res['user_id'],
-                        $res['page_title'],
-                        $res['page_slug'],
-                        $res['page_content'],
-                        $res['page_updated'],
-                        $res['page_state'],
-                        $this->translatePage($res['page_content']),
-                        $res['page_created']
-            );
-
+        return $this->fetchPageResult($res);
     }
 
-    /***
-     * @return \CMW\Entity\Pages\pagesEntity[]
+    public function getPageBySlug(string $slug): ?pageEntity
+    {
+        $sql = "SELECT page_id, page_title, page_slug, user_id, page_content, page_state, 
+                DATE_FORMAT(page_created, $this->dateFormat) AS 'page_created', 
+                DATE_FORMAT(page_updated, $this->dateFormat) AS 'page_updated' FROM cmw_pages
+                WHERE page_slug = :page_slug";
+
+        $db = manager::dbConnect();
+
+        $res = $db->prepare($sql);
+
+        if (!$res->execute(array("page_slug" => $slug))) {
+            return null;
+        }
+
+        return $this->fetchPageResult($res);
+    }
+
+    /**
+     * @return \CMW\Entity\Pages\pageEntity[]
      */
     public function getPages(): array
     {
-        $return = array();
 
-        $sql = "SELECT page_id, page_title, page_slug, user_id, page_content, page_state, 
-                    DATE_FORMAT(page_created, '%d/%m/%Y à %H:%i:%s') AS 'page_created', 
-                    DATE_FORMAT(page_updated, '%d/%m/%Y à %H:%i:%s') AS 'page_updated' FROM cmw_pages ";
+        $sql = "select page_id from cmw_pages";
+        $db = manager::dbConnect();
+
+        $res = $db->prepare($sql);
+
+        if (!$res->execute()) {
+            return array();
+        }
+
+        $toReturn = array();
+
+        while ($page = $res->fetch()) {
+            $toReturn[] = $this->getPageById($page["page_id"]);
+        }
+
+        return $toReturn;
+
+    }
+
+    /*=> CREATE */
+
+    public function createPage($title, $slug, $content, $userId, $state): ?pageEntity
+    {
+        $data = array(
+            "page_title" => mb_strimwidth($title, 0, 255),
+            "page_slug" => $slug,
+            "page_content" => $content,
+            "user_id" => $userId,
+            "page_state" => $state
+        );
+
+        $sql = "INSERT INTO cmw_pages(page_title, page_slug, page_content, user_id, page_state) 
+                VALUES (:page_title, :page_slug, :page_content, :user_id, :page_state)";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
 
-        if ($req->execute()) {
-            while ($res = $req->fetch()) {
-                $return[] = $this->getPage($res['page_slug']);
-
-               $this->translatePage($res['page_content']);
-
-                $user = new usersModel();
-                $user->fetch($res['user_id']);
-            }
+        if ($req->execute($data)) {
+            $id = $db->lastInsertId();
+            return $this->getPageById($id);
         }
 
-        return $return;
+        return null;
     }
 
-    public function update(string $pageSlug, string $pageTitle, string $pageContent, bool $pageState, int $pageId): void
+    /*=> DELETE */
+
+    public function deletePage($id): bool
     {
         $var = array(
-            "page_slug" => $pageSlug,
-            "page_title" => mb_strimwidth($pageTitle, 0, 255),
-            "page_content" => $pageContent,
-            "page_state" => $pageState,
-            "page_id" => $pageId
+            "page_id" => $id,
+        );
+        $sql = "DELETE FROM cmw_pages WHERE page_id=:page_id";
+
+        $db = manager::dbConnect();
+        return $db->prepare($sql)->execute($var);
+    }
+
+    /*=> UPDATE */
+
+    public function updatePage($id, $slug, $title, $content, $state): ?pageEntity
+    {
+        $var = array(
+            "page_id" => $id,
+            "page_slug" => $slug,
+            "page_title" => mb_strimwidth($title, 0, 255),
+            "page_content" => $content,
+            "page_state" => $state
         );
 
         $sql = "UPDATE cmw_pages SET page_slug=:page_slug, page_title=:page_title,
@@ -140,41 +137,33 @@ class pagesModel extends manager
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
-        $req->execute($var);
+        if ($req->execute($var)) {
+            $this->updateEditTime($id);
+            return $this->getPageById($id);
+        }
 
-        var_dump($req->execute($var));
-
-        $this->updateEditTime($pageId);
+        return null;
     }
 
-    public function delete($pageId): void
+    public function updateEditTime($id): void
     {
         $var = array(
-            "page_id" => $pageId,
+            "page_id" => $id,
         );
-        $sql = "DELETE FROM cmw_pages WHERE page_id=:page_id";
+
+        $sql = "UPDATE cmw_pages SET page_updated = NOW() WHERE page_id=:page_id";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
 
-    public function updateEditTime($page_id): void
+    /* => PRIVATE */
+
+    private function translatePage($content): string
     {
-        $var = array(
-            "page_id" => $page_id,
-        );
+        $content = json_decode($content, false, 512);
 
-        $sql = "UPDATE cmw_pages SET page_updated = CURRENT_TIMESTAMP WHERE page_id=:page_id";
-
-        $db = manager::dbConnect();
-        $req = $db->prepare($sql);
-        $req->execute($var);
-    }
-
-    public function translatePage(string $pageContent): string
-    {
-        $content = json_decode($pageContent, false, 512);
         $blocks = $content->blocks;
         $convertedHtml = "";
         foreach ($blocks as $block) {
@@ -184,53 +173,100 @@ class pagesModel extends manager
                     $text = $block->data->text;
                     $convertedHtml .= "<h$level>$text</h$level>";
                     break;
-                case "embded":
-                    $convertedHtml .= "<div><iframe width='560' height='315' src='$block->data->embed' allow='autoplay; encrypted-media' allowfullscreen></iframe></div>";
+
+                case "embed":
+                    $src = $block->data->embed;
+                    $convertedHtml .=
+                        <<<HTML
+                            <div>
+                                <iframe width="560" height="315" src="$src" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                            </div>
+                        HTML;
                     break;
+
                 case "paragraph":
                     $text = $block->data->text;
-                    $convertedHtml .= "<p>$text</p>";
+                    $convertedHtml .=
+                        <<<HTML
+                            <p>$text</p>
+                        HTML;
                     break;
+
                 case "delimiter":
-                    $convertedHtml .= "<hr />";
+                    $convertedHtml .=
+                        <<<HTML
+                            <br>
+                        HTML;
                     break;
+
                 case "image":
                     $src = $block->data->url;
                     $caption = $block->data->caption;
-                    $convertedHtml .= "<img class='img-fluid' src='$src' title='$caption' alt='$caption' /><br /><em>$caption</em>";
+                    $convertedHtml .=
+                        <<<HTML
+                            <img class="img-fluid" src="$src" title="$caption" alt="$caption" /><br /><em>$caption</em>
+                        HTML;
                     break;
+
                 case "list":
                     $convertedHtml .= ($block->data->style === "unordered") ? "<ul>" : "<ol>";
                     foreach ($block->data->items as $item) {
-                        $convertedHtml .= "<li>$item</li>";
+                        $convertedHtml .=
+                            <<<HTML
+                                <li>$item</li>
+                            HTML;
                     }
                     $convertedHtml .= ($block->data->style === "unordered") ? "</ul>" : "</ol>";
                     break;
+
                 case "quote":
                     $text = $block->data->text;
                     $caption = $block->data->caption;
-                    $convertedHtml .= "<figure>";
-                    $convertedHtml .= "<blockquote><p>$text</p></blockquote>";
-                    $convertedHtml .= "<figcaption>$caption</figcaption>";
-                    $convertedHtml .= "</figure>";
+                    $convertedHtml .=
+                        <<<HTML
+                            <figure>
+                                <blockquote>
+                                    <p>$text</p> 
+                                </blockquote>
+                                <figcaption>$caption</figcaption>
+                            </figure>
+                        HTML;
                     break;
+
                 case "code":
-                    $convertedHtml .= "<pre><code>";
-                    $convertedHtml .= $block->data->code;
-                    $convertedHtml .= "</pre></code>";
+                    $text = $block->data->code;
+                    $convertedHtml .=
+                        <<<HTML
+                            <pre>
+                                <code>$text</code>
+                            </pre>
+                        HTML;
                     break;
+
                 case "warning":
                     $title = $block->data->title;
                     $message = $block->data->message;
-                    $convertedHtml .= "<div class='warning'>";
-                    $convertedHtml .= "<div class='warning-title'><p>$title</p></div>";
-                    $convertedHtml .= "<div class='warning-content'>$message</div>";
-                    $convertedHtml .= "</div>";
+                    $convertedHtml .=
+                        <<<HTML
+                            <div class="warning">
+                                <div class="warning-title">
+                                    <p>$title</p>
+                                </div>
+                                <div class="warning-content">
+                                    <p>$message</p>
+                                </div>
+                            </div>
+                        HTML;
                     break;
+
                 case "linkTool":
                     $link = $block->data->link;
-                    $convertedHtml .= "<a href='$link'>$link</a>";
+                    $convertedHtml .=
+                        <<<HTML
+                            <a href="$link">$link</a>
+                        HTML;
                     break;
+
                 case "table":
                     $convertedHtml .= "<table><tbody>";
                     foreach ($block->data->content as $tr) {
@@ -244,8 +280,33 @@ class pagesModel extends manager
                     $convertedHtml .= "</table></tbody>";
                     break;
             }
-        };
+        }
 
         return $convertedHtml;
+    }
+
+
+    private function fetchPageResult(PDOStatement $res): ?pageEntity
+    {
+        $res = $res->fetch();
+
+        $user = (new usersModel())->getUserById($res["user_id"]);
+
+        if(!$user) {
+            return null;
+        }
+
+        return new pageEntity(
+            $res["page_id"],
+            $res["page_slug"],
+            $res["page_title"],
+            $res["page_content"],
+            $user,
+            $this->translatePage($res["page_content"]),
+            $res["page_state"],
+            $res["page_created"],
+            $res["page_updated"],
+        );
+
     }
 }

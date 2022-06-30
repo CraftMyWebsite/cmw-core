@@ -2,30 +2,28 @@
 
 $title = PAGES_ADD_TITLE;
 $description = PAGES_ADD_DESC;
-
-/* @var pagesController[] $page
- * @var pagesController[] $pageContent
- */
 ?>
 
-<?php $scripts = '<script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script><!-- Header -->
+<?php $scripts = '
+    
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/header.js"></script>
+    
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/image.js"></script>
+    
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/delimiter.js"></script>
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/list.js"></script>
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/quote.js"></script>
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/code.js"></script>
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/table.js"></script>
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/link.js"></script>
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/warning.js"></script>
+    
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/embed.js"></script>
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/marker.js"></script>
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/underline.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/image@latest"></script><!-- Image -->
-
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/delimiter@latest"></script><!-- Delimiter -->
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script><!-- List -->
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest"></script><!-- Quote -->
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/code@latest"></script><!-- Code -->
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/table@latest"></script><!-- Table -->
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/link@latest"></script><!-- Link -->
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/warning@latest"></script><!-- Warning -->
-
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script><!-- Embed -->
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/marker@latest"></script><!-- Marker -->
-    <script src="https://cdn.jsdelivr.net/npm/@editorjs/underline@latest"></script><!-- Underline -->
-
-    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/drag-drop.js"></script><!-- DragDrop -->
-    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/undo.js"></script><!-- Undo -->
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/drag-drop.js"></script> 
+    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/undo.js"></script>
 
 
     <!-- Load Editor.js Core -->
