@@ -115,9 +115,4 @@ class pageEntity
         return $this->pageEdited;
     }
 
-    
-
-
-=======
->>>>>>> Stashed changes
 }

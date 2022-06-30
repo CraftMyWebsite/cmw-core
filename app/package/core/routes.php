@@ -2,11 +2,14 @@
 
 global $router;
 
+use CMW\Router\router;
+
 //Todo Try to remove that...
 require_once('lang/'.getenv("LOCALE").'.php');
 
+
 /* Administration scope of package */
-$router->scope('/cmw-admin', function($router) {
+$router->scope('/cmw-admin', function(Router $router) {
     $router->get('/dashboard', "core#adminDashboard");
 
     $router->get('/configuration', "core#adminConfiguration");

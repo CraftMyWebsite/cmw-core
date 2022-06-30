@@ -6,6 +6,6 @@ global $router;
 require_once('Lang/'.getenv("LOCALE").'.php');
 
 /* Administration scope of package */
-$router->scope('/cmw-admin/menus', function($router) {
+$router->scope('/cmw-admin/menus', function(Router $router) {
     $router->get('/', "menus#adminMenus");
 });

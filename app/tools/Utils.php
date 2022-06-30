@@ -2,6 +2,8 @@
 
 namespace CMW\Utils;
 
+use JetBrains\PhpStorm\NoReturn;
+
 require("EnvBuilder.php");
 
 class Utils
@@ -27,5 +29,11 @@ class Utils
         }
 
         return false;
+    }
+
+    #[NoReturn] public static function sendErrorCode($err = 404): void
+    {
+        http_response_code($err);
+        die();
     }
 }

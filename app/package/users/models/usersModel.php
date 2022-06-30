@@ -14,7 +14,8 @@ use CMW\Model\manager;
  */
 class usersModel extends manager
 {
-    public function getUserById($id): ?userEntity {
+    public function getUserById(int $id): ?userEntity {
+
         $sql = "select * from cmw_users where user_id = :user_id";
 
         $db = manager::dbConnect();
@@ -25,29 +26,47 @@ class usersModel extends manager
             return null;
         }
 
+        $res = $res->fetch();
+
+        if(!$res) {
+            return null;
+        }
+
+
         $roles = array();
 
         $roleSql = "select * from cmw_users_roles where user_id = :user_id";
         $roleRes = $db->prepare($roleSql);
 
-        if ($res->execute(array("user_id" => $id))) {
+        if ($roleRes->execute(array("user_id" => $id))) {
 
             $roleRes = $roleRes->fetchAll();
 
             foreach ($roleRes as $role) {
 
+                $rlData = "select * from cmw_roles where role_id = :role_id";
+                $rlRes = $db->prepare($rlData);
+
+                if(!$rlRes->execute(array("role_id" =>  $role["role_id"]))) {
+                    continue;
+                }
+
+                $rl = $rlRes->fetch();
+
+                if(!$rl) {
+                    continue;
+                }
+
                 $roles[] = new roleEntity(
                     $role["role_id"],
-                    $role["role_name"],
-                    $role["role_description"],
-                    $role["role_weight"]
+                    $rl["role_name"],
+                    $rl["role_description"],
+                    $rl["role_weight"]
                 );
 
             }
 
         }
-
-        $res = $res->fetch();
 
         return new userEntity(
             $res["user_id"],

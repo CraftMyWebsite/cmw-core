@@ -5,6 +5,7 @@ namespace CMW\Controller\Users;
 use CMW\Controller\coreController;
 use CMW\Model\Roles\rolesModel;
 use CMW\Model\Users\usersModel;
+use CMW\Utils\Utils;
 use JetBrains\PhpStorm\NoReturn;
 
 /**
