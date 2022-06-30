@@ -66,25 +66,13 @@ $description = PAGES_LIST_DESC; ?>
                                 </tr>
                                 </thead>
                                 <tbody>
-<<<<<<< Updated upstream
-                                  
-=======
->>>>>>> Stashed changes
                                 <?php /** @var \CMW\Entity\Pages\pageEntity[] $pagesList */
                                 foreach ($pagesList as $page) : ?>
                                     <tr>
                                         <td><?= $page->getTitle() ?></td>
-<<<<<<< Updated upstream
-                                        <td><?= $page->getUser()->userPseudo ?></td>
-                                        <td><?= $page->getCreated() ?></td>
-                                        <td><a href="../pages/edit/<?= $page->getId() ?>"><i class="fa fa-cog"></i></a>
-
-=======
                                         <td><?= $page->getUser()->getUsername() ?></td>
                                         <td><?= $page->getCreated() ?></td>
-                                        <td><a href="../pages/edit/<?= $page->getId() ?>"><i class="fa fa-cog"></i></a>
->>>>>>> Stashed changes
-                                        </td>
+                                        <td><a href="../pages/edit/<?= $page->getId() ?>"><i class="fa fa-cog"></i></a></td>
                                     </tr>
                                 <?php endforeach; ?>
                                 </tbody>
