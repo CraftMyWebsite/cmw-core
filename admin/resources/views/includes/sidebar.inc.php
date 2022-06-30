@@ -1,6 +1,5 @@
-<?php /* @var \CMW\Model\Users\usersModel $userAdmin */
-/* @var \CMW\Controller\coreController $coreAdmin */
-$userAdmin->fetch($_SESSION['cmwUserId']); ?>
+<?php /* @var \CMW\Entity\Users\userEntity $userAdmin */
+/* @var \CMW\Controller\coreController $coreAdmin */ ?>
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
@@ -19,7 +18,7 @@ $userAdmin->fetch($_SESSION['cmwUserId']); ?>
                      class="elevation-2" alt="<?= CORE_ALT_LOGO ?>">
             </div>
             <div class="info">
-                <a href="#" class="d-block"><?= $userAdmin->userPseudo ?></a>
+                <a href="#" class="d-block"><?= $userAdmin->getUsername() ?></a>
             </div>
         </div>
 
