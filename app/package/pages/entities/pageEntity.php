@@ -2,11 +2,8 @@
 
 namespace CMW\Entity\Pages;
 
-<<<<<<< Updated upstream
-use CMW\Model\Users\usersModel;
-=======
+
 use CMW\Entity\Users\userEntity;
->>>>>>> Stashed changes
 
 class pageEntity
 {
@@ -15,11 +12,7 @@ class pageEntity
     private string $pageSlug;
     private string $pageTitle;
     private string $pageContent;
-<<<<<<< Updated upstream
-    private usersModel $pageUser;
-=======
     private userEntity $pageUser;
->>>>>>> Stashed changes
     private string $pageConverted;
     private int $pageState;
     private string $pageCreated;
@@ -30,21 +23,14 @@ class pageEntity
      * @param string $pageSlug
      * @param string $pageTitle
      * @param string $pageContent
-<<<<<<< Updated upstream
-     * @param \CMW\Model\Users\usersModel $pageUser
-=======
      * @param \CMW\Entity\Users\userEntity $pageUser
->>>>>>> Stashed changes
      * @param string $pageConverted
      * @param int $pageState
      * @param string $pageCreated
      * @param string $pageEdited
      */
-<<<<<<< Updated upstream
-    public function __construct(int $pageId, string $pageSlug, string $pageTitle, string $pageContent, usersModel $pageUser, string $pageConverted, int $pageState, string $pageCreated, string $pageEdited)
-=======
+     
     public function __construct(int $pageId, string $pageSlug, string $pageTitle, string $pageContent, userEntity $pageUser, string $pageConverted, int $pageState, string $pageCreated, string $pageEdited)
->>>>>>> Stashed changes
     {
         $this->pageId = $pageId;
         $this->pageSlug = $pageSlug;
@@ -90,15 +76,9 @@ class pageEntity
     }
 
     /**
-<<<<<<< Updated upstream
-     * @return \CMW\Model\Users\usersModel
-     */
-    public function getUser(): usersModel
-=======
      * @return \CMW\Entity\Users\userEntity
      */
     public function getUser(): userEntity
->>>>>>> Stashed changes
     {
         return $this->pageUser;
     }
@@ -134,7 +114,6 @@ class pageEntity
     {
         return $this->pageEdited;
     }
-<<<<<<< Updated upstream
 
     
 
