@@ -285,14 +285,7 @@ class pagesModel extends manager
         return $convertedHtml;
     }
 
-<<<<<<< Updated upstream
-    private function fetchPageResult(PDOStatement $res): pageEntity
-    {
-        $res = $res->fetch();
 
-        $user = new usersModel($res["user_id"]);
-        $user->fetch($res["user_id"]);
-=======
     private function fetchPageResult(PDOStatement $res): ?pageEntity
     {
         $res = $res->fetch();
@@ -302,7 +295,6 @@ class pagesModel extends manager
         if(!$user) {
             return null;
         }
->>>>>>> Stashed changes
 
         return new pageEntity(
             $res["page_id"],
