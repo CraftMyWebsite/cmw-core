@@ -3,6 +3,8 @@
 namespace CMW\Controller\Users;
 
 use CMW\Controller\coreController;
+use CMW\Controller\Menus\menusController;
+use CMW\Model\coreModel;
 use CMW\Model\Roles\rolesModel;
 use CMW\Model\Users\usersModel;
 use CMW\Utils\Utils;
@@ -24,6 +26,15 @@ class usersController extends coreController
         parent::__construct($theme_path);
         $this->userModel = new usersModel();
         $this->roleModel = new rolesModel();
+    }
+
+    public function adminDashboard(): void
+    {
+        if (isset($_SESSION['cmwUserId']) && usersModel::getLoggedUser() !== -1) {
+            header('Location: ' . getenv('PATH_SUBFOLDER') . "cmw-admin");
+        } else {
+            header('Location: ' . getenv('PATH_SUBFOLDER') . "login");
+        }
     }
 
     public static function isAdminLogged(): void
@@ -59,16 +70,19 @@ class usersController extends coreController
         return true;
     }
 
-    public function adminLogin(): void
+    public function login(): void
     {
         if (usersModel::getLoggedUser() !== -1) {
-            header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
+            header('Location: ' . getenv('PATH_SUBFOLDER'));
         } else {
-            view('users', 'login.admin', [], 'admin', 1);
+            $core = new coreController();
+            $menu = new menusController();
+
+            view('users', 'login', ["core" => $core, "menu" => $menu], 'public');
         }
     }
 
-    public function adminLoginPost(): void
+    public function loginPost(): void
     {
         $infos = array(
             "email" => filter_input(INPUT_POST, "login_email"),
@@ -92,10 +106,10 @@ class usersController extends coreController
         }
     }
 
-    public function adminLogOut(): void
+    public function lLogOut(): void
     {
         usersModel::logOut();
-        header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin');
+        header('Location: ' . getenv('PATH_SUBFOLDER'));
     }
 
     public function adminUsersList(): void

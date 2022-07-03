@@ -4,6 +4,7 @@ namespace CMW\Controller\Roles;
 
 use CMW\Controller\coreController;
 use CMW\Controller\Users\usersController;
+use CMW\Model\Permissions\permissionsModel;
 use CMW\Model\Roles\rolesModel;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
@@ -26,15 +27,13 @@ class rolesController extends coreController
         view('users', 'roles.list.admin', ["rolesList" => $rolesList], 'admin');
     }
 
-    /**
-     * @throws JsonException
-     */
+
     public function adminRolesAdd(): void
     {
         usersController::isUserHasPermission("users.roles");
 
-        $rolesModel = new rolesModel();
-        $permissionsList = $rolesModel->fetchAllPermissions();
+        $permissionsModel = new permissionsModel();
+        $permissionsList = $permissionsModel->getPermissions();
 
         view('users', 'roles.add.admin', ["permissionsList" => $permissionsList], 'admin');
     }
@@ -44,11 +43,11 @@ class rolesController extends coreController
         usersController::isUserHasPermission("users.roles");
 
         $role = new rolesModel();
-        $role->roleName = filter_input(INPUT_POST, "name");
-        $role->roleDescription = filter_input(INPUT_POST, "description");
-        $role->permList = $_POST['perms'];
-        $role->roleWeight = filter_input(INPUT_POST, "weight");
-        $role->createRole();
+        $roleName = filter_input(INPUT_POST, "name");
+        $roleDescription = filter_input(INPUT_POST, "description");
+        $permList = $_POST['perms'];
+        $roleWeight = filter_input(INPUT_POST, "weight");
+        $role->createRole($roleName, $roleDescription, $roleWeight, $permList);
 
 
         $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;
@@ -59,15 +58,15 @@ class rolesController extends coreController
         die();
     }
 
-    /**
-     * @throws JsonException
-     */
+
     public function adminRolesEdit($id): void
     {
         $role = new rolesModel();
         $role->fetchRole($id);
 
-        $permissionsList = $role->fetchAllPermissions();
+        $permissions = new permissionsModel();
+        $permissionsList = $permissions->getPermissions();
+
 
         view('users', 'roles.edit.admin', ["role" => $role,
             "permissionsList" => $permissionsList], 'admin');
@@ -100,8 +99,7 @@ class rolesController extends coreController
         usersController::isUserHasPermission("users.roles");
 
         $role = new rolesModel();
-        $role->roleId = $id;
-        $role->deleteRole();
+        $role->deleteRole($id);
 
         //Todo Try to remove that
         $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;

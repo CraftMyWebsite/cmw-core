@@ -2,8 +2,8 @@
 
 use CMW\Controller\Users\usersController;
 
-$title = USERS_ROLE_ADD_TITLE;
-$description = USERS_ROLE_ADD_DESC;
+$title = USERS_ROLE_EDIT_TITLE;
+$description = USERS_ROLE_EDIT_DESC;
 /* @var usersController $role */
 ?>
 
@@ -52,14 +52,13 @@ $description = USERS_ROLE_ADD_DESC;
                                                         <div class="form-group">
                                                             <div class="custom-control custom-checkbox">
                                                                 <input class="custom-control-input" type="checkbox"
-                                                                       id="<?= ($permCode == "*" ? "*" : "perms[$permName][$permCode]") ?>"
-                                                                       name="<?= ($permCode == "*" ? "perms[$permName][$permCode]" : "perms[$permName][$permCode]") ?>"
-                                                                       value="<?= $permCode ?>"
-                                                                    <?= ($role->roleHasPermission($role->roleId, $permCode) ? "checked" : "") ?>
-                                                                    <?= ($permCode == "*" ? "" : "disabled") ?>>
-                                                                <label for="<?= ($permCode == "*" ? "*" : "perms[$permName][$permCode]") ?>"
+                                                                       id=""
+                                                                       name=""
+                                                                       value=""
+                                                                    >
+                                                                <label for=""
                                                                        class="custom-control-label">
-                                                                    <?= $permName ?>
+
                                                                 </label>
                                                             </div>
                                                         </div>

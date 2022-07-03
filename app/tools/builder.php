@@ -9,6 +9,7 @@ function view(string $module, string $view, ?array $data, string $type, ?string 
     $toaster = bigToaster();
 
     if($type === 'admin' && !isset($data["userAdmin"])) {
+
         $data["userAdmin"] = (new usersModel())->getUserById($_SESSION["cmwUserId"]);
         $data["coreAdmin"] = new coreController();
     }

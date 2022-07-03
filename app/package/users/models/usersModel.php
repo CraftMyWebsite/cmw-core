@@ -14,7 +14,8 @@ use CMW\Model\manager;
  */
 class usersModel extends manager
 {
-    public function getUserById(int $id): ?userEntity {
+    public function getUserById(int $id): ?userEntity
+    {
 
         $sql = "select * from cmw_users where user_id = :user_id";
 
@@ -28,7 +29,7 @@ class usersModel extends manager
 
         $res = $res->fetch();
 
-        if(!$res) {
+        if (!$res) {
             return null;
         }
 
@@ -44,16 +45,20 @@ class usersModel extends manager
 
             foreach ($roleRes as $role) {
 
-                $rlData = "select * from cmw_roles where role_id = :role_id";
+                $rlData = "SELECT cmw_roles.*, cmw_roles_permissions.* 
+                            FROM cmw_roles 
+                            JOIN cmw_roles_permissions 
+                            ON cmw_roles.role_id = cmw_roles_permissions.role_permission_role_id 
+                            WHERE role_id = :role_id";
                 $rlRes = $db->prepare($rlData);
 
-                if(!$rlRes->execute(array("role_id" =>  $role["role_id"]))) {
+                if (!$rlRes->execute(array("role_id" => $role["role_id"]))) {
                     continue;
                 }
 
                 $rl = $rlRes->fetch();
 
-                if(!$rl) {
+                if (!$rl) {
                     continue;
                 }
 
@@ -61,7 +66,10 @@ class usersModel extends manager
                     $role["role_id"],
                     $rl["role_name"],
                     $rl["role_description"],
-                    $rl["role_weight"]
+                    $rl["role_weight"],
+                    $rl["role_permission_id"],
+                    $rl["role_permission_code"],
+                    $rl["role_permission_role_id"]
                 );
 
             }
@@ -82,7 +90,8 @@ class usersModel extends manager
         );
     }
 
-    public function getUsers(): array {
+    public function getUsers(): array
+    {
         $sql = "select user_id from cmw_users";
         $db = manager::dbConnect();
 
@@ -104,7 +113,7 @@ class usersModel extends manager
 
     public static function getLoggedUser(): int
     {
-        return $_SESSION['cmwUserId'] ?: -1;
+        return isset($_SESSION['cmwUserId']) ?: -1;
     }
 
     public static function logIn($info, $cookie = false)
@@ -311,10 +320,10 @@ class usersModel extends manager
             "perm_code" => $permCode
         );
 
-        $sql = "SELECT cmw_permissions.permission_code FROM cmw_permissions
-                    JOIN cmw_roles ON cmw_permissions.role_id = cmw_roles.role_id
+        $sql = "SELECT cmw_roles_permissions.role_permission_code FROM cmw_roles_permissions
+                    JOIN cmw_roles ON cmw_roles_permissions.role_permission_role_id = cmw_roles.role_id
                     JOIN cmw_users_roles on cmw_roles.role_id = cmw_users_roles.role_id
-                    WHERE cmw_users_roles.user_id = :user_id AND cmw_permissions.permission_code = :perm_code";
+                    WHERE cmw_users_roles.user_id = :user_id AND cmw_roles_permissions.role_permission_code = :perm_code";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
@@ -335,9 +344,10 @@ class usersModel extends manager
      */
     public static function getUserRoles(int $userId): array
     {
-        $sql = "SELECT cmw_roles.role_name FROM cmw_users_roles
-                    JOIN cmw_users on cmw_users.user_id = cmw_users_roles.user_id
-                    JOIN cmw_roles on cmw_users_roles.role_id = cmw_roles.role_id
+        $sql = "SELECT cmw_roles.role_name, cmw_roles_permissions.* FROM cmw_users_roles
+                    JOIN cmw_users ON cmw_users.user_id = cmw_users_roles.user_id
+                    JOIN cmw_roles ON cmw_users_roles.role_id = cmw_roles.role_id   
+                    JOIN cmw_roles_permissions ON cmw_roles.role_id = cmw_roles_permissions.role_permission_role_id                                
                     WHERE cmw_users.user_id = :user_id";
 
         $db = manager::dbConnect();
@@ -356,6 +366,9 @@ class usersModel extends manager
                 $role["role_name"],
                 $role["role_description"],
                 $role["role_weight"],
+                $role["role_permission_id"],
+                $role["role_permission_code"],
+                $role["role_permission_role_id"]
             );
         }
 
