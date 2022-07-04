@@ -2,9 +2,10 @@
 
 use CMW\Controller\Users\usersController;
 
-$title = USERS_ROLE_ADD_TITLE;
-$description = USERS_ROLE_ADD_DESC;
-/* @var usersController $role */
+$title = USERS_ROLE_EDIT_TITLE;
+$description = USERS_ROLE_EDIT_DESC;
+/** @var \CMW\Entity\Roles\roleEntity $role */
+/** @var \CMW\Model\Roles\rolesModel $rm */
 ?>
 
 <?php ob_start(); ?>
@@ -23,49 +24,56 @@ $description = USERS_ROLE_ADD_DESC;
                                         <span class="input-group-text"><i class="fas fa-id-card"></i></span>
                                     </div>
                                     <input type="text" name="name" class="form-control" placeholder="<?= USERS_ROLE ?>"
-                                           value="<?= $role->roleName ?>" required>
+                                           value="<?= $role->getName() ?>" required>
                                 </div>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-signature"></i></span>
                                     </div>
                                     <input type="text" name="description" class="form-control"
-                                           value="<?= $role->roleDescription ?>"
+                                           value="<?= $role->getDescription() ?>"
                                            placeholder="<?= USERS_ROLE_DESCRIPTION ?>" required>
                                 </div>
 
-                                <input type="number" name="weight" class="form-control" placeholder="<?= USERS_WEIGHT ?>"
-                                       value="<?= $role->roleWeight ?>" required>
+                                <input type="number" name="weight" class="form-control"
+                                       placeholder="<?= USERS_WEIGHT ?>"
+                                       value="<?= $role->getWeight() ?>" required>
 
                                 <!-- PERMISSIONS -->
                                 <h3 class="mt-4"><?= USERS_ROLE_PERMISSIONS_LIST ?></h3>
                                 <hr>
-                                <div class="container">
+                                <div class="container-fluid">
                                     <div class="row justify-content-center">
                                         <?php /* @var $permissionsList */
-                                        //Foreach all permissions
-                                        foreach ($permissionsList as $package => $perms):
-                                            echo "<div class='mb-2 mr-5'> <span>$package</span> <hr>";
-                                                foreach ($perms as $permName => $permCode): ?>
 
-                                                    <div class="">
-                                                        <div class="form-group">
-                                                            <div class="custom-control custom-checkbox">
-                                                                <input class="custom-control-input" type="checkbox"
-                                                                       id="<?= ($permCode == "*" ? "*" : "perms[$permName][$permCode]") ?>"
-                                                                       name="<?= ($permCode == "*" ? "perms[$permName][$permCode]" : "perms[$permName][$permCode]") ?>"
-                                                                       value="<?= $permCode ?>"
-                                                                    <?= ($role->roleHasPermission($role->roleId, $permCode) ? "checked" : "") ?>
-                                                                    <?= ($permCode == "*" ? "" : "disabled") ?>>
-                                                                <label for="<?= ($permCode == "*" ? "*" : "perms[$permName][$permCode]") ?>"
-                                                                       class="custom-control-label">
-                                                                    <?= $permName ?>
-                                                                </label>
-                                                            </div>
+
+                                        foreach ($permissionsList as $parent):
+                                            echo "<div class='mb-2 mr-5'> <span>Package: {$parent['package']} </span> <hr>";
+
+                                            echo $parent['parent_code'];
+
+                                            foreach ($parent['perms_childs'] as $child):?>
+
+
+                                                <div class="">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input class="custom-control-input" type="checkbox"
+                                                                   id="<?= $child['child_code'] ?>"
+                                                                   name="perms[<?= $child['child_code'] ?>]"
+                                                                   value="<?= $child['child_code'] ?>"
+                                                                <?= ($rm->roleHasPermission($role->getId(), $child['child_code'])
+                                                                || $rm->roleHasPermission($role->getId(), $parent['parent_code']) ? "checked" : "") ?>>
+                                                            <label for="<?= $child['child_code'] ?>"
+                                                                   class="custom-control-label">
+                                                                <?= $child['child_desc_value'] ?>
+                                                            </label>
                                                         </div>
                                                     </div>
+                                                </div>
 
-                                                <?php endforeach;
+
+                                            <?php endforeach;
                                             echo "</div>";
                                         endforeach; ?>
                                     </div>

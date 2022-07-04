@@ -12,10 +12,7 @@ require_once('Lang/'.getenv("LOCALE").'.php');
 
 /* Administration scope of package */
 $router->scope('/cmw-admin', function(Router $router) {
-    $router->get('/', "users#adminLogin");
-    $router->post('/', "users#adminLoginPost");
-
-    $router->get('/logout', "users#adminLogout");
+    $router->get("/", "users#adminDashboard");
 });
 
 $router->scope('/cmw-admin/users', function(Router $router) {
@@ -52,4 +49,13 @@ $router->scope('/cmw-admin/roles', function(Router $router) {
     $router->get('/delete/:id', function($id) {
         (new rolesController())->adminRolesDelete($id);
     })->with('id', '[0-9]+');
+});
+
+// PUBLIC
+
+$router->scope('/', function(Router $router) {
+    $router->get('/login', "users#login");
+    $router->post('/login', "users#loginPost");
+
+    $router->get('/logout', "users#logout");
 });

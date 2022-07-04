@@ -4,7 +4,9 @@ namespace CMW\Controller\Roles;
 
 use CMW\Controller\coreController;
 use CMW\Controller\Users\usersController;
+use CMW\Model\Permissions\permissionsModel;
 use CMW\Model\Roles\rolesModel;
+use CMW\Model\Users\usersModel;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
@@ -16,25 +18,36 @@ use JsonException;
  */
 class rolesController extends coreController
 {
+
+
+    private usersModel $userModel;
+    private rolesModel $roleModel;
+    private permissionsModel $permissionsModel;
+
+
+    public function __construct($theme_path = null)
+    {
+        parent::__construct($theme_path);
+        $this->userModel = new usersModel();
+        $this->roleModel = new rolesModel();
+        $this->permissionsModel = new permissionsModel();
+    }
+    
     public function adminRolesList(): void
     {
         usersController::isUserHasPermission("users.roles");
 
-        $rolesModel = new rolesModel();
-        $rolesList = $rolesModel->fetchAll();
+        $rolesList = $this->roleModel->fetchAll();
 
         view('users', 'roles.list.admin', ["rolesList" => $rolesList], 'admin');
     }
 
-    /**
-     * @throws JsonException
-     */
+
     public function adminRolesAdd(): void
     {
         usersController::isUserHasPermission("users.roles");
 
-        $rolesModel = new rolesModel();
-        $permissionsList = $rolesModel->fetchAllPermissions();
+        $permissionsList = $this->permissionsModel->getPermissions();
 
         view('users', 'roles.add.admin', ["permissionsList" => $permissionsList], 'admin');
     }
@@ -44,11 +57,11 @@ class rolesController extends coreController
         usersController::isUserHasPermission("users.roles");
 
         $role = new rolesModel();
-        $role->roleName = filter_input(INPUT_POST, "name");
-        $role->roleDescription = filter_input(INPUT_POST, "description");
-        $role->permList = $_POST['perms'];
-        $role->roleWeight = filter_input(INPUT_POST, "weight");
-        $role->createRole();
+        $roleName = filter_input(INPUT_POST, "name");
+        $roleDescription = filter_input(INPUT_POST, "description");
+        $permList = $_POST['perms'];
+        $roleWeight = filter_input(INPUT_POST, "weight");
+        $role->createRole($roleName, $roleDescription, $roleWeight, $permList);
 
 
         $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;
@@ -59,32 +72,30 @@ class rolesController extends coreController
         die();
     }
 
-    /**
-     * @throws JsonException
-     */
+
     public function adminRolesEdit($id): void
     {
-        $role = new rolesModel();
-        $role->fetchRole($id);
+        $rm = new rolesModel();
+        $role = $this->roleModel->getRoleById($id);
 
-        $permissionsList = $role->fetchAllPermissions();
+        $permissionsList = $this->permissionsModel->getPermissions();
+
 
         view('users', 'roles.edit.admin', ["role" => $role,
-            "permissionsList" => $permissionsList], 'admin');
+            "permissionsList" => $permissionsList, "rm" => $rm], 'admin');
     }
 
     #[NoReturn] public function adminRolesEditPost($id): void
     {
         usersController::isUserHasPermission("users.roles");
 
-        $role = new rolesModel();
-        $role->roleName = filter_input(INPUT_POST, "name");
-        $role->roleDescription = filter_input(INPUT_POST, "description");
-        $role->permList = $_POST['perms'];
-        $role->roleWeight = filter_input(INPUT_POST, "weight");
 
-        $role->roleId = $id;
-        $role->updateRole();
+        $roleName = filter_input(INPUT_POST, "name");
+        $roleDescription = filter_input(INPUT_POST, "description");
+        $permList = $_POST['perms'];
+        $roleWeight = filter_input(INPUT_POST, "weight");
+
+        $this->roleModel->updateRole($roleName, $roleDescription, $id, $roleWeight, $permList);
 
         //Todo Try to remove that
         $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;
@@ -99,9 +110,7 @@ class rolesController extends coreController
     {
         usersController::isUserHasPermission("users.roles");
 
-        $role = new rolesModel();
-        $role->roleId = $id;
-        $role->deleteRole();
+        $this->roleModel->deleteRole($id);
 
         //Todo Try to remove that
         $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;

@@ -34,7 +34,9 @@ const USERS_ADD_CARD_TITLE = "Ajouter un utilisateur";
 /* ROLES ADD */
 const USERS_ROLE_ADD = "Ajouter un rôle";
 const USERS_ROLE_ADD_TITLE = "Rôles | Ajouter";
+const USERS_ROLE_EDIT_TITLE = "Rôles | Édition";
 const USERS_ROLE_ADD_DESC = "Créer un nouveau rôle sur le site";
+const USERS_ROLE_EDIT_DESC = "Modifiez un nouveau rôle sur le site";
 const USERS_ROLE_PERMISSIONS_LIST = "Liste des permissions";
 const USERS_ROLE_ADD_TOASTER_SUCCESS = "Rôle créé avec succès !";
 const USERS_ROLE_EDIT_TOASTER_SUCCESS = "Rôle modifié avec succès !";

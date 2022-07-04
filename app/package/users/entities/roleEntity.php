@@ -10,18 +10,23 @@ class roleEntity
     private string $roleDescription;
     private int $roleWeight;
 
+    private ?array $rolePermissions;
+
+
     /**
      * @param int $roleId
      * @param string $roleName
      * @param string $roleDescription
      * @param int $roleWeight
+     * @param array|null $rolePermissions
      */
-    public function __construct(int $roleId, string $roleName, string $roleDescription, int $roleWeight)
+    public function __construct(int $roleId, string $roleName, string $roleDescription, int $roleWeight, ?array $rolePermissions)
     {
         $this->roleId = $roleId;
         $this->roleName = $roleName;
         $this->roleDescription = $roleDescription;
         $this->roleWeight = $roleWeight;
+        $this->rolePermissions = $rolePermissions;
     }
 
     /**
@@ -55,5 +60,15 @@ class roleEntity
     {
         return $this->roleWeight;
     }
+
+
+    /**
+     * @return array|null
+     */
+    public function getRolePermissions(): ?array
+    {
+        return $this->rolePermissions;
+    }
+
 
 }
