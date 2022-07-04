@@ -1,11 +1,11 @@
 <?php
 
-use CMW\Controller\Users\usersController;
+use CMW\Controller\Users\UsersController;
 
 $title = USERS_ROLE_EDIT_TITLE;
 $description = USERS_ROLE_EDIT_DESC;
-/** @var \CMW\Entity\Roles\roleEntity $role */
-/** @var \CMW\Model\Roles\rolesModel $rm */
+/** @var \CMW\Entity\Roles\RoleEntity $role */
+/** @var \CMW\Model\Roles\RolesModel $rm */
 ?>
 
 <?php ob_start(); ?>

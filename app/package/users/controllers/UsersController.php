@@ -2,11 +2,11 @@
 
 namespace CMW\Controller\Users;
 
-use CMW\Controller\coreController;
-use CMW\Controller\Menus\menusController;
-use CMW\Model\coreModel;
-use CMW\Model\Roles\rolesModel;
-use CMW\Model\Users\usersModel;
+use CMW\Controller\CoreController;
+use CMW\Controller\Menus\MenusController;
+use CMW\Model\CoreModel;
+use CMW\Model\Roles\RolesModel;
+use CMW\Model\Users\UsersModel;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\NoReturn;
 
@@ -16,21 +16,21 @@ use JetBrains\PhpStorm\NoReturn;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class usersController extends coreController
+class UsersController extends CoreController
 {
-    private usersModel $userModel;
-    private rolesModel $roleModel;
+    private UsersModel $userModel;
+    private RolesModel $roleModel;
 
     public function __construct($theme_path = null)
     {
         parent::__construct($theme_path);
-        $this->userModel = new usersModel();
-        $this->roleModel = new rolesModel();
+        $this->userModel = new UsersModel();
+        $this->roleModel = new RolesModel();
     }
 
     public function adminDashboard(): void
     {
-        if (isset($_SESSION['cmwUserId']) && usersModel::getLoggedUser() !== -1) {
+        if (isset($_SESSION['cmwUserId']) && UsersModel::getLoggedUser() !== -1) {
             header('Location: ' . getenv('PATH_SUBFOLDER') . "cmw-admin");
         } else {
             header('Location: ' . getenv('PATH_SUBFOLDER') . "login");
@@ -39,8 +39,8 @@ class usersController extends coreController
 
     public static function isAdminLogged(): void
     {
-        if (usersModel::getLoggedUser() !== -1) {
-            $user = new usersModel();
+        if (UsersModel::getLoggedUser() !== -1) {
+            $user = new UsersModel();
             $userEntity = $user->getUserById($_SESSION['cmwUserId']);
 
             if (!$user->hasPermission($userEntity?->getId(), "*")
@@ -56,8 +56,8 @@ class usersController extends coreController
 
     public static function isAdminLoggedBool(): bool
     {
-        if (usersModel::getLoggedUser() !== -1) {
-            $user = new usersModel();
+        if (UsersModel::getLoggedUser() !== -1) {
+            $user = new UsersModel();
             $userEntity = $user->getUserById($_SESSION['cmwUserId']);
 
             if (!$user->hasPermission($userEntity?->getId(), "*") && !$user->hasPermission($userEntity?->getId(), "core.dashboard")) {
@@ -149,7 +149,7 @@ class usersController extends coreController
     {
         self::isUserHasPermission("users.edit");
 
-        if (usersModel::getLoggedUser() == filter_input(INPUT_POST, "id")) {
+        if (UsersModel::getLoggedUser() == filter_input(INPUT_POST, "id")) {
             $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE_ERROR;
             $_SESSION['toaster'][0]['type'] = "bg-danger";
             $_SESSION['toaster'][0]['body'] = USERS_STATE_TOASTER_ERROR;
@@ -174,7 +174,7 @@ class usersController extends coreController
     {
         self::isUserHasPermission("users.delete");
 
-        if (usersModel::getLoggedUser() == filter_input(INPUT_POST, "id")) {
+        if (UsersModel::getLoggedUser() == filter_input(INPUT_POST, "id")) {
 
             //Todo Try to remove that
             $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE_ERROR;
@@ -201,8 +201,8 @@ class usersController extends coreController
     */
     public static function isUserHasPermission(string $permCode): void
     {
-        if (usersModel::getLoggedUser() !== -1) {
-            $user = new usersModel();
+        if (UsersModel::getLoggedUser() !== -1) {
+            $user = new UsersModel();
 
             if (!self::isAdminLoggedBool() || $user->hasPermission($_SESSION['cmwUserId'], $permCode) < 0) {
                 header('Location: ' . getenv('PATH_SUBFOLDER'));
@@ -220,11 +220,11 @@ class usersController extends coreController
 
     public function login(): void
     {
-        if (usersModel::getLoggedUser() !== -1) {
+        if (UsersModel::getLoggedUser() !== -1) {
             header('Location: ' . getenv('PATH_SUBFOLDER'));
         } else {
-            $core = new coreController();
-            $menu = new menusController();
+            $core = new CoreController();
+            $menu = new MenusController();
 
             view('users', 'login', ["core" => $core, "menu" => $menu], 'public');
         }
@@ -240,7 +240,7 @@ class usersController extends coreController
         if (isset($_POST['login_keep_connect']) && $_POST['login_keep_connect']) {
             $cookie = 1;
         }
-        $userId = usersModel::logIn($infos, $cookie);
+        $userId = UsersModel::logIn($infos, $cookie);
         if ($userId > 0 && $userId !== "ERROR") {
             $this->userModel->updateLoggedTime($userId);
             header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
@@ -256,7 +256,7 @@ class usersController extends coreController
 
     public function logOut(): void
     {
-        usersModel::logOut();
+        UsersModel::logOut();
         header('Location: ' . getenv('PATH_SUBFOLDER'));
     }
 }

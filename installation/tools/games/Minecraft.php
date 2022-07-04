@@ -2,7 +2,7 @@
 
 namespace CMW\Controller\Installer\Games;
 
-use CMW\Model\manager;
+use CMW\Model\Manager;
 
 require_once("installation/tools/Games.php");
 
@@ -13,7 +13,7 @@ require_once("installation/tools/Games.php");
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class minecraft extends Games
+class Minecraft extends Games
 {
 
     private static function loadSql(): string
@@ -29,7 +29,7 @@ class minecraft extends Games
 
         require_once($_UTILS::getEnv()->getValue("dir") . "app/manager.php");
 
-        $db = manager::dbConnect();
+        $db = Manager::dbConnect();
         $query = self::loadSql();
         if ($query) {
             $db->exec($query);
@@ -47,7 +47,7 @@ class minecraft extends Games
         $ip_minecraft = filter_input(INPUT_POST, "config_minecraft_ip");
 
         require_once($_UTILS::getEnv()->getValue("dir") . "app/manager.php");
-        $db = manager::dbConnect();
+        $db = Manager::dbConnect();
 
         $query = $db->prepare("INSERT INTO cmw_core_options (option_name, option_value, option_updated) VALUES (:option_name, :option_value, NOW())");
         $query->execute(array(

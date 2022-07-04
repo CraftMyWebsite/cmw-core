@@ -2,7 +2,7 @@
 
 namespace CMW\Model\Menus;
 
-use CMW\Model\manager;
+use CMW\Model\Manager;
 
 /**
  * Class: @menusModel
@@ -10,7 +10,7 @@ use CMW\Model\manager;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class menusModel extends manager {
+class MenusModel extends Manager {
 
     /* Get the menu
      *

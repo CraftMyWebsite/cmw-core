@@ -3,7 +3,7 @@
 $title = PAGES_EDIT_TITLE;
 $description = PAGES_EDIT_DESC;
 
-/* @var \CMW\Entity\Pages\pageEntity $page
+/* @var \CMW\Entity\Pages\PageEntity $page
  */
 
 ?>

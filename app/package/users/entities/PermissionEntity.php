@@ -2,7 +2,7 @@
 
 namespace CMW\Entity\Permissions;
 
-class permissionEntity
+class PermissionEntity
 {
     private string $permissionParentCode;
     private string $permissionParentPackage;

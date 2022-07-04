@@ -8,7 +8,7 @@ namespace CMW\Model;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class coreModel extends manager
+class CoreModel extends Manager
 {
 
     public function fetchOption($option): string

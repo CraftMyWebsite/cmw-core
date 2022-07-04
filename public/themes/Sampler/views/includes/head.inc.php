@@ -1,6 +1,6 @@
-<?php use CMW\Controller\coreController;
+<?php use CMW\Controller\CoreController;
 
-/* @var \CMW\Controller\coreController $core */
+/* @var \CMW\Controller\CoreController $core */
 /* @var string $title */
 /* @var string $description */
 

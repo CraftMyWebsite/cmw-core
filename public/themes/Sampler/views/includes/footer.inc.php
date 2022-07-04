@@ -1,7 +1,7 @@
-<?php use CMW\Controller\coreController; ?>
+<?php use CMW\Controller\CoreController; ?>
 
 <footer>
-    <?= /** @var coreController $core */
+    <?= /** @var CoreController $core */
     $core->cmwFooter() ?>
 </footer>
 </body>

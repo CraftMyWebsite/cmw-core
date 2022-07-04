@@ -1,4 +1,4 @@
-<?php use CMW\Controller\Menus\menusController;
+<?php use CMW\Controller\Menus\MenusController;
 
 ?>
 
@@ -6,7 +6,7 @@
     <nav>
         <ul>
             <?php
-            /** @var menusController $menu */
+            /** @var MenusController $menu */
 
             $menu = $menu->cmwMenu();
             foreach ($menu as $item) :

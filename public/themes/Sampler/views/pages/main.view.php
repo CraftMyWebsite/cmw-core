@@ -1,9 +1,9 @@
 <?php
 
-/* @var \CMW\Entity\Pages\pageEntity $page */
-/* @var \CMW\Model\Pages\pagesModel $pages */
-/* @var \CMW\Controller\coreController $core */
-/* @var \CMW\Controller\Menus\menusController $menu */
+/* @var \CMW\Entity\Pages\PageEntity $page */
+/* @var \CMW\Model\Pages\PagesModel $pages */
+/* @var \CMW\Controller\CoreController $core */
+/* @var \CMW\Controller\Menus\MenusController $menu */
 
 $title = ucfirst($page->getTitle());
 $description = "Description de votre page";

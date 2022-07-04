@@ -10,7 +10,7 @@ use PDO;
  * @author CraftMywebsite <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class manager {
+class Manager {
     protected static $db;
 
     public static function dbConnect() : PDO {

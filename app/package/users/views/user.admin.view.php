@@ -1,13 +1,13 @@
 <?php
 
-use CMW\Model\Roles\rolesModel;
+use CMW\Model\Roles\RolesModel;
 
 $title = USERS_EDIT_TITLE;
 $description = USERS_EDIT_DESC;
 
 $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main.js"></script>';
 
-/** @var \CMW\Entity\Users\userEntity $user */
+/** @var \CMW\Entity\Users\UserEntity $user */
 ?>
 
 <?php ob_start(); ?>
@@ -53,10 +53,10 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                                 <div class="form-group">
                                     <label><?= USERS_ROLE ?></label>
                                     <select name="roles[]" class="form-control" multiple>
-                                        <?php /** @var rolesModel[] $roles */
+                                        <?php /** @var RolesModel[] $roles */
                                         foreach ($roles as $role) : ?>
                                             <option value="<?= $role['role_id'] ?>"
-                                                <?= (rolesModel::playerHasRole($user->getId(), $role['role_id']) ? "selected" : "") ?>><?= $role['role_name'] ?>
+                                                <?= (RolesModel::playerHasRole($user->getId(), $role['role_id']) ? "selected" : "") ?>><?= $role['role_name'] ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>

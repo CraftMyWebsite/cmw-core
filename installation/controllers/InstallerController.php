@@ -4,7 +4,7 @@ namespace CMW\Controller\Installer;
 
 use CMW\Controller\Installer\Games\FabricGames;
 use CMW\Utils\Utils;
-use installerModel;
+use InstallerModel;
 use JetBrains\PhpStorm\NoReturn;
 
 /**
@@ -13,7 +13,7 @@ use JetBrains\PhpStorm\NoReturn;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class installerController
+class InstallerController
 {
 
     private Utils $Utils;
@@ -40,7 +40,7 @@ class installerController
 
     private function loadView(string $filename): void
     {
-        $install = new installerController();
+        $install = new InstallerController();
         ob_start();
 
         extract(["install" => $install], EXTR_OVERWRITE);
@@ -112,7 +112,7 @@ class installerController
         $devMode = isset($_POST['dev_mode']);
         $timezone = date_default_timezone_get();
 
-        if (!installerModel::tryDatabaseConnection($host, $db, $username, $password)) {
+        if (!InstallerModel::tryDatabaseConnection($host, $db, $username, $password)) {
             echo '-2';
             return;
         }
@@ -127,7 +127,7 @@ class installerController
 
 
         //Todo Throw error
-        installerModel::initDatabase($host, $db, $username, $password, $devMode);
+        InstallerModel::initDatabase($host, $db, $username, $password, $devMode);
 
         $this->Utils::getEnv()->editValue("installStep", 1);
 
@@ -165,7 +165,7 @@ class installerController
         $username = filter_input(INPUT_POST, "username");
         $password = password_hash(filter_input(INPUT_POST, "password"), PASSWORD_BCRYPT);
 
-        installerModel::initAdmin($email, $username, $password);
+        InstallerModel::initAdmin($email, $username, $password);
 
         $this->Utils::getEnv()->editValue("installStep", 3);
 
@@ -183,7 +183,7 @@ class installerController
         $name = filter_input(INPUT_POST, "config_name");
         $description = filter_input(INPUT_POST, "config_description");
 
-        installerModel::initConfig($name, $description);
+        InstallerModel::initConfig($name, $description);
 
         $res = FabricGames::initConfig();
 

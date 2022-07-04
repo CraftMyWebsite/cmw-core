@@ -10,7 +10,7 @@ use Closure;
  * @author CraftMywebsite <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class router
+class Router
 {
 
     private string $url;
@@ -24,29 +24,29 @@ class router
     }
 
     /**
-     * @return route[]
+     * @return Route[]
      */
     public function getAndPost($path, $callableGet, $callablePost): array
     {
         return [$this->get($path, $callableGet), $this->post($path, $callablePost)];
     }
 
-    public function get($path, $callable, $name = null): route
+    public function get($path, $callable, $name = null): Route
     {
         return $this->add($path, $callable, $name, 'GET');
     }
 
-    public function post($path, $callable, $name = null): route
+    public function post($path, $callable, $name = null): Route
     {
         return $this->add($path, $callable, $name, 'POST');
     }
 
-    private function add($path, $callable, $name, $method): route
+    private function add($path, $callable, $name, $method): Route
     {
         if (!empty($this->groupPattern)) {
             $path = $this->groupPattern . $path;
         }
-        $route = new route($path, $callable);
+        $route = new Route($path, $callable);
         $this->routes[$method][] = $route;
         if (is_string($callable) && $name === null) {
             $name = $callable;
@@ -65,12 +65,12 @@ class router
     }
 
     /**
-     * @throws routerException
+     * @throws RouterException
      */
     public function listen()
     {
         if (!isset($this->routes[$_SERVER['REQUEST_METHOD']])) {
-            throw new routerException('REQUEST_METHOD does not exist');
+            throw new RouterException('REQUEST_METHOD does not exist');
         }
         foreach ($this->routes[$_SERVER['REQUEST_METHOD']] as $route) {
             if ($route->match($this->url)) {
@@ -78,17 +78,17 @@ class router
             }
         }
         //TODO ERROR PAGE
-        throw new routerException('No matching routes');
+        throw new RouterException('No matching routes');
     }
 
     /**
-     * @throws routerException
+     * @throws RouterException
      */
     public function url($name, $params = [])
     {
         if (!isset($this->namedRoutes[$name])) {
             //TODO ERROR PAGE
-            throw new routerException('No route matches this name');
+            throw new RouterException('No route matches this name');
         }
         return $this->namedRoutes[$name]->getUrl($params);
     }

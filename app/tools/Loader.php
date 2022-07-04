@@ -2,9 +2,9 @@
 
 namespace CMW\Utils;
 
-use CMW\Controller\Installer\installerController;
-use CMW\Router\router;
-use CMW\Router\routerException;
+use CMW\Controller\Installer\InstallerController;
+use CMW\Router\Router;
+use CMW\Router\RouterException;
 
 class Loader
 {
@@ -83,7 +83,7 @@ class Loader
             if ((int)$this->getValue("installStep") >= 0) {
                 require_once($this->getValue("dir") . "installation/controllers/installerController.php");
 
-                $installation = new installerController();
+                $installation = new InstallerController();
 
                 $installation->goToInstall();
             } elseif (!$this->getValue("devMode")) {

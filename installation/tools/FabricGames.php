@@ -68,7 +68,7 @@ class FabricGames
         switch ($string) {
             case "minecraft":
                 self::$game = "minecraft";
-                minecraft::install();
+                Minecraft::install();
                 break;
             default:
                 self::$game = "personal";
@@ -82,7 +82,7 @@ class FabricGames
         self::loadGames();
 
         return match (self::getGame()) {
-            "minecraft" => minecraft::initConfig(),
+            "minecraft" => Minecraft::initConfig(),
             default => personal::initConfig(),
         };
     }
@@ -94,7 +94,7 @@ class FabricGames
 
         switch (self::getGame()) {
             case "minecraft":
-                minecraft::initConfigHTML();
+                Minecraft::initConfigHTML();
                 break;
             default:
                 personal::initConfigHTML();

@@ -2,10 +2,10 @@
 
 namespace CMW\Model\Permissions;
 
-use CMW\Entity\Roles\roleEntity;
-use CMW\Entity\Users\userEntity;
-use CMW\Entity\Permissions\permissionEntity;
-use CMW\Model\manager;
+use CMW\Entity\Roles\RoleEntity;
+use CMW\Entity\Users\UserEntity;
+use CMW\Entity\Permissions\PermissionEntity;
+use CMW\Model\Manager;
 
 /**
  * Class: @permissionsModel
@@ -13,7 +13,7 @@ use CMW\Model\manager;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class permissionsModel extends manager
+class PermissionsModel extends Manager
 {
 
     /**
@@ -29,7 +29,7 @@ class permissionsModel extends manager
                 JOIN cmw_permissions_desc permDesc
                 ON permParent.permission_parent_code = permDesc.permission_desc_code_parent
                 WHERE permDesc.permission_desc_lang = :lang";
-        $db = manager::dbConnect();
+        $db = Manager::dbConnect();
 
         $resParent = $db->prepare($sql);
 

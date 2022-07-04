@@ -3,8 +3,8 @@
 global $router;
 
 
-use CMW\Controller\pages\pagesController;
-use CMW\Router\router;
+use CMW\Controller\pages\PagesController;
+use CMW\Router\Router;
 
 //Todo Try to remove that...
 
@@ -17,7 +17,7 @@ $router->scope('/cmw-admin/pages', function (Router $router) {
     $router->get('/list', "pages#adminPagesList");
 
     $router->get('/edit/:slug', function (Router $slug) {
-        (new pagesController)->adminPagesEdit($slug);
+        (new PagesController)->adminPagesEdit($slug);
     })->with('slug', '.*?');
 
     $router->post('/edit', "pages#adminPagesEditPost");
@@ -33,7 +33,7 @@ $router->scope('/cmw-admin/pages', function (Router $router) {
 $router->scope('/p', function (Router $router){
 
     $router->get('/:slug', function($slug) {
-        (new pagesController)->publicShowPage($slug);
+        (new PagesController)->publicShowPage($slug);
     })->with('slug', '.*?');
 
 });

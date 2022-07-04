@@ -2,9 +2,9 @@
 
 namespace CMW\Model\Pages;
 
-use CMW\Entity\Pages\pageEntity;
-use CMW\Model\manager;
-use CMW\Model\Users\usersModel;
+use CMW\Entity\Pages\PageEntity;
+use CMW\Model\Manager;
+use CMW\Model\Users\UsersModel;
 use PDO;
 use PDOStatement;
 
@@ -14,20 +14,20 @@ use PDOStatement;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class pagesModel extends manager
+class PagesModel extends Manager
 {
     private string $dateFormat = '%d/%m/%Y à %H:%i:%s';
 
     /*=> GET */
 
-    public function getPageById(int $id): ?pageEntity
+    public function getPageById(int $id): ?PageEntity
     {
         $sql = "SELECT page_id, page_title, page_slug, user_id, page_content, page_state, 
                 DATE_FORMAT(page_created, '%d/%m/%Y à %H:%i:%s') AS 'page_created', 
                 DATE_FORMAT(page_updated, '%d/%m/%Y à %H:%i:%s') AS 'page_updated' FROM cmw_pages
                 WHERE page_id = :page_id";
 
-        $db = manager::dbConnect();
+        $db = Manager::dbConnect();
 
         $res = $db->prepare($sql);
 
@@ -38,14 +38,14 @@ class pagesModel extends manager
         return $this->fetchPageResult($res);
     }
 
-    public function getPageBySlug(string $slug): ?pageEntity
+    public function getPageBySlug(string $slug): ?PageEntity
     {
         $sql = "SELECT page_id, page_title, page_slug, user_id, page_content, page_state, 
                 DATE_FORMAT(page_created, $this->dateFormat) AS 'page_created', 
                 DATE_FORMAT(page_updated, $this->dateFormat) AS 'page_updated' FROM cmw_pages
                 WHERE page_slug = :page_slug";
 
-        $db = manager::dbConnect();
+        $db = Manager::dbConnect();
 
         $res = $db->prepare($sql);
 
@@ -57,13 +57,13 @@ class pagesModel extends manager
     }
 
     /**
-     * @return \CMW\Entity\Pages\pageEntity[]
+     * @return \CMW\Entity\Pages\PageEntity[]
      */
     public function getPages(): array
     {
 
         $sql = "select page_id from cmw_pages";
-        $db = manager::dbConnect();
+        $db = Manager::dbConnect();
 
         $res = $db->prepare($sql);
 
@@ -83,7 +83,7 @@ class pagesModel extends manager
 
     /*=> CREATE */
 
-    public function createPage($title, $slug, $content, $userId, $state): ?pageEntity
+    public function createPage($title, $slug, $content, $userId, $state): ?PageEntity
     {
         $data = array(
             "page_title" => mb_strimwidth($title, 0, 255),
@@ -96,7 +96,7 @@ class pagesModel extends manager
         $sql = "INSERT INTO cmw_pages(page_title, page_slug, page_content, user_id, page_state) 
                 VALUES (:page_title, :page_slug, :page_content, :user_id, :page_state)";
 
-        $db = manager::dbConnect();
+        $db = Manager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($data)) {
@@ -116,13 +116,13 @@ class pagesModel extends manager
         );
         $sql = "DELETE FROM cmw_pages WHERE page_id=:page_id";
 
-        $db = manager::dbConnect();
+        $db = Manager::dbConnect();
         return $db->prepare($sql)->execute($var);
     }
 
     /*=> UPDATE */
 
-    public function updatePage($id, $slug, $title, $content, $state): ?pageEntity
+    public function updatePage($id, $slug, $title, $content, $state): ?PageEntity
     {
         $var = array(
             "page_id" => $id,
@@ -135,7 +135,7 @@ class pagesModel extends manager
         $sql = "UPDATE cmw_pages SET page_slug=:page_slug, page_title=:page_title,
                      page_content=:page_content, page_state=:page_state WHERE page_id=:page_id";
 
-        $db = manager::dbConnect();
+        $db = Manager::dbConnect();
         $req = $db->prepare($sql);
         if ($req->execute($var)) {
             $this->updateEditTime($id);
@@ -153,7 +153,7 @@ class pagesModel extends manager
 
         $sql = "UPDATE cmw_pages SET page_updated = NOW() WHERE page_id=:page_id";
 
-        $db = manager::dbConnect();
+        $db = Manager::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
@@ -286,17 +286,17 @@ class pagesModel extends manager
     }
 
 
-    private function fetchPageResult(PDOStatement $res): ?pageEntity
+    private function fetchPageResult(PDOStatement $res): ?PageEntity
     {
         $res = $res->fetch();
 
-        $user = (new usersModel())->getUserById($res["user_id"]);
+        $user = (new UsersModel())->getUserById($res["user_id"]);
 
         if(!$user) {
             return null;
         }
 
-        return new pageEntity(
+        return new PageEntity(
             $res["page_id"],
             $res["page_slug"],
             $res["page_title"],

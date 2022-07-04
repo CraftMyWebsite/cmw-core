@@ -3,7 +3,7 @@
 global $router;
 
 //Todo Try to remove that...
-use CMW\Router\router;
+use CMW\Router\Router;
 
 require_once('Lang/'.getenv("LOCALE").'.php');
 

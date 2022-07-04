@@ -2,7 +2,7 @@
 
 global $router, $_UTILS;
 
-use CMW\Controller\Installer\installerController;
+use CMW\Controller\Installer\InstallerController;
 
 $installationStep = $_UTILS::getEnv()->getValue("installStep") ?? 0;
 $number ??= "first";
@@ -32,6 +32,6 @@ $router->scope("/installer", function ($router) use ($number) {
     $router->post("/submit{$capsMaj}Install", "Installer#{$number}InstallPost");
 
     $router->get('/lang/:code', function($code) {
-        (new installerController())->changeLang($code);
+        (new InstallerController())->changeLang($code);
     })->with('slug', '.*?');
 });

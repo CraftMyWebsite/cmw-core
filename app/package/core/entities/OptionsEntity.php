@@ -2,7 +2,7 @@
 
 namespace CMW\Entity\Core;
 
-class optionsEntity
+class OptionsEntity
 {
     public string $theme;
     public array $menu;

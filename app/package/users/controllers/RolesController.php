@@ -2,11 +2,11 @@
 
 namespace CMW\Controller\Roles;
 
-use CMW\Controller\coreController;
-use CMW\Controller\Users\usersController;
-use CMW\Model\Permissions\permissionsModel;
-use CMW\Model\Roles\rolesModel;
-use CMW\Model\Users\usersModel;
+use CMW\Controller\CoreController;
+use CMW\Controller\Users\UsersController;
+use CMW\Model\Permissions\PermissionsModel;
+use CMW\Model\Roles\RolesModel;
+use CMW\Model\Users\UsersModel;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
@@ -16,26 +16,26 @@ use JsonException;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class rolesController extends coreController
+class RolesController extends CoreController
 {
 
 
-    private usersModel $userModel;
-    private rolesModel $roleModel;
-    private permissionsModel $permissionsModel;
+    private UsersModel $userModel;
+    private RolesModel $roleModel;
+    private PermissionsModel $permissionsModel;
 
 
     public function __construct($theme_path = null)
     {
         parent::__construct($theme_path);
-        $this->userModel = new usersModel();
-        $this->roleModel = new rolesModel();
-        $this->permissionsModel = new permissionsModel();
+        $this->userModel = new UsersModel();
+        $this->roleModel = new RolesModel();
+        $this->permissionsModel = new PermissionsModel();
     }
     
     public function adminRolesList(): void
     {
-        usersController::isUserHasPermission("users.roles");
+        UsersController::isUserHasPermission("users.roles");
 
         $rolesList = $this->roleModel->fetchAll();
 
@@ -45,7 +45,7 @@ class rolesController extends coreController
 
     public function adminRolesAdd(): void
     {
-        usersController::isUserHasPermission("users.roles");
+        UsersController::isUserHasPermission("users.roles");
 
         $permissionsList = $this->permissionsModel->getPermissions();
 
@@ -54,9 +54,9 @@ class rolesController extends coreController
 
     #[NoReturn] public function adminRolesAddPost(): void
     {
-        usersController::isUserHasPermission("users.roles");
+        UsersController::isUserHasPermission("users.roles");
 
-        $role = new rolesModel();
+        $role = new RolesModel();
         $roleName = filter_input(INPUT_POST, "name");
         $roleDescription = filter_input(INPUT_POST, "description");
         $permList = $_POST['perms'];
@@ -75,7 +75,7 @@ class rolesController extends coreController
 
     public function adminRolesEdit($id): void
     {
-        $rm = new rolesModel();
+        $rm = new RolesModel();
         $role = $this->roleModel->getRoleById($id);
 
         $permissionsList = $this->permissionsModel->getPermissions();
@@ -87,7 +87,7 @@ class rolesController extends coreController
 
     #[NoReturn] public function adminRolesEditPost($id): void
     {
-        usersController::isUserHasPermission("users.roles");
+        UsersController::isUserHasPermission("users.roles");
 
 
         $roleName = filter_input(INPUT_POST, "name");
@@ -108,7 +108,7 @@ class rolesController extends coreController
 
     #[NoReturn] public function adminRolesDelete($id): void
     {
-        usersController::isUserHasPermission("users.roles");
+        UsersController::isUserHasPermission("users.roles");
 
         $this->roleModel->deleteRole($id);
 

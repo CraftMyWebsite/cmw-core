@@ -66,7 +66,7 @@ $description = PAGES_LIST_DESC; ?>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php /** @var \CMW\Entity\Pages\pageEntity[] $pagesList */
+                                <?php /** @var \CMW\Entity\Pages\PageEntity[] $pagesList */
                                 foreach ($pagesList as $page) : ?>
                                     <tr>
                                         <td><?= $page->getTitle() ?></td>

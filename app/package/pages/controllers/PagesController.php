@@ -2,12 +2,12 @@
 
 namespace CMW\Controller\pages;
 
-use CMW\Controller\coreController;
-use CMW\Controller\Menus\menusController;
-use CMW\Controller\Users\usersController;
+use CMW\Controller\CoreController;
+use CMW\Controller\Menus\MenusController;
+use CMW\Controller\Users\UsersController;
 use CMW\Entity\Pages\pagesEntity;
-use CMW\Model\Pages\pagesModel;
-use CMW\Model\Users\usersModel;
+use CMW\Model\Pages\PagesModel;
+use CMW\Model\Users\UsersModel;
 use JetBrains\PhpStorm\NoReturn;
 
 /**
@@ -16,20 +16,20 @@ use JetBrains\PhpStorm\NoReturn;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class pagesController extends coreController
+class PagesController extends CoreController
 {
 
-    private pagesModel $pagesModel;
+    private PagesModel $pagesModel;
 
     public function __construct($theme_path = null)
     {
         parent::__construct($theme_path);
-        $this->pagesModel = new pagesModel();
+        $this->pagesModel = new PagesModel();
     }
 
     public function adminPagesList(): void
     {
-        usersController::isUserHasPermission("pages.show");
+        UsersController::isUserHasPermission("pages.show");
 
         $pagesList = $this->pagesModel->getPages();
 
@@ -38,18 +38,18 @@ class pagesController extends coreController
 
     public function adminPagesAdd(): void
     {
-        usersController::isUserHasPermission("pages.add");
+        UsersController::isUserHasPermission("pages.add");
 
         view('pages', 'add.admin', [], 'admin');
     }
 
     public function adminPagesAddPost(): void
     {
-        usersController::isUserHasPermission("pages.add");
+        UsersController::isUserHasPermission("pages.add");
 
-        $user = new usersModel();
+        $user = new UsersModel();
 
-        $page = new pagesModel();
+        $page = new PagesModel();
         $pageTitle = filter_input(INPUT_POST, "news_title");
         $pageSlug = filter_input(INPUT_POST, "news_slug");
         $pageContent = filter_input(INPUT_POST, "news_content");
@@ -64,7 +64,7 @@ class pagesController extends coreController
 
     public function adminPagesEdit($slug): void
     {
-        usersController::isUserHasPermission("pages.edit");
+        UsersController::isUserHasPermission("pages.edit");
 
         $page = $this->pagesModel->getPageBySlug($slug);
 
@@ -74,9 +74,9 @@ class pagesController extends coreController
 
     public function adminPagesEditPost(): void
     {
-        usersController::isUserHasPermission("pages.edit");
+        UsersController::isUserHasPermission("pages.edit");
 
-        $page = new pagesModel();
+        $page = new PagesModel();
       
         $id = filter_input(INPUT_POST, "news_id");
         $title = filter_input(INPUT_POST, "news_title");
@@ -91,7 +91,7 @@ class pagesController extends coreController
 
     #[NoReturn] public function adminPagesDelete(): void
     {
-        usersController::isUserHasPermission("pages.delete");
+        UsersController::isUserHasPermission("pages.delete");
       
         $id = filter_input(INPUT_POST, "id");
         $this->pagesModel->deletePage($id);
@@ -112,9 +112,9 @@ class pagesController extends coreController
     {
 
         //Default controllers (important)
-        $core = new coreController();
-        $menu = new menusController();
-        $page = new pagesModel();
+        $core = new CoreController();
+        $menu = new MenusController();
+        $page = new PagesModel();
 
         $pageEntity = $page->getPageBySlug($slug);
 

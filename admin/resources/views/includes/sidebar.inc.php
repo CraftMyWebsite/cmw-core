@@ -1,5 +1,5 @@
-<?php /* @var \CMW\Entity\Users\userEntity $userAdmin */
-/* @var \CMW\Controller\coreController $coreAdmin */ ?>
+<?php /* @var \CMW\Entity\Users\UserEntity $userAdmin */
+/* @var \CMW\Controller\CoreController $coreAdmin */ ?>
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->

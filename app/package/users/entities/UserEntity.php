@@ -2,9 +2,9 @@
 
 namespace CMW\Entity\Users;
 
-use CMW\Entity\Roles\roleEntity;
+use CMW\Entity\Roles\RoleEntity;
 
-class userEntity
+class UserEntity
 {
 
     private int $userId;
@@ -14,7 +14,7 @@ class userEntity
     private string $userLastName;
     private int $userState;
     private string $userLastConnection;
-    /** @var \CMW\Entity\Roles\roleEntity|\CMW\Entity\Roles\roleEntity[] $userRoles */
+    /** @var \CMW\Entity\Roles\RoleEntity|\CMW\Entity\Roles\RoleEntity[] $userRoles */
     private array $userRoles;
     private string $userCreated;
     private string $userUpdated;
@@ -27,7 +27,7 @@ class userEntity
      * @param string $userLastName
      * @param int $userState
      * @param string $userLastConnection
-     * @param \CMW\Entity\Roles\roleEntity[] $userRoles
+     * @param \CMW\Entity\Roles\RoleEntity[] $userRoles
      * @param string $userCreated
      * @param string $userUpdated
      */
@@ -102,7 +102,7 @@ class userEntity
     }
 
     /**
-     * @return \CMW\Entity\Roles\roleEntity[]
+     * @return \CMW\Entity\Roles\RoleEntity[]
      */
     public function getRoles(): array
     {

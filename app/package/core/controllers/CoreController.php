@@ -2,12 +2,12 @@
 
 namespace CMW\Controller;
 
-use CMW\Controller\Menus\menusController;
-use CMW\Controller\Users\usersController;
+use CMW\Controller\Menus\MenusController;
+use CMW\Controller\Users\UsersController;
 
-use CMW\Model\coreModel;
-use CMW\Model\Users\usersModel;
-use CMW\Entity\Core\optionsEntity;
+use CMW\Model\CoreModel;
+use CMW\Model\Users\UsersModel;
+use CMW\Entity\Core\OptionsEntity;
 use CMW\Utils\Utils;
 use JsonException;
 
@@ -17,16 +17,16 @@ use JsonException;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class coreController
+class CoreController
 {
     public static string $themePath;
     public static array $availableLocales = ['fr' => 'Français', 'en' => 'English'];
-    private coreModel $coreModel;
+    private CoreModel $coreModel;
 
     public function __construct($theme_path = null)
     {
         self::$themePath = $this->cmwThemePath();
-        $this->coreModel = new coreModel();
+        $this->coreModel = new CoreModel();
     }
 
     /* ADMINISTRATION */
@@ -42,20 +42,20 @@ class coreController
 
     public function adminConfigurationPost(): void
     {
-        usersController::isUserHasPermission("core.configuration");
+        UsersController::isUserHasPermission("core.configuration");
 
         foreach ($_POST as $option_name => $option_value):
             if ($option_name === "locale")
                 Utils::getEnv()->editValue("LOCALE", $option_value);
 
-            coreModel::updateOption($option_name, $option_value);
+            CoreModel::updateOption($option_name, $option_value);
         endforeach;
 
 
         //Todo review that
         //Options with nullables options (checkbox ...)
         if (empty($_POST['minecraft_register_premium']) && getenv("GAME") === "minecraft") {
-            coreModel::updateOption("minecraft_register_premium", "false");
+            CoreModel::updateOption("minecraft_register_premium", "false");
         }
 
         //TODO Remove that
@@ -69,15 +69,15 @@ class coreController
     /* PUBLIC FRONT */
     public function frontHome(): void
     {
-        $core = new coreController();
-        $menu = new menusController();
+        $core = new CoreController();
+        $menu = new MenusController();
 
         view('core', 'home', ["core" => $core, "menu" => $menu], 'public');
     }
 
     public function cmwThemePath(): string
     {
-        $coreModel = new coreModel();
+        $coreModel = new CoreModel();
         return $coreModel->fetchOption("theme");
     }
 

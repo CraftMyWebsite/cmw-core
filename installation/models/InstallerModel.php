@@ -7,7 +7,7 @@
  * @version 1.0
  */
 
-class installerModel
+class InstallerModel
 {
 
     public function __construct()

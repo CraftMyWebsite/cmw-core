@@ -2,7 +2,7 @@
 
 namespace CMW\Entity\Roles;
 
-class roleEntity
+class RoleEntity
 {
 
     private int $roleId;

@@ -2,9 +2,9 @@
 
 namespace CMW\Model\Roles;
 
-use CMW\Entity\Roles\roleEntity;
-use CMW\Model\manager;
-use CMW\Model\Permissions\permissionsModel;
+use CMW\Entity\Roles\RoleEntity;
+use CMW\Model\Manager;
+use CMW\Model\Permissions\PermissionsModel;
 use JsonException;
 
 /**
@@ -13,13 +13,13 @@ use JsonException;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class rolesModel extends manager
+class RolesModel extends Manager
 {
 
     public function fetchAll(): array
     {
         $sql = "SELECT role_id, role_name, role_description, role_weight FROM cmw_roles";
-        $db = manager::dbConnect();
+        $db = Manager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute()) {
@@ -40,7 +40,7 @@ class rolesModel extends manager
 
         $sql = "INSERT INTO cmw_roles (role_name, role_description, role_weight) VALUES (:role_name, :role_description, :role_weight)";
 
-        $db = manager::dbConnect();
+        $db = Manager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -71,7 +71,7 @@ class rolesModel extends manager
             $sql = "INSERT INTO cmw_roles_permissions (role_permission_code, role_permission_role_id) 
                         VALUES(:role_permission_code, :role_id)";
 
-            $db = manager::dbConnect();
+            $db = Manager::dbConnect();
             $req = $db->prepare($sql);
             $req->execute($var);
 
@@ -79,13 +79,13 @@ class rolesModel extends manager
 
     }
 
-    public function getRoleById($id): ?roleEntity
+    public function getRoleById($id): ?RoleEntity
     {
 
 
         $sql = "SELECT * FROM cmw_roles WHERE role_id = :role_id";
 
-        $db = manager::dbConnect();
+        $db = Manager::dbConnect();
         $req = $db->prepare($sql);
 
         if (!$req->execute(array("role_id" => $id))) {
@@ -98,7 +98,7 @@ class rolesModel extends manager
             return null;
         }
 
-        return new roleEntity(
+        return new RoleEntity(
             $id,
             $res['role_name'],
             $res['role_description'],
@@ -117,7 +117,7 @@ class rolesModel extends manager
         $toReturn = array();
 
         $sql = "SELECT * FROM cmw_roles_permissions WHERE role_permission_role_id = :role_id";
-        $db = manager::dbConnect();
+        $db = Manager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute(array("role_id" => $roleId))) {
@@ -147,7 +147,7 @@ class rolesModel extends manager
         $sql = "SELECT cmw_roles_permissions.role_permission_code FROM cmw_roles_permissions 
                     WHERE cmw_roles_permissions.role_permission_role_id = :role_id AND cmw_roles_permissions.role_permission_code = :perm_code";
 
-        $db = manager::dbConnect();
+        $db = Manager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -171,7 +171,7 @@ class rolesModel extends manager
 
         $sql = "UPDATE cmw_roles SET role_name = :role_name, role_description = :role_description, role_weight = :role_weight WHERE role_id = :role_id";
 
-        $db = manager::dbConnect();
+        $db = Manager::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
 
@@ -194,7 +194,7 @@ class rolesModel extends manager
 
         $sql = "DELETE FROM cmw_roles_permissions WHERE role_permission_role_id = :role_id";
 
-        $db = manager::dbConnect();
+        $db = Manager::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
 
@@ -211,7 +211,7 @@ class rolesModel extends manager
 
         $sql = "DELETE FROM cmw_roles WHERE role_id = :role_id";
 
-        $db = manager::dbConnect();
+        $db = Manager::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
@@ -223,7 +223,7 @@ class rolesModel extends manager
                     JOIN cmw_roles on cmw_users_roles.role_id = cmw_roles.role_id
                     WHERE cmw_users.user_id = :user_id AND cmw_roles.role_id = :role_id";
 
-        $db = manager::dbConnect();
+        $db = Manager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute(array("user_id" => $user_id, "role_id" => $role_id))) {

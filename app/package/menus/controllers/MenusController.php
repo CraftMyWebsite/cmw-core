@@ -2,8 +2,8 @@
 
 namespace CMW\Controller\Menus;
 
-use CMW\Controller\coreController;
-use CMW\Model\Menus\menusModel;
+use CMW\Controller\CoreController;
+use CMW\Model\Menus\MenusModel;
 
 /**
  * Class: @menusController
@@ -11,9 +11,9 @@ use CMW\Model\Menus\menusModel;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class menusController extends coreController {
+class MenusController extends CoreController {
 
-    private menusModel $menusModel;
+    private MenusModel $menusModel;
 
 
     /* //////////////////////////////////////////////////////////////////////////// */
@@ -26,12 +26,12 @@ class menusController extends coreController {
     public function __construct($theme_path = null)
     {
         parent::__construct($theme_path);
-        $this->menusModel = new menusModel();
+        $this->menusModel = new MenusModel();
     }
 
     public function cmwMenu(): array
     {
-        $coreModel = new menusModel();
+        $coreModel = new MenusModel();
 
         return $coreModel->fetchMenu();
     }

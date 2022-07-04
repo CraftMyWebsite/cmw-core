@@ -1,5 +1,5 @@
-<?php use CMW\Controller\coreController;
-use CMW\Model\coreModel;
+<?php use CMW\Controller\CoreController;
+use CMW\Model\CoreModel;
 
 $title = CORE_CONFIG_TITLE;
 $description = CORE_CONFIG_DESC; ?>
@@ -25,7 +25,7 @@ $description = CORE_CONFIG_DESC; ?>
                                             <span class="input-group-text"><i class="fas fa-signature"></i></span>
                                         </div>
                                         <input type="text" name="name" class="form-control"
-                                               value="<?= coreModel::getOptionValue("name") ?>"
+                                               value="<?= CoreModel::getOptionValue("name") ?>"
                                                placeholder="<?= CORE_WEBSITE_NAME ?>" required>
                                     </div>
                                 </div>
@@ -37,7 +37,7 @@ $description = CORE_CONFIG_DESC; ?>
                                             <span class="input-group-text"><i class="fa fa-paragraph"></i></span>
                                         </div>
                                         <input type="text" name="description" class="form-control"
-                                               value="<?= coreModel::getOptionValue("description") ?>"
+                                               value="<?= CoreModel::getOptionValue("description") ?>"
                                                placeholder="<?= CORE_WEBSITE_DESCRIPTION ?>" required>
                                     </div>
                                 </div>
@@ -45,7 +45,7 @@ $description = CORE_CONFIG_DESC; ?>
                                 <div class="form-group">
                                     <label><?= CORE_CHANGE_LANG ?></label>
                                     <select class="form-control" name="locale">
-                                        <?php foreach (coreController::$availableLocales as $code => $name): ?>
+                                        <?php foreach (CoreController::$availableLocales as $code => $name): ?>
                                         <option value="<?= $code ?>" <?= $code === getenv("LOCALE") ? "selected" : "" ?>>
                                             <?= $name ?>
                                         </option>
@@ -64,7 +64,7 @@ $description = CORE_CONFIG_DESC; ?>
                                             </div>
                                             <input type="text" name="minecraft_ip" id="minecraft_ip"
                                                    class="form-control"
-                                                   value="<?= coreModel::getOptionValue("minecraft_ip") ?>"
+                                                   value="<?= CoreModel::getOptionValue("minecraft_ip") ?>"
                                                    placeholder="<?= CORE_MINECRAFT_IP ?>" required>
                                         </div>
                                     </div>
@@ -73,7 +73,7 @@ $description = CORE_CONFIG_DESC; ?>
                                         <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
                                             <input type="checkbox" class="custom-control-input"
                                                    name="minecraft_register_premium" id="minecraft_register_premium"
-                                                   value="true" <?= coreModel::getOptionValue("minecraft_register_premium") === "true" ? "checked" : "" ?>>
+                                                   value="true" <?= CoreModel::getOptionValue("minecraft_register_premium") === "true" ? "checked" : "" ?>>
                                             <label class="custom-control-label" for="minecraft_register_premium">
                                                 <?= CORE_MINECRAFT_REGISTER_PREMIUM ?>
                                             </label>

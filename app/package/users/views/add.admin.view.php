@@ -1,13 +1,13 @@
 <?php
 
-use CMW\Controller\Users\usersController;
+use CMW\Controller\Users\UsersController;
 
 $title = USERS_ADD_TITLE;
 $description = USERS_ADD_DESC;
 
 $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main.js"></script>';
 
-/* @var usersController[] $roles */
+/* @var UsersController[] $roles */
 ?>
 
 <?php ob_start(); ?>

@@ -1,5 +1,5 @@
 <?php
-/* @var \CMW\Controller\Installer\installerController $install */
+/* @var \CMW\Controller\Installer\InstallerController $install */
 ?>
 
 <div class="card">

@@ -10,7 +10,7 @@ use Exception;
  * @author CraftMywebsite <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class routerException extends Exception
+class RouterException extends Exception
 {
 
     protected $message = 'Unknown exception';     // Exception message

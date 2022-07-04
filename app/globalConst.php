@@ -3,7 +3,7 @@
  * This is dedicated to all the global const utils for the front devs and more...
  */
 
-use CMW\Model\coreModel;
+use CMW\Model\CoreModel;
 
 //todo need to be call only when database is ready !
 

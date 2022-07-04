@@ -1,8 +1,8 @@
 <?php
 
-use CMW\Controller\coreController;
-use CMW\Controller\Users\usersController;
-use CMW\Model\Users\usersModel;
+use CMW\Controller\CoreController;
+use CMW\Controller\Users\UsersController;
+use CMW\Model\Users\UsersModel;
 
 function view(string $module, string $view, ?array $data, string $type, ?string $noAdminControl = null): void
 {
@@ -10,8 +10,8 @@ function view(string $module, string $view, ?array $data, string $type, ?string 
 
     if($type === 'admin' && !isset($data["userAdmin"])) {
 
-        $data["userAdmin"] = (new usersModel())->getUserById($_SESSION["cmwUserId"]);
-        $data["coreAdmin"] = new coreController();
+        $data["userAdmin"] = (new UsersModel())->getUserById($_SESSION["cmwUserId"]);
+        $data["coreAdmin"] = new CoreController();
     }
 
     extract($data, EXTR_OVERWRITE);
@@ -19,14 +19,14 @@ function view(string $module, string $view, ?array $data, string $type, ?string 
     if ($type === 'admin') {
 
         if (is_null($noAdminControl)) {
-            usersController::isAdminLogged();
+            UsersController::isAdminLogged();
         }
 
         $path = "app/package/$module/views/$view.view.php";
         require_once($path);
         require_once(getenv("PATH_ADMIN_VIEW") . 'template.php');
     } else {
-        $coreController = new coreController();
+        $coreController = new CoreController();
         $theme = $coreController->cmwThemePath();
 
         $path = "public/themes/$theme/views/$module/$view.view.php";

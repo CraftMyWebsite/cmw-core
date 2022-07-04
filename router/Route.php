@@ -8,7 +8,7 @@ namespace CMW\Router;
  * @author CraftMywebsite <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class route
+class Route
 {
 
     private string $path;
@@ -22,7 +22,7 @@ class route
         $this->callable = $callable;
     }
 
-    public function with($param, $regex): route
+    public function with($param, $regex): Route
     {
         $this->params[$param] = str_replace('(', '(?:', $regex);
         return $this; // On retourne tjrs l'objet pour enchainer les arguments

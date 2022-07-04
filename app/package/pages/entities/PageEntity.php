@@ -3,16 +3,16 @@
 namespace CMW\Entity\Pages;
 
 
-use CMW\Entity\Users\userEntity;
+use CMW\Entity\Users\UserEntity;
 
-class pageEntity
+class PageEntity
 {
 
     private int $pageId;
     private string $pageSlug;
     private string $pageTitle;
     private string $pageContent;
-    private userEntity $pageUser;
+    private UserEntity $pageUser;
     private string $pageConverted;
     private int $pageState;
     private string $pageCreated;
@@ -23,14 +23,14 @@ class pageEntity
      * @param string $pageSlug
      * @param string $pageTitle
      * @param string $pageContent
-     * @param \CMW\Entity\Users\userEntity $pageUser
+     * @param \CMW\Entity\Users\UserEntity $pageUser
      * @param string $pageConverted
      * @param int $pageState
      * @param string $pageCreated
      * @param string $pageEdited
      */
      
-    public function __construct(int $pageId, string $pageSlug, string $pageTitle, string $pageContent, userEntity $pageUser, string $pageConverted, int $pageState, string $pageCreated, string $pageEdited)
+    public function __construct(int $pageId, string $pageSlug, string $pageTitle, string $pageContent, UserEntity $pageUser, string $pageConverted, int $pageState, string $pageCreated, string $pageEdited)
     {
         $this->pageId = $pageId;
         $this->pageSlug = $pageSlug;
@@ -76,9 +76,9 @@ class pageEntity
     }
 
     /**
-     * @return \CMW\Entity\Users\userEntity
+     * @return \CMW\Entity\Users\UserEntity
      */
-    public function getUser(): userEntity
+    public function getUser(): UserEntity
     {
         return $this->pageUser;
     }

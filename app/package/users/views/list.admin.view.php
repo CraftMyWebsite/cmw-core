@@ -70,7 +70,7 @@ $description = USERS_LIST_DESC; ?>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php /** @var \CMW\Entity\Users\userEntity[] $userList */
+                                <?php /** @var \CMW\Entity\Users\UserEntity[] $userList */
                                 foreach ($userList as $user) : ?>
                                     <tr>
                                         <td><?= $user->getMail() ?></td>

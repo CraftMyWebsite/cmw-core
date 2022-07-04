@@ -2,7 +2,7 @@
 
 namespace CMW\Entity\Menus;
 
-class menuEntity
+class MenuEntity
 {
     public array $menu;
 
