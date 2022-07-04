@@ -2,9 +2,11 @@
 
 namespace CMW\Model\Users;
 
+use CMW\Controller\Roles\rolesController;
 use CMW\Entity\Roles\roleEntity;
 use CMW\Entity\Users\userEntity;
 use CMW\Model\manager;
+use CMW\Model\Roles\rolesModel;
 
 /**
  * Class: @usersModel
@@ -41,6 +43,8 @@ class usersModel extends manager
 
         if ($roleRes->execute(array("user_id" => $id))) {
 
+            $rolesModel = new rolesModel();
+
             $roleRes = $roleRes->fetchAll();
 
             foreach ($roleRes as $role) {
@@ -67,9 +71,7 @@ class usersModel extends manager
                     $rl["role_name"],
                     $rl["role_description"],
                     $rl["role_weight"],
-                    $rl["role_permission_id"],
-                    $rl["role_permission_code"],
-                    $rl["role_permission_role_id"]
+                    $rolesModel->getRolePermissions($role["role_id"])
                 );
 
             }
@@ -344,6 +346,8 @@ class usersModel extends manager
      */
     public static function getUserRoles(int $userId): array
     {
+        $rolesModel = new rolesModel();
+
         $sql = "SELECT cmw_roles.role_name, cmw_roles_permissions.* FROM cmw_users_roles
                     JOIN cmw_users ON cmw_users.user_id = cmw_users_roles.user_id
                     JOIN cmw_roles ON cmw_users_roles.role_id = cmw_roles.role_id   
@@ -366,9 +370,7 @@ class usersModel extends manager
                 $role["role_name"],
                 $role["role_description"],
                 $role["role_weight"],
-                $role["role_permission_id"],
-                $role["role_permission_code"],
-                $role["role_permission_role_id"]
+                $rolesModel->getRolePermissions($role["role_id"])
             );
         }
 

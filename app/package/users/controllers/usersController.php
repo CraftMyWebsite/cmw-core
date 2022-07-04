@@ -70,48 +70,6 @@ class usersController extends coreController
         return true;
     }
 
-    public function login(): void
-    {
-        if (usersModel::getLoggedUser() !== -1) {
-            header('Location: ' . getenv('PATH_SUBFOLDER'));
-        } else {
-            $core = new coreController();
-            $menu = new menusController();
-
-            view('users', 'login', ["core" => $core, "menu" => $menu], 'public');
-        }
-    }
-
-    public function loginPost(): void
-    {
-        $infos = array(
-            "email" => filter_input(INPUT_POST, "login_email"),
-            "password" => filter_input(INPUT_POST, "login_password")
-        );
-        $cookie = 0;
-        if (isset($_POST['login_keep_connect']) && $_POST['login_keep_connect']) {
-            $cookie = 1;
-        }
-        $userId = usersModel::logIn($infos, $cookie);
-        if ($userId > 0 && $userId !== "ERROR") {
-            $this->userModel->updateLoggedTime($userId);
-            header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
-
-        } else {
-            $_SESSION['toaster'][0]['title'] = "Désolé";
-            $_SESSION['toaster'][0]['body'] = "Cette combinaison email/mot de passe est erronée";
-            $_SESSION['toaster'][0]['type'] = "bg-danger";
-            header('Location: ' . $_SERVER['HTTP_REFERER']);
-
-        }
-    }
-
-    public function lLogOut(): void
-    {
-        usersModel::logOut();
-        header('Location: ' . getenv('PATH_SUBFOLDER'));
-    }
-
     public function adminUsersList(): void
     {
         self::isUserHasPermission("users.show");
@@ -254,5 +212,51 @@ class usersController extends coreController
             header('Location: ' . getenv('PATH_SUBFOLDER'));
             exit();
         }
+    }
+
+
+    // PUBLIC SECTION
+
+
+    public function login(): void
+    {
+        if (usersModel::getLoggedUser() !== -1) {
+            header('Location: ' . getenv('PATH_SUBFOLDER'));
+        } else {
+            $core = new coreController();
+            $menu = new menusController();
+
+            view('users', 'login', ["core" => $core, "menu" => $menu], 'public');
+        }
+    }
+
+    public function loginPost(): void
+    {
+        $infos = array(
+            "email" => filter_input(INPUT_POST, "login_email"),
+            "password" => filter_input(INPUT_POST, "login_password")
+        );
+        $cookie = 0;
+        if (isset($_POST['login_keep_connect']) && $_POST['login_keep_connect']) {
+            $cookie = 1;
+        }
+        $userId = usersModel::logIn($infos, $cookie);
+        if ($userId > 0 && $userId !== "ERROR") {
+            $this->userModel->updateLoggedTime($userId);
+            header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
+
+        } else {
+            $_SESSION['toaster'][0]['title'] = "Désolé";
+            $_SESSION['toaster'][0]['body'] = "Cette combinaison email/mot de passe est erronée";
+            $_SESSION['toaster'][0]['type'] = "bg-danger";
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+
+        }
+    }
+
+    public function logOut(): void
+    {
+        usersModel::logOut();
+        header('Location: ' . getenv('PATH_SUBFOLDER'));
     }
 }

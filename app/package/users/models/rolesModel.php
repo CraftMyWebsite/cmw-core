@@ -4,6 +4,7 @@ namespace CMW\Model\Roles;
 
 use CMW\Entity\Roles\roleEntity;
 use CMW\Model\manager;
+use CMW\Model\Permissions\permissionsModel;
 use JsonException;
 
 /**
@@ -78,53 +79,62 @@ class rolesModel extends manager
 
     }
 
-    public function fetchRole($id): void
+    public function getRoleById($id): ?roleEntity
     {
-        $var = array(
-            "role_id" => $id
-        );
+
 
         $sql = "SELECT * FROM cmw_roles WHERE role_id = :role_id";
 
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
 
-        if ($req->execute($var)) {
-            $result = $req->fetch();
-
-            foreach ($result as $key => $property) {
-
-                //to camel case all keys (role_id => roleId (for $this->>roleId))
-                $key = explode('_', $key);
-                $firstElement = array_shift($key);
-                $key = array_map('ucfirst', $key);
-                array_unshift($key, $firstElement);
-                $key = implode('', $key);
-
-                if (property_exists(__CLASS__, $key)) {
-                    $this->$key = $property;
-                }
-            }
+        if (!$req->execute(array("role_id" => $id))) {
+            return null;
         }
+
+        $res = $req->fetch();
+
+        if (!$res) {
+            return null;
+        }
+
+        return new roleEntity(
+            $id,
+            $res['role_name'],
+            $res['role_description'],
+            $res['role_weight'],
+            $this->getRolePermissions($id)
+        );
+
     }
 
     /**
      * @desc Get all permissions for a role
      */
-    public function getAllPermissionsForRole($roleId): array
+    public function getRolePermissions($roleId): array
     {
-        $var = array(
-            "role_id" => $roleId
-        );
+
+        $toReturn = array();
 
         $sql = "SELECT * FROM cmw_roles_permissions WHERE role_permission_role_id = :role_id";
         $db = manager::dbConnect();
         $req = $db->prepare($sql);
 
-        if ($req->execute($var)) {
-            return $req->fetchAll();
+        if ($req->execute(array("role_id" => $roleId))) {
+            $res = $req->fetchAll();
+
+            if(!$res)
+                return [];
+
+            foreach ($res as $perm){
+                $toReturn += array( $perm['role_permission_id'] => [
+                    "role_permission_code" => $perm['role_permission_code']
+                ]);
+            }
+
         }
-        return [];
+
+        return $toReturn;
     }
 
     public function roleHasPermission(int $roleId, string $permCode): int

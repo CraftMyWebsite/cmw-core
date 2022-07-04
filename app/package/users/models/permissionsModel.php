@@ -86,10 +86,6 @@ class permissionsModel extends manager
         }
 
 
-
-
-
-
         return $toReturn;
     }
 }
