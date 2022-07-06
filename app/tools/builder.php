@@ -8,7 +8,7 @@ function view(string $module, string $view, ?array $data, string $type, ?string 
 {
     $toaster = bigToaster();
 
-    if($type === 'admin' && !isset($data["userAdmin"])) {
+    if($type === 'admin' && !isset($data["userAdmin"]) && isset($_SESSION["cmwUserId"])) {
 
         $data["userAdmin"] = (new UsersModel())->getUserById($_SESSION["cmwUserId"]);
         $data["coreAdmin"] = new CoreController();
@@ -30,7 +30,9 @@ function view(string $module, string $view, ?array $data, string $type, ?string 
         $theme = $coreController->cmwThemePath();
 
         $path = "public/themes/$theme/views/$module/$view.view.php";
+        /* ob_start(); */
         require_once($path);
+        /* $content = ob_get_clean(); */
         require_once("public/themes/$theme/views/template.php");
     }
 }

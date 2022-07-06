@@ -16,6 +16,12 @@ require_once("installation/tools/Games.php");
 class Minecraft extends Games
 {
 
+    public function __construct(string $name)
+    {
+        parent::__construct("minecraft");
+    }
+
+
     private static function loadSql(): string
     {
         global $_UTILS;

@@ -31,12 +31,17 @@ class Loader
         error_reporting(E_ALL);
     }
 
+    private function requireFile($directory, ...$files): void
+    {
+        foreach ($files as $file) {
+            require_once($this->getValue("dir") . "$directory/$file");
+        }
+    }
+
     public function loadRouter($url = ""): Router
     {
         if (!isset(self::$globalRouter)) {
-            require_once($this->getValue("dir") . "router/router.php");
-            require_once($this->getValue("dir") . "router/route.php");
-            require_once($this->getValue("dir") . "router/routerException.php");
+            $this->requireFile("router", "Router.php", "Route.php", "RouterException.php");
 
             $router = new Router($_GET['url'] ?? $url);
             self::$globalRouter = $router;
@@ -47,23 +52,18 @@ class Loader
 
     public function loadPackages(): void
     {
-        require_once($this->getValue("dir") . "app/manager.php");
-        require_once($this->getValue("dir") . "app/package-loader/__model.php");
-        require_once($this->getValue("dir") . "app/package-loader/__controller.php");
-        require_once($this->getValue("dir") . "app/package-loader/__entity.php");
-        require_once($this->getValue("dir") . "app/package-loader/__routes.php");
+        $this->requireFile("app", "manager.php");
+        $this->requireFile("app/package-loader", "__model.php", "__controller.php", "__entity.php", "__routes.php");
+
         if ((int)$this->getValue("installStep") >= 0) {
-            require_once($this->getValue("dir") . "installation/routes.php");
-            require_once($this->getValue("dir") . "installation/controllers/installerController.php");
-            require_once($this->getValue("dir") . "installation/models/installerModel.php");
+            $this->requireFile("installation", "routes.php", "controllers/installerController.php", "models/installerModel.php");
         }
     }
 
     public function loadGlobalConstants(): void
     {
-        require_once($this->getValue("dir") . "app/tools/builder.php");
-        require_once($this->getValue("dir") . "app/tools/functions.php");
-        require_once($this->getValue("dir") . "app/globalConst.php");
+        $this->requireFile("app/tools", "builder.php", "functions.php");
+        $this->requireFile("app", "globalConst.php");
     }
 
     public function listenRouter(): void
@@ -81,7 +81,7 @@ class Loader
     {
         if (is_dir("installation")) {
             if ((int)$this->getValue("installStep") >= 0) {
-                require_once($this->getValue("dir") . "installation/controllers/installerController.php");
+                $this->requireFile("installation/controllers", "installerController.php");
 
                 $installation = new InstallerController();
 

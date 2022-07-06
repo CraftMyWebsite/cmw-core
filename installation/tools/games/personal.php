@@ -14,6 +14,12 @@ require_once("installation/tools/Games.php");
 class personal extends Games
 {
 
+    public function __construct(string $name)
+    {
+        parent::__construct("personal");
+    }
+
+
     public static function install(): void
     {
         //Do Nothing.

@@ -13,24 +13,25 @@ require_once("GameInterface.php");
  */
 abstract class Games implements GameInterface
 {
-    private string $gameName;
+    private static string $gameName;
 
     public function __construct(string $name)
     {
-        $this->gameName = $name;
+        self::$gameName = $name;
     }
 
     public function setGameName($name): void
     {
-        $this->gameName = $name;
+        self::$gameName = $name;
     }
 
     public function getGameName($name): string
     {
-        return $this->gameName;
+        return self::$gameName;
     }
 
-    public static function initConfig(): int {
+    public static function initConfig(): int
+    {
         return 1;
     }
 

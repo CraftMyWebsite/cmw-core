@@ -11,20 +11,21 @@ namespace CMW\Controller\Installer\Games;
 class FabricGames
 {
     private static string $game;
+    private const defaultGame = "personal";
 
 
     public function __construct()
     {
         global $_UTILS;
 
-        self::$game = $_UTILS::getEnv()->getValue("game") ?? "personal";
+        self::$game = $_UTILS::getEnv()->getValue("game") ?? self::defaultGame;
 
     }
 
     public static function getGame(): string
     {
         global $_UTILS;
-        self::$game = $_UTILS::getEnv()->getValue("game") ?? "personal";
+        self::$game = $_UTILS::getEnv()->getValue("game") ?? self::defaultGame;
         return self::$game;
     }
 
