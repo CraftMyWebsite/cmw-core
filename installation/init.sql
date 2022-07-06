@@ -36,10 +36,33 @@ CREATE TABLE IF NOT EXISTS `cmw_permissions_desc`
     `permission_desc_id`          int(11)      NOT NULL,
     `permission_desc_code_parent` varchar(255) DEFAULT NULL,
     `permission_desc_code_child`  varchar(255) DEFAULT NULL,
-    `permission_desc_lang`       varchar(20) NOT NULL,
+    `permission_desc_lang`        varchar(20)  NOT NULL,
     `permission_desc_value`       varchar(255) NOT NULL
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+# MY PROPOSITION !
+
+create table cmw_permissions2
+(
+    permission_id        int auto_increment
+        primary key,
+    permission_parent_id int                         null,
+    permission_code      varchar(50) charset utf8mb4 not null,
+    permission_editable  smallint                    not null,
+    constraint FK_PERMISSION_PARENT_ID
+        foreign key (permission_parent_id) references cmw_permissions2 (permission_id)
+            on update cascade on delete cascade
+);
+
+INSERT INTO `cmw_permissions2` (`permission_id`, `permission_parent_id`, `permission_code`, `permission_editable`)
+VALUES (1, NULL, 'users', 0),
+       (2, 1, 'edit', 0),
+       (3, 1, 'add', 0),
+       (4, NULL, 'core', 0),
+       (5, 4, 'dashboard', 0);
+
+# END
 
 CREATE TABLE IF NOT EXISTS `cmw_roles`
 (

@@ -4,138 +4,57 @@ namespace CMW\Entity\Permissions;
 
 class PermissionEntity
 {
-    private string $permissionParentCode;
-    private string $permissionParentPackage;
-    private int $permissionParentEditable;
 
-    private string $permissionChildCode;
-    private string $permissionChildParent;
-    private int $permissionChildEditable;
-
-    private int $permissionDescId;
-    private ?string $permissionDescCodeParent;
-    private ?string $permissionDescCodeChild;
-    private string $permissionDescValue;
-    private string $permissionDescLang;
-
+    private int $permissionId;
+    private ?PermissionEntity $permissionParent;
+    private string $permissionCode;
+    private int $permissionEditable;
 
     /**
-     * @param string $permissionParentCode
-     * @param string $permissionParentPackage
-     * @param int $permissionParentEditable
-     * @param string $permissionChildCode
-     * @param string $permissionChildParent
-     * @param int $permissionChildEditable
-     * @param int $permissionDescId
-     * @param string|null $permissionDescCodeParent
-     * @param string|null $permissionDescCodeChild
-     * @param string $permissionDescValue
-     * @param string $permissionDescLang
+     * @param int $permissionId
+     * @param PermissionEntity|null $permissionParent
+     * @param string $permissionCode
+     * @param int $permissionEditable
      */
-    public function __construct(string $permissionParentCode, string $permissionParentPackage, int $permissionParentEditable, string $permissionChildCode, string $permissionChildParent, int $permissionChildEditable, int $permissionDescId, ?string $permissionDescCodeParent, ?string $permissionDescCodeChild, string $permissionDescValue, string $permissionDescLang)
+    public function __construct(int $permissionId, ?PermissionEntity $permissionParent, string $permissionCode, int $permissionEditable)
     {
-        $this->permissionParentCode = $permissionParentCode;
-        $this->permissionParentPackage = $permissionParentPackage;
-        $this->permissionParentEditable = $permissionParentEditable;
-        $this->permissionChildCode = $permissionChildCode;
-        $this->permissionChildParent = $permissionChildParent;
-        $this->permissionChildEditable = $permissionChildEditable;
-        $this->permissionDescId = $permissionDescId;
-        $this->permissionDescCodeParent = $permissionDescCodeParent;
-        $this->permissionDescCodeChild = $permissionDescCodeChild;
-        $this->permissionDescValue = $permissionDescValue;
-        $this->permissionDescLang = $permissionDescLang;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPermissionParentCode(): string
-    {
-        return $this->permissionParentCode;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPermissionParentPackage(): string
-    {
-        return $this->permissionParentPackage;
+        $this->permissionId = $permissionId;
+        $this->permissionParent = $permissionParent;
+        $this->permissionCode = $permissionCode;
+        $this->permissionEditable = $permissionEditable;
     }
 
     /**
      * @return int
      */
-    public function getPermissionParentEditable(): int
+    public function getPermissionId(): int
     {
-        return $this->permissionParentEditable;
+        return $this->permissionId;
+    }
+
+    /**
+     * @return PermissionEntity|null
+     */
+    public function getPermissionParent(): ?PermissionEntity
+    {
+        return $this->permissionParent;
     }
 
     /**
      * @return string
      */
-    public function getPermissionChildCode(): string
+    public function getPermissionCode(): string
     {
-        return $this->permissionChildCode;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPermissionChildParent(): string
-    {
-        return $this->permissionChildParent;
+        return $this->permissionCode;
     }
 
     /**
      * @return int
      */
-    public function getPermissionChildEditable(): int
+    public function getPermissionEditable(): int
     {
-        return $this->permissionChildEditable;
+        return $this->permissionEditable;
     }
-
-    /**
-     * @return int
-     */
-    public function getPermissionDescId(): int
-    {
-        return $this->permissionDescId;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPermissionDescCodeParent(): ?string
-    {
-        return $this->permissionDescCodeParent;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPermissionDescCodeChild(): ?string
-    {
-        return $this->permissionDescCodeChild;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPermissionDescValue(): string
-    {
-        return $this->permissionDescValue;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPermissionDescLang(): string
-    {
-        return $this->permissionDescLang;
-    }
-
-
 
 
 }

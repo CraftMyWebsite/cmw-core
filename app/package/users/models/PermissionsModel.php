@@ -16,76 +16,59 @@ use CMW\Model\Manager;
 class PermissionsModel extends Manager
 {
 
-    /**
-     * @return array
-     */
-    public function getPermissions(): array
+    public function getPermissionById(int $id): ?PermissionEntity
     {
-        $toReturn = array();
 
-        /* Get all parents + desc */
-        $sql = "SELECT permParent.*, permDesc.permission_desc_code_parent, permDesc.permission_desc_value, permission_desc_lang 
-                FROM cmw_permissions_parent AS permParent 
-                JOIN cmw_permissions_desc permDesc
-                ON permParent.permission_parent_code = permDesc.permission_desc_code_parent
-                WHERE permDesc.permission_desc_lang = :lang";
+        $sql = "SELECT * FROM cmw_permissions2 WHERE permission_id = :permission_id";
+
         $db = Manager::dbConnect();
+        $req = $db->prepare($sql);
 
-        $resParent = $db->prepare($sql);
-
-        if($resParent->execute(array("lang" => getenv("LOCALE")))){
-
-            $resParent = $resParent->fetchAll();
-
-
-            foreach ($resParent as $parent){
-
-
-                $sql = "SELECT permChild.*, permDesc.permission_desc_code_parent, permDesc.permission_desc_value, permission_desc_lang
-                FROM cmw_permissions_child AS permChild
-                JOIN cmw_permissions_desc permDesc
-                ON permChild.permission_child_code = permDesc.permission_desc_code_child
-                WHERE permChild.permission_child_parent = :parent";
-
-                $resChild = $db->prepare($sql);
-
-
-
-                if(!$resChild->execute(array("parent" => $parent['permission_parent_code']))){
-                    continue;
-                }
-
-                $resChild = $resChild->fetchAll();
-
-
-                if(!$resChild){
-                    continue;
-                }
-
-
-                $toReturn += array($parent['permission_parent_package'] => [
-                    "package" => $parent['permission_parent_package'],
-                    "parent_code" => $parent['permission_parent_code'],
-                    "parent_editable" => $parent['permission_parent_editable'],
-                    "parent_desc_value" => $parent['permission_desc_value'],
-                    "perms_childs" => []]);
-
-                foreach ($resChild as $child){
-                    $toReturn[$parent['permission_parent_package']]['perms_childs'] += [
-                            $child['permission_child_code'] => [
-                            "child_code" => $child['permission_child_code'],
-                            "child_editable" => $child['permission_child_editable'],
-                            "child_desc_value" => $child['permission_desc_value']
-                        ]
-                  ];
-                }
-
-
-
-            }
+        if (!$req->execute(array("permission_id" => $id))) {
+            return null;
         }
 
+        $res = $req->fetch();
 
-        return $toReturn;
+        if (!$res) {
+            return null;
+        }
+
+        $parentEntity = null;
+
+        if (!is_null($res["permission_parent_id"])) {
+            $parentEntity = $this->getPermissionById($res["permission_parent_id"]);
+        }
+
+        return new PermissionEntity(
+            $id,
+            $parentEntity,
+            $res["permission_code"],
+            $res['permission_editable']
+        );
+
     }
+
+    public function getFullPermissionCodeById(int $id, string $separationChar = "."): string
+    {
+
+        $permissionEntity = $this->getPermissionById($id);
+
+        if (is_null($permissionEntity)) {
+            return "";
+        }
+
+        $toReturn = array($permissionEntity->getPermissionCode());
+
+        while (!is_null($permissionEntity->getPermissionParent())) {
+
+            $permissionEntity = $permissionEntity->getPermissionParent();
+            $toReturn[] = $permissionEntity->getPermissionCode();
+
+        }
+
+        return implode($separationChar, array_reverse($toReturn));
+
+    }
+
 }
