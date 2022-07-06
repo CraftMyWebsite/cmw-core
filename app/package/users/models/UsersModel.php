@@ -115,7 +115,7 @@ class UsersModel extends Manager
 
     public static function getLoggedUser(): int
     {
-        return isset($_SESSION['cmwUserId']) ?: -1;
+        return isset($_SESSION['cmwUserId']) ?? -1;
     }
 
     public static function logIn($info, $cookie = false)
