@@ -31,7 +31,8 @@ class UsersController extends CoreController
     public function adminDashboard(): void
     {
         if (isset($_SESSION['cmwUserId']) && UsersModel::getLoggedUser() !== -1) {
-            header('Location: ' . getenv('PATH_SUBFOLDER') . "cmw-admin");
+            //TODO WARNING : CHECK IF IS AN ADMIN USER!!!
+            header('Location: ' . getenv('PATH_SUBFOLDER') . "cmw-admin/dashboard");
         } else {
             header('Location: ' . getenv('PATH_SUBFOLDER') . "login");
         }
