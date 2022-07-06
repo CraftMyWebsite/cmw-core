@@ -2,3 +2,19 @@
 .env
 .idea
 
+# Exclude all other packages, only if package is "core" (Core, Users, Menus...)
+!/app/package
+/app/package/*
+!/app/package/core
+!/app/package/users
+!/app/package/menus
+
+# Exclude all other views, only if view refer to a core package (Core, Users, Menus...)
+!/public/themes/Sampler/views
+/public/themes/Sampler/views/*
+!/public/themes/Sampler/views/includes
+!/public/themes/Sampler/views/core
+!/public/themes/Sampler/views/users
+!/public/themes/Sampler/views/template.php
+
+
