@@ -56,6 +56,16 @@ class Utils
         }
     }
 
+    public static function filterInput(string ...$values): array
+    {
+        $toReturn = array();
+        foreach ($values as $value) {
+            $toReturn[] = filter_input(INPUT_POST, $value);
+        }
+
+        return $toReturn;
+    }
+
     #[NoReturn] public static function sendErrorCode($err = 404): void
     {
         http_response_code($err);
