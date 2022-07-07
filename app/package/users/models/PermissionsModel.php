@@ -2,8 +2,6 @@
 
 namespace CMW\Model\Permissions;
 
-use CMW\Entity\Roles\RoleEntity;
-use CMW\Entity\Users\UserEntity;
 use CMW\Entity\Permissions\PermissionEntity;
 use CMW\Model\Manager;
 use CMW\Utils\Utils;
@@ -16,20 +14,12 @@ use CMW\Utils\Utils;
  */
 class PermissionsModel extends Manager
 {
-    private Utils $utils;
-
-    public function __construct()
-    {
-        global $_UTILS;
-        $this->utils = $_UTILS;
-    }
-
     /**==> GETTERS */
 
     public function getPermissionById(int $id): ?PermissionEntity
     {
 
-        $sql = "SELECT * FROM cmw_permissions2 WHERE permission_id = :permission_id";
+        $sql = "SELECT * FROM cmw_permissions WHERE permission_id = :permission_id";
 
         $db = Manager::dbConnect();
         $req = $db->prepare($sql);
@@ -53,8 +43,7 @@ class PermissionsModel extends Manager
         return new PermissionEntity(
             $id,
             $parentEntity,
-            $res["permission_code"],
-            $res['permission_editable']
+            $res["permission_code"]
         );
 
     }
@@ -66,7 +55,7 @@ class PermissionsModel extends Manager
      */
     public function getPermissionByParentId(int $parentId): array
     {
-        $sql = "SELECT permission_id FROM cmw_permissions2 WHERE permission_parent_id = :permission_parent_id";
+        $sql = "SELECT permission_id FROM cmw_permissions WHERE permission_parent_id = :permission_parent_id";
 
         $db = Manager::dbConnect();
         $req = $db->prepare($sql);
@@ -81,7 +70,7 @@ class PermissionsModel extends Manager
 
             $entity = $this->getPermissionById($res["permission_id"]);
 
-            $this->utils::addIfNotNull($toReturn, $entity);
+            Utils::addIfNotNull($toReturn, $entity);
 
         }
 
@@ -108,10 +97,10 @@ class PermissionsModel extends Manager
 
         $toReturn = array($permissionEntity->getCode());
 
-        while (!is_null($permissionEntity->getCode())) {
+        while (!is_null($permissionEntity->getParent())) {
 
-            $permissionEntity = $permissionEntity->getPermissionParent();
-            $toReturn[] = $permissionEntity->getPermissionCode();
+            $permissionEntity = $permissionEntity->getParent();
+            $toReturn[] = $permissionEntity->getCode();
 
         }
 
@@ -128,7 +117,7 @@ class PermissionsModel extends Manager
     public function getPermissionsByLastCode(string $code, int $limit = -1): array
     {
 
-        $sql = "SELECT permission_id FROM cmw_permissions2 WHERE permission_code = :permission_code ORDER BY permission_parent_id ";
+        $sql = "SELECT permission_id FROM cmw_permissions WHERE permission_code = :permission_code ORDER BY permission_parent_id ";
         $sql .= $limit > 0 ? "LIMIT $limit" : "";
 
         $db = Manager::dbConnect();
@@ -144,7 +133,7 @@ class PermissionsModel extends Manager
 
             $permissionEntity = $this->getPermissionById($res["permission_id"]);
 
-            $this->utils::addIfNotNull($toReturn, $permissionEntity);
+           Utils::addIfNotNull($toReturn, $permissionEntity);
 
         }
 
@@ -205,7 +194,7 @@ class PermissionsModel extends Manager
             }
         }
 
-        $sql = "INSERT INTO cmw_permissions2(permission_parent_id, permission_code, permission_editable) VALUES (null, :permission_code, 0)";
+        $sql = "INSERT INTO cmw_permissions(permission_parent_id, permission_code) VALUES (null, :permission_code)";
 
         $db = self::dbConnect();
 
@@ -213,7 +202,7 @@ class PermissionsModel extends Manager
 
         if ($req->execute(array("permission_code" => $code))) {
             $id = $db->lastInsertId();
-            return new PermissionEntity($id, null, $code, 0);
+            return new PermissionEntity($id, null, $code);
         }
 
         return null;
@@ -236,7 +225,7 @@ class PermissionsModel extends Manager
             }
         }
 
-        $sql = "INSERT INTO cmw_permissions2(permission_parent_id, permission_code, permission_editable) VALUES (:parent_id, :permission_code, 0)";
+        $sql = "INSERT INTO cmw_permissions(permission_parent_id, permission_code) VALUES (:parent_id, :permission_code)";
 
         $db = self::dbConnect();
 
@@ -244,7 +233,7 @@ class PermissionsModel extends Manager
 
         if ($req->execute(array("parent_id" => $parentId, "permission_code" => $code))) {
             $id = $db->lastInsertId();
-            return new PermissionEntity($id, $parent, $code, 0);
+            return new PermissionEntity($id, $parent, $code);
         }
 
         return null;
@@ -261,20 +250,57 @@ class PermissionsModel extends Manager
         $actualPermission = null;
 
         foreach ($values as $key => $value) {
-
-
-            if ($key === 0) {
-                $actualPermission = $this->addParentPermission($value);
-            } else {
-
-                $actualPermission = $this->addChildPermission($actualPermission->getId(), $value);
-
-            }
-
-
+            $actualPermission = ($key === 0)
+                ? $this->addParentPermission($value)
+                : $this->addChildPermission($actualPermission->getId(), $value);
         }
 
         return $actualPermission;
+    }
+
+    /**==> UTILS */
+
+    /**
+     * @param PermissionEntity[] $permissionList
+     * @param string $code Permission Code to test, need to be a child permission (<b>users.edit</b>)<br>
+     * Don't use <b>users</b> or <b>users.*</b> !
+     */
+    public static function hasPermissions(array $permissionList, string $code): bool
+    {
+
+        $permissionModel = new PermissionsModel();
+
+        foreach ($permissionList as $permissionEntity) {
+            if ($permissionModel->checkPermission($permissionEntity, $code)) {
+                return true;
+            }
+
+            $permissionChildList = $permissionModel->getPermissionByParentId($permissionEntity->getId());
+            foreach ($permissionChildList as $permissionChild) {
+                if ($permissionModel->checkPermission($permissionChild, $code)) {
+                    return true;
+                }
+            }
+
+        }
+
+        return false;
+    }
+
+    private function checkPermission(PermissionEntity $permissionEntity, string $code)
+    {
+        $operatorPermission = "operator";
+
+        $permissionFullCode = $this->getFullPermissionCodeById($permissionEntity->getId());
+
+        if ($permissionFullCode === $operatorPermission) {
+            return true;
+        }
+
+        if ($permissionFullCode === $code) {
+            return true;
+        }
+
     }
 
 }

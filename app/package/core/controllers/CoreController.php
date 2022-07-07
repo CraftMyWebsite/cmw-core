@@ -9,6 +9,7 @@ use CMW\Model\CoreModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Entity\Core\OptionsEntity;
 use CMW\Utils\Utils;
+use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
 /**
@@ -27,6 +28,12 @@ class CoreController
     {
         self::$themePath = $this->cmwThemePath();
         $this->coreModel = new CoreModel();
+    }
+
+    #[NoReturn] protected static function redirectToHome(): void
+    {
+        header('Location: ' . getenv('PATH_SUBFOLDER'));
+        exit();
     }
 
     /* ADMINISTRATION */

@@ -8,20 +8,17 @@ class PermissionEntity
     private int $permissionId;
     private ?PermissionEntity $permissionParent;
     private string $permissionCode;
-    private int $permissionEditable;
 
     /**
      * @param int $permissionId
      * @param PermissionEntity|null $permissionParent
      * @param string $permissionCode
-     * @param int $permissionEditable
      */
-    public function __construct(int $permissionId, ?PermissionEntity $permissionParent, string $permissionCode, int $permissionEditable)
+    public function __construct(int $permissionId, ?PermissionEntity $permissionParent, string $permissionCode)
     {
         $this->permissionId = $permissionId;
         $this->permissionParent = $permissionParent;
         $this->permissionCode = $permissionCode;
-        $this->permissionEditable = $permissionEditable;
     }
 
 
@@ -37,7 +34,6 @@ class PermissionEntity
                 <li><b>Parent: </b> {$parent}</li>
                 <br>
                 <li><b>Name (Code): </b> {$this->getCode()}</li>
-                <li><b>Editable: </b> {$this->getEditable()}</li>
             </ul>
         </div>
         HTML;
@@ -66,14 +62,6 @@ class PermissionEntity
     public function getCode(): string
     {
         return $this->permissionCode;
-    }
-
-    /**
-     * @return int
-     */
-    public function getEditable(): int
-    {
-        return $this->permissionEditable;
     }
 
     public function hasParent(): bool

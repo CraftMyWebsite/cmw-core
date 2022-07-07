@@ -37,6 +37,7 @@ class RolesController extends CoreController
     {
         UsersController::isUserHasPermission("users.roles");
 
+
         $rolesList = $this->roleModel->fetchAll();
 
         view('users', 'roles.list.admin', ["rolesList" => $rolesList], 'admin');

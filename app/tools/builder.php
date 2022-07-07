@@ -19,7 +19,7 @@ function view(string $module, string $view, ?array $data, string $type, ?string 
     if ($type === 'admin') {
 
         if (is_null($noAdminControl)) {
-            UsersController::isAdminLogged();
+            UsersController::redirectIfNotHavePermissions("core.dashboard");
         }
 
         $path = "app/package/$module/views/$view.view.php";
