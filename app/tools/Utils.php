@@ -49,6 +49,13 @@ class Utils
         return $text;
     }
 
+    public static function addIfNotNull(array &$array, mixed $value): void
+    {
+        if (!is_null($value)) {
+            $array[] = $value;
+        }
+    }
+
     #[NoReturn] public static function sendErrorCode($err = 404): void
     {
         http_response_code($err);
