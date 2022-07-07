@@ -24,10 +24,30 @@ class PermissionEntity
         $this->permissionEditable = $permissionEditable;
     }
 
+
+    public function __toString(): string
+    {
+
+        $parent = $this->getParent() ?? "<u>Aucun parent !</u>";
+
+        return <<<HTML
+        <div>
+            <h4>Permission #{$this->getId()}</h4>
+            <ul>
+                <li><b>Parent: </b> {$parent}</li>
+                <br>
+                <li><b>Name (Code): </b> {$this->getCode()}</li>
+                <li><b>Editable: </b> {$this->getEditable()}</li>
+            </ul>
+        </div>
+        HTML;
+    }
+
+
     /**
      * @return int
      */
-    public function getPermissionId(): int
+    public function getId(): int
     {
         return $this->permissionId;
     }
@@ -35,7 +55,7 @@ class PermissionEntity
     /**
      * @return PermissionEntity|null
      */
-    public function getPermissionParent(): ?PermissionEntity
+    public function getParent(): ?PermissionEntity
     {
         return $this->permissionParent;
     }
@@ -43,7 +63,7 @@ class PermissionEntity
     /**
      * @return string
      */
-    public function getPermissionCode(): string
+    public function getCode(): string
     {
         return $this->permissionCode;
     }
@@ -51,9 +71,14 @@ class PermissionEntity
     /**
      * @return int
      */
-    public function getPermissionEditable(): int
+    public function getEditable(): int
     {
         return $this->permissionEditable;
+    }
+
+    public function hasParent(): bool
+    {
+        return !is_null($this->permissionParent);
     }
 
 
