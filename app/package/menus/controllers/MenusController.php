@@ -11,7 +11,8 @@ use CMW\Model\Menus\MenusModel;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class MenusController extends CoreController {
+class MenusController extends CoreController
+{
 
     private MenusModel $menusModel;
 
@@ -36,7 +37,20 @@ class MenusController extends CoreController {
         return $coreModel->fetchMenu();
     }
 
-    public function adminMenus() : void {
-        view('menus', 'menus.admin', [], 'admin');
+    public function adminMenus(): void
+    {
+
+        $includes = array(
+            "scripts" => [
+                "before" => [
+                    "admin/resources/vendors/dragula/dragula.js",
+                    "app/package/menus/views/assets/js/main.js",
+                ]
+            ],
+            "styles" => [
+                "admin/resources/vendors/dragula/dragula.css"
+            ]);
+
+        view('menus', 'menus.admin', [], 'admin', $includes);
     }
 }

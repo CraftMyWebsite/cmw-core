@@ -76,7 +76,7 @@ class UsersController extends CoreController
         self::isUserHasPermission("users.show");
         $userList = $this->userModel->getUsers();
 
-        view('users', 'list.admin', ["userList" => $userList], 'admin');
+        view('users', 'list.admin', ["userList" => $userList], 'admin', []);
     }
 
     public function adminUsersEdit($id): void
@@ -87,7 +87,7 @@ class UsersController extends CoreController
 
         $roles = $this->roleModel->fetchAll();
 
-        view('users', 'user.admin', ["user" => $userEntity, "roles" => $roles], 'admin');
+        view('users', 'user.admin', ["user" => $userEntity, "roles" => $roles], 'admin', []);
     }
 
     #[NoReturn] public function adminUsersEditPost($id): void
@@ -128,7 +128,7 @@ class UsersController extends CoreController
 
         $roles = $this->roleModel->fetchAll();
 
-        view('users', 'add.admin', ["roles" => $roles], 'admin');
+        view('users', 'add.admin', ["roles" => $roles], 'admin', []);
     }
 
     public function adminUsersAddPost(): void
@@ -227,7 +227,7 @@ class UsersController extends CoreController
             $core = new CoreController();
             $menu = new MenusController();
 
-            view('users', 'login', ["core" => $core, "menu" => $menu], 'public');
+            view('users', 'login', ["core" => $core, "menu" => $menu], 'public', []);
         }
     }
 

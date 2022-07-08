@@ -1,8 +1,12 @@
-<?php use CMW\Controller\CoreController; ?>
+<?php use CMW\Controller\CoreController;
+/** @var CoreController $core */ ?>
 
 <footer>
-    <?= /** @var CoreController $core */
-    $core->cmwFooter() ?>
+   <?= $core->cmwFooter() ?>
 </footer>
-</body>
-</html>
+
+<?php
+/* INCLUDE AFTER SCRIPTS*/
+if (!empty($includes))
+    includeFiles($includes, "scriptsAfter");
+?>

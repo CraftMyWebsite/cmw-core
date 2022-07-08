@@ -32,12 +32,12 @@ class CoreController
     /* ADMINISTRATION */
     public function adminDashboard(): void
     {
-        view('core', 'dashboard.admin', [], 'admin');
+        view('core', 'dashboard.admin', [], 'admin', []);
     }
 
     public function adminConfiguration(): void
     {
-        view('core', 'configuration.admin', [], 'admin');
+        view('core', 'configuration.admin', [], 'admin', []);
     }
 
     public function adminConfigurationPost(): void
@@ -72,7 +72,7 @@ class CoreController
         $core = new CoreController();
         $menu = new MenusController();
 
-        view('core', 'home', ["core" => $core, "menu" => $menu], 'public');
+        view('core', 'home', ["core" => $core, "menu" => $menu], 'public', []);
     }
 
     public function cmwThemePath(): string

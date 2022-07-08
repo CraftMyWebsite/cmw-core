@@ -39,7 +39,7 @@ class RolesController extends CoreController
 
         $rolesList = $this->roleModel->fetchAll();
 
-        view('users', 'roles.list.admin', ["rolesList" => $rolesList], 'admin');
+        view('users', 'roles.list.admin', ["rolesList" => $rolesList], 'admin', []);
     }
 
 
@@ -49,7 +49,7 @@ class RolesController extends CoreController
 
         $permissionsList = $this->permissionsModel->getPermissions();
 
-        view('users', 'roles.add.admin', ["permissionsList" => $permissionsList], 'admin');
+        view('users', 'roles.add.admin', ["permissionsList" => $permissionsList], 'admin', []);
     }
 
     #[NoReturn] public function adminRolesAddPost(): void
@@ -82,7 +82,7 @@ class RolesController extends CoreController
 
 
         view('users', 'roles.edit.admin', ["role" => $role,
-            "permissionsList" => $permissionsList, "rm" => $rm], 'admin');
+            "permissionsList" => $permissionsList, "rm" => $rm], 'admin', []);
     }
 
     #[NoReturn] public function adminRolesEditPost($id): void
