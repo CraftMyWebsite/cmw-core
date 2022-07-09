@@ -94,10 +94,10 @@ class UsersController extends CoreController
     {
         self::isUserHasPermission("users.edit");
 
-        $mail = filter_input(INPUT_POST, "email");
-        $username = filter_input(INPUT_POST, "pseudo");
-        $firstname = filter_input(INPUT_POST, "name");
-        $lastname = filter_input(INPUT_POST, "lastname");
+        $mail = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
+        $username = filter_input(INPUT_POST, "pseudo", FILTER_SANITIZE_STRING);
+        $firstname = filter_input(INPUT_POST, "name", FILTER_SANITIZE_STRING);
+        $lastname = filter_input(INPUT_POST, "lastname", FILTER_SANITIZE_STRING);
         $this->userModel->updateUser($id, $mail, $username, $firstname, $lastname, $_POST['roles']);
 
         //Todo Try to edit that
@@ -105,9 +105,9 @@ class UsersController extends CoreController
         $_SESSION['toaster'][0]['type'] = "bg-success";
         $_SESSION['toaster'][0]['body'] = USERS_EDIT_TOASTER_SUCCESS;
 
-        if (!empty(filter_input(INPUT_POST, "pass"))) {
-            if (filter_input(INPUT_POST, "pass") === filter_input(INPUT_POST, "pass_verif")) {
-                $this->userModel->updatePass($id, password_hash(filter_input(INPUT_POST, "pass"), PASSWORD_BCRYPT));
+        if (!empty(filter_input(INPUT_POST, "pass", FILTER_SANITIZE_STRING))) {
+            if (filter_input(INPUT_POST, "pass", FILTER_SANITIZE_STRING) === filter_input(INPUT_POST, "pass_verif", FILTER_SANITIZE_STRING)) {
+                $this->userModel->updatePass($id, password_hash(filter_input(INPUT_POST, "pass", FILTER_SANITIZE_STRING), PASSWORD_BCRYPT));
             } else {
                 //Todo Try to edit that
                 $_SESSION['toaster'][1]['title'] = USERS_TOASTER_TITLE_ERROR;
@@ -135,13 +135,13 @@ class UsersController extends CoreController
     {
         self::isUserHasPermission("users.add");
 
-        $mail = filter_input(INPUT_POST, "email");
-        $username = filter_input(INPUT_POST, "pseudo");
-        $firstname = filter_input(INPUT_POST, "name");
-        $lastname = filter_input(INPUT_POST, "lastname");
+        $mail = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
+        $username = filter_input(INPUT_POST, "pseudo", FILTER_SANITIZE_STRING);
+        $firstname = filter_input(INPUT_POST, "name", FILTER_SANITIZE_STRING);
+        $lastname = filter_input(INPUT_POST, "lastname", FILTER_SANITIZE_STRING);
         $userEntity = $this->userModel->createUser($mail, $username, $firstname, $lastname, $_POST['roles']);
 
-        $this->userModel->updatePass($userEntity?->getId(), password_hash(filter_input(INPUT_POST, "pass"), PASSWORD_BCRYPT));
+        $this->userModel->updatePass($userEntity?->getId(), password_hash(filter_input(INPUT_POST, "pass", FILTER_SANITIZE_STRING), PASSWORD_BCRYPT));
 
         header("location: ../users/list");
     }
@@ -150,7 +150,7 @@ class UsersController extends CoreController
     {
         self::isUserHasPermission("users.edit");
 
-        if (UsersModel::getLoggedUser() == filter_input(INPUT_POST, "id")) {
+        if (UsersModel::getLoggedUser() == filter_input(INPUT_POST, "id", FILTER_SANITIZE_NUMBER_INT)) {
             $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE_ERROR;
             $_SESSION['toaster'][0]['type'] = "bg-danger";
             $_SESSION['toaster'][0]['body'] = USERS_STATE_TOASTER_ERROR;
@@ -158,8 +158,8 @@ class UsersController extends CoreController
             die();
         }
 
-        $id = filter_input(INPUT_POST, "id");
-        $state = (filter_input(INPUT_POST, "actual_state")) ? 0 : 1;
+        $id = filter_input(INPUT_POST, "id", FILTER_SANITIZE_NUMBER_INT);
+        $state = (filter_input(INPUT_POST, "actual_state", FILTER_SANITIZE_NUMBER_INT)) ? 0 : 1;
 
         $this->userModel->changeState($id, $state);
 
@@ -175,7 +175,7 @@ class UsersController extends CoreController
     {
         self::isUserHasPermission("users.delete");
 
-        if (UsersModel::getLoggedUser() == filter_input(INPUT_POST, "id")) {
+        if (UsersModel::getLoggedUser() == filter_input(INPUT_POST, "id", FILTER_SANITIZE_NUMBER_INT)) {
 
             //Todo Try to remove that
             $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE_ERROR;
@@ -185,7 +185,7 @@ class UsersController extends CoreController
             die();
         }
 
-        $id = filter_input(INPUT_POST, "id");
+        $id = filter_input(INPUT_POST, "id", FILTER_SANITIZE_NUMBER_INT);
         $this->userModel->delete($id);
 
         //Todo Try to remove that
@@ -234,8 +234,8 @@ class UsersController extends CoreController
     public function loginPost(): void
     {
         $infos = array(
-            "email" => filter_input(INPUT_POST, "login_email"),
-            "password" => filter_input(INPUT_POST, "login_password")
+            "email" => filter_input(INPUT_POST, "login_email", FILTER_SANITIZE_EMAIL),
+            "password" => filter_input(INPUT_POST, "login_password", FILTER_SANITIZE_STRING)
         );
         $cookie = 0;
         if (isset($_POST['login_keep_connect']) && $_POST['login_keep_connect']) {

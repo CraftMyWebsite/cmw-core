@@ -57,10 +57,10 @@ class RolesController extends CoreController
         UsersController::isUserHasPermission("users.roles");
 
         $role = new RolesModel();
-        $roleName = filter_input(INPUT_POST, "name");
-        $roleDescription = filter_input(INPUT_POST, "description");
+        $roleName = filter_input(INPUT_POST, "name",FILTER_SANITIZE_STRING );
+        $roleDescription = filter_input(INPUT_POST, "description", FILTER_SANITIZE_STRING);
         $permList = $_POST['perms'];
-        $roleWeight = filter_input(INPUT_POST, "weight");
+        $roleWeight = filter_input(INPUT_POST, "weight", FILTER_SANITIZE_NUMBER_INT);
         $role->createRole($roleName, $roleDescription, $roleWeight, $permList);
 
 
@@ -90,10 +90,10 @@ class RolesController extends CoreController
         UsersController::isUserHasPermission("users.roles");
 
 
-        $roleName = filter_input(INPUT_POST, "name");
-        $roleDescription = filter_input(INPUT_POST, "description");
+        $roleName = filter_input(INPUT_POST, "name", FILTER_SANITIZE_STRING);
+        $roleDescription = filter_input(INPUT_POST, "description", FILTER_SANITIZE_STRING);
         $permList = $_POST['perms'];
-        $roleWeight = filter_input(INPUT_POST, "weight");
+        $roleWeight = filter_input(INPUT_POST, "weight", FILTER_SANITIZE_NUMBER_INT);
 
         $this->roleModel->updateRole($roleName, $roleDescription, $id, $roleWeight, $permList);
 

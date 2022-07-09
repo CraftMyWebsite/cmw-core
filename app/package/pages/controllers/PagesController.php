@@ -149,11 +149,11 @@ class PagesController extends CoreController
 
         $page = new PagesModel();
       
-        $id = filter_input(INPUT_POST, "news_id");
-        $title = filter_input(INPUT_POST, "news_title");
-        $slug = filter_input(INPUT_POST, "news_slug");
-        $content = filter_input(INPUT_POST, "news_content");
-        $state = filter_input(INPUT_POST, "page_state");
+        $id = filter_input(INPUT_POST, "news_id", FILTER_SANITIZE_NUMBER_INT);
+        $title = filter_input(INPUT_POST, "news_title", FILTER_SANITIZE_STRING);
+        $slug = filter_input(INPUT_POST, "news_slug", FILTER_SANITIZE_STRING);
+        $content = filter_input(INPUT_POST, "news_content", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $state = filter_input(INPUT_POST, "page_state", FILTER_SANITIZE_NUMBER_INT);
 
         $pageEntity = $page->updatePage($id, $slug, $title, $content, $state);
 
@@ -164,7 +164,7 @@ class PagesController extends CoreController
     {
         UsersController::isUserHasPermission("pages.delete");
       
-        $id = filter_input(INPUT_POST, "id");
+        $id = filter_input(INPUT_POST, "id", FILTER_SANITIZE_NUMBER_INT);
         $this->pagesModel->deletePage($id);
 
 
