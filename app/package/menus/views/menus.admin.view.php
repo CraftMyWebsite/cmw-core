@@ -3,7 +3,6 @@ $title = MENUS_TITLE;
 $description = MENUS_DESC;
 ?>
 
-<?php ob_start(); ?>
     <!-- main-content -->
     <div class="content">
         <div class="container-fluid">
@@ -117,4 +116,3 @@ $description = MENUS_DESC;
         <!-- /.row -->
     </div>
     <!-- /.main-content -->
-<?php $content = ob_get_clean(); ?>

@@ -135,7 +135,6 @@ $description = PAGES_EDIT_DESC;
     });
     </script>'; ?>
 
-<?php ob_start(); ?>
 <!-- main-content -->
 <div class="content">
     <div class="container-fluid">
@@ -189,4 +188,3 @@ $description = PAGES_EDIT_DESC;
 </div>
 
 <!-- /.main-content -->
-<?php $content = ob_get_clean(); ?>

@@ -10,7 +10,6 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
 /* @var UsersController[] $roles */
 ?>
 
-<?php ob_start(); ?>
     <!-- main-content -->
     <div class="content">
         <div class="container-fluid">
@@ -86,4 +85,3 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
         </div>
     </div>
     <!-- /.main-content -->
-<?php $content = ob_get_clean(); ?>

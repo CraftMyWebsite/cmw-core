@@ -3,7 +3,6 @@ $title = USERS_ROLE_ADD_TITLE;
 $description = USERS_ROLE_ADD_DESC;
 ?>
 
-<?php ob_start(); ?>
     <div class="content">
         <div class="container-fluid">
             <div class="row">
@@ -101,5 +100,3 @@ $description = USERS_ROLE_ADD_DESC;
             }
         })
     </script>
-
-<?php $content = ob_get_clean(); ?>
