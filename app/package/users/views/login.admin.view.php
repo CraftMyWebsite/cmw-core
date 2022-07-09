@@ -6,7 +6,6 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
 ?>
 <?php $noBody = 1; ?>
 
-<?php ob_start(); ?>
     <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo mb-4">
@@ -64,4 +63,3 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
         <!-- /.login-card-body -->
     </div>
 </div>
-<?php $content = ob_get_clean(); ?>

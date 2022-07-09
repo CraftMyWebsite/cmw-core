@@ -6,27 +6,27 @@ use CMW\Model\Users\UsersModel;
 
 
 /**
- * EXAMPLE INCLUDES:
+ * Example includes
  *
  * $includes = array(
- * "scripts" => [
- * "before" => [
- * "link",
- * "link",
- * "link"
- * ],
- * "after" => [
- * "link",
- * "link",
- * "link"
- * ]
- * ],
- * "styles" => [
- * "link",
- * "link",
- * "link"
- * ]
- * );
+ *            "scripts" => [
+ *                "before" => [
+ *                    "link",
+ *                    "link",
+ *                    "link"
+ *            ],
+ *                "after" => [
+ *                    "link",
+ *                    "link",
+ *                    "link"
+ *                ]
+ *            ],
+ *            "styles" => [
+ *                "link",
+ *                "link",
+ *                "link"
+ *            ]
+ *            );
  */
 
 /**
@@ -59,7 +59,9 @@ function view(string $module, string $view, ?array $data, string $type, ?array $
         }
 
         $path = "app/package/$module/views/$view.view.php";
+        ob_start();
         require_once($path);
+        $content = ob_get_clean();
         require_once(getenv("PATH_ADMIN_VIEW") . 'template.php');
 
 

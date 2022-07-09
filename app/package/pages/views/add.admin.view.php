@@ -152,7 +152,6 @@ $description = PAGES_ADD_DESC;
     });
     </script>'; ?>
 
-<?php ob_start(); ?>
 <!-- main-content -->
 <div class="content">
     <div class="container-fluid">
@@ -190,7 +189,4 @@ $description = PAGES_ADD_DESC;
         <!-- /.row -->
     </div>
 </div>
-
-
 <!-- /.main-content -->
-<?php $content = ob_get_clean(); ?>

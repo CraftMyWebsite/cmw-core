@@ -36,7 +36,6 @@ $description = PAGES_LIST_DESC; ?>
     });
 </script>'; ?>
 
-<?php ob_start(); ?>
     <!-- main-content -->
     <div class="content">
         <div class="container-fluid">
@@ -88,4 +87,3 @@ $description = PAGES_LIST_DESC; ?>
         </div>
     </div>
     <!-- /.main-content -->
-<?php $content = ob_get_clean(); ?>

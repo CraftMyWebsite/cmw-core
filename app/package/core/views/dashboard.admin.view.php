@@ -1,7 +1,6 @@
 <?php $title = CORE_DASHBOARD_TITLE;
 $description = CORE_DASHBOARD_DESC; ?>
 
-<?php ob_start(); ?>
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -9,4 +8,3 @@ $description = CORE_DASHBOARD_DESC; ?>
                 </div>
             </div>
         </div>
-<?php $content = ob_get_clean(); ?>
