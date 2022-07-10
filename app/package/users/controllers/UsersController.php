@@ -4,12 +4,13 @@ namespace CMW\Controller\Users;
 
 use CMW\Controller\CoreController;
 use CMW\Controller\Menus\MenusController;
-<<<<<<< Updated upstream
-=======
+
 use CMW\Controller\Permissions\PermissionsController;
 use CMW\Entity\Users\UserEntity;
->>>>>>> Stashed changes
+
+use CMW\Entity\Users\UserEntity;
 use CMW\Model\CoreModel;
+use CMW\Model\Permissions\PermissionsModel;
 use CMW\Model\Roles\RolesModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Utils\Utils;
@@ -33,52 +34,42 @@ class UsersController extends CoreController
         $this->roleModel = new RolesModel();
     }
 
+    private static function getSessionUser(): ?UserEntity
+    {
+        if (is_null($_SESSION['cmwUserId'])) {
+            return null;
+        }
+
+        return (new UsersModel())->getUserById($_SESSION['cmwUserId']);
+    }
+
+    private static function hasPermission(string ...$permissions): bool
+    {
+        return UsersModel::hasPermission(self::getSessionUser(), ...$permissions);
+    }
+
     public function adminDashboard(): void
     {
-        if (isset($_SESSION['cmwUserId']) && UsersModel::getLoggedUser() !== -1) {
-            //TODO WARNING : CHECK IF IS AN ADMIN USER!!!
-            header('Location: ' . getenv('PATH_SUBFOLDER') . "cmw-admin/dashboard");
-        } else {
-            header('Location: ' . getenv('PATH_SUBFOLDER') . "login");
-        }
+        header("Location" . getenv("PATH_SUBFOLDER") . ((self::isAdminLogged()) ? "cmw-admin/dashboard" : "login"));
     }
 
-    public static function isAdminLogged(): void
+    public static function isAdminLogged(): bool
     {
-        if (UsersModel::getLoggedUser() !== -1) {
-            $user = new UsersModel();
-            $userEntity = $user->getUserById($_SESSION['cmwUserId']);
-
-            if (!$user->hasPermission($userEntity?->getId(), "*")
-                && !$user->hasPermission($userEntity?->getId(), "core.dashboard")) {
-                header('Location: ' . getenv('PATH_SUBFOLDER'));
-                exit();
-            }
-        } else {
-            header('Location: ' . getenv('PATH_SUBFOLDER'));
-            exit();
-        }
+        return UsersModel::hasPermission(self::getSessionUser(), "core.dashboard");
     }
 
-    public static function isAdminLoggedBool(): bool
+    public static function redirectIfNotHavePermissions(string ...$permCode): void
     {
-        if (UsersModel::getLoggedUser() !== -1) {
-            $user = new UsersModel();
-            $userEntity = $user->getUserById($_SESSION['cmwUserId']);
-
-            if (!$user->hasPermission($userEntity?->getId(), "*") && !$user->hasPermission($userEntity?->getId(), "core.dashboard")) {
-                return false;
-            }
-        } else {
-            return false;
+        if (!(self::hasPermission(...$permCode))) {
+            self::redirectToHome();
         }
-
-        return true;
     }
 
     public function adminUsersList(): void
     {
-        self::isUserHasPermission("users.show");
+
+        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+
         $userList = $this->userModel->getUsers();
 
         view('users', 'list.admin', ["userList" => $userList], 'admin', []);
@@ -86,33 +77,32 @@ class UsersController extends CoreController
 
     public function adminUsersEdit($id): void
     {
-        self::isUserHasPermission("users.edit");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
         $userEntity = $this->userModel->getUserById($id);
 
-        $roles = $this->roleModel->fetchAll();
+        $roles = $this->roleModel->getRoles();
 
         view('users', 'user.admin', ["user" => $userEntity, "roles" => $roles], 'admin', []);
     }
 
     #[NoReturn] public function adminUsersEditPost($id): void
     {
-        self::isUserHasPermission("users.edit");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
-        $mail = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
-        $username = filter_input(INPUT_POST, "pseudo", FILTER_SANITIZE_STRING);
-        $firstname = filter_input(INPUT_POST, "name", FILTER_SANITIZE_STRING);
-        $lastname = filter_input(INPUT_POST, "lastname", FILTER_SANITIZE_STRING);
-        $this->userModel->updateUser($id, $mail, $username, $firstname, $lastname, $_POST['roles']);
+        [$mail, $username, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "name", "lastname");
+        $this->userModel->update($id, $mail, $username, $firstname, $lastname, $_POST['roles']);
 
         //Todo Try to edit that
         $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;
         $_SESSION['toaster'][0]['type'] = "bg-success";
         $_SESSION['toaster'][0]['body'] = USERS_EDIT_TOASTER_SUCCESS;
 
-        if (!empty(filter_input(INPUT_POST, "pass", FILTER_SANITIZE_STRING))) {
-            if (filter_input(INPUT_POST, "pass", FILTER_SANITIZE_STRING) === filter_input(INPUT_POST, "pass_verif", FILTER_SANITIZE_STRING)) {
-                $this->userModel->updatePass($id, password_hash(filter_input(INPUT_POST, "pass", FILTER_SANITIZE_STRING), PASSWORD_BCRYPT));
+        [$pass, $passVerif] = Utils::filterInput("pass", "passVerif");
+
+        if (!is_null($pass)) {
+            if ($pass === $passVerif) {
+                $this->userModel->updatePass($id, password_hash($pass, PASSWORD_BCRYPT));
             } else {
                 //Todo Try to edit that
                 $_SESSION['toaster'][1]['title'] = USERS_TOASTER_TITLE_ERROR;
@@ -129,9 +119,9 @@ class UsersController extends CoreController
 
     public function adminUsersAdd(): void
     {
-        self::isUserHasPermission("users.add");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
-        $roles = $this->roleModel->fetchAll();
+        $roles = $this->roleModel->getRoles();
 
         view('users', 'add.admin', ["roles" => $roles], 'admin', []);
     }
@@ -148,13 +138,11 @@ class UsersController extends CoreController
 
     public function adminUsersAddPost(): void
     {
-        self::isUserHasPermission("users.add");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.add");
 
-        $mail = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
-        $username = filter_input(INPUT_POST, "pseudo", FILTER_SANITIZE_STRING);
-        $firstname = filter_input(INPUT_POST, "name", FILTER_SANITIZE_STRING);
-        $lastname = filter_input(INPUT_POST, "lastname", FILTER_SANITIZE_STRING);
-        $userEntity = $this->userModel->createUser($mail, $username, $firstname, $lastname, $_POST['roles']);
+        [$mail, $username, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "name", "lastname");
+
+        $userEntity = $this->userModel->create($mail, $username, $firstname, $lastname, $_POST['roles']);
 
         $this->userModel->updatePass($userEntity?->getId(), password_hash(filter_input(INPUT_POST, "pass", FILTER_SANITIZE_STRING), PASSWORD_BCRYPT));
 
@@ -163,7 +151,7 @@ class UsersController extends CoreController
 
     #[NoReturn] public function adminUserState(): void
     {
-        self::isUserHasPermission("users.edit");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
         if (UsersModel::getLoggedUser() == filter_input(INPUT_POST, "id", FILTER_SANITIZE_NUMBER_INT)) {
             $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE_ERROR;
@@ -188,7 +176,7 @@ class UsersController extends CoreController
 
     #[NoReturn] public function adminUsersDelete(): void
     {
-        self::isUserHasPermission("users.delete");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.delete");
 
         if (UsersModel::getLoggedUser() == filter_input(INPUT_POST, "id", FILTER_SANITIZE_NUMBER_INT)) {
 
@@ -212,31 +200,9 @@ class UsersController extends CoreController
         die();
     }
 
-<<<<<<< Updated upstream
-    /*
-        Manage user with permissions (role permissions)
-    */
-    public static function isUserHasPermission(string $permCode): void
-    {
-        if (UsersModel::getLoggedUser() !== -1) {
-            $user = new UsersModel();
-
-            if (!self::isAdminLoggedBool() || $user->hasPermission($_SESSION['cmwUserId'], $permCode) < 0) {
-                header('Location: ' . getenv('PATH_SUBFOLDER'));
-                exit();
-            }
-        } else {
-            header('Location: ' . getenv('PATH_SUBFOLDER'));
-            exit();
-        }
-    }
-
 
     // PUBLIC SECTION
 
-
-=======
->>>>>>> Stashed changes
     public function login(): void
     {
         if (UsersModel::getLoggedUser() !== -1) {
@@ -251,14 +217,18 @@ class UsersController extends CoreController
 
     public function loginPost(): void
     {
+        [$mail, $password] = Utils::filterInput("login_email", "login_password");
+
         $infos = array(
-            "email" => filter_input(INPUT_POST, "login_email", FILTER_SANITIZE_EMAIL),
-            "password" => filter_input(INPUT_POST, "login_password", FILTER_SANITIZE_STRING)
+            "email" => $mail,
+            "password" => $password
         );
         $cookie = 0;
+
         if (isset($_POST['login_keep_connect']) && $_POST['login_keep_connect']) {
             $cookie = 1;
         }
+
         $userId = UsersModel::logIn($infos, $cookie);
         if ($userId > 0 && $userId !== "ERROR") {
             $this->userModel->updateLoggedTime($userId);

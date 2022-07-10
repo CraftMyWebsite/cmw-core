@@ -69,14 +69,14 @@ $description = USERS_LIST_DESC; ?>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php /* @var $rolesList */
+                                <?php /* @var \CMW\Entity\Roles\RoleEntity[] $rolesList */
                                 foreach ($rolesList as $role) : ?>
                                     <tr>
-                                        <td><?= $role['role_name'] ?></td>
-                                        <td><?= $role['role_description'] ?></td>
-                                        <td><a href="../roles/edit/<?= $role['role_id'] ?>"><i
+                                        <td><?= $role->getName() ?></td>
+                                        <td><?= $role->getDescription() ?></td>
+                                        <td><a href="../roles/edit/<?= $role->getId() ?>"><i
                                                         class="fa fa-cog"></i></a>
-                                            <a href="../roles/delete/<?= $role['role_id'] ?>"
+                                            <a href="../roles/delete/<?= $role->getId() ?>"
                                                class="text-danger float-right"><i class="fas fa-trash-alt"></i></a></td>
                                     </tr>
                                 <?php endforeach; ?>

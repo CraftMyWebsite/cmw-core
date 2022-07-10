@@ -6,7 +6,9 @@ use CMW\Controller\Roles\RolesController;
 use CMW\Entity\Roles\RoleEntity;
 use CMW\Entity\Users\UserEntity;
 use CMW\Model\Manager;
+use CMW\Model\Permissions\PermissionsModel;
 use CMW\Model\Roles\RolesModel;
+use CMW\Utils\Utils;
 
 /**
  * Class: @usersModel
@@ -49,10 +51,8 @@ class UsersModel extends Manager
 
             foreach ($roleRes as $role) {
 
-                $rlData = "SELECT cmw_roles.*, cmw_roles_permissions.* 
+                $rlData = "SELECT cmw_roles.*
                             FROM cmw_roles 
-                            JOIN cmw_roles_permissions 
-                            ON cmw_roles.role_id = cmw_roles_permissions.role_permission_role_id 
                             WHERE role_id = :role_id";
                 $rlRes = $db->prepare($rlData);
 
@@ -71,7 +71,7 @@ class UsersModel extends Manager
                     $rl["role_name"],
                     $rl["role_description"],
                     $rl["role_weight"],
-                    $rolesModel->getRolePermissions($role["role_id"])
+                    $rolesModel->getPermissions($role["role_id"])
                 );
 
             }
@@ -106,12 +106,11 @@ class UsersModel extends Manager
         $toReturn = array();
 
         while ($user = $res->fetch()) {
-            $toReturn[] = $this->getUserById($user["user_id"]);
+            Utils::addIfNotNull($toReturn, $this->getUserById($user["user_id"]));
         }
 
         return $toReturn;
     }
-
 
     public static function getLoggedUser(): int
     {
@@ -163,7 +162,7 @@ class UsersModel extends Manager
         session_destroy();
     }
 
-    public function createUser(string $mail, string $username, string $firstName, string $lastName, array $roles): ?UserEntity
+    public function create(string $mail, string $username, string $firstName, string $lastName, array $roles): ?UserEntity
     {
         $var = array(
             'user_email' => $mail,
@@ -206,7 +205,7 @@ class UsersModel extends Manager
         }
     }
 
-    public function updateUser(int $id, string $mail, string $username, string $firstname, string $lastname, array $roles): ?UserEntity
+    public function update(int $id, string $mail, string $username, string $firstname, string $lastname, array $roles): ?UserEntity
     {
         $var = array(
             "user_id" => $id,
@@ -228,7 +227,7 @@ class UsersModel extends Manager
         return $this->getUserById($id);
     }
 
-    public function updateEditTime(int $id): void
+    private function updateEditTime(int $id): void
     {
         $var = array(
             "user_id" => $id,
@@ -241,7 +240,7 @@ class UsersModel extends Manager
         $req->execute($var);
     }
 
-    public function updateRoles(int $id, array $roles): void
+    private function updateRoles(int $id, array $roles): void
     {
         //Delete all the roles of the players
         $var = array(
@@ -315,44 +314,53 @@ class UsersModel extends Manager
         $req->execute($var);
     }
 
-    public function hasPermission(int $userId, string $permCode): int
+    public static function hasPermission(?UserEntity $user, string ...$permCode): bool
     {
-        $var = array(
-            "user_id" => $userId,
-            "perm_code" => $permCode
-        );
-
-        $sql = "SELECT cmw_roles_permissions.role_permission_code FROM cmw_roles_permissions
-                    JOIN cmw_roles ON cmw_roles_permissions.role_permission_role_id = cmw_roles.role_id
-                    JOIN cmw_users_roles on cmw_roles.role_id = cmw_users_roles.role_id
-                    WHERE cmw_users_roles.user_id = :user_id AND cmw_roles_permissions.role_permission_code = :perm_code";
-
-        $db = Manager::dbConnect();
-        $req = $db->prepare($sql);
-
-        if ($req->execute($var)) {
-            $lines = $req->fetchAll();
-
-            return count($lines);
+        if (is_null($user)) {
+            return false;
         }
 
-        return -1;
+        foreach ($permCode as $perm) {
+            if (!PermissionsModel::hasPermissions(self::getPermissions($user->getId()), $perm)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @return \CMW\Entity\Permissions\PermissionEntity[]
+     */
+    public static function getPermissions(int $userId): array
+    {
+
+        $roles = self::getRoles($userId);
+
+        $rolesModel = new RolesModel();
+
+        $toReturn = array();
+        foreach ($roles as $role) {
+
+            $permissions = $rolesModel->getPermissions($role->getId());
+            foreach ($permissions as $permission) {
+                $toReturn[] = $permission;
+            }
+
+        }
+
+        return $toReturn;
+
     }
 
 
     /**
-     * @param int $userId
      * @return \CMW\Entity\Roles\RoleEntity[]
      */
-    public static function getUserRoles(int $userId): array
+    public static function getRoles(int $userId): array
     {
         $rolesModel = new RolesModel();
 
-        $sql = "SELECT cmw_roles.role_name, cmw_roles_permissions.* FROM cmw_users_roles
-                    JOIN cmw_users ON cmw_users.user_id = cmw_users_roles.user_id
-                    JOIN cmw_roles ON cmw_users_roles.role_id = cmw_roles.role_id   
-                    JOIN cmw_roles_permissions ON cmw_roles.role_id = cmw_roles_permissions.role_permission_role_id                                
-                    WHERE cmw_users.user_id = :user_id";
+        $sql = "SELECT role_id FROM cmw_users_roles WHERE user_id = :user_id";
 
         $db = Manager::dbConnect();
         $req = $db->prepare($sql);
@@ -361,29 +369,15 @@ class UsersModel extends Manager
             return array();
         }
 
-        $res = $req->fetchAll();
         $toReturn = array();
 
-        foreach ($res as $role) {
-            $toReturn[] = new RoleEntity(
-                $role["role_id"],
-                $role["role_name"],
-                $role["role_description"],
-                $role["role_weight"],
-                $rolesModel->getRolePermissions($role["role_id"])
-            );
+        while ($role = $req->fetch()) {
+            Utils::addIfNotNull($toReturn, $rolesModel->getRoleById($role["role_id"]));
         }
 
         return $toReturn;
     }
 
-    //TODO set that in other class (try on installation to generate Controller for games ?)
-    public function checkMinecraftPseudo($pseudo): int
-    {
-        $req = file_get_contents("https://api.mojang.com/users/profiles/minecraft/$pseudo");
-
-        return (int)($req === "NULL");
-    }
 
     public function checkPseudo($pseudo): int
     {
@@ -419,6 +413,14 @@ class UsersModel extends Manager
         }
 
         return 0;
+    }
+
+    //TODO set that in other class (try on installation to generate Controller for games ?)
+    private function checkMinecraftPseudo($pseudo): int
+    {
+        $req = file_get_contents("https://api.mojang.com/users/profiles/minecraft/$pseudo");
+
+        return (int)($req === "NULL");
     }
 
 }

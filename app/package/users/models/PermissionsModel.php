@@ -2,10 +2,9 @@
 
 namespace CMW\Model\Permissions;
 
-use CMW\Entity\Roles\RoleEntity;
-use CMW\Entity\Users\UserEntity;
 use CMW\Entity\Permissions\PermissionEntity;
 use CMW\Model\Manager;
+use CMW\Utils\Utils;
 
 /**
  * Class: @permissionsModel
@@ -15,23 +14,113 @@ use CMW\Model\Manager;
  */
 class PermissionsModel extends Manager
 {
+    /**==> GETTERS */
+
+    public function getPermissionById(int $id): ?PermissionEntity
+    {
+
+        $sql = "SELECT * FROM cmw_permissions WHERE permission_id = :permission_id";
+
+        $db = Manager::dbConnect();
+        $req = $db->prepare($sql);
+
+        if (!$req->execute(array("permission_id" => $id))) {
+            return null;
+        }
+
+        $res = $req->fetch();
+
+        if (!$res) {
+            return null;
+        }
+
+        $parentEntity = null;
+
+        if (!is_null($res["permission_parent_id"])) {
+            $parentEntity = $this->getPermissionById($res["permission_parent_id"]);
+        }
+
+        return new PermissionEntity(
+            $id,
+            $parentEntity,
+            $res["permission_code"]
+        );
+
+    }
 
     /**
-     * @return array
+     * Get all permission reattached by his parentId (Can be used to <b>code.* </b>)
+     * @param int $parentId
+     * @return PermissionEntity[]
      */
-    public function getPermissions(): array
+    public function getPermissionByParentId(int $parentId): array
     {
+        $sql = "SELECT permission_id FROM cmw_permissions WHERE permission_parent_id = :permission_parent_id";
+
+        $db = Manager::dbConnect();
+        $req = $db->prepare($sql);
+
+        if (!$req->execute(array("permission_parent_id" => $parentId))) {
+            return array();
+        }
+
         $toReturn = array();
 
-        /* Get all parents + desc */
-        $sql = "SELECT permParent.*, permDesc.permission_desc_code_parent, permDesc.permission_desc_value, permission_desc_lang 
-                FROM cmw_permissions_parent AS permParent 
-                JOIN cmw_permissions_desc permDesc
-                ON permParent.permission_parent_code = permDesc.permission_desc_code_parent
-                WHERE permDesc.permission_desc_lang = :lang";
+        while ($res = $req->fetch()) {
+
+            $entity = $this->getPermissionById($res["permission_id"]);
+
+            Utils::addIfNotNull($toReturn, $entity);
+
+        }
+
+        return $toReturn;
+
+
+    }
+
+    /**
+     * Parse a child and parent permission to string permission <br>
+     * Child: edit, Parent: users will result => users.edit
+     * @param int $id last child Id
+     * @param string $separationChar Default point, only for decoration users<separationChar>edit.
+     * @return string Parsed permission
+     */
+    public function getFullPermissionCodeById(int $id, string $separationChar = "."): string
+    {
+
+        $permissionEntity = $this->getPermissionById($id);
+
+        if (is_null($permissionEntity)) {
+            return "";
+        }
+
+        $toReturn = array($permissionEntity->getCode());
+
+        while (!is_null($permissionEntity->getParent())) {
+
+            $permissionEntity = $permissionEntity->getParent();
+            $toReturn[] = $permissionEntity->getCode();
+
+        }
+
+        return implode($separationChar, array_reverse($toReturn));
+
+    }
+
+    /**
+     * Get all possible permission entities by last code. <br>
+     * edit, can result by an array with user and core edit permissions
+     * @param int $limit If -1, send all permission with this code.
+     * @return PermissionEntity[]
+     */
+    public function getPermissionsByLastCode(string $code, int $limit = -1): array
+    {
+
+        $sql = "SELECT permission_id FROM cmw_permissions WHERE permission_code = :permission_code ORDER BY permission_parent_id ";
+        $sql .= $limit > 0 ? "LIMIT $limit" : "";
+
         $db = Manager::dbConnect();
-<<<<<<< Updated upstream
-=======
         $req = $db->prepare($sql);
 
         if (!$req->execute(array("permission_code" => $code))) {
@@ -44,7 +133,7 @@ class PermissionsModel extends Manager
 
             $permissionEntity = $this->getPermissionById($res["permission_id"]);
 
-            Utils::addIfNotNull($toReturn, $permissionEntity);
+           Utils::addIfNotNull($toReturn, $permissionEntity);
 
         }
 
@@ -59,83 +148,36 @@ class PermissionsModel extends Manager
     public function getPermissionByFullCode(string $code): ?PermissionEntity
     {
         $codeList = explode(".", $code);
->>>>>>> Stashed changes
 
-        $resParent = $db->prepare($sql);
+        $idCodeList = array();
 
-        if($resParent->execute(array("lang" => getenv("LOCALE")))){
+        foreach ($codeList as $key => $value) {
 
-            $resParent = $resParent->fetchAll();
+            $elm = $this->getPermissionsByLastCode($value, 1);
 
+            if (empty($elm)) {
+                return null;
+            }
 
-            foreach ($resParent as $parent){
-
-
-                $sql = "SELECT permChild.*, permDesc.permission_desc_code_parent, permDesc.permission_desc_value, permission_desc_lang
-                FROM cmw_permissions_child AS permChild
-                JOIN cmw_permissions_desc permDesc
-                ON permChild.permission_child_code = permDesc.permission_desc_code_child
-                WHERE permChild.permission_child_parent = :parent";
-
-                $resChild = $db->prepare($sql);
+            $elm = $elm[0];
 
 
+            if ($key === 0 && $elm?->hasParent()) {
+                return null;
+            }
 
-<<<<<<< Updated upstream
-                if(!$resChild->execute(array("parent" => $parent['permission_parent_code']))){
-                    continue;
-                }
-=======
+            $parentElement = $elm?->getParent();
+
+
+            if ($key !== 0 && (is_null($parentElement) || $parentElement->getId() !== $idCodeList[count($idCodeList) - 1])) {
+                return null;
+            }
+
             $idCodeList[] = $elm->getId();
         }
 
         return $this->getPermissionById($idCodeList[count($idCodeList) - 1]);
 
-    }
-
-    /**
-     * @return \CMW\Entity\Permissions\PermissionEntity[]
-     */
-    public function getPermissions(): array
-    {
-
-        $sql = "SELECT permission_id FROM cmw_permissions ORDER BY permission_parent_id";
-        $db = self::dbConnect();
-        $req = $db->query($sql);
-
-        if (!$req) {
-            return array();
-        }
-
-        $toReturn = array();
-
-        while ($perm = $req->fetch()) {
-            Utils::addIfNotNull($toReturn, $this->getPermissionById($perm["permission_id"]));
-        }
-
-        return $toReturn;
-    }
-
-    /**
-     * @return \CMW\Entity\Permissions\PermissionEntity[]
-     */
-    public function getParents(): array
-    {
-        $sql = "SELECT permission_id FROM cmw_permissions WHERE permission_parent_id IS NULL";
-        $db = self::dbConnect();
-        $req = $db->query($sql);
-
-        if (!$req) {
-            return array();
-        }
-
-        $toReturn = array();
-
-        while ($perm = $req->fetch()) {
-            Utils::addIfNotNull($toReturn, $this->getPermissionById($perm["permission_id"]));
-        }
-
-        return $toReturn;
     }
 
 
@@ -225,65 +267,40 @@ class PermissionsModel extends Manager
      */
     public static function hasPermissions(array $permissionList, string $code): bool
     {
->>>>>>> Stashed changes
 
-                $resChild = $resChild->fetchAll();
+        $permissionModel = new PermissionsModel();
 
+        foreach ($permissionList as $permissionEntity) {
+            if ($permissionModel->checkPermission($permissionEntity, $code)) {
+                return true;
+            }
 
-                if(!$resChild){
-                    continue;
+            $permissionChildList = $permissionModel->getPermissionByParentId($permissionEntity->getId());
+            foreach ($permissionChildList as $permissionChild) {
+                if ($permissionModel->checkPermission($permissionChild, $code)) {
+                    return true;
                 }
+            }
 
+        }
 
-                $toReturn += array($parent['permission_parent_package'] => [
-                    "package" => $parent['permission_parent_package'],
-                    "parent_code" => $parent['permission_parent_code'],
-                    "parent_editable" => $parent['permission_parent_editable'],
-                    "parent_desc_value" => $parent['permission_desc_value'],
-                    "perms_childs" => []]);
+        return false;
+    }
 
-                foreach ($resChild as $child){
-                    $toReturn[$parent['permission_parent_package']]['perms_childs'] += [
-                            $child['permission_child_code'] => [
-                            "child_code" => $child['permission_child_code'],
-                            "child_editable" => $child['permission_child_editable'],
-                            "child_desc_value" => $child['permission_desc_value']
-                        ]
-                  ];
-                }
-
-<<<<<<< Updated upstream
-=======
-    private function checkPermission(PermissionEntity $permissionEntity, string $code): bool
+    private function checkPermission(PermissionEntity $permissionEntity, string $code)
     {
         $operatorPermission = "operator";
->>>>>>> Stashed changes
 
+        $permissionFullCode = $this->getFullPermissionCodeById($permissionEntity->getId());
 
-            }
+        if ($permissionFullCode === $operatorPermission) {
+            return true;
         }
 
-
-<<<<<<< Updated upstream
-        return $toReturn;
-=======
-        return false;
+        if ($permissionFullCode === $code) {
+            return true;
+        }
 
     }
 
-    public function hasChild($permissionId): bool
-    {
-
-        $sql = "SELECT COUNT(*) as result FROM cmw_permissions WHERE permission_parent_id = :permission_id";
-        $db = Manager::dbConnect();
-        $res = $db->prepare($sql);
-
-        if(!$res->execute(array("permission_id" => $permissionId))) {
-            return false;
-        }
-
-        return $res->fetch()["result"];
-
->>>>>>> Stashed changes
-    }
 }

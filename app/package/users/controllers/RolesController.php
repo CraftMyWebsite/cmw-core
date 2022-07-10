@@ -38,8 +38,8 @@ class RolesController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
-
         $rolesList = $this->roleModel->getRoles();
+
 
         view('users', 'roles.list.admin', ["rolesList" => $rolesList], 'admin', []);
     }

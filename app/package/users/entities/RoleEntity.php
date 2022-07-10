@@ -2,6 +2,8 @@
 
 namespace CMW\Entity\Roles;
 
+use CMW\Entity\Permissions\PermissionEntity;
+
 class RoleEntity
 {
 
@@ -10,7 +12,7 @@ class RoleEntity
     private string $roleDescription;
     private int $roleWeight;
 
-    private ?array $rolePermissions;
+    private array $rolePermissions;
 
 
     /**
@@ -18,9 +20,9 @@ class RoleEntity
      * @param string $roleName
      * @param string $roleDescription
      * @param int $roleWeight
-     * @param array|null $rolePermissions
+     * @param PermissionEntity[] $rolePermissions
      */
-    public function __construct(int $roleId, string $roleName, string $roleDescription, int $roleWeight, ?array $rolePermissions)
+    public function __construct(int $roleId, string $roleName, string $roleDescription, int $roleWeight, array $rolePermissions)
     {
         $this->roleId = $roleId;
         $this->roleName = $roleName;
@@ -63,9 +65,9 @@ class RoleEntity
 
 
     /**
-     * @return array|null
+     * @return PermissionEntity[]
      */
-    public function getRolePermissions(): ?array
+    public function getPermissions(): array
     {
         return $this->rolePermissions;
     }

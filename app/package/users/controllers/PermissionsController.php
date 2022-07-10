@@ -4,6 +4,8 @@ namespace CMW\Controller\Permissions;
 
 use CMW\Controller\CoreController;
 use CMW\Controller\Users\UsersController;
+use CMW\Entity\Roles\RoleEntity;
+use CMW\Entity\Users\UserEntity;
 use CMW\Model\Permissions\PermissionsModel;
 use CMW\Model\Roles\RolesModel;
 use CMW\Model\Users\UsersModel;
@@ -19,16 +21,13 @@ use JsonException;
 class PermissionsController extends CoreController
 {
 
-    private UsersModel $userModel;
-    private RolesModel $roleModel;
-    private PermissionsModel $permissionsModel;
-
-    public function __construct($theme_path = null)
+    /**
+     * @return \CMW\Entity\Permissions\PermissionEntity[]
+     */
+    public function getParents(): array
     {
-        parent::__construct($theme_path);
-        $this->userModel = new UsersModel();
-        $this->roleModel = new RolesModel();
-        $this->permissionsModel = new PermissionsModel();
+        return (new PermissionsModel())->getParents();
     }
+
 
 }
