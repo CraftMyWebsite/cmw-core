@@ -78,7 +78,7 @@ $description = USERS_LIST_DESC; ?>
                                         <td><?= $user->getLastName() ?></td>
                                         <td><?php $i = 1;
                                             foreach ($user->getRoles() as $role): ?>
-                                                <?= $i != 1 ? ", {$role->getName()}" : $role->getName() ?>
+                                                <?= $i !== 1 ? ", {$role->getName()}" : $role->getName() ?>
                                                 <?php $i++;
                                             endforeach; ?>
                                         </td>

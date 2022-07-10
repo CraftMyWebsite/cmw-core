@@ -52,10 +52,10 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                                 <div class="form-group">
                                     <label><?= USERS_ROLE ?></label>
                                     <select name="roles[]" class="form-control" multiple>
-                                        <?php /** @var RolesModel[] $roles */
+                                        <?php /** @var \CMW\Entity\Roles\RoleEntity[] $roles */
                                         foreach ($roles as $role) : ?>
-                                            <option value="<?= $role['role_id'] ?>"
-                                                <?= (RolesModel::playerHasRole($user->getId(), $role['role_id']) ? "selected" : "") ?>><?= $role['role_name'] ?>
+                                            <option value="<?= $role->getId() ?>"
+                                                <?= (RolesModel::playerHasRole($user->getId(), $role->getId()) ? "selected" : "") ?>><?= $role->getName() ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>

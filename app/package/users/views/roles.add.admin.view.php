@@ -1,6 +1,12 @@
 <?php
+
+/**@var \CMW\Controller\Permissions\PermissionsController $permissionController */
+
+/**@var \CMW\Model\Permissions\PermissionsModel $permissionModel */
+
 $title = USERS_ROLE_ADD_TITLE;
 $description = USERS_ROLE_ADD_DESC;
+
 ?>
 
     <div class="content">
@@ -37,66 +43,42 @@ $description = USERS_ROLE_ADD_DESC;
                                 <hr>
                                 <div class="container-fluid">
                                     <div class="row justify-content-center">
-                                        <?php /* @var $permissionsList */
-
-                                        foreach ($permissionsList as $parent):
-                                            echo "<div class='mb-2 mr-5'> <span>Package: {$parent['package']} </span> <hr>";
-
-                                            echo $parent['parent_code'];
-
-                                            foreach ($parent['perms_childs'] as $child): ?>
-
-                                                <div class="">
-                                                    <div class="form-group">
-                                                        <div class="custom-control custom-checkbox">
-                                                            <input class="custom-control-input" type="checkbox"
-                                                                   id="<?= $child['child_code'] ?>"
-                                                                   name="perms[<?= $child['child_code']?>]"
-                                                                   value="<?= $child['child_code'] ?>">
-                                                            <label for="<?= $child['child_code'] ?>"
-                                                                   class="custom-control-label">
-                                                               <?= $child['child_desc_value'] ?>
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                            <?php endforeach;
-                                            echo "</div>";
-                                        endforeach; ?>
+                                        <?php showPermission($permissionModel, $permissionController->getParents()) ?>
                                     </div>
+
                                 </div>
 
                             </div>
-
+                            <div class="card-footer">
+                                <button type="submit"
+                                        class="btn btn-primary float-right"><?= USERS_LIST_BUTTON_SAVE ?></button>
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            <button type="submit"
-                                    class="btn btn-primary float-right"><?= USERS_LIST_BUTTON_SAVE ?></button>
-                        </div>
+                    </form>
                 </div>
-                </form>
             </div>
         </div>
     </div>
 
     <!-- Trigger perm * and disabled all others perms checkbox -->
     <script>
-        const checkbox = document.getElementById("*");
+        const inputs = document.getElementsByClassName("permission-input")
 
-        checkbox.addEventListener('change', (event) => {
-            if (event.currentTarget.checked) {
-                $(':checkbox').each(function () {
-                    if (this.id !== "*") {
-                        this.disabled = true;
-                        this.checked = false;
-                    }
-                });
-            } else {
-                $(':checkbox').each(function () {
-                    this.disabled = false;
-                });
+
+        const checkChild = (parentElement) => {
+            const group = parentElement.parentElement.parentElement.parentElement.parentElement
+            const els   = group.getElementsByClassName("permission-input")
+            for (const item of els) {
+                item.parentElement.parentElement.parentElement.classList.toggle("d-none")
             }
-        })
+            parentElement.parentElement.parentElement.parentElement.classList.toggle("d-none")
+        }
+
+        for (const inp of inputs) {
+
+            inp.onchange = () => checkChild(inp);
+
+        }
+
+
     </script>

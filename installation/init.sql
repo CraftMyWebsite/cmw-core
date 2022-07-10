@@ -7,39 +7,37 @@ CREATE TABLE IF NOT EXISTS `cmw_core_options`
   DEFAULT CHARSET = utf8mb4;
 
 
-CREATE TABLE IF NOT EXISTS `cmw_roles_permissions`
+create table IF NOT EXISTS cmw_roles_permissions
 (
-    `role_permission_id`      int(11)      NOT NULL,
-    `role_permission_code`    varchar(255) NOT NULL,
-    `role_permission_role_id` int(11) DEFAULT NULL
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+    permission_id int not null,
+    role_id       int not null,
+    primary key (role_id, permission_id),
+    constraint ROLE_PERMISSION_PERMISSION_ID
+        foreign key (permission_id) references cmw_permissions (permission_id),
+    constraint ROLE_PERMISSION_ROLE_ID
+        foreign key (role_id) references cmw_roles (role_id)
+)
+    charset = utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `cmw_permissions_parent`
-(
-    `permission_parent_code`     varchar(255) NOT NULL,
-    `permission_parent_package`  varchar(255) NOT NULL,
-    `permission_parent_editable` smallint(6)  NOT NULL DEFAULT '0'
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+create index IF NOT EXISTS role_id
+    on cmw_roles_permissions (role_id);
 
-CREATE TABLE IF NOT EXISTS `cmw_permissions_child`
-(
-    `permission_child_code`     varchar(255) NOT NULL,
-    `permission_child_parent`   varchar(255) NOT NULL,
-    `permission_child_editable` smallint(6)  NOT NULL DEFAULT '0'
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `cmw_permissions_desc`
+# MY PROPOSITION !
+
+create table IF NOT EXISTS cmw_permissions
 (
-    `permission_desc_id`          int(11)      NOT NULL,
-    `permission_desc_code_parent` varchar(255) DEFAULT NULL,
-    `permission_desc_code_child`  varchar(255) DEFAULT NULL,
-    `permission_desc_lang`       varchar(20) NOT NULL,
-    `permission_desc_value`       varchar(255) NOT NULL
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+    permission_id        int auto_increment
+        primary key,
+    permission_parent_id int                         null,
+    permission_code      varchar(50) charset utf8mb4 not null,
+    constraint FK_PERMISSION_PARENT_ID
+        foreign key (permission_parent_id) references cmw_permissions (permission_id)
+            on update cascade on delete cascade
+);
+
+
+# END
 
 CREATE TABLE IF NOT EXISTS `cmw_roles`
 (
@@ -79,18 +77,12 @@ CREATE TABLE IF NOT EXISTS `cmw_users_roles`
 ALTER TABLE `cmw_core_options`
     ADD UNIQUE KEY `option_name` (`option_name`);
 
-ALTER TABLE `cmw_roles_permissions`
-    ADD PRIMARY KEY (`role_permission_id`),
-    ADD KEY `permission_role_id` (`role_permission_role_id`);
-
 ALTER TABLE `cmw_roles`
     ADD PRIMARY KEY (`role_id`);
 
 ALTER TABLE `cmw_roles`
     MODIFY `role_id` INT(11) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE `cmw_roles_permissions`
-    MODIFY `role_permission_id` INT(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `cmw_users`
     ADD PRIMARY KEY (`user_id`),
@@ -99,9 +91,6 @@ ALTER TABLE `cmw_users`
 
 ALTER TABLE `cmw_users`
     MODIFY `user_id` INT(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `cmw_roles_permissions`
-    ADD CONSTRAINT `cmw_roles_permissions_ibfk_1` FOREIGN KEY (`role_permission_role_id`) REFERENCES `cmw_roles` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `cmw_users_roles`
     ADD PRIMARY KEY (`id`),
@@ -116,30 +105,6 @@ ALTER TABLE `cmw_users_roles`
     ADD CONSTRAINT `cmw_users_roles_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `cmw_roles` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
-ALTER TABLE `cmw_permissions_child`
-    ADD UNIQUE KEY `code` (`permission_child_code`),
-    ADD KEY `parent` (`permission_child_parent`);
-
-ALTER TABLE `cmw_permissions_desc`
-    ADD PRIMARY KEY (`permission_desc_id`),
-    ADD KEY `permission_code_parent` (`permission_desc_code_parent`),
-    ADD KEY `permission_code_child` (`permission_desc_code_child`);
-
-ALTER TABLE `cmw_permissions_parent`
-    ADD UNIQUE KEY `code` (`permission_parent_code`);
-
-ALTER TABLE `cmw_permissions_desc`
-    MODIFY `permission_desc_id` int(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `cmw_permissions_child`
-    ADD CONSTRAINT `cmw_permissions_child_ibfk_1` FOREIGN KEY (`permission_child_parent`) REFERENCES `cmw_permissions_parent` (`permission_parent_code`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `cmw_permissions_desc`
-    ADD CONSTRAINT `cmw_permissions_desc_ibfk_1` FOREIGN KEY (`permission_desc_code_parent`) REFERENCES `cmw_permissions_parent` (`permission_parent_code`) ON DELETE CASCADE ON UPDATE CASCADE,
-    ADD CONSTRAINT `cmw_permissions_desc_ibfk_2` FOREIGN KEY (`permission_desc_code_child`) REFERENCES `cmw_permissions_child` (`permission_child_code`) ON DELETE CASCADE ON UPDATE CASCADE;
-COMMIT;
-
-
 INSERT INTO `cmw_core_options` (`option_name`, `option_value`, `option_updated`)
 VALUES ('theme', 'Sampler', NOW());
 
@@ -151,16 +116,18 @@ VALUES ('Visiteur', 'Rôle pour les visiteurs', 0),
        ('Modérateur', 'Rôle pour les modérateurs', 10),
        ('Administrateur', 'Rôle pour les administrateurs', 100);
 
-INSERT INTO `cmw_roles_permissions` (`role_permission_code`, `role_permission_role_id`)
-VALUES ('*', 5),
-       ('pages.show', 3),
-       ('pages.add', 3),
-       ('pages.edit', 3),
-       ('pages.delete', 3),
-       ('core.dashboard', 3),
-       ('core.dashboard', 4),
-       ('users.show', 4),
-       ('users.add', 4),
-       ('users.edit', 4),
-       ('users.delete', 4),
-       ('users.roles', 4);
+
+INSERT INTO `cmw_permissions` (`permission_id`, `permission_parent_id`, `permission_code`)
+VALUES (1, NULL, 'operator'),
+       (2, NULL, 'pages'),
+       (3, NULL, 'core'),
+       (4, NULL, 'users'),
+       (5, 2, 'show'),
+       (6, 2, 'add'),
+       (7, 2, 'edit'),
+       (8, 3, 'dashboard'),
+       (9, 4, 'show'),
+       (10, 4, 'add'),
+       (11, 4, 'edit'),
+       (12, 4, 'delete'),
+       (13, 4, 'roles');
