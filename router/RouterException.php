@@ -18,9 +18,7 @@ class RouterException extends Exception
 
     public function __construct($message = null, $code = 500)
     {
-        if (!$message) {
-            throw new $this('Unknown ' . get_class($this));
-        }
+        $message ??= 'Unknown ' . get_class($this);
         parent::__construct($message, $code);
     }
 }

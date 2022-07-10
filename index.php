@@ -15,17 +15,14 @@ session_start();
 $_UTILS = new Utils();
 $loader = new Loader($_UTILS);
 
-$_UTILS::getEnv()->setOrEditValue("locale", $_UTILS::getEnv()->getValue("locale") ?: "fr");
-date_default_timezone_set($_UTILS::getEnv()->getValue("TIMEZONE") ?: "UTC");
+$_UTILS::getEnv()->addValue("locale", "fr");
+date_default_timezone_set($_UTILS::getEnv()->getValue("TIMEZONE") ?? "UTC");
 
 /*=> Load Router */
 $router = $loader->loadRouter();
 
 /*=> Load Packages */
 $loader->loadPackages();
-
-/*=> Load Functions */
-//$loader->loadFunctions();
 
 /*=> Load Global Constants */
 $loader->loadGlobalConstants(); //TODO MODIF THAT

@@ -4,6 +4,12 @@ namespace CMW\Utils;
 
 use Closure;
 
+/**
+ * Class: @EnvBuilder
+ * @package Utils
+ * @author CraftMywebsite <contact@craftmywebsite.fr>
+ * @version 1.0
+ */
 class EnvBuilder
 {
 
@@ -78,9 +84,9 @@ class EnvBuilder
         }
     }
 
-    public function getValue($key): string|false
+    public function getValue($key): ?string
     {
-        $toReturn = NULL;
+        $toReturn = null;
 
         $this->doWithFile(function ($name, $value) use ($key, &$toReturn) {
             if ($name === mb_strtoupper(trim($key))) {
@@ -93,7 +99,7 @@ class EnvBuilder
             return $toReturn ?? $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);
         }
 
-        return false;
+        return $toReturn;
     }
 
     public function deleteValue($key): void

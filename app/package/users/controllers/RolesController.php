@@ -3,6 +3,7 @@
 namespace CMW\Controller\Roles;
 
 use CMW\Controller\CoreController;
+use CMW\Controller\Permissions\PermissionsController;
 use CMW\Controller\Users\UsersController;
 use CMW\Model\Permissions\PermissionsModel;
 use CMW\Model\Roles\RolesModel;
@@ -32,12 +33,17 @@ class RolesController extends CoreController
         $this->roleModel = new RolesModel();
         $this->permissionsModel = new PermissionsModel();
     }
-    
+
     public function adminRolesList(): void
     {
-        UsersController::isUserHasPermission("users.roles");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
+<<<<<<< Updated upstream
         $rolesList = $this->roleModel->fetchAll();
+=======
+
+        $rolesList = $this->roleModel->getRoles();
+>>>>>>> Stashed changes
 
         view('users', 'roles.list.admin', ["rolesList" => $rolesList], 'admin');
     }
@@ -45,16 +51,20 @@ class RolesController extends CoreController
 
     public function adminRolesAdd(): void
     {
-        UsersController::isUserHasPermission("users.roles");
 
-        $permissionsList = $this->permissionsModel->getPermissions();
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
-        view('users', 'roles.add.admin', ["permissionsList" => $permissionsList], 'admin');
+        $roles = $this->roleModel->getRoles();
+
+        $permissions = new PermissionsController();
+        $permModel = new PermissionsModel();
+
+        view('users', 'roles.add.admin', ["permissionController" => $permissions, "permissionModel" => $permModel], 'admin');
     }
 
     #[NoReturn] public function adminRolesAddPost(): void
     {
-        UsersController::isUserHasPermission("users.roles");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
         $role = new RolesModel();
         $roleName = filter_input(INPUT_POST, "name");
@@ -75,24 +85,26 @@ class RolesController extends CoreController
 
     public function adminRolesEdit($id): void
     {
-        $rm = new RolesModel();
+        $roleModel = new RolesModel();
         $role = $this->roleModel->getRoleById($id);
+        $permissions = new PermissionsController();
+        $permModel = new PermissionsModel();
 
         $permissionsList = $this->permissionsModel->getPermissions();
 
 
         view('users', 'roles.edit.admin', ["role" => $role,
-            "permissionsList" => $permissionsList, "rm" => $rm], 'admin');
+            "permissionsList" => $permissionsList, "roleModel" => $roleModel,
+            "permissionController" => $permissions, "permissionModel" => $permModel], 'admin');
     }
 
     #[NoReturn] public function adminRolesEditPost($id): void
     {
-        UsersController::isUserHasPermission("users.roles");
-
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
         $roleName = filter_input(INPUT_POST, "name");
         $roleDescription = filter_input(INPUT_POST, "description");
-        $permList = $_POST['perms'];
+        $permList = $_POST['perms'] ?? [];
         $roleWeight = filter_input(INPUT_POST, "weight");
 
         $this->roleModel->updateRole($roleName, $roleDescription, $id, $roleWeight, $permList);
@@ -108,7 +120,7 @@ class RolesController extends CoreController
 
     #[NoReturn] public function adminRolesDelete($id): void
     {
-        UsersController::isUserHasPermission("users.roles");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
         $this->roleModel->deleteRole($id);
 

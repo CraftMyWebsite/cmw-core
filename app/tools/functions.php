@@ -1,38 +1,5 @@
 <?php
 /* Installation cleaner */
-function deleteDirectory($dir): bool
-{
-    if (!file_exists($dir)) {
-        return true;
-    }
-
-    if (!is_dir($dir)) {
-        return unlink($dir);
-    }
-
-    foreach (scandir($dir) as $item) {
-        if ($item === '.' || $item === '..') {
-            continue;
-        }
-
-        if (!deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
-            return false;
-        }
-
-    }
-
-    return rmdir($dir);
-}
-
-/**
- * @throws JsonException
- */
-function cmwPackageInfo(string $package): array
-{
-    $jsonFile = file_get_contents("app/package/$package/infos.json");
-    return json_decode($jsonFile, true, 512, JSON_THROW_ON_ERROR);
-}
-
 
 /*
  * Error management

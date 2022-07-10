@@ -108,10 +108,14 @@ class RolesModel extends Manager
 
     }
 
+<<<<<<< Updated upstream
     /**
      * @desc Get all permissions for a role
      */
     public function getRolePermissions($roleId): array
+=======
+    public function roleHasPermission(int $id, string $permCode): bool
+>>>>>>> Stashed changes
     {
 
         $toReturn = array();

@@ -53,7 +53,7 @@ class Loader
     public function loadPackages(): void
     {
         $this->requireFile("app", "manager.php");
-        $this->requireFile("app/package-loader", "__model.php", "__controller.php", "__entity.php", "__routes.php");
+        $this->requireFile("app/package-loader", "__model.php", "__controller.php", "__entity.php", "__routes.php", "__function.php");
 
         if ((int)$this->getValue("installStep") >= 0) {
             $this->requireFile("installation", "routes.php", "controllers/installerController.php", "models/installerModel.php");
@@ -87,43 +87,9 @@ class Loader
 
                 $installation->goToInstall();
             } elseif (!$this->getValue("devMode")) {
-                deleteDirectory("installation");
+                Utils::deleteDirectory("installation");
             }
         }
-    }
-
-    public function loadFunctions(): void
-    {
-
-        echo <<<HTML
-        <script>
-            const callPostFunction = (forumId, resToSend) => {
-                const formRaw    = document.getElementById(forumId);
-
-                formRaw.onsubmit = e => {
-                    e.preventDefault();
-            
-                    const formData   = new FormData(formRaw);
-                    const link = window.location.pathname;
-                    fetch(link, {
-                        method: "post",
-                        body  : formData
-                    }).then(v => v.text())
-                        .then(res => {
-                            if (+res > 0) {
-                                console.log("ok")
-                                //window.location.reload();
-                            } else {
-                                //Todo, Alert system
-                            }
-            
-                        })
-                }
-            }
-        </script>
-        HTML;
-
-
     }
 
 }

@@ -4,6 +4,11 @@ namespace CMW\Controller\Users;
 
 use CMW\Controller\CoreController;
 use CMW\Controller\Menus\MenusController;
+<<<<<<< Updated upstream
+=======
+use CMW\Controller\Permissions\PermissionsController;
+use CMW\Entity\Users\UserEntity;
+>>>>>>> Stashed changes
 use CMW\Model\CoreModel;
 use CMW\Model\Roles\RolesModel;
 use CMW\Model\Users\UsersModel;
@@ -131,6 +136,16 @@ class UsersController extends CoreController
         view('users', 'add.admin', ["roles" => $roles], 'admin');
     }
 
+
+    public function rolesTest(): void {
+
+        $permissions = new PermissionsController();
+        $permModel = new PermissionsModel();
+
+        view('users', 'test.admin', ["perms" => $permissions, "pmodel" => $permModel], 'admin');
+    }
+
+
     public function adminUsersAddPost(): void
     {
         self::isUserHasPermission("users.add");
@@ -197,6 +212,7 @@ class UsersController extends CoreController
         die();
     }
 
+<<<<<<< Updated upstream
     /*
         Manage user with permissions (role permissions)
     */
@@ -219,6 +235,8 @@ class UsersController extends CoreController
     // PUBLIC SECTION
 
 
+=======
+>>>>>>> Stashed changes
     public function login(): void
     {
         if (UsersModel::getLoggedUser() !== -1) {

@@ -3,9 +3,16 @@
 namespace CMW\Utils;
 
 use JetBrains\PhpStorm\NoReturn;
+use JsonException;
 
 require("EnvBuilder.php");
 
+/**
+ * Class: @Utils
+ * @package Utils
+ * @author CraftMywebsite <contact@craftmywebsite.fr>
+ * @version 1.0
+ */
 class Utils
 {
     private static EnvBuilder $env;
@@ -64,6 +71,39 @@ class Utils
         }
 
         return $toReturn;
+    }
+
+    public static function deleteDirectory($dir): bool
+    {
+        if (!file_exists($dir)) {
+            return true;
+        }
+
+        if (!is_dir($dir)) {
+            return unlink($dir);
+        }
+
+        foreach (scandir($dir) as $item) {
+            if ($item === '.' || $item === '..') {
+                continue;
+            }
+
+            if (!self::deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+                return false;
+            }
+
+        }
+
+        return rmdir($dir);
+    }
+
+    /**
+     * @throws JsonException
+     */
+    public static function getPackageInfo($package): mixed
+    {
+        $jsonFile = file_get_contents("app/package/$package/infos.json");
+        return json_decode($jsonFile, true, 512, JSON_THROW_ON_ERROR);
     }
 
     #[NoReturn] public static function sendErrorCode($err = 404): void
