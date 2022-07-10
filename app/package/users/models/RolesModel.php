@@ -2,10 +2,14 @@
 
 namespace CMW\Model\Roles;
 
+use CMW\Entity\Permissions\PermissionEntity;
 use CMW\Entity\Roles\RoleEntity;
-use CMW\Model\Manager;
+
 use CMW\Model\Permissions\PermissionsModel;
-use JsonException;
+use CMW\Model\Users\UsersModel;
+use CMW\Model\Manager;
+
+use CMW\Utils\Utils;
 
 /**
  * Class: @rolesModel
@@ -16,72 +20,17 @@ use JsonException;
 class RolesModel extends Manager
 {
 
-    public function fetchAll(): array
+    private PermissionsModel $permissionsModel;
+    private static UsersModel $usersModel;
+
+    public function __construct()
     {
-        $sql = "SELECT role_id, role_name, role_description, role_weight FROM cmw_roles";
-        $db = Manager::dbConnect();
-        $req = $db->prepare($sql);
-
-        if ($req->execute()) {
-            return $req->fetchAll();
-        }
-
-        return [];
-    }
-
-    public function createRole(string $roleName, string $roleDescription, int $roleWeight, ?array $permList): ?int
-    {
-        //Create role & return roleId
-        $var = array(
-            "role_name" => $roleName,
-            "role_description" => $roleDescription,
-            "role_weight" => $roleWeight
-        );
-
-        $sql = "INSERT INTO cmw_roles (role_name, role_description, role_weight) VALUES (:role_name, :role_description, :role_weight)";
-
-        $db = Manager::dbConnect();
-        $req = $db->prepare($sql);
-
-        if ($req->execute($var)) {
-
-            $roleId = $db->lastInsertId();
-
-            //Insert permissions
-            if(!empty($permList))
-                $this->addPermissions($roleId, $permList);
-
-            return $roleId;
-        }
-
-
-        return null;
-    }
-
-    public function addPermissions(int $roleId, ?array $permList): void
-    {
-
-        foreach ($permList as $permCode) {
-
-            $var = array(
-                "role_permission_code" => $permCode,
-                "role_id" => $roleId
-            );
-
-            $sql = "INSERT INTO cmw_roles_permissions (role_permission_code, role_permission_role_id) 
-                        VALUES(:role_permission_code, :role_id)";
-
-            $db = Manager::dbConnect();
-            $req = $db->prepare($sql);
-            $req->execute($var);
-
-        }
-
+        $this->permissionsModel = new PermissionsModel();
+        self::$usersModel = new UsersModel();
     }
 
     public function getRoleById($id): ?RoleEntity
     {
-
 
         $sql = "SELECT * FROM cmw_roles WHERE role_id = :role_id";
 
@@ -103,64 +52,109 @@ class RolesModel extends Manager
             $res['role_name'],
             $res['role_description'],
             $res['role_weight'],
-            $this->getRolePermissions($id)
+            $this->getPermissions($id)
         );
 
     }
 
-<<<<<<< Updated upstream
     /**
-     * @desc Get all permissions for a role
+     * @return RoleEntity[]
      */
-    public function getRolePermissions($roleId): array
-=======
-    public function roleHasPermission(int $id, string $permCode): bool
->>>>>>> Stashed changes
+    public function getRoles(): array
     {
+        $sql = "SELECT role_id FROM cmw_roles";
+        $db = Manager::dbConnect();
+        $res = $db->prepare($sql);
+
+        if (!$res->execute()) {
+            return array();
+        }
 
         $toReturn = array();
 
-        $sql = "SELECT * FROM cmw_roles_permissions WHERE role_permission_role_id = :role_id";
-        $db = Manager::dbConnect();
-        $req = $db->prepare($sql);
-
-        if ($req->execute(array("role_id" => $roleId))) {
-            $res = $req->fetchAll();
-
-            if(!$res)
-                return [];
-
-            foreach ($res as $perm){
-                $toReturn += array( $perm['role_permission_id'] => [
-                    "role_permission_code" => $perm['role_permission_code']
-                ]);
-            }
-
+        while ($role = $res->fetch()) {
+            Utils::addIfNotNull($toReturn, $this->getRoleById($role["role_id"]));
         }
 
         return $toReturn;
     }
 
-    public function roleHasPermission(int $roleId, string $permCode): int
+    public function createRole(string $roleName, string $roleDescription, int $roleWeight, ?array $permList): ?int
     {
+        //Create role & return roleId
         $var = array(
-            "role_id" => $roleId,
-            "perm_code" => $permCode
+            "role_name" => $roleName,
+            "role_description" => $roleDescription,
+            "role_weight" => $roleWeight
         );
 
-        $sql = "SELECT cmw_roles_permissions.role_permission_code FROM cmw_roles_permissions 
-                    WHERE cmw_roles_permissions.role_permission_role_id = :role_id AND cmw_roles_permissions.role_permission_code = :perm_code";
+        $sql = "INSERT INTO cmw_roles (role_name, role_description, role_weight) VALUES (:role_name, :role_description, :role_weight)";
 
         $db = Manager::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
-            $lines = $req->fetchAll();
 
-            return count($lines);
+            $roleId = $db->lastInsertId();
+
+            //Insert permissions
+            foreach ($permList as $permId) {
+                $this->addPermission($roleId, $permId);
+            }
+
+            return $roleId;
         }
 
-        return -1;
+
+        return null;
+    }
+
+    public function addPermission(int $roleId, int $permId): bool
+    {
+        $sql = "INSERT INTO cmw_roles_permissions VALUES (:permission_id, :role_id)";
+        $db = self::dbConnect();
+        return $db->prepare($sql)->execute(array("permission_id" => $permId, "role_id" => $roleId));
+    }
+
+    /**
+     * @return PermissionEntity[]
+     */
+    public function getPermissions(int $id): array
+    {
+        $sql = "SELECT permission_id FROM cmw_roles_permissions WHERE role_id = :role_id";
+        $db = Manager::dbConnect();
+        $res = $db->prepare($sql);
+
+        if (!$res->execute(array("role_id" => $id))) {
+            return array();
+        }
+
+        $toReturn = array();
+
+        while ($perm = $res->fetch()) {
+            Utils::addIfNotNull($toReturn, $this->permissionsModel->getPermissionById($perm["permission_id"]));
+        }
+
+        return $toReturn;
+
+    }
+
+    public function roleHasPermission(int $id, string $permCode): int
+    {
+        $role = $this->getRoleById($id);
+
+        if (is_null($role)) {
+            return false;
+        }
+
+        $permissionList = $role->getPermissions();
+        foreach ($permissionList as $permissionEntity) {
+            if ($this->permissionsModel->getFullPermissionCodeById($permissionEntity->getId()) === $permCode) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function updateRole(string $roleName, string $roleDescription, int $roleId, int $roleWeight, ?array $permList): void
@@ -180,35 +174,28 @@ class RolesModel extends Manager
         $req->execute($var);
 
 
-        //Insert permissions
-        if (!empty($permList)) {
-            $this->updatePermissions($roleId, $permList);
+        $this->updatePermission($roleId, $permList);
+    }
+
+    public function updatePermission(int $roleId, ?array $permList): void
+    {
+        $this->deleteAllPermissions($roleId);
+        foreach ($permList as $perm) {
+            $this->addPermission($roleId, $perm);
         }
     }
 
-    /***
-     * @desc First we delete all the permissions of the role, after we insert the new permissions.
-     */
-    public function updatePermissions(int $roleId, ?array $permList): void
+    public function deleteAllPermissions(int $roleId): void
     {
-        //Delete permissions
-        $var = array(
-            "role_id" => $roleId
-        );
-
-        $sql = "DELETE FROM cmw_roles_permissions WHERE role_permission_role_id = :role_id";
-
-        $db = Manager::dbConnect();
-        $req = $db->prepare($sql);
-        $req->execute($var);
-
-        //Add new permissions
-        $this->addPermissions($roleId, $permList);
-
+        $sql = "DELETE FROM cmw_roles_permissions WHERE role_id = :role_id";
+        $db = self::dbConnect();
+        $db->prepare($sql)->execute(array("role_id" => $roleId));
     }
 
     public function deleteRole(int $roleId): void
     {
+        $this->deleteAllPermissions($roleId);
+
         $var = array(
             "role_id" => $roleId
         );
@@ -220,19 +207,21 @@ class RolesModel extends Manager
         $req->execute($var);
     }
 
-    public static function playerHasRole(int $user_id, int $role_id): bool
+    public static function playerHasRole(int $userId, int $roleId): bool
     {
-        $sql = "SELECT cmw_roles.role_name FROM cmw_users
-                    JOIN cmw_users_roles ON cmw_users.user_id = cmw_users_roles.user_id
-                    JOIN cmw_roles on cmw_users_roles.role_id = cmw_roles.role_id
-                    WHERE cmw_users.user_id = :user_id AND cmw_roles.role_id = :role_id";
+        $user = self::$usersModel->getUserById($userId);
 
-        $db = Manager::dbConnect();
-        $req = $db->prepare($sql);
-
-        if ($req->execute(array("user_id" => $user_id, "role_id" => $role_id))) {
-            return count($req->fetchAll()) > 0;
+        if (is_null($user)) {
+            return false;
         }
+
+        $roles = $user->getRoles();
+        foreach ($roles as $role) {
+            if ($role->getId() === $roleId) {
+                return true;
+            }
+        }
+
         return false;
     }
 
