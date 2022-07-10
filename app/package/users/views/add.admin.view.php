@@ -7,7 +7,7 @@ $description = USERS_ADD_DESC;
 
 $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main.js"></script>';
 
-/* @var UsersController[] $roles */
+/* @var \CMW\Entity\Roles\RoleEntity[] $roles */
 ?>
 
 <?php ob_start(); ?>
@@ -55,7 +55,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                                     <select name="roles[]" class="form-control" multiple>
                                         <?php
                                         foreach ($roles as $role) : ?>
-                                            <option value="<?= $role['role_id'] ?>"><?= $role['role_name'] ?></option>
+                                            <option value="<?= $role->getId() ?>"><?= $role->getName() ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
