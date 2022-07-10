@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <html lang="fr-FR">
-<?php include_once("includes/head.inc.php"); ?>
-<?php if (!isset($noBody) || !$noBody) : ?>
+<?php
+
+include_once("includes/head.inc.php");
+
+/* INCLUDE SCRIPTS / STYLES*/
+if(!empty($includes)) {
+    includeFiles($includes, "scriptsBefore", "styles");
+}
+if (!isset($noBody) || !$noBody) :
+?>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
     <?php include_once("includes/header.inc.php"); ?>
@@ -42,6 +50,12 @@
 <script src="<?= getenv("PATH_SUBFOLDER") ?>admin/resources/js/adminlte.min.js"></script>
 <!-- Darkmode -->
 <script src="<?= getenv("PATH_SUBFOLDER") ?>admin/resources/js/darkmode.js"></script>
+
+<?php
+/* INCLUDE SCRIPTS */
+if(!empty($includes))
+    includeFiles($includes, "scriptsAfter");
+?>
 
 <?= (isset($scripts) && !empty($scripts)) ? $scripts : "" ?>
 <?= (isset($toaster) && !empty($toaster)) ? $toaster : "" ?>

@@ -4,7 +4,6 @@ use CMW\Model\CoreModel;
 $title = CORE_CONFIG_TITLE;
 $description = CORE_CONFIG_DESC; ?>
 
-<?php ob_start(); ?>
     <div class="content">
         <div class="container-fluid">
             <div class="row">
@@ -93,4 +92,3 @@ $description = CORE_CONFIG_DESC; ?>
             <!-- /.row -->
         </div>
     </div>
-<?php $content = ob_get_clean(); ?>

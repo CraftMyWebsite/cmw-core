@@ -1,7 +1,7 @@
 <?php $title = "Accueil";
 $description = "page d'accueil de CraftMyWebsite"; ?>
 
-<?php ob_start(); ?>
+
 
 <h1>Accueil</h1>
 
@@ -14,4 +14,3 @@ $description = "page d'accueil de CraftMyWebsite"; ?>
 
 </main>
 
-<?php $content = ob_get_clean(); ?>

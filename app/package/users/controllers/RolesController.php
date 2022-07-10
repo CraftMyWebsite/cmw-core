@@ -38,14 +38,10 @@ class RolesController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
-<<<<<<< Updated upstream
-        $rolesList = $this->roleModel->fetchAll();
-=======
 
         $rolesList = $this->roleModel->getRoles();
->>>>>>> Stashed changes
 
-        view('users', 'roles.list.admin', ["rolesList" => $rolesList], 'admin');
+        view('users', 'roles.list.admin', ["rolesList" => $rolesList], 'admin', []);
     }
 
 
@@ -54,12 +50,7 @@ class RolesController extends CoreController
 
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
-        $roles = $this->roleModel->getRoles();
-
-        $permissions = new PermissionsController();
-        $permModel = new PermissionsModel();
-
-        view('users', 'roles.add.admin', ["permissionController" => $permissions, "permissionModel" => $permModel], 'admin');
+        view('users', 'roles.add.admin', ["permissionsList" => $permissionsList], 'admin', []);
     }
 
     #[NoReturn] public function adminRolesAddPost(): void
@@ -67,10 +58,10 @@ class RolesController extends CoreController
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
         $role = new RolesModel();
-        $roleName = filter_input(INPUT_POST, "name");
-        $roleDescription = filter_input(INPUT_POST, "description");
+        $roleName = filter_input(INPUT_POST, "name",FILTER_SANITIZE_STRING );
+        $roleDescription = filter_input(INPUT_POST, "description", FILTER_SANITIZE_STRING);
         $permList = $_POST['perms'];
-        $roleWeight = filter_input(INPUT_POST, "weight");
+        $roleWeight = filter_input(INPUT_POST, "weight", FILTER_SANITIZE_NUMBER_INT);
         $role->createRole($roleName, $roleDescription, $roleWeight, $permList);
 
 
@@ -94,18 +85,17 @@ class RolesController extends CoreController
 
 
         view('users', 'roles.edit.admin', ["role" => $role,
-            "permissionsList" => $permissionsList, "roleModel" => $roleModel,
-            "permissionController" => $permissions, "permissionModel" => $permModel], 'admin');
+            "permissionsList" => $permissionsList, "rm" => $rm], 'admin', []);
     }
 
     #[NoReturn] public function adminRolesEditPost($id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
-        $roleName = filter_input(INPUT_POST, "name");
-        $roleDescription = filter_input(INPUT_POST, "description");
-        $permList = $_POST['perms'] ?? [];
-        $roleWeight = filter_input(INPUT_POST, "weight");
+        $roleName = filter_input(INPUT_POST, "name", FILTER_SANITIZE_STRING);
+        $roleDescription = filter_input(INPUT_POST, "description", FILTER_SANITIZE_STRING);
+        $permList = $_POST['perms'];
+        $roleWeight = filter_input(INPUT_POST, "weight", FILTER_SANITIZE_NUMBER_INT);
 
         $this->roleModel->updateRole($roleName, $roleDescription, $id, $roleWeight, $permList);
 

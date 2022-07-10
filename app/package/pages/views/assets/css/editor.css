@@ -1,0 +1,19 @@
+.ce-block__content, .ce-toolbar__content {
+    max-width: 80% !important;
+}
+
+.page-title {
+    width: 80%;
+    margin: 0 10%;
+    font-size: 30px;
+    border: 0;
+}
+
+.page-slug {
+    width: 80%;
+    margin: 0 10%;
+}
+
+input:focus {
+    outline: none;
+}

@@ -7,7 +7,7 @@
 
 $title = ucfirst($page->getTitle());
 $description = "Description de votre page";
-ob_start(); ?>
+?>
 
 
     <section>
@@ -16,5 +16,3 @@ ob_start(); ?>
         </div>
     </section>
 
-
-<?php $content = ob_get_clean(); ?>

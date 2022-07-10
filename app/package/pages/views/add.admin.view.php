@@ -5,29 +5,6 @@ $description = PAGES_ADD_DESC;
 ?>
 
 <?php $scripts = '
-    
-    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/header.js"></script>
-    
-    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/image.js"></script>
-    
-    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/delimiter.js"></script>
-    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/list.js"></script>
-    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/quote.js"></script>
-    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/code.js"></script>
-    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/table.js"></script>
-    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/link.js"></script>
-    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/warning.js"></script>
-    
-    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/embed.js"></script>
-    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/marker.js"></script>
-    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/underline.js"></script>
-
-    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/drag-drop.js"></script> 
-    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/plugins/undo.js"></script>
-
-
-    <!-- Load Editor.js Core -->
-    <script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/editorjs/editor.js"></script>
     <!-- Initialization -->
     <script>
     let editor = new EditorJS({
@@ -175,28 +152,6 @@ $description = PAGES_ADD_DESC;
     });
     </script>'; ?>
 
-<?php ob_start(); ?>
-<style>
-    .ce-block__content, .ce-toolbar__content {
-        max-width: 80% !important;
-    }
-
-    .page-title {
-        width: 80%;
-        margin: 0 10%;
-        font-size: 30px;
-        border: 0;
-    }
-
-    .page-slug {
-        width: 80%;
-        margin: 0 10%;
-    }
-
-    input:focus {
-        outline: none;
-    }
-</style>
 <!-- main-content -->
 <div class="content">
     <div class="container-fluid">
@@ -234,15 +189,4 @@ $description = PAGES_ADD_DESC;
         <!-- /.row -->
     </div>
 </div>
-<script>
-    $('#title').on('keyup', function () {
-        let val = $(this).val();
-        val = val.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        val = val.replace(/[^\w\s]/gi, '');
-        val = val.replace(/ /g, "-");
-        $('#slug').val(val);
-    });
-</script>
-
 <!-- /.main-content -->
-<?php $content = ob_get_clean(); ?>

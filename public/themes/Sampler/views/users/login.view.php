@@ -2,8 +2,7 @@
 
 
 $title = "Connexion";
-$description = "Description de votre page";
-ob_start(); ?>
+$description = "Description de votre page"; ?>
 
 
 <section>
@@ -53,6 +52,3 @@ ob_start(); ?>
 
     </div>
 </section>
-
-
-<?php $content = ob_get_clean(); ?>

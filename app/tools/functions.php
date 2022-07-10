@@ -51,3 +51,24 @@ function debugR($arr): void
     echo print_r($arr);
     echo "</pre>";
 }
+
+function getClientIp(): bool|array|string
+{
+    $ipClient = "";
+    if (getenv('HTTP_CLIENT_IP')) {
+        $ipClient = getenv('HTTP_CLIENT_IP');
+    } else if(getenv('HTTP_X_FORWARDED_FOR')) {
+        $ipClient = getenv('HTTP_X_FORWARDED_FOR');
+    } else if(getenv('HTTP_X_FORWARDED')) {
+        $ipClient = getenv('HTTP_X_FORWARDED');
+    } else if(getenv('HTTP_FORWARDED_FOR')) {
+        $ipClient = getenv('HTTP_FORWARDED_FOR');
+    } else if(getenv('HTTP_FORWARDED')) {
+        $ipClient = getenv('HTTP_FORWARDED');
+    } else if(getenv('REMOTE_ADDR')) {
+        $ipClient= getenv('REMOTE_ADDR');
+    } else {
+        $ipClient = 'UNKNOWN';
+    }
+    return $ipClient;
+}

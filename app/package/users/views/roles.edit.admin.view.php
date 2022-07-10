@@ -8,7 +8,6 @@ $description = USERS_ROLE_EDIT_DESC;
 /** @var \CMW\Model\Roles\RolesModel $rm */
 ?>
 
-<?php ob_start(); ?>
     <div class="content">
         <div class="container-fluid">
             <div class="row">
@@ -111,5 +110,3 @@ $description = USERS_ROLE_EDIT_DESC;
             }
         })
     </script>
-
-<?php $content = ob_get_clean(); ?>

@@ -3,14 +3,7 @@
 $title = PAGES_LIST_TITLE;
 $description = PAGES_LIST_DESC; ?>
 
-<?php $styles = '<link rel="stylesheet" href="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-bs4/css/dataTables.bootstrap4.min.css">
-<link rel="stylesheet" href="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-responsive/css/responsive.bootstrap4.min.css">'; ?>
-
-<?php $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables/jquery.dataTables.min.js"></script>
-<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<?php $scripts = '
 <script>
     $(function () {
         $("#users_table").DataTable({
@@ -43,7 +36,6 @@ $description = PAGES_LIST_DESC; ?>
     });
 </script>'; ?>
 
-<?php ob_start(); ?>
     <!-- main-content -->
     <div class="content">
         <div class="container-fluid">
@@ -95,4 +87,3 @@ $description = PAGES_LIST_DESC; ?>
         </div>
     </div>
     <!-- /.main-content -->
-<?php $content = ob_get_clean(); ?>

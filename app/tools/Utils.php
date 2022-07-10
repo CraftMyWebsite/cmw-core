@@ -47,7 +47,7 @@ class Utils
     public static function normalizeForSlug($text, $encode = "UTF-8"): string
     {
         $text = mb_strtolower(trim(self::removeAccents($text, $encode)));
-        $text = preg_replace("/\s'+/", "-", $text);
+        $text = preg_replace("/\s+/", "-", $text);
         $text = preg_replace("/(-)\\1+/", "$1", $text);
         $text = preg_replace("/[^A-z\-\d]/", "", $text);
         if ($text[strlen($text) - 1] === '-') {
