@@ -39,6 +39,10 @@ class CoreController
     /* ADMINISTRATION */
     public function adminDashboard(): void
     {
+        //Redirect to the dashboard
+        if($_GET['url'] === "cmw-admin")
+            header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
+
         view('core', 'dashboard.admin', [], 'admin', []);
     }
 
@@ -49,7 +53,7 @@ class CoreController
 
     public function adminConfigurationPost(): void
     {
-        UsersController::isUserHasPermission("core.configuration");
+        UsersController::redirectIfNotHavePermissions("core.configuration");
 
         foreach ($_POST as $option_name => $option_value):
             if ($option_name === "locale")

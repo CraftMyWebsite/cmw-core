@@ -10,6 +10,7 @@ require_once('lang/'.getenv("LOCALE").'.php');
 
 /* Administration scope of package */
 $router->scope('/cmw-admin', function(Router $router) {
+    $router->get('/', "core#adminDashboard");
     $router->get('/dashboard', "core#adminDashboard");
 
     $router->get('/configuration', "core#adminConfiguration");
