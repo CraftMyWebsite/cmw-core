@@ -8,8 +8,6 @@ use CMW\Controller\Menus\MenusController;
 use CMW\Controller\Permissions\PermissionsController;
 use CMW\Entity\Users\UserEntity;
 
-use CMW\Entity\Users\UserEntity;
-use CMW\Model\CoreModel;
 use CMW\Model\Permissions\PermissionsModel;
 use CMW\Model\Roles\RolesModel;
 use CMW\Model\Users\UsersModel;

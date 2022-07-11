@@ -73,7 +73,7 @@ class InstallerModel
 
         foreach ($scannedDirectory as $package) {
             $packageSqlFile = $_UTILS::getEnv()->getValue("dir") . "/app/package/$package/init.sql";
-            if (file_exists($packageSqlFile)) {
+            if (file_exists($packageSqlFile) && trim(file_get_contents($packageSqlFile))) {
                 $query_package = file_get_contents($packageSqlFile);
                 $stmt_package = $db->query($query_package);
                 $stmt_package->closeCursor();
