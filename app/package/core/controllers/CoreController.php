@@ -53,7 +53,7 @@ class CoreController
 
     public function adminConfigurationPost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
 
         foreach ($_POST as $option_name => $option_value):
             if ($option_name === "locale")

@@ -29,7 +29,7 @@ class PagesController extends CoreController
 
     public function adminPagesList(): void
     {
-        UsersController::isUserHasPermission("pages.show");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.show");
 
         $pagesList = $this->pagesModel->getPages();
 
@@ -53,7 +53,7 @@ class PagesController extends CoreController
 
     public function adminPagesAdd(): void
     {
-        UsersController::isUserHasPermission("pages.add");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.add");
 
         $includes = array(
             "scripts" => [
@@ -88,7 +88,7 @@ class PagesController extends CoreController
 
     public function adminPagesAddPost(): void
     {
-        UsersController::isUserHasPermission("pages.add");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.add");
 
         $user = new UsersModel();
 
@@ -107,7 +107,7 @@ class PagesController extends CoreController
 
     public function adminPagesEdit($slug): void
     {
-        UsersController::isUserHasPermission("pages.edit");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.edit");
 
         $page = $this->pagesModel->getPageBySlug($slug);
 
@@ -145,7 +145,7 @@ class PagesController extends CoreController
 
     public function adminPagesEditPost(): void
     {
-        UsersController::isUserHasPermission("pages.edit");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.edit");
 
         $page = new PagesModel();
       
@@ -162,7 +162,7 @@ class PagesController extends CoreController
 
     #[NoReturn] public function adminPagesDelete(): void
     {
-        UsersController::isUserHasPermission("pages.delete");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.delete");
       
         $id = filter_input(INPUT_POST, "id", FILTER_SANITIZE_NUMBER_INT);
         $this->pagesModel->deletePage($id);
