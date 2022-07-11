@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `cmw_pages` (
     `page_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `page_updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `page_slug` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 ALTER TABLE `cmw_pages`

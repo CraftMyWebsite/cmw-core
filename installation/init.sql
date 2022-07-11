@@ -6,23 +6,6 @@ CREATE TABLE IF NOT EXISTS `cmw_core_options`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-
-create table IF NOT EXISTS cmw_roles_permissions
-(
-    permission_id int not null,
-    role_id       int not null,
-    primary key (role_id, permission_id),
-    constraint ROLE_PERMISSION_PERMISSION_ID
-        foreign key (permission_id) references cmw_permissions (permission_id),
-    constraint ROLE_PERMISSION_ROLE_ID
-        foreign key (role_id) references cmw_roles (role_id)
-)
-    charset = utf8mb4;
-
-create index IF NOT EXISTS role_id
-    on cmw_roles_permissions (role_id);
-
-
 # MY PROPOSITION !
 
 create table IF NOT EXISTS cmw_permissions
@@ -34,7 +17,8 @@ create table IF NOT EXISTS cmw_permissions
     constraint FK_PERMISSION_PARENT_ID
         foreign key (permission_parent_id) references cmw_permissions (permission_id)
             on update cascade on delete cascade
-);
+) ENGINE = InnoDB
+  charset = utf8mb4;
 
 
 # END
@@ -47,7 +31,6 @@ CREATE TABLE IF NOT EXISTS `cmw_roles`
     `role_weight`      int     DEFAULT 0
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-
 
 CREATE TABLE IF NOT EXISTS `cmw_users`
 (
@@ -104,6 +87,21 @@ ALTER TABLE `cmw_users_roles`
     ADD CONSTRAINT `cmw_users_roles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     ADD CONSTRAINT `cmw_users_roles_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `cmw_roles` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
+
+CREATE TABLE IF NOT EXISTS cmw_roles_permissions
+(
+    permission_id int not null,
+    role_id       int not null,
+    primary key (role_id, permission_id),
+    constraint FK_ROLE_PERMISSION_PERMISSION_ID
+        foreign key (permission_id) references cmw_permissions (permission_id),
+    constraint FK_ROLE_PERMISSION_ROLE_ID
+        foreign key (role_id) references cmw_roles (role_id)
+) ENGINE = InnoDB
+  charset = utf8mb4;
+
+CREATE INDEX role_id
+    ON cmw_roles_permissions (role_id);
 
 INSERT INTO `cmw_core_options` (`option_name`, `option_value`, `option_updated`)
 VALUES ('theme', 'Sampler', NOW());
