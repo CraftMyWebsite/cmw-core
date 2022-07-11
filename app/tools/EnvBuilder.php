@@ -17,13 +17,14 @@ class EnvBuilder
     private string $envPath;
     private string $path;
     private string $absPath;
-    private string $apiURL = "https://api2.craftmywebsite.fr"; //TODO En production mettre la vraie URL de l'API
+    private string $apiURL;
 
     public function __construct()
     {
         $this->absPath = dirname(__DIR__, 2) . "/";
         $this->envPath = $this->absPath;
         $this->path = $this->envPath . $this->envFileName;
+        $this->apiURL = "https://apiv2.craftmywebsite.fr"; //TODO En production mettre la vraie URL de l'API
 
         if (!$this->checkForFile()) {
             $this->createFile();
