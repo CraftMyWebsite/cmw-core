@@ -17,6 +17,7 @@ class EnvBuilder
     private string $envPath;
     private string $path;
     private string $absPath;
+    private string $apiURL = "https://api2.craftmywebsite.fr"; //TODO En production mettre la vraie URL de l'API
 
     public function __construct()
     {
@@ -164,6 +165,7 @@ class EnvBuilder
         $this->addValue("installStep", 0);
         $this->addValue("dir", $this->absPath);
         $this->addValue("devMode", 0);
+        $this->addValue("APIURL", $this->apiURL);
     }
 
 }
