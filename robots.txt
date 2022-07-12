@@ -2,5 +2,6 @@ User-Agent: *
 Disallow: /cmw-admin/
 Disallow: /admin/
 Disallow: /installation/
+Disallow: /installer/
 Disallow: /Router/
 Sitemap: sitemap.xml
