@@ -50,7 +50,10 @@ class RolesController extends CoreController
 
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
-        view('users', 'roles.add.admin', ["permissionsList" => $permissionsList], 'admin', []);
+        $permissionController = new PermissionsController();
+        $permissionModel = new PermissionsModel();
+
+        view('users', 'roles.add.admin', ["permissionController" => $permissionController, "permissionModel" => $permissionModel], 'admin', []);
     }
 
     #[NoReturn] public function adminRolesAddPost(): void
@@ -58,7 +61,7 @@ class RolesController extends CoreController
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
         $role = new RolesModel();
-        $roleName = filter_input(INPUT_POST, "name",FILTER_SANITIZE_STRING );
+        $roleName = filter_input(INPUT_POST, "name", FILTER_SANITIZE_STRING);
         $roleDescription = filter_input(INPUT_POST, "description", FILTER_SANITIZE_STRING);
         $permList = $_POST['perms'];
         $roleWeight = filter_input(INPUT_POST, "weight", FILTER_SANITIZE_NUMBER_INT);
@@ -78,14 +81,12 @@ class RolesController extends CoreController
     {
         $roleModel = new RolesModel();
         $role = $this->roleModel->getRoleById($id);
-        $permissions = new PermissionsController();
-        $permModel = new PermissionsModel();
-
-        $permissionsList = $this->permissionsModel->getPermissions();
+        $permissionController = new PermissionsController();
+        $permissionModel = new PermissionsModel();
 
 
         view('users', 'roles.edit.admin', ["role" => $role,
-            "permissionsList" => $permissionsList, "rm" => $rm], 'admin', []);
+            "permissionController" => $permissionController, "permissionModel" => $permissionModel, "roleModel" => $roleModel], 'admin', []);
     }
 
     #[NoReturn] public function adminRolesEditPost($id): void

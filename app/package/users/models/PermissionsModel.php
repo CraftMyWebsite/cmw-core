@@ -133,7 +133,7 @@ class PermissionsModel extends Manager
 
             $permissionEntity = $this->getPermissionById($res["permission_id"]);
 
-           Utils::addIfNotNull($toReturn, $permissionEntity);
+            Utils::addIfNotNull($toReturn, $permissionEntity);
 
         }
 
@@ -268,7 +268,7 @@ class PermissionsModel extends Manager
     public static function hasPermissions(array $permissionList, string $code): bool
     {
 
-        $permissionModel = new PermissionsModel();
+        $permissionModel = new self();
 
         foreach ($permissionList as $permissionEntity) {
             if ($permissionModel->checkPermission($permissionEntity, $code)) {
@@ -300,6 +300,53 @@ class PermissionsModel extends Manager
         if ($permissionFullCode === $code) {
             return true;
         }
+
+        return false;
+    }
+
+    /**
+     * @return PermissionEntity[]
+     */
+    public function getParents(): array
+    {
+
+        $sql = "SELECT permission_id FROM cmw_permissions WHERE permission_parent_id IS NULL";
+
+        $db = Manager::dbConnect();
+        $req = $db->prepare($sql);
+
+        if (!$req->execute()) {
+            return array();
+        }
+
+        $toReturn = array();
+
+        while ($res = $req->fetch()) {
+
+            $entity = $this->getPermissionById($res["permission_id"]);
+
+            Utils::addIfNotNull($toReturn, $entity);
+
+        }
+
+        return $toReturn;
+
+    }
+
+    public function hasChild(int $id): bool
+    {
+
+        $sql = "SELECT permission_id FROM cmw_permissions WHERE permission_parent_id = :permission_parent_id";
+
+        $db = Manager::dbConnect();
+        $req = $db->prepare($sql);
+
+        if (!$req->execute(array("permission_parent_id" => $id))) {
+            return false;
+        }
+
+        return (bool)$req->rowCount();
+
 
     }
 

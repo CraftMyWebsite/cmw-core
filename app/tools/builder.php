@@ -49,7 +49,7 @@ function view(string $module, string $view, ?array $data, string $type, ?array $
         $data["coreAdmin"] = new CoreController();
     }
 
-    extract($data);
+    extract($data, EXTR_OVERWRITE);
 
     /* ADMIN */
     if ($type === 'admin') {
