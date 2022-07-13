@@ -53,7 +53,10 @@ class Loader
     public function loadPackages(): void
     {
         $this->requireFile("app", "manager.php");
-        $this->requireFile("app/package-loader", "__model.php", "__controller.php", "__entity.php", "__routes.php", "__function.php", "__lang.php");
+
+        $this->loadMultiplePackageFiles("controllers", "entities", "functions", "models");
+
+        $this->requireFile("app/package-loader", "__routes.php", "__lang.php");
 
         if ((int)$this->getValue("installStep") >= 0) {
             $this->requireFile("installation", "routes.php", "controllers/installerController.php", "models/installerModel.php");
@@ -88,6 +91,33 @@ class Loader
                 $installation->goToInstall();
             } elseif (!$this->getValue("devMode")) {
                 Utils::deleteDirectory("installation");
+            }
+        }
+    }
+
+    private function loadMultiplePackageFiles(string ...$packages): void
+    {
+        foreach ($packages as $package) {
+            $this->loadPackageFiles($package);
+        }
+    }
+
+    private function loadPackageFiles(string $partName): void
+    {
+        $packageFolder = 'app/package';
+        $contentDirectory = array_diff(scandir("$packageFolder/"), array('..', '.'));
+        $dir = Utils::getEnv()->getValue("dir");
+
+        foreach ($contentDirectory as $package) {
+            $packageSubFolder = "$packageFolder/$package/$partName";
+            if (is_dir($packageSubFolder)) {
+                $contentSubDirectory = array_diff(scandir("$packageSubFolder/"), array('..', '.'));
+                foreach ($contentSubDirectory as $packageFile) {
+                    $file = "$dir$packageSubFolder/$packageFile";
+                    if (is_file($file)) {
+                        require_once($file);
+                    }
+                }
             }
         }
     }

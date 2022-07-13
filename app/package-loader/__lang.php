@@ -1,10 +1,10 @@
 <?php
-global $_UTILS;
+
+use CMW\Utils\Utils;
 
 $packageFolder = 'app/package/';
 $scannedDirectory = array_diff(scandir($packageFolder), array('..', '.'));
-$dir = $_UTILS::getEnv()->getValue("dir");
-
+$dir = Utils::getEnv()->getValue("dir");
 foreach ($scannedDirectory as $package) {
     $packageSubFolder = "app/package/$package/lang/";
     if (is_dir($packageSubFolder)) {
