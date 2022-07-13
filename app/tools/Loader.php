@@ -53,7 +53,7 @@ class Loader
     public function loadPackages(): void
     {
         $this->requireFile("app", "manager.php");
-        $this->requireFile("app/package-loader", "__model.php", "__controller.php", "__entity.php", "__routes.php", "__function.php");
+        $this->requireFile("app/package-loader", "__model.php", "__controller.php", "__entity.php", "__routes.php", "__function.php", "__lang.php");
 
         if ((int)$this->getValue("installStep") >= 0) {
             $this->requireFile("installation", "routes.php", "controllers/installerController.php", "models/installerModel.php");

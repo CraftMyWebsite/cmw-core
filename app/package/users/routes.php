@@ -6,9 +6,6 @@ use CMW\Controller\Roles\RolesController;
 use CMW\Controller\Users\UsersController;
 use CMW\Router\Router;
 
-//Todo Try to remove that...
-require_once('Lang/'.getenv("LOCALE").'.php');
-
 
 /* Administration scope of package */
 $router->scope('/cmw-admin', function(Router $router) {
