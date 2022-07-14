@@ -1,7 +1,5 @@
 <?php
 /* @var \CMW\Controller\Installer\InstallerController $install */
-
-global $_UTILS;
 ?>
 
 <div class="card">
