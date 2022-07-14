@@ -130,13 +130,21 @@ class Utils
      *
      * @desc Upload image on the uploads folder. File accepted [png, jpeg, jpg, gif, webp].
      */
-    public static function uploadImage(array $file, string $dirName = "/"): string
+    public static function uploadImage(array $file, string $dirName = ""): string
     {
+
         if (mb_substr($dirName, -1) !== "/")
             $dirName .= "/";
 
 
-        $path = getenv("DIR") . "public/uploads" . $dirName;
+        if($dirName !== "/" && is_dir(getenv("DIR") . "public/uploads" . $dirName)) {
+            mkdir(getenv("DIR") . "public/uploads/" . $dirName);
+        }
+
+        $path = getenv("DIR") . "public/uploads/" . $dirName;
+
+        echo $path;
+
 
         if (!empty($dirName) && $dirName !== "/") {
             if(!is_dir($path))
