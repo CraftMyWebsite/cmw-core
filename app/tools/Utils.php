@@ -143,8 +143,6 @@ class Utils
 
         $path = getenv("DIR") . "public/uploads/" . $dirName;
 
-        echo $path;
-
 
         if (!empty($dirName) && $dirName !== "/") {
             if(!is_dir($path))
