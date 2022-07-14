@@ -13,16 +13,19 @@ require_once("app/tools/Loader.php");
 session_start();
 
 $_UTILS = new Utils();
-$loader = new Loader($_UTILS);
+$loader = new Loader();
 
-$_UTILS::getEnv()->addValue("locale", "fr");
-date_default_timezone_set($_UTILS::getEnv()->getValue("TIMEZONE") ?? "UTC");
+Utils::getEnv()->addValue("locale", "fr");
+date_default_timezone_set(Utils::getEnv()->getValue("TIMEZONE") ?? "UTC");
 
 /*=> Load Router */
 $router = $loader->loadRouter();
 
 /*=> Load Packages */
 $loader->loadPackages();
+
+/*=> Load Tools */
+$loader->loadTools();
 
 /*=> Load Global Constants */
 $loader->loadGlobalConstants(); //TODO MODIF THAT
