@@ -133,13 +133,13 @@ class Utils
     public static function uploadImage(array $file, string $dirName = ""): string
     {
 
-        if (mb_substr($dirName, -1) !== "/")
+        if (!empty(mb_substr($dirName, -1)))
             $dirName .= "/";
 
 
-        if($dirName !== "/" && is_dir(getenv("DIR") . "public/uploads" . $dirName)) {
+        if(!file_exists(getenv("DIR") . "public/uploads/" . $dirName))
             mkdir(getenv("DIR") . "public/uploads/" . $dirName);
-        }
+
 
         $path = getenv("DIR") . "public/uploads/" . $dirName;
 
