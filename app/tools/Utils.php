@@ -171,13 +171,15 @@ class Utils
         $fileName = self::genId(rand(15, 35));
         $extension = $allowedTypes[$fileType];
 
-        $newFilePath = $path . $fileName . "." . $extension;
+        $neFileWExtension = $fileName . "." . $extension;
+
+        $newFilePath = $path . $neFileWExtension;
 
 
         if (!copy($filePath, $newFilePath))
             return "ERROR_CANT_MOVE_FILE";
 
-
-        return "CONFIRM_UPLOAD";
+        //Return the file name with extension
+        return $neFileWExtension;
     }
 }
