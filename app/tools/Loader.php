@@ -9,18 +9,16 @@ use CMW\Router\RouterException;
 class Loader
 {
 
-    private Utils $utils;
     private static Router $globalRouter;
 
-    public function __construct(Utils $utils)
+    public function __construct()
     {
-        $this->utils = $utils;
         $this->loadRouter();
     }
 
     private function getValue(string $value): string
     {
-        return $this->utils::getEnv()->getValue($value);
+        return Utils::getEnv()->getValue($value);
     }
 
     public function manageErrors(): void
@@ -61,6 +59,10 @@ class Loader
         if ((int)$this->getValue("installStep") >= 0) {
             $this->requireFile("installation", "routes.php", "controllers/installerController.php", "models/installerModel.php");
         }
+    }
+
+    public function loadTools(): void {
+        $this->requireFile("app/tools", "View.php");
     }
 
     public function loadGlobalConstants(): void

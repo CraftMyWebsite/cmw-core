@@ -1,12 +1,13 @@
 <?php use CMW\Controller\CoreController;
-/** @var CoreController $core */ ?>
+use CMW\Utils\View;
+
+/** @var CoreController $core */
+/**@var  array $includes*/?>
 
 <footer>
    <?= $core->cmwFooter() ?>
 </footer>
 
 <?php
-/* INCLUDE AFTER SCRIPTS*/
-if (!empty($includes))
-    includeFiles($includes, "scriptsAfter");
+View::loadInclude($includes, "afterScript");
 ?>

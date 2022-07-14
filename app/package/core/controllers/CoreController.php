@@ -9,6 +9,7 @@ use CMW\Model\CoreModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Entity\Core\OptionsEntity;
 use CMW\Utils\Utils;
+use CMW\Utils\View;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
@@ -22,12 +23,10 @@ class CoreController
 {
     public static string $themePath;
     public static array $availableLocales = ['fr' => 'Français', 'en' => 'English'];
-    private CoreModel $coreModel;
 
-    public function __construct($theme_path = null)
+    public function __construct()
     {
         self::$themePath = $this->cmwThemePath();
-        $this->coreModel = new CoreModel();
     }
 
     #[NoReturn] protected static function redirectToHome(): void
@@ -40,7 +39,7 @@ class CoreController
     public function adminDashboard(): void
     {
         //Redirect to the dashboard
-        if($_GET['url'] === "cmw-admin")
+        if ($_GET['url'] === "cmw-admin")
             header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
 
         view('core', 'dashboard.admin', [], 'admin', []);
@@ -83,13 +82,18 @@ class CoreController
         $core = new CoreController();
         $menu = new MenusController();
 
-        view('core', 'home', ["core" => $core, "menu" => $menu], 'public', []);
+        $view = new View();
+        $view
+            ->setPackage("core")
+            ->setViewFile("home")
+            ->addVariableList(array("core" => $core, "menu" => $menu))
+            //->addStyle()
+            ->view();
     }
 
     public function cmwThemePath(): string
     {
-        $coreModel = new CoreModel();
-        return $coreModel->fetchOption("theme");
+        return (new CoreModel())->fetchOption("theme");
     }
 
     /**
@@ -115,7 +119,7 @@ class CoreController
     /* Security Warning */
     public function cmwWarn(): ?string
     {
-        if (is_dir("installation") && getenv("DEVMODE") != 1 ) {
+        if (is_dir("installation") && getenv("DEVMODE") != 1) {
             //Todo Set that in lang file
             return <<<HTML
             <p class='security-warning'>ATTENTION - Votre dossier d'installation n'a pas encore été supprimé. Pour des questions de sécurité, vous devez supprimer le dossier installation situé à la racine de votre site.</p>

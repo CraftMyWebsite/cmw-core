@@ -38,6 +38,17 @@ class Utils
         return false;
     }
 
+    public static function hasOneNullValue(string ...$values): bool
+    {
+        foreach ($values as $value) {
+            if (is_null($value)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static function normalizeForSlug($text, $encode = "UTF-8"): string
     {
         $text = mb_strtolower(trim(self::removeAccents($text, $encode)));
@@ -145,7 +156,7 @@ class Utils
 
 
         if (!empty($dirName) && $dirName !== "/") {
-            if(!is_dir($path))
+            if (!is_dir($path))
                 return "ERROR_FOLDER_DONT_EXIST";
 
         }
