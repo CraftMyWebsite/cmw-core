@@ -54,9 +54,9 @@ class Loader
     {
         $this->requireFile("app", "manager.php");
 
+        $this->loadLangFiles();
         $this->loadMultiplePackageFiles("controllers", "entities", "functions", "models");
-
-        $this->requireFile("app/package-loader", "__routes.php", "__lang.php");
+        $this->loadRouteFiles();
 
         if ((int)$this->getValue("installStep") >= 0) {
             $this->requireFile("installation", "routes.php", "controllers/installerController.php", "models/installerModel.php");
@@ -118,6 +118,40 @@ class Loader
                         require_once($file);
                     }
                 }
+            }
+        }
+    }
+
+    private function loadLangFiles(): void
+    {
+        $packageFolder = 'app/package';
+        $contentDirectory = array_diff(scandir("$packageFolder/"), array('..', '.'));
+        $dir = Utils::getEnv()->getValue("dir");
+
+        foreach ($contentDirectory as $package) {
+            $packageSubFolder = "$packageFolder/$package/lang";
+            if (is_dir($packageSubFolder)) {
+                $contentSubDirectory = array_diff(scandir("$packageSubFolder/"), array('..', '.'));
+                foreach ($contentSubDirectory as $packageFile) {
+                    $file = "$dir$packageSubFolder/" . getenv("LOCALE") . ".php";
+                    if (is_file($file)) {
+                        require_once($file);
+                    }
+                }
+            }
+        }
+    }
+
+    private function loadRouteFiles(): void
+    {
+        $packageFolder = 'app/package';
+        $scannedDirectory = array_diff(scandir("$packageFolder/"), array('..', '.'));
+        $dir = Utils::getEnv()->getValue("dir");
+
+        foreach ($scannedDirectory as $package) {
+            $file = "$dir$packageFolder/$package/routes.php";
+            if (is_file($file)) {
+                require($file);
             }
         }
     }
