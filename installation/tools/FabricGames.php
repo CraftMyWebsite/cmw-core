@@ -2,6 +2,8 @@
 
 namespace CMW\Controller\Installer\Games;
 
+use CMW\Utils\Utils;
+
 /**
  * Class: @FabricGames
  * @package games
@@ -16,25 +18,19 @@ class FabricGames
 
     public function __construct()
     {
-        global $_UTILS;
-
-        self::$game = $_UTILS::getEnv()->getValue("game") ?? self::defaultGame;
-
+        self::$game = Utils::getEnv()->getValue("game") ?? self::defaultGame;
     }
 
     public static function getGame(): string
     {
-        global $_UTILS;
-        self::$game = $_UTILS::getEnv()->getValue("game") ?? self::defaultGame;
+        self::$game = Utils::getEnv()->getValue("game") ?? self::defaultGame;
         return self::$game;
     }
 
     public static function getGameList(): array
     {
-        global $_UTILS;
-
         $toReturn = array();
-        $path = $_UTILS::getEnv()->getValue("dir") . "installation/tools/games/";
+        $path = Utils::getEnv()->getValue("dir") . "installation/tools/games/";
         $scannedDirectory = array_diff(scandir($path), array('..', '.'));
 
         foreach ($scannedDirectory as $file) {
@@ -48,9 +44,7 @@ class FabricGames
 
     public static function loadGames(): void
     {
-        global $_UTILS;
-
-        $path = $_UTILS::getEnv()->getValue("dir") . "installation/tools/games/";
+        $path = Utils::getEnv()->getValue("dir") . "installation/tools/games/";
         $scannedDirectory = array_diff(scandir($path), array('..', '.'));
         foreach ($scannedDirectory as $file) {
             if (is_file("$path/$file")) {

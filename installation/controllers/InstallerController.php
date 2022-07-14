@@ -16,25 +16,21 @@ use JetBrains\PhpStorm\NoReturn;
 class InstallerController
 {
 
-    private Utils $Utils;
-
     public function __construct()
     {
-        global $_UTILS;
-        $this->Utils = $_UTILS;
         $this->loadLang();
     }
 
 
     private function loadLang(): void
     {
-        $lang = $this->Utils::getEnv()->getValue("locale") ?: "fr";
-        require_once($this->Utils::getEnv()->getValue("dir") . "/installation/lang/$lang.php");
+        $lang = Utils::getEnv()->getValue("locale") ?? "fr";
+        require_once(Utils::getEnv()->getValue("dir") . "/installation/lang/$lang.php");
     }
 
     public function changeLang(string $code): void
     {
-        $this->Utils::getEnv()->setOrEditValue("LOCALE", $code);
+        Utils::getEnv()->setOrEditValue("LOCALE", $code);
         header("location: ../../installer");
     }
 
@@ -44,14 +40,14 @@ class InstallerController
         ob_start();
 
         extract(["install" => $install], EXTR_OVERWRITE);
-        require_once($this->Utils::getEnv()->getValue("dir") . "/installation/views/$filename.view.php");
+        require_once(Utils::getEnv()->getValue("dir") . "/installation/views/$filename.view.php");
         $content = ob_get_clean();
-        require_once($this->Utils::getEnv()->getValue("dir") . "/installation/views/template.php");
+        require_once(Utils::getEnv()->getValue("dir") . "/installation/views/template.php");
     }
 
     public function getInstallationStep(): int
     {
-        return $this->Utils::getEnv()->getValue("installStep");
+        return Utils::getEnv()->getValue("installStep");
     }
 
     public function setActiveOnStep(int $step): string
@@ -61,12 +57,12 @@ class InstallerController
 
     public function setCheckOnStep(int $step): string
     {
-        return (($this->getInstallationStep() > $step) || $this->getInstallationStep() == -1) ? "check" : "spinner";
+        return (($this->getInstallationStep() > $step) || $this->getInstallationStep() === -1) ? "check" : "spinner";
     }
 
     public function getGameList(): array
     {
-        require_once($this->Utils::getEnv()->getValue("dir") . "installation/tools/FabricGames.php");
+        require_once(Utils::getEnv()->getValue("dir") . "installation/tools/FabricGames.php");
 
         return FabricGames::getGameList();
     }
@@ -98,7 +94,7 @@ class InstallerController
 
     public function firstInstallPost(): void
     {
-        if ($this->Utils::isValuesEmpty($_POST, "bdd_name", "bdd_login", "bdd_address")) {
+        if (Utils::isValuesEmpty($_POST, "bdd_name", "bdd_login", "bdd_address")) {
             echo "-1";
             return;
         }
@@ -120,25 +116,25 @@ class InstallerController
         $this->firstInstallSetDatabase($host, $db, $username, $password);
         $this->firstInstallSetInfos($subFolder, $timezone, $devMode);
 
-        $this->Utils::getEnv()->setOrEditValue("PATH_SUBFOLDER", $subFolder);
-        $this->Utils::getEnv()->setOrEditValue("PATH_ADMIN_VIEW", "admin/resources/views/");
-        $this->Utils::getEnv()->setOrEditValue("TIMEZONE", $timezone);
-        $this->Utils::getEnv()->setOrEditValue("DEVMODE", $devMode);
+        Utils::getEnv()->setOrEditValue("PATH_SUBFOLDER", $subFolder);
+        Utils::getEnv()->setOrEditValue("PATH_ADMIN_VIEW", "admin/resources/views/");
+        Utils::getEnv()->setOrEditValue("TIMEZONE", $timezone);
+        Utils::getEnv()->setOrEditValue("DEVMODE", $devMode);
 
 
         //Todo Throw error
         InstallerModel::initDatabase($host, $db, $username, $password, $devMode);
 
-        $this->Utils::getEnv()->editValue("installStep", 1);
+        Utils::getEnv()->editValue("installStep", 1);
 
         echo '1';
     }
 
     public function secondInstallPost(): void
     {
-        require_once($this->Utils::getEnv()->getValue("dir") . "installation/tools/FabricGames.php");
+        require_once(Utils::getEnv()->getValue("dir") . "installation/tools/FabricGames.php");
 
-        if ($this->Utils::isValuesEmpty($_POST, "game")) {
+        if (Utils::isValuesEmpty($_POST, "game")) {
             echo "-1";
             return;
         }
@@ -147,16 +143,16 @@ class InstallerController
 
         FabricGames::installGame($selGame);
 
-        $this->Utils::getEnv()->setOrEditValue("game", $selGame);
+        Utils::getEnv()->setOrEditValue("game", $selGame);
 
-        $this->Utils::getEnv()->editValue("installStep", 2);
+        Utils::getEnv()->editValue("installStep", 2);
 
         echo '1';
     }
 
     public function thirdInstallPost(): void
     {
-        if ($this->Utils::isValuesEmpty($_POST, "email", "username", "password") || !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+        if (Utils::isValuesEmpty($_POST, "email", "username", "password") || !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
             echo "-1";
             return;
         }
@@ -167,15 +163,15 @@ class InstallerController
 
         InstallerModel::initAdmin($email, $username, $password);
 
-        $this->Utils::getEnv()->editValue("installStep", 3);
+        Utils::getEnv()->editValue("installStep", 3);
 
         echo '1';
     }
 
     public function fourthInstallPost(): void {
-        require_once($this->Utils::getEnv()->getValue("dir") . "installation/tools/FabricGames.php");
+        require_once(Utils::getEnv()->getValue("dir") . "installation/tools/FabricGames.php");
 
-        if ($this->Utils::isValuesEmpty($_POST, "config_name", "config_description")) {
+        if (Utils::isValuesEmpty($_POST, "config_name", "config_description")) {
             echo "-1";
             return;
         }
@@ -192,30 +188,30 @@ class InstallerController
             return;
         }
 
-        $this->Utils::getEnv()->editValue("installStep", 4);
+        Utils::getEnv()->editValue("installStep", 4);
 
         echo 1;
     }
 
     private function firstInstallSetDatabase(string $host, string $db, string $username, string $password): void
     {
-        $this->Utils::getEnv()->setOrEditValue("DB_HOST", $host);
-        $this->Utils::getEnv()->setOrEditValue("DB_NAME", $db);
-        $this->Utils::getEnv()->setOrEditValue("DB_USERNAME", $username);
-        $this->Utils::getEnv()->setOrEditValue("DB_PASSWORD", $password);
+        Utils::getEnv()->setOrEditValue("DB_HOST", $host);
+        Utils::getEnv()->setOrEditValue("DB_NAME", $db);
+        Utils::getEnv()->setOrEditValue("DB_USERNAME", $username);
+        Utils::getEnv()->setOrEditValue("DB_PASSWORD", $password);
     }
 
     private function firstInstallSetInfos(string $subFolder, string $timezone, bool $devMode): void
     {
-        $this->Utils::getEnv()->setOrEditValue("PATH_SUBFOLDER", $subFolder);
-        $this->Utils::getEnv()->setOrEditValue("TIMEZONE", $timezone);
-        $this->Utils::getEnv()->setOrEditValue("DEVMODE", $devMode);
+        Utils::getEnv()->setOrEditValue("PATH_SUBFOLDER", $subFolder);
+        Utils::getEnv()->setOrEditValue("TIMEZONE", $timezone);
+        Utils::getEnv()->setOrEditValue("DEVMODE", $devMode);
     }
 
 
     public function loadHTMLGame(): void
     {
-        require_once($this->Utils::getEnv()->getValue("dir") . "installation/tools/FabricGames.php");
+        require_once(Utils::getEnv()->getValue("dir") . "installation/tools/FabricGames.php");
 
         FabricGames::getHTML();
     }
@@ -237,7 +233,7 @@ class InstallerController
 
     public function endInstallation(): void
     {
-        $this->Utils::getEnv()->editValue("installStep", -1);
+        Utils::getEnv()->editValue("installStep", -1);
     }
 
 

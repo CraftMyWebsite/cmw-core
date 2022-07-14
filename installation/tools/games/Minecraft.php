@@ -3,6 +3,7 @@
 namespace CMW\Controller\Installer\Games;
 
 use CMW\Model\Manager;
+use CMW\Utils\Utils;
 
 require_once("installation/tools/Games.php");
 
@@ -24,16 +25,12 @@ class Minecraft extends Games
 
     private static function loadSql(): string
     {
-        global $_UTILS;
-
-        return file_get_contents($_UTILS::getEnv()->getValue("dir") . "installation/tools/init/minecraft.sql");
+        return file_get_contents(Utils::getEnv()->getValue("dir") . "installation/tools/init/minecraft.sql");
     }
 
     public static function install(): void
     {
-        global $_UTILS;
-
-        require_once($_UTILS::getEnv()->getValue("dir") . "app/manager.php");
+        require_once(Utils::getEnv()->getValue("dir") . "app/manager.php");
 
         $db = Manager::dbConnect();
         $query = self::loadSql();
@@ -44,15 +41,13 @@ class Minecraft extends Games
 
     public static function initConfig(): int
     {
-        global $_UTILS;
-
-        if ($_UTILS::isValuesEmpty($_POST, "config_minecraft_ip")) {
+        if (Utils::isValuesEmpty($_POST, "config_minecraft_ip")) {
             return -1;
         }
 
         $ip_minecraft = filter_input(INPUT_POST, "config_minecraft_ip");
 
-        require_once($_UTILS::getEnv()->getValue("dir") . "app/manager.php");
+        require_once(Utils::getEnv()->getValue("dir") . "app/manager.php");
         $db = Manager::dbConnect();
 
         $query = $db->prepare("INSERT INTO cmw_core_options (option_name, option_value, option_updated) VALUES (:option_name, :option_value, NOW())");

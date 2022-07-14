@@ -13,12 +13,19 @@ class Loader
 
     public function __construct()
     {
+        new Utils(); //Need to be first /!\ IMPORTANT
         $this->loadRouter();
     }
 
     private function getValue(string $value): string
     {
         return Utils::getEnv()->getValue($value);
+    }
+
+    public function setLocale(): void
+    {
+        Utils::getEnv()->addValue("locale", "fr");
+        date_default_timezone_set(Utils::getEnv()->getValue("TIMEZONE") ?? "UTC");
     }
 
     public function manageErrors(): void
@@ -61,13 +68,14 @@ class Loader
         }
     }
 
-    public function loadTools(): void {
+    public function loadTools(): void
+    {
         $this->requireFile("app/tools", "View.php");
     }
 
     public function loadGlobalConstants(): void
     {
-        $this->requireFile("app/tools", "builder.php", "functions.php");
+        $this->requireFile("app/tools", "functions.php");
         $this->requireFile("app", "globalConst.php");
     }
 

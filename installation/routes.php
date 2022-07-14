@@ -1,10 +1,12 @@
 <?php
 
-global $router, $_UTILS;
+global $router;
 
 use CMW\Controller\Installer\InstallerController;
+use CMW\Router\Router;
+use CMW\Utils\Utils;
 
-$installationStep = $_UTILS::getEnv()->getValue("installStep") ?? 0;
+$installationStep = Utils::getEnv()->getValue("installStep") ?? 0;
 $number ??= "first";
 
 switch ((int)$installationStep) {
@@ -26,7 +28,7 @@ switch ((int)$installationStep) {
 }
 
 
-$router->scope("/installer", function ($router) use ($number) {
+$router->scope("/installer", function (Router $router) use ($number) {
     $capsMaj = ucfirst($number);
     $router->get("/", "Installer#{$number}InstallView");
     $router->post("/submit{$capsMaj}Install", "Installer#{$number}InstallPost");

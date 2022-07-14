@@ -1,7 +1,7 @@
 <?php
-global $_UTILS;
+use CMW\Utils\Utils;
 
-include_once($_UTILS::getEnv()->getValue("dir") . "admin/resources/views/includes/footer.inc.php") ?>
+include_once(Utils::getEnv()->getValue("dir") . "admin/resources/views/includes/footer.inc.php") ?>
 </div>
 
 <!-- Bootstrap 4 -->

@@ -1,10 +1,10 @@
 <?php
-global $_UTILS;
+use CMW\Utils\Utils;
 
-$dbHost = $_UTILS::getEnv()->getValue("DB_HOST") ?? "<span class='text-danger'>" . INSTALL_INFOS_ERROR . "</span>";
-$dbUsername = $_UTILS::getEnv()->getValue("DB_USERNAME") ?? "<span class='text-danger'>" . INSTALL_INFOS_ERROR . "</span>";
-$dbPassword = $_UTILS::getEnv()->getValue("DB_PASSWORD") ? "*****" : "<span class='text-danger'>" . INSTALL_INFOS_EMPTY . "</span>";
-$dbName = $_UTILS::getEnv()->getValue("DB_NAME") ?? "<span class='text-danger'>" . INSTALL_INFOS_ERROR . "</span>";
+$dbHost = Utils::getEnv()->getValue("DB_HOST") ?? "<span class='text-danger'>" . INSTALL_INFOS_ERROR . "</span>";
+$dbUsername = Utils::getEnv()->getValue("DB_USERNAME") ?? "<span class='text-danger'>" . INSTALL_INFOS_ERROR . "</span>";
+$dbPassword = Utils::getEnv()->getValue("DB_PASSWORD") ? "*****" : "<span class='text-danger'>" . INSTALL_INFOS_EMPTY . "</span>";
+$dbName = Utils::getEnv()->getValue("DB_NAME") ?? "<span class='text-danger'>" . INSTALL_INFOS_ERROR . "</span>";
 ?>
 
 <div class="col-5">
@@ -22,7 +22,7 @@ $dbName = $_UTILS::getEnv()->getValue("DB_NAME") ?? "<span class='text-danger'>"
                     <?= INSTALL_ALERT_VERSION_INFOS ?>
                 </div>
             <?php endif; ?>
-            <?php if ($_UTILS::getEnv()->getValue("installStep") == 0) : ?>
+            <?php if (Utils::getEnv()->getValue("installStep") === 0) : ?>
                 <div class="info-box bg-success">
                     <span class="info-box-icon"><i class="fas fa-server"></i></span>
 
@@ -33,7 +33,7 @@ $dbName = $_UTILS::getEnv()->getValue("DB_NAME") ?? "<span class='text-danger'>"
                     <!-- /.info-box-content -->
                 </div>
             <?php endif; ?>
-            <?php if ($_UTILS::getEnv()->getValue("installStep") > 0) : ?>
+            <?php if (Utils::getEnv()->getValue("installStep") > 0) : ?>
                 <p>
                     <b><?= INSTALL_BDD_ADDRESS ?> :</b> <?= $dbHost ?><br>
                     <b><?= INSTALL_BDD_USER_ABOUT ?> :</b> <?= $dbUsername ?><br>
@@ -46,7 +46,7 @@ $dbName = $_UTILS::getEnv()->getValue("DB_NAME") ?? "<span class='text-danger'>"
                 <b><?= INSTALL_INFO_HOST ?></b><?= php_uname('n') ?><br>
                 <b><?= INSTALL_INFO_IP ?></b><?= $_SERVER['SERVER_ADDR'] ?>:<?= $_SERVER['SERVER_PORT'] ?>
             </p>
-            <?php if ($_UTILS::getEnv()->getValue("installStep") > 1): ?>
+            <?php if (Utils::getEnv()->getValue("installStep") > 1): ?>
                 <p>
                     <b><?= INSTALL_GAME ?>:</b> <?= ucfirst(getenv("GAME")) ?>
                 </p>

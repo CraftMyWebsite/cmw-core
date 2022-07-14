@@ -1,12 +1,13 @@
 <?php
 
+use CMW\Utils\Utils;
+
 /**
  * Class: @installerModel
  * @package installer
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-
 class InstallerModel
 {
 
@@ -26,12 +27,11 @@ class InstallerModel
 
     private static function loadDatabaseWithoutParams(): PDO
     {
-        global $_UTILS;
 
-        $dbServername = $_UTILS::getEnv()->getValue("DB_HOST");
-        $dbUsername = $_UTILS::getEnv()->getValue("DB_USERNAME");
-        $dbPassword = $_UTILS::getEnv()->getValue("DB_PASSWORD");
-        $dbName = $_UTILS::getEnv()->getValue("DB_NAME");
+        $dbServername = Utils::getEnv()->getValue("DB_HOST");
+        $dbUsername = Utils::getEnv()->getValue("DB_USERNAME");
+        $dbPassword = Utils::getEnv()->getValue("DB_PASSWORD");
+        $dbName = Utils::getEnv()->getValue("DB_NAME");
 
         return self::loadDatabase($dbServername, $dbName, $dbUsername, $dbPassword);
     }
@@ -49,12 +49,11 @@ class InstallerModel
 
     public static function initDatabase($serverName, $database, $username, $password, $devMode): void
     {
-        global $_UTILS;
 
         $db = self::loadDatabase($serverName, $database, $username, $password);
 
 
-        $query = file_get_contents($_UTILS::getEnv()->getValue("dir") . "installation/init.sql");
+        $query = file_get_contents(Utils::getEnv()->getValue("dir") . "installation/init.sql");
         $req = $db->query($query);
         $req->closeCursor();
 
@@ -64,15 +63,13 @@ class InstallerModel
 
     private static function loadPackages(PDO $db, int $devMode): void
     {
-        global $_UTILS;
 
-        $packageFolder = $_UTILS::getEnv()->getValue("dir") . 'app/package/';
+        $packageFolder = Utils::getEnv()->getValue("dir") . 'app/package/';
         $scannedDirectory = array_diff(scandir($packageFolder), array('..', '.'));
 
 
-
         foreach ($scannedDirectory as $package) {
-            $packageSqlFile = $_UTILS::getEnv()->getValue("dir") . "/app/package/$package/init.sql";
+            $packageSqlFile = Utils::getEnv()->getValue("dir") . "/app/package/$package/init.sql";
             if (file_exists($packageSqlFile) && trim(file_get_contents($packageSqlFile))) {
                 $query_package = file_get_contents($packageSqlFile);
                 $stmt_package = $db->query($query_package);
