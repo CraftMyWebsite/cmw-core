@@ -28,6 +28,21 @@ class View
         $this->isAdminFile = $isAdminFile;
     }
 
+    public static function basicPublicView(string $package, string $viewFile): void
+    {
+        $view = new self($package, $viewFile);
+        $view->view();
+    }
+
+    public static function createAdminView(string $package, string $viewFile): View
+    {
+        $view = new self($package, $viewFile);
+
+        $view->setAdminView()->needAdminControl();
+
+        return $view;
+    }
+
     #[ArrayShape(["styles" => "array", "scripts" => "array"])]
     private function generateInclude(): array
     {
@@ -126,7 +141,7 @@ class View
     {
         $theme = (new CoreController())->cmwThemePath();
         return ($this->isAdminFile)
-            ? "app/package/{$this->package}/views/{$this->viewFile}.view.php"
+            ? "app/package/{$this->package}/views/{$this->viewFile}.admin.view.php"
             : "public/themes/$theme/views/{$this->package}/{$this->viewFile}.view.php";
     }
 
@@ -137,6 +152,34 @@ class View
             ? getenv("PATH_ADMIN_VIEW") . "template.php"
             : "public/themes/$theme/views/template.php";
     }
+
+    private static function loadIncludeFile(array $includes, #[ExpectedValues(["beforeScript", "afterScript", "styles"])] string $fileType): void
+    {
+        if (!in_array($fileType, ["beforeScript", "afterScript", "styles"])) {
+            return;
+        }
+
+        if ($fileType === "styles") {
+            foreach ($includes['styles'] as $style) {
+                $styleLink = getenv("PATH_SUBFOLDER") . $style;
+                echo <<<HTML
+                    <link rel="stylesheet" href="$styleLink">
+                HTML;
+            }
+
+            return;
+        }
+
+        $arrayAccess = $fileType === "beforeScript" ? "before" : "after";
+
+        foreach ($includes['scripts'][$arrayAccess] as $script) {
+            $scriptLink = getenv("PATH_SUBFOLDER") . $script;
+            echo <<<HTML
+                    <script src="$scriptLink"></script>
+                HTML;
+        }
+    }
+
 
     public function view(): void
     {
@@ -169,33 +212,6 @@ class View
         $content = ob_get_clean();
 
         require_once($this->getTemplateFile());
-    }
-
-    private static function loadIncludeFile(array $includes, #[ExpectedValues(["beforeScript", "afterScript", "styles"])] string $fileType): void
-    {
-        if (!in_array($fileType, ["beforeScript", "afterScript", "styles"])) {
-            return;
-        }
-
-        if ($fileType === "styles") {
-            foreach ($includes['styles'] as $style) {
-                $styleLink = getenv("PATH_SUBFOLDER") . $style;
-                echo <<<HTML
-                    <link rel="stylesheet" href="$styleLink">
-                HTML;
-            }
-
-            return;
-        }
-
-        $arrayAccess = $fileType === "beforeScript" ? "before" : "after";
-
-        foreach ($includes['scripts'][$arrayAccess] as $script) {
-            $scriptLink = getenv("PATH_SUBFOLDER") . $script;
-            echo <<<HTML
-                    <script src="$scriptLink"></script>
-                HTML;
-        }
     }
 
     public static function loadInclude(array $includes, #[ExpectedValues(flags: ["beforeScript", "afterScript", "styles"])] string ...$files): void
