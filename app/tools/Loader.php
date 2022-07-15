@@ -5,6 +5,7 @@ namespace CMW\Utils;
 use CMW\Controller\Installer\InstallerController;
 use CMW\Router\Router;
 use CMW\Router\RouterException;
+use Throwable;
 
 class Loader
 {
@@ -85,8 +86,12 @@ class Loader
 
         try {
             $router->listen();
-        } catch (RouterException $e) {
-            exit($e->getMessage());
+        }
+        catch (RouterException $e) {
+
+        }
+        catch (Throwable $e) {
+            echo "Erreur $e";
         }
     }
 
