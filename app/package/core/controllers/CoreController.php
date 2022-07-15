@@ -42,12 +42,12 @@ class CoreController
         if ($_GET['url'] === "cmw-admin")
             header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
 
-        view('core', 'dashboard.admin', [], 'admin', []);
+        View::createAdminView("core", "dashboard")->addScriptBefore("useless", "useless")->view();
     }
 
     public function adminConfiguration(): void
     {
-        view('core', 'configuration.admin', [], 'admin', []);
+        View::createAdminView("core", "configuration")->view();
     }
 
     public function adminConfigurationPost(): void
@@ -79,16 +79,10 @@ class CoreController
     /* PUBLIC FRONT */
     public function frontHome(): void
     {
-        $core = new CoreController();
         $menu = new MenusController();
 
-        $view = new View();
-        $view
-            ->setPackage("core")
-            ->setViewFile("home")
-            ->addVariableList(array("core" => $core, "menu" => $menu))
-            //->addStyle()
-            ->view();
+        $view = new View("core", "menu");
+        $view->addVariable("menu", $menu)->view();
     }
 
     public function cmwThemePath(): string

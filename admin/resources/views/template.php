@@ -2,12 +2,13 @@
 <html lang="fr-FR">
 <?php
 
+use CMW\Utils\View;
+
 include_once("includes/head.inc.php");
 
 /* INCLUDE SCRIPTS / STYLES*/
-if(!empty($includes)) {
-    includeFiles($includes, "scriptsBefore", "styles");
-}
+View::loadInclude($includes, "beforeScript", "styles");
+
 if (!isset($noBody) || !$noBody) :
 ?>
 <body class="hold-transition sidebar-mini">
@@ -53,9 +54,9 @@ if (!isset($noBody) || !$noBody) :
 
 <?php
 /* INCLUDE SCRIPTS */
-if(!empty($includes))
-    includeFiles($includes, "scriptsAfter");
+View::loadInclude($includes, "afterScript");
 ?>
+
 
 <?= (isset($scripts) && !empty($scripts)) ? $scripts : "" ?>
 <?= (isset($toaster) && !empty($toaster)) ? $toaster : "" ?>
