@@ -8,6 +8,7 @@ use CMW\Controller\Users\UsersController;
 use CMW\Model\Permissions\PermissionsModel;
 use CMW\Model\Roles\RolesModel;
 use CMW\Model\Users\UsersModel;
+use CMW\Utils\View;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
@@ -40,8 +41,8 @@ class RolesController extends CoreController
 
         $rolesList = $this->roleModel->getRoles();
 
-
-        view('users', 'roles.list.admin', ["rolesList" => $rolesList], 'admin', []);
+        $view = View::createAdminView("users", "roles.list")->addVariable("rolesList", $rolesList);
+        $view->view();
     }
 
 
@@ -53,7 +54,11 @@ class RolesController extends CoreController
         $permissionController = new PermissionsController();
         $permissionModel = new PermissionsModel();
 
-        view('users', 'roles.add.admin', ["permissionController" => $permissionController, "permissionModel" => $permissionModel], 'admin', []);
+        $view = View::createAdminView("users", "roles.add")->addVariableList(array(
+            "permissionController" => $permissionController,
+            "permissionModel" => $permissionModel
+        ));
+        $view->view();
     }
 
     #[NoReturn] public function adminRolesAddPost(): void
@@ -85,8 +90,13 @@ class RolesController extends CoreController
         $permissionModel = new PermissionsModel();
 
 
-        view('users', 'roles.edit.admin', ["role" => $role,
-            "permissionController" => $permissionController, "permissionModel" => $permissionModel, "roleModel" => $roleModel], 'admin', []);
+       $view = View::createAdminView("users", "roles.edit")->addVariableList(array(
+            "permissionController" => $permissionController,
+            "permissionModel" => $permissionModel,
+            "roleModel" => $roleModel,
+            "role" => $role
+        ));
+        $view->view();
     }
 
     #[NoReturn] public function adminRolesEditPost($id): void

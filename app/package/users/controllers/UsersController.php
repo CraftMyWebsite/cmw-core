@@ -12,6 +12,7 @@ use CMW\Model\Permissions\PermissionsModel;
 use CMW\Model\Roles\RolesModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Utils\Utils;
+use CMW\Utils\View;
 use JetBrains\PhpStorm\NoReturn;
 
 /**
@@ -70,7 +71,8 @@ class UsersController extends CoreController
 
         $userList = $this->userModel->getUsers();
 
-        view('users', 'list.admin', ["userList" => $userList], 'admin', []);
+        $view = View::createAdminView("users", "list")->addVariable("userList", $userList);
+        $view->view();
     }
 
     public function adminUsersEdit($id): void
@@ -81,7 +83,11 @@ class UsersController extends CoreController
 
         $roles = $this->roleModel->getRoles();
 
-        view('users', 'user.admin', ["user" => $userEntity, "roles" => $roles], 'admin', []);
+        $view = View::createAdminView("users", "user")->addVariableList(array(
+            "user" => $userEntity,
+            "roles" => $roles
+        ));
+        $view->view();
     }
 
     #[NoReturn] public function adminUsersEditPost($id): void
@@ -122,6 +128,8 @@ class UsersController extends CoreController
         $roles = $this->roleModel->getRoles();
 
         view('users', 'add.admin', ["roles" => $roles], 'admin', []);
+        $view = View::createAdminView("users", "add")->addVariable("roles", $roles);
+        $view->view();
     }
 
 
@@ -130,7 +138,12 @@ class UsersController extends CoreController
         $permissions = new PermissionsController();
         $permModel = new PermissionsModel();
 
-        view('users', 'test.admin', ["perms" => $permissions, "pmodel" => $permModel], 'admin');
+        $view = View::createAdminView("users", "test")->addVariableList(array(
+            "perms" => $permissions,
+            "pmodel" => $permModel
+        ));
+        $view->view();
+
     }
 
 
@@ -205,12 +218,13 @@ class UsersController extends CoreController
     {
         if (UsersModel::getLoggedUser() !== -1) {
             header('Location: ' . getenv('PATH_SUBFOLDER'));
-        } else {
-            $core = new CoreController();
-            $menu = new MenusController();
-
-            view('users', 'login', ["core" => $core, "menu" => $menu], 'public', []);
+            die();
         }
+
+        $menu = new MenusController();
+
+        $view = new View("users", "login");
+        $view->addVariable("menu", $menu)->view();
     }
 
     public function loginPost(): void
