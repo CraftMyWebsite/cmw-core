@@ -79,16 +79,37 @@ class CoreController
     /* PUBLIC FRONT */
     public function frontHome(): void
     {
-        $core = new CoreController();
         $menu = new MenusController();
 
         $view = new View();
         $view
             ->setPackage("core")
             ->setViewFile("home")
-            ->addVariableList(array("core" => $core, "menu" => $menu))
-            //->addStyle()
+            ->addVariable("menu", $menu)
             ->view();
+    }
+
+    public function errorView(int $errorCode): void
+    {
+        $theme = (new CoreController())->cmwThemePath();
+        $menu = new MenusController();
+
+
+        $errorToCall = (string)$errorCode;
+        $errorFolder = "public/themes/$theme/views/errors";
+        $errorFile = "$errorFolder/$errorCode.view.php";
+
+        if (!is_file($errorFile) && is_file("$errorFolder/default.view.php")) {
+            $errorToCall = "default";
+        }
+
+        $view = new View();
+        $view
+            ->setPackage("errors")
+            ->addVariable("menu", $menu)
+            ->setViewFile($errorToCall)
+            ->view();
+
     }
 
     public function cmwThemePath(): string

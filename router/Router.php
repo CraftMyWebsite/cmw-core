@@ -70,7 +70,7 @@ class Router
     public function listen()
     {
         if (!isset($this->routes[$_SERVER['REQUEST_METHOD']])) {
-            throw new RouterException('REQUEST_METHOD does not exist');
+            throw new RouterException('REQUEST_METHOD does not exist', 500);
         }
         foreach ($this->routes[$_SERVER['REQUEST_METHOD']] as $route) {
             /** @var Route $route */
@@ -78,8 +78,7 @@ class Router
                 return $route->call();
             }
         }
-        //TODO ERROR PAGE
-        throw new RouterException('No matching routes');
+        throw new RouterException('No matching routes', 404);
     }
 
     /**
@@ -88,8 +87,7 @@ class Router
     public function url($name, $params = [])
     {
         if (!isset($this->namedRoutes[$name])) {
-            //TODO ERROR PAGE
-            throw new RouterException('No route matches this name');
+            throw new RouterException('No route matches this name', 404);
         }
         return $this->namedRoutes[$name]->getUrl($params);
     }

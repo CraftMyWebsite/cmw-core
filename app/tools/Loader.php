@@ -71,7 +71,7 @@ class Loader
 
     public function loadTools(): void
     {
-        $this->requireFile("app/tools", "View.php");
+        $this->requireFile("app/tools", "View.php", "ErrorManager.php");
     }
 
     public function loadGlobalConstants(): void
@@ -88,7 +88,8 @@ class Loader
             $router->listen();
         }
         catch (RouterException $e) {
-
+            ErrorManager::redirectError($e->getCode());
+            return;
         }
         catch (Throwable $e) {
             echo "Erreur $e";
