@@ -66,6 +66,7 @@ class Route
                 $controller = "CMW\\Controller\\" . $params[0] . "\\" . $params[0] . "Controller";
             }
 
+            //Todo see if $controller inst a controller.
             $controller = new $controller();
             return call_user_func_array([$controller, $params[1]], $this->matches);
         }

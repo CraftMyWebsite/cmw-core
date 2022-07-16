@@ -5,6 +5,7 @@ namespace CMW\Utils;
 use CMW\Controller\Installer\InstallerController;
 use CMW\Router\Router;
 use CMW\Router\RouterException;
+use Throwable;
 
 class Loader
 {
@@ -70,7 +71,7 @@ class Loader
 
     public function loadTools(): void
     {
-        $this->requireFile("app/tools", "View.php");
+        $this->requireFile("app/tools", "View.php", "ErrorManager.php");
     }
 
     public function loadGlobalConstants(): void
@@ -85,8 +86,13 @@ class Loader
 
         try {
             $router->listen();
-        } catch (RouterException $e) {
-            exit($e->getMessage());
+        }
+        catch (RouterException $e) {
+            ErrorManager::redirectError($e->getCode());
+            return;
+        }
+        catch (Throwable $e) {
+            echo "Erreur $e";
         }
     }
 

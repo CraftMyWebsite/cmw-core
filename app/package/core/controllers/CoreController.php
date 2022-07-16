@@ -85,6 +85,29 @@ class CoreController
         $view->addVariable("menu", $menu)->view();
     }
 
+    public function errorView(int $errorCode): void
+    {
+        $theme = (new CoreController())->cmwThemePath();
+        $menu = new MenusController();
+
+
+        $errorToCall = (string)$errorCode;
+        $errorFolder = "public/themes/$theme/views/errors";
+        $errorFile = "$errorFolder/$errorCode.view.php";
+
+        if (!is_file($errorFile) && is_file("$errorFolder/default.view.php")) {
+            $errorToCall = "default";
+        }
+
+        $view = new View();
+        $view
+            ->setPackage("errors")
+            ->addVariable("menu", $menu)
+            ->setViewFile($errorToCall)
+            ->view();
+
+    }
+
     public function cmwThemePath(): string
     {
         return (new CoreModel())->fetchOption("theme");

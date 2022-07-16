@@ -6,17 +6,13 @@ use Exception;
 
 /**
  * Class: @routerException
- * @package Core
+ * @package Router
  * @author CraftMywebsite <contact@craftmywebsite.fr>
  * @version 1.0
  */
 class RouterException extends Exception
 {
-
-    protected $message = 'Unknown exception';     // Exception message
-    protected $code = 500;                     // User-defined exception code
-
-    public function __construct($message = null, $code = 500)
+    public function __construct($message = null, $code = 403)
     {
         $message ??= 'Unknown ' . get_class($this);
         parent::__construct($message, $code);
