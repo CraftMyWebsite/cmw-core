@@ -3,8 +3,11 @@
 namespace CMW\Utils;
 
 use CMW\Controller\Installer\InstallerController;
+use CMW\Router\Link;
 use CMW\Router\Router;
 use CMW\Router\RouterException;
+use ReflectionClass;
+use ReflectionMethod;
 use Throwable;
 
 class Loader
@@ -51,17 +54,28 @@ class Loader
 
             $router = new Router($_GET['url'] ?? $url);
             self::$globalRouter = $router;
+
+            $this->requireFile("router", "Link.php");
         }
 
         return self::$globalRouter;
     }
 
+    public static function getRouter(): Router
+    {
+        return self::$globalRouter;
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
     public function loadPackages(): void
     {
         $this->requireFile("app", "manager.php");
 
         $this->loadLangFiles();
-        $this->loadMultiplePackageFiles("controllers", "entities", "functions", "models");
+        $this->loadControllers();
+        $this->loadMultiplePackageFiles("entities", "functions", "models");
         $this->loadRouteFiles();
 
         if ((int)$this->getValue("installStep") >= 0) {
@@ -71,7 +85,7 @@ class Loader
 
     public function loadTools(): void
     {
-        $this->requireFile("app/tools", "View.php", "ErrorManager.php");
+        $this->requireFile("app/tools", "View.php", "ErrorManager.php", "ClassManager.php");
     }
 
     public function loadGlobalConstants(): void
@@ -86,12 +100,10 @@ class Loader
 
         try {
             $router->listen();
-        }
-        catch (RouterException $e) {
+        } catch (RouterException $e) {
             ErrorManager::redirectError($e->getCode());
             return;
-        }
-        catch (Throwable $e) {
+        } catch (Throwable $e) {
             echo "Erreur $e";
         }
     }
@@ -170,6 +182,60 @@ class Loader
                 require($file);
             }
         }
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    private function loadControllers(): void
+    {
+        $packageFolder = 'app/package';
+        $contentDirectory = array_diff(scandir("$packageFolder/"), array('..', '.'));
+        $dir = Utils::getEnv()->getValue("dir");
+
+        foreach ($contentDirectory as $package) {
+            $packageSubFolder = "$packageFolder/$package/controllers";
+            if (is_dir($packageSubFolder)) {
+                $contentSubDirectory = array_diff(scandir("$packageSubFolder/"), array('..', '.'));
+                foreach ($contentSubDirectory as $packageFile) {
+                    $file = "$dir$packageSubFolder/$packageFile";
+                    if (is_file($file)) {
+                        require_once($file);
+                        $this->initRoute($file);
+                    }
+                }
+            }
+        }
+
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    private function initRoute(string $file): void
+    {
+        $className = ClassManager::getClassFullNameFromFile($file);
+
+        $classRef = new ReflectionClass($className);
+        foreach ($classRef->getMethods() as $method) {
+
+            $isMethodClass = $method->getDeclaringClass()->getName() === $className;
+
+            if (!$isMethodClass) {
+                continue;
+            }
+
+            $linkAttributes = $method->getAttributes(Link::class);
+            foreach ($linkAttributes as $attribute) {
+
+                /** @var Link $linkInstance */
+                $linkInstance = $attribute->newInstance();
+
+                self::$globalRouter->registerRoute($linkInstance, $method);
+            }
+
+        }
+
     }
 
 }

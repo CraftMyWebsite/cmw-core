@@ -20,11 +20,11 @@ $router = $loader->loadRouter();
 /*=> Set Locale Timezone */
 $loader->setLocale();
 
-/*=> Load Packages */
-$loader->loadPackages();
-
 /*=> Load Tools */
 $loader->loadTools();
+
+/*=> Load Packages */
+$loader->loadPackages();
 
 /*=> Load Global Constants */
 $loader->loadGlobalConstants(); //TODO MODIF THAT

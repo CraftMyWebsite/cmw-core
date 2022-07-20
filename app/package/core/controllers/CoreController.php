@@ -6,10 +6,13 @@ use CMW\Controller\Menus\MenusController;
 use CMW\Controller\Users\UsersController;
 
 use CMW\Model\CoreModel;
-use CMW\Model\Users\UsersModel;
-use CMW\Entity\Core\OptionsEntity;
+
+use CMW\Router\RouterException;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
+
+use CMW\Router\Link;
+
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
@@ -36,20 +39,25 @@ class CoreController
     }
 
     /* ADMINISTRATION */
+    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin")]
+    #[Link("/dashboard", Link::GET, [], "/cmw-admin")]
     public function adminDashboard(): void
     {
         //Redirect to the dashboard
-        if ($_GET['url'] === "cmw-admin")
+        if ($_GET['url'] === "cmw-admin") {
             header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
+        }
 
         View::createAdminView("core", "dashboard")->addScriptBefore("useless", "useless")->view();
     }
 
+    #[Link(path: "/configuration", method: Link::GET, scope: "/cmw-admin")]
     public function adminConfiguration(): void
     {
         View::createAdminView("core", "configuration")->view();
     }
 
+    #[Link(path: "/configuration", method: Link::POST, scope: "/cmw-admin")]
     public function adminConfigurationPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
@@ -77,15 +85,17 @@ class CoreController
     }
 
     /* PUBLIC FRONT */
+    #[Link('/', Link::GET)]
     public function frontHome(): void
     {
         $menu = new MenusController();
 
-        $view = new View("core", "menu");
+        $view = new View("core", "home");
         $view->addVariable("menu", $menu)->view();
     }
 
-    public function errorView(int $errorCode): void
+    #[Link("/:errorCode", Link::GET, ["errorCode" => ".*?"], "geterror")]
+    public function errorView(int $errorCode = 403): void
     {
         $theme = (new CoreController())->cmwThemePath();
         $menu = new MenusController();
@@ -106,6 +116,15 @@ class CoreController
             ->setViewFile($errorToCall)
             ->view();
 
+    }
+
+    /**
+     * @throws \CMW\Router\RouterException
+     */
+    #[Link("/:errorCode", Link::GET, ["errorCode" => ".*?"], "error")]
+    public function threwRouterError($errorCode): void
+    {
+        throw new RouterException('Trowed Error', $errorCode);
     }
 
     public function cmwThemePath(): string
