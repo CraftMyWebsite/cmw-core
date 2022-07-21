@@ -67,7 +67,7 @@ class FabricGames
                 break;
             default:
                 self::$game = "personal";
-                personal::install();
+                Personal::install();
         }
 
     }
@@ -78,7 +78,7 @@ class FabricGames
 
         return match (self::getGame()) {
             "minecraft" => Minecraft::initConfig(),
-            default => personal::initConfig(),
+            default => Personal::initConfig(),
         };
     }
 
@@ -92,7 +92,7 @@ class FabricGames
                 Minecraft::initConfigHTML();
                 break;
             default:
-                personal::initConfigHTML();
+                Personal::initConfigHTML();
         }
     }
 
