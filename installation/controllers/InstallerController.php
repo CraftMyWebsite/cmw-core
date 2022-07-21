@@ -217,7 +217,7 @@ class InstallerController
     }
 
 
-    #[NoReturn] public function goToInstall(): void
+    #[NoReturn] public static function goToInstall(): void
     {
         $path = $_SERVER["REQUEST_URI"];
         $path = explode("/", $path);

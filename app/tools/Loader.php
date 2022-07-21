@@ -58,14 +58,14 @@ class Loader
 
     public function loadPackages(): void
     {
-        $this->requireFile("app", "manager.php");
+        $this->requireFile("app", "Manager.php");
 
         $this->loadLangFiles();
         $this->loadMultiplePackageFiles("controllers", "entities", "functions", "models");
         $this->loadRouteFiles();
 
         if ((int)$this->getValue("installStep") >= 0) {
-            $this->requireFile("installation", "routes.php", "controllers/installerController.php", "models/installerModel.php");
+            $this->requireFile("installation", "routes.php", "controllers/InstallerController.php", "models/InstallerModel.php");
         }
     }
 
@@ -100,11 +100,9 @@ class Loader
     {
         if (is_dir("installation")) {
             if ((int)$this->getValue("installStep") >= 0) {
-                $this->requireFile("installation/controllers", "installerController.php");
 
-                $installation = new InstallerController();
+                InstallerController::goToInstall();
 
-                $installation->goToInstall();
             } elseif (!$this->getValue("devMode")) {
                 Utils::deleteDirectory("installation");
             }
