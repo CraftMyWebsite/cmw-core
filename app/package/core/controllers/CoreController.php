@@ -185,7 +185,7 @@ class CoreController
     {
         //Todo Set that in lang
         return <<<HTML
-            <p>Un site fièrement propulsé par <a href='https://craftmywebsite.com/'>CraftMyWebsite</a></p>
+            <p>Un site fièrement propulsé par <a href='https://craftmywebsite.fr/'>CraftMyWebsite</a></p>
         HTML;
     }
 }
