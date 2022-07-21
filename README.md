@@ -1,4 +1,4 @@
-Projet CraftMyWebsite - CMS multi-gaming
+Projet CraftMyWebsite - CMS multi-gaming et bien plus encore...
 =================================================
 
 ### ATTENTION : Le projet est toujours en stade de développement.
@@ -12,7 +12,7 @@ Ce projet a pour ambition de proposer à l'ensemble des administrateurs de serve
 Introduction
 ------------
 
-À ce stade du projet, seul le jeu Minecraft sera utilisable avec CraftMyWebsite et uniquement les langues françaises et anglaises sont disponibles. 
+À ce stade du projet, seul le jeu Minecraft et les sites personnels seront utilisables avec CraftMyWebsite 2.0 et uniquement les langues françaises et anglaises sont disponibles. 
 
 Installation
 ------------
