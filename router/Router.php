@@ -3,6 +3,7 @@
 namespace CMW\Router;
 
 use Closure;
+use ReflectionMethod;
 
 /**
  * Class: @router
@@ -90,6 +91,65 @@ class Router
             throw new RouterException('No route matches this name', 404);
         }
         return $this->namedRoutes[$name]->getUrl($params);
+    }
+
+    public function registerRoute(Link $link, ReflectionMethod $method): void
+    {
+
+        if (!is_null($link->getScope())) {
+            $this->scope($link->getScope(), function () use ($link, $method) {
+
+                $newLink = new Link($link->getPath(), $link->getMethod(), $link->getVariables(), null);
+                $this->registerRoute($newLink, $method);
+            });
+
+            return;
+        }
+
+        $router = match ($link->getMethod()) {
+            Link::GET => $this->registerGetRoute($link, $method),
+            Link::POST => $this->registerPostRoute($link, $method)
+        };
+
+
+        $regexValues = $link->getVariables();
+        foreach ($regexValues as $value => $regex) {
+
+            $router->with($value, $regex);
+
+        }
+
+    }
+
+    private function registerGetRoute(Link $link, ReflectionMethod $method): Route
+    {
+        return $this->get($link->getPath(), function (...$values) use ($method) {
+
+            $this->callRegisteredRoute($method, ...$values);
+
+        });
+    }
+
+    private function registerPostRoute(Link $link, ReflectionMethod $method): Route
+    {
+        return $this->post($link->getPath(), function (...$values) use ($method) {
+
+            $this->callRegisteredRoute($method, ...$values);
+
+        });
+    }
+
+
+    /**
+     * @throws \ReflectionException
+     */
+    private function callRegisteredRoute(ReflectionMethod $method, string ...$values): void
+    {
+
+        $controller = $method->getDeclaringClass()->newInstance();
+        $methodName = $method->getName();
+        $controller->$methodName(...$values);
+
     }
 
 }
