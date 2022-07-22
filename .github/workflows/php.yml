@@ -1,39 +1,33 @@
-name: PHP Composer
-
+name: PHP
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - '**.md'
+      
   pull_request:
-    branches: [ "main" ]
-
+    branches: [ "main" ]  
+    paths-ignore:
+      - '**.md'
+    
 permissions:
   contents: read
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: [ubuntu-22.04, ubuntu-20.04, ubuntu-18.04, windows-2019, macos-latest]
+        php-versions: ['8.0', '8.1']
+    
     steps:
-    - uses: actions/checkout@v3
-
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
-
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
       with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
-
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
-
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
-
-    # - name: Run test suite
-    #   run: composer run-script test
+        php-versions: ${{ matrix.php-versions }}
+        extensions: mbstring
+        ini-values: post_max_size=256M, max_execution_time=180
+        coverage: xdebug
+        tools: php-cs-fixer, phpunit
