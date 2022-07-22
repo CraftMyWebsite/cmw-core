@@ -6,6 +6,9 @@
  */
 
 //TODO A refaire...
+use CMW\Entity\Users\UserEntity;
+use CMW\Model\Users\UsersModel;
+
 function bigToaster(): string
 {
     $toasters = "";
@@ -57,4 +60,9 @@ function getClientIp(): string
     return getenv('HTTP_CLIENT_IP') ?? getenv('HTTP_X_FORWARDED_FOR')
         ?? getenv('HTTP_X_FORWARDED') ?? getenv('HTTP_FORWARDED_FOR')
         ?? getenv('REMOTE_ADDR') ?? "UNKNOWN";
+}
+
+function getCurrentUser(): ?userEntity
+{
+    return (new UsersModel())->getUserById($_SESSION['cmwUserId']);
 }
