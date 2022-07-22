@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        operating-system: [ubuntu-22.04, windows-2019]
+        operating-system: [ubuntu-latest, windows-2019]
         php-versions: ['8.0', '8.1']
     
     steps:

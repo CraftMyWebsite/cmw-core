@@ -1,0 +1,31 @@
+name: phpDocumentor
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+
+  pull_request:
+    branches: [ "main" ]
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  phpdoc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run phpdoc
+        run: |
+          docker run --rm -v $(pwd):/data phpdoc/phpdoc:3 -d ./Src -t ./Docs
+
+      - name: git commit
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email ""
+          git add Docs/
+          git commit -m "[GITHUB-ACTIONS] Update phpdoc" || echo "No changes to commit"
+          git push
