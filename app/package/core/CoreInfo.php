@@ -1,13 +1,13 @@
 <?php
 
 use CMW\Manager\PackageInfo\Author;
-use CMW\Manager\PackageInfo\DefaultPackageInfo;
 use CMW\Manager\PackageInfo\IPackageInfo;
 use CMW\Manager\PackageInfo\Menu;
+use CMW\Manager\PackageInfo\NoDependenciesPackageInfo;
 
 class CoreInfo implements IPackageInfo
 {
-    use DefaultPackageInfo;
+    use NoDependenciesPackageInfo;
 
     public function getUniqueName(): string
     {
@@ -50,5 +50,10 @@ class CoreInfo implements IPackageInfo
     public function getVersion(): string
     {
         return "1.0.0";
+    }
+
+    public function isCorePackage(): bool
+    {
+        return true;
     }
 }

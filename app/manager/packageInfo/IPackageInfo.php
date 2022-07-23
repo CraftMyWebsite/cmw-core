@@ -14,7 +14,24 @@ interface IPackageInfo
 
     public function getVersion(): string;
 
-    public function isCorePackage();
+    public function getDependencies(): array;
+
+    public function getSoftDependencies(): array;
+
+    public function isCorePackage(): bool;
+}
+
+trait NoDependenciesPackageInfo
+{
+    public function getDependencies(): array
+    {
+        return array();
+    }
+
+    public function getSoftDependencies(): array
+    {
+        return array();
+    }
 }
 
 trait DefaultPackageInfo
