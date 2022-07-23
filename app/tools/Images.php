@@ -4,7 +4,7 @@ namespace CMW\Utils;
 
 class Images
 {
-    private string $returnName;
+    protected static string $returnName;
 
     /**
      * @param array $file
@@ -13,7 +13,7 @@ class Images
      *
      * @desc Upload image on the uploads folder. File accepted [png, jpeg, jpg, gif, webp].
      */
-    private function upload(array $file, string $dirName = ""): string
+    public static function upload(array $file, string $dirName = ""): string
     {
 
         if (is_uploaded_file($file['tmp_name']) === false) //TODO implements error managements
@@ -65,16 +65,16 @@ class Images
         $fileName = Utils::genId(rand(15, 35));
         $extension = $allowedTypes[$fileType];
 
-        $this->returnName = $fileName . "." . $extension;
+        Images::$returnName = $fileName . "." . $extension;
 
-        $newFilePath = $path . $this->returnName;
+        $newFilePath = $path . Images::$returnName;
 
 
         if (!copy($filePath, $newFilePath)) //TODO implements error managements
             return "ERROR_CANT_MOVE_FILE";
 
         //Return the file name with extension
-        return $this->returnName;
+        return Images::$returnName;
     }
 
     /**
@@ -90,7 +90,7 @@ class Images
 
         foreach ($files as $file){
             self::upload($file, $dirName);
-            $toReturn[] .= $this->returnName;
+            $toReturn[] .= Images::$returnName;
         }
 
         return $toReturn;
