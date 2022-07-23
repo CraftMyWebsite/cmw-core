@@ -16,7 +16,6 @@ use PDOStatement;
  */
 class PagesModel extends Manager
 {
-    private string $dateFormat = '%d/%m/%Y à %H:%i:%s';
 
     /*=> GET */
 
@@ -41,12 +40,11 @@ class PagesModel extends Manager
     public function getPageBySlug(string $slug): ?PageEntity
     {
         $sql = "SELECT page_id, page_title, page_slug, user_id, page_content, page_state, 
-                DATE_FORMAT(page_created, $this->dateFormat) AS 'page_created', 
-                DATE_FORMAT(page_updated, $this->dateFormat) AS 'page_updated' FROM cmw_pages
+                DATE_FORMAT(page_created, '%d/%m/%Y à %H:%i:%s') AS 'page_created', 
+                DATE_FORMAT(page_updated, '%d/%m/%Y à %H:%i:%s') AS 'page_updated' FROM cmw_pages
                 WHERE page_slug = :page_slug";
 
         $db = Manager::dbConnect();
-
         $res = $db->prepare($sql);
 
         if (!$res->execute(array("page_slug" => $slug))) {
@@ -289,7 +287,6 @@ class PagesModel extends Manager
     private function fetchPageResult(PDOStatement $res): ?PageEntity
     {
         $res = $res->fetch();
-
         $user = (new UsersModel())->getUserById($res["user_id"]);
 
         if(!$user) {

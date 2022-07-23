@@ -11,7 +11,7 @@ require_once("installation/tools/Games.php");
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class personal extends Games
+class Personal extends Games
 {
 
     public function __construct(string $name)

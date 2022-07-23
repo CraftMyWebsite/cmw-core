@@ -11,6 +11,7 @@ use CMW\Entity\Users\UserEntity;
 use CMW\Model\Permissions\PermissionsModel;
 use CMW\Model\Roles\RolesModel;
 use CMW\Model\Users\UsersModel;
+use CMW\Router\Link;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
 use JetBrains\PhpStorm\NoReturn;
@@ -64,6 +65,8 @@ class UsersController extends CoreController
         }
     }
 
+    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/users")]
+    #[Link("/list", Link::GET, [], "/cmw-admin/users")]
     public function adminUsersList(): void
     {
 
@@ -71,11 +74,12 @@ class UsersController extends CoreController
 
         $userList = $this->userModel->getUsers();
 
-        $view = View::createAdminView("users", "list")->addVariable("userList", $userList);
-        $view->view();
+        View::createAdminView("users", "list")->addVariable("userList", $userList)
+        ->view();
     }
 
-    public function adminUsersEdit($id): void
+    #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
+    public function adminUsersEdit(int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
@@ -83,14 +87,15 @@ class UsersController extends CoreController
 
         $roles = $this->roleModel->getRoles();
 
-        $view = View::createAdminView("users", "user")->addVariableList(array(
+        View::createAdminView("users", "user")->addVariableList(array(
             "user" => $userEntity,
             "roles" => $roles
-        ));
-        $view->view();
+        ))
+        ->view();
     }
 
-    #[NoReturn] public function adminUsersEditPost($id): void
+    #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users")]
+    #[NoReturn] public function adminUsersEditPost(int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
@@ -118,21 +123,21 @@ class UsersController extends CoreController
         }
 
         header("location: ../edit/" . $id);
-        die();
     }
 
+    #[Link("/add", Link::GET, [], "/cmw-admin/users")]
     public function adminUsersAdd(): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
         $roles = $this->roleModel->getRoles();
 
-        view('users', 'add.admin', ["roles" => $roles], 'admin', []);
-        $view = View::createAdminView("users", "add")->addVariable("roles", $roles);
-        $view->view();
+        View::createAdminView("users", "add")->addVariable("roles", $roles)
+        ->view();
     }
 
 
+    //Useless ?
     public function rolesTest(): void {
 
         $permissions = new PermissionsController();
@@ -147,6 +152,7 @@ class UsersController extends CoreController
     }
 
 
+    #[Link("/add", Link::POST, [], "/cmw-admin/users")]
     public function adminUsersAddPost(): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.add");
@@ -160,11 +166,12 @@ class UsersController extends CoreController
         header("location: ../users/list");
     }
 
-    #[NoReturn] public function adminUserState(): void
+    #[Link("/state/:id/:state", Link::GET, ["id" => "[0-9]+", "state" => "[0-9]+"], "/cmw-admin/users")]
+    #[NoReturn] public function adminUserState(int $id, int $state): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
-        if (UsersModel::getLoggedUser() == filter_input(INPUT_POST, "id", FILTER_SANITIZE_NUMBER_INT)) {
+        if (UsersModel::getLoggedUser() == $id) {
             $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE_ERROR;
             $_SESSION['toaster'][0]['type'] = "bg-danger";
             $_SESSION['toaster'][0]['body'] = USERS_STATE_TOASTER_ERROR;
@@ -172,8 +179,7 @@ class UsersController extends CoreController
             die();
         }
 
-        $id = filter_input(INPUT_POST, "id", FILTER_SANITIZE_NUMBER_INT);
-        $state = (filter_input(INPUT_POST, "actual_state", FILTER_SANITIZE_NUMBER_INT)) ? 0 : 1;
+        $state = ($state) ? 0 : 1;
 
         $this->userModel->changeState($id, $state);
 
@@ -182,14 +188,14 @@ class UsersController extends CoreController
         $_SESSION['toaster'][0]['body'] = USERS_STATE_TOASTER_SUCCESS;
 
         header("location: " . $_SERVER['HTTP_REFERER']);
-        die();
     }
 
-    #[NoReturn] public function adminUsersDelete(): void
+    #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
+    #[NoReturn] public function adminUsersDelete(int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.delete");
 
-        if (UsersModel::getLoggedUser() == filter_input(INPUT_POST, "id", FILTER_SANITIZE_NUMBER_INT)) {
+        if (UsersModel::getLoggedUser() == $id) {
 
             //Todo Try to remove that
             $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE_ERROR;
@@ -199,7 +205,6 @@ class UsersController extends CoreController
             die();
         }
 
-        $id = filter_input(INPUT_POST, "id", FILTER_SANITIZE_NUMBER_INT);
         $this->userModel->delete($id);
 
         //Todo Try to remove that
@@ -207,13 +212,13 @@ class UsersController extends CoreController
         $_SESSION['toaster'][0]['type'] = "bg-success";
         $_SESSION['toaster'][0]['body'] = USERS_DELETE_TOASTER_SUCCESS;
 
-        header("location: ../users/list");
-        die();
+        header("location: ../list");
     }
 
 
     // PUBLIC SECTION
 
+    #[Link('/login', Link::GET)]
     public function login(): void
     {
         if (UsersModel::getLoggedUser() !== -1) {
@@ -227,6 +232,7 @@ class UsersController extends CoreController
         $view->addVariable("menu", $menu)->view();
     }
 
+    #[Link('/login', Link::POST)]
     public function loginPost(): void
     {
         [$mail, $password] = Utils::filterInput("login_email", "login_password");
@@ -255,6 +261,7 @@ class UsersController extends CoreController
         }
     }
 
+    #[Link('/logout', Link::GET)]
     public function logOut(): void
     {
         UsersModel::logOut();
