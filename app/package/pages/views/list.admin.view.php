@@ -64,7 +64,7 @@ $description = PAGES_LIST_DESC; ?>
                                         <td><?= $page->getTitle() ?></td>
                                         <td><?= $page->getUser()->getUsername() ?></td>
                                         <td><?= $page->getCreated() ?></td>
-                                        <td><a href="../pages/edit/<?= $page->getId() ?>"><i class="fa fa-cog"></i></a></td>
+                                        <td><a href="../pages/edit/<?= $page->getSlug() ?>"><i class="fa fa-cog"></i></a></td>
                                     </tr>
                                 <?php endforeach; ?>
                                 </tbody>

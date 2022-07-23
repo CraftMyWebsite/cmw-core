@@ -170,14 +170,11 @@ $description = PAGES_EDIT_DESC;
                         <div class="btn btn-block btn-primary" id="saveButton">
                             <?= CORE_BTN_SAVE ?>
                         </div>
-                      
-                        <form action="/cmw-admin/pages/delete" method="post">
-                            <input type="hidden" name="id" value="<?= $page->getId() ?>">
 
-                            <button class="mt-3 btn btn-danger btn-block" id="deleteButton">
-                                <?= CORE_BTN_DELETE ?>
-                            </button>
-                        </form>
+                        <a href="../delete/<?= $page->getId() ?>" class="mt-3 btn btn-danger btn-block"
+                           id="deleteButton">
+                            <?= CORE_BTN_DELETE ?>
+                        </a>
 
                     </div>
                 </div>

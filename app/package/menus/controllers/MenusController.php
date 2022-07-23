@@ -4,6 +4,8 @@ namespace CMW\Controller\Menus;
 
 use CMW\Controller\CoreController;
 use CMW\Model\Menus\MenusModel;
+use CMW\Router\Link;
+use CMW\Utils\View;
 
 /**
  * Class: @menusController
@@ -37,20 +39,15 @@ class MenusController extends CoreController
         return $coreModel->fetchMenu();
     }
 
+    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/menus")]
+    #[Link("/", Link::GET, [], "/cmw-admin/menus")]
     public function adminMenus(): void
     {
+        $view = View::createAdminView('menus', 'menus')
+            ->addScriptBefore("admin/resources/vendors/dragula/dragula.js",
+                "app/package/menus/views/assets/js/main.js")
+            ->addStyle("admin/resources/vendors/dragula/dragula.css");
 
-        $includes = array(
-            "scripts" => [
-                "before" => [
-                    "admin/resources/vendors/dragula/dragula.js",
-                    "app/package/menus/views/assets/js/main.js",
-                ]
-            ],
-            "styles" => [
-                "admin/resources/vendors/dragula/dragula.css"
-            ]);
-
-        view('menus', 'menus.admin', [], 'admin', $includes);
+        $view->view();
     }
 }
