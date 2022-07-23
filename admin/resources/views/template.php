@@ -7,8 +7,10 @@ use CMW\Utils\View;
 include_once("includes/head.inc.php");
 
 /* INCLUDE SCRIPTS / STYLES*/
-View::loadInclude($includes, "beforeScript", "styles");
-
+$view = new View();
+if(!empty($includes)) {
+    $view::loadInclude($includes, "beforeScript", "styles");
+}
 if (!isset($noBody) || !$noBody) :
 ?>
 <body class="hold-transition sidebar-mini">
@@ -54,9 +56,9 @@ if (!isset($noBody) || !$noBody) :
 
 <?php
 /* INCLUDE SCRIPTS */
-View::loadInclude($includes, "afterScript");
+if(!empty($includes))
+    $view::loadInclude($includes, "afterScript");
 ?>
-
 
 <?= (isset($scripts) && !empty($scripts)) ? $scripts : "" ?>
 <?= (isset($toaster) && !empty($toaster)) ? $toaster : "" ?>
