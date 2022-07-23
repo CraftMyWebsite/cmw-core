@@ -85,7 +85,7 @@ class Loader
 
     public function loadTools(): void
     {
-        $this->requireFile("app/tools", "View.php", "ErrorManager.php", "ClassManager.php");
+        $this->requireFile("app/tools", "View.php", "ErrorManager.php", "ClassManager.php", "Images.php");
     }
 
     public function loadGlobalConstants(): void
