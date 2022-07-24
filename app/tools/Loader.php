@@ -26,6 +26,13 @@ class Loader
         return Utils::getEnv()->getValue($value);
     }
 
+    private function requireFile($directory, ...$files): void
+    {
+        foreach ($files as $file) {
+            require_once($this->getValue("dir") . "$directory/$file");
+        }
+    }
+
     public function setLocale(): void
     {
         Utils::getEnv()->addValue("locale", "fr");
@@ -38,13 +45,6 @@ class Loader
         ini_set('display_errors', $devMode);
         ini_set('display_startup_errors', $devMode);
         error_reporting(E_ALL);
-    }
-
-    private function requireFile($directory, ...$files): void
-    {
-        foreach ($files as $file) {
-            require_once($this->getValue("dir") . "$directory/$file");
-        }
     }
 
     public function loadRouter($url = ""): Router
@@ -61,11 +61,6 @@ class Loader
         return self::$globalRouter;
     }
 
-    public static function getRouter(): Router
-    {
-        return self::$globalRouter;
-    }
-
     /**
      * @throws \ReflectionException
      */
@@ -77,6 +72,7 @@ class Loader
         $this->loadControllers();
         $this->loadMultiplePackageFiles("entities", "functions", "models");
         $this->loadRouteFiles();
+        $this->loadManager();
 
         if ((int)$this->getValue("installStep") >= 0) {
             $this->requireFile("installation", "routes.php", "controllers/InstallerController.php", "models/InstallerModel.php");
@@ -85,7 +81,7 @@ class Loader
 
     public function loadTools(): void
     {
-        $this->requireFile("app/tools", "View.php", "ErrorManager.php", "ClassManager.php", "Images.php");
+        $this->requireFile("app/tools", "View.php", "ErrorManager.php", "ClassManager.php", "Images.php", "Response.php");
     }
 
     public function loadGlobalConstants(): void
@@ -234,6 +230,16 @@ class Loader
 
         }
 
+    }
+
+    private function loadManager(): void
+    {
+     $this->requireFile("app/manager",
+         "packageInfo/Author.php",
+         "packageInfo/Menu.php",
+         "packageInfo/IPackageInfo.php",
+         "Response/Alert.php",
+     );
     }
 
 }

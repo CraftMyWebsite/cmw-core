@@ -20,6 +20,7 @@ class Utils
     public function __construct()
     {
         self::$env ??= new EnvBuilder();
+        $_SESSION["alerts"] ??= array();
     }
 
     public static function getEnv(): EnvBuilder

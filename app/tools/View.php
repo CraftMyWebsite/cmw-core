@@ -5,6 +5,7 @@ namespace CMW\Utils;
 use CMW\Controller\CoreController;
 use CMW\Controller\Users\UsersController;
 use CMW\Model\Users\UsersModel;
+use CMW\Router\RouterException;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
 
@@ -180,7 +181,28 @@ class View
         }
     }
 
+    /**
+     * @throws \CMW\Router\RouterException
+     */
+    public function loadFile(): string
+    {
+        $path = $this->getViewPath();
 
+        if (!is_file($path)) {
+            throw new RouterException(null, 404);
+        }
+
+        extract($this->variables, EXTR_OVERWRITE);
+        $includes = $this->includes;
+
+        ob_start();
+        require($path);
+        return ob_get_clean();
+    }
+
+    /**
+     * @throws \CMW\Router\RouterException
+     */
     public function view(): void
     {
 
@@ -198,17 +220,20 @@ class View
         $includes = $this->includes;
 
         if (Utils::hasOneNullValue($this->package, $this->viewFile)) {
-            return; //todo error 404 or another error
+            throw new RouterException(null, 404);
         }
 
         $path = $this->getViewPath();
 
         if (!is_file($path)) {
-            return; //todo error 404
+            throw new RouterException(null, 404);
         }
+
+        //Show Alerts
 
         ob_start();
         require_once($path);
+        echo $this->callAlerts();
         $content = ob_get_clean();
 
         require_once($this->getTemplateFile());
@@ -219,5 +244,22 @@ class View
         foreach ($files as $file) {
             self::loadIncludeFile($includes, $file);
         }
+    }
+
+    /**
+     * @throws \CMW\Router\RouterException
+     */
+    private function callAlerts(): string
+    {
+        $alerts = Response::getAlerts();
+        $alertContent = "";
+        foreach ($alerts as $alert) {
+            var_dump("test");
+            $view = new View("alerts", $alert->getType());
+            $view->addVariable("alert", $alert);
+            $alertContent .= $view->loadFile();
+        }
+        Response::clearAlerts();
+        return $alertContent;
     }
 }
