@@ -6,6 +6,7 @@ const USERS_LOGIN_DESC = "Connectez-vous pour accéder au panneau d'administrati
 
 const USERS_LOGIN_REMEMBER = "Se souvenir de moi";
 const USERS_LOGIN_SIGNIN = "Connexion";
+const USERS_REGISTER = "S'inscrire";
 const USERS_LOGIN_LOST_PASSWORD = "J'ai perdu mon mot de passe";
 
 /* USER LIST */

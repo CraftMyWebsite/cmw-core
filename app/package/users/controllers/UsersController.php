@@ -4,10 +4,9 @@ namespace CMW\Controller\Users;
 
 use CMW\Controller\CoreController;
 use CMW\Controller\Menus\MenusController;
-
 use CMW\Controller\Permissions\PermissionsController;
 use CMW\Entity\Users\UserEntity;
-
+use CMW\Model\CoreModel;
 use CMW\Model\Permissions\PermissionsModel;
 use CMW\Model\Roles\RolesModel;
 use CMW\Model\Users\UsersModel;
@@ -34,20 +33,6 @@ class UsersController extends CoreController
         $this->roleModel = new RolesModel();
     }
 
-    private static function getSessionUser(): ?UserEntity
-    {
-        if (is_null($_SESSION['cmwUserId'])) {
-            return null;
-        }
-
-        return (new UsersModel())->getUserById($_SESSION['cmwUserId']);
-    }
-
-    private static function hasPermission(string ...$permissions): bool
-    {
-        return UsersModel::hasPermission(self::getSessionUser(), ...$permissions);
-    }
-
     public function adminDashboard(): void
     {
         header("Location" . getenv("PATH_SUBFOLDER") . ((self::isAdminLogged()) ? "cmw-admin/dashboard" : "login"));
@@ -58,11 +43,18 @@ class UsersController extends CoreController
         return UsersModel::hasPermission(self::getSessionUser(), "core.dashboard");
     }
 
-    public static function redirectIfNotHavePermissions(string ...$permCode): void
+    private static function hasPermission(string ...$permissions): bool
     {
-        if (!(self::hasPermission(...$permCode))) {
-            self::redirectToHome();
+        return UsersModel::hasPermission(self::getSessionUser(), ...$permissions);
+    }
+
+    private static function getSessionUser(): ?UserEntity
+    {
+        if (is_null($_SESSION['cmwUserId'])) {
+            return null;
         }
+
+        return (new UsersModel())->getUserById($_SESSION['cmwUserId']);
     }
 
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/users")]
@@ -75,7 +67,14 @@ class UsersController extends CoreController
         $userList = $this->userModel->getUsers();
 
         View::createAdminView("users", "list")->addVariable("userList", $userList)
-        ->view();
+            ->view();
+    }
+
+    public static function redirectIfNotHavePermissions(string ...$permCode): void
+    {
+        if (!(self::hasPermission(...$permCode))) {
+            self::redirectToHome();
+        }
     }
 
     #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
@@ -91,7 +90,7 @@ class UsersController extends CoreController
             "user" => $userEntity,
             "roles" => $roles
         ))
-        ->view();
+            ->view();
     }
 
     #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users")]
@@ -133,12 +132,13 @@ class UsersController extends CoreController
         $roles = $this->roleModel->getRoles();
 
         View::createAdminView("users", "add")->addVariable("roles", $roles)
-        ->view();
+            ->view();
     }
 
 
     //Useless ?
-    public function rolesTest(): void {
+    public function rolesTest(): void
+    {
 
         $permissions = new PermissionsController();
         $permModel = new PermissionsModel();
@@ -161,7 +161,7 @@ class UsersController extends CoreController
 
         $userEntity = $this->userModel->create($mail, $username, $firstname, $lastname, $_POST['roles']);
 
-        $this->userModel->updatePass($userEntity?->getId(), password_hash(filter_input(INPUT_POST, "pass", FILTER_SANITIZE_STRING), PASSWORD_BCRYPT));
+        $this->userModel->updatePass($userEntity?->getId(), password_hash(filter_input(INPUT_POST, "pass"), PASSWORD_BCRYPT));
 
         header("location: ../users/list");
     }
@@ -218,20 +218,6 @@ class UsersController extends CoreController
 
     // PUBLIC SECTION
 
-    #[Link('/login', Link::GET)]
-    public function login(): void
-    {
-        if (UsersModel::getLoggedUser() !== -1) {
-            header('Location: ' . getenv('PATH_SUBFOLDER'));
-            die();
-        }
-
-        $menu = new MenusController();
-
-        $view = new View("users", "login");
-        $view->addVariable("menu", $menu)->view();
-    }
-
     #[Link('/login', Link::POST)]
     public function loginPost(): void
     {
@@ -250,15 +236,28 @@ class UsersController extends CoreController
         $userId = UsersModel::logIn($infos, $cookie);
         if ($userId > 0 && $userId !== "ERROR") {
             $this->userModel->updateLoggedTime($userId);
-            header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
+            header('Location: ' . getenv('PATH_SUBFOLDER'));
 
         } else {
             $_SESSION['toaster'][0]['title'] = "Désolé";
             $_SESSION['toaster'][0]['body'] = "Cette combinaison email/mot de passe est erronée";
             $_SESSION['toaster'][0]['type'] = "bg-danger";
             header('Location: ' . $_SERVER['HTTP_REFERER']);
-
         }
+    }
+
+    #[Link('/login', Link::GET)]
+    public function login(): void
+    {
+        if (UsersModel::getLoggedUser() !== -1) {
+            header('Location: ' . getenv('PATH_SUBFOLDER'));
+            die();
+        }
+
+        $menu = new MenusController();
+
+        $view = new View("users", "login");
+        $view->addVariable("menu", $menu)->view();
     }
 
     #[Link('/logout', Link::GET)]
@@ -267,4 +266,71 @@ class UsersController extends CoreController
         UsersModel::logOut();
         header('Location: ' . getenv('PATH_SUBFOLDER'));
     }
+
+    #[Link('/register', Link::GET)]
+    public function register(): void
+    {
+        //Default controllers (important)
+        $core = new coreController();
+        $menu = new menusController();
+
+        if (UsersModel::getLoggedUser() !== -1) {
+            header('Location: ' . getenv('PATH_SUBFOLDER'));
+            die();
+        }
+
+        $menu = new MenusController();
+
+        $view = new View("users", "register");
+        $view->addVariable("menu", $menu)->view();
+    }
+
+    #[Link('/register', Link::POST)]
+    public function registerPost(): void
+    {
+
+        if ($this->userModel->checkPseudo(filter_input(INPUT_POST, "register_pseudo")) > 0) {
+            $_SESSION['toaster'][0]['title'] = "Désolé";
+            $_SESSION['toaster'][0]['body'] = "Ce pseudo est déjà pris.";
+            $_SESSION['toaster'][0]['type'] = "bg-danger";
+            header('Location: inscription');
+        } else if ($this->userModel->checkEmail(filter_input(INPUT_POST, "register_email")) > 0) {
+            $_SESSION['toaster'][0]['title'] = "Désolé";
+            $_SESSION['toaster'][0]['body'] = "Cette e-mail est déjà prise.";
+            $_SESSION['toaster'][0]['type'] = "bg-danger";
+            header('Location: inscription');
+        } else {
+
+            [$mail, $password] = Utils::filterInput("register_email", "register_password");
+
+            $userEntity = $this->userModel->create($mail, "", "", "", array("2"));
+
+            $this->userModel->updatePass($userEntity?->getId(), password_hash($password, PASSWORD_BCRYPT));
+
+
+            /* Connection */
+
+            $infos = array(
+                "email" => filter_input(INPUT_POST, "register_email"),
+                "password" => filter_input(INPUT_POST, "register_password")
+            );
+
+            $cookie = 1;
+
+            $userId = UsersModel::logIn($infos, $cookie);
+            if ($userId > 0 && $userId !== "ERROR") {
+                $this->userModel->updateLoggedTime($userId);
+                header('Location: ' . getenv('PATH_SUBFOLDER'));
+
+
+                $_SESSION['toaster'][0]['title'] = "Inscription réussie";
+                $_SESSION['toaster'][0]['type'] = "bg-success";
+                $_SESSION['toaster'][0]['body'] = "Bienvenue sur " . CoreModel::getOptionValue("name");
+
+            }
+
+        }
+
+    }
+
 }

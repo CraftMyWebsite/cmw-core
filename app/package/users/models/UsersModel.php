@@ -162,7 +162,7 @@ class UsersModel extends Manager
         session_destroy();
     }
 
-    public function create(string $mail, string $username, string $firstName, string $lastName, array $roles): ?UserEntity
+    public function create(string $mail, ?string $username, ?string $firstName, ?string $lastName, array $roles): ?UserEntity
     {
         $var = array(
             'user_email' => $mail,
