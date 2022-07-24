@@ -1,11 +1,14 @@
 <?php
 
+namespace CMW\PackageInfo\Core;
+
 use CMW\Manager\PackageInfo\Author;
 use CMW\Manager\PackageInfo\IPackageInfo;
 use CMW\Manager\PackageInfo\Menu;
 use CMW\Manager\PackageInfo\NoDependenciesPackageInfo;
 
-class CoreInfo implements IPackageInfo
+
+class PackageInfo implements IPackageInfo
 {
     use NoDependenciesPackageInfo;
 
