@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta name="robots" content="NOINDEX, NOFOLLOW">
-    <meta name="description" content="<?=/** @var string $description */ $description ?>">
+    <meta name="description" content="<?=/** @var string $description */  htmlspecialchars_decode($description, ENT_QUOTES) ?>">
     
     <link rel="icon" type="image/png" href="<?=getenv("PATH_SUBFOLDER")?>admin/resources/images/identity/logo_compact.png">
     

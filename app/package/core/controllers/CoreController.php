@@ -4,15 +4,11 @@ namespace CMW\Controller;
 
 use CMW\Controller\Menus\MenusController;
 use CMW\Controller\Users\UsersController;
-
 use CMW\Model\CoreModel;
-
+use CMW\Router\Link;
 use CMW\Router\RouterException;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
-
-use CMW\Router\Link;
-
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
@@ -169,13 +165,16 @@ class CoreController
      */
     public function cmwHead($title, $description): string
     {
-        return <<<HTML
+        $toReturn = <<<HTML
             <meta charset='utf-8'>
             <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
             <title>$title</title>
-            <meta name='description' content='$description'>
-            <meta name='author' content='CraftMyWebsite'>
-        HTML;
+            HTML;
+
+        $toReturn .= PHP_EOL . '<meta name="description" content= "' . htmlspecialchars_decode($description, ENT_QUOTES) . '">
+            <meta name="author" content="CraftMyWebsite">';
+
+        return $toReturn;
     }
 
     /*
