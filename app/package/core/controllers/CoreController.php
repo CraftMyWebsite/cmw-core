@@ -7,6 +7,7 @@ use CMW\Controller\Users\UsersController;
 use CMW\Model\CoreModel;
 use CMW\Router\Link;
 use CMW\Router\RouterException;
+use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
 use JetBrains\PhpStorm\NoReturn;
@@ -87,6 +88,8 @@ class CoreController
         $menu = new MenusController();
 
         $view = new View("core", "home");
+        Response::sendAlert("success", "Ceci est un test", "Autre test");
+        Response::sendAlert("success", "Second alerte !", "Dingue");
         $view->addVariable("menu", $menu)->view();
     }
 
