@@ -333,4 +333,23 @@ class UsersController extends CoreController
 
     }
 
+    #[Link('/profile', Link::GET)]
+    public function publicProfile(): void
+    {
+        //Default controllers (important)
+        $core = new coreController();
+        $menu = new menusController();
+
+        $user = (new usersModel())->getUserById($_SESSION['cmwUserId']);
+
+
+        if (UsersModel::getLoggedUser() == -1) {
+            header('Location: ' . getenv('PATH_SUBFOLDER'));
+            die();
+        }
+        $view = new View('users', 'profile');
+        $view->addVariableList(["core" => $core, "menu" => $menu, "user" => $user]);
+        $view->view();
+    }
+
 }
