@@ -9,6 +9,7 @@ use CMW\Entity\Users\UserEntity;
 use CMW\Model\CoreModel;
 use CMW\Model\Permissions\PermissionsModel;
 use CMW\Model\Roles\RolesModel;
+use CMW\Model\Users\UserPictureModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Router\Link;
 use CMW\Utils\Utils;
@@ -25,12 +26,14 @@ class UsersController extends CoreController
 {
     private UsersModel $userModel;
     private RolesModel $roleModel;
+    private UserPictureModel $userPictureModel;
 
     public function __construct($theme_path = null)
     {
         parent::__construct($theme_path);
         $this->userModel = new UsersModel();
         $this->roleModel = new RolesModel();
+        $this->userPictureModel = new UserPictureModel();
     }
 
     public function adminDashboard(): void
@@ -350,6 +353,16 @@ class UsersController extends CoreController
         $view = new View('users', 'profile');
         $view->addVariableList(["core" => $core, "menu" => $menu, "user" => $user]);
         $view->view();
+    }
+
+    #[Link('/profile', Link::POST)]
+    public function publicProfilePost(): void
+    {
+        $image = $_FILES['pictureProfile'];
+
+        $this->userPictureModel->uploadImage($_SESSION['cmwUserId'], $image);
+
+        header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
     }
 
 }

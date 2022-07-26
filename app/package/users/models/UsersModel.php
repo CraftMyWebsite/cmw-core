@@ -4,6 +4,7 @@ namespace CMW\Model\Users;
 
 use CMW\Controller\Roles\RolesController;
 use CMW\Entity\Roles\RoleEntity;
+use CMW\Entity\Users\UserPictureEntity;
 use CMW\Entity\Users\UserEntity;
 use CMW\Model\Manager;
 use CMW\Model\Permissions\PermissionsModel;
@@ -21,7 +22,7 @@ class UsersModel extends Manager
     public function getUserById(int $id): ?UserEntity
     {
 
-        $sql = "select * from cmw_users where user_id = :user_id";
+        $sql = "SELECT * FROM cmw_users WHERE user_id = :user_id";
 
         $db = Manager::dbConnect();
 
@@ -78,6 +79,23 @@ class UsersModel extends Manager
 
         }
 
+        $userPictureSql = "SELECT * FROM cmw_users_pictures WHERE users_pictures_user_id = :user_id";
+
+        $resUserPicture = $db->prepare($userPictureSql);
+
+        $resUserPicture->execute(array("user_id" => $id));
+
+        $resUserPicture = $resUserPicture->fetch();
+
+        if($resUserPicture){
+            $userPicture = new UserPictureEntity(
+                $resUserPicture['users_pictures_user_id'],
+                $resUserPicture['users_pictures_image_name'],
+                $resUserPicture['users_pictures_last_update']
+            );
+        }
+
+
         return new UserEntity(
             $res["user_id"],
             $res["user_email"],
@@ -89,6 +107,7 @@ class UsersModel extends Manager
             $roles,
             $res["user_created"],
             $res["user_updated"],
+            $userPicture ?? null
         );
     }
 
