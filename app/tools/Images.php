@@ -24,7 +24,7 @@ class Images
             $dirName .= "/";
 
 
-        if(!file_exists(getenv("DIR") . "public/uploads/" . $dirName))
+        if (!file_exists(getenv("DIR") . "public/uploads/" . $dirName))
             mkdir(getenv("DIR") . "public/uploads/" . $dirName);
 
 
@@ -77,6 +77,7 @@ class Images
         return Images::$returnName;
     }
 
+
     /**
      * @param array $files
      * @param string $dirName
@@ -84,16 +85,38 @@ class Images
      *
      * * @desc Upload images on the uploads folder. File accepted [png, jpeg, jpg, gif, webp].
      */
-    private function uploadMultiple(array $files, string $dirName = ""): array
+    public static function uploadMultiple(array $files, string $dirName = ""): array
     {
         $toReturn = array();
 
-        foreach ($files as $file){
+        foreach ($files as $file) {
             self::upload($file, $dirName);
             $toReturn[] .= Images::$returnName;
         }
 
         return $toReturn;
+    }
+
+
+    /**
+     * @param string $imageName
+     * @param string $dirName
+     * @return void
+     * @desc Delete the specific image
+     */
+    public static function deleteImage(string $imageName, string $dirName = ""): void
+    {
+        if (!empty(mb_substr($dirName, -1)))
+            $dirName .= "/";
+
+
+        if (!file_exists(getenv("DIR") . "public/uploads/" . $dirName))
+            mkdir(getenv("DIR") . "public/uploads/" . $dirName);
+
+
+        $path = getenv("DIR") . "public/uploads/" . $dirName;
+
+        unlink($path . $imageName);
     }
 
 }

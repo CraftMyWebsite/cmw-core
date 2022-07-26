@@ -18,6 +18,8 @@ class UserEntity
     private array $userRoles;
     private string $userCreated;
     private string $userUpdated;
+    private ?UserPictureEntity $userPicture;
+
 
     /**
      * @param int $userId
@@ -30,8 +32,9 @@ class UserEntity
      * @param \CMW\Entity\Roles\RoleEntity[] $userRoles
      * @param string $userCreated
      * @param string $userUpdated
+     * @param \CMW\Entity\Users\UserPictureEntity|null $userPicture
      */
-    public function __construct(int $userId, string $userMail, string $userUsername, string $userFirstName, string $userLastName, int $userState, string $userLastConnection, array $userRoles, string $userCreated, string $userUpdated)
+    public function __construct(int $userId, string $userMail, string $userUsername, string $userFirstName, string $userLastName, int $userState, string $userLastConnection, array $userRoles, string $userCreated, string $userUpdated, ?UserPictureEntity $userPicture)
     {
         $this->userId = $userId;
         $this->userMail = $userMail;
@@ -43,6 +46,7 @@ class UserEntity
         $this->userRoles = $userRoles;
         $this->userCreated = $userCreated;
         $this->userUpdated = $userUpdated;
+        $this->userPicture = $userPicture;
     }
 
     /**
@@ -123,6 +127,14 @@ class UserEntity
     public function getUpdated(): string
     {
         return $this->userUpdated;
+    }
+
+    /**
+     * @return \CMW\Entity\Users\UserPictureEntity | null
+     */
+    public function getUserPicture(): ?UserPictureEntity
+    {
+        return $this->userPicture;
     }
 
 }
