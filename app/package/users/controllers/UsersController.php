@@ -239,7 +239,7 @@ class UsersController extends CoreController
         $userId = UsersModel::logIn($infos, $cookie);
         if ($userId > 0 && $userId !== "ERROR") {
             $this->userModel->updateLoggedTime($userId);
-            header('Location: ' . getenv('PATH_SUBFOLDER'));
+            header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
 
         } else {
             $_SESSION['toaster'][0]['title'] = "Désolé";
@@ -261,13 +261,6 @@ class UsersController extends CoreController
 
         $view = new View("users", "login");
         $view->addVariable("menu", $menu)->view();
-    }
-
-    #[Link('/logout', Link::GET)]
-    public function logOut(): void
-    {
-        UsersModel::logOut();
-        header('Location: ' . getenv('PATH_SUBFOLDER'));
     }
 
     #[Link('/register', Link::GET)]
@@ -323,7 +316,7 @@ class UsersController extends CoreController
             $userId = UsersModel::logIn($infos, $cookie);
             if ($userId > 0 && $userId !== "ERROR") {
                 $this->userModel->updateLoggedTime($userId);
-                header('Location: ' . getenv('PATH_SUBFOLDER'));
+                header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
 
 
                 $_SESSION['toaster'][0]['title'] = "Inscription réussie";
@@ -361,6 +354,62 @@ class UsersController extends CoreController
         $image = $_FILES['pictureProfile'];
 
         $this->userPictureModel->uploadImage($_SESSION['cmwUserId'], $image);
+
+        header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
+    }
+
+    #[Link("/profile/delete/:id", Link::GET, ["id" => "[0-9]+"])]
+    public function publicProfileDelete(int $id)
+    {
+        //Check if this is the current user account
+        if ($_SESSION['cmwUserId'] !== $id) {
+            //TODO ERROR MANAGEMENT (MESSAGE TO TELL THE USER CAN'T DELETE THIS ACCOUNT)
+            header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
+            return;
+        }
+
+        UsersModel::logOut();
+        $this->userModel->delete($id);
+
+        header('Location: ' . getenv('PATH_SUBFOLDER'));
+    }
+
+    #[Link('/logout', Link::GET)]
+    public function logOut(): void
+    {
+        UsersModel::logOut();
+        header('Location: ' . getenv('PATH_SUBFOLDER'));
+    }
+
+    #[Link('/profile/update', Link::POST)]
+    public function publicProfileUpdate()
+    {
+        if (!isset($_SESSION['cmwUserId'])) {
+            header('Location: ' . getenv('PATH_SUBFOLDER'));
+            return;
+        }
+
+        $userId = $_SESSION['cmwUserId'];
+
+        [$mail, $username, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "name", "lastname");
+
+        $roles = UsersModel::getRoles($userId);
+
+        $this->userModel->update($userId, $mail, $username, $firstname, $lastname, $roles);
+
+
+        [$pass, $passVerif] = Utils::filterInput("password", "passwordVerif");
+
+        if (!is_null($pass)) {
+            if ($pass === $passVerif) {
+                $this->userModel->updatePass($userId, password_hash($pass, PASSWORD_BCRYPT));
+            } else {
+                //Todo Try to edit that
+                $_SESSION['toaster'][1]['title'] = USERS_TOASTER_TITLE_ERROR;
+                $_SESSION['toaster'][1]['type'] = "bg-danger";
+                $_SESSION['toaster'][1]['body'] = USERS_EDIT_TOASTER_PASS_ERROR;
+            }
+        }
 
         header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
     }
