@@ -12,18 +12,40 @@ $description = "Profil de " . $user->getUsername(); ?>
                 Bonjour, <strong><?= $user->getUsername() ?></strong>
             </p>
 
-            <p>Upload ton image de profile ici:</p>
+            <p>Upload ton image de profil ici:</p>
 
             <form action="" method="post" enctype="multipart/form-data">
-                <input type="file" id="pictureProfile" name="pictureProfile" accept=".png, .jpg, .jpeg, .webp, .gif" required>
+                <input type="file" id="pictureProfile" name="pictureProfile" accept=".png, .jpg, .jpeg, .webp, .gif"
+                       required>
 
                 <button type="submit">Sauvegarder</button>
             </form>
 
             <?php if (!is_null($user->getUserPicture()->getImageName())): ?>
                 <img src="<?= getenv('PATH_SUBFOLDER') ?>public/uploads/users/<?= $user->getUserPicture()->getImageName() ?>"
+                     height="15%" width="15%"
                      alt="Image de profil de <?= $user->getUsername() ?>">
             <?php endif; ?>
+
+            <form action="profile/update" method="post">
+                <label for="email"> Adresse e-mail</label>
+                <input type="email" name="email" id="email" value="<?= $user->getMail() ?>" required>
+                <br>
+                <label for="pseudo"> Pseudo</label>
+                <input type="text" name="pseudo" id="pseudo" value="<?= $user->getUsername() ?>" required>
+                <br>
+                <label for="password"> Mot de passe</label>
+                <input type="password" name="password" id="password" placeholder="********">
+                <label for="passwordVerif"> Confirmation mot de passe</label>
+                <input type="password" name="passwordVerif" id="passwordVerif" placeholder="********">
+                <br>
+                <button type="submit">Modifier</button>
+            </form>
+
+            <p>
+                Supprimez votre compte en cliquant <a
+                        href="<?= getenv('PATH_SUBFOLDER') ?>profile/delete/<?= $user->getId() ?>">ici</a>
+            </p>
 
 
             <p class="text-center">

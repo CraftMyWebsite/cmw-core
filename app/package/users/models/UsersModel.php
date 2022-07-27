@@ -224,7 +224,7 @@ class UsersModel extends Manager
         }
     }
 
-    public function update(int $id, string $mail, string $username, string $firstname, string $lastname, array $roles): ?UserEntity
+    public function update(int $id, string $mail, string $username, ?string $firstname, ?string $lastname, array $roles): ?UserEntity
     {
         $var = array(
             "user_id" => $id,
