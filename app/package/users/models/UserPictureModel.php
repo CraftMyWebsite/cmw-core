@@ -3,7 +3,7 @@
 namespace CMW\Model\Users;
 
 use CMW\Entity\Users\UserPictureEntity;
-use CMW\Model\Manager;
+use CMW\Manager\Database\DatabaseManager;
 use CMW\Utils\Images;
 
 
@@ -13,7 +13,7 @@ use CMW\Utils\Images;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class UserPictureModel extends Manager
+class UserPictureModel extends DatabaseManager
 {
 
 
@@ -33,7 +33,7 @@ class UserPictureModel extends Manager
         $imageName = Images::upload($image, 'users');
 
         $sql = "INSERT INTO cmw_users_pictures (users_pictures_user_id, users_pictures_image_name) VALUES (:userId, :imageName)";
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
 
         $req = $db->prepare($sql);
 
@@ -53,7 +53,7 @@ class UserPictureModel extends Manager
     {
         $sql = "SELECT users_pictures_user_id FROM `cmw_users_pictures` WHERE users_pictures_user_id = :userId";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute(array('userId' => $userId)) && count($req->fetchAll()) >= 1) {
@@ -87,7 +87,7 @@ class UserPictureModel extends Manager
         $sql = "UPDATE cmw_users_pictures SET users_pictures_image_name = :imageName, 
                                             users_pictures_last_update = CURRENT_TIMESTAMP() 
                                             WHERE users_pictures_user_id = :userId";
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
 
         $req = $db->prepare($sql);
 
@@ -101,7 +101,7 @@ class UserPictureModel extends Manager
     public function getImageByUserId(int $userId): ?UserPictureEntity
     {
         $sql = "SELECT * FROM cmw_users_pictures WHERE users_pictures_user_id = :userId";
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
 
         $req = $db->prepare($sql);
 

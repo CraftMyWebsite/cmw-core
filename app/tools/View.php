@@ -2,7 +2,7 @@
 
 namespace CMW\Utils;
 
-use CMW\Controller\CoreController;
+use CMW\Controller\Core\CoreController;
 use CMW\Controller\Users\UsersController;
 use CMW\Model\Users\UsersModel;
 use CMW\Router\RouterException;
@@ -254,7 +254,6 @@ class View
         $alerts = Response::getAlerts();
         $alertContent = "";
         foreach ($alerts as $alert) {
-            var_dump("test");
             $view = new View("alerts", $alert->getType());
             $view->addVariable("alert", $alert);
             $alertContent .= $view->loadFile();

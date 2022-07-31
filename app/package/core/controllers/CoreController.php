@@ -1,10 +1,10 @@
 <?php
 
-namespace CMW\Controller;
+namespace CMW\Controller\Core;
 
 use CMW\Controller\Menus\MenusController;
 use CMW\Controller\Users\UsersController;
-use CMW\Model\CoreModel;
+use CMW\Model\Core\CoreModel;
 use CMW\Router\Link;
 use CMW\Router\RouterException;
 use CMW\Utils\Response;

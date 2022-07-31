@@ -1,5 +1,5 @@
-<?php use CMW\Controller\CoreController;
-use CMW\Model\CoreModel;
+<?php use CMW\Controller\Core\CoreController;
+use CMW\Model\Core\CoreModel;
 
 $title = CORE_CONFIG_TITLE;
 $description = CORE_CONFIG_DESC; ?>

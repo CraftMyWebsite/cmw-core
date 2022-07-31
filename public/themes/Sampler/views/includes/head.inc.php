@@ -1,4 +1,4 @@
-<?php use CMW\Controller\CoreController;
+<?php use CMW\Controller\Core\CoreController;
 use CMW\Utils\View;
 
 /* @var \CMW\Controller\CoreController $core */

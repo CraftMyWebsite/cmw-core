@@ -1,16 +1,9 @@
 <?php
 
-namespace CMW\Controller\Permissions;
+namespace CMW\Controller\Users;
 
-use CMW\Controller\CoreController;
-use CMW\Controller\Users\UsersController;
-use CMW\Entity\Roles\RoleEntity;
-use CMW\Entity\Users\UserEntity;
-use CMW\Model\Permissions\PermissionsModel;
-use CMW\Model\Roles\RolesModel;
-use CMW\Model\Users\UsersModel;
-use JetBrains\PhpStorm\NoReturn;
-use JsonException;
+use CMW\Controller\Core\CoreController;
+use CMW\Model\Users\PermissionsModel;
 
 /**
  * Class: @permissionsController
@@ -22,7 +15,7 @@ class PermissionsController extends CoreController
 {
 
     /**
-     * @return \CMW\Entity\Permissions\PermissionEntity[]
+     * @return \CMW\Entity\Users\PermissionEntity[]
      */
     public function getParents(): array
     {

@@ -2,13 +2,13 @@
 
 namespace CMW\Controller\Users;
 
-use CMW\Controller\CoreController;
+use CMW\Controller\Core\CoreController;
 use CMW\Controller\Menus\MenusController;
-use CMW\Controller\Permissions\PermissionsController;
+use CMW\Controller\Users\PermissionsController;
 use CMW\Entity\Users\UserEntity;
-use CMW\Model\CoreModel;
-use CMW\Model\Permissions\PermissionsModel;
-use CMW\Model\Roles\RolesModel;
+use CMW\Model\Core\CoreModel;
+use CMW\Model\Users\PermissionsModel;
+use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UserPictureModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Router\Link;

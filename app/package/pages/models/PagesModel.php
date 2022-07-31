@@ -26,7 +26,7 @@ class PagesModel extends Manager
                 DATE_FORMAT(page_updated, '%d/%m/%Y à %H:%i:%s') AS 'page_updated' FROM cmw_pages
                 WHERE page_id = :page_id";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
 
         $res = $db->prepare($sql);
 
@@ -44,7 +44,7 @@ class PagesModel extends Manager
                 DATE_FORMAT(page_updated, '%d/%m/%Y à %H:%i:%s') AS 'page_updated' FROM cmw_pages
                 WHERE page_slug = :page_slug";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $res = $db->prepare($sql);
 
         if (!$res->execute(array("page_slug" => $slug))) {
@@ -61,7 +61,7 @@ class PagesModel extends Manager
     {
 
         $sql = "select page_id from cmw_pages";
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
 
         $res = $db->prepare($sql);
 
@@ -94,7 +94,7 @@ class PagesModel extends Manager
         $sql = "INSERT INTO cmw_pages(page_title, page_slug, page_content, user_id, page_state) 
                 VALUES (:page_title, :page_slug, :page_content, :user_id, :page_state)";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($data)) {
@@ -114,7 +114,7 @@ class PagesModel extends Manager
         );
         $sql = "DELETE FROM cmw_pages WHERE page_id=:page_id";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         return $db->prepare($sql)->execute($var);
     }
 
@@ -133,7 +133,7 @@ class PagesModel extends Manager
         $sql = "UPDATE cmw_pages SET page_slug=:page_slug, page_title=:page_title,
                      page_content=:page_content, page_state=:page_state WHERE page_id=:page_id";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
         if ($req->execute($var)) {
             $this->updateEditTime($id);
@@ -151,7 +151,7 @@ class PagesModel extends Manager
 
         $sql = "UPDATE cmw_pages SET page_updated = NOW() WHERE page_id=:page_id";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
     }

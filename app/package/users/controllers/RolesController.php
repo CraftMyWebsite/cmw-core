@@ -1,13 +1,13 @@
 <?php
 
-namespace CMW\Controller\Roles;
+namespace CMW\Controller\Users;
 
-use CMW\Controller\CoreController;
-use CMW\Controller\Permissions\PermissionsController;
-use CMW\Controller\Users\UsersController;
-use CMW\Model\Permissions\PermissionsModel;
-use CMW\Model\Roles\RolesModel;
+use CMW\Controller\Core\CoreController;
+
+use CMW\Model\Users\PermissionsModel;
+use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UsersModel;
+
 use CMW\Router\Link;
 use CMW\Utils\View;
 use JetBrains\PhpStorm\NoReturn;

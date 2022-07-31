@@ -13,27 +13,18 @@ session_start();
 
 $loader = new Loader();
 
+Loader::loadProject();
 
-/*=> Load Router */
-$router = $loader->loadRouter();
+$router = $loader->getRouterInstance();
 
-/*=> Set Locale Timezone */
+$loader->loadRoutes();
+
 $loader->setLocale();
 
-/*=> Load Tools */
-$loader->loadTools();
+$loader->loadLangFiles(); //Todo remove that
 
-/*=> Load Packages */
-$loader->loadPackages();
-
-/*=> Load Global Constants */
-$loader->loadGlobalConstants(); //TODO MODIF THAT
-
-/*=> Manage Errors (DevMode) */
 $loader->manageErrors();
 
-/*=> Manage Installation part */
 $loader->installManager();
 
-/*=> Listen Router */
 $loader->listenRouter();

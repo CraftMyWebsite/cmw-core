@@ -2,7 +2,7 @@
 
 namespace CMW\Controller\pages;
 
-use CMW\Controller\CoreController;
+use CMW\Controller\Core\CoreController;
 use CMW\Controller\Menus\MenusController;
 use CMW\Controller\Users\UsersController;
 use CMW\Entity\Pages\pagesEntity;

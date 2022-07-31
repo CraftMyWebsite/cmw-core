@@ -1,9 +1,9 @@
 <?php
 
-namespace CMW\Model\Permissions;
+namespace CMW\Model\Users;
 
-use CMW\Entity\Permissions\PermissionEntity;
-use CMW\Model\Manager;
+use CMW\Entity\Users\PermissionEntity;
+use CMW\Manager\Database\DatabaseManager;
 use CMW\Utils\Utils;
 
 /**
@@ -12,7 +12,7 @@ use CMW\Utils\Utils;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class PermissionsModel extends Manager
+class PermissionsModel extends DatabaseManager
 {
     /**==> GETTERS */
 
@@ -21,7 +21,7 @@ class PermissionsModel extends Manager
 
         $sql = "SELECT * FROM cmw_permissions WHERE permission_id = :permission_id";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
 
         if (!$req->execute(array("permission_id" => $id))) {
@@ -57,7 +57,7 @@ class PermissionsModel extends Manager
     {
         $sql = "SELECT permission_id FROM cmw_permissions WHERE permission_parent_id = :permission_parent_id";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
 
         if (!$req->execute(array("permission_parent_id" => $parentId))) {
@@ -120,7 +120,7 @@ class PermissionsModel extends Manager
         $sql = "SELECT permission_id FROM cmw_permissions WHERE permission_code = :permission_code ORDER BY permission_parent_id ";
         $sql .= $limit > 0 ? "LIMIT $limit" : "";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
 
         if (!$req->execute(array("permission_code" => $code))) {
@@ -143,7 +143,7 @@ class PermissionsModel extends Manager
 
     /** With an parsed code (like <b>users.edit</b>), get permission Entity
      * @param string $code Parsed code
-     * @return \CMW\Entity\Permissions\PermissionEntity|null
+     * @return \CMW\Entity\Users\PermissionEntity|null
      */
     public function getPermissionByFullCode(string $code): ?PermissionEntity
     {
@@ -287,7 +287,7 @@ class PermissionsModel extends Manager
         return false;
     }
 
-    private function checkPermission(PermissionEntity $permissionEntity, string $code)
+    private function checkPermission(PermissionEntity $permissionEntity, string $code): bool
     {
         $operatorPermission = "operator";
 
@@ -312,7 +312,7 @@ class PermissionsModel extends Manager
 
         $sql = "SELECT permission_id FROM cmw_permissions WHERE permission_parent_id IS NULL";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
 
         if (!$req->execute()) {
@@ -338,7 +338,7 @@ class PermissionsModel extends Manager
 
         $sql = "SELECT permission_id FROM cmw_permissions WHERE permission_parent_id = :permission_parent_id";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
 
         if (!$req->execute(array("permission_parent_id" => $id))) {
