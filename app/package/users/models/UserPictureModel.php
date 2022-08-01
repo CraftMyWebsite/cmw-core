@@ -33,7 +33,7 @@ class UserPictureModel extends DatabaseManager
         $imageName = Images::upload($image, 'users');
 
         $sql = "INSERT INTO cmw_users_pictures (users_pictures_user_id, users_pictures_image_name) VALUES (:userId, :imageName)";
-        $db = self::dbConnect();
+        $db = self::getInstance();
 
         $req = $db->prepare($sql);
 
@@ -53,7 +53,7 @@ class UserPictureModel extends DatabaseManager
     {
         $sql = "SELECT users_pictures_user_id FROM `cmw_users_pictures` WHERE users_pictures_user_id = :userId";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute(array('userId' => $userId)) && count($req->fetchAll()) >= 1) {
@@ -87,7 +87,7 @@ class UserPictureModel extends DatabaseManager
         $sql = "UPDATE cmw_users_pictures SET users_pictures_image_name = :imageName, 
                                             users_pictures_last_update = CURRENT_TIMESTAMP() 
                                             WHERE users_pictures_user_id = :userId";
-        $db = self::dbConnect();
+        $db = self::getInstance();
 
         $req = $db->prepare($sql);
 
@@ -101,7 +101,7 @@ class UserPictureModel extends DatabaseManager
     public function getImageByUserId(int $userId): ?UserPictureEntity
     {
         $sql = "SELECT * FROM cmw_users_pictures WHERE users_pictures_user_id = :userId";
-        $db = self::dbConnect();
+        $db = self::getInstance();
 
         $req = $db->prepare($sql);
 

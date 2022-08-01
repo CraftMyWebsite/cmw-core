@@ -2,13 +2,16 @@
 
 namespace CMW\Utils;
 
+use CMW\Manager\Class\ClassManager;
+
 use CMW\Controller\Installer\InstallerController;
+
+use CMW\Manager\Error\ErrorManager;
 use CMW\Router\Link;
 use CMW\Router\Router;
 use CMW\Router\RouterException;
+
 use ReflectionClass;
-use ReflectionMethod;
-use Throwable;
 
 class Loader
 {
@@ -158,7 +161,7 @@ class Loader
         try {
             $router->listen();
         } catch (RouterException $e) {
-            ErrorManager::redirectError($e->getCode());
+            ErrorManager::showError($e->getCode());
             return;
         }
     }

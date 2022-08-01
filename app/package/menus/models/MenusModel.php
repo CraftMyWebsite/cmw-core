@@ -17,7 +17,7 @@ class MenusModel extends DatabaseManager {
      */
     public function fetchMenu(): array
     {
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->query('SELECT menu_id, menu_name, menu_url, menu_level, menu_parent_id FROM cmw_menus');
         return $req->fetchAll(\PDO::FETCH_CLASS);
     }

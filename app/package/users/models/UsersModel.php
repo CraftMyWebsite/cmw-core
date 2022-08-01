@@ -23,7 +23,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "SELECT * FROM cmw_users WHERE user_id = :user_id";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
 
         $res = $db->prepare($sql);
 
@@ -113,7 +113,7 @@ class UsersModel extends DatabaseManager
     public function getUsers(): array
     {
         $sql = "select user_id from cmw_users";
-        $db = self::dbConnect();
+        $db = self::getInstance();
 
         $res = $db->prepare($sql);
 
@@ -143,7 +143,7 @@ class UsersModel extends DatabaseManager
         );
         $sql = "SELECT user_id, user_password FROM cmw_users WHERE user_state=1 AND user_email=:user_email";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -194,7 +194,7 @@ class UsersModel extends DatabaseManager
         $sql = "INSERT INTO cmw_users (user_email, user_pseudo, user_firstname, user_lastname, user_state, user_key) 
                 VALUES (:user_email, :user_pseudo, :user_firstname, :user_lastname, :user_state, :user_key)";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -217,7 +217,7 @@ class UsersModel extends DatabaseManager
 
             $sql = "INSERT INTO cmw_users_roles (user_id, role_id) VALUES (:user_id, :role_id)";
 
-            $db = self::dbConnect();
+            $db = self::getInstance();
             $req = $db->prepare($sql);
             $req->execute($var);
         }
@@ -235,7 +235,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "UPDATE cmw_users SET user_email=:user_email,user_pseudo=:user_pseudo,user_firstname=:user_firstname,user_lastname=:user_lastname WHERE user_id=:user_id";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
 
@@ -253,7 +253,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "UPDATE cmw_users SET user_updated=NOW() WHERE user_id=:user_id";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
@@ -267,7 +267,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "DELETE FROM cmw_users_roles WHERE user_id = :user_id";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
 
@@ -284,7 +284,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "UPDATE cmw_users SET user_password=:user_password WHERE user_id=:user_id";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
 
@@ -300,7 +300,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "UPDATE cmw_users SET user_state=:user_state WHERE user_id=:user_id";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
 
@@ -314,7 +314,7 @@ class UsersModel extends DatabaseManager
         );
         $sql = "DELETE FROM cmw_users WHERE user_id=:user_id";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
@@ -327,7 +327,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "UPDATE cmw_users SET user_logged=NOW() WHERE user_id=:user_id";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
@@ -380,7 +380,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "SELECT role_id FROM cmw_users_roles WHERE user_id = :user_id";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
 
         if (!$req->execute(array("user_id" => $userId))) {
@@ -405,7 +405,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "SELECT * FROM `cmw_users` WHERE user_pseudo = :pseudo";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -423,7 +423,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "SELECT * FROM `cmw_users` WHERE user_email = :email";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
