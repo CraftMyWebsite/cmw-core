@@ -249,6 +249,9 @@ class UsersController extends CoreController
         }
     }
 
+    /**
+     * @throws \CMW\Router\RouterException
+     */
     #[Link('/login', Link::GET)]
     public function login(): void
     {
@@ -257,28 +260,24 @@ class UsersController extends CoreController
             die();
         }
 
-        $menu = new MenusController();
 
         $view = new View("users", "login");
-        $view->addVariable("menu", $menu)->setAdminView()->view();
+        $view->setAdminView()->view();
     }
 
+    /**
+     * @throws \CMW\Router\RouterException
+     */
     #[Link('/register', Link::GET)]
     public function register(): void
     {
-        //Default controllers (important)
-        $core = new coreController();
-        $menu = new menusController();
-
         if (UsersModel::getLoggedUser() !== -1) {
             header('Location: ' . getenv('PATH_SUBFOLDER'));
             die();
         }
 
-        $menu = new MenusController();
-
         $view = new View("users", "register");
-        $view->addVariable("menu", $menu)->view();
+        $view->view();
     }
 
     #[Link('/register', Link::POST)]
@@ -329,13 +328,12 @@ class UsersController extends CoreController
 
     }
 
+    /**
+     * @throws \CMW\Router\RouterException
+     */
     #[Link('/profile', Link::GET)]
     public function publicProfile(): void
     {
-        //Default controllers (important)
-        $core = new coreController();
-        $menu = new menusController();
-
         $user = (new usersModel())->getUserById($_SESSION['cmwUserId']);
 
 
@@ -344,7 +342,7 @@ class UsersController extends CoreController
             die();
         }
         $view = new View('users', 'profile');
-        $view->addVariableList(["core" => $core, "menu" => $menu, "user" => $user]);
+        $view->addVariableList(["user" => $user]);
         $view->view();
     }
 

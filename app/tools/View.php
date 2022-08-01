@@ -3,6 +3,7 @@
 namespace CMW\Utils;
 
 use CMW\Controller\Core\CoreController;
+use CMW\Controller\Menus\MenusController;
 use CMW\Controller\Users\UsersController;
 use CMW\Model\Users\UsersModel;
 use CMW\Router\RouterException;
@@ -59,10 +60,10 @@ class View
         return $array;
     }
 
-    #[ArrayShape(["core" => CoreController::class])]
+    #[ArrayShape(["core" => CoreController::class, "menu" => MenusController::class])]
     private function generateVariables(): array
     {
-        return array("core" => new CoreController());
+        return array("core" => new CoreController(), "menu" => new MenusController());
     }
 
     private function addScript(#[ExpectedValues(["after", "before"])] string $position, string $fileName): void

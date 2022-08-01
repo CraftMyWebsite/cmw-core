@@ -158,20 +158,21 @@ class PagesController extends CoreController
 
 
     /* Public section */
+    /**
+     * @throws \CMW\Router\RouterException
+     */
     #[Link('/p/:slug', Link::GET, ["slug" => ".*?"])]
     public function publicShowPage(string $slug): void
     {
 
         //Default controllers (important)
-        $core = new CoreController();
-        $menu = new MenusController();
         $page = new PagesModel();
 
         $pageEntity = $page->getPageBySlug($slug);
 
         //Include the public view file ("public/themes/$themePath/views/pages/main.view.php")
         $view = new View('pages', 'main');
-        $view->addVariableList( ["pages" => $page, "page" => $pageEntity, "core" => $core, "menu" => $menu]);
+        $view->addVariableList( ["pages" => $page, "page" => $pageEntity]);
         $view->view();
     }
 

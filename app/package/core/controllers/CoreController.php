@@ -82,23 +82,26 @@ class CoreController
     }
 
     /* PUBLIC FRONT */
+    /**
+     * @throws \CMW\Router\RouterException
+     */
     #[Link('/', Link::GET)]
     public function frontHome(): void
     {
-        $menu = new MenusController();
 
         $view = new View("core", "home");
         Response::sendAlert("success", "Ceci est un test", "Autre test");
         Response::sendAlert("success", "Second alerte !", "Dingue");
-        $view->addVariable("menu", $menu)->view();
+        $view->view();
     }
 
+    /**
+     * @throws \CMW\Router\RouterException
+     */
     #[Link("/:errorCode", Link::GET, ["errorCode" => ".*?"], "geterror")]
     public function errorView(int $errorCode = 403): void
     {
         $theme = (new CoreController())->cmwThemePath();
-        $menu = new MenusController();
-
 
         $errorToCall = (string)$errorCode;
         $errorFolder = "public/themes/$theme/views/errors";
@@ -111,7 +114,6 @@ class CoreController
         $view = new View();
         $view
             ->setPackage("errors")
-            ->addVariable("menu", $menu)
             ->setViewFile($errorToCall)
             ->view();
 
