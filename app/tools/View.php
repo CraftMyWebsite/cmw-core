@@ -2,7 +2,7 @@
 
 namespace CMW\Utils;
 
-use CMW\Controller\CoreController;
+use CMW\Controller\Core\CoreController;
 use CMW\Controller\Users\UsersController;
 use CMW\Model\Users\UsersModel;
 use CMW\Router\RouterException;
@@ -29,6 +29,9 @@ class View
         $this->isAdminFile = $isAdminFile;
     }
 
+    /**
+     * @throws \CMW\Router\RouterException
+     */
     public static function basicPublicView(string $package, string $viewFile): void
     {
         $view = new self($package, $viewFile);
@@ -254,7 +257,6 @@ class View
         $alerts = Response::getAlerts();
         $alertContent = "";
         foreach ($alerts as $alert) {
-            var_dump("test");
             $view = new View("alerts", $alert->getType());
             $view->addVariable("alert", $alert);
             $alertContent .= $view->loadFile();

@@ -13,15 +13,15 @@ use Throwable;
 class Loader
 {
 
-    private static Router $globalRouter;
+    private static Router $_routerInstance;
+    private static array $fileLoaded = array();
 
     public function __construct()
     {
         new Utils(); //Need to be first /!\ IMPORTANT
-        $this->loadRouter();
     }
 
-    private function getValue(string $value): string
+    private static function getValue(string $value): string
     {
         return Utils::getEnv()->getValue($value);
     }
@@ -29,9 +29,58 @@ class Loader
     private function requireFile($directory, ...$files): void
     {
         foreach ($files as $file) {
-            require_once($this->getValue("dir") . "$directory/$file");
+            require_once(self::getValue("dir") . "$directory/$file");
         }
     }
+
+    private static function callPackage(array $classPart, string $startDir, string $folderPackage = ""): bool
+    {
+
+        if (count($classPart) < 4) {
+            return false;
+        }
+
+        $classPart = array_slice($classPart, 2);
+        $packageName = strtolower($classPart[0]);
+        $classPart = array_slice($classPart, 1);
+
+        $fileName = array_pop($classPart) . ".php";
+
+        $subFolderFile = count($classPart) ? implode("/", $classPart) . "/" : "";
+
+        $file = self::getValue("dir") . $startDir . $packageName . $folderPackage . $subFolderFile . $fileName;
+
+        if (is_file($file)) {
+            require_once($file);
+            return true;
+        }
+
+        return false;
+    }
+
+    private static function callCoreClass(array $classPart, string $startDir): bool
+    {
+
+        if (count($classPart) < 3) {
+            return false;
+        }
+
+        $classPart = array_slice($classPart, 2);
+
+        $fileName = array_pop($classPart) . ".php";
+
+        $subFolderFile = count($classPart) ? implode("/", $classPart) . "/" : "";
+
+        $file = self::getValue("dir") . $startDir . $subFolderFile . $fileName;
+
+        if (is_file($file)) {
+            require_once($file);
+            return true;
+        }
+
+        return false;
+    }
+
 
     public function setLocale(): void
     {
@@ -41,110 +90,38 @@ class Loader
 
     public function manageErrors(): void
     {
-        $devMode = (bool)$this->getValue("devMode");
+        $devMode = (bool)self::getValue("devMode");
         ini_set('display_errors', $devMode);
         ini_set('display_startup_errors', $devMode);
         error_reporting(E_ALL);
     }
 
-    public function loadRouter($url = ""): Router
+
+    public static function loadProject(): void
     {
-        if (!isset(self::$globalRouter)) {
-            $this->requireFile("router", "Router.php", "Route.php", "RouterException.php");
+        spl_autoload_register(static function ($class) {
 
-            $router = new Router($_GET['url'] ?? $url);
-            self::$globalRouter = $router;
 
-            $this->requireFile("router", "Link.php");
-        }
+            $classPart = explode("\\", $class);
 
-        return self::$globalRouter;
-    }
-
-    /**
-     * @throws \ReflectionException
-     */
-    public function loadPackages(): void
-    {
-        $this->requireFile("app", "Manager.php");
-
-        $this->loadLangFiles();
-        $this->loadControllers();
-        $this->loadMultiplePackageFiles("entities", "functions", "models");
-        $this->loadRouteFiles();
-        $this->loadManager();
-
-        if ((int)$this->getValue("installStep") >= 0) {
-            $this->requireFile("installation", "routes.php", "controllers/InstallerController.php", "models/InstallerModel.php");
-        }
-    }
-
-    public function loadTools(): void
-    {
-        $this->requireFile("app/tools", "View.php", "ErrorManager.php", "ClassManager.php", "Images.php", "Response.php");
-    }
-
-    public function loadGlobalConstants(): void
-    {
-        $this->requireFile("app/tools", "functions.php");
-        $this->requireFile("app", "globalConst.php");
-    }
-
-    public function listenRouter(): void
-    {
-        $router = self::$globalRouter;
-
-        try {
-            $router->listen();
-        } catch (RouterException $e) {
-            ErrorManager::redirectError($e->getCode());
-            return;
-        } catch (Throwable $e) {
-            echo "Erreur $e";
-        }
-    }
-
-    public function installManager(): void
-    {
-        if (is_dir("installation")) {
-            if ((int)$this->getValue("installStep") >= 0) {
-
-                InstallerController::goToInstall();
-
-            } elseif (!$this->getValue("devMode")) {
-                Utils::deleteDirectory("installation");
+            if (count($classPart) < 2 || $classPart[0] !== "CMW") {
+                return false;
             }
-        }
+
+            return match (ucfirst($classPart[1])) {
+                "Controller" => Loader::callPackage($classPart, "app/package/", "/controllers/", true),
+                "Model" => Loader::callPackage($classPart, "app/package/", "/models/"),
+                "Entity" => Loader::callPackage($classPart, "app/package/", "/entities/"),
+                "PackageInfo" => Loader::callPackage($classPart, "app/package", "/"),
+                "Manager" => Loader::callPackage($classPart, "app/manager/", "/"),
+                "Utils" => Loader::callCoreClass($classPart, "app/tools/"),
+                "Router" => Loader::callCoreClass($classPart, "router/"),
+                default => false,
+            };
+        });
     }
 
-    private function loadMultiplePackageFiles(string ...$packages): void
-    {
-        foreach ($packages as $package) {
-            $this->loadPackageFiles($package);
-        }
-    }
-
-    private function loadPackageFiles(string $partName): void
-    {
-        $packageFolder = 'app/package';
-        $contentDirectory = array_diff(scandir("$packageFolder/"), array('..', '.'));
-        $dir = Utils::getEnv()->getValue("dir");
-
-        foreach ($contentDirectory as $package) {
-            $packageSubFolder = "$packageFolder/$package/$partName";
-            if (is_dir($packageSubFolder)) {
-                $contentSubDirectory = array_diff(scandir("$packageSubFolder/"), array('..', '.'));
-                foreach ($contentSubDirectory as $packageFile) {
-                    $file = "$dir$packageSubFolder/$packageFile";
-                    if (is_file($file)) {
-                        require_once($file);
-                    }
-                }
-            }
-        }
-    }
-
-    private function loadLangFiles(): void
+    public function loadLangFiles(): void
     {
         $packageFolder = 'app/package';
         $contentDirectory = array_diff(scandir("$packageFolder/"), array('..', '.'));
@@ -164,29 +141,33 @@ class Loader
         }
     }
 
-    private function loadRouteFiles(): void
-    {
-        $packageFolder = 'app/package';
-        $scannedDirectory = array_diff(scandir("$packageFolder/"), array('..', '.'));
-        $dir = Utils::getEnv()->getValue("dir");
 
-        foreach ($scannedDirectory as $package) {
-            $file = "$dir$packageFolder/$package/routes.php";
-            if (is_file($file)) {
-                require($file);
-            }
+    public function getRouterInstance($url = ""): Router
+    {
+        if (!isset(self::$_routerInstance)) {
+            self::$_routerInstance = new Router($_GET['url'] ?? $url);
+        }
+
+        return self::$_routerInstance;
+    }
+
+    public function listenRouter(): void
+    {
+        $router = self::$_routerInstance;
+
+        try {
+            $router->listen();
+        } catch (RouterException $e) {
+            ErrorManager::redirectError($e->getCode());
+            return;
         }
     }
 
-    /**
-     * @throws \ReflectionException
-     */
-    private function loadControllers(): void
+    public function loadRoutes(): void
     {
         $packageFolder = 'app/package';
         $contentDirectory = array_diff(scandir("$packageFolder/"), array('..', '.'));
         $dir = Utils::getEnv()->getValue("dir");
-
         foreach ($contentDirectory as $package) {
             $packageSubFolder = "$packageFolder/$package/controllers";
             if (is_dir($packageSubFolder)) {
@@ -194,20 +175,22 @@ class Loader
                 foreach ($contentSubDirectory as $packageFile) {
                     $file = "$dir$packageSubFolder/$packageFile";
                     if (is_file($file)) {
-                        require_once($file);
-                        $this->initRoute($file);
+                        self::initRoute($file);
                     }
                 }
             }
         }
-
     }
 
     /**
      * @throws \ReflectionException
      */
-    private function initRoute(string $file): void
+    private static function initRoute(string $file): void
     {
+        if (in_array($file, self::$fileLoaded, true)) {
+            return;
+        }
+
         $className = ClassManager::getClassFullNameFromFile($file);
 
         $classRef = new ReflectionClass($className);
@@ -225,21 +208,28 @@ class Loader
                 /** @var Link $linkInstance */
                 $linkInstance = $attribute->newInstance();
 
-                self::$globalRouter->registerRoute($linkInstance, $method);
+                self::$_routerInstance->registerRoute($linkInstance, $method);
             }
 
         }
 
+        self::$fileLoaded[] = $file;
+
     }
 
-    private function loadManager(): void
+
+    public function installManager(): void
     {
-     $this->requireFile("app/manager",
-         "packageInfo/Author.php",
-         "packageInfo/Menu.php",
-         "packageInfo/IPackageInfo.php",
-         "Response/Alert.php",
-     );
+        $this->requireFile("installation", "routes.php", "controllers/InstallerController.php", "models/InstallerModel.php"); //Todo See that
+        if (is_dir("installation")) {
+            if ((int)self::getValue("installStep") >= 0) {
+
+                InstallerController::goToInstall();
+
+            } elseif (!self::getValue("devMode")) {
+                Utils::deleteDirectory("installation");
+            }
+        }
     }
 
 }

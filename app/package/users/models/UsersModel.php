@@ -2,13 +2,12 @@
 
 namespace CMW\Model\Users;
 
-use CMW\Controller\Roles\RolesController;
-use CMW\Entity\Roles\RoleEntity;
+use CMW\Entity\Users\RoleEntity;
 use CMW\Entity\Users\UserPictureEntity;
 use CMW\Entity\Users\UserEntity;
-use CMW\Model\Manager;
-use CMW\Model\Permissions\PermissionsModel;
-use CMW\Model\Roles\RolesModel;
+
+use CMW\Manager\Database\DatabaseManager;
+
 use CMW\Utils\Utils;
 
 /**
@@ -17,14 +16,14 @@ use CMW\Utils\Utils;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class UsersModel extends Manager
+class UsersModel extends DatabaseManager
 {
     public function getUserById(int $id): ?UserEntity
     {
 
         $sql = "SELECT * FROM cmw_users WHERE user_id = :user_id";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
 
         $res = $db->prepare($sql);
 
@@ -114,7 +113,7 @@ class UsersModel extends Manager
     public function getUsers(): array
     {
         $sql = "select user_id from cmw_users";
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
 
         $res = $db->prepare($sql);
 
@@ -144,7 +143,7 @@ class UsersModel extends Manager
         );
         $sql = "SELECT user_id, user_password FROM cmw_users WHERE user_state=1 AND user_email=:user_email";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -195,7 +194,7 @@ class UsersModel extends Manager
         $sql = "INSERT INTO cmw_users (user_email, user_pseudo, user_firstname, user_lastname, user_state, user_key) 
                 VALUES (:user_email, :user_pseudo, :user_firstname, :user_lastname, :user_state, :user_key)";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -218,7 +217,7 @@ class UsersModel extends Manager
 
             $sql = "INSERT INTO cmw_users_roles (user_id, role_id) VALUES (:user_id, :role_id)";
 
-            $db = Manager::dbConnect();
+            $db = self::dbConnect();
             $req = $db->prepare($sql);
             $req->execute($var);
         }
@@ -236,7 +235,7 @@ class UsersModel extends Manager
 
         $sql = "UPDATE cmw_users SET user_email=:user_email,user_pseudo=:user_pseudo,user_firstname=:user_firstname,user_lastname=:user_lastname WHERE user_id=:user_id";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
 
@@ -254,7 +253,7 @@ class UsersModel extends Manager
 
         $sql = "UPDATE cmw_users SET user_updated=NOW() WHERE user_id=:user_id";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
@@ -268,7 +267,7 @@ class UsersModel extends Manager
 
         $sql = "DELETE FROM cmw_users_roles WHERE user_id = :user_id";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
 
@@ -285,7 +284,7 @@ class UsersModel extends Manager
 
         $sql = "UPDATE cmw_users SET user_password=:user_password WHERE user_id=:user_id";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
 
@@ -301,7 +300,7 @@ class UsersModel extends Manager
 
         $sql = "UPDATE cmw_users SET user_state=:user_state WHERE user_id=:user_id";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
 
@@ -315,7 +314,7 @@ class UsersModel extends Manager
         );
         $sql = "DELETE FROM cmw_users WHERE user_id=:user_id";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
@@ -328,7 +327,7 @@ class UsersModel extends Manager
 
         $sql = "UPDATE cmw_users SET user_logged=NOW() WHERE user_id=:user_id";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
@@ -348,7 +347,7 @@ class UsersModel extends Manager
     }
 
     /**
-     * @return \CMW\Entity\Permissions\PermissionEntity[]
+     * @return \CMW\Entity\Users\PermissionEntity[]
      */
     public static function getPermissions(int $userId): array
     {
@@ -373,7 +372,7 @@ class UsersModel extends Manager
 
 
     /**
-     * @return \CMW\Entity\Roles\RoleEntity[]
+     * @return \CMW\Entity\Users\RoleEntity[]
      */
     public static function getRoles(int $userId): array
     {
@@ -381,7 +380,7 @@ class UsersModel extends Manager
 
         $sql = "SELECT role_id FROM cmw_users_roles WHERE user_id = :user_id";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
 
         if (!$req->execute(array("user_id" => $userId))) {
@@ -406,7 +405,7 @@ class UsersModel extends Manager
 
         $sql = "SELECT * FROM `cmw_users` WHERE user_pseudo = :pseudo";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -424,7 +423,7 @@ class UsersModel extends Manager
 
         $sql = "SELECT * FROM `cmw_users` WHERE user_email = :email";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {

@@ -9,31 +9,25 @@ use CMW\Utils\Loader;
 require_once("app/tools/Utils.php");
 require_once("app/tools/Loader.php");
 
+//IMPORTANT, LOAD ALERT BEFORE SESSION START
+include_once("app/manager/Response/Alert.php");
+
 session_start();
 
 $loader = new Loader();
 
+Loader::loadProject();
 
-/*=> Load Router */
-$router = $loader->loadRouter();
+$router = $loader->getRouterInstance();
 
-/*=> Set Locale Timezone */
+$loader->loadRoutes();
+
 $loader->setLocale();
 
-/*=> Load Tools */
-$loader->loadTools();
+$loader->loadLangFiles(); //Todo remove that
 
-/*=> Load Packages */
-$loader->loadPackages();
-
-/*=> Load Global Constants */
-$loader->loadGlobalConstants(); //TODO MODIF THAT
-
-/*=> Manage Errors (DevMode) */
 $loader->manageErrors();
 
-/*=> Manage Installation part */
 $loader->installManager();
 
-/*=> Listen Router */
 $loader->listenRouter();

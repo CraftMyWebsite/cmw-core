@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Entity\Permissions;
+namespace CMW\Entity\Users;
 
 class PermissionEntity
 {

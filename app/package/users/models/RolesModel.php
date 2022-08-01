@@ -1,13 +1,11 @@
 <?php
 
-namespace CMW\Model\Roles;
+namespace CMW\Model\Users;
 
-use CMW\Entity\Permissions\PermissionEntity;
-use CMW\Entity\Roles\RoleEntity;
+use CMW\Entity\Users\PermissionEntity;
+use CMW\Entity\Users\RoleEntity;
 
-use CMW\Model\Permissions\PermissionsModel;
-use CMW\Model\Users\UsersModel;
-use CMW\Model\Manager;
+use CMW\Manager\Database\DatabaseManager;
 
 use CMW\Utils\Utils;
 
@@ -17,7 +15,7 @@ use CMW\Utils\Utils;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class RolesModel extends Manager
+class RolesModel extends DatabaseManager
 {
 
     private PermissionsModel $permissionsModel;
@@ -34,7 +32,7 @@ class RolesModel extends Manager
 
         $sql = "SELECT * FROM cmw_roles WHERE role_id = :role_id";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
 
         if (!$req->execute(array("role_id" => $id))) {
@@ -63,7 +61,7 @@ class RolesModel extends Manager
     public function getRoles(): array
     {
         $sql = "SELECT role_id FROM cmw_roles";
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $res = $db->prepare($sql);
 
         if (!$res->execute()) {
@@ -90,7 +88,7 @@ class RolesModel extends Manager
 
         $sql = "INSERT INTO cmw_roles (role_name, role_description, role_weight) VALUES (:role_name, :role_description, :role_weight)";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -122,7 +120,7 @@ class RolesModel extends Manager
     public function getPermissions(int $id): array
     {
         $sql = "SELECT permission_id FROM cmw_roles_permissions WHERE role_id = :role_id";
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $res = $db->prepare($sql);
 
         if (!$res->execute(array("role_id" => $id))) {
@@ -169,7 +167,7 @@ class RolesModel extends Manager
 
         $sql = "UPDATE cmw_roles SET role_name = :role_name, role_description = :role_description, role_weight = :role_weight WHERE role_id = :role_id";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
 
@@ -202,7 +200,7 @@ class RolesModel extends Manager
 
         $sql = "DELETE FROM cmw_roles WHERE role_id = :role_id";
 
-        $db = Manager::dbConnect();
+        $db = self::dbConnect();
         $req = $db->prepare($sql);
         $req->execute($var);
     }

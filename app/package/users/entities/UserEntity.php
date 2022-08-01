@@ -2,8 +2,6 @@
 
 namespace CMW\Entity\Users;
 
-use CMW\Entity\Roles\RoleEntity;
-
 class UserEntity
 {
 

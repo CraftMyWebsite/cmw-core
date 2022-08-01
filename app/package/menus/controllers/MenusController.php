@@ -2,7 +2,7 @@
 
 namespace CMW\Controller\Menus;
 
-use CMW\Controller\CoreController;
+use CMW\Controller\Core\CoreController;
 use CMW\Model\Menus\MenusModel;
 use CMW\Router\Link;
 use CMW\Utils\View;

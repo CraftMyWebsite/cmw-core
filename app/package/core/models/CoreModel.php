@@ -1,6 +1,8 @@
 <?php
 
-namespace CMW\Model;
+namespace CMW\Model\Core;
+
+use CMW\Manager\Database\DatabaseManager;
 
 /**
  * Class: @coreController
@@ -8,7 +10,7 @@ namespace CMW\Model;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class CoreModel extends Manager
+class CoreModel extends DatabaseManager
 {
 
     public function fetchOption($option): string

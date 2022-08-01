@@ -1,8 +1,6 @@
 <?php
 
-namespace CMW\Entity\Roles;
-
-use CMW\Entity\Permissions\PermissionEntity;
+namespace CMW\Entity\Users;
 
 class RoleEntity
 {
