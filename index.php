@@ -9,6 +9,9 @@ use CMW\Utils\Loader;
 require_once("app/tools/Utils.php");
 require_once("app/tools/Loader.php");
 
+//IMPORTANT, LOAD ALERT BEFORE SESSION START
+include_once("app/manager/Response/Alert.php");
+
 session_start();
 
 $loader = new Loader();

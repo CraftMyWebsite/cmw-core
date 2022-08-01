@@ -29,6 +29,9 @@ class View
         $this->isAdminFile = $isAdminFile;
     }
 
+    /**
+     * @throws \CMW\Router\RouterException
+     */
     public static function basicPublicView(string $package, string $viewFile): void
     {
         $view = new self($package, $viewFile);
@@ -254,6 +257,7 @@ class View
         $alerts = Response::getAlerts();
         $alertContent = "";
         foreach ($alerts as $alert) {
+            print_r($alert);
             $view = new View("alerts", $alert->getType());
             $view->addVariable("alert", $alert);
             $alertContent .= $view->loadFile();
