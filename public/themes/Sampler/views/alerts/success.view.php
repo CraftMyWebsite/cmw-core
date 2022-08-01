@@ -1,10 +1,16 @@
 <?php
-$title = "Success";
-$description = "Success";
+/** @var Alert $alert */
+
+use CMW\Manager\Response\Alert;
+
 ?>
-
-<div class="container">
-
-    <h1>C good mec</h1>
-
-</div>
+<link rel="stylesheet" href="https://izitoast.marcelodolza.com/css/iziToast.min.css">
+<script src="https://izitoast.marcelodolza.com/js/iziToast.min.js"></script>
+<script>
+    iziToast.show(
+        {
+            title  : "<?= $alert->getTitle() ?>",
+            message: "<?= $alert->getMessage() ?>",
+            color: "green"
+        });
+</script>
