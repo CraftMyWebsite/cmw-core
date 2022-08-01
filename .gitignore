@@ -18,6 +18,7 @@
 !/public/themes/Sampler/views/core
 !/public/themes/Sampler/views/users
 !/public/themes/Sampler/views/errors
+!/public/themes/Sampler/views/alerts
 !/public/themes/Sampler/views/template.php
 
 
