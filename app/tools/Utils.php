@@ -75,6 +75,11 @@ class Utils
         }
     }
 
+    /**
+     * @param string ...$values
+     * @return array
+     * @Desc Filter input only for INPUT_POST
+     */
     public static function filterInput(string ...$values): array
     {
         $toReturn = array();
