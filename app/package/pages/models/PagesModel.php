@@ -3,9 +3,8 @@
 namespace CMW\Model\Pages;
 
 use CMW\Entity\Pages\PageEntity;
-use CMW\Model\Manager;
+use CMW\Manager\Database\DatabaseManager;
 use CMW\Model\Users\UsersModel;
-use PDO;
 use PDOStatement;
 
 /**
@@ -14,7 +13,7 @@ use PDOStatement;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class PagesModel extends Manager
+class PagesModel extends DatabaseManager
 {
 
     /*=> GET */
