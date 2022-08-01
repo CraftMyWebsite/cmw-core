@@ -66,9 +66,7 @@ CREATE TABLE IF NOT EXISTS `cmw_users_pictures`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-ALTER TABLE `cmw_users_pictures`
-    ADD CONSTRAINT `cmw_users_pictures_ibfk_1` FOREIGN KEY (`users_pictures_user_id`) REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-COMMIT;
+
 
 ALTER TABLE `cmw_core_options`
     ADD UNIQUE KEY `option_name` (`option_name`);
@@ -99,6 +97,10 @@ ALTER TABLE `cmw_users_roles`
 ALTER TABLE `cmw_users_roles`
     ADD CONSTRAINT `cmw_users_roles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     ADD CONSTRAINT `cmw_users_roles_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `cmw_roles` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+
+ALTER TABLE `cmw_users_pictures`
+    ADD CONSTRAINT `cmw_users_pictures_ibfk_1` FOREIGN KEY (`users_pictures_user_id`) REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 CREATE TABLE IF NOT EXISTS cmw_roles_permissions

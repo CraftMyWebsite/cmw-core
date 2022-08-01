@@ -2,6 +2,7 @@
 
 namespace CMW\Manager\Database;
 
+use Exception;
 use PDO;
 
 class DatabaseManager
