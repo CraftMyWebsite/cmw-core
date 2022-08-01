@@ -110,26 +110,11 @@ class Utils
     }
 
     /**
-     * @throws JsonException
-     */
-    public static function getPackageInfo($package): mixed
-    {
-        $jsonFile = file_get_contents("app/package/$package/infos.json");
-        return json_decode($jsonFile, true, 512, JSON_THROW_ON_ERROR);
-    }
-
-    #[NoReturn] public static function sendErrorCode($err = 404): void
-    {
-        http_response_code($err);
-        die();
-    }
-
-    /**
-     * @param $l
+     * @param int $l
      * @return string
      * @desc Return a string ID
      */
-    public static function genId($l = 5): string
+    public static function genId(int $l = 5): string
     {
         return substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"), 10, $l);
     }

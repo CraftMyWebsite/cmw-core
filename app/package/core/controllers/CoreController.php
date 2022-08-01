@@ -45,7 +45,7 @@ class CoreController
             header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
         }
 
-        View::createAdminView("core", "dashboard")->addScriptBefore("useless", "useless")->view();
+        View::createAdminView("core", "dashboard")->view();
     }
 
     #[Link(path: "/configuration", method: Link::GET, scope: "/cmw-admin")]

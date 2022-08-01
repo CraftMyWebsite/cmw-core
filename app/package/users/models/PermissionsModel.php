@@ -21,7 +21,7 @@ class PermissionsModel extends DatabaseManager
 
         $sql = "SELECT * FROM cmw_permissions WHERE permission_id = :permission_id";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
 
         if (!$req->execute(array("permission_id" => $id))) {
@@ -57,7 +57,7 @@ class PermissionsModel extends DatabaseManager
     {
         $sql = "SELECT permission_id FROM cmw_permissions WHERE permission_parent_id = :permission_parent_id";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
 
         if (!$req->execute(array("permission_parent_id" => $parentId))) {
@@ -120,7 +120,7 @@ class PermissionsModel extends DatabaseManager
         $sql = "SELECT permission_id FROM cmw_permissions WHERE permission_code = :permission_code ORDER BY permission_parent_id ";
         $sql .= $limit > 0 ? "LIMIT $limit" : "";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
 
         if (!$req->execute(array("permission_code" => $code))) {
@@ -196,7 +196,7 @@ class PermissionsModel extends DatabaseManager
 
         $sql = "INSERT INTO cmw_permissions(permission_parent_id, permission_code) VALUES (null, :permission_code)";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
 
         $req = $db->prepare($sql);
 
@@ -227,7 +227,7 @@ class PermissionsModel extends DatabaseManager
 
         $sql = "INSERT INTO cmw_permissions(permission_parent_id, permission_code) VALUES (:parent_id, :permission_code)";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
 
         $req = $db->prepare($sql);
 
@@ -312,7 +312,7 @@ class PermissionsModel extends DatabaseManager
 
         $sql = "SELECT permission_id FROM cmw_permissions WHERE permission_parent_id IS NULL";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
 
         if (!$req->execute()) {
@@ -338,7 +338,7 @@ class PermissionsModel extends DatabaseManager
 
         $sql = "SELECT permission_id FROM cmw_permissions WHERE permission_parent_id = :permission_parent_id";
 
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare($sql);
 
         if (!$req->execute(array("permission_parent_id" => $id))) {

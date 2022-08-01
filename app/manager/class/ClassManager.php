@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Utils;
+namespace CMW\Manager\Class;
 
 class ClassManager
 {

@@ -53,7 +53,7 @@ class UsersController extends CoreController
 
     private static function getSessionUser(): ?UserEntity
     {
-        if (is_null($_SESSION['cmwUserId'])) {
+        if (!isset($_SESSION['cmwUserId'])) {
             return null;
         }
 
@@ -260,7 +260,7 @@ class UsersController extends CoreController
         $menu = new MenusController();
 
         $view = new View("users", "login");
-        $view->addVariable("menu", $menu)->view();
+        $view->addVariable("menu", $menu)->setAdminView()->view();
     }
 
     #[Link('/register', Link::GET)]

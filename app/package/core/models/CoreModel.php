@@ -15,7 +15,7 @@ class CoreModel extends DatabaseManager
 
     public function fetchOption($option): string
     {
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare('SELECT option_value FROM cmw_core_options WHERE option_name = ?');
         $req->execute(array($option));
         $option = $req->fetch();
@@ -30,7 +30,7 @@ class CoreModel extends DatabaseManager
      */
     public static function getOptionValue($option): string
     {
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare('SELECT option_value FROM cmw_core_options WHERE option_name = ?');
         $req->execute(array($option));
 
@@ -39,7 +39,7 @@ class CoreModel extends DatabaseManager
 
     public function fetchOptions(): array
     {
-        $db = $this->dbConnect();
+        $db = $this->getInstance();
         $req = $db->prepare('SELECT * FROM cmw_core_options');
 
         if ($req->execute()) {
@@ -51,7 +51,7 @@ class CoreModel extends DatabaseManager
 
     public static function updateOption(string $option_name, string $option_value): void
     {
-        $db = self::dbConnect();
+        $db = self::getInstance();
         $req = $db->prepare('UPDATE cmw_core_options SET option_value=:option_value, option_updated=now() WHERE option_name=:option_name');
         $req->execute(array("option_name" => $option_name, "option_value" => $option_value));
     }
