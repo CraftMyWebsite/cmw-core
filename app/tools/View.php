@@ -257,7 +257,6 @@ class View
         $alerts = Response::getAlerts();
         $alertContent = "";
         foreach ($alerts as $alert) {
-            print_r($alert);
             $view = new View("alerts", $alert->getType());
             $view->addVariable("alert", $alert);
             $alertContent .= $view->loadFile();
