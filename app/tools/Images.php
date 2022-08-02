@@ -11,7 +11,7 @@ class Images
      * @param string $dirName
      * @return string fileName
      *
-     * @desc Upload image on the uploads folder. File accepted [png, jpeg, jpg, gif, webp].
+     * @desc Upload image on the uploads' folder. File accepted [png, jpeg, jpg, gif, webp, ico, svg].
      */
     public static function upload(array $file, string $dirName = ""): string
     {
@@ -47,7 +47,9 @@ class Images
             'image/jpg' => 'jpg',
             'image/jpeg' => 'jpeg',
             'image/gif' => 'gif',
-            'image/webp' => 'webp'
+            'image/webp' => 'webp',
+            'image/x-icon' => 'ico',
+            'image/svg+xml' => 'svg'
         ];
 
         $maxFileSize = 20971520; // 20 MB
@@ -83,7 +85,7 @@ class Images
      * @param string $dirName
      * @return array
      *
-     * * @desc Upload images on the uploads folder. File accepted [png, jpeg, jpg, gif, webp].
+     * * @desc Upload images on the uploads' folder. File accepted [png, jpeg, jpg, gif, webp].
      */
     public static function uploadMultiple(array $files, string $dirName = ""): array
     {
