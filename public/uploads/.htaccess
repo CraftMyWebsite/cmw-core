@@ -1,6 +1,6 @@
 RewriteEngine on
 #If the file is not an image we return 403
-RewriteCond %{REQUEST_URI} !\.(png|jpg|jpeg|gif|webp)$
+RewriteCond %{REQUEST_URI} !\.(png|jpg|jpeg|gif|webp|ico|svg)$
 RewriteRule .*$ - [F]
 
 Options -Indexes
