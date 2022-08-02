@@ -110,6 +110,11 @@ class UsersModel extends DatabaseManager
         );
     }
 
+    public function getCurrentUser(): ?UserEntity
+    {
+        return $this->getUserById($_SESSION['cmwUserId']);
+    }
+
     public function getUsers(): array
     {
         $sql = "select user_id from cmw_users";
