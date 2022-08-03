@@ -12,14 +12,20 @@ class Route
 {
 
     private string $path;
+    private int $weight;
     private $callable;
     private array $matches = [];
     private array $params = [];
 
-    public function __construct($path, $callable)
+    public function __construct($path, $callable, $weight = 1)
     {
-        $this->path = trim($path, '/');  // On retire les / inutiles
+        $this->path = trim($path, '/');
+        $this->weight = $weight;
         $this->callable = $callable;
+    }
+
+    public function getWeight(): int {
+        return $this->weight;
     }
 
     public function with($param, $regex): Route
@@ -58,19 +64,6 @@ class Route
 
     public function call()
     {
-        if (is_string($this->callable)) {
-            $params = explode('#', $this->callable);
-            if ($params[0] === "core") {
-                $controller = "CMW\\Controller\\" . $params[0] . "Controller";
-            } else {
-                $controller = "CMW\\Controller\\" . $params[0] . "\\" . $params[0] . "Controller";
-            }
-
-            //Todo see if $controller inst a controller.
-            $controller = new $controller();
-            return call_user_func_array([$controller, $params[1]], $this->matches);
-        }
-
         return call_user_func_array($this->callable, $this->matches);
     }
 

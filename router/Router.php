@@ -24,30 +24,22 @@ class Router
         $this->url = $url;
     }
 
-    /**
-     * @return Route[]
-     */
-    public function getAndPost($path, $callableGet, $callablePost): array
+    public function get($path, $callable, $name = null, $weight = 1): Route
     {
-        return [$this->get($path, $callableGet), $this->post($path, $callablePost)];
+        return $this->add($path, $callable, $name, 'GET', $weight);
     }
 
-    public function get($path, $callable, $name = null): Route
+    public function post($path, $callable, $name = null, $weight = 1): Route
     {
-        return $this->add($path, $callable, $name, 'GET');
+        return $this->add($path, $callable, $name, 'POST', $weight);
     }
 
-    public function post($path, $callable, $name = null): Route
-    {
-        return $this->add($path, $callable, $name, 'POST');
-    }
-
-    private function add($path, $callable, $name, $method): Route
+    private function add($path, $callable, $name, $method, $weight = 1): Route
     {
         if (!empty($this->groupPattern)) {
             $path = $this->groupPattern . $path;
         }
-        $route = new Route($path, $callable);
+        $route = new Route($path, $callable, $weight);
         $this->routes[$method][] = $route;
         if (is_string($callable) && $name === null) {
             $name = $callable;
@@ -73,13 +65,30 @@ class Router
         if (!isset($this->routes[$_SERVER['REQUEST_METHOD']])) {
             throw new RouterException('REQUEST_METHOD does not exist', 500);
         }
+
+        $matchedRoute = $this->getMatchedUrl($this->url);
+
+        if(!is_null($matchedRoute)) {
+            return $matchedRoute->call();
+        }
+
+        throw new RouterException('No matching routes', 404);
+    }
+
+    private function getMatchedUrl(string $url): ?Route
+    {
+        /** @var $matchedRoute ?Route */
+        $matchedRoute = null;
         foreach ($this->routes[$_SERVER['REQUEST_METHOD']] as $route) {
             /** @var Route $route */
-            if ($route->match($this->url)) {
-                return $route->call();
+            if ($route->match($url)) {
+                if(is_null($matchedRoute?->getWeight()) || $route->getWeight() > $matchedRoute->getWeight()) {
+                    $matchedRoute = $route;
+                }
             }
         }
-        throw new RouterException('No matching routes', 404);
+
+        return $matchedRoute;
     }
 
     /**
@@ -99,7 +108,7 @@ class Router
         if (!is_null($link->getScope())) {
             $this->scope($link->getScope(), function () use ($link, $method) {
 
-                $newLink = new Link($link->getPath(), $link->getMethod(), $link->getVariables(), null);
+                $newLink = new Link($link->getPath(), $link->getMethod(), $link->getVariables(), null, $link->getWeight());
                 $this->registerRoute($newLink, $method);
             });
 
@@ -127,7 +136,7 @@ class Router
 
             $this->callRegisteredRoute($method, ...$values);
 
-        });
+        }, weight: $link->getWeight());
     }
 
     private function registerPostRoute(Link $link, ReflectionMethod $method): Route
@@ -136,7 +145,7 @@ class Router
 
             $this->callRegisteredRoute($method, ...$values);
 
-        });
+        }, weight: $link->getWeight());
     }
 
 
