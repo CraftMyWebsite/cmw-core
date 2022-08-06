@@ -99,7 +99,6 @@ class Loader
         error_reporting(E_ALL);
     }
 
-
     public static function loadProject(): void
     {
         spl_autoload_register(static function ($class) {
@@ -142,6 +141,27 @@ class Loader
                 }
             }
         }
+    }
+
+    public static function loadLang(string $package, ?string $lang): ?array
+    {
+
+        $package = strtolower($package);
+
+        $fileName = "app/package/$package/i18n/$lang.i18n.php";
+        $fileExist = is_file($fileName);
+
+        if (!$fileExist) {
+            return null;
+        }
+
+        $fileContent = include $fileName;
+
+        if (!is_array($fileContent)) {
+            return null;
+        }
+
+        return $fileContent;
     }
 
 
