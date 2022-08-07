@@ -24,6 +24,7 @@ $loader->loadRoutes();
 
 $loader->setLocale();
 
+// Now Useless
 $loader->loadLangFiles(); //Todo remove that
 
 $loader->manageErrors();
@@ -31,3 +32,4 @@ $loader->manageErrors();
 $loader->installManager();
 
 $loader->listenRouter();
+
