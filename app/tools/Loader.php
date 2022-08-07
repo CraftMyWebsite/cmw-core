@@ -148,7 +148,7 @@ class Loader
 
         $package = strtolower($package);
 
-        $fileName = "app/package/$package/i18n/$lang.i18n.php";
+        $fileName = "app/package/$package/lang/$lang.php";
         $fileExist = is_file($fileName);
 
         if (!$fileExist) {
