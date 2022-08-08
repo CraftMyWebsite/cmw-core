@@ -60,7 +60,7 @@ class EnvBuilder
 
     }
 
-    private function valueExist($key): bool
+    public function valueExist($key): bool
     {
         $toReturn = false;
 

@@ -4,6 +4,7 @@ namespace CMW\Controller\Core;
 
 use CMW\Controller\Menus\MenusController;
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Api\APIManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Router\Link;
 use CMW\Router\RouterException;
@@ -127,6 +128,17 @@ class CoreController
     {
         throw new RouterException('Trowed Error', $errorCode);
     }
+
+     #[Link("/api/test", Link::GET,)]
+     public function testAPI(): void
+     {
+         header("Content-Type: application/json; charset=UTF-8");
+
+         $post = APIManager::postRequest("https://eowndr9l5vaglcn.m.pipedream.net", ["test" => "Element woaw", "deuxieme" => 'Deuxième test']);
+         echo ($post);
+
+
+     }
 
     public function cmwThemePath(): string
     {
