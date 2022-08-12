@@ -4,6 +4,7 @@
  * Warning : This file must NOT be modified !
  */
 
+use CMW\Manager\Error\ErrorManager;
 use CMW\Utils\Loader;
 
 require_once("app/tools/Utils.php");
@@ -27,7 +28,7 @@ $loader->setLocale();
 // Now Useless
 $loader->loadLangFiles(); //Todo remove that
 
-$loader->manageErrors();
+$loader->manageErrors(ErrorManager::class);
 
 $loader->installManager();
 
