@@ -69,8 +69,9 @@ class APIManager
         $data = json_encode($data, JSON_THROW_ON_ERROR);
         curl_setopt($curlHandle, CURLOPT_POST, 1);
         curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $data);
-
-        return curl_exec($curlHandle);
+        $response = curl_exec($curlHandle);
+        curl_close($curlHandle);
+        return $response;
     }
 
     public static function getRequest(string $url): string|false
@@ -79,7 +80,19 @@ class APIManager
 
         $curlHandle = self::generateHeader($url);
 
-        return curl_exec($curlHandle);
+        $response = curl_exec($curlHandle);
+        curl_close($curlHandle);
+        return $response;
+    }
+
+    public static function sendSecureJson(string $message, int $code = 200, array $data = array()): bool|string
+    {
+        header("Content-Type: application/json; charset=UTF-8");
+        return json_encode(array(
+            "message" => $message,
+            "code" => $code,
+            "data" => $data
+        ), JSON_THROW_ON_ERROR);
     }
 
     public static function canRequestWebsite(): bool
