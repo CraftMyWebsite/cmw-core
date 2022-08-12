@@ -2,6 +2,7 @@
 
 namespace CMW\Manager\Error;
 
+use CMW\Manager\Permission\PermissionManager;
 use CMW\Utils\Utils;
 use DateTime;
 use ErrorException;
@@ -16,6 +17,24 @@ class ErrorManager
     {
         $this->enableErrorDisplays();
         $this->handleError();
+        $this->invokeCheckPermissions();
+    }
+
+    private function invokeCheckPermissions(): void
+    {
+        if (!$this->checkPermissions()) {
+            echo <<<HTML
+            <div style="text-align: center; background: #ed5263; padding: .2rem 1rem; width: 60%; border-radius: 6px; margin: 6px auto; word-wrap: break-word">
+                <h2 style="color: #52040b">[MISSING PERMISSIONS]<br> Cannot create log file !</h2>
+               <h3 style="">It seems that it is impossible to create a log file in the path: <b>{$this->dirStorage}</b></h3>
+            </div>
+        HTML;
+        }
+    }
+
+    private function checkPermissions(): bool
+    {
+        return PermissionManager::canCreateFile(Utils::getEnv()->getValue("DIR") . $this->dirStorage);
     }
 
     private function enableErrorDisplays(): void
@@ -52,8 +71,10 @@ class ErrorManager
 
     private function logException(Throwable $e): void
     {
-        $message = $this->getLogMessage($e);
-        file_put_contents("{$this->dirStorage}/{$this->getFileLogName()}", $message . PHP_EOL, FILE_APPEND);
+        if ($this->checkPermissions()) {
+            $message = $this->getLogMessage($e);
+            file_put_contents("$this->dirStorage/{$this->getFileLogName()}", $message . PHP_EOL, FILE_APPEND);
+        }
 
         if ((int)ini_get("display_errors") > 0) {
             echo $this->displayError($e);
