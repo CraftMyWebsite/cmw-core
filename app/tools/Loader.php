@@ -88,15 +88,13 @@ class Loader
     public function setLocale(): void
     {
         Utils::getEnv()->addValue("locale", "fr");
-        date_default_timezone_set(Utils::getEnv()->getValue("TIMEZONE") ?? "UTC");
+        date_default_timezone_set(Utils::getEnv()->getValue("TIMEZONE") ?? "Europe/Paris");
     }
 
-    public function manageErrors(): void
+    public function manageErrors(string $em): void
     {
-        $devMode = (bool)self::getValue("devMode");
-        ini_set('display_errors', $devMode);
-        ini_set('display_startup_errors', $devMode);
-        error_reporting(E_ALL);
+        $class = new $em;
+        $class();
     }
 
     public static function loadProject(): void

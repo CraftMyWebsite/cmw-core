@@ -3,12 +3,115 @@
 namespace CMW\Manager\Error;
 
 use CMW\Utils\Utils;
+use DateTime;
+use ErrorException;
+use Throwable;
 
 class ErrorManager
 {
 
+    private string $dirStorage = "app/storage/logs/";
 
-    public static function showError(int $errorCode): void {
+    public function __invoke(): void
+    {
+        $this->enableErrorDisplays();
+        $this->handleError();
+    }
+
+    private function enableErrorDisplays(): void
+    {
+        $devMode = (int)(Utils::getEnv()->getValue("devMode") ?? 0);
+        ini_set('display_errors', $devMode);
+        ini_set('display_startup_errors', $devMode);
+        error_reporting(E_ALL);
+    }
+
+    private function handleError(): void
+    {
+        register_shutdown_function(
+            function () {
+                $this->checkForFatal();
+            }
+        );
+        set_error_handler(
+            function ($num, $str, $file, $line) {
+                $this->logError($num, $str, $file, $line);
+            }
+        );
+        set_exception_handler(
+            function ($e) {
+                $this->logException($e);
+            }
+        );
+    }
+
+    private function logError($num, $str, $file, $line): void
+    {
+        $this->logException(new ErrorException($str, 0, $num, $file, $line));
+    }
+
+    private function logException(Throwable $e): void
+    {
+        $message = $this->getLogMessage($e);
+        file_put_contents("{$this->dirStorage}/{$this->getFileLogName()}", $message . PHP_EOL, FILE_APPEND);
+
+        if ((int)ini_get("display_errors") > 0) {
+            echo $this->displayError($e);
+        }
+    }
+
+    private function getFileLogName(): string
+    {
+        return "log_" . (new DateTime())->format("d-m-Y") . ".txt";
+    }
+
+    private function getLogMessage(Throwable $e): string
+    {
+        $date = (new DateTime())->format("H:i:s");
+        $classType = get_class($e);
+        return <<<EOL
+        ==> CRAFTMYWEBSITE   : LOGGER SYSTEM
+            [$date] Type     : $classType
+            [$date] Message  : {$e->getMessage()}
+            [$date] Location : {$e->getFile()}:{$e->getLine()}
+            
+        EOL;
+    }
+
+    private function displayError(Throwable $e): string
+    {
+        $classType = get_class($e);
+        $trace = preg_replace("/#(\d)/", "<b>#$1</b><br>", $e->getTraceAsString());
+        $trace = preg_replace("/<br>/", "</code><code style='margin: .6rem 0; display: block'>", $trace);
+        return <<<HTML
+            <div style="background: #ed5263; padding: .2rem 1rem; width: 60%; border-radius: 6px; margin: 6px auto; word-wrap: break-word">
+                <h2 style="color: #52040b">[Internal Exception] Oops...</h2>
+                <ul>
+                    <li><b>Error Type:</b> <code>$classType</code></li>
+                    <li><b>Error Message:</b> <code>{$e->getMessage()}</code></li>
+                    <li><b>Location:</b> <code style="word-wrap: revert">{$e->getFile()}:{$e->getLine()}</code></li>
+                </ul>
+                <p>
+                    <u>Trace :</u> <code style="margin: .2rem 0">{$trace}</code>
+                </p>
+                
+                <small>This error has been saved in {$this->dirStorage}/{$this->getFileLogName()}</small>
+            </div>
+        HTML;
+
+    }
+
+    private function checkForFatal(): void
+    {
+        $error = error_get_last();
+        if (!is_null($error) && $error["type"] === E_ERROR) {
+            $this->logError($error["type"], $error["message"], $error["file"], $error["line"]);
+        }
+    }
+
+    public static function showError(int $errorCode): void
+    {
+        http_response_code($errorCode);
 
         $pathUrl = Utils::getEnv()->getValue("PATH_URL");
 
@@ -16,7 +119,7 @@ class ErrorManager
         //Route /error get error file : $errorCode.view.php, if that file don't exist, we call default.view.php (from errors package)
         $data = file_get_contents($pathUrl . "geterror/$errorCode");
 
-        if(!$data) {
+        if (!$data) {
             echo "Error $errorCode.";
             return;
         }
