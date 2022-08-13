@@ -15,7 +15,9 @@ class Router
 {
 
     private string $url;
+    /** @var Route[] $routes */
     private array $routes = [];
+    /** @var Route[] $namedRoutes */
     private array $namedRoutes = [];
     private string $groupPattern;
 
@@ -66,23 +68,23 @@ class Router
             throw new RouterException('REQUEST_METHOD does not exist', 500);
         }
 
-        $matchedRoute = $this->getMatchedUrl($this->url);
+        $matchedRoute = $this->getRouteByUrl($this->url);
 
-        if(!is_null($matchedRoute)) {
+        if (!is_null($matchedRoute)) {
             return $matchedRoute->call();
         }
 
         throw new RouterException('No matching routes', 404);
     }
 
-    private function getMatchedUrl(string $url): ?Route
+    public function getRouteByUrl(string $url): ?Route
     {
         /** @var $matchedRoute ?Route */
         $matchedRoute = null;
         foreach ($this->routes[$_SERVER['REQUEST_METHOD']] as $route) {
             /** @var Route $route */
             if ($route->match($url)) {
-                if(is_null($matchedRoute?->getWeight()) || $route->getWeight() > $matchedRoute->getWeight()) {
+                if (is_null($matchedRoute?->getWeight()) || $route->getWeight() > $matchedRoute->getWeight()) {
                     $matchedRoute = $route;
                 }
             }
@@ -91,15 +93,17 @@ class Router
         return $matchedRoute;
     }
 
-    /**
-     * @throws RouterException
-     */
-    public function url($name, $params = [])
+    public function getUrlByName($name, $params = []): ?string
     {
         if (!isset($this->namedRoutes[$name])) {
-            throw new RouterException('No route matches this name', 404);
+            return null;
         }
         return $this->namedRoutes[$name]->getUrl($params);
+    }
+
+    public function getRouteByName($name): ?Route
+    {
+        return $this->namedRoutes[$name] ?? null;
     }
 
     public function registerRoute(Link $link, ReflectionMethod $method): void
@@ -136,7 +140,7 @@ class Router
 
             $this->callRegisteredRoute($method, ...$values);
 
-        }, weight: $link->getWeight());
+        }, name: $link->getName(), weight: $link->getWeight());
     }
 
     private function registerPostRoute(Link $link, ReflectionMethod $method): Route
@@ -145,7 +149,7 @@ class Router
 
             $this->callRegisteredRoute($method, ...$values);
 
-        }, weight: $link->getWeight());
+        }, name: $link->getName(), weight: $link->getWeight());
     }
 
 

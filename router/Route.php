@@ -67,7 +67,7 @@ class Route
         return call_user_func_array($this->callable, $this->matches);
     }
 
-    public function getUrl($params): array|string
+    public function getUrl(array $params = array()): string
     {
         $path = $this->path;
         foreach ($params as $k => $v) {

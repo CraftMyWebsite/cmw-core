@@ -19,7 +19,7 @@ $loader = new Loader();
 
 Loader::loadProject();
 
-$router = $loader->getRouterInstance();
+$router = Loader::getRouterInstance();
 
 $loader->loadRoutes();
 

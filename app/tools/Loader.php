@@ -163,7 +163,7 @@ class Loader
     }
 
 
-    public function getRouterInstance($url = ""): Router
+    public static function getRouterInstance($url = ""): Router
     {
         if (!isset(self::$_routerInstance)) {
             self::$_routerInstance = new Router($_GET['url'] ?? $url);
