@@ -115,10 +115,10 @@ class Images
     }
 
     /**
-     * @return float|int|string
+     * @return int
      * @desc Return in byte the uploadMaxSizeFileSize value in php.ini
      */
-    private static function getUploadMaxSizeFileSize(): float|int|string
+    private static function getUploadMaxSizeFileSize(): int
     {
         $value = ini_get('upload_max_filesize');
 
@@ -126,9 +126,9 @@ class Images
             return $value;
         }
 
-        $value_length = strlen($value);
-        $qty = substr($value, 0, $value_length - 1);
-        $unit = strtolower(substr($value, $value_length - 1));
+        $valueLength = strlen($value);
+        $qty = substr($value, 0, $valueLength - 1);
+        $unit = strtolower(substr($value, $valueLength - 1));
         $qty *= match ($unit) {
             'k' => 1024,
             'm' => 1048576,
