@@ -2,9 +2,32 @@
 
 namespace CMW\Utils;
 
+use Exception;
+use RuntimeException;
+
 class Images
 {
     protected static string $returnName;
+
+    /**
+     * @param array $files
+     * @param string $dirName
+     * @return array
+     *
+     * * @desc Upload images on the uploads' folder. File accepted [png, jpeg, jpg, gif, webp].
+     * @throws Exception
+     */
+    public static function uploadMultiple(array $files, string $dirName = ""): array
+    {
+        $toReturn = array();
+
+        foreach ($files as $file) {
+            self::upload($file, $dirName);
+            $toReturn[] .= self::$returnName;
+        }
+
+        return $toReturn;
+    }
 
     /**
      * @param array $file
@@ -12,6 +35,7 @@ class Images
      * @return string fileName
      *
      * @desc Upload image on the uploads' folder. File accepted [png, jpeg, jpg, gif, webp, ico, svg].
+     * @throws Exception
      */
     public static function upload(array $file, string $dirName = ""): string
     {
@@ -24,8 +48,7 @@ class Images
             $dirName .= "/";
 
 
-        if (!file_exists(getenv("DIR") . "public/uploads/" . $dirName))
-            mkdir(getenv("DIR") . "public/uploads/" . $dirName);
+        self::createDirectory($dirName); //Create the directory if this is necessary
 
 
         $path = getenv("DIR") . "public/uploads/" . $dirName;
@@ -52,7 +75,7 @@ class Images
             'image/svg+xml' => 'svg'
         ];
 
-        $maxFileSize = 20971520; // 20 MB
+        $maxFileSize = self::getUploadMaxSizeFileSize();
 
 
         if (empty($fileSize2) || ($fileSize2[0] === 0) || ($fileSize2[1] === 0 || filesize($filePath) <= 0)) //TODO implements error managements
@@ -61,44 +84,58 @@ class Images
         if ($fileSize > $maxFileSize) //TODO implements error managements
             return "ERROR_FILE_TOO_LARGE";
 
-        if (!in_array($fileType, array_keys($allowedTypes))) //TODO implements error managements
+        if (!array_key_exists($fileType, $allowedTypes)) //TODO implements error managements
             return "ERROR_FILE_NOT_ALLOWED";
 
-        $fileName = Utils::genId(rand(15, 35));
+        $fileName = Utils::genId(random_int(15, 35));
         $extension = $allowedTypes[$fileType];
 
-        Images::$returnName = $fileName . "." . $extension;
+        self::$returnName = $fileName . "." . $extension;
 
-        $newFilePath = $path . Images::$returnName;
+        $newFilePath = $path . self::$returnName;
 
 
         if (!copy($filePath, $newFilePath)) //TODO implements error managements
             return "ERROR_CANT_MOVE_FILE";
 
         //Return the file name with extension
-        return Images::$returnName;
+        return self::$returnName;
     }
-
 
     /**
-     * @param array $files
      * @param string $dirName
-     * @return array
-     *
-     * * @desc Upload images on the uploads' folder. File accepted [png, jpeg, jpg, gif, webp].
+     * @return void
+     * @Desc Create directory on the upload folder
      */
-    public static function uploadMultiple(array $files, string $dirName = ""): array
+    private static function createDirectory(string $dirName): void
     {
-        $toReturn = array();
-
-        foreach ($files as $file) {
-            self::upload($file, $dirName);
-            $toReturn[] .= Images::$returnName;
+        if (!file_exists(getenv("DIR") . "public/uploads/" . $dirName) && !mkdir($concurrentDirectory = getenv("DIR") . "public/uploads/" . $dirName) && !is_dir($concurrentDirectory)) {
+            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
-
-        return $toReturn;
     }
 
+    /**
+     * @return int
+     * @desc Return in byte the uploadMaxSizeFileSize value in php.ini
+     */
+    private static function getUploadMaxSizeFileSize(): int
+    {
+        $value = ini_get('upload_max_filesize');
+
+        if (is_numeric($value)) {
+            return $value;
+        }
+
+        $valueLength = strlen($value);
+        $qty = substr($value, 0, $valueLength - 1);
+        $unit = strtolower(substr($value, $valueLength - 1));
+        $qty *= match ($unit) {
+            'k' => 1024,
+            'm' => 1048576,
+            'g' => 1073741824,
+        };
+        return $qty;
+    }
 
     /**
      * @param string $imageName
@@ -113,12 +150,13 @@ class Images
 
 
         if (!file_exists(getenv("DIR") . "public/uploads/" . $dirName))
-            mkdir(getenv("DIR") . "public/uploads/" . $dirName);
+            if (!mkdir($concurrentDirectory = getenv("DIR") . "public/uploads/" . $dirName) && !is_dir($concurrentDirectory)) {
+                throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+            }
 
 
         $path = getenv("DIR") . "public/uploads/" . $dirName;
 
         unlink($path . $imageName);
     }
-
 }
