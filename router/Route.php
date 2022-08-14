@@ -2,6 +2,8 @@
 
 namespace CMW\Router;
 
+use JetBrains\PhpStorm\ArrayShape;
+
 /**
  * Class: @route
  * @package Core
@@ -12,26 +14,70 @@ class Route
 {
 
     private string $path;
+    private string $name;
     private int $weight;
     private $callable;
     private array $matches = [];
     private array $params = [];
 
-    public function __construct($path, $callable, $weight = 1)
+    public function __construct($path, $callable, $weight = 1, string $name = "")
     {
         $this->path = trim($path, '/');
         $this->weight = $weight;
         $this->callable = $callable;
+        $this->name = $name;
     }
 
-    public function getWeight(): int {
+    public function __debugInfo(): ?array
+    {
+        $toReturn = array();
+
+        $toReturn["path"] = $this->path;
+        $toReturn["name"] = $this->name;
+        $toReturn["weight"] = $this->weight;
+        if(!empty($this->matches)) {
+            $toReturn["matches"] = $this->matches;
+        }
+        if(!empty($this->params)) {
+            $toReturn["params"] = $this->params;
+        }
+
+        return $toReturn;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return array
+     */
+    public function getParams(): array
+    {
+        return $this->params;
+    }
+
+    public function getWeight(): int
+    {
         return $this->weight;
     }
 
     public function with($param, $regex): Route
     {
-        $this->params[$param] = str_replace('(', '(?:', $regex);
-        return $this; // On retourne tjrs l'objet pour enchainer les arguments
+        $this->getParams()[$param] = str_replace('(', '(?:', $regex);
+        return $this;
     }
 
     /**
@@ -49,6 +95,7 @@ class Route
         if (!preg_match($regex, $url, $matches)) {
             return false;
         }
+
         array_shift($matches);
         $this->matches = $matches;
         return true;

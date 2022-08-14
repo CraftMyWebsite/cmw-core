@@ -16,7 +16,7 @@ class Link
                                 private readonly array                                                 $variables = array(),
                                 private readonly ?string                                               $scope = null,
                                 private readonly int                                                   $weight = 1,
-                                private readonly ?string                                               $name = null)
+                                private ?string                                                        $name = null)
     {
     }
 
@@ -66,6 +66,11 @@ class Link
     public function getName(): ?string
     {
         return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 
 }
