@@ -265,18 +265,4 @@ class View
         Response::clearAlerts();
         return $alertContent;
     }
-
-    /**
-     * @return void
-     * @Desc This method is added automatically in the forms
-     */
-    private function defineTokenInput(): void
-    {
-        $dom = new \DOMDocument();
-
-        $forms = $dom->getElementsByTagName('form');
-
-
-
-    }
 }
