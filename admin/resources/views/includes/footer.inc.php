@@ -1,7 +1,9 @@
+<?php use CMW\Manager\Lang\LangManager; ?>
+
 <!-- Main Footer -->
 <footer class="main-footer">
     <div class="float-right d-none d-sm-inline">
-        <?= CORE_FOOTER_RIGHT ?>
+        <?= LangManager::translate("core.footer.right", lineBreak: true) ?>
     </div>
-    <strong><?= CORE_FOOTER_LEFT ?></strong>
+    <strong><?= LangManager::translate("core.footer.left", lineBreak: true) ?></strong>
 </footer>

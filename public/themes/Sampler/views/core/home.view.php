@@ -1,5 +1,6 @@
 <?php use CMW\Controller\Users\UsersController;
 use CMW\Manager\Lang\LangManager;
+use CMW\Model\Users\UsersModel;
 
 $title = "Accueil";
 $description = "page d'accueil de CraftMyWebsite"; ?>
@@ -16,7 +17,7 @@ $description = "page d'accueil de CraftMyWebsite"; ?>
     <p>
         Bienvenue sur votre nouveau site
         <?= LangManager::translate("core.eat.pasta", lineBreak: true) ?>
-        <?= LangManager::translate("core.eat.potatoes", ["name" => "karim"]) ?>
+        <?= LangManager::translate("core.eat.potatoes", ["name" => UsersModel::getCurrentUser()->getUsername()]) ?>
     </p>
 
 </main>

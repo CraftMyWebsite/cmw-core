@@ -1,11 +1,13 @@
 <?php /* @var \CMW\Entity\Users\UserEntity $userAdmin */
-/* @var \CMW\Controller\CoreController $coreAdmin */ ?>
+/* @var \CMW\Controller\CoreController $coreAdmin */
+
+use CMW\Manager\Lang\LangManager; ?>
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="<?= getenv("PATH_SUBFOLDER") ?>cmw-admin/" class="brand-link">
         <img src="<?= getenv("PATH_SUBFOLDER") ?>admin/resources/images/identity/logo_compact.png"
-             alt="<?= CORE_ALT_LOGO ?>" class="brand-image elevation-3">
+             alt="<?= LangManager::translate("core.alt.logo", lineBreak: true) ?>" class="brand-image elevation-3">
         <span class="brand-text font-weight-light">CMW - ADMIN</span>
     </a>
 
@@ -15,7 +17,7 @@
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
                 <img src="<?= getenv("PATH_SUBFOLDER") ?>admin/resources/images/identity/logo_compact.png"
-                     class="elevation-2" alt="<?= CORE_ALT_LOGO ?>">
+                     class="elevation-2" alt="<?= LangManager::translate("core.alt.logo", lineBreak: true) ?>">
             </div>
             <div class="info">
                 <a href="#" class="d-block"><?= $userAdmin->getUsername() ?></a>
@@ -29,7 +31,7 @@
                 <li class="nav-item">
                     <a href="<?= getenv("PATH_SUBFOLDER") ?>cmw-admin/dashboard" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p><?= CORE_DASHBOARD ?></p>
+                        <p><?= LangManager::translate("core.dashboard.title", lineBreak: true) ?></p>
                     </a>
                 </li>
 

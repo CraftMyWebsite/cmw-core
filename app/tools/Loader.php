@@ -121,25 +121,6 @@ class Loader
         });
     }
 
-    public function loadLangFiles(): void
-    {
-        $packageFolder = 'app/package';
-        $contentDirectory = array_diff(scandir("$packageFolder/"), array('..', '.'));
-        $dir = Utils::getEnv()->getValue("dir");
-
-        foreach ($contentDirectory as $package) {
-            $packageSubFolder = "$packageFolder/$package/lang";
-            if (is_dir($packageSubFolder)) {
-                $contentSubDirectory = array_diff(scandir("$packageSubFolder/"), array('..', '.'));
-                foreach ($contentSubDirectory as $packageFile) {
-                    $file = "$dir$packageSubFolder/" . getenv("LOCALE") . ".php";
-                    if (is_file($file)) {
-                        require_once($file);
-                    }
-                }
-            }
-        }
-    }
 
     public static function loadLang(string $package, ?string $lang): ?array
     {
