@@ -1,4 +1,6 @@
 <?php
+
+/*
 const CORE_ALT_LOGO = "Logo CMW";
 
 const CORE_DASHBOARD_TITLE = "Dashboard";
@@ -25,7 +27,7 @@ const CORE_DASHBOARD = "Dashboard";
 
 const CORE_CHANGE_LANG = "Changez la langue du site";
 
-/* Datatables */
+/* Datatables /
 const CORE_DATATABLES_LIST_PROCESSING = "Traitement en cours...";
 const CORE_DATATABLES_LIST_SEARCH = "Rechercher&nbsp; ";
 const CORE_DATATABLES_LIST_LENGTHMENU = "Afficher _MENU_ &eacute;l&eacute;ments";
@@ -45,10 +47,20 @@ const CORE_DATATABLES_LIST_LAST = "Dernier";
 const CORE_DATATABLES_LIST_SORTASCENDING = ": activer pour trier la colonne par ordre croissant";
 const CORE_DATATABLES_LIST_SORTDESCENDING = ": activer pour trier la colonne par ordre décroissant";
 
-/* FOOTER */
+/* FOOTER /
 define("CORE_FOOTER_LEFT", "Copyright &copy; 2014 - " . date("Y") . " Tous droits réservés.");
 const CORE_FOOTER_RIGHT = "Merci d'utiliser <a href='https://craftmywebsite.com/'>CraftMyWebsite</a>.";
 
-/* BTN */
+/* BTN /
 const CORE_BTN_SAVE = "Sauvegarder";
 const CORE_BTN_DELETE = "Supprimer";
+
+*/
+
+return [
+    "welcome" => "Bienvenue !",
+    "eat" => [
+        "pasta" => "Mangeons des pâtes !",
+        "potatoes" => "Mangeons des patates %name% !",
+    ]
+];

@@ -2,7 +2,6 @@
 
 namespace CMW\Controller\Core;
 
-use CMW\Controller\Menus\MenusController;
 use CMW\Controller\Users\UsersController;
 use CMW\Model\Core\CoreModel;
 use CMW\Router\Link;
@@ -88,7 +87,6 @@ class CoreController
     #[Link('/', Link::GET)]
     public function frontHome(): void
     {
-
         $view = new View("core", "home");
         Response::sendAlert("success", "Ceci est un test", "Autre test");
         Response::sendAlert("success", "Second alerte !", "Dingue");

@@ -88,17 +88,14 @@ class Loader
     public function setLocale(): void
     {
         Utils::getEnv()->addValue("locale", "fr");
-        date_default_timezone_set(Utils::getEnv()->getValue("TIMEZONE") ?? "UTC");
+        date_default_timezone_set(Utils::getEnv()->getValue("TIMEZONE") ?? "Europe/Paris");
     }
 
-    public function manageErrors(): void
+    public function manageErrors(string $em): void
     {
-        $devMode = (bool)self::getValue("devMode");
-        ini_set('display_errors', $devMode);
-        ini_set('display_startup_errors', $devMode);
-        error_reporting(E_ALL);
+        $class = new $em;
+        $class();
     }
-
 
     public static function loadProject(): void
     {
@@ -144,8 +141,29 @@ class Loader
         }
     }
 
+    public static function loadLang(string $package, ?string $lang): ?array
+    {
 
-    public function getRouterInstance($url = ""): Router
+        $package = strtolower($package);
+
+        $fileName = "app/package/$package/lang/$lang.php";
+        $fileExist = is_file($fileName);
+
+        if (!$fileExist) {
+            return null;
+        }
+
+        $fileContent = include $fileName;
+
+        if (!is_array($fileContent)) {
+            return null;
+        }
+
+        return $fileContent;
+    }
+
+
+    public static function getRouterInstance($url = ""): Router
     {
         if (!isset(self::$_routerInstance)) {
             self::$_routerInstance = new Router($_GET['url'] ?? $url);

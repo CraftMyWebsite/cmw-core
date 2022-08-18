@@ -2,6 +2,9 @@
 .env
 .idea
 
+#Exclude log files
+/app/storage/logs/*
+
 # Exclude all other packages, only if package is "core" (Core, Users, Menus...)
 !/app/package
 /app/package/*
