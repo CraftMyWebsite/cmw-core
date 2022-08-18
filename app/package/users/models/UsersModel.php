@@ -110,9 +110,9 @@ class UsersModel extends DatabaseManager
         );
     }
 
-    public function getCurrentUser(): ?UserEntity
+    public static function getCurrentUser(): ?UserEntity
     {
-        return $this->getUserById($_SESSION['cmwUserId']);
+        return (new UsersModel)->getUserById($_SESSION['cmwUserId']);
     }
 
     public function getUsers(): array

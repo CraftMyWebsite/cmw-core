@@ -1,8 +1,9 @@
 <?php use CMW\Controller\Core\CoreController;
+use CMW\Manager\Lang\LangManager;
 use CMW\Model\Core\CoreModel;
 
-$title = CORE_CONFIG_TITLE;
-$description = CORE_CONFIG_DESC; ?>
+$title = LangManager::translate("core.config.title", lineBreak: true);
+$description = LangManager::translate("core.config.desc", lineBreak: true); ?>
 
     <div class="content">
         <div class="container-fluid">
@@ -11,38 +12,38 @@ $description = CORE_CONFIG_DESC; ?>
                     <form action="" method="post">
                         <div class="card card-primary">
                             <div class="card-header">
-                                <h3 class="card-title"><?= CORE_CONFIG_TITLE ?> :</h3>
+                                <h3 class="card-title"><?= LangManager::translate("core.dashboard.title", lineBreak: true) ?> :</h3>
                             </div>
                             <div class="card-body">
 
                                 <!-- GENERAL CONFIG SECTION -->
 
                                 <div class="form-group">
-                                    <label for="name"><?= CORE_WEBSITE_NAME ?></label>
+                                    <label for="name"><?= LangManager::translate("core.website.name", lineBreak: true) ?></label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-signature"></i></span>
                                         </div>
                                         <input type="text" name="name" class="form-control"
                                                value="<?= CoreModel::getOptionValue("name") ?>"
-                                               placeholder="<?= CORE_WEBSITE_NAME ?>" required>
+                                               placeholder="<?= LangManager::translate("core.website.name", lineBreak: true) ?>" required>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="description"><?= CORE_WEBSITE_DESCRIPTION ?></label>
+                                    <label for="description"><?= LangManager::translate("core.website.description", lineBreak: true) ?></label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fa fa-paragraph"></i></span>
                                         </div>
                                         <input type="text" name="description" class="form-control"
                                                value="<?= CoreModel::getOptionValue("description") ?>"
-                                               placeholder="<?= CORE_WEBSITE_DESCRIPTION ?>" required>
+                                               placeholder="<?= LangManager::translate("core.website.description", lineBreak: true) ?>" required>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label><?= CORE_CHANGE_LANG ?></label>
+                                    <label><?= LangManager::translate("core.lang.change", lineBreak: true) ?></label>
                                     <select class="form-control" name="locale">
                                         <?php foreach (CoreController::$availableLocales as $code => $name): ?>
                                         <option value="<?= $code ?>" <?= $code === getenv("LOCALE") ? "selected" : "" ?>>
@@ -55,7 +56,7 @@ $description = CORE_CONFIG_DESC; ?>
                                 <?php //Minecraft config section
                                 if (getenv("GAME") === "minecraft"):?>
                                     <div class="form-group">
-                                        <label for="minecraft_ip"><?= CORE_MINECRAFT_IP ?></label>
+                                        <label for="minecraft_ip"><?= LangManager::translate("core.minecraft.ip", lineBreak: true) ?></label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i
@@ -64,7 +65,7 @@ $description = CORE_CONFIG_DESC; ?>
                                             <input type="text" name="minecraft_ip" id="minecraft_ip"
                                                    class="form-control"
                                                    value="<?= CoreModel::getOptionValue("minecraft_ip") ?>"
-                                                   placeholder="<?= CORE_MINECRAFT_IP ?>" required>
+                                                   placeholder="<?= LangManager::translate("core.minecraft.ip", lineBreak: true) ?>" required>
                                         </div>
                                     </div>
 
@@ -74,7 +75,7 @@ $description = CORE_CONFIG_DESC; ?>
                                                    name="minecraft_register_premium" id="minecraft_register_premium"
                                                    value="true" <?= CoreModel::getOptionValue("minecraft_register_premium") === "true" ? "checked" : "" ?>>
                                             <label class="custom-control-label" for="minecraft_register_premium">
-                                                <?= CORE_MINECRAFT_REGISTER_PREMIUM ?>
+                                                <?= LangManager::translate("core.minecraft.register", lineBreak: true) ?>
                                             </label>
                                         </div>
                                     </div>
@@ -83,7 +84,7 @@ $description = CORE_CONFIG_DESC; ?>
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary float-right"><?= CORE_BTN_SAVE ?></button>
+                                <button type="submit" class="btn btn-primary float-right"><?= LangManager::translate("core.btn.save", lineBreak: true) ?></button>
                             </div>
                         </div>
                     </form>

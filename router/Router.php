@@ -104,7 +104,6 @@ class Router
 
         if (!is_null($matchedRoute)) {
             self::setActualRoute($matchedRoute);
-            var_dump($matchedRoute);
             return $matchedRoute->call();
         }
 
