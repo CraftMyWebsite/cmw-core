@@ -2,8 +2,9 @@
 .env
 .idea
 
-#Exclude log files
+#Exclude log files except the .gitignore
 /app/storage/logs/*
+!/app/storage/logs/.gitkeep
 
 # Exclude all other packages, only if package is "core" (Core, Users, Menus...)
 !/app/package
