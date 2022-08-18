@@ -15,8 +15,11 @@ class Router
 {
 
     private string $url;
+    /** @var Route[] $routes */
     private array $routes = [];
+    /** @var Route[] $namedRoutes */
     private array $namedRoutes = [];
+    private static ?Route $actualRoute = null;
     private string $groupPattern;
 
     public function __construct($url)
@@ -24,12 +27,44 @@ class Router
         $this->url = $url;
     }
 
-    public function get($path, $callable, $name = null, $weight = 1): Route
+    public static function getActualRoute(): ?Route
+    {
+        return self::$actualRoute;
+    }
+
+    public static function setActualRoute(?Route $actualRoute): void
+    {
+        self::$actualRoute = $actualRoute;
+    }
+
+    /**
+     * @return Route[]
+     */
+    public function getRoutes(): array
+    {
+        return $this->routes;
+    }
+
+    /**
+     * @return Route[]
+     */
+    public function getRoutesByName(): array
+    {
+        return $this->namedRoutes;
+    }
+
+    public function addRoute(Route $route, $method): void
+    {
+        $this->routes[$method][] = $route;
+        $this->namedRoutes[$route->getName()] = &$route;
+    }
+
+    public function get($path, $callable, $name = "", $weight = 1): Route
     {
         return $this->add($path, $callable, $name, 'GET', $weight);
     }
 
-    public function post($path, $callable, $name = null, $weight = 1): Route
+    public function post($path, $callable, $name = "", $weight = 1): Route
     {
         return $this->add($path, $callable, $name, 'POST', $weight);
     }
@@ -39,14 +74,13 @@ class Router
         if (!empty($this->groupPattern)) {
             $path = $this->groupPattern . $path;
         }
-        $route = new Route($path, $callable, $weight);
-        $this->routes[$method][] = $route;
-        if (is_string($callable) && $name === null) {
-            $name = $callable;
-        }
-        if ($name) {
-            $this->namedRoutes[$name] = $route;
-        }
+
+        $name = $name ?: uniqid('route-', true);
+
+        $route = new Route($path, $callable, $weight, $name);
+
+        $this->addRoute($route, $method);
+
         return $route;
     }
 
@@ -62,27 +96,28 @@ class Router
      */
     public function listen()
     {
-        if (!isset($this->routes[$_SERVER['REQUEST_METHOD']])) {
+        if (!isset($this->getRoutes()[$_SERVER['REQUEST_METHOD']])) {
             throw new RouterException('REQUEST_METHOD does not exist', 500);
         }
 
-        $matchedRoute = $this->getMatchedUrl($this->url);
+        $matchedRoute = $this->getRouteByUrl($this->url);
 
-        if(!is_null($matchedRoute)) {
+        if (!is_null($matchedRoute)) {
+            self::setActualRoute($matchedRoute);
+            var_dump($matchedRoute);
             return $matchedRoute->call();
         }
 
         throw new RouterException('No matching routes', 404);
     }
 
-    private function getMatchedUrl(string $url): ?Route
+    public function getRouteByUrl(string $url): ?Route
     {
-        /** @var $matchedRoute ?Route */
         $matchedRoute = null;
-        foreach ($this->routes[$_SERVER['REQUEST_METHOD']] as $route) {
+        foreach ($this->getRoutes()[$_SERVER['REQUEST_METHOD']] as $route) {
             /** @var Route $route */
             if ($route->match($url)) {
-                if(is_null($matchedRoute?->getWeight()) || $route->getWeight() > $matchedRoute->getWeight()) {
+                if (is_null($matchedRoute) || $route->getWeight() > $matchedRoute->getWeight()) {
                     $matchedRoute = $route;
                 }
             }
@@ -91,15 +126,9 @@ class Router
         return $matchedRoute;
     }
 
-    /**
-     * @throws RouterException
-     */
-    public function url($name, $params = [])
+    public function getRouteByName($name): ?Route
     {
-        if (!isset($this->namedRoutes[$name])) {
-            throw new RouterException('No route matches this name', 404);
-        }
-        return $this->namedRoutes[$name]->getUrl($params);
+        return $this->namedRoutes[$name] ?? null;
     }
 
     public function registerRoute(Link $link, ReflectionMethod $method): void
@@ -107,25 +136,23 @@ class Router
 
         if (!is_null($link->getScope())) {
             $this->scope($link->getScope(), function () use ($link, $method) {
-
-                $newLink = new Link($link->getPath(), $link->getMethod(), $link->getVariables(), null, $link->getWeight());
+                $newLink = new Link($link->getPath(), $link->getMethod(), $link->getVariables(), null, $link->getWeight(), $link->getName());
                 $this->registerRoute($newLink, $method);
             });
 
             return;
         }
 
+        $link->setName($this->generateRouteName($method));
+
         $router = match ($link->getMethod()) {
             Link::GET => $this->registerGetRoute($link, $method),
             Link::POST => $this->registerPostRoute($link, $method)
         };
 
-
         $regexValues = $link->getVariables();
         foreach ($regexValues as $value => $regex) {
-
             $router->with($value, $regex);
-
         }
 
     }
@@ -136,7 +163,7 @@ class Router
 
             $this->callRegisteredRoute($method, ...$values);
 
-        }, weight: $link->getWeight());
+        }, name: $link->getName(), weight: $link->getWeight());
     }
 
     private function registerPostRoute(Link $link, ReflectionMethod $method): Route
@@ -145,20 +172,23 @@ class Router
 
             $this->callRegisteredRoute($method, ...$values);
 
-        }, weight: $link->getWeight());
+        }, name: $link->getName(), weight: $link->getWeight());
     }
-
 
     /**
      * @throws \ReflectionException
      */
     private function callRegisteredRoute(ReflectionMethod $method, string ...$values): void
     {
-
         $controller = $method->getDeclaringClass()->newInstance();
         $methodName = $method->getName();
         $controller->$methodName(...$values);
+    }
 
+    private function generateRouteName(ReflectionMethod $method): string
+    {
+        $class = strtolower(str_replace("Controller", "", $method->getDeclaringClass()->getShortName()));
+        return "$class.{$method->getName()}";
     }
 
 }

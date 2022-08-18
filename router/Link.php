@@ -15,7 +15,8 @@ class Link
                                 #[ExpectedValues(flagsFromClass: Link::class)] private readonly string $method,
                                 private readonly array                                                 $variables = array(),
                                 private readonly ?string                                               $scope = null,
-                                private readonly int                                                   $weight = 1)
+                                private readonly int                                                   $weight = 1,
+                                private ?string                                                        $name = null)
     {
     }
 
@@ -54,9 +55,22 @@ class Link
     /**
      * @return int
      */
-    public function getWeight(): int {
+    public function getWeight(): int
+    {
         return $this->weight;
     }
 
+    /**
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
 
 }
