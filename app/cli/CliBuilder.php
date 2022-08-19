@@ -2,13 +2,15 @@
 
 use CMW\Utils\EnvBuilder;
 
-class cliBuilder{
 
-    private EnvBuilder $envBuilder;
+class cliBuilder{
+    protected EnvBuilder $envBuilder;
+
 
     public function __construct()
     {
         $this->envBuilder = new EnvBuilder();
+
 
         $this->loadLang();
     }
@@ -20,17 +22,26 @@ class cliBuilder{
 
     public function emptyArgs(): void
     {
-        $this->say(CLI_EMPTY_ARGS);
+        $this->sayLn(CLI_EMPTY_ARGS);
     }
 
     /* UTILS FUNCTIONS */
 
-    public function say(string $content): void
+    public function say(string... $contents): void
     {
-        echo "\n$content\n";
+        foreach($contents as $content) {
+            echo "$content ";
+        }
     }
 
-    public function read(): string|false
+    public function sayLn(string... $contents): void
+    {
+        foreach($contents as $content) {
+            echo "\n$content\n";
+        }
+    }
+
+    public function read(): ?string
     {
         return readline("> ");
     }
