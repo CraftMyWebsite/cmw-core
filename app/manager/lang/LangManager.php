@@ -40,7 +40,9 @@ class LangManager
     {
         foreach ($vars as $key => $var) {
             $key = strtolower($key);
-            $translation = str_replace("%$key%", $var, $translation);
+            if (!is_null($var)) {
+                $translation = str_replace("%$key%", $var, $translation);
+            }
         }
 
         return $translation;

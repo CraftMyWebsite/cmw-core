@@ -21,7 +21,8 @@ class Loader
 
     public function __construct()
     {
-        new Utils(); //Need to be first /!\ IMPORTANT
+        require_once("app/tools/Utils.php");
+        new Utils(); //Need to call Utils __construct.
     }
 
     private static function getValue(string $value): string
@@ -119,6 +120,10 @@ class Loader
                 default => false,
             };
         });
+
+        if (!isset($_SESSION)) {
+            session_start();
+        }
     }
 
 
