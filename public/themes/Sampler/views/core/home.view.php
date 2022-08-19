@@ -16,8 +16,6 @@ $description = "page d'accueil de CraftMyWebsite"; ?>
     <?php endif; ?>
     <p>
         Bienvenue sur votre nouveau site
-        <?= LangManager::translate("core.eat.pasta", lineBreak: true) ?>
-        <?= LangManager::translate("core.eat.potatoes", ["name" => UsersModel::getCurrentUser()->getUsername()]) ?>
     </p>
 
 </main>

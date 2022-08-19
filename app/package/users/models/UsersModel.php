@@ -2,6 +2,7 @@
 
 namespace CMW\Model\Users;
 
+use CMW\Controller\Users\UsersController;
 use CMW\Entity\Users\RoleEntity;
 use CMW\Entity\Users\UserPictureEntity;
 use CMW\Entity\Users\UserEntity;
@@ -86,7 +87,7 @@ class UsersModel extends DatabaseManager
 
         $resUserPicture = $resUserPicture->fetch();
 
-        if($resUserPicture){
+        if ($resUserPicture) {
             $userPicture = new UserPictureEntity(
                 $resUserPicture['users_pictures_user_id'],
                 $resUserPicture['users_pictures_image_name'],
@@ -112,7 +113,7 @@ class UsersModel extends DatabaseManager
 
     public static function getCurrentUser(): ?UserEntity
     {
-        return (new UsersModel)->getUserById($_SESSION['cmwUserId']);
+        return !isset($_SESSION['cmwUserId']) ? null : (new self)->getUserById($_SESSION['cmwUserId']);
     }
 
     public function getUsers(): array
