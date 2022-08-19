@@ -8,8 +8,9 @@ use CurlHandle;
 class APIManager
 {
 
-    private const ENV_KEY = "api password";
+    private const ENV_KEY = "api_password";
     private const HEADER_KEY = "X-CMW-ACCESS";
+    private const HTTP_HEADER_KEY = "HTTP_X_CMW_ACCESS";
 
     public function __construct()
     {
@@ -42,14 +43,19 @@ class APIManager
         return self::hashPassword($password);
     }
 
-    private static function generateHeader(string $url): CurlHandle|bool
+    private static function getSecureHeader(): string
+    {
+        return self::HEADER_KEY . ": " . self::getPassword();
+    }
+
+    private static function generateHeader(string $url, $secure): CurlHandle|bool
     {
         $curlHandle = curl_init($url);
         $passwordAccess = self::getPassword();
         $headerAccess = self::HEADER_KEY;
-        $headers = array(
-            "$headerAccess : $passwordAccess"
-        );
+        $headers = $secure
+            ? array(self::getSecureHeader())
+            : array();
 
 
         curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $headers);
@@ -60,34 +66,44 @@ class APIManager
     }
 
 
-    public static function postRequest(string $url, array $data = []): string|false
+    /**
+     * @throws \JsonException
+     */
+    public static function postRequest(string $url, array $data = [], $secure = true): string|false
     {
         //todo verif if url is real URL.
 
-        $curlHandle = self::generateHeader($url);
+        $curlHandle = self::generateHeader($url, $secure);
 
-        $data = json_encode($data, JSON_THROW_ON_ERROR);
+        $parsedData = json_encode($data, JSON_THROW_ON_ERROR);
         curl_setopt($curlHandle, CURLOPT_POST, 1);
-        curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $parsedData);
         $response = curl_exec($curlHandle);
         curl_close($curlHandle);
         return $response;
     }
 
-    public static function getRequest(string $url): string|false
+    public static function getRequest(string $url, $secure = true): string|false
     {
         //todo verif if url is real URL.
 
-        $curlHandle = self::generateHeader($url);
+        $curlHandle = self::generateHeader($url, $secure);
 
         $response = curl_exec($curlHandle);
         curl_close($curlHandle);
         return $response;
     }
 
-    public static function sendSecureJson(string $message, int $code = 200, array $data = array()): bool|string
+    /**
+     * @throws \JsonException
+     */
+    public static function createResponse(string $message, int $code = 200, array $data = array(), $secure = true): bool|string
     {
+
         header("Content-Type: application/json; charset=UTF-8");
+        if ($secure) {
+            header(self::getSecureHeader());
+        }
         return json_encode(array(
             "message" => $message,
             "code" => $code,
@@ -95,22 +111,20 @@ class APIManager
         ), JSON_THROW_ON_ERROR);
     }
 
-    public static function canRequestWebsite(): bool
+    public static function canRequestWebsite($headerKey = self::HTTP_HEADER_KEY, $key = self::ENV_KEY): bool
     {
-        $headers = $_SERVER;
+        $receivedKey = $_SERVER[$headerKey] ?? null;
 
-        $key = $headers[self::HEADER_KEY] ?? null;
-
-        if (is_null($key)) {
+        if (is_null($receivedKey)) {
             return false;
         }
 
-        return self::verifyPassword($key);
+        return self::verifyPassword($receivedKey, $key);
     }
 
-    private static function verifyPassword($hashedPass): bool
+    private static function verifyPassword($hashedPass, $key): bool
     {
-        return password_verify(Utils::getEnv()->getValue(self::ENV_KEY), $hashedPass);
+        return password_verify(Utils::getEnv()->getValue($key), $hashedPass);
     }
 
 

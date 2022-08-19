@@ -129,17 +129,6 @@ class CoreController
         throw new RouterException('Trowed Error', $errorCode);
     }
 
-     #[Link("/api/test", Link::GET,)]
-     public function testAPI(): void
-     {
-         header("Content-Type: application/json; charset=UTF-8");
-
-         $post = APIManager::postRequest("https://eowndr9l5vaglcn.m.pipedream.net", ["test" => "Element woaw", "deuxieme" => 'Deuxième test']);
-         echo ($post);
-
-
-     }
-
     public function cmwThemePath(): string
     {
         return (new CoreModel())->fetchOption("theme");
