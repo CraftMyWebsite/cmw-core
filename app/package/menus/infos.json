@@ -1,8 +1,12 @@
 {
   "name": "menus",
-  "name_menu": "Menus",
-  "icon_menu": "fas fa-bars",
-  "url_menu": "menus",
+  "menus": [
+    {
+      "name_menu": "Menus",
+      "icon_menu": "fas fa-bars",
+      "url_menu": "menus"
+    }
+  ],
   "description": "Gérer et afficher les menus sur le site",
   "version": "1.0.0",
   "author": "CraftMyWebsite Team"

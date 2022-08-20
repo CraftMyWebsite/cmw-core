@@ -1,23 +1,27 @@
 {
   "name": "pages",
-  "name_menu": "Pages",
-  "name_menu_en": "Pages",
-  "icon_menu": "fas fa-copy",
-  "url_menu": "",
-  "urls_submenu": {
-    "Liste":"pages/list",
-    "Ajouter":"pages/add"
-  },
-  "urls_submenu_en": {
-    "List":"pages/list",
-    "Add":"pages/add"
-  },
+  "menus": [
+    {
+      "name_menu": "Pages",
+      "name_menu_en": "Pages",
+      "icon_menu": "fas fa-copy",
+      "url_menu": "",
+      "urls_submenu": {
+        "Liste": "pages/list",
+        "Ajouter": "pages/add"
+      },
+      "urls_submenu_en": {
+        "List": "pages/list",
+        "Add": "pages/add"
+      }
+    }
+  ],
   "permissions": {
     "Afficher la liste des pages": "pages.show",
     "Ajouts d'une page": "pages.add",
     "Modification d'une page": "pages.edit",
     "Suppression d'une page": "pages.delete"
-},
+  },
   "description": "Gérer les pages du site",
   "version": "1.0.0",
   "author": "CraftMyWebsite Team"
