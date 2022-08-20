@@ -8,6 +8,15 @@ use RuntimeException;
 class Images
 {
     protected static string $returnName;
+    private static array $allowedTypes = [
+        'image/png' => 'png',
+        'image/jpg' => 'jpg',
+        'image/jpeg' => 'jpeg',
+        'image/gif' => 'gif',
+        'image/webp' => 'webp',
+        'image/x-icon' => 'ico',
+        'image/svg+xml' => 'svg'
+    ];
 
     /**
      * @param array $files
@@ -41,11 +50,14 @@ class Images
     {
 
         if (is_uploaded_file($file['tmp_name']) === false) //TODO implements error managements
+        {
             return "ERROR_INVALID_FILE_DEFINITION";
+        }
 
 
-        if (!empty(mb_substr($dirName, -1)))
+        if (!empty(mb_substr($dirName, -1))) {
             $dirName .= "/";
+        }
 
 
         self::createDirectory($dirName); //Create the directory if this is necessary
@@ -54,9 +66,8 @@ class Images
         $path = getenv("DIR") . "public/uploads/" . $dirName;
 
 
-        if (!empty($dirName) && $dirName !== "/") {
-            if (!is_dir($path)) //TODO implements error managements
-                return "ERROR_FOLDER_DONT_EXIST";
+        if (!empty($dirName) && $dirName !== "/" && !is_dir($path)) {
+            return "ERROR_FOLDER_DONT_EXIST";
         }
 
         $filePath = $file['tmp_name'];
@@ -65,30 +76,27 @@ class Images
         $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
         $fileType = finfo_file($fileInfo, $filePath);
 
-        $allowedTypes = [
-            'image/png' => 'png',
-            'image/jpg' => 'jpg',
-            'image/jpeg' => 'jpeg',
-            'image/gif' => 'gif',
-            'image/webp' => 'webp',
-            'image/x-icon' => 'ico',
-            'image/svg+xml' => 'svg'
-        ];
 
         $maxFileSize = self::getUploadMaxSizeFileSize();
 
 
         if (empty($fileSize2) || ($fileSize2[0] === 0) || ($fileSize2[1] === 0 || filesize($filePath) <= 0)) //TODO implements error managements
+        {
             return "ERROR_EMPTY_FILE";
+        }
 
         if ($fileSize > $maxFileSize) //TODO implements error managements
+        {
             return "ERROR_FILE_TOO_LARGE";
+        }
 
-        if (!array_key_exists($fileType, $allowedTypes)) //TODO implements error managements
+        if (!array_key_exists($fileType, self::$allowedTypes)) //TODO implements error managements
+        {
             return "ERROR_FILE_NOT_ALLOWED";
+        }
 
         $fileName = Utils::genId(random_int(15, 35));
-        $extension = $allowedTypes[$fileType];
+        $extension = self::$allowedTypes[$fileType];
 
         self::$returnName = $fileName . "." . $extension;
 
@@ -96,7 +104,13 @@ class Images
 
 
         if (!copy($filePath, $newFilePath)) //TODO implements error managements
+        {
             return "ERROR_CANT_MOVE_FILE";
+        }
+
+        //Clear image metadata
+        $oldFilePath = $path . $fileName . "-old." . $extension;
+        self::clearMetadata($oldFilePath, $path . self::$returnName, $extension);
 
         //Return the file name with extension
         return self::$returnName;
@@ -138,6 +152,53 @@ class Images
     }
 
     /**
+     * @param string $oldFilePath
+     * @param string $filePath
+     * @param string $imageFormat
+     * @return void
+     * @Desc Clear all the image metadata
+     * @throws \JsonException
+     */
+    private static function clearMetadata(string $oldFilePath, string $filePath, string $imageFormat): void
+    {
+        //We copy the current file
+        copy($filePath, $oldFilePath);
+
+        $bufferLen = filesize($filePath);
+        $fdIn = fopen($oldFilePath, 'rb');
+        $fdOut = fopen($filePath, 'wb');
+
+        while (($buffer = fread($fdIn, $bufferLen))) {
+            //  \xFF\xE1\xHH\xLLExif\x00\x00 - Exif
+            //  \xFF\xE1\xHH\xLLhttp://      - XMP
+            //  \xFF\xE2\xHH\xLLICC_PROFILE  - ICC
+            //  \xFF\xED\xHH\xLLPhotoshop    - PH
+            while (preg_match('/\xFF[\xE1\xE2\xED\xEE](.)(.)(exif|photoshop|http:|icc_profile|adobe)/si', $buffer, $match, PREG_OFFSET_CAPTURE)) {
+                Utils::debugConsole("found: '{$match[3][0]}' marker\n");
+                $len = ord($match[1][0]) * 256 + ord($match[2][0]);
+
+                Utils::debugConsole("length: $len bytes\n");
+                Utils::debugConsole("write: {$match[0][1]} bytes to output file\n");
+
+                fwrite($fdOut, substr($buffer, 0, $match[0][1]));
+                $filepos = $match[0][1] + 2 + $len - strlen($buffer);
+                fseek($fdIn, $filepos, SEEK_CUR);
+
+                Utils::debugConsole("seek to: " . ftell($fdIn) . "\n");
+
+                $buffer = fread($fdIn, $bufferLen);
+            }
+            Utils::debugConsole("write: " . strlen($buffer) . " bytes to output file\n");
+            fwrite($fdOut, $buffer, strlen($buffer));
+        }
+        fclose($fdOut);
+        fclose($fdIn);
+
+        //We delete the "old" file
+        unlink($oldFilePath);
+    }
+
+    /**
      * @param string $imageName
      * @param string $dirName
      * @return void
@@ -145,15 +206,13 @@ class Images
      */
     public static function deleteImage(string $imageName, string $dirName = ""): void
     {
-        if (!empty(mb_substr($dirName, -1)))
+        if (!empty(mb_substr($dirName, -1))) {
             $dirName .= "/";
+        }
 
-
-        if (!file_exists(getenv("DIR") . "public/uploads/" . $dirName))
-            if (!mkdir($concurrentDirectory = getenv("DIR") . "public/uploads/" . $dirName) && !is_dir($concurrentDirectory)) {
-                throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
-            }
-
+        if (!file_exists(getenv("DIR") . "public/uploads/" . $dirName) && !mkdir($concurrentDirectory = getenv("DIR") . "public/uploads/" . $dirName) && !is_dir($concurrentDirectory)) {
+            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+        }
 
         $path = getenv("DIR") . "public/uploads/" . $dirName;
 
