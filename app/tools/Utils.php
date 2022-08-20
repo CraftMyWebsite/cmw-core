@@ -118,4 +118,16 @@ class Utils
     {
         return substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"), 10, $l);
     }
+
+    /**
+     * @param string $data
+     * @throws \JsonException
+     * @desc Echo the data in the navigator console
+     */
+    public static function debugConsole(string $data): void
+    {
+        echo '<script>';
+        echo 'console.log('. json_encode($data, JSON_THROW_ON_ERROR) .')';
+        echo '</script>';
+    }
 }
