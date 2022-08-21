@@ -3,6 +3,7 @@
 namespace CMW\Utils;
 
 use CMW\Controller\Core\CoreController;
+use CMW\Controller\Core\ThemeController;
 use CMW\Controller\Menus\MenusController;
 use CMW\Controller\Users\UsersController;
 use CMW\Model\Users\UsersModel;
@@ -144,7 +145,7 @@ class View
 
     private function getViewPath(): string
     {
-        $theme = (new CoreController())->cmwThemePath();
+        $theme = ThemeController::getCurrentTheme()->getName();
         return ($this->isAdminFile)
             ? "app/package/{$this->package}/views/{$this->viewFile}.admin.view.php"
             : "public/themes/$theme/views/{$this->package}/{$this->viewFile}.view.php";
@@ -152,7 +153,7 @@ class View
 
     private function getTemplateFile(): string
     {
-        $theme = (new CoreController())->cmwThemePath();
+        $theme = ThemeController::getCurrentTheme()->getName();
         return ($this->isAdminFile)
             ? getenv("PATH_ADMIN_VIEW") . "template.php"
             : "public/themes/$theme/views/template.php";

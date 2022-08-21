@@ -68,6 +68,13 @@ return [
             ],
         ],
     ],
+    "theme" => [
+      "config" => [
+          "title" => "Gestion de vos thèmes",
+          "description" => "Gérez les thèmes de votre site",
+          "select" => "Choisissez votre thème"
+      ],
+    ],
     "footer" => [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " Tous droits réservés.",
         "right" => "Merci d'utiliser <a href='https://craftmywebsite.com/'>CraftMyWebsite</a>.",

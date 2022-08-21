@@ -25,7 +25,7 @@ class CoreController
 
     public function __construct()
     {
-        self::$themePath = $this->cmwThemePath();
+        self::$themePath = (new CoreModel())->fetchOption("theme"); //Get the current active theme
     }
 
     #[NoReturn] protected static function redirectToHome(): void
@@ -99,7 +99,7 @@ class CoreController
     #[Link("/:errorCode", Link::GET, ["errorCode" => ".*?"], "geterror")]
     public function errorView(int $errorCode = 403): void
     {
-        $theme = (new CoreController())->cmwThemePath();
+        $theme = ThemeController::getCurrentTheme()->getName();
 
         $errorToCall = (string)$errorCode;
         $errorFolder = "public/themes/$theme/views/errors";
@@ -124,28 +124,6 @@ class CoreController
     public function threwRouterError($errorCode): void
     {
         throw new RouterException('Trowed Error', $errorCode);
-    }
-
-    public function cmwThemePath(): string
-    {
-        return (new CoreModel())->fetchOption("theme");
-    }
-
-    /**
-     * @throws JsonException
-     */
-    public function cmwThemeAvailablePackages(): array
-    {
-        $jsonFile = file_get_contents($this->cmwThemePath() . "/infos.json");
-        return json_decode($jsonFile, true, 512, JSON_THROW_ON_ERROR)["packages"];
-    }
-
-    /**
-     * @throws JsonException
-     */
-    public function cmwPackageAvailableTheme(string $package): bool
-    {
-        return in_array($package, $this->cmwThemeAvailablePackages(), true);
     }
 
     /* //////////////////////////////////////////////////////////////////////////// */
