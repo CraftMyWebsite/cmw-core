@@ -1,19 +1,30 @@
 <?php
 
-const PAGES_ADD_TITLE = "Pages | Create";
-const PAGES_ADD_DESC = "Create new page";
+return [
+	"add" => [
+		"title" => "Pages | Create",
+		"desc" => "Create new page",
+	],
+	"edit" => [
+		"title" => "Pages | Editing",
+		"desc" => "Edite your page",
+	],
+	"list" => [
+		"title" => "Pages | List",
+		"desc" => "Pages list",
+	],
+	"publish" => "Publish page",
+	"draft" => "Draft",
 
-const PAGES_EDIT_TITLE = "Pages | Editing";
-const PAGES_EDIT_DESC = "Edite your page";
+	"title" => "Title",
+	"author" => "Author",
 
-const PAGES_ADD_CARD_TITLE = "Page content";
+	"creation" => [
+		"date" => "Creation date",
+	],
+	"content" => [
+		"placeholder" => "Start typing or click the \"+\" to choose a block to add...",
+	],
 
-const PAGES_LIST_TITLE = "Pages | List";
-const PAGES_LIST_DESC = "Pages list";
 
-const PAGES_PUBLISH = "Publish page";
-const PAGES_DRAFT = "Draft";
-
-const PAGES_TITLE = "Title";
-const PAGES_AUTHOR = "Author";
-const PAGES_CREATION_DATE = "Creation date";
+];
