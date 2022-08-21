@@ -16,6 +16,7 @@ class Route
     private string $path;
     private string $name;
     private int $weight;
+    /** @var callable $callable */
     private $callable;
     private array $matches = [];
     private array $params = [];
@@ -35,10 +36,10 @@ class Route
         $toReturn["path"] = $this->path;
         $toReturn["name"] = $this->name;
         $toReturn["weight"] = $this->weight;
-        if(!empty($this->matches)) {
+        if (!empty($this->matches)) {
             $toReturn["matches"] = $this->matches;
         }
-        if(!empty($this->params)) {
+        if (!empty($this->params)) {
             $toReturn["params"] = $this->params;
         }
 
