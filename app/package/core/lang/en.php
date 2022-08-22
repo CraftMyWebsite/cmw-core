@@ -68,6 +68,22 @@ return [
             ],
         ],
     ],
+    "theme" => [
+        "config" => [
+            "title" => "Manage your themes",
+            "description" => "Manage the themes of your website",
+            "select" => "Select your theme",
+            "list" => [
+                "title" => "Our officials themes",
+                "info" => "You can download all this themes on our marketplace",
+                "name" => "Name",
+                "version" => "Version",
+                "cmw_version" => "Version CMW",
+                "downloads" => "Downloads",
+                "download" => "Download",
+            ],
+        ],
+    ],
     "footer" => [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " All right reserved.",
         "right" => "Thank you for using <a href='https://craftmywebsite.com/'>CraftMyWebsite</a>.",

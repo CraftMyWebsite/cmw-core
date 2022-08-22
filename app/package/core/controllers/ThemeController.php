@@ -9,6 +9,7 @@ use CMW\Utils\Redirect;
 use CMW\Utils\Response;
 use CMW\Utils\View;
 use JsonException;
+use ZipArchive;
 
 class ThemeController extends CoreController
 {
@@ -79,8 +80,13 @@ class ThemeController extends CoreController
         $currentTheme = self::getCurrentTheme();
         $installedThemes = self::getInstalledThemes();
 
+        try {
+            $themesList = json_decode(file_get_contents("https://devcmw.w3b.websr.fr/API/?getThemeList"), false, 512, JSON_THROW_ON_ERROR); // TODO USE REEL API
+        } catch (JsonException $e) {
+        }
+
         View::createAdminView("core", "themeConfiguration")
-            ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes])
+            ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes, "themesList" => $themesList])
             ->view();
     }
 
@@ -92,6 +98,36 @@ class ThemeController extends CoreController
         CoreModel::updateOption("theme", $theme);
         header("Location: configuration");
     }
+
+    #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/theme")]
+    public function adminThemeInstallation(int $id): void
+    {
+        try {
+            $theme = json_decode(file_get_contents("https://devcmw.w3b.websr.fr/API/?getRessourceById=" . $id), false, 512, JSON_THROW_ON_ERROR); //TODO USE REEL API
+        } catch (JsonException $e) {
+        }
+
+
+        //VARS
+        $url = "https://devcmw.w3b.websr.fr/public/uploads/market/files/" . $theme->getRessourceById[0]->file;
+        $outFileName = "public/uploads/" . $theme->getRessourceById[0]->file;
+
+        //Download & store File
+        set_time_limit(0);
+        $file = file_get_contents($url);
+        file_put_contents($outFileName, $file);
+
+
+        $zip = new ZipArchive();
+        if($zip->open($outFileName) === TRUE) {
+            $zip->extractTo('public/themes/');
+            $zip->close();
+            unlink($outFileName);
+        }
+
+        header("location: /cmw-admin/theme/configuration");
+    }
+
 
 
 

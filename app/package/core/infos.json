@@ -18,7 +18,7 @@
       "url_menu": "",
       "urls_submenu": {
         "Configuration": "theme/configuration",
-        "Gérez de votre thème": "theme/manage"
+        "Gestion de votre thème": "theme/manage"
       },
       "urls_submenu_en": {
         "Configuration": "theme/configuration",
