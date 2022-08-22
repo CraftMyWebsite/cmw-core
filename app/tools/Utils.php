@@ -109,6 +109,11 @@ class Utils
         return rmdir($dir);
     }
 
+    public static function getVersion(): string
+    {
+        return self::getEnv()->getValue("VERSION");
+    }
+
     /**
      * @param int $l
      * @return string
