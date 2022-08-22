@@ -163,9 +163,10 @@ class CoreController
      */
     public function cmwFooter(): string
     {
+        $version = Utils::getVersion();
         //Todo Set that in lang
         return <<<HTML
-            <p>Un site fièrement propulsé par <a href='https://craftmywebsite.fr/'>CraftMyWebsite</a></p>
+            <p>Un site fièrement propulsé par <a href='https://craftmywebsite.fr/'>CraftMyWebsite $version</a></p>
         HTML;
     }
 }

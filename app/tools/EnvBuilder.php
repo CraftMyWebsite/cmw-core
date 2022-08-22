@@ -18,6 +18,7 @@ class EnvBuilder
     private string $path;
     private string $absPath;
     private string $apiURL;
+    private string $version;
 
     public function __construct()
     {
@@ -25,6 +26,7 @@ class EnvBuilder
         $this->envPath = $this->absPath;
         $this->path = $this->envPath . $this->envFileName;
         $this->apiURL = "https://apiv2.craftmywebsite.fr"; //TODO En production mettre la vraie URL de l'API
+        $this->version = "2.0";
 
         if (!$this->checkForFile()) {
             $this->createFile();
@@ -167,6 +169,7 @@ class EnvBuilder
         $this->addValue("dir", $this->absPath);
         $this->addValue("devMode", 0);
         $this->addValue("APIURL", $this->apiURL);
+        $this->addValue("VERSION", $this->version);
     }
 
 }
