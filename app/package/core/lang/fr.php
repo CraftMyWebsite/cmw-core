@@ -68,6 +68,22 @@ return [
             ],
         ],
     ],
+    "theme" => [
+      "config" => [
+          "title" => "Gestion de vos thèmes",
+          "description" => "Gérez les thèmes de votre site",
+          "select" => "Choisissez votre thème",
+          "list" => [
+              "title" => "Liste des Thèmes officiels",
+              "info" => "Vous pouvez directement télécharger nos Thèmes sur notre Market",
+              "name" => "Nom",
+              "version" => "Version",
+              "cmw_version" => "Version CMW",
+              "downloads" => "Nombre de téléchargement",
+              "download" => "Télécharger",
+          ],
+      ],
+    ],
     "footer" => [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " Tous droits réservés.",
         "right" => "Merci d'utiliser <a href='https://craftmywebsite.com/'>CraftMyWebsite</a>.",

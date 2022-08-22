@@ -1,19 +1,32 @@
 {
   "name": "core",
-  "name_menu": "Général",
-  "icon_menu": "fas fa-th",
-  "url_menu": "",
-  "urls_submenu": {
-    "Configuration": "configuration"
-  },
-  "urls_submenu_en": {
-    "Configuration": "configuration"
-  },
-  "permissions": {
-    "Accès au dashboard admin": "core.dashboard",
-    "Gestion des paramètres du site": "core.configuration",
-    "Obtiens toutes les permissions": "*"
-  },
+  "menus": [
+    {
+      "name_menu": "Général",
+      "icon_menu": "fas fa-th",
+      "url_menu": "",
+      "urls_submenu": {
+        "Configuration": "configuration"
+      },
+      "urls_submenu_en": {
+        "Configuration": "configuration"
+      }
+    },
+    {
+      "name_menu": "Thèmes",
+      "icon_menu": "fas fa-paintbrush",
+      "url_menu": "",
+      "urls_submenu": {
+        "Configuration": "theme/configuration",
+        "Gestion de votre thème": "theme/manage"
+      },
+      "urls_submenu_en": {
+        "Configuration": "theme/configuration",
+        "Manage your theme": "theme/manage"
+      }
+    }
+  ],
+
   "description": "Gère le coeur du CMS",
   "version": "1.0.0",
   "author": "CraftMyWebsite Team"

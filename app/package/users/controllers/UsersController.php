@@ -334,13 +334,14 @@ class UsersController extends CoreController
     #[Link('/profile', Link::GET)]
     public function publicProfile(): void
     {
-        $user = (new usersModel())->getUserById($_SESSION['cmwUserId']);
-
 
         if (UsersModel::getLoggedUser() == -1) {
             header('Location: ' . getenv('PATH_SUBFOLDER'));
             die();
         }
+
+        $user = (new usersModel())->getUserById($_SESSION['cmwUserId']);
+
         $view = new View('users', 'profile');
         $view->addVariableList(["user" => $user]);
         $view->view();
@@ -357,7 +358,7 @@ class UsersController extends CoreController
     }
 
     #[Link("/profile/delete/:id", Link::GET, ["id" => "[0-9]+"])]
-    public function publicProfileDelete(int $id)
+    public function publicProfileDelete(int $id): void
     {
         //Check if this is the current user account
         if ($_SESSION['cmwUserId'] !== $id) {

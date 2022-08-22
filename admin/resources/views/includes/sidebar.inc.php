@@ -1,4 +1,5 @@
 <?php /* @var \CMW\Entity\Users\UserEntity $userAdmin */
+
 /* @var \CMW\Controller\CoreController $coreAdmin */
 
 use CMW\Manager\Lang\LangManager; ?>
@@ -35,7 +36,10 @@ use CMW\Manager\Lang\LangManager; ?>
                     </a>
                 </li>
 
-                <?php $packagesFolder = 'app/package/';
+                <?php
+
+                //Get the package folders
+                $packagesFolder = 'app/package/';
                 $scannedDirectory = array_diff(scandir($packagesFolder), array('..', '.'));
                 foreach ($scannedDirectory as $package) :
                     $strJsonFileContents = file_get_contents("app/package/$package/infos.json");
@@ -44,37 +48,40 @@ use CMW\Manager\Lang\LangManager; ?>
                     } catch (JsonException $e) {
                     }
 
-                    $nameMenu = $packageInfos['name_menu_' . getenv("LOCALE")] ?? $packageInfos['name_menu'];
 
+                    foreach ($packageInfos['menus'] as $packageMenus):
 
-                    if (isset($packageInfos["urls_submenu"])) :
-                        $urlsSubMenu = $packageInfos["urls_submenu_" . getenv("LOCALE")] ?? $packageInfos["urls_submenu"]; ?>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon <?= $packageInfos['icon_menu'] ?>"></i>
-                                <p><?= $nameMenu ?><i class="right fas fa-angle-left"></i></p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <?php foreach ($urlsSubMenu as $subMenuName => $subMenuUrl) : ?>
-                                    <li class="nav-item">
-                                        <a href="<?= getenv("PATH_SUBFOLDER") ?>cmw-admin/<?= $subMenuUrl ?>"
-                                           class="nav-link">
-                                            <p><?= $subMenuName ?></p>
-                                        </a>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </li>
+                        $nameMenu = $packageMenus['name_menu_' . getenv("LOCALE")] ?? $packageMenus['name_menu'];
 
-                    <?php else : ?>
-                        <li class="nav-item">
-                            <a href="<?= getenv("PATH_SUBFOLDER") ?>cmw-admin/<?= $packageInfos['url_menu'] ?>"
-                               class="nav-link">
-                                <i class="nav-icon <?= $packageInfos['icon_menu'] ?>"></i>
-                                <p><?= $nameMenu ?></p>
-                            </a>
-                        </li>
-                    <?php endif; ?>
+                        if (isset($packageMenus["urls_submenu"])) :
+                            $urlsSubMenu = $packageMenus["urls_submenu_" . getenv("LOCALE")] ?? $packageMenus["urls_submenu"]; ?>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon <?= $packageMenus['icon_menu'] ?>"></i>
+                                    <p><?= $nameMenu ?><i class="right fas fa-angle-left"></i></p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <?php foreach ($urlsSubMenu as $subMenuName => $subMenuUrl) : ?>
+                                        <li class="nav-item">
+                                            <a href="<?= getenv("PATH_SUBFOLDER") ?>cmw-admin/<?= $subMenuUrl ?>"
+                                               class="nav-link">
+                                                <p><?= $subMenuName ?></p>
+                                            </a>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </li>
+
+                        <?php else : ?>
+                            <li class="nav-item">
+                                <a href="<?= getenv("PATH_SUBFOLDER") ?>cmw-admin/<?= $packageMenus['url_menu'] ?>"
+                                   class="nav-link">
+                                    <i class="nav-icon <?= $packageMenus['icon_menu'] ?>"></i>
+                                    <p><?= $nameMenu ?></p>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
                 <?php endforeach; ?>
 
             </ul>
