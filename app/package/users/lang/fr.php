@@ -1,77 +1,75 @@
 <?php
 
-/* LOGIN PAGE */
-const USERS_LOGIN_TITLE = "Connexion";
-const USERS_LOGIN_DESC = "Connectez-vous pour accéder au panneau d'administration";
-
-const USERS_LOGIN_REMEMBER = "Se souvenir de moi";
-const USERS_LOGIN_SIGNIN = "Connexion";
-const USERS_REGISTER = "S'inscrire";
-const USERS_LOGIN_LOST_PASSWORD = "J'ai perdu mon mot de passe";
-
-/* USER LIST */
-const USERS_LIST_TITLE = "Utilisateurs | Liste";
-const USERS_LIST_DESC = "Liste des utilisateurs inscrits sur le site";
-const USERS_LIST_CARD_TITLE = "Liste des utilisateurs inscrits";
-
-const USERS_ROLES_LIST_CARD_TITLE = "Liste des rôles";
-
-/* USER EDIT */
-const USERS_EDIT_TITLE = "Utilisateurs | Edition";
-const USERS_EDIT_DESC = "Editez les comptes de vos utilisateurs";
-
-const USERS_EDIT_ACTIVATE_ACCOUNT = "Activer le compte";
-const USERS_EDIT_DISABLE_ACCOUNT = "Désactiver le compte";
-const USERS_EDIT_DELETE_ACCOUNT = "Supprimer le compte";
-
-const USERS_EDIT_TOASTER_SUCCESS = "Le compte a bien été mis à jours !";
-const USERS_EDIT_TOASTER_PASS_ERROR = "Une erreur est survenue dans la modification du mot de passe.<br>Les mots de passes ne correspondent pas.";
-
-/* USER ADD */
-const USERS_ADD_TITLE = "Utilisateurs | Ajouter";
-const USERS_ADD_DESC = "Créer un nouvel utilisateur sur le site";
-const USERS_ADD_CARD_TITLE = "Ajouter un utilisateur";
-
-/* ROLES ADD */
-const USERS_ROLE_ADD = "Ajouter un rôle";
-const USERS_ROLE_ADD_TITLE = "Rôles | Ajouter";
-const USERS_ROLE_EDIT_TITLE = "Rôles | Édition";
-const USERS_ROLE_ADD_DESC = "Créer un nouveau rôle sur le site";
-const USERS_ROLE_EDIT_DESC = "Modifiez un nouveau rôle sur le site";
-const USERS_ROLE_PERMISSIONS_LIST = "Liste des permissions";
-const USERS_ROLE_ADD_TOASTER_SUCCESS = "Rôle créé avec succès !";
-const USERS_ROLE_EDIT_TOASTER_SUCCESS = "Rôle modifié avec succès !";
-const USERS_ROLE_DELETE_TOASTER_SUCCESS = "Rôle supprimé avec succès !";
-
-/* USER DELETE */
-const USERS_DELETE_TOASTER_ERROR = "Vous ne pouvez pas supprimer le compte avec lequel vous êtes connecté.";
-const USERS_DELETE_TOASTER_SUCCESS = "Le compte a bien été supprimé !";
-
-/* USER STATE */
-const USERS_STATE_TOASTER_ERROR = "Vous ne pouvez pas désactiver le compte avec lequel vous êtes connecté.";
-const USERS_STATE_TOASTER_SUCCESS = "Le compte a bien été modifié !";
-
-const USERS_USER = "Utilisateur";
-const USERS_ABOUT = "A propos";
-const USERS_LIST_BUTTON_SAVE = "Enregistrer";
-
-const USERS_MAIL = "Email";
-const USERS_PSEUDO = "Surnom";
-const USERS_FIRSTNAME = "Prénom";
-const USERS_SURNAME = "Nom";
-const USERS_ROLE = "Rôles";
-const USERS_WEIGHT= "Poids";
-const USERS_CREATION = "Date de création";
-const USERS_LAST_EDIT = "Date de modification";
-const USERS_LAST_CONNECTION = "Dernière connexion au site";
-const USERS_ROLE_DESCRIPTION = "Description";
-const USERS_ROLE_NAME = "Nom";
-
-const USERS_PASS = "Mot de passe";
-const USERS_NEW_PASS = "Modifier le mot de passe";
-const USERS_REPEAT_PASS = "Retaper le mot de passe";
-
-const USERS_TOASTER_TITLE = "Information";
-const USERS_TOASTER_TITLE_ERROR = "Attention";
-
-const USERS_LOGOUT = "Déconnexion";
+return [
+	"login" => [
+		"title" => "Connexion",
+		"desc" => "Connectez-vous pour accéder au panneau d'administration",
+		"remember" => "Se souvenir de moi",
+		"signin" => "Connexion",
+		"lost_password" => "J'ai perdu mon mot de passe",
+		"register" => "S'inscrire",
+	],
+	"List" => [
+		"title" => "Utilisateurs | Liste",
+		"desc" => "Liste des utilisateurs inscrits sur le site",
+		"card_title" => "Liste des utilisateurs inscrits",
+	],
+	"roles" => [
+		"list_card_title" => "Liste des rôles",
+	],
+	"edit" => [
+		"title" => "Utilisateurs | Edition",
+		"desc" => "Editez les comptes de vos utilisateurs",
+		"activate_account" => "Activer le compte",
+		"disable_account" => "Désactiver le compte",
+		"delete_account" => "Supprimer le compte",
+		"toaster_success" => "Le compte a bien été mis à jours !",
+		"toaster_pass_error" => "Une erreur est survenue dans la modification du mot de passe.<br>Les mots de passes ne correspondent pas."
+	],
+	"add" => [
+		"title" => "Utilisateurs | Ajouter",
+		"desc" => "Créer un nouvel utilisateur sur le site",
+		"card_title" => "ajouter un utilisateur",
+	],
+	"role" => [
+		"add" => "Ajouter un rôle",
+		"add_title" => "Rôles | Ajouter",
+		"edit_title" => "Rôles | Édition",
+		"add_desc" => "Créer un nouveau rôle sur le site",
+		"edit_desc" => "Modifiez un nouveau rôle sur le site",
+		"permissions_list" => "Liste des permissions",
+		"add_toaster_success" => "Rôle créé avec succès !",
+		"edit_toaster_success" => "Rôle modifié avec succès !",
+		"delete_toaster_success" => "Rôle supprimé avec succès ",
+	],
+	"delete" => [
+		"toaster_error" => "Vous ne pouvez pas supprimer le compte avec lequel vous êtes connecté.",
+		"toaster_success" => "Le compte a bien été supprimé !",
+	],
+	"state" => [
+		"toaster_error" => "Vous ne pouvez pas désactiver le compte avec lequel vous êtes connecté.",
+		"toaster_success" => "Le compte a bien été modifié !",
+	],
+	"users" => [
+		"user" => "Utilisateur",
+		"about" => "A propos",
+		"list_button_save" => "Enregistrer",
+		"mail" => "Email",
+		"pseudo" => "Surnom",
+		"firstname" => "Prénom",
+		"surname" => "Nom",
+		"role" => "Rôles",
+		"weight" => "Poids",
+		"creation" => "Date de création",
+		"last_edit" => "Date de modification",
+		"last_connection" => "Dernière connexion au site",
+		"role_description" => "Description",
+		"role_name" => "Nom",
+		"pass" => "Mot de passe",
+		"new_pass" => "Modifier le mot de passe",
+		"repeat_pass" => "Retaper le mot de passe",
+		"toaster_title" => "Information",
+		"toaster_title_error" => "Attention",
+		"logout" => "Déconnexion",
+	],
+];

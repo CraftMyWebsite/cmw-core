@@ -1,77 +1,75 @@
 <?php
 
-/* LOGIN PAGE */
-const USERS_LOGIN_TITLE = "Login";
-const USERS_LOGIN_DESC = "Login to access the administration panel";
-
-const USERS_LOGIN_REMEMBER = "Remember me";
-const USERS_LOGIN_SIGNIN = "Login";
-const USERS_REGISTER = "S'inscrire";
-const USERS_LOGIN_LOST_PASSWORD = "I have lost my password";
-
-/* USER LIST */
-const USERS_LIST_TITLE = "Users | List";
-const USERS_LIST_DESC = "List of users registered on the site";
-const USERS_LIST_CARD_TITLE = "List of registered users";
-
-const USERS_ROLES_LIST_CARD_TITLE = "List of roles";
-
-/* USER EDIT */
-const USERS_EDIT_TITLE = "Users | Edition";
-const USERS_EDIT_DESC = "Edit the accounts of your users";
-
-const USERS_EDIT_ACTIVATE_ACCOUNT = "Activate the account";
-const USERS_EDIT_DISABLE_ACCOUNT = "Deactivate the account";
-const USERS_EDIT_DELETE_ACCOUNT = "Delete account";
-
-const USERS_EDIT_TOASTER_SUCCESS = "The account has been updated !";
-const USERS_EDIT_TOASTER_PASS_ERROR = "An error occurred in changing the password.<br>The passwords do not match.";
-
-/* USER ADD */
-const USERS_ADD_TITLE = "Users | Add";
-const USERS_ADD_DESC = "Create a new user on the site";
-const USERS_ADD_CARD_TITLE = "Add a user";
-
-/* ROLES ADD */
-const USERS_ROLE_ADD = "Add a role";
-const USERS_ROLE_ADD_TITLE = "Roles | Add";
-const USERS_ROLE_EDIT_TITLE = "Roles | Editing";
-const USERS_ROLE_ADD_DESC = "Create a new role on the site";
-const USERS_ROLE_EDIT_DESC = "Edit a role on the site";
-const USERS_ROLE_PERMISSIONS_LIST = "List of all permissions";
-const USERS_ROLE_ADD_TOASTER_SUCCESS = "The role has been created !";
-const USERS_ROLE_EDIT_TOASTER_SUCCESS = "The role has been edited !";
-const USERS_ROLE_DELETE_TOASTER_SUCCESS = "The role has been deleted !";
-
-/* USER DELETE */
-const USERS_DELETE_TOASTER_ERROR = "You cannot delete the account you are logged in with.";
-const USERS_DELETE_TOASTER_SUCCESS = "The account has been deleted!";
-
-/* USER STATE */
-const USERS_STATE_TOASTER_ERROR = "You cannot deactivate the account you are logged in with.";
-const USERS_STATE_TOASTER_SUCCESS = "The account has been modified!";
-
-const USERS_USER = "User";
-const USERS_ABOUT = "About";
-const USERS_LIST_BUTTON_SAVE = "Save";
-
-const USERS_MAIL = "Email";
-const USERS_PSEUDO = "Nickname";
-const USERS_FIRSTNAME = "First name";
-const USERS_SURNAME = "Last name";
-const USERS_ROLE = "Roles";
-const USERS_WEIGHT = "Weight";
-const USERS_CREATION = "Creation date";
-const USERS_LAST_EDIT = "Modification date";
-const USERS_LAST_CONNECTION = "Last login to the site";
-const USERS_ROLE_DESCRIPTION = "Description";
-const USERS_ROLE_NAME = "Name";
-
-const USERS_PASS = "Password";
-const USERS_NEW_PASS = "Change your password";
-const USERS_REPEAT_PASS = "Retype password";
-
-const USERS_TOASTER_TITLE = "Information";
-const USERS_TOASTER_TITLE_ERROR = "Warning";
-
-const USERS_LOGOUT = "Logout";
+return [
+	"login" => [
+		"title" => "Login",
+		"desc" => "Login to access the administration panel",
+		"remember" => "Remember me",
+		"signin" => "Login",
+		"lost_password" => "I have lost my password",
+		"register" => "Register",
+	],
+	"List" => [
+		"title" => "Users | List",
+		"desc" => "List of users registered on the site",
+		"card_title" => "List of registered users",
+	],
+	"roles" => [
+		"list_card_title" => "List of roles",
+	],
+	"edit" => [
+		"title" => "Users | Edition",
+		"desc" => "Edit the accounts of your users",
+		"activate_account" => "Activate the account",
+		"disable_account" => "Deactivate the account",
+		"delete_account" => "Delete account",
+		"toaster_success" => "The account has been updated !",
+		"toaster_pass_error" => "An error occurred in changing the password.<br>The passwords do not match."
+	],
+	"add" => [
+		"title" => "Users | Add",
+		"desc" => "Create a new user on the site",
+		"card_title" => "Add a user",
+	],
+	"role" => [
+		"add" => "Add a role",
+		"add_title" => "Roles | Add",
+		"edit_title" => "Roles | Editing",
+		"add_desc" => "Create a new role on the site",
+		"edit_desc" => "Edit a role on the site",
+		"permissions_list" => "List of all permissions",
+		"add_toaster_success" => "The role has been created !",
+		"edit_toaster_success" => "The role has been edited !",
+		"delete_toaster_success" => "The role has been deleted !",
+	],
+	"delete" => [
+		"toaster_error" => "You cannot delete the account you are logged in with.",
+		"toaster_success" => "The account has been deleted!",
+	],
+	"state" => [
+		"toaster_error" => "You cannot deactivate the account you are logged in with.",
+		"toaster_success" => "The account has been modified!",
+	],
+	"users" => [
+		"user" => "User",
+		"about" => "About",
+		"list_button_save" => "save",
+		"mail" => "Email",
+		"pseudo" => "Pseudo",
+		"firstname" => "First name",
+		"surname" => "Last name",
+		"role" => "Roles",
+		"weight" => "Weight",
+		"creation" => "Creation date",
+		"last_edit" => "Modification date",
+		"last_connection" => "Last login to the site",
+		"role_description" => "Description",
+		"role_name" => "Name",
+		"pass" => "Password",
+		"new_pass" => "Change your password",
+		"repeat_pass" => "Retype password",
+		"toaster_title" => "Information",
+		"toaster_title_error" => "Warning",
+		"logout" => "Logout",
+	],
+];
