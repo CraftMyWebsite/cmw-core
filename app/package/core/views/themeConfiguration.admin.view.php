@@ -76,7 +76,7 @@ $description = LangManager::translate("core.theme.config.desc", lineBreak: true)
                                 </tr>
                                 </thead>
                                 <!-- Get availables themes -->
-                                <?php foreach ($themesList->getThemeList as $theme): ?>
+                                <?php foreach ($themesList as $theme): ?>
                                     <tbody>
                                     <td class="text-center"><?= $theme->title ?></td>
                                     <td class="text-center"><?= $theme->version ?></td>
@@ -120,7 +120,6 @@ $description = LangManager::translate("core.theme.config.desc", lineBreak: true)
                                                 </li>
                                             </ul>
                                         </nav>
-
 
                                     </div>
                                 </div>
