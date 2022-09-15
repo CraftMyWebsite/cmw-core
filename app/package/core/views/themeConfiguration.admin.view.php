@@ -6,8 +6,8 @@ use CMW\Manager\Lang\LangManager;
 /* @var $installedThemes \CMW\Entity\Core\ThemeEntity[] */
 /* @var $themesList */
 
-$title = LangManager::translate("core.theme.config.title", lineBreak: true);
-$description = LangManager::translate("core.theme.config.desc", lineBreak: true); ?>
+$title = LangManager::translate("core.theme.config.title");
+$description = LangManager::translate("core.theme.config.description"); ?>
 
 <div class="content">
     <div class="container-fluid">

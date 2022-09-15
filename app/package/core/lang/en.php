@@ -83,6 +83,10 @@ return [
                 "download" => "Download",
             ],
         ],
+        "manage" => [
+            "title" => "Manage your theme <b>%theme%</b>",
+            "description" => "Manage your theme to have a theme that suits you ! "
+        ],
     ],
     "footer" => [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " All right reserved.",

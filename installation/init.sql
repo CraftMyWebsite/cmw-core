@@ -59,8 +59,8 @@ CREATE TABLE IF NOT EXISTS `cmw_users_roles`
 
 CREATE TABLE IF NOT EXISTS `cmw_users_pictures`
 (
-    `users_pictures_user_id`      INT          NOT NULL,
-    `users_pictures_image_name`   VARCHAR(255) NOT NULL,
+    `users_pictures_user_id`     INT          NOT NULL,
+    `users_pictures_image_name`  VARCHAR(255) NOT NULL,
     `users_pictures_last_update` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (`users_pictures_user_id`)
 ) ENGINE = InnoDB
@@ -114,6 +114,16 @@ CREATE TABLE IF NOT EXISTS cmw_roles_permissions
         foreign key (role_id) references cmw_roles (role_id)
 ) ENGINE = InnoDB
   charset = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `cmw_theme_config`
+(
+    `theme_config_id`    INT          NOT NULL AUTO_INCREMENT,
+    `theme_config_name`  VARCHAR(255) NOT NULL,
+    `theme_config_value` MEDIUMTEXT   NOT NULL,
+    `theme_config_theme` VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`theme_config_id`)
+) ENGINE = InnoDB
+  CHARSET = utf8mb4;
 
 CREATE INDEX role_id
     ON cmw_roles_permissions (role_id);

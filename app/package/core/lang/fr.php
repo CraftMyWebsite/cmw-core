@@ -83,6 +83,10 @@ return [
               "download" => "Télécharger",
           ],
       ],
+      "manage" => [
+          "title" => "Gérez votre thème <b>%theme%</b>",
+          "description" => "Gérez votre thème pour le personnaliser à votre guise !"
+        ],
     ],
     "footer" => [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " Tous droits réservés.",
