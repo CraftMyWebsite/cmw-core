@@ -45,8 +45,8 @@ class ThemeModel extends DatabaseManager
         $req = $db->prepare('INSERT INTO cmw_theme_config (theme_config_name, theme_config_value, theme_config_theme) 
                                     VALUES (:theme_config_name, :theme_config_value, :theme_config_theme)');
         $req->execute(array("theme_config_name" => $configName,
-                            "theme_config_value" => $configValue,
-                            "theme_config_theme" => $theme));
+            "theme_config_value" => $configValue,
+            "theme_config_theme" => $theme));
     }
 
     public function updateThemeConfig(string $configName, string $configValue, string $theme): void

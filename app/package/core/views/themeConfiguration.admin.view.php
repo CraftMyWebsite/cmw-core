@@ -39,7 +39,7 @@ $description = LangManager::translate("core.theme.config.description"); ?>
                         <!-- /.card-body -->
                         <div class="card-footer">
                             <button type="submit"
-                                    class="btn btn-primary float-right"><?= LangManager::translate("core.btn.save", lineBreak: true) ?></button>
+                                    class="btn btn-primary float-right"><?= LangManager::translate("core.btn.save") ?></button>
                         </div>
                     </div>
                 </form>

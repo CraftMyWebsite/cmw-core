@@ -39,17 +39,20 @@ use CMW\Model\Core\ThemeModel;
                                     <!-- CONTENT -->
                                     <div class="form-group">
                                         <label for="primaryColor">Couleur principale</label>
-                                        <input type="color" id="primaryColor" name="primaryColor" value="<?= ThemeModel::fetchConfigValue('primaryColor') ?>">
+                                        <input type="color" id="primaryColor" name="primaryColor"
+                                               value="<?= ThemeModel::fetchConfigValue('primaryColor') ?>">
                                     </div>
 
                                     <div class="form-group">
                                         <label for="secondaryColor">Couleur secondaire</label>
-                                        <input type="color" id="secondaryColor" name="secondaryColor" value="<?= ThemeModel::fetchConfigValue('secondaryColor') ?>">
+                                        <input type="color" id="secondaryColor" name="secondaryColor"
+                                               value="<?= ThemeModel::fetchConfigValue('secondaryColor') ?>">
                                     </div>
 
                                     <div class="form-group">
                                         <label for="backgroundColor">Couleur d'arrière plan</label>
-                                        <input type="color" id="backgroundColor" name="backgroundColor" value="<?= ThemeModel::fetchConfigValue('backgroundColor') ?>">
+                                        <input type="color" id="backgroundColor" name="backgroundColor"
+                                               value="<?= ThemeModel::fetchConfigValue('backgroundColor') ?>">
                                     </div>
                                 </div>
 

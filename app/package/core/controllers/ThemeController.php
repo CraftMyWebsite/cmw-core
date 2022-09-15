@@ -106,7 +106,7 @@ class ThemeController extends CoreController
         return $content;
     }
 
-    protected function installThemeSettings(String $theme): void
+    public function installThemeSettings(String $theme): void
     {
         $themeConfigFile = "public/themes/$theme/config/config.settings.php";
 

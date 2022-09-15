@@ -4,7 +4,7 @@ use CMW\Controller\Core\ThemeController;
 use CMW\Manager\Lang\LangManager;
 
 $title = LangManager::translate("core.theme.manage.title", ["theme" => ThemeController::getCurrentTheme()->getName()]);
-$description = LangManager::translate("core.theme.manage.description", lineBreak: true); ?>
+$description = LangManager::translate("core.theme.manage.description"); ?>
 
 
 <!-- THEME CONFIG FILE -->
