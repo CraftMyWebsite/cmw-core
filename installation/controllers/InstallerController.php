@@ -2,6 +2,7 @@
 
 namespace CMW\Controller\Installer;
 
+use CMW\Controller\Core\ThemeController;
 use CMW\Controller\Installer\Games\FabricGames;
 use CMW\Utils\Utils;
 use InstallerModel;
@@ -125,6 +126,9 @@ class InstallerController
 
         //Todo Throw error
         InstallerModel::initDatabase($host, $db, $username, $password, $devMode);
+
+        // Install the default theme settings
+        (new ThemeController())->installThemeSettings(ThemeController::getCurrentTheme()->getName());
 
         Utils::getEnv()->editValue("installStep", 1);
 
