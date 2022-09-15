@@ -84,7 +84,9 @@ class ThemeController extends CoreController
         $themesFolder = 'public/themes';
         $contentDirectory = array_diff(scandir("$themesFolder/"), array('..', '.'));
         foreach ($contentDirectory as $theme) {
-            $toReturn[] = self::getTheme($theme);
+            if(file_exists("$themesFolder/$theme/infos.json")) {
+                $toReturn[] = self::getTheme($theme);
+            }
         }
 
         return $toReturn;
@@ -103,14 +105,14 @@ class ThemeController extends CoreController
     public function adminThemeInstallation(int $id): void
     {
         try {
-            $theme = json_decode(file_get_contents("https://devcmw.w3b.websr.fr/API/?getRessourceById=" . $id), false, 512, JSON_THROW_ON_ERROR); //TODO USE REEL API
+            $theme = json_decode(file_get_contents("https://devcmw.w3b.websr.fr/API/getRessourceById=" . $id), false, 512, JSON_THROW_ON_ERROR); //TODO USE REEL API
         } catch (JsonException $e) {
         }
 
 
         //VARS
-        $url = "https://devcmw.w3b.websr.fr/public/uploads/market/files/" . $theme->getRessourceById[0]->file;
-        $outFileName = "public/uploads/" . $theme->getRessourceById[0]->file;
+        $url = "https://devcmw.w3b.websr.fr/public/uploads/market/files/" . $theme->file;
+        $outFileName = "public/uploads/" . $theme->file;
 
         //Download & store File
         set_time_limit(0);
