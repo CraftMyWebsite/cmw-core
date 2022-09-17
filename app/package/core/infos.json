@@ -13,6 +13,17 @@
       }
     },
     {
+      "name_menu": "Mails",
+      "icon_menu": "fas fa-envelope",
+      "url_menu": "",
+      "urls_submenu": {
+        "Configuration": "mail/configuration"
+      },
+      "urls_submenu_en": {
+        "Configuration": "mail/configuration"
+      }
+    },
+    {
       "name_menu": "Thèmes",
       "icon_menu": "fas fa-paintbrush",
       "url_menu": "",

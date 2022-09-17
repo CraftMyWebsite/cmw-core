@@ -87,6 +87,28 @@ return [
             "title" => "Manage your theme <b>%theme%</b>",
             "description" => "Manage your theme to have a theme that suits you ! "
         ],
+        "mail" => [
+            "config" => [
+                "title" => "Manage your mails",
+                "description" => "Manage your mails settings",
+                "enableSMTP" => "Enable SMTP",
+                "senderMail" => "Email sender",
+                "replyMail" => "Email reply",
+                "serverSMTP" => "SMTP address",
+                "userSMTP" => "SMTP user",
+                "passwordSMTP" => "Password",
+                "portSMTP" => "Port SMTP",
+                "protocol" => "Sending protocol",
+                "footer" => "Mails footer",
+                "test" => [
+                    "btn" => "Try your configuration",
+                    "title" => "Try now your configuration",
+                    "description" => "You can test your configuration by sending an email to your email address <br> <strong> Remember to save your configuration before starting the test</strong>",
+                    "receiverMail" => "Recipient address",
+                    "receiverMailPlaceholder" => "Enter your mail",
+                ]
+            ]
+        ],
     ],
     "footer" => [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " All right reserved.",
@@ -95,5 +117,7 @@ return [
     "btn" => [
         "save" => "Save",
         "delete" => "Delete",
+        "close" => "Close",
+        "send" => "Send"
     ]
 ];
