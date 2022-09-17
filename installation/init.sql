@@ -6,6 +6,19 @@ CREATE TABLE IF NOT EXISTS `cmw_core_options`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `cmw_mail_config_smtp`
+(
+    `mail_config_mail`        VARCHAR(255)  NOT NULL,
+    `mail_config_mail_reply`  VARCHAR(255)  NOT NULL,
+    `mail_config_address_smtp` VARCHAR(255) NOT NULL,
+    `mail_config_user`        VARCHAR(255)  NOT NULL,
+    `mail_config_port`        INT(5)        NOT NULL,
+    `mail_config_protocol`    VARCHAR(50)   NOT NULL,
+    `mail_config_footer`      MEDIUMTEXT    NULL,
+    `mail_config_enable`      TINYINT(1)    NOT NULL DEFAULT 1
+) ENGINE = InnoDB
+  CHARSET = utf8mb4;
+
 # MY PROPOSITION !
 
 create table IF NOT EXISTS cmw_permissions

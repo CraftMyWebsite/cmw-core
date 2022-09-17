@@ -88,6 +88,28 @@ return [
           "description" => "Gérez votre thème pour le personnaliser à votre guise !"
         ],
     ],
+    "mail" => [
+        "config" => [
+            "title" => "Configuration mails",
+            "description" => "Gérez les mails de votre site",
+            "enableSMTP" => "Activation des mails SMTP",
+            "senderMail" => "Adresse mail d'envoie",
+            "replyMail" => "Adresse mail de réponse",
+            "serverSMTP" => "Adresse du serveur SMTP",
+            "userSMTP" => "Utilisateur SMTP",
+            "passwordSMTP" => "Mot de passe",
+            "portSMTP" => "Port SMTP",
+            "protocol" => "Protocol d'envoie",
+            "footer" => "Footer de vos mails",
+            "test" => [
+                "btn" => "Testez votre configuration",
+                "title" => "Essaye dès maintenant ta configuration",
+                "description" => "Vous pouvez tester votre configuration en envoyant un mail à votre adresse e-mail <br> <strong>Pensez à bien sauvegarder votre configuration avant de débuter le test</strong>",
+                "receiverMail" => "Adresse e-mail du destinataire",
+                "receiverMailPlaceholder" => "Entrez l'adresse e-mail",
+            ]
+        ]
+    ],
     "footer" => [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " Tous droits réservés.",
         "right" => "Merci d'utiliser <a href='https://craftmywebsite.com/'>CraftMyWebsite</a>.",
@@ -95,5 +117,7 @@ return [
     "btn" => [
         "save" => "Sauvegarder",
         "delete" => "Supprimer",
+        "close" => "Fermer",
+        "send" => "Envoyer"
     ]
 ];
