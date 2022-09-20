@@ -1,14 +1,14 @@
 <?php use CMW\Manager\Lang\LangManager;
 
-$title = LangManager::translate("user.login.title", lineBreak: true);
-$description = LangManager::translate("user.login.desc", lineBreak: true);
+$title = LangManager::translate("users.login.title", lineBreak: true);
+$description = LangManager::translate("users.login.desc", lineBreak: true);
 
 $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main.js"></script>';
 
 ?>
 <?php $noBody = 1; ?>
 
-    <body class="hold-transition login-page">
+<body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo mb-4">
         <img src="<?= getenv("PATH_SUBFOLDER") ?>admin/resources/images/identity/logo_compact.png" alt="<?= LangManager::translate("core.alt.logo", lineBreak: true) ?>"
@@ -26,7 +26,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                                 <span class="fas fa-envelope"></span>
                             </div>
                         </div>
-                        <input name="login_email" type="email" class="form-control" placeholder="<?= LangManager::translate("user.login.mail", lineBreak: true) ?>">
+                        <input name="login_email" type="email" class="form-control" placeholder="<?= LangManager::translate("users.login.mail", lineBreak: true) ?>">
                     </div>
                 </div>
                 <div class="form-group">
@@ -47,19 +47,19 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                     <div class="col-12">
                         <div class="icheck-primary">
                             <input type="checkbox" id="login_keep_connect" name="login_keep_connect">
-                            <label for="login_keep_connect"><?= LangManager::translate("user.login.remember", lineBreak: true) ?></label>
+                            <label for="login_keep_connect"><?= LangManager::translate("users.login.remember", lineBreak: true) ?></label>
                         </div>
                     </div>
                     <!-- /.col -->
                     <div class="col-12">
-                        <button type="submit" class="btn btn-primary btn-block"><?= LangManager::translate("user.login.signin", lineBreak: true) ?></button>
+                        <button type="submit" class="btn btn-primary btn-block"><?= LangManager::translate("users.login.signin", lineBreak: true) ?></button>
                     </div>
                     <!-- /.col -->
                 </div>
             </form>
 
             <p class="mb-1">
-                <a href=""><?= LangManager::translate("user.login.lost_password", lineBreak: true) ?></a>
+                <a href=""><?= LangManager::translate("users.login.lost_password", lineBreak: true) ?></a>
             </p>
         </div>
         <!-- /.login-card-body -->

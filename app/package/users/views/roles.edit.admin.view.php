@@ -5,8 +5,10 @@
 /** @var \CMW\Entity\Roles\RoleEntity $role */
 /** @var \CMW\Model\Roles\RolesModel $roleModel */
 
-$title = USERS_ROLE_EDIT_TITLE;
-$description = USERS_ROLE_EDIT_DESC;
+use CMW\Manager\Lang\LangManager;
+
+$title = LangManager::translate("users.role.edit_title");
+$description = LangManager::translate("users.role.edit_desc");
 ?>
 <div class="content">
     <div class="container-fluid">
@@ -15,14 +17,14 @@ $description = USERS_ROLE_EDIT_DESC;
                 <form action="" method="post">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title"><?= USERS_ROLE_ADD ?> :</h3>
+                            <h3 class="card-title"><?= LangManager::translate("users.role.edit_title") ?> :</h3>
                         </div>
                         <div class="card-body">
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-id-card"></i></span>
                                 </div>
-                                <input type="text" name="name" class="form-control" placeholder="<?= USERS_ROLE ?>"
+                                <input type="text" name="name" class="form-control" placeholder="<?= LangManager::translate("users.users.role") ?>"
                                        value="<?= $role->getName() ?>" required>
                             </div>
                             <div class="input-group mb-3">
@@ -31,15 +33,15 @@ $description = USERS_ROLE_EDIT_DESC;
                                 </div>
                                 <input type="text" name="description" class="form-control"
                                        value="<?= $role->getDescription() ?>"
-                                       placeholder="<?= USERS_ROLE_DESCRIPTION ?>" required>
+                                       placeholder="<?= LangManager::translate("users.users.role_description") ?>" required>
                             </div>
 
                             <input type="number" name="weight" class="form-control"
-                                   placeholder="<?= USERS_WEIGHT ?>"
+                                   placeholder="<?= LangManager::translate("users.users.weight") ?>"
                                    value="<?= $role->getWeight() ?>" required>
 
                             <!-- PERMISSIONS -->
-                            <h3 class="mt-4"><?= USERS_ROLE_PERMISSIONS_LIST ?></h3>
+                            <h3 class="mt-4"><?= LangManager::translate("users.role.permission_list") ?></h3>
                             <hr>
                             <div class="container-fluid">
                                 <div class="row justify-content-center">
@@ -52,7 +54,7 @@ $description = USERS_ROLE_EDIT_DESC;
                     </div>
                     <div class="card-footer">
                         <button type="submit"
-                                class="btn btn-primary float-right"><?= USERS_LIST_BUTTON_SAVE ?></button>
+                                class="btn btn-primary float-right"><?= LangManager::translate("core.btn.save") ?></button>
                     </div>
                 </form>
             </div>

@@ -1,7 +1,9 @@
 <?php
 
-$title = PAGES_ADD_TITLE;
-$description = PAGES_ADD_DESC;
+use CMW\Manager\Lang\LangManager;
+
+$title = LangManager::translate("pages.add.title");
+$description = LangManager::translate("pages.add.desc");
 ?>
 
 <?php $scripts = '
@@ -161,7 +163,7 @@ $description = PAGES_ADD_DESC;
                     <div class="card-body">
                         <input type="hidden" id="page_id" name="page_id">
                         <input class="page-title" type="text" id="title" placeholder="Titre de la page">
-                        <p class="page-slug text-blue mb-3 d-flex"><?php echo "http://" . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . "p/"; ?>
+                        <p class="page-slug text-blue mb-3 d-flex"><?= "http://" . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . "p/"; ?>
                             <input class="border-0 text-blue p-0 w-100 page-slug-input" type="text" id="slug"></p>
                         <div>
                             <div id="editorjs"></div>
@@ -172,15 +174,15 @@ $description = PAGES_ADD_DESC;
             <div class="col-3">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title"><?= PAGES_PUBLISH ?></h3>
+                        <h3 class="card-title"><?= LangManager::translate("pages.publish") ?></h3>
                     </div>
                     <div class="card-body">
                         <div class="custom-control custom-switch mb-2">
                             <input type="checkbox" class="custom-control-input" id="draft" name="draft">
-                            <label class="custom-control-label" for="draft"><?= PAGES_DRAFT ?></label>
+                            <label class="custom-control-label" for="draft"><?= LangManager::translate("pages.draft") ?></label>
                         </div>
                         <div class="btn btn-block btn-primary" id="saveButton">
-                            <?= CORE_BTN_SAVE ?>
+                            <?= LangManager::translate("core.btn.save") ?>
                         </div>
                     </div>
                 </div>

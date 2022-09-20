@@ -25,8 +25,8 @@ $description = LangManager::translate("core.mail.config.description");
                             <div class="form-group">
                                 <div class="custom-control custom-switch">
                                     <input type="checkbox" class="custom-control-input" id="enableSMTP"
-                                           name="enableSMTP" value="<?= $config->isEnable() ?>"
-                                        <?= $config->isEnable() ? 'checked' : '' ?>>
+                                           name="enableSMTP" value="<?= $config?->isEnable() ?>"
+                                        <?= $config?->isEnable() ? 'checked' : '' ?>>
                                     <label class="custom-control-label" for="enableSMTP">
                                         <?= LangManager::translate("core.mail.config.enableSMTP") ?>
                                     </label>
@@ -40,7 +40,7 @@ $description = LangManager::translate("core.mail.config.description");
                                         <span class="input-group-text"><i class="fas fa-at"></i></span>
                                     </div>
                                     <input type="email" id="mail" name="mail" class="form-control"
-                                           value="<?= $config->getMail() ?>"
+                                           value="<?= $config?->getMail() ?>"
                                            placeholder="contact@monsite.fr" required>
                                 </div>
                             </div>
@@ -52,7 +52,7 @@ $description = LangManager::translate("core.mail.config.description");
                                         <span class="input-group-text"><i class="fas fa-at"></i></span>
                                     </div>
                                     <input type="email" id="mailReply" name="mailReply" class="form-control"
-                                           value="<?= $config->getMailReply() ?>"
+                                           value="<?= $config?->getMailReply() ?>"
                                            placeholder="reply@monsite.fr" required>
                                 </div>
                             </div>
@@ -64,7 +64,7 @@ $description = LangManager::translate("core.mail.config.description");
                                         <span class="input-group-text"><i class="fas fa-server"></i></span>
                                     </div>
                                     <input type="text" id="addressSMTP" name="addressSMTP" class="form-control"
-                                           value="<?= $config->getAddressSMTP() ?>"
+                                           value="<?= $config?->getAddressSMTP() ?>"
                                            placeholder="smtp.google.com" required>
                                 </div>
                             </div>
@@ -76,7 +76,7 @@ $description = LangManager::translate("core.mail.config.description");
                                         <span class="input-group-text"><i class="fas fa-server"></i></span>
                                     </div>
                                     <input type="text" id="user" name="user" class="form-control"
-                                           value="<?= $config->getUser() ?>"
+                                           value="<?= $config?->getUser() ?>"
                                            placeholder="admin@monsite.fr" required>
                                 </div>
                             </div>
@@ -88,7 +88,7 @@ $description = LangManager::translate("core.mail.config.description");
                                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
                                     </div>
                                     <input type="password" id="password" name="password" class="form-control"
-                                           value="<?= $config->getPassword() ?>"
+                                           value="<?= $config?->getPassword() ?>"
                                            placeholder="*******" required>
                                 </div>
                             </div>
@@ -100,7 +100,7 @@ $description = LangManager::translate("core.mail.config.description");
                                         <span class="input-group-text"><i class="fas fa-map-pin"></i></span>
                                     </div>
                                     <input type="number" id="port" name="port" class="form-control"
-                                           value="<?= $config->getPort() ?>"
+                                           value="<?= $config?->getPort() ?>"
                                            placeholder="465" required>
                                 </div>
                             </div>
@@ -109,12 +109,12 @@ $description = LangManager::translate("core.mail.config.description");
                                 <label for="protocol"><?= LangManager::translate("core.mail.config.protocol") ?></label>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="protocol" value="tls"
-                                        <?= $config->getProtocol() === "tls" ? "checked" : "" ?>>
+                                        <?= $config?->getProtocol() === "tls" ? "checked" : "" ?>>
                                     <label class="form-check-label">TLS (Par default)</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" value="ssl" name="protocol"
-                                        <?= $config->getProtocol() === "ssl" ? "checked" : "" ?>>
+                                        <?= $config?->getProtocol() === "ssl" ? "checked" : "" ?>>
                                     <label class="form-check-label">SSL</label>
                                 </div>
                             </div>
@@ -123,7 +123,7 @@ $description = LangManager::translate("core.mail.config.description");
                                    class="mt-3"><?= LangManager::translate("core.mail.config.footer") ?></label>
                             <div class="input-group mb-3">
                                 <textarea id="footer" name="footer" class="form-control" required>
-                                    <?= $config->getFooter() ?>
+                                    <?= $config?->getFooter() ?>
                                 </textarea>
                             </div>
 
