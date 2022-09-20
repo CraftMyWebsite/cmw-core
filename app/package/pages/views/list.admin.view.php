@@ -1,7 +1,9 @@
 <?php
 
-$title = PAGES_LIST_TITLE;
-$description = PAGES_LIST_DESC; ?>
+use CMW\Manager\Lang\LangManager;
+
+$title = LangManager::translate("pages.list.title");
+$description = LangManager::translate("pages.list.desc"); ?>
 
 <?php $scripts = '
 <script>
@@ -11,79 +13,79 @@ $description = PAGES_LIST_DESC; ?>
             "lengthChange": false, 
             "autoWidth": false,
             language: {
-                processing:     "' . CORE_DATATABLES_LIST_PROCESSING . '",
-                search:         "' . CORE_DATATABLES_LIST_SEARCH . '",
-                lengthMenu:    "' . CORE_DATATABLES_LIST_LENGTHMENU . '",
-                info:           "' . CORE_DATATABLES_LIST_INFO . '",
-                infoEmpty:      "' . CORE_DATATABLES_LIST_INFOEMPTY . '",
-                infoFiltered:   "' . CORE_DATATABLES_LIST_INFOFILTERED . '",
-                infoPostFix:    "' . CORE_DATATABLES_LIST_INFOPOSTFIX . '",
-                loadingRecords: "' . CORE_DATATABLES_LIST_LOADINGRECORDS . '",
-                zeroRecords:    "' . CORE_DATATABLES_LIST_ZERORECORDS . '",
-                emptyTable:     "' . CORE_DATATABLES_LIST_EMPTYTABLE . '",
+                processing:     "' . LangManager::translate("core.datatables.list.processing") . '",
+                search:         "' . LangManager::translate("core.datatables.list.search") . '",
+                lengthMenu:    "' . LangManager::translate("core.datatables.list.lenghtmenu") . '",
+                info:           "' . LangManager::translate("core.datatables.list.info") . '",
+                infoEmpty:      "' . LangManager::translate("core.datatables.list.info_empty") . '",
+                infoFiltered:   "' . LangManager::translate("core.datatables.list.info_filtered") . '",
+                infoPostFix:    "' . LangManager::translate("core.datatables.list.info_postfix") . '",
+                loadingRecords: "' . LangManager::translate("core.datatables.list.loadingrecords") . '",
+                zeroRecords:    "' . LangManager::translate("core.datatables.list.zerorecords") . '",
+                emptyTable:     "' . LangManager::translate("core.datatables.list.emptytable") . '",
                 paginate: {
-                    first:      "' . CORE_DATATABLES_LIST_FIRST . '",
-                    previous:   "' . CORE_DATATABLES_LIST_PREVIOUS . '",
-                    next:       "' . CORE_DATATABLES_LIST_NEXT . '",
-                    last:       "' . CORE_DATATABLES_LIST_LAST . '"
+                    first:      "' . LangManager::translate("core.datatables.list.first") . '",
+                    previous:   "' . LangManager::translate("core.datatables.list.previous") . '",
+                    next:       "' . LangManager::translate("core.datatables.list.next") . '",
+                    last:       "' . LangManager::translate("core.datatables.list.last") . '"
                 },
                 aria: {
-                    sortAscending:  "' . CORE_DATATABLES_LIST_SORTASCENDING . '",
-                    sortDescending: "' . CORE_DATATABLES_LIST_SORTDESCENDING . '"
+                    sortAscending:  "' . LangManager::translate("core.datatables.list.sort.ascending") . '",
+                    sortDescending: "' . LangManager::translate("core.datatables.list.sort.descending") . '"
                 }
             },
         });
     });
 </script>'; ?>
 
-    <!-- main-content -->
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <!-- Contenu ici -->
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title"><?= USERS_LIST_CARD_TITLE ?></h3>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <table id="users_table" class="table table-bordered table-striped">
-                                <thead>
-                                <tr>
-                                    <th><?= PAGES_TITLE ?></th>
-                                    <th><?= PAGES_AUTHOR ?></th>
-                                    <th><?= PAGES_CREATION_DATE ?></th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php /** @var \CMW\Entity\Pages\PageEntity[] $pagesList */
-                                foreach ($pagesList as $page) : ?>
-                                    <tr>
-                                        <td><?= $page->getTitle() ?></td>
-                                        <td><?= $page->getUser()->getUsername() ?></td>
-                                        <td><?= $page->getCreated() ?></td>
-                                        <td><a href="../pages/edit/<?= $page->getSlug() ?>"><i class="fa fa-cog"></i></a></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <th><?= PAGES_TITLE ?></th>
-                                    <th><?= PAGES_AUTHOR ?></th>
-                                    <th><?= PAGES_CREATION_DATE ?></th>
-                                    <th></th>
-                                </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                        <!-- /.card-body -->
+<!-- main-content -->
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Contenu ici -->
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><?= LangManager::translate("pages.list.title") ?></h3>
                     </div>
-                    <!-- /.card -->
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="users_table" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th><?= LangManager::translate("pages.title") ?></th>
+                                <th><?= LangManager::translate("pages.author") ?></th>
+                                <th><?= LangManager::translate("pages.creation.date") ?></th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php /** @var \CMW\Entity\Pages\PageEntity[] $pagesList */
+                            foreach ($pagesList as $page) : ?>
+                                <tr>
+                                    <td><?= $page->getTitle() ?></td>
+                                    <td><?= $page->getUser()->getUsername() ?></td>
+                                    <td><?= $page->getCreated() ?></td>
+                                    <td><a href="../pages/edit/<?= $page->getSlug() ?>"><i class="fa fa-cog"></i></a></td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th><?= LangManager::translate("pages.title") ?></th>
+                                <th><?= LangManager::translate("pages.author") ?></th>
+                                <th><?= LangManager::translate("pages.creation.date") ?></th>
+                                <th></th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
                 </div>
+                <!-- /.card -->
             </div>
-            <!-- /.row -->
         </div>
+        <!-- /.row -->
     </div>
-    <!-- /.main-content -->
+</div>
+<!-- /.main-content -->

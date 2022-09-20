@@ -1,7 +1,9 @@
 <?php
 
-$title = PAGES_EDIT_TITLE;
-$description = PAGES_EDIT_DESC;
+use CMW\Manager\Lang\LangManager;
+
+$title = LangManager::translate("pages.edit.title");
+$description = LangManager::translate("pages.edit.desc");
 
 /* @var \CMW\Entity\Pages\PageEntity $page
  */
@@ -159,21 +161,21 @@ $description = PAGES_EDIT_DESC;
             <div class="col-3">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title"><?= PAGES_PUBLISH ?></h3>
+                        <h3 class="card-title"><?= LangManager::translate("pages.publish") ?></h3>
                     </div>
                     <div class="card-body">
                         <div class="custom-control custom-switch mb-2">
                             <input type="checkbox" class="custom-control-input" id="draft"
                                    name="draft" <?= $page->getState() === 2 ? "checked" : ""; ?>>
-                            <label class="custom-control-label" for="draft"><?= PAGES_DRAFT ?></label>
+                            <label class="custom-control-label" for="draft"><?= LangManager::translate("pages.draft") ?></label>
                         </div>
                         <div class="btn btn-block btn-primary" id="saveButton">
-                            <?= CORE_BTN_SAVE ?>
+                            <?= LangManager::translate("core.btn.save") ?>
                         </div>
 
                         <a href="../delete/<?= $page->getId() ?>" class="mt-3 btn btn-danger btn-block"
                            id="deleteButton">
-                            <?= CORE_BTN_DELETE ?>
+                            <?= LangManager::translate("core.btn.delete") ?>
                         </a>
 
                     </div>
