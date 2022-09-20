@@ -13,6 +13,7 @@
 !/app/package/core
 !/app/package/users
 !/app/package/menus
+!/app/package/pages
 
 # Exclude all other views, only if view refer to a core package (Core, Users, Menus...)
 !/public/themes/Sampler/views
