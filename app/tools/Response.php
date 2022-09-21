@@ -11,6 +11,7 @@ class Response
      * @return Alert[]
      */
     public static function getAlerts() : array {
+        if(!isset($_SESSION["alerts"])) $_SESSION["alerts"] = array();
         return $_SESSION["alerts"];
     }
 

@@ -4,7 +4,9 @@ namespace CMW\Controller\Installer;
 
 use CMW\Controller\Core\ThemeController;
 use CMW\Controller\Installer\Games\FabricGames;
+use CMW\Router\Link;
 use CMW\Utils\Utils;
+use CMW\Utils\View;
 use InstallerModel;
 use JetBrains\PhpStorm\NoReturn;
 
@@ -29,6 +31,7 @@ class InstallerController
         require_once(Utils::getEnv()->getValue("dir") . "/installation/lang/$lang.php");
     }
 
+    #[Link(path: "/lang/:code", method: Link::GET, variables: ["code" => ".*?"], scope: "/installer")]
     public function changeLang(string $code): void
     {
         Utils::getEnv()->setOrEditValue("LOCALE", $code);
@@ -38,12 +41,14 @@ class InstallerController
     private function loadView(string $filename): void
     {
         $install = new InstallerController();
-        ob_start();
 
-        extract(["install" => $install], EXTR_OVERWRITE);
-        require_once(Utils::getEnv()->getValue("dir") . "/installation/views/$filename.view.php");
-        $content = ob_get_clean();
-        require_once(Utils::getEnv()->getValue("dir") . "/installation/views/template.php");
+        $view = new View(basicVars: false);
+        $view
+            ->setCustomPath(Utils::getEnv()->getValue("dir"). "/installation/views/$filename.view.php")
+            ->setCustomTemplate(Utils::getEnv()->getValue("dir") . "/installation/views/template.php")
+            ->addVariable("install", $install);
+
+        $view->view();
     }
 
     public function getInstallationStep(): int
@@ -68,29 +73,30 @@ class InstallerController
         return FabricGames::getGameList();
     }
 
-    public function firstInstallView(): void
+    #[Link(path: "/", method: Link::GET, scope: "/installer")]
+    public function getInstallPage(): void
     {
-        $this->loadView("firstInstall");
+        $value = match ($this->getInstallationStep()) {
+            1 => "secondInstall",
+            2 => "thirdInstall",
+            3 => "fourthInstall",
+            4 => "fifthInstall",
+            default => "firstInstall"
+        };
+
+        $this->loadView($value);
     }
 
-    public function secondInstallView(): void
-    {
-        $this->loadView("secondInstall");
-    }
+    #[Link(path: "/submit", method: Link::POST, scope: "/installer")]
+    public function postInstallPage(): void {
+        $value = match ($this->getInstallationStep()) {
+            1 => "secondInstallPost",
+            2 => "thirdInstallPost",
+            3 => "fourthInstallPost",
+            default => "firstInstallPost"
+        };
 
-    public function thirdInstallView(): void
-    {
-        $this->loadView("thirdInstall");
-    }
-
-    public function fourthInstallView(): void
-    {
-        $this->loadView("fourthInstall");
-    }
-
-    public function fifthInstallView(): void
-    {
-        $this->loadView("fifthInstall");
+        $this->$value();
     }
 
     public function firstInstallPost(): void

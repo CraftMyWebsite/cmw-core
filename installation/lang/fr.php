@@ -5,6 +5,8 @@ const INSTALL_DESC = "Installation du CMS";
 
 /* Menu */
 
+const CORE_ALT_LOGO = "OUAIIIS LE LOGOOOOO";
+
 const INSTALL_STEP = "Etape";
 const INSTALL_ERROR = "Erreur";
 const INSTALL_SUCCESS = "Succès";

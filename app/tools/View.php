@@ -16,23 +16,25 @@ class View
 
     private ?string $package;
     private ?string $viewFile;
+    private ?string $customPath = null;
+    private ?string $customTemplate = null;
     private array $includes;
     private array $variables;
     private bool $needAdminControl;
     private bool $isAdminFile;
 
-    public function __construct(?string $package = null, ?string $viewFile = null, ?bool $isAdminFile = false)
+    public function __construct(?string $package = null, ?string $viewFile = null, ?bool $isAdminFile = false, bool $basicVars = true)
     {
         $this->package = $package;
         $this->viewFile = $viewFile;
         $this->includes = $this->generateInclude();
-        $this->variables = $this->generateVariables();
+        $this->variables = $basicVars ? $this->generateVariables() : [];
         $this->needAdminControl = false;
         $this->isAdminFile = $isAdminFile;
     }
 
     /**
-     * @throws \CMW\Router\RouterException
+     * @throws RouterException
      */
     public static function basicPublicView(string $package, string $viewFile): void
     {
@@ -106,10 +108,6 @@ class View
     public function addVariableList(array $variableList): self
     {
         foreach ($variableList as $key => $value) {
-            /**
-             * @var string $key
-             * @var mixed $value
-             */
             $this->addVariable($key, $value);
         }
 
@@ -143,8 +141,23 @@ class View
         return $this;
     }
 
+    public function setCustomPath(string $path): self
+    {
+        $this->customPath = $path;
+        return $this;
+    }
+
+    public function setCustomTemplate(string $path): self
+    {
+        $this->customTemplate = $path;
+        return $this;
+    }
+
     private function getViewPath(): string
     {
+        if($this->customPath !== null) {
+            return $this->customPath;
+        }
         $theme = ThemeController::getCurrentTheme()->getName();
         return ($this->isAdminFile)
             ? "app/package/{$this->package}/views/{$this->viewFile}.admin.view.php"
@@ -153,6 +166,9 @@ class View
 
     private function getTemplateFile(): string
     {
+        if($this->customTemplate !== null) {
+            return $this->customTemplate;
+        }
         $theme = ThemeController::getCurrentTheme()->getName();
         return ($this->isAdminFile)
             ? getenv("PATH_ADMIN_VIEW") . "template.php"
@@ -187,7 +203,7 @@ class View
     }
 
     /**
-     * @throws \CMW\Router\RouterException
+     * @throws RouterException
      */
     public function loadFile(): string
     {
@@ -197,7 +213,7 @@ class View
             throw new RouterException(null, 404);
         }
 
-        extract($this->variables, EXTR_OVERWRITE);
+        extract($this->variables);
         $includes = $this->includes;
 
         ob_start();
@@ -206,7 +222,7 @@ class View
     }
 
     /**
-     * @throws \CMW\Router\RouterException
+     * @throws RouterException
      */
     public function view(): void
     {
@@ -224,7 +240,7 @@ class View
         extract($this->variables, EXTR_OVERWRITE);
         $includes = $this->includes;
 
-        if (Utils::hasOneNullValue($this->package, $this->viewFile)) {
+        if (Utils::hasOneNullValue($this->package, $this->viewFile) && is_null($this->customPath)) {
             throw new RouterException(null, 404);
         }
 
@@ -252,7 +268,7 @@ class View
     }
 
     /**
-     * @throws \CMW\Router\RouterException
+     * @throws RouterException
      */
     private function callAlerts(): string
     {

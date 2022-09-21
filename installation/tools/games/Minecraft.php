@@ -32,7 +32,7 @@ class Minecraft extends Games
     {
         require_once(Utils::getEnv()->getValue("dir") . "app/manager.php");
 
-        $db = self::getInstance();
+        $db = self::dbConnect();
         $query = self::loadSql();
         if ($query) {
             $db->exec($query);
@@ -48,7 +48,7 @@ class Minecraft extends Games
         $ip_minecraft = filter_input(INPUT_POST, "config_minecraft_ip");
 
         require_once(Utils::getEnv()->getValue("dir") . "app/manager.php");
-        $db = self::getInstance();
+        $db = self::dbConnect();
 
         $query = $db->prepare("INSERT INTO cmw_core_options (option_name, option_value, option_updated) VALUES (:option_name, :option_value, NOW())");
         $query->execute(array(
