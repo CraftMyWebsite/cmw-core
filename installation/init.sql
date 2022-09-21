@@ -167,3 +167,7 @@ VALUES (1, NULL, 'operator'),
        (11, 4, 'edit'),
        (12, 4, 'delete'),
        (13, 4, 'roles');
+
+#Insert operator permission for the admin role
+INSERT INTO `cmw_roles_permissions` (`permission_id`, `role_id`)
+VALUES ('1', '5');
