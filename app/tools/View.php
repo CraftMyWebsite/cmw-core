@@ -240,7 +240,7 @@ class View
         extract($this->variables, EXTR_OVERWRITE);
         $includes = $this->includes;
 
-        if (Utils::hasOneNullValue($this->package, $this->viewFile) && is_null($this->customPath)) {
+        if (is_null($this->customPath) && Utils::hasOneNullValue($this->package, $this->viewFile)) {
             throw new RouterException(null, 404);
         }
 
