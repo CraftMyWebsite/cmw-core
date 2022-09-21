@@ -76,7 +76,7 @@
 
         const formData   = new FormData(formRaw);
 
-        fetch(`${window.location.pathname}/submitFirstInstall`, {
+        fetch(`${window.location.pathname}/submit`, {
             method: "post",
             body  : formData,
         }).then(v => v.text())

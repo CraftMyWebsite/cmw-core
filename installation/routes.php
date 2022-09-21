@@ -30,8 +30,6 @@ switch ((int)$installationStep) {
 
 $router->scope("/installer", function (Router $router) use ($number) {
     $capsMaj = ucfirst($number);
-    $router->get("/", "Installer#{$number}InstallView");
-    $router->post("/submit{$capsMaj}Install", "Installer#{$number}InstallPost");
 
     $router->get('/lang/:code', function($code) {
         (new InstallerController())->changeLang($code);

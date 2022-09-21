@@ -29,7 +29,7 @@ class DatabaseManager
             self::$_databaseInstance->exec("USE " . getenv("DB_NAME") . ";");
             return self::$_databaseInstance;
         } catch (Exception $e) {
-            die(DATABASE_ERROR_MSG . $e->getMessage());
+            die("DATABASE ERROR" . $e->getMessage());
         }
     }
 
