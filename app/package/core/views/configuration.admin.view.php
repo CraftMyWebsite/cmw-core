@@ -2,8 +2,8 @@
 use CMW\Manager\Lang\LangManager;
 use CMW\Model\Core\CoreModel;
 
-$title = LangManager::translate("core.config.title", lineBreak: true);
-$description = LangManager::translate("core.config.desc", lineBreak: true); ?>
+$title = LangManager::translate("core.config.title");
+$description = LangManager::translate("core.config.desc"); ?>
 
     <div class="content">
         <div class="container-fluid">
@@ -12,38 +12,38 @@ $description = LangManager::translate("core.config.desc", lineBreak: true); ?>
                     <form action="" method="post">
                         <div class="card card-primary">
                             <div class="card-header">
-                                <h3 class="card-title"><?= LangManager::translate("core.dashboard.title", lineBreak: true) ?> :</h3>
+                                <h3 class="card-title"><?= LangManager::translate("core.config.title") ?> :</h3>
                             </div>
                             <div class="card-body">
 
                                 <!-- GENERAL CONFIG SECTION -->
 
                                 <div class="form-group">
-                                    <label for="name"><?= LangManager::translate("core.website.name", lineBreak: true) ?></label>
+                                    <label for="name"><?= LangManager::translate("core.website.name") ?></label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fas fa-signature"></i></span>
                                         </div>
                                         <input type="text" name="name" class="form-control"
                                                value="<?= CoreModel::getOptionValue("name") ?>"
-                                               placeholder="<?= LangManager::translate("core.website.name", lineBreak: true) ?>" required>
+                                               placeholder="<?= LangManager::translate("core.website.name") ?>" required>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="description"><?= LangManager::translate("core.website.description", lineBreak: true) ?></label>
+                                    <label for="description"><?= LangManager::translate("core.website.description") ?></label>
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fa fa-paragraph"></i></span>
                                         </div>
                                         <input type="text" name="description" class="form-control"
                                                value="<?= CoreModel::getOptionValue("description") ?>"
-                                               placeholder="<?= LangManager::translate("core.website.description", lineBreak: true) ?>" required>
+                                               placeholder="<?= LangManager::translate("core.website.description") ?>" required>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label><?= LangManager::translate("core.lang.change", lineBreak: true) ?></label>
+                                    <label><?= LangManager::translate("core.lang.change") ?></label>
                                     <select class="form-control" name="locale">
                                         <?php foreach (CoreController::$availableLocales as $code => $name): ?>
                                         <option value="<?= $code ?>" <?= $code === getenv("LOCALE") ? "selected" : "" ?>>
@@ -54,6 +54,8 @@ $description = LangManager::translate("core.config.desc", lineBreak: true); ?>
                                 </div>
 
                                 <?php //Minecraft config section
+                                /*
+                                 * //TODO USE GAMEFABRIC
                                 if (getenv("GAME") === "minecraft"):?>
                                     <div class="form-group">
                                         <label for="minecraft_ip"><?= LangManager::translate("core.minecraft.ip", lineBreak: true) ?></label>
@@ -79,7 +81,7 @@ $description = LangManager::translate("core.config.desc", lineBreak: true); ?>
                                             </label>
                                         </div>
                                     </div>
-                                <?php endif; ?>
+                                <?php endif; */?>
 
                             </div>
                             <!-- /.card-body -->
