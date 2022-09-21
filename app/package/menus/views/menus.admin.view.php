@@ -1,6 +1,9 @@
 <?php
-$title = MENUS_TITLE;
-$description = MENUS_DESC;
+
+use CMW\Manager\Lang\LangManager;
+
+$title = LangManager::translate("menus.menus.title");
+$description = LangManager::translate("menus.menus.desc");
 ?>
 
     <!-- main-content -->
