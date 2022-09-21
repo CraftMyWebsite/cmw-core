@@ -229,7 +229,7 @@ class Loader
 
     public function installManager(): void
     {
-        $this->requireFile("installation", "routes.php", "controllers/InstallerController.php", "models/InstallerModel.php"); //Todo See that
+        $this->requireFile("installation","controllers/InstallerController.php", "models/InstallerModel.php"); //Todo See that
 
         self::initRoute(self::getValue("dir") . "installation/controllers/InstallerController.php");
         if (is_dir("installation")) {

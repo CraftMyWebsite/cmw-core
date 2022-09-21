@@ -41,6 +41,9 @@ return [
 		"add_toaster_success" => "The role has been created !",
 		"edit_toaster_success" => "The role has been edited !",
 		"delete_toaster_success" => "The role has been deleted !",
+        "list_title" => "Roles list",
+        "description" => "Role description",
+        "name" => "Role name",
 	],
 	"delete" => [
 		"toaster_error" => "You cannot delete the account you are logged in with.",

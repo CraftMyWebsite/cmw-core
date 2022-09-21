@@ -21,7 +21,7 @@ $description = "Profil de " . $user->getUsername(); ?>
                 <button type="submit">Sauvegarder</button>
             </form>
 
-            <?php if (!is_null($user->getUserPicture()->getImageName())): ?>
+            <?php if (!is_null($user->getUserPicture()?->getImageName())): ?>
                 <img src="<?= getenv('PATH_SUBFOLDER') ?>public/uploads/users/<?= $user->getUserPicture()->getImageName() ?>"
                      height="15%" width="15%"
                      alt="Image de profil de <?= $user->getUsername() ?>">

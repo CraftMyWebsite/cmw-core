@@ -41,6 +41,9 @@ return [
 		"add_toaster_success" => "Rôle créé avec succès !",
 		"edit_toaster_success" => "Rôle modifié avec succès !",
 		"delete_toaster_success" => "Rôle supprimé avec succès ",
+        "list_title" => "Liste des rôles",
+        "description" => "Description du rôle",
+        "name" => "Nom du rôle"
 	],
 	"delete" => [
 		"toaster_error" => "Vous ne pouvez pas supprimer le compte avec lequel vous êtes connecté.",
