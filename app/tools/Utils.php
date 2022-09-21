@@ -31,7 +31,7 @@ class Utils
         return false;
     }
 
-    public static function hasOneNullValue(string ...$values): bool
+    public static function hasOneNullValue(?string ...$values): bool
     {
         foreach ($values as $value) {
             if (is_null($value)) {

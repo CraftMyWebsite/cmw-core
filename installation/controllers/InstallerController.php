@@ -44,8 +44,8 @@ class InstallerController
 
         $view = new View(basicVars: false);
         $view
-            ->setCustomPath(Utils::getEnv()->getValue("dir"). "/installation/views/$filename.view.php")
-            ->setCustomTemplate(Utils::getEnv()->getValue("dir") . "/installation/views/template.php")
+            ->setCustomPath(Utils::getEnv()->getValue("DIR"). "installation/views/$filename.view.php")
+            ->setCustomTemplate(Utils::getEnv()->getValue("DIR") . "installation/views/template.php")
             ->addVariable("install", $install);
 
         $view->view();

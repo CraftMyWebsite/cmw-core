@@ -11,8 +11,8 @@ use Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
-include(getenv("DIR") . 'app\package\core\vendors\PHPMailer\PHPMailer.php');
-include(getenv("DIR") . 'app\package\core\vendors\PHPMailer\SMTP.php');
+require_once(getenv("DIR") . 'app/package/core/vendors/PHPMailer/PHPMailer.php');
+require_once(getenv("DIR") . 'app/package/core/vendors/PHPMailer/SMTP.php');
 
 /**
  * Class: @MailController
