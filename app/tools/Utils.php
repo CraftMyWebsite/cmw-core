@@ -2,9 +2,6 @@
 
 namespace CMW\Utils;
 
-use JetBrains\PhpStorm\NoReturn;
-use JsonException;
-
 require("EnvBuilder.php");
 
 /**
@@ -21,11 +18,6 @@ class Utils
     {
         self::$env ??= new EnvBuilder();
         $_SESSION["alerts"] ??= array();
-    }
-
-    public static function getEnv(): EnvBuilder
-    {
-        return self::$env;
     }
 
     public static function isValuesEmpty(array $array, string ...$values): bool
@@ -114,6 +106,11 @@ class Utils
         return self::getEnv()->getValue("VERSION");
     }
 
+    public static function getEnv(): EnvBuilder
+    {
+        return self::$env;
+    }
+
     /**
      * @param int $l
      * @return string
@@ -132,7 +129,13 @@ class Utils
     public static function debugConsole(string $data): void
     {
         echo '<script>';
-        echo 'console.log('. json_encode($data, JSON_THROW_ON_ERROR) .')';
+        echo 'console.log(' . json_encode($data, JSON_THROW_ON_ERROR) . ')';
         echo '</script>';
+    }
+
+    public static function getHttpProtocol(): string
+    {
+        return in_array($_SERVER['HTTPS'] ?? '', ['on', 1], true) ||
+        ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https' ? 'https' : 'http';
     }
 }

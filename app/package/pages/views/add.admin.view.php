@@ -1,6 +1,7 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
+use CMW\Utils\Utils;
 
 $title = LangManager::translate("pages.add.title");
 $description = LangManager::translate("pages.add.desc");
@@ -162,8 +163,8 @@ $description = LangManager::translate("pages.add.desc");
                 <div class="card card-primary">
                     <div class="card-body">
                         <input type="hidden" id="page_id" name="page_id">
-                        <input class="page-title" type="text" id="title" placeholder="Titre de la page">
-                        <p class="page-slug text-blue mb-3 d-flex"><?= "http://" . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . "p/"; ?>
+                        <input class="page-title" type="text" id="title" placeholder="<?= LangManager::translate("pages.title") ?>">
+                        <p class="page-slug text-blue mb-3 d-flex"><?= Utils::getHttpProtocol() . '://' . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . "p/" ?>
                             <input class="border-0 text-blue p-0 w-100 page-slug-input" type="text" id="slug"></p>
                         <div>
                             <div id="editorjs"></div>

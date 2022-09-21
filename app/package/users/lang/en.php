@@ -9,7 +9,7 @@ return [
 		"lost_password" => "I have lost my password",
 		"register" => "Register",
 	],
-	"List" => [
+	"list" => [
 		"title" => "Users | List",
 		"desc" => "List of users registered on the site",
 		"card_title" => "List of registered users",

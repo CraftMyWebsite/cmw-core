@@ -1,7 +1,7 @@
 <?php use CMW\Manager\Lang\LangManager;
 
-$title = LangManager::translate("users.login.title", lineBreak: true);
-$description = LangManager::translate("users.login.desc", lineBreak: true);
+$title = LangManager::translate("users.login.title");
+$description = LangManager::translate("users.login.desc");
 
 $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main.js"></script>';
 
@@ -11,13 +11,13 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo mb-4">
-        <img src="<?= getenv("PATH_SUBFOLDER") ?>admin/resources/images/identity/logo_compact.png" alt="<?= LangManager::translate("core.alt.logo", lineBreak: true) ?>"
+        <img src="<?= getenv("PATH_SUBFOLDER") ?>admin/resources/images/identity/logo_compact.png" alt="<?= LangManager::translate("core.alt.logo") ?>"
              width="100px">
     </div>
     <!-- /.login-logo -->
     <div class="card">
         <div class="card-body login-card-body">
-            <p class="login-box-msg"><?= LangManager::translate("user.login.title", lineBreak: true) ?></p>
+            <p class="login-box-msg"><?= LangManager::translate("users.login.title", lineBreak: true) ?></p>
             <form action="" method="post" class="mb-4">
                 <div class="form-group">
                     <div class="input-group mb-3">
@@ -26,7 +26,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                                 <span class="fas fa-envelope"></span>
                             </div>
                         </div>
-                        <input name="login_email" type="email" class="form-control" placeholder="<?= LangManager::translate("users.login.mail", lineBreak: true) ?>">
+                        <input name="login_email" type="email" class="form-control" placeholder="<?= LangManager::translate("users.users.mail") ?>">
                     </div>
                 </div>
                 <div class="form-group">
@@ -35,7 +35,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                             <span class="input-group-text"><i class="fas fa-lock"></i></span>
                         </div>
                         <input type="password" name="login_password" class="form-control"
-                               placeholder="<?= LangManager::translate("user.login.password", lineBreak: true) ?>">
+                               placeholder="<?= LangManager::translate("users.users.pass") ?>">
                         <div class="input-group-append">
                             <a class="input-group-text" href="#"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
                         </div>
