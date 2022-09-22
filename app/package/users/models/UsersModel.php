@@ -235,14 +235,14 @@ class UsersModel extends DatabaseManager
         }
     }
 
-    public function update(int $id, string $mail, string $username, ?string $firstname, ?string $lastname, array $roles): ?UserEntity
+    public function update(int $id, string $mail, ?string $username, ?string $firstname, ?string $lastname, array $roles): ?UserEntity
     {
         $var = array(
             "user_id" => $id,
             "user_email" => $mail,
-            "user_pseudo" => mb_strimwidth($username, 0, 255),
-            "user_firstname" => mb_strimwidth($firstname, 0, 255),
-            "user_lastname" => mb_strimwidth($lastname, 0, 255)
+            "user_pseudo" => $username !== null ? mb_strimwidth($username, 0, 255) : "",
+            "user_firstname" => $firstname !== null ? mb_strimwidth($firstname, 0, 255) : "",
+            "user_lastname" => $lastname !== null ? mb_strimwidth($lastname, 0, 255) : ""
         );
 
         $sql = "UPDATE cmw_users SET user_email=:user_email,user_pseudo=:user_pseudo,user_firstname=:user_firstname,user_lastname=:user_lastname WHERE user_id=:user_id";
