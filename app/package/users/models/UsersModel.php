@@ -224,7 +224,7 @@ class UsersModel extends DatabaseManager
 
             $var = array(
                 "user_id" => $id,
-                "role_id" => $roleId
+                "role_id" => $roleId->getId()
             );
 
             $sql = "INSERT INTO cmw_users_roles (user_id, role_id) VALUES (:user_id, :role_id)";
