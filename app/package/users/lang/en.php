@@ -8,6 +8,15 @@ return [
 		"signin" => "Login",
 		"lost_password" => "I have lost my password",
 		"register" => "Register",
+        "forgot_password" => [
+            "title" => "Forgot your password",
+            "desc" => "Retrieve a new password",
+            "btn" => "Request new password",
+            "mail" => [
+                "object" => "This is your new password %site_name%",
+                "body" => "This is your new password, please change this password fast <b> %password% </b>"
+            ],
+        ],
 	],
 	"list" => [
 		"title" => "Users | List",

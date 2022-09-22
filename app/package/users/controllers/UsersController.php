@@ -268,6 +268,38 @@ class UsersController extends CoreController
     /**
      * @throws \CMW\Router\RouterException
      */
+    #[Link('/login/forgot', Link::GET)]
+    public function forgotPassword(): void
+    {
+        if (UsersModel::getLoggedUser() !== -1) {
+            header('Location: ' . getenv('PATH_SUBFOLDER'));
+            die();
+        }
+
+        $view = new View("users", "forgotPassword");
+        $view->setAdminView()->view();
+    }
+
+
+    #[Link('/login/forgot', Link::POST)]
+    public function forgotPasswordPost(): void
+    {
+        $mail = filter_input(INPUT_POST, "mail");
+
+        //We check if this email exist
+        if($this->userModel->checkEmail($mail) <= 0) {
+            //TODO toaster with error
+            die();
+        }
+
+        //We send a verification link for this mail
+        $this->userModel->resetPassword($mail);
+        header("Location: /login");
+    }
+
+    /**
+     * @throws \CMW\Router\RouterException
+     */
     #[Link('/register', Link::GET)]
     public function register(): void
     {
