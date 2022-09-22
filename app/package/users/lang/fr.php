@@ -8,6 +8,15 @@ return [
 		"signin" => "Connexion",
 		"lost_password" => "J'ai perdu mon mot de passe",
 		"register" => "S'inscrire",
+        "forgot_password" => [
+            "title" => "Mot de passe oublié",
+            "desc" => "Récupérez votre mot de passe",
+            "btn" => "Confirmation",
+            "mail" => [
+                "object" => "Votre nouveau mot de passe %site_name%",
+                "body" => "Voici votre nouveau mot de passe à changer rapidement après votre connexion : <b> %password% </b>"
+            ],
+        ],
 	],
 	"list" => [
 		"title" => "Utilisateurs | Liste",
@@ -75,4 +84,9 @@ return [
 		"toaster_title_error" => "Attention",
 		"logout" => "Déconnexion",
 	],
+    "settings" => [
+        "title" => "Paramètres utilisateurs",
+        "desc" => "Gérez les paramètres de la partie utilisateur de votre site",
+        "default_picture" => "Image de profil par défaut",
+    ],
 ];

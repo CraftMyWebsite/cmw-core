@@ -3,6 +3,9 @@
 namespace CMW\Entity\Users;
 
 
+use CMW\Model\Users\UsersSettingsModel;
+use CMW\Utils\Utils;
+
 class UserPictureEntity
 {
     private ?int $userId;
@@ -34,6 +37,10 @@ class UserPictureEntity
      */
     public function getImageName(): ?string
     {
+        if(!is_file(Utils::getEnv()->getValue("PATH_SUBFOLDER") . "uploads/users/" . $this->imageName))
+        {
+            return "default/" . (new UsersSettingsModel())->getSetting("defaultImage");
+        }
         return $this->imageName;
     }
 

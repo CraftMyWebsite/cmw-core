@@ -1,6 +1,8 @@
 <?php
 
 
+use CMW\Manager\Lang\LangManager;
+
 $title = "Inscription";
 $description = "Description de votre page"; ?>
 
@@ -17,7 +19,7 @@ $description = "Description de votre page"; ?>
                                 <span class="fas fa-envelope"></span>
                             </div>
                         </div>
-                        <input name="register_email" type="email" class="form-control" placeholder="<?= USERS_MAIL ?>">
+                        <input name="register_email" type="email" class="form-control" placeholder="<?= LangManager::translate("users.users.mail") ?>">
                     </div>
                 </div>
                 <div class="form-group">
@@ -26,7 +28,7 @@ $description = "Description de votre page"; ?>
                             <span class="input-group-text"><i class="fas fa-lock"></i></span>
                         </div>
                         <input type="password" name="register_password" class="form-control"
-                               placeholder="<?= USERS_PASS ?>">
+                               placeholder="<?= LangManager::translate("users.users.pass") ?>">
                         <div class="input-group-append">
                             <a class="input-group-text" href="#"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
                         </div>
@@ -36,7 +38,7 @@ $description = "Description de votre page"; ?>
 
                 <div class="row">
                     <div class="col-12">
-                        <button type="submit" class="btn btn-primary btn-block"><?= USERS_REGISTER ?></button>
+                        <button type="submit" class="btn btn-primary btn-block"><?= LangManager::translate("users.login.register") ?></button>
                     </div>
                 </div>
             </form>

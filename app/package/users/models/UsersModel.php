@@ -2,6 +2,8 @@
 
 namespace CMW\Model\Users;
 
+use CMW\Controller\Core\CoreController;
+use CMW\Controller\Core\MailController;
 use CMW\Controller\Users\UsersController;
 use CMW\Entity\Users\RoleEntity;
 use CMW\Entity\Users\UserPictureEntity;
@@ -9,7 +11,11 @@ use CMW\Entity\Users\UserEntity;
 
 use CMW\Manager\Database\DatabaseManager;
 
+use CMW\Manager\Lang\LangManager;
+use CMW\Model\Core\CoreModel;
+use CMW\Model\Core\MailModel;
 use CMW\Utils\Utils;
+use Exception;
 
 /**
  * Class: @usersModel
@@ -87,13 +93,13 @@ class UsersModel extends DatabaseManager
 
         $resUserPicture = $resUserPicture->fetch();
 
-        if ($resUserPicture) {
-            $userPicture = new UserPictureEntity(
-                $resUserPicture['users_pictures_user_id'],
-                $resUserPicture['users_pictures_image_name'],
-                $resUserPicture['users_pictures_last_update']
+
+        $userPicture = new UserPictureEntity(
+            $resUserPicture['users_pictures_user_id'] ?? $id,
+                $resUserPicture['users_pictures_image_name'] ?? ("default/" . (new UsersSettingsModel())->getSetting("defaultImage")),
+                $resUserPicture['users_pictures_last_update'] ?? null
             );
-        }
+
 
 
         return new UserEntity(
@@ -218,7 +224,7 @@ class UsersModel extends DatabaseManager
 
             $var = array(
                 "user_id" => $id,
-                "role_id" => $roleId
+                "role_id" => $roleId->getId()
             );
 
             $sql = "INSERT INTO cmw_users_roles (user_id, role_id) VALUES (:user_id, :role_id)";
@@ -229,14 +235,14 @@ class UsersModel extends DatabaseManager
         }
     }
 
-    public function update(int $id, string $mail, string $username, ?string $firstname, ?string $lastname, array $roles): ?UserEntity
+    public function update(int $id, string $mail, ?string $username, ?string $firstname, ?string $lastname, array $roles): ?UserEntity
     {
         $var = array(
             "user_id" => $id,
             "user_email" => $mail,
-            "user_pseudo" => mb_strimwidth($username, 0, 255),
-            "user_firstname" => mb_strimwidth($firstname, 0, 255),
-            "user_lastname" => mb_strimwidth($lastname, 0, 255)
+            "user_pseudo" => $username !== null ? mb_strimwidth($username, 0, 255) : "",
+            "user_firstname" => $firstname !== null ? mb_strimwidth($firstname, 0, 255) : "",
+            "user_lastname" => $lastname !== null ? mb_strimwidth($lastname, 0, 255) : ""
         );
 
         $sql = "UPDATE cmw_users SET user_email=:user_email,user_pseudo=:user_pseudo,user_firstname=:user_firstname,user_lastname=:user_lastname WHERE user_id=:user_id";
@@ -295,6 +301,22 @@ class UsersModel extends DatabaseManager
         $req->execute($var);
 
         $this->updateEditTime($id);
+    }
+
+    public function updatePassWithMail(string $mail, string $password): void
+    {
+        $var = array(
+            "user_email" => $mail,
+            "user_password" => $password
+        );
+
+        $sql = "UPDATE cmw_users SET user_password=:user_password WHERE user_email=:user_email";
+
+        $db = self::getInstance();
+        $req = $db->prepare($sql);
+        $req->execute($var);
+
+        $this->updateEditTime($db->lastInsertId());
     }
 
     public function changeState(int $id, int $state): void
@@ -437,6 +459,35 @@ class UsersModel extends DatabaseManager
         }
 
         return 0;
+    }
+
+    public function resetPassword(string $email): void
+    {
+        $newPassword = $this->generatePassword();
+
+        $this->updatePassWithMail($email, password_hash($newPassword, PASSWORD_BCRYPT));
+
+        $this->sendResetPassword($email, $newPassword);
+    }
+
+    public function sendResetPassword(string $email, string $password): void
+    {
+        $mailController = new MailController();
+        $mailController->sendMail($email, LangManager::translate("users.login.forgot_password.mail.object",
+            ["site_name" => (new CoreModel())->fetchOption("name")]),
+            LangManager::translate("users.login.forgot_password.mail.body",
+                ["password" => $password]));
+
+    }
+
+    private function generatePassword(): string
+    {
+        try {
+            return bin2hex(Utils::genId(random_int(15, 50)));
+        } catch (Exception $e) {
+            return bin2hex(Utils::genId(50));
+        }
+
     }
 
     //TODO set that in other class (try on installation to generate Controller for games ?)

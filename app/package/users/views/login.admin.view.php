@@ -59,7 +59,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
             </form>
 
             <p class="mb-1">
-                <a href=""><?= LangManager::translate("users.login.lost_password", lineBreak: true) ?></a>
+                <a href="login/forgot"><?= LangManager::translate("users.login.lost_password") ?></a>
             </p>
         </div>
         <!-- /.login-card-body -->

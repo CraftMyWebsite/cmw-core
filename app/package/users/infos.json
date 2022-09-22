@@ -7,11 +7,13 @@
       "icon_menu": "fas fa-user",
       "url_menu": "",
       "urls_submenu": {
+        "Paramètres": "users/settings",
         "Liste": "users/list",
         "Ajouter": "users/add",
         "Roles": "roles/list"
       },
       "urls_submenu_en": {
+        "Settings": "users/settings",
         "List": "users/list",
         "Add": "users/add",
         "Roles": "roles/list"
