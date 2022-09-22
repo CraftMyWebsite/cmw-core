@@ -79,6 +79,15 @@ CREATE TABLE IF NOT EXISTS `cmw_users_pictures`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `cmw_users_settings`
+(
+    `users_settings_name`    varchar(255) NOT NULL,
+    `users_settings_value`   varchar(255) NOT NULL,
+    `users_settings_updated` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY (`users_settings_name`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
+
 
 
 ALTER TABLE `cmw_core_options`
@@ -171,3 +180,7 @@ VALUES (1, NULL, 'operator'),
 #Insert operator permission for the admin role
 INSERT INTO `cmw_roles_permissions` (`permission_id`, `role_id`)
 VALUES ('1', '5');
+
+#Insert the default profile picture image
+INSERT INTO `cmw_users_settings` (users_settings_name, users_settings_value)
+VALUES ('defaultImage', 'defaultImage.jpg')

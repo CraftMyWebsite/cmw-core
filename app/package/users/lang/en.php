@@ -84,4 +84,9 @@ return [
 		"toaster_title_error" => "Warning",
 		"logout" => "Logout",
 	],
+    "settings" => [
+        "title" => "Users settings",
+        "desc" => "Manage your users area settings",
+        "default_picture" => "Default profile picture",
+    ],
 ];

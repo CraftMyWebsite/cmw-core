@@ -21,12 +21,14 @@ class UserPictureModel extends DatabaseManager
      * @param int $userId
      * @param array $image
      * @return \CMW\Entity\Users\UserPictureEntity|null
+     * @throws \Exception
      */
     public function uploadImage(int $userId, array $image): ?UserPictureEntity
     {
         //First check if the user has an image
-        if (self::userHasImage($userId))
-            return self::updateUserImage($userId, $image);
+        if ($this->userHasImage($userId)) {
+            return $this->updateUserImage($userId, $image);
+        }
 
 
         //Upload image on the server
@@ -41,7 +43,7 @@ class UserPictureModel extends DatabaseManager
             return null;
         }
 
-        return self::getImageByUserId($userId);
+        return $this->getImageByUserId($userId);
     }
 
     /**
@@ -56,26 +58,23 @@ class UserPictureModel extends DatabaseManager
         $db = self::getInstance();
         $req = $db->prepare($sql);
 
-        if ($req->execute(array('userId' => $userId)) && count($req->fetchAll()) >= 1) {
-            return true;
-        }
-
-        return false;
+        return $req->execute(array('userId' => $userId)) && count($req->fetchAll()) >= 1;
     }
 
     /**
      * @param int $userId
      * @param array $image
      * @return \CMW\Entity\Users\UserPictureEntity|null
+     * @throws \Exception
      */
     public function updateUserImage(int $userId, array $image): ?UserPictureEntity
     {
 
         //Get older imageName
-        $userPictureEntity = self::getImageByUserId($userId);
+        $userPictureEntity = $this->getImageByUserId($userId);
 
 
-        $olderImageName = $userPictureEntity->getImageName();
+        $olderImageName = $userPictureEntity?->getImageName();
 
         //Delete older image
         Images::deleteImage($olderImageName, 'users');
@@ -95,7 +94,7 @@ class UserPictureModel extends DatabaseManager
             return null;
         }
 
-        return self::getImageByUserId($userId);
+        return $this->getImageByUserId($userId);
     }
 
     public function getImageByUserId(int $userId): ?UserPictureEntity

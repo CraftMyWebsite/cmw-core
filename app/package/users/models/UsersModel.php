@@ -93,13 +93,13 @@ class UsersModel extends DatabaseManager
 
         $resUserPicture = $resUserPicture->fetch();
 
-        if ($resUserPicture) {
-            $userPicture = new UserPictureEntity(
-                $resUserPicture['users_pictures_user_id'],
-                $resUserPicture['users_pictures_image_name'],
-                $resUserPicture['users_pictures_last_update']
+
+        $userPicture = new UserPictureEntity(
+            $resUserPicture['users_pictures_user_id'] ?? $id,
+                $resUserPicture['users_pictures_image_name'] ?? ("default/" . (new UsersSettingsModel())->getSetting("defaultImage")),
+                $resUserPicture['users_pictures_last_update'] ?? null
             );
-        }
+
 
 
         return new UserEntity(

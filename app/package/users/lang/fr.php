@@ -84,4 +84,9 @@ return [
 		"toaster_title_error" => "Attention",
 		"logout" => "Déconnexion",
 	],
+    "settings" => [
+        "title" => "Paramètres utilisateurs",
+        "desc" => "Gérez les paramètres de la partie utilisateur de votre site",
+        "default_picture" => "Image de profil par défaut",
+    ],
 ];

@@ -26,4 +26,9 @@
 !/public/themes/Sampler/views/alerts
 !/public/themes/Sampler/views/template.php
 
+# Exclude all uploads folders and files except the default profile image
+!/public/uploads/users/default/defaultImage.jpg
+/public/uploads/*
+
+
 
