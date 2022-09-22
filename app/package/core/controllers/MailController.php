@@ -55,6 +55,7 @@ class MailController extends CoreController
             $mail->Password = $config->getPassword();              //SMTP password
             $mail->SMTPSecure = $config->getProtocol();            //TLS OR SSL
             $mail->Port = $config->getPort();                      //TCP port
+            $mail->CharSet = 'UTF-8';
 
             //Receiver config
             $mail->setFrom($config->getMail(), (new CoreModel())->fetchOption("name"));
