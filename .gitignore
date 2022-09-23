@@ -2,6 +2,8 @@
 .env
 .idea
 
+/app/package/*/.idea/
+
 #Exclude log files except the .gitignore
 /app/storage/logs/*
 !/app/storage/logs/.gitkeep
@@ -29,6 +31,3 @@
 # Exclude all uploads folders and files except the default profile image
 !/public/uploads/users/default/defaultImage.jpg
 /public/uploads/*
-
-
-
