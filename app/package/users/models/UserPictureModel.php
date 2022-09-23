@@ -5,6 +5,8 @@ namespace CMW\Model\Users;
 use CMW\Entity\Users\UserPictureEntity;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Utils\Images;
+use CMW\Utils\Utils;
+use Exception;
 
 
 /**
@@ -20,8 +22,8 @@ class UserPictureModel extends DatabaseManager
     /**
      * @param int $userId
      * @param array $image
-     * @return \CMW\Entity\Users\UserPictureEntity|null
-     * @throws \Exception
+     * @return UserPictureEntity|null
+     * @throws Exception
      */
     public function uploadImage(int $userId, array $image): ?UserPictureEntity
     {
@@ -61,11 +63,16 @@ class UserPictureModel extends DatabaseManager
         return $req->execute(array('userId' => $userId)) && count($req->fetchAll()) >= 1;
     }
 
+    public function userHasDefaultImage(int $userId): bool
+    {
+        return  is_file(Utils::getEnv()->getValue("DIR") . "public/uploads/users/default/" . (new UsersSettingsModel())->getSetting("defaultImage")) && !$this->userHasImage($userId);
+    }
+
     /**
      * @param int $userId
      * @param array $image
-     * @return \CMW\Entity\Users\UserPictureEntity|null
-     * @throws \Exception
+     * @return UserPictureEntity|null
+     * @throws Exception
      */
     public function updateUserImage(int $userId, array $image): ?UserPictureEntity
     {
@@ -76,8 +83,10 @@ class UserPictureModel extends DatabaseManager
 
         $olderImageName = $userPictureEntity?->getImageName();
 
-        //Delete older image
-        Images::deleteImage($olderImageName, 'users');
+        //Delete older image if this isn't the default image
+        if (!$this->userHasDefaultImage($userId)) {
+            Images::deleteImage($olderImageName, 'users');
+        }
 
         //Upload image on the server
         $imageName = Images::upload($image, 'users');
@@ -115,6 +124,26 @@ class UserPictureModel extends DatabaseManager
             $res['users_pictures_image_name'],
             $res['users_pictures_last_update']
         );
+    }
+
+    public function deleteUserPicture(int $userId): void
+    {
+        if ($this->userHasDefaultImage($userId)) {
+           return;
+        }
+
+        $imageName = $this->getImageByUserId($userId)->getImageName();
+
+        Images::deleteImage($imageName, "users");
+
+        $sql = "DELETE FROM cmw_users_pictures WHERE users_pictures_user_id = :userId";
+        $db = self::getInstance();
+
+        $req = $db->prepare($sql);
+
+        $req->execute(array("userId" => $userId));
+
+
     }
 
 }

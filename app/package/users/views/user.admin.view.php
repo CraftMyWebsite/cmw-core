@@ -19,7 +19,8 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                 <form action="" method="post">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title"><?= LangManager::translate("users.users.user") ?> : <?= $user->getUsername() ?></h3>
+                            <h3 class="card-title"><?= LangManager::translate("users.users.user") ?>
+                                : <?= $user->getUsername() ?></h3>
                         </div>
                         <div class="card-body">
                             <div class="input-group mb-3">
@@ -27,28 +28,32 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                                     <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                 </div>
                                 <input type="email" name="email" class="form-control"
-                                       placeholder="<?= LangManager::translate("users.users.mail") ?>" value="<?= $user->getMail() ?>">
+                                       placeholder="<?= LangManager::translate("users.users.mail") ?>"
+                                       value="<?= $user->getMail() ?>">
                             </div>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-signature"></i></span>
                                 </div>
                                 <input type="text" name="pseudo" class="form-control"
-                                       placeholder="<?= LangManager::translate("users.users.pseudo") ?>" value="<?= $user->getUsername() ?>">
+                                       placeholder="<?= LangManager::translate("users.users.pseudo") ?>"
+                                       value="<?= $user->getUsername() ?>">
                             </div>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-id-card"></i></span>
                                 </div>
                                 <input type="text" name="name" class="form-control"
-                                       placeholder="<?= LangManager::translate("users.users.firstname") ?>" value="<?= $user->getFirstName() ?>">
+                                       placeholder="<?= LangManager::translate("users.users.firstname") ?>"
+                                       value="<?= $user->getFirstName() ?>">
                             </div>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-id-card"></i></span>
                                 </div>
                                 <input type="text" name="lastname" class="form-control"
-                                       placeholder="<?= LangManager::translate("users.users.surname") ?>" value="<?= $user->getLastName() ?>">
+                                       placeholder="<?= LangManager::translate("users.users.surname") ?>"
+                                       value="<?= $user->getLastName() ?>">
                             </div>
                             <div class="form-group">
                                 <label><?= LangManager::translate("users.users.role") ?></label>
@@ -104,8 +109,10 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                     </div>
                     <div class="card-body">
                         <p><b><?= LangManager::translate("users.users.creation") ?> :</b> <?= $user->getCreated() ?></p>
-                        <p><b><?= LangManager::translate("users.users.last_edit") ?> :</b> <?= $user->getUpdated() ?></p>
-                        <p><b><?= LangManager::translate("users.users.last_connection") ?> :</b> <?= $user->getLastConnection() ?></p>
+                        <p><b><?= LangManager::translate("users.users.last_edit") ?> :</b> <?= $user->getUpdated() ?>
+                        </p>
+                        <p><b><?= LangManager::translate("users.users.last_connection") ?>
+                                :</b> <?= $user->getLastConnection() ?></p>
                         <div>
                             <a href="../state/<?= $user->getId() ?>/<?= $user->getState() ?>" type="submit"
                                class="btn btn-<?= ($user->getState()) ? 'warning' : 'success' ?>"><i
@@ -117,7 +124,59 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                             </a>
                         </div>
                     </div>
-                    <!-- /.card-body -->
+                    <!-- /.card-body    -->
+                </div>
+
+                <!-- Edit profile picture -->
+                <div>
+                    <form action="../picture/edit/<?= $user->getId() ?>" method="post" enctype="multipart/form-data">
+                        <div class="card card-info">
+                            <div class="card-header">
+                                <h3 class="card-title"><?= LangManager::translate("users.users.image.title") ?></h3>
+                            </div>
+                            <div class="card-body">
+                                <p><b><?= LangManager::translate("users.users.image.last_update") ?>:</b>
+                                    <?= ($user->getUserPicture()->getLastUpdate() ?? $user->getCreated()) ?>
+                                </p>
+
+                                <div class="container">
+                                    <div class="row mx-auto">
+                                        <div class="col-4">
+                                            <img src="<?= getenv('PATH_SUBFOLDER') ?>public/uploads/users/<?= $user->getUserPicture()->getImageName() ?>"
+                                                 height="150px" width="150px"
+                                                 alt="<?= LangManager::translate("users.users.image.image_alt")
+                                                 . $user->getUsername() ?>">
+                                        </div>
+                                        <div class="input-group col">
+                                            <div class="input-group col">
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" id="profilePicture"
+                                                           accept=".png, .jpg, .jpeg, .webp, .gif"
+                                                           name="profilePicture">
+                                                    <label class="custom-file-label" for="profilePicture">
+                                                        <?= LangManager::translate("users.users.image.placeholder_input") ?>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col">
+                                                <a href="../picture/reset/<?= $user->getId() ?>" type="submit"
+                                                   class="btn btn-warning"><i
+                                                            class="fa fa-arrows-rotate"></i>
+                                                    <?= LangManager::translate("users.users.image.reset") ?>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit"
+                                        class="btn btn-primary float-left"><?= LangManager::translate("core.btn.save") ?></button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
