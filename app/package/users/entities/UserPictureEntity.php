@@ -37,7 +37,7 @@ class UserPictureEntity
      */
     public function getImageName(): ?string
     {
-        if(!is_file(Utils::getEnv()->getValue("PATH_SUBFOLDER") . "uploads/users/" . $this->imageName))
+        if(!is_file(Utils::getEnv()->getValue("DIR") . "public/uploads/users/" . $this->imageName))
         {
             return "default/" . (new UsersSettingsModel())->getSetting("defaultImage");
         }

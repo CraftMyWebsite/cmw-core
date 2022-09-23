@@ -83,6 +83,13 @@ return [
 		"toaster_title" => "Information",
 		"toaster_title_error" => "Warning",
 		"logout" => "Logout",
+        "image" => [
+            "title" => "Profile picture",
+            "last_update" => "Last update",
+            "placeholder_input" => "Choose the profile picture",
+            "image_alt" => "Profile picture of ",
+            "reset" => "Reset image"
+        ],
 	],
     "settings" => [
         "title" => "Users settings",

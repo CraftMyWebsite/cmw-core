@@ -83,6 +83,13 @@ return [
 		"toaster_title" => "Information",
 		"toaster_title_error" => "Attention",
 		"logout" => "Déconnexion",
+        "image" => [
+            "title" => "Image de profile",
+            "last_update" => "Dernière modification",
+            "placeholder_input" => "Choisissez une image de profile",
+            "image_alt" => "Image de profile de ",
+            "reset" => "Réinitialisez l'image"
+        ],
 	],
     "settings" => [
         "title" => "Paramètres utilisateurs",

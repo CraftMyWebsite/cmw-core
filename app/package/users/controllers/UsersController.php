@@ -218,6 +218,24 @@ class UsersController extends CoreController
         header("location: ../list");
     }
 
+    #[Link("/picture/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users")]
+    #[NoReturn] public function adminUsersEditPicturePost(int $id): void
+    {
+        $image = $_FILES['profilePicture'];
+
+
+        $this->userPictureModel->uploadImage($id, $image);
+
+        header("Location: ../../edit/$id");
+    }
+
+    #[Link("/picture/reset/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
+    #[NoReturn] public function adminUsersResetPicture(int $id): void
+    {
+        $this->userPictureModel->deleteUserPicture($id);
+
+        header("Location: ../../edit/$id");
+    }
 
     // PUBLIC SECTION
 
