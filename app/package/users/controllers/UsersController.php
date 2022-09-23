@@ -426,7 +426,13 @@ class UsersController extends CoreController
 
         $roles = UsersModel::getRoles($userId);
 
-        $this->userModel->update($userId, $mail, $username, $firstname, $lastname, $roles);
+        $rolesId = array();
+
+        foreach ($roles as $role){
+            $rolesId[] = $role->getId();
+        }
+
+        $this->userModel->update($userId, $mail, $username, $firstname, $lastname, $rolesId);
 
 
         [$pass, $passVerif] = Utils::filterInput("password", "passwordVerif");
