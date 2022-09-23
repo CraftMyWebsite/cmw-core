@@ -1,7 +1,7 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
-use CMW\Model\Roles\RolesModel;
+use CMW\Model\Users\RolesModel;
 
 $title = LangManager::translate("users.edit.title");
 $description = LangManager::translate("users.edit.desc");
@@ -53,7 +53,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                             <div class="form-group">
                                 <label><?= LangManager::translate("users.users.role") ?></label>
                                 <select name="roles[]" class="form-control" multiple>
-                                    <?php /** @var \CMW\Entity\Roles\RoleEntity[] $roles */
+                                    <?php /** @var \CMW\Entity\Users\RoleEntity[] $roles */
                                     foreach ($roles as $role) : ?>
                                         <option value="<?= $role->getId() ?>"
                                             <?= (RolesModel::playerHasRole($user->getId(), $role->getId()) ? "selected" : "") ?>><?= $role->getName() ?>
@@ -105,7 +105,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                     <div class="card-body">
                         <p><b><?= LangManager::translate("users.users.creation") ?> :</b> <?= $user->getCreated() ?></p>
                         <p><b><?= LangManager::translate("users.users.last_edit") ?> :</b> <?= $user->getUpdated() ?></p>
-                        <p><b><?= LangManager::translate("users.users.last_connexion") ?> :</b> <?= $user->getLastConnection() ?></p>
+                        <p><b><?= LangManager::translate("users.users.last_connection") ?> :</b> <?= $user->getLastConnection() ?></p>
                         <div>
                             <a href="../state/<?= $user->getId() ?>/<?= $user->getState() ?>" type="submit"
                                class="btn btn-<?= ($user->getState()) ? 'warning' : 'success' ?>"><i
@@ -113,7 +113,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                             </a>
 
                             <a href="../delete/<?= $user->getId() ?>" type="submit" class="btn btn-danger"><i
-                                        class="fa fa-user-times"></i> <?= LangManager::translate("core.btn.deleete") ?>
+                                        class="fa fa-user-times"></i> <?= LangManager::translate("core.btn.delete") ?>
                             </a>
                         </div>
                     </div>
