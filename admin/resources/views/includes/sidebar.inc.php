@@ -1,7 +1,9 @@
-<?php /* @var \CMW\Entity\Users\UserEntity $userAdmin */
+<?php /* @var UserEntity $userAdmin */
 
-/* @var \CMW\Controller\CoreController $coreAdmin */
+/* @var CoreController $coreAdmin */
 
+use CMW\Controller\Core\CoreController;
+use CMW\Entity\Users\UserEntity;
 use CMW\Manager\Lang\LangManager; ?>
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -17,7 +19,7 @@ use CMW\Manager\Lang\LangManager; ?>
         <!-- Sidebar user panel -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="<?= getenv("PATH_SUBFOLDER") ?>admin/resources/images/identity/logo_compact.png"
+                <img src="<?= getenv('PATH_SUBFOLDER') ?>public/uploads/users/<?= $userAdmin->getUserPicture()->getImageName() ?>"
                      class="elevation-2" alt="<?= LangManager::translate("core.alt.logo", lineBreak: true) ?>">
             </div>
             <div class="info">
