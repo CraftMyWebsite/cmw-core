@@ -2,6 +2,8 @@
 .env
 .idea
 
+app/package/*/.idea/
+
 #Exclude log files except the .gitignore
 /app/storage/logs/*
 !/app/storage/logs/.gitkeep
@@ -32,3 +34,5 @@
 
 
 
+/app/package/minecraft/.idea/
+/app/package/minecraft/.idea/
