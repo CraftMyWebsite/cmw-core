@@ -2,7 +2,7 @@
 .env
 .idea
 
-app/package/*/.idea/
+/app/package/*/.idea/
 
 #Exclude log files except the .gitignore
 /app/storage/logs/*
@@ -31,8 +31,3 @@ app/package/*/.idea/
 # Exclude all uploads folders and files except the default profile image
 !/public/uploads/users/default/defaultImage.jpg
 /public/uploads/*
-
-
-
-/app/package/minecraft/.idea/
-/app/package/minecraft/.idea/
