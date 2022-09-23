@@ -1,9 +1,9 @@
 <?php
 
-use CMW\Entity\Permissions\PermissionEntity;
-use CMW\Entity\Roles\RoleEntity;
-use CMW\Model\Permissions\PermissionsModel;
-use CMW\Model\Roles\RolesModel;
+use CMW\Entity\USers\PermissionEntity;
+use CMW\Entity\Users\RoleEntity;
+use CMW\Model\USers\PermissionsModel;
+use CMW\Model\Users\RolesModel;
 
 function generateCheckBox(PermissionEntity $permission, string $codeValue, bool $checked = false): string
 {
@@ -23,7 +23,7 @@ function generateCheckBox(PermissionEntity $permission, string $codeValue, bool 
 }
 
 /**
- * @param \CMW\Entity\Permissions\PermissionEntity[] $permissionList
+ * @param \CMW\Entity\Users\PermissionEntity[] $permissionList
  */
 function showPermission(PermissionsModel $permissionModel, array $permissionList, ?RolesModel $rolesModel = null, ?RoleEntity $roleEntity = null): void
 {

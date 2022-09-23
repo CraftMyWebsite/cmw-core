@@ -1,11 +1,15 @@
 <?php
 
-/**@var \CMW\Controller\Permissions\PermissionsController $permissionController */
-/**@var \CMW\Model\Permissions\PermissionsModel $permissionModel */
-/** @var \CMW\Entity\Roles\RoleEntity $role */
-/** @var \CMW\Model\Roles\RolesModel $roleModel */
+/**@var PermissionsController $permissionController */
+/**@var PermissionsModel $permissionModel */
+/** @var RoleEntity $role */
+/** @var RolesModel $roleModel */
 
+use CMW\Controller\Users\PermissionsController;
+use CMW\Entity\Users\RoleEntity;
 use CMW\Manager\Lang\LangManager;
+use CMW\Model\Users\PermissionsModel;
+use CMW\Model\Users\RolesModel;
 
 $title = LangManager::translate("users.role.edit_title");
 $description = LangManager::translate("users.role.edit_desc");
@@ -41,7 +45,7 @@ $description = LangManager::translate("users.role.edit_desc");
                                    value="<?= $role->getWeight() ?>" required>
 
                             <!-- PERMISSIONS -->
-                            <h3 class="mt-4"><?= LangManager::translate("users.role.permission_list") ?></h3>
+                            <h3 class="mt-4"><?= LangManager::translate("users.role.permissions_list") ?></h3>
                             <hr>
                             <div class="container-fluid">
                                 <div class="row justify-content-center">

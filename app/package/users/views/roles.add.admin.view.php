@@ -1,10 +1,12 @@
 <?php
 
-/**@var \CMW\Controller\Permissions\PermissionsController $permissionController */
+/**@var PermissionsController $permissionController */
 
-/**@var \CMW\Model\Permissions\PermissionsModel $permissionModel */
+/**@var PermissionsModel $permissionModel */
 
+use CMW\Controller\Users\PermissionsController;
 use CMW\Manager\Lang\LangManager;
+use CMW\Model\Users\PermissionsModel;
 
 $title = LangManager::translate("users.role.add_title");
 $description = LangManager::translate("users.role.add_desc");
@@ -41,7 +43,7 @@ $description = LangManager::translate("users.role.add_desc");
                                    required>
 
                             <!-- PERMISSIONS -->
-                            <h3 class="mt-4"><?= LangManager::translate("users.role.permission_list") ?></h3>
+                            <h3 class="mt-4"><?= LangManager::translate("users.role.permissions_list") ?></h3>
                             <hr>
                             <div class="container-fluid">
                                 <div class="row justify-content-center">

@@ -55,6 +55,10 @@ class RolesController extends CoreController
         $permissionController = new PermissionsController();
         $permissionModel = new PermissionsModel();
 
+        //Try to improve that ?
+        require_once (getenv("DIR") . "app/package/users/functions/loadPermissions.php");
+
+
         View::createAdminView("users", "roles.add")->addVariableList(array(
             "permissionController" => $permissionController,
             "permissionModel" => $permissionModel
@@ -90,6 +94,8 @@ class RolesController extends CoreController
         $permissionController = new PermissionsController();
         $permissionModel = new PermissionsModel();
 
+        //Try to improve that ?
+        require_once (getenv("DIR") . "app/package/users/functions/loadPermissions.php");
 
         View::createAdminView("users", "roles.edit")->addVariableList(array(
             "permissionController" => $permissionController,
@@ -105,8 +111,8 @@ class RolesController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
-        $roleName = filter_input(INPUT_POST, "name", FILTER_SANITIZE_STRING);
-        $roleDescription = filter_input(INPUT_POST, "description", FILTER_SANITIZE_STRING);
+        $roleName = filter_input(INPUT_POST, "name");
+        $roleDescription = filter_input(INPUT_POST, "description");
         $permList = $_POST['perms'];
         $roleWeight = filter_input(INPUT_POST, "weight", FILTER_SANITIZE_NUMBER_INT);
 
