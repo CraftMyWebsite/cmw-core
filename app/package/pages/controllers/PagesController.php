@@ -149,9 +149,9 @@ class PagesController extends CoreController
         $this->pagesModel->deletePage($id);
 
         //Todo try to remove that
-        $_SESSION['toaster'][0]['title'] = CORE_TOASTER_TITLE;
+        $_SESSION['toaster'][0]['title'] = "CORE_TOASTER_TITLE";
         $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = CORE_TOASTER_DELETE_SUCCESS;
+        $_SESSION['toaster'][0]['body'] = "CORE_TOASTER_DELETE_SUCCESS";
 
         header("location: ../list");
     }
