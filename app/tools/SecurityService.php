@@ -4,6 +4,7 @@ namespace CMW\Utils\SecurityService;
 
 
 use Error;
+use Exception;
 
 class SecurityService
 {
@@ -62,7 +63,11 @@ class SecurityService
     public function getCSRFToken()
     {
         if (empty($this->session[$this->sessionTokenLabel])) {
-            $this->session[$this->sessionTokenLabel] = bin2hex(openssl_random_pseudo_bytes(32));
+            try {
+                $this->session[$this->sessionTokenLabel] = bin2hex(random_bytes(32));
+            } catch (Exception $e) {
+                $this->session[$this->sessionTokenLabel] = bin2hex(microtime() + $e);
+            }
         }
 
         if ($this->hmac_ip !== false) {
@@ -86,19 +91,17 @@ class SecurityService
     public function validate(): bool
     {
         $currentUrl = $this->getCurrentRequestUrl();
-        if (!in_array($currentUrl, $this->excludeUrl)) {
-            if (!empty($this->post)) {
-                $isAntiCSRF = $this->validateRequest();
-                if (!$isAntiCSRF) {
-                    // CSRF attack attempt
-                    // CSRF attempt is detected. Need not reveal that information
-                    // to the attacker, so just failing without info.
-                    // Error code 1837 stands for CSRF attempt and this is for
-                    // our identification purposes.
-                    return false;
-                }
-                return true;
+        if (!empty($this->post) && !in_array($currentUrl, $this->excludeUrl, true)) {
+            $isAntiCSRF = $this->validateRequest();
+            if (!$isAntiCSRF) {
+                // CSRF attack attempt
+                // CSRF attempt is detected. Need not reveal that information
+                // to the attacker, so just failing without info.
+                // Error code 1837 stands for CSRF attempt and this is for
+                // our identification purposes.
+                return false;
             }
+            return true;
         }
         return false;
     }
@@ -144,10 +147,8 @@ class SecurityService
     {
         $isValid = false;
         $currentUrl = $this->getCurrentRequestUrl();
-        if (!in_array($currentUrl, $this->excludeUrl)) {
-            if (!empty($this->post)) {
-                $isValid = $this->validateRequest();
-            }
+        if (!empty($this->post) && !in_array($currentUrl, $this->excludeUrl, true)) {
+            $isValid = $this->validateRequest();
         }
         return $isValid;
     }
