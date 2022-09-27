@@ -1,4 +1,5 @@
 <?php use CMW\Controller\Core\CoreController;
+use CMW\Model\Core\ThemeModel;
 use CMW\Utils\View;
 
 /* @var \CMW\Controller\CoreController $core */
@@ -21,6 +22,11 @@ use CMW\Utils\View;
     View::loadInclude($includes, "beforeScript", "styles");
     ?>
 </head>
+<style>
+    * {
+        background-color: <?= ThemeModel::fetchConfigValue('backgroundColor') ?> !important;
+    }
+</style>
 <body>
 <?= $core->cmwWarn() ?>
 
