@@ -133,9 +133,29 @@ class Utils
         echo '</script>';
     }
 
+    /***
+     * @param mixed $arr
+     * @desc Return a pretty array
+     */
+    public static function debugR(mixed $arr): void
+    {
+        echo "<pre>";
+        echo print_r($arr);
+        echo "</pre>";
+    }
+
     public static function getHttpProtocol(): string
     {
         return in_array($_SERVER['HTTPS'] ?? '', ['on', 1], true) ||
         ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https' ? 'https' : 'http';
+    }
+
+    /**
+     * @return string
+     * @desc Return the client ip, for local users -> 127.0.0.1
+     */
+    public static function getClientIp(): string
+    {
+        return $_SERVER['HTTP_CLIENT_IP'] ?? ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR']);
     }
 }
