@@ -1,3 +1,8 @@
+<?php
+
+use CMW\Utils\Images;
+
+?>
 <head>
     <meta charset="utf-8" />
     <title>CraftMyWebsite | <?=/** @var string $title */ $title ?></title>
@@ -6,7 +11,7 @@
     <meta name="robots" content="NOINDEX, NOFOLLOW">
     <meta name="description" content="<?=/** @var string $description */  htmlspecialchars_decode($description, ENT_QUOTES) ?>">
     
-    <link rel="icon" type="image/png" href="<?=getenv("PATH_SUBFOLDER")?>admin/resources/images/identity/logo_compact.png">
+    <?= Images::getFaviconInclude() ?>
     
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">

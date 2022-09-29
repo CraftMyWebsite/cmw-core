@@ -15,6 +15,7 @@ class Images
         'image/gif' => 'gif',
         'image/webp' => 'webp',
         'image/x-icon' => 'ico',
+        'image/x-tga' => 'ico',
         'image/svg+xml' => 'svg'
     ];
 
@@ -41,12 +42,14 @@ class Images
     /**
      * @param array $file
      * @param string $dirName
+     * @param bool $keepName
+     * @param string $customName
      * @return string fileName
      *
+     * @throws \JsonException
      * @desc Upload image on the uploads' folder. File accepted [png, jpeg, jpg, gif, webp, ico, svg].
-     * @throws Exception
      */
-    public static function upload(array $file, string $dirName = ""): string
+    public static function upload(array $file, string $dirName = "", bool $keepName = false, string $customName = ""): string
     {
 
         if (is_uploaded_file($file['tmp_name']) === false) //TODO implements error managements
@@ -95,7 +98,15 @@ class Images
             return "ERROR_FILE_NOT_ALLOWED";
         }
 
-        $fileName = Utils::genId(random_int(15, 35));
+        //If $keepName is false, we generate a random name
+        if ($keepName) {
+            $fileName = $file['name'];
+        } elseif (!empty($customName)) {
+            $fileName = $customName;
+        } else {
+            $fileName = Utils::genId(random_int(15, 35));
+        }
+
         $extension = self::$allowedTypes[$fileType];
 
         self::$returnName = $fileName . "." . $extension;
@@ -218,4 +229,16 @@ class Images
 
         unlink($path . $imageName);
     }
+
+    /**
+     * @return string
+     * @desc Return the favicon include
+     */
+    public static function getFaviconInclude(): string
+    {
+        $path = Utils::getEnv()->getValue("PATH_SUBFOLDER") . 'public/uploads/favicon/favicon.ico';
+
+        return '<link rel="icon" type="image/x-icon" href="' . $path . '">';
+    }
+
 }

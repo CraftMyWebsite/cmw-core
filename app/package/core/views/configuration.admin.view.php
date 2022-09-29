@@ -9,7 +9,7 @@ $description = LangManager::translate("core.config.desc"); ?>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <form action="" method="post">
+                    <form action="" method="post" enctype="multipart/form-data">
                         <div class="card card-primary">
                             <div class="card-header">
                                 <h3 class="card-title"><?= LangManager::translate("core.config.title") ?> :</h3>
@@ -51,6 +51,17 @@ $description = LangManager::translate("core.config.desc"); ?>
                                         </option>
                                         <?php endforeach; ?>
                                     </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="favicon" accept="image/x-icon"
+                                               name="favicon">
+                                        <label class="custom-file-label" for="favicon">
+                                            <?= LangManager::translate("core.config.favicon") ?>
+                                        </label>
+                                    </div>
+                                    <small><?= LangManager::translate("core.config.favicon_tips") ?></small>
                                 </div>
 
                                 <?php //Minecraft config section
