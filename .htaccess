@@ -57,3 +57,7 @@ Deny from all
 
     ExpiresByType text/css "access plus 1 month"
 </IfModule>
+
+<filesMatch ".(ico|jpg|jpeg|png|gif|js|css|webp|svg)$">
+    Header set Cache-Control "max-age=84600, public"
+</filesMatch>

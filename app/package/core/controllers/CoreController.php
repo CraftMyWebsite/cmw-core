@@ -6,6 +6,7 @@ use CMW\Controller\Users\UsersController;
 use CMW\Model\Core\CoreModel;
 use CMW\Router\Link;
 use CMW\Router\RouterException;
+use CMW\Utils\Images;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
@@ -65,17 +66,22 @@ class CoreController
             CoreModel::updateOption($option_name, $option_value);
         endforeach;
 
+        //update favicon
+
+        echo Images::upload($_FILES['favicon'], "favicon", false, "favicon");
 
         //Todo review that
         //Options with nullables options (checkbox ...)
+        /*
         if (empty($_POST['minecraft_register_premium']) && getenv("GAME") === "minecraft") {
             CoreModel::updateOption("minecraft_register_premium", "false");
         }
+        */
 
         //TODO Remove that
-        $_SESSION['toaster'][0]['title'] = CORE_TOASTER_TITLE;
+        $_SESSION['toaster'][0]['title'] = "CORE_TOASTER_TITLE";
         $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = CORE_TOASTER_CONFIG_EDIT_SUCCESS;
+        $_SESSION['toaster'][0]['body'] = "CORE_TOASTER_CONFIG_EDIT_SUCCESS";
 
         header("location: configuration");
     }

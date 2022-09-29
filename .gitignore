@@ -30,4 +30,5 @@
 
 # Exclude all uploads folders and files except the default profile image
 !/public/uploads/users/default/defaultImage.jpg
+!/public/uploads/favicon/favicon.ico
 /public/uploads/*

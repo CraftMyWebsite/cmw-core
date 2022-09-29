@@ -1,5 +1,6 @@
 <?php use CMW\Controller\Core\CoreController;
 use CMW\Model\Core\ThemeModel;
+use CMW\Utils\Images;
 use CMW\Utils\View;
 
 /* @var \CMW\Controller\CoreController $core */
@@ -18,6 +19,9 @@ use CMW\Utils\View;
     <!-- Theme style -->
     <link rel="stylesheet" type="text/css"
           href="<?= getenv("PATH_SUBFOLDER") ?>public/themes/Sampler/assets/css/main.css">
+
+    <?= Images::getFaviconInclude() ?>
+
     <?php
     View::loadInclude($includes, "beforeScript", "styles");
     ?>

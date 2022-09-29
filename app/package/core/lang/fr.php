@@ -16,6 +16,8 @@ return [
     "config" => [
         "title" => "Configuration",
         "desc" => "Configurez votre site CMW !",
+        "favicon" => "Modifiez le favicon de votre site",
+        "favicon_tips" => 'CraftMyWebsite accepte uniquement les images <a href="https://www.icoconverter.com" target="_blank">.ico</a> pour des soucis de performances.'
     ],
     "lang" => [
         "title" => "Langues",
