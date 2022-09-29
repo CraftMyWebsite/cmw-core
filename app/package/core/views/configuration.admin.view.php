@@ -63,37 +63,6 @@ $description = LangManager::translate("core.config.desc"); ?>
                                     </div>
                                     <small><?= LangManager::translate("core.config.favicon_tips") ?></small>
                                 </div>
-
-                                <?php //Minecraft config section
-                                /*
-                                 * //TODO USE GAMEFABRIC
-                                if (getenv("GAME") === "minecraft"):?>
-                                    <div class="form-group">
-                                        <label for="minecraft_ip"><?= LangManager::translate("core.minecraft.ip", lineBreak: true) ?></label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i
-                                                            class="fas fa-network-wired"></i></span>
-                                            </div>
-                                            <input type="text" name="minecraft_ip" id="minecraft_ip"
-                                                   class="form-control"
-                                                   value="<?= CoreModel::getOptionValue("minecraft_ip") ?>"
-                                                   placeholder="<?= LangManager::translate("core.minecraft.ip", lineBreak: true) ?>" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
-                                            <input type="checkbox" class="custom-control-input"
-                                                   name="minecraft_register_premium" id="minecraft_register_premium"
-                                                   value="true" <?= CoreModel::getOptionValue("minecraft_register_premium") === "true" ? "checked" : "" ?>>
-                                            <label class="custom-control-label" for="minecraft_register_premium">
-                                                <?= LangManager::translate("core.minecraft.register", lineBreak: true) ?>
-                                            </label>
-                                        </div>
-                                    </div>
-                                <?php endif; */?>
-
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
