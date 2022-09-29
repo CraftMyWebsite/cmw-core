@@ -70,14 +70,6 @@ class CoreController
 
         echo Images::upload($_FILES['favicon'], "favicon", false, "favicon");
 
-        //Todo review that
-        //Options with nullables options (checkbox ...)
-        /*
-        if (empty($_POST['minecraft_register_premium']) && getenv("GAME") === "minecraft") {
-            CoreModel::updateOption("minecraft_register_premium", "false");
-        }
-        */
-
         //TODO Remove that
         $_SESSION['toaster'][0]['title'] = "CORE_TOASTER_TITLE";
         $_SESSION['toaster'][0]['type'] = "bg-success";
