@@ -99,6 +99,8 @@ ALTER TABLE `cmw_roles`
 ALTER TABLE `cmw_roles`
     MODIFY `role_id` INT(11) NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `cmw_mail_config_smtp`
+    ADD `mail_config_id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`mail_config_id`);
 
 ALTER TABLE `cmw_users`
     ADD PRIMARY KEY (`user_id`),

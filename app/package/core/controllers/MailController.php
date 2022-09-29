@@ -13,6 +13,7 @@ use PHPMailer\PHPMailer\SMTP;
 
 require_once(getenv("DIR") . 'app/package/core/vendors/PHPMailer/PHPMailer.php');
 require_once(getenv("DIR") . 'app/package/core/vendors/PHPMailer/SMTP.php');
+require_once(getenv("DIR") . 'app/package/core/vendors/PHPMailer/Exception.php');
 
 /**
  * Class: @MailController
@@ -131,7 +132,7 @@ class MailController extends CoreController
 
         $this->mailModel->create($mail, $mailReply, $addressSMTP, $user, $password, $port, $protocol, $footer, (is_null($enableSMTP) ? 0 : 1));
 
-        header("configuration");
+        header("Location: configuration");
     }
 
 
@@ -141,7 +142,7 @@ class MailController extends CoreController
         $receiver = filter_input(INPUT_POST,"receiver");
 
         $this->sendMail($receiver, "Test CraftMyWebsite - MAILS", "<p>Hello World !</p>");
-        header("configuration");
+        header("Location: configuration");
 
         //TODO ADD TOASTERS NOTIFICATIONS
     }
