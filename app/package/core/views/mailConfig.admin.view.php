@@ -159,7 +159,7 @@ $description = LangManager::translate("core.mail.config.description");
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="/cmw-admin/mail/test" method="post">
+            <form action="test" method="post">
                 <div class="modal-body">
                     <div class="form-group">
                         <p>
