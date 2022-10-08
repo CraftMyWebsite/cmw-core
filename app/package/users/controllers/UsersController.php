@@ -346,9 +346,9 @@ class UsersController extends CoreController
             header('Location: inscription');
         } else {
 
-            [$mail, $password] = Utils::filterInput("register_email", "register_password");
+            [$mail, $pseudo, $password] = Utils::filterInput("register_email", "register_pseudo", "register_password");
 
-            $userEntity = $this->userModel->create($mail, "", "", "", array("2"));
+            $userEntity = $this->userModel->create($mail, $pseudo, "", "", array("2"));
 
             $this->userModel->updatePass($userEntity?->getId(), password_hash($password, PASSWORD_BCRYPT));
 

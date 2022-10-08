@@ -23,6 +23,16 @@ $description = "Description de votre page"; ?>
                     </div>
                 </div>
                 <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                        <input name="register_pseudo" type="text" class="form-control" placeholder="<?= LangManager::translate("users.users.pseudo") ?>">
+                    </div>
+                </div>
+                <div class="form-group">
                     <div class="input-group mb-3" id="showHidePassword">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-lock"></i></span>
