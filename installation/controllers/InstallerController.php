@@ -113,7 +113,7 @@ class InstallerController
 
         $subFolder = filter_input(INPUT_POST, "install_folder");
         $devMode = isset($_POST['dev_mode']);
-        $timezone = date_default_timezone_get();
+        $timezone = date_default_timezone_get(); //TODO GET BROWSER TIMEZONE
 
         if (!InstallerModel::tryDatabaseConnection($host, $db, $username, $password)) {
             echo '-2';

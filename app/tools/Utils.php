@@ -158,4 +158,13 @@ class Utils
     {
         return $_SERVER['HTTP_CLIENT_IP'] ?? ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR']);
     }
+
+    /**
+     * @return string
+     * @desc Get the API URL
+     */
+    public static function getApi(): string
+    {
+        return self::getEnv()->getValue("APIURL");
+    }
 }

@@ -3,7 +3,7 @@ use CMW\Model\Core\ThemeModel;
 use CMW\Utils\Images;
 use CMW\Utils\View;
 
-/* @var \CMW\Controller\CoreController $core */
+/* @var \CMW\Controller\Core\CoreController $core */
 /* @var string $title */
 /* @var string $description */
 /* @var array $includes */

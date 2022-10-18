@@ -6,6 +6,7 @@ use CMW\Entity\Core\ThemeEntity;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\ThemeModel;
 use CMW\Router\Link;
+use CMW\Utils\Utils;
 use CMW\Utils\View;
 use Error;
 use JsonException;
@@ -133,7 +134,7 @@ class ThemeController extends CoreController
         $installedThemes = self::getInstalledThemes();
 
         try {
-            $themesList = json_decode(file_get_contents("https://devcmw.w3b.websr.fr/API/getThemeList"), false, 512, JSON_THROW_ON_ERROR); // TODO USE REEL API
+            $themesList = json_decode(file_get_contents(Utils::getApi() . "/getThemeList"), false, 512, JSON_THROW_ON_ERROR);
             View::createAdminView("core", "themeConfiguration")
                 ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes, "themesList" => $themesList])
                 ->view();
@@ -156,13 +157,13 @@ class ThemeController extends CoreController
     public function adminThemeInstallation(int $id): void
     {
         try {
-            $theme = json_decode(file_get_contents("https://devcmw.w3b.websr.fr/API/getThemeById=" . $id), false, 512, JSON_THROW_ON_ERROR); //TODO USE REEL API
+            $theme = json_decode(file_get_contents(Utils::getApi() . "/getThemeById=" . $id), false, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
         }
 
 
         //VARS
-        $url = "https://devcmw.w3b.websr.fr/public/uploads/market/files/" . $theme->file;
+        $url = "https://devcmw.w3b.websr.fr/public/uploads/market/files/" . $theme->file; // TODO GET REAL LINK
         $outFileName = "public/uploads/" . $theme->file;
 
         //Download & store File
