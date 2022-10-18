@@ -119,6 +119,7 @@ return [
     "btn" => [
         "save" => "Save",
         "delete" => "Delete",
+        "delete_forever" => "Delete forever",
         "close" => "Close",
         "send" => "Send"
     ]
