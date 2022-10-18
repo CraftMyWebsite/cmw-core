@@ -26,7 +26,7 @@ class LangManager
         while (count($sentenceElement) !== 0) {
             $value = array_shift($sentenceElement);
 
-            if (!array_key_exists($value, $translationList)) {
+            if (!is_array($translationList) || !array_key_exists($value, $translationList)) {
                 return null;
             }
 
