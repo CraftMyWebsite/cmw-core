@@ -1,9 +1,15 @@
-<?php include_once("includes/head.inc.php");
+<?php use CMW\Utils\View;
+
+include_once("includes/head.inc.php");
 include_once("includes/header.inc.php");
 
-/* @var string $content */
+
+/* INCLUDE SCRIPTS / STYLES*/
+/* @var $includes */
+View::loadInclude($includes, "beforeScript");
+View::loadInclude($includes, "styles");
 ?>
 
-<?= $content ?>
+<?= /* @var string $content */ $content ?>
 
-<?php include_once("includes/footer.inc.php"); ?>
+<?php View::loadInclude($includes, "afterScript"); include_once("includes/footer.inc.php"); ?>
