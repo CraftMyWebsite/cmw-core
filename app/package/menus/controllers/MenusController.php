@@ -44,9 +44,8 @@ class MenusController extends CoreController
     public function adminMenus(): void
     {
         $view = View::createAdminView('menus', 'menus')
-            ->addScriptBefore("admin/resources/vendors/dragula/dragula.js",
-                "app/package/menus/views/assets/js/main.js")
-            ->addStyle("admin/resources/vendors/dragula/dragula.css");
+            ->addScriptBefore("app/package/menus/views/assets/js/sortable.min.js")
+            ->addScriptAfter("app/package/menus/views/assets/js/main.js");
 
         $view->view();
     }
