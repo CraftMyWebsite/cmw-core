@@ -1,11 +1,6 @@
 <?php
 
 return [
-    "welcome" => "Bienvenue !",
-    "eat" => [
-        "pasta" => "Mangeons des pâtes !",
-        "potatoes" => "Mangeons des patates %name% !",
-    ],
     "alt" => [
         "logo" => "Logo CMW",
     ],
@@ -119,7 +114,9 @@ return [
     "btn" => [
         "save" => "Sauvegarder",
         "delete" => "Supprimer",
+        "delete_forever" => "Supprimer définitivement",
         "close" => "Fermer",
         "send" => "Envoyer"
-    ]
+    ],
+    "months" => ["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Decembre"],
 ];
