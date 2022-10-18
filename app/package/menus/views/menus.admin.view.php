@@ -33,83 +33,34 @@ $description = LangManager::translate("menus.menus.desc");
                         <div class="card-header">
                             <h3 class="card-title">Menu principal</h3>
                         </div>
-                        <div class="card-body">
-                            <style>
-                                .menu-drag {
-                                    margin: 0 auto;
-                                }
 
-                                .menu-drag > ul {
-                                    padding: 0;
-                                }
-
-                                .menu-drag > ul > li {
-                                    padding-left: 0;
-                                }
-
-                                .menu-drag ul {
-                                    padding: 0 0 0 20px;
-                                    margin: 0;
-                                    min-height: 10px;
-                                }
-
-                                .menu-drag li > span {
-                                    cursor: move;
-                                    background: #fff;
-                                    display: block;
-                                    padding: 10px 15px;
-                                    border-radius: 3px;
-                                    box-shadow: 0 2px 6px rgba(170, 185, 200, 0.4);
-                                }
-
-                                .menu-drag li:first-child {
-                                    padding-top: 10px;
-                                }
-
-                                .menu-drag li {
-                                    list-style: none;
-                                }
-                            </style>
-
-                            <div class="menu-drag">
-                                <ul>
-                                    <li data-id="1">
-                                        <span>Item 1</span>
-                                        <ul>
-                                            <li data-id="4">
-                                                <span>Item 4</span>
-                                                <ul>
-                                                    <li data-id="7">
-                                                        <span>Item 7</span>
-                                                        <ul></ul>
-                                                    </li>
-                                                    <li data-id="8">
-                                                        <span>Item 8</span>
-                                                        <ul></ul>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li data-id="5">
-                                                <span>Item 5</span>
-                                                <ul></ul>
-                                            </li>
-                                            <li data-id="6">
-                                                <span>Item 6</span>
-                                                <ul></ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li data-id="2">
-                                        <span>Item 2</span>
-                                        <ul></ul>
-                                    </li>
-                                    <li data-id="3">
-                                        <span>Item 3</span>
-                                        <ul></ul>
-                                    </li>
-                                </ul>
+                        <div id="list1" class="list">
+                            <div>Item 1.1
+                                <div class="list n1">
+                                    <div>Item 2.1</div>
+                                    <div>Item 2.2</div>
+                                </div>
                             </div>
+                            <div>Item 1.2
+                                <div class="list n1">
+                                    <div>Item 2.1</div>
+                                    <div>Item 2.2</div>
+                                    <div>Item 2.3</div>
+                                </div>
+                            </div>
+                            <div>Item 1.3</div>
+                        </div>
 
+                        <style>
+                            .n1 > div {
+                                background-color: lightblue;
+                            }
+
+                            .list {
+                                padding: 50px;
+                            }
+
+                        </style>
 
                         </div>
                     </div>
