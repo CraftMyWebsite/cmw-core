@@ -11,12 +11,22 @@ class Link
     public const GET = "get";
     public const POST = "post";
 
+    /**
+     * @param string $path
+     * @param string $method
+     * @param array $variables
+     * @param string|null $scope
+     * @param int $weight
+     * @param string|null $name
+     * @param bool $secure
+     */
     public function __construct(private readonly string                                                $path,
                                 #[ExpectedValues(flagsFromClass: Link::class)] private readonly string $method,
                                 private readonly array                                                 $variables = array(),
                                 private readonly ?string                                               $scope = null,
                                 private readonly int                                                   $weight = 1,
-                                private ?string                                                        $name = null)
+                                private ?string                                                        $name = null,
+                                private readonly bool                                                  $secure = true)
     {
     }
 
@@ -71,6 +81,14 @@ class Link
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSecure(): bool
+    {
+        return $this->secure;
     }
 
 }
