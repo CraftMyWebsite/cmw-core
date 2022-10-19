@@ -483,9 +483,9 @@ class UsersModel extends DatabaseManager
     private function generatePassword(): string
     {
         try {
-            return bin2hex(Utils::genId(random_int(15, 50)));
+            return bin2hex(Utils::genId(random_int(7, 12)));
         } catch (Exception $e) {
-            return bin2hex(Utils::genId(50));
+            return bin2hex(Utils::genId(10));
         }
 
     }

@@ -1,17 +1,18 @@
 <?php
 
-namespace CMW\Utils\SecurityService;
+namespace CMW\Utils;
 
 
+use CMW\Model\Users\UsersModel;
 use Error;
 use Exception;
 
 class SecurityService
 {
 
-    private string $formTokenLabel = 'eg-csrf-token-label';
+    private string $formTokenLabel = 'security-csrf-token';
 
-    private string $sessionTokenLabel = 'EG_CSRF_TOKEN_SESS_IDX';
+    private string $sessionTokenLabel;
 
     private array $post = [];
 
@@ -29,6 +30,8 @@ class SecurityService
 
     public function __construct($excludeUrl = null, &$post = null, &$session = null, &$server = null)
     {
+        $this->sessionTokenLabel = 'CSRF_TOKEN_SESS_ID_' . UsersModel::getCurrentUser()?->getId();
+
         if (!is_null($excludeUrl)) {
             $this->excludeUrl = $excludeUrl;
         }
@@ -57,7 +60,7 @@ class SecurityService
     {
         $csrfToken = $this->getCSRFToken();
 
-        echo "<!--\n--><input type=\"hidden\"" . " name=\"" . $this->xssafe($this->formTokenLabel) . "\"" . " value=\"" . $this->xssafe($csrfToken) . "\"" . " />";
+        echo "<input type=\"hidden\"" . " name=\"" . $this->xssafe($this->formTokenLabel) . "\"" . " value=\"" . $this->xssafe($csrfToken) . "\"" . " />";
     }
 
     public function getCSRFToken()
@@ -126,10 +129,6 @@ class SecurityService
             // Let's pull the POST data
             $token = $this->post[$this->formTokenLabel];
         } else {
-            return false;
-        }
-
-        if (is_string($token)) {
             return false;
         }
 

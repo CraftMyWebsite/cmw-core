@@ -7,6 +7,7 @@
 use CMW\Controller\Users\PermissionsController;
 use CMW\Manager\Lang\LangManager;
 use CMW\Model\Users\PermissionsModel;
+use CMW\Utils\SecurityService;
 
 $title = LangManager::translate("users.role.add_title");
 $description = LangManager::translate("users.role.add_desc");
@@ -18,6 +19,7 @@ $description = LangManager::translate("users.role.add_desc");
         <div class="row">
             <div class="col-12">
                 <form action="" method="post">
+                    <?php (new SecurityService())->insertHiddenToken() ?>
                     <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title"><?= LangManager::translate("users.role.add") ?> :</h3>

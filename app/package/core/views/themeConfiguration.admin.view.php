@@ -1,6 +1,7 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
+use CMW\Utils\SecurityService;
 
 /* @var $currentTheme \CMW\Entity\Core\ThemeEntity */
 /* @var $installedThemes \CMW\Entity\Core\ThemeEntity[] */
@@ -14,6 +15,7 @@ $description = LangManager::translate("core.theme.config.description"); ?>
         <div class="row">
             <div class="col-12">
                 <form action="" method="post">
+                    <?php (new SecurityService())->insertHiddenToken() ?>
                     <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title"><?= LangManager::translate("core.dashboard.title") ?>:</h3>
