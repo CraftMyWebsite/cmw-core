@@ -2,6 +2,8 @@
 
 /* @var \CMW\Entity\Users\UserEntity $user */
 
+use CMW\Utils\SecurityService;
+
 $title = "Profil - " . $user->getUsername();
 $description = "Profil de " . $user->getUsername(); ?>
 
@@ -15,6 +17,7 @@ $description = "Profil de " . $user->getUsername(); ?>
             <p>Upload ton image de profil ici:</p>
 
             <form action="" method="post" enctype="multipart/form-data">
+                <?php (new SecurityService())->insertHiddenToken() ?>
                 <input type="file" id="pictureProfile" name="pictureProfile" accept=".png, .jpg, .jpeg, .webp, .gif"
                        required>
 
@@ -28,6 +31,7 @@ $description = "Profil de " . $user->getUsername(); ?>
             <?php endif; ?>
 
             <form action="profile/update" method="post">
+                <?php (new SecurityService())->insertHiddenToken() ?>
                 <label for="email"> Adresse e-mail</label>
                 <input type="email" name="email" id="email" value="<?= $user->getMail() ?>" required>
                 <br>
