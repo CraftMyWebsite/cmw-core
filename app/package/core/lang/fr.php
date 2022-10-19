@@ -108,6 +108,10 @@ return [
             ]
         ]
     ],
+    "updates" => [
+        "title" => "Mettez à jour votre site",
+        "description" => "Mettez à jour votre site CraftMyWebsite"
+    ],
     "footer" => [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " Tous droits réservés.",
         "right" => "Merci d'utiliser <a href='https://craftmywebsite.com/'>CraftMyWebsite</a>.",
