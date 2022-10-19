@@ -111,6 +111,10 @@ return [
                 ]
             ]
         ],
+        "updates" => [
+            "title" => "Update your website",
+            "description" => "Update your CraftMyWebsite website"
+        ],
     ],
     "footer" => [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " All right reserved.",
