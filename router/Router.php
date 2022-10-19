@@ -3,6 +3,7 @@
 namespace CMW\Router;
 
 use Closure;
+use CMW\Utils\SecurityService;
 use ReflectionMethod;
 
 /**
@@ -169,7 +170,15 @@ class Router
     {
         return $this->post($link->getPath(), function (...$values) use ($method) {
 
-            $this->callRegisteredRoute($method, ...$values);
+            //Check security before send post request
+            $security = new SecurityService();
+
+            if(!empty($security->validate())){
+                $security->unsetToken();  //Remove the token from the session...
+                $this->callRegisteredRoute($method, ...$values);
+            } else {
+                throw new RouterException('Wrong token, try again sir.', 403);
+            }
 
         }, name: $link->getName(), weight: $link->getWeight());
     }
