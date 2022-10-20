@@ -46,8 +46,10 @@ $description = "Description de votre page"; ?>
                 </div>
                 <!-- /.col -->
                 <div class="col-12">
-                    <button type="submit" class="btn btn-primary btn-block">S'enregistrer</button>
+                    <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
                 </div>
+
+                <a href="register">Inscription</a>
                 <!-- /.col -->
             </div>
         </form>
