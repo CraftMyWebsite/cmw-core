@@ -153,6 +153,16 @@ class ThemeController extends CoreController
         header("Location: configuration");
     }
 
+    #[Link("/configuration/regenerate", Link::POST, [], "/cmw-admin/theme")]
+    public function adminThemeConfigurationRegeneratePost(): void
+    {
+        $themeName = self::getCurrentTheme()->getName();
+        $this->themeModel->deleteThemeConfig($themeName);
+        $this->installThemeSettings($themeName);
+
+        header("Location: ../configuration");
+    }
+
     #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/theme")]
     public function adminThemeInstallation(int $id): void
     {

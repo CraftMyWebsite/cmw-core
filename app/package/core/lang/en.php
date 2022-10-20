@@ -84,6 +84,7 @@ return [
                 "downloads" => "Downloads",
                 "download" => "Download",
             ],
+            "regen_config" => "Re-generate theme config"
         ],
         "manage" => [
             "title" => "Manage your theme <b>%theme%</b>",

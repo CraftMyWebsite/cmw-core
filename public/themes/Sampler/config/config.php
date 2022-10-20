@@ -2,12 +2,14 @@
 
 use CMW\Manager\Lang\LangManager;
 use CMW\Model\Core\ThemeModel;
+use CMW\Utils\SecurityService;
 
 ?>
 
 <div class="row">
     <div class="col-12">
         <form action="" method="post"> <!-- IMPORTANT, KEEP THE FORM -->
+            <?php (new SecurityService())->insertHiddenToken() ?>
             <div class="card card-primary">
                 <div class="card-body">
 

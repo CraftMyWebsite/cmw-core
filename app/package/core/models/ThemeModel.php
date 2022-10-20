@@ -58,4 +58,12 @@ class ThemeModel extends DatabaseManager
         $req->execute(array("theme_config_name" => $configName, "theme_config_value" => $configValue, "theme" => $theme));
     }
 
+    public function deleteThemeConfig(string $themeName): void
+    {
+        $db = self::getInstance();
+        $req = $db->prepare('DELETE FROM cmw_theme_config WHERE theme_config_theme = :themeName');
+
+        $req->execute(array("themeName" => $themeName));
+    }
+
 }
