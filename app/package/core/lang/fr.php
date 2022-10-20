@@ -79,6 +79,7 @@ return [
               "downloads" => "Nombre de téléchargement",
               "download" => "Télécharger",
           ],
+          "regen_config" => "Re-générer la config du thème"
       ],
       "manage" => [
           "title" => "Gérez votre thème <b>%theme%</b>",
