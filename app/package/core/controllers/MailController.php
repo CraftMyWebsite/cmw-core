@@ -136,7 +136,7 @@ class MailController extends CoreController
     }
 
 
-    #[Link("/test", Link::POST, [], "/cmw-admin/mail")]
+    #[Link("/test", Link::POST, [], "/cmw-admin/mail", secure: true)]
     public function testMailConfigurationPost(): void
     {
         $receiver = filter_input(INPUT_POST,"receiver");

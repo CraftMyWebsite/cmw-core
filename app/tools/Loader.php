@@ -123,6 +123,8 @@ class Loader
 
 
             if (session_status() === PHP_SESSION_NONE) {
+                ini_set('session.gc_maxlifetime', 60480); // 7 days
+                session_set_cookie_params(60480); // 7 days
                 session_start();
             }
 

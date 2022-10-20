@@ -40,7 +40,7 @@ $description = "Profil de " . $user->getUsername(); ?>
                 <br>
                 <label for="password"> Mot de passe</label>
                 <input type="password" name="password" id="password" placeholder="********">
-                <label for="passwordVerif"> Confirmation mot de passe</label>
+                <label style="input-security: revert" for="passwordVerif"> Confirmation mot de passe</label>
                 <input type="password" name="passwordVerif" id="passwordVerif" placeholder="********">
                 <br>
                 <button type="submit">Modifier</button>
