@@ -87,7 +87,7 @@ class InstallerController
         $this->loadView($value);
     }
 
-    #[Link(path: "/submit", method: Link::POST, scope: "/installer")]
+    #[Link(path: "/submit", method: Link::POST, scope: "/installer", secure: false)]
     public function postInstallPage(): void {
         $value = match ($this->getInstallationStep()) {
             1 => "secondInstallPost",

@@ -46,7 +46,7 @@ class UsersController extends CoreController
         return UsersModel::hasPermission(self::getSessionUser(), "core.dashboard");
     }
 
-    private static function hasPermission(string ...$permissions): bool
+    public static function hasPermission(string ...$permissions): bool
     {
         return UsersModel::hasPermission(self::getSessionUser(), ...$permissions);
     }
@@ -280,7 +280,7 @@ class UsersController extends CoreController
 
 
         $view = new View("users", "login");
-        $view->setAdminView()->view();
+        $view->view();
     }
 
     /**
@@ -294,8 +294,8 @@ class UsersController extends CoreController
             die();
         }
 
-        $view = new View("users", "forgotPassword");
-        $view->setAdminView()->view();
+        $view = new View("users", "forgot_password");
+        $view->view();
     }
 
 
@@ -385,7 +385,7 @@ class UsersController extends CoreController
     public function publicProfile(): void
     {
 
-        if (UsersModel::getLoggedUser() == -1) {
+        if (UsersModel::getLoggedUser() === -1) {
             header('Location: ' . getenv('PATH_SUBFOLDER'));
             die();
         }
@@ -460,9 +460,9 @@ class UsersController extends CoreController
                 $this->userModel->updatePass($userId, password_hash($pass, PASSWORD_BCRYPT));
             } else {
                 //Todo Try to edit that
-                $_SESSION['toaster'][1]['title'] = USERS_TOASTER_TITLE_ERROR;
+                $_SESSION['toaster'][1]['title'] = "USERS_TOASTER_TITLE_ERROR";
                 $_SESSION['toaster'][1]['type'] = "bg-danger";
-                $_SESSION['toaster'][1]['body'] = USERS_EDIT_TOASTER_PASS_ERROR;
+                $_SESSION['toaster'][1]['body'] = "USERS_EDIT_TOASTER_PASS_ERROR";
             }
         }
 
