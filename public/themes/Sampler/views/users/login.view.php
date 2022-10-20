@@ -20,7 +20,7 @@ $description = "Description de votre page"; ?>
                             <span class="fas fa-envelope"></span>
                         </div>
                     </div>
-                    <input name="login_email" type="email" class="form-control" placeholder="<?= USERS_MAIL ?>">
+                    <input name="login_email" type="email" class="form-control" placeholder="email">
                 </div>
             </div>
             <div class="form-group">
@@ -29,7 +29,7 @@ $description = "Description de votre page"; ?>
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
                     </div>
                     <input type="password" name="login_password" class="form-control"
-                           placeholder="<?= USERS_PASS ?>">
+                           placeholder="*****">
                     <div class="input-group-append">
                         <a class="input-group-text" href="#"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
                     </div>
@@ -41,13 +41,15 @@ $description = "Description de votre page"; ?>
                 <div class="col-12">
                     <div class="icheck-primary">
                         <input type="checkbox" id="login_keep_connect" name="login_keep_connect">
-                        <label for="login_keep_connect"><?= USERS_LOGIN_REMEMBER ?></label>
+                        <label for="login_keep_connect">Rester connecter</label>
                     </div>
                 </div>
                 <!-- /.col -->
                 <div class="col-12">
-                    <button type="submit" class="btn btn-primary btn-block"><?= USERS_LOGIN_SIGNIN ?></button>
+                    <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
                 </div>
+
+                <a href="register">Inscription</a>
                 <!-- /.col -->
             </div>
         </form>

@@ -11,8 +11,12 @@ $description = "page d'accueil de CraftMyWebsite"; ?>
 <main>
     <?php if (UsersController::isAdminLogged()) : ?>
         <a href="./cmw-admin/">Accès rapide à l'administration</a>
-    <?php else : ?>
+    <?php endif; ?>
+
+    <?php if(UsersModel::getLoggedUser() === -1): ?>
         <a href="./login">Se connecter</a>
+    <?php else: ?>
+        <a href="./register">S'enregistrer</a>
     <?php endif; ?>
     <p>
         Bienvenue sur votre nouveau site
