@@ -27,7 +27,7 @@ class UserEntity
      * @param string $userLastName
      * @param int $userState
      * @param string $userLastConnection
-     * @param \CMW\Entity\Roles\RoleEntity[] $userRoles
+     * @param \CMW\Entity\Users\RoleEntity[] $userRoles
      * @param string $userCreated
      * @param string $userUpdated
      * @param \CMW\Entity\Users\UserPictureEntity|null $userPicture
@@ -104,7 +104,7 @@ class UserEntity
     }
 
     /**
-     * @return \CMW\Entity\Roles\RoleEntity[]
+     * @return \CMW\Entity\Users\RoleEntity[]
      */
     public function getRoles(): array
     {
