@@ -1,15 +1,14 @@
 <?php
 
-namespace CMW\Controller\Menus;
+namespace CMW\Controller\Core;
 
-use CMW\Controller\Core\CoreController;
-use CMW\Model\Menus\MenusModel;
+use CMW\Model\Core\MenusModel;
 use CMW\Router\Link;
 use CMW\Utils\View;
 
 /**
- * Class: @menusController
- * @package Menus
+ * Class: @MenusController
+ * @package Core
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
@@ -34,19 +33,16 @@ class MenusController extends CoreController
 
     public function cmwMenu(): array
     {
-        $coreModel = new MenusModel();
-
-        return $coreModel->fetchMenu();
+        return (new MenusModel())->fetchMenu();
     }
 
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/menus")]
     #[Link("/", Link::GET, [], "/cmw-admin/menus")]
     public function adminMenus(): void
     {
-        $view = View::createAdminView('menus', 'menus')
-            ->addScriptBefore("app/package/menus/views/assets/js/sortable.min.js")
-            ->addScriptAfter("app/package/menus/views/assets/js/main.js");
-
+        $view = View::createAdminView('core', 'menus')
+            ->addScriptBefore("app/package/core/views/resources/js/sortable.min.js")
+            ->addScriptAfter("app/package/core/views/resources/js/menu.js");
         $view->view();
     }
 }

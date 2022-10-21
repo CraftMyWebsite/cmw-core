@@ -4,7 +4,7 @@ namespace CMW\Utils;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\ThemeController;
-use CMW\Controller\Menus\MenusController;
+use CMW\Controller\Core\MenusController;
 use CMW\Controller\Users\UsersController;
 use CMW\Model\Users\UsersModel;
 use CMW\Router\RouterException;

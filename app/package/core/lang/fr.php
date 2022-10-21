@@ -108,6 +108,10 @@ return [
             ]
         ]
     ],
+    "menus" => [
+        "title" => "Menus | Editer",
+        "desc" => "Edition du menu du site",
+    ],
     "updates" => [
         "title" => "Mettez à jour votre site",
         "description" => "Mettez à jour votre site CraftMyWebsite"

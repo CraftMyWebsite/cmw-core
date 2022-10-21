@@ -8,14 +8,14 @@ CREATE TABLE IF NOT EXISTS `cmw_core_options`
 
 CREATE TABLE IF NOT EXISTS `cmw_mail_config_smtp`
 (
-    `mail_config_mail`        VARCHAR(255)  NOT NULL,
-    `mail_config_mail_reply`  VARCHAR(255)  NOT NULL,
+    `mail_config_mail`         VARCHAR(255) NOT NULL,
+    `mail_config_mail_reply`   VARCHAR(255) NOT NULL,
     `mail_config_address_smtp` VARCHAR(255) NOT NULL,
-    `mail_config_user`        VARCHAR(255)  NOT NULL,
-    `mail_config_port`        INT(5)        NOT NULL,
-    `mail_config_protocol`    VARCHAR(50)   NOT NULL,
-    `mail_config_footer`      MEDIUMTEXT    NULL,
-    `mail_config_enable`      TINYINT(1)    NOT NULL DEFAULT 1
+    `mail_config_user`         VARCHAR(255) NOT NULL,
+    `mail_config_port`         INT(5)       NOT NULL,
+    `mail_config_protocol`     VARCHAR(50)  NOT NULL,
+    `mail_config_footer`       MEDIUMTEXT   NULL,
+    `mail_config_enable`       TINYINT(1)   NOT NULL DEFAULT 1
 ) ENGINE = InnoDB
   CHARSET = utf8mb4;
 
@@ -88,7 +88,21 @@ CREATE TABLE IF NOT EXISTS `cmw_users_settings`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `cmw_menus`
+(
+    `menu_id`        int(11)      NOT NULL,
+    `menu_name`      varchar(255) NOT NULL,
+    `menu_url`       varchar(255) NOT NULL,
+    `menu_level`     int(1)       NOT NULL,
+    `menu_parent_id` int(11)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
 
+ALTER TABLE `cmw_menus`
+    ADD PRIMARY KEY (`menu_id`);
+
+ALTER TABLE `cmw_menus`
+    MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `cmw_core_options`
     ADD UNIQUE KEY `option_name` (`option_name`);
@@ -100,7 +114,8 @@ ALTER TABLE `cmw_roles`
     MODIFY `role_id` INT(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `cmw_mail_config_smtp`
-    ADD `mail_config_id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`mail_config_id`);
+    ADD `mail_config_id` INT NOT NULL AUTO_INCREMENT FIRST,
+    ADD PRIMARY KEY (`mail_config_id`);
 
 ALTER TABLE `cmw_users`
     ADD PRIMARY KEY (`user_id`),

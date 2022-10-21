@@ -1,4 +1,4 @@
-<?php use CMW\Controller\Menus\MenusController;
+<?php use CMW\Controller\Core\MenusController;
 
 ?>
 
