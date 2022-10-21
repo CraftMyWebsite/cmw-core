@@ -61,3 +61,9 @@ Deny from all
 <filesMatch ".(ico|jpg|jpeg|png|gif|js|css|webp|svg)$">
     Header set Cache-Control "max-age=84600, public"
 </filesMatch>
+
+<IfModule mod_php5.c>
+    #Session timeout
+    php_value session.cookie_lifetime 600480 # 7 days
+    php_value session.gc_maxlifetime 600480
+</IfModule>
