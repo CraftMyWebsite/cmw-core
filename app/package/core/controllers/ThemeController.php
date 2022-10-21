@@ -63,10 +63,11 @@ class ThemeController extends CoreController
 
         return new ThemeEntity(
             $themeInfos['name'] ?? "",
-            $themeInfos['creator'] ?? "",
+            $themeInfos['author'] ?? "",
+            $themeInfos['authors'] ?? [],
             $themeInfos['version'] ?? "",
             $themeInfos['cmwVersion'] ?? "",
-            $themeInfos['packages'] ?? ""
+            $themeInfos['packages'] ?? []
         );
     }
 
