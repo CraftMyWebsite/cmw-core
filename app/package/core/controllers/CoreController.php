@@ -3,6 +3,7 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Api\APIManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Router\Link;
 use CMW\Router\RouterException;
