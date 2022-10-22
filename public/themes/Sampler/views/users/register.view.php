@@ -1,6 +1,7 @@
 <?php
 
 
+use CMW\Controller\Core\SecurityController;
 use CMW\Manager\Lang\LangManager;
 use CMW\Utils\SecurityService;
 
@@ -60,6 +61,8 @@ $description = "Description de votre page"; ?>
                     </div>
                 </div>
             </div>
+
+            <?php SecurityController::getPublicData(); ?>
 
 
             <div class="row">

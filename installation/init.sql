@@ -8,14 +8,14 @@ CREATE TABLE IF NOT EXISTS `cmw_core_options`
 
 CREATE TABLE IF NOT EXISTS `cmw_mail_config_smtp`
 (
-    `mail_config_mail`        VARCHAR(255)  NOT NULL,
-    `mail_config_mail_reply`  VARCHAR(255)  NOT NULL,
+    `mail_config_mail`         VARCHAR(255) NOT NULL,
+    `mail_config_mail_reply`   VARCHAR(255) NOT NULL,
     `mail_config_address_smtp` VARCHAR(255) NOT NULL,
-    `mail_config_user`        VARCHAR(255)  NOT NULL,
-    `mail_config_port`        INT(5)        NOT NULL,
-    `mail_config_protocol`    VARCHAR(50)   NOT NULL,
-    `mail_config_footer`      MEDIUMTEXT    NULL,
-    `mail_config_enable`      TINYINT(1)    NOT NULL DEFAULT 1
+    `mail_config_user`         VARCHAR(255) NOT NULL,
+    `mail_config_port`         INT(5)       NOT NULL,
+    `mail_config_protocol`     VARCHAR(50)  NOT NULL,
+    `mail_config_footer`       MEDIUMTEXT   NULL,
+    `mail_config_enable`       TINYINT(1)   NOT NULL DEFAULT 1
 ) ENGINE = InnoDB
   CHARSET = utf8mb4;
 
@@ -100,7 +100,8 @@ ALTER TABLE `cmw_roles`
     MODIFY `role_id` INT(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `cmw_mail_config_smtp`
-    ADD `mail_config_id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`mail_config_id`);
+    ADD `mail_config_id` INT NOT NULL AUTO_INCREMENT FIRST,
+    ADD PRIMARY KEY (`mail_config_id`);
 
 ALTER TABLE `cmw_users`
     ADD PRIMARY KEY (`user_id`),
@@ -153,7 +154,8 @@ CREATE INDEX role_id
     ON cmw_roles_permissions (role_id);
 
 INSERT INTO `cmw_core_options` (`option_name`, `option_value`, `option_updated`)
-VALUES ('theme', 'Sampler', NOW());
+VALUES ('theme', 'Sampler', NOW()),
+       ('captcha', 'none', NOW());
 
 
 INSERT INTO `cmw_roles` (`role_name`, `role_description`, `role_weight`)

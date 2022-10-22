@@ -3,6 +3,7 @@
 namespace CMW\Controller\Users;
 
 use CMW\Controller\Core\CoreController;
+use CMW\Controller\Core\SecurityController;
 use CMW\Controller\Menus\MenusController;
 use CMW\Controller\Users\PermissionsController;
 use CMW\Entity\Users\UserEntity;
@@ -242,27 +243,33 @@ class UsersController extends CoreController
     #[Link('/login', Link::POST)]
     public function loginPost(): void
     {
-        [$mail, $password] = Utils::filterInput("login_email", "login_password");
+        if(SecurityController::checkCaptcha()) {
 
-        $infos = array(
-            "email" => $mail,
-            "password" => $password
-        );
-        $cookie = 0;
+            [$mail, $password] = Utils::filterInput("login_email", "login_password");
 
-        if (isset($_POST['login_keep_connect']) && $_POST['login_keep_connect']) {
-            $cookie = 1;
-        }
+            $infos = array(
+                "email" => $mail,
+                "password" => $password
+            );
+            $cookie = 0;
 
-        $userId = UsersModel::logIn($infos, $cookie);
-        if ($userId > 0 && $userId !== "ERROR") {
-            $this->userModel->updateLoggedTime($userId);
-            header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
+            if (isset($_POST['login_keep_connect']) && $_POST['login_keep_connect']) {
+                $cookie = 1;
+            }
 
+            $userId = UsersModel::logIn($infos, $cookie);
+            if ($userId > 0 && $userId !== "ERROR") {
+                $this->userModel->updateLoggedTime($userId);
+                header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
+
+            } else {
+                $_SESSION['toaster'][0]['title'] = "Désolé";
+                $_SESSION['toaster'][0]['body'] = "Cette combinaison email/mot de passe est erronée";
+                $_SESSION['toaster'][0]['type'] = "bg-danger";
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+            }
         } else {
-            $_SESSION['toaster'][0]['title'] = "Désolé";
-            $_SESSION['toaster'][0]['body'] = "Cette combinaison email/mot de passe est erronée";
-            $_SESSION['toaster'][0]['type'] = "bg-danger";
+            //TODO Toaster invalid captcha
             header('Location: ' . $_SERVER['HTTP_REFERER']);
         }
     }
