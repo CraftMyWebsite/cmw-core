@@ -108,6 +108,14 @@ return [
             ]
         ]
     ],
+    "security" => [
+        "title" => "CMW - Sécurité",
+        "description" => "Gérez la sécurité de votre site",
+        "captcha" => [
+          "title"  => "Gestion du captcha",
+            "type" => "Type de captcha",
+        ],
+    ],
     "footer" => [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " Tous droits réservés.",
         "right" => "Merci d'utiliser <a href='https://craftmywebsite.com/'>CraftMyWebsite</a>.",
