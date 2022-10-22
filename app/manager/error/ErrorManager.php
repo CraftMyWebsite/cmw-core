@@ -16,7 +16,7 @@ class ErrorManager
 
     public function __invoke(): void
     {
-        $this->enableErrorDisplays();
+        self::enableErrorDisplays();
         $this->handleError();
         $this->invokeCheckPermissions();
     }
@@ -38,12 +38,19 @@ class ErrorManager
         return PermissionManager::canCreateFile(Utils::getEnv()->getValue("DIR") . $this->dirStorage);
     }
 
-    private function enableErrorDisplays(): void
+    public static function enableErrorDisplays(): void
     {
         $devMode = (int)(Utils::getEnv()->getValue("devMode") ?? 0);
         ini_set('display_errors', $devMode);
         ini_set('display_startup_errors', $devMode);
         error_reporting(E_ALL);
+    }
+
+    public static function disableErrorDisplays(): void
+    {
+        ini_set('display_errors', 0);
+        ini_set('display_startup_errors', 0);
+        error_reporting(0);
     }
 
     private function handleError(): void
