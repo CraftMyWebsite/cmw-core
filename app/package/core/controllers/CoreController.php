@@ -87,8 +87,8 @@ class CoreController
     public function frontHome(): void
     {
         $view = new View("core", "home");
-        Response::sendAlert("success", "Ceci est un test", "Autre test");
-        Response::sendAlert("success", "Second alerte !", "Dingue");
+//        Response::sendAlert("success", "Ceci est un test", "Autre test");
+//        Response::sendAlert("success", "Second alerte !", "Dingue");
         $view->view();
     }
 

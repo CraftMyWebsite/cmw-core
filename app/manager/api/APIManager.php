@@ -4,6 +4,7 @@ namespace CMW\Manager\Api;
 
 use CMW\Utils\Utils;
 use CurlHandle;
+use JsonException;
 
 class APIManager
 {
@@ -73,6 +74,8 @@ class APIManager
     {
         //todo verif if url is real URL.
 
+        // TODO Add retry function
+
         $curlHandle = self::generateHeader($url, $secure);
 
         $parsedData = json_encode($data, JSON_THROW_ON_ERROR);
@@ -87,6 +90,8 @@ class APIManager
     {
         //todo verif if url is real URL.
 
+        // TODO Add retry function
+
         $curlHandle = self::generateHeader($url, $secure);
 
         $response = curl_exec($curlHandle);
@@ -94,9 +99,6 @@ class APIManager
         return $response;
     }
 
-    /**
-     * @throws \JsonException
-     */
     public static function createResponse(string $message, int $code = 200, array $data = array(), $secure = true): bool|string
     {
 
@@ -104,11 +106,14 @@ class APIManager
         if ($secure) {
             header(self::getSecureHeader());
         }
-        return json_encode(array(
-            "message" => $message,
-            "code" => $code,
-            "data" => $data
-        ), JSON_THROW_ON_ERROR);
+        try {
+            return json_encode(array(
+                "message" => $message,
+                "code" => $code,
+                "data" => $data
+            ), JSON_THROW_ON_ERROR);
+        } catch (JsonException) {
+        }
     }
 
     public static function canRequestWebsite($headerKey = self::HTTP_HEADER_KEY, $key = self::ENV_KEY): bool

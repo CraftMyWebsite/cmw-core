@@ -125,7 +125,8 @@ class Loader
             if (session_status() === PHP_SESSION_NONE) {
                 ini_set('session.gc_maxlifetime', 600480); // 7 days
                 ini_set('session.cookie_lifetime', 600480); // 7 days
-                session_set_cookie_params(600480, '/', null, true, true);  // 7 days
+                session_set_cookie_params(600480, Utils::getEnv()->getValue("PATH_SUBFOLDER"),
+                    Utils::getEnv()->getValue("PATH_URL"), true, true);  // 7 days
                 session_start();
             }
 
