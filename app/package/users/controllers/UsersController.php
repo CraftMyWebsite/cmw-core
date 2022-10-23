@@ -47,6 +47,15 @@ class UsersController extends CoreController
         return UsersModel::hasPermission(self::getSessionUser(), "core.dashboard");
     }
 
+    /**
+     * @return bool
+     * @desc Return true if the current user / client is logged.
+     */
+    public static function isUserLogged(): bool
+    {
+        return isset($_SESSION['cmwUserId']);
+    }
+
     public static function hasPermission(string ...$permissions): bool
     {
         return UsersModel::hasPermission(self::getSessionUser(), ...$permissions);
