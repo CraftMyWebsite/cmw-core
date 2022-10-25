@@ -49,7 +49,7 @@ class ThemeModel extends DatabaseManager
             "theme_config_theme" => $theme));
     }
 
-    public function updateThemeConfig(string $configName, string $configValue, string $theme): void
+    public function updateThemeConfig(string $configName, ?string $configValue, string $theme): void
     {
         $db = self::getInstance();
         $req = $db->prepare('UPDATE cmw_theme_config SET theme_config_value = :theme_config_value 

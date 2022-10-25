@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `cmw_theme_config`
 (
     `theme_config_id`    INT          NOT NULL AUTO_INCREMENT,
     `theme_config_name`  VARCHAR(255) NOT NULL,
-    `theme_config_value` MEDIUMTEXT   NOT NULL,
+    `theme_config_value` MEDIUMTEXT   NULL,
     `theme_config_theme` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`theme_config_id`)
 ) ENGINE = InnoDB
