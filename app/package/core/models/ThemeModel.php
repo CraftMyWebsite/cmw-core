@@ -13,7 +13,7 @@ use CMW\Manager\Database\DatabaseManager;
  */
 class ThemeModel extends DatabaseManager
 {
-    public static function fetchConfigValue(string $config, string $theme = null): string
+    public static function fetchConfigValue(string $config, string $theme = null): ?string
     {
         if ($theme === null) {
             $theme = ThemeController::getCurrentTheme()->getName();
