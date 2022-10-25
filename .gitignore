@@ -1,6 +1,7 @@
 # Exclude environment variables
 .env
 .idea
+__MACOSX/
 
 /app/package/*/.idea/
 

@@ -112,6 +112,10 @@ return [
                 ]
             ]
         ],
+        "updates" => [
+            "title" => "Update your website",
+            "description" => "Update your CraftMyWebsite website"
+        ],
     ],
     "security" => [
         "title" => "CMW - Security",

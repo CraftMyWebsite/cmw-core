@@ -37,6 +37,17 @@
         "Configuration": "theme/configuration",
         "Manage your theme": "theme/manage"
       }
+    },
+    {
+      "name_menu": "Updates",
+      "icon_menu": "fas fa-arrows-rotate",
+      "url_menu": "",
+      "urls_submenu": {
+        "MAJ CMW": "updates/cms"
+      },
+      "urls_submenu_en": {
+        "MAJ CMW": "update/cms"
+      }
     }
   ],
 
