@@ -138,6 +138,7 @@ return [
         "delete" => "Delete",
         "delete_forever" => "Delete forever",
         "close" => "Close",
-        "send" => "Send"
+        "send" => "Send",
+        "download" => "Download",
     ]
 ];
