@@ -108,6 +108,10 @@ return [
             ]
         ]
     ],
+    "updates" => [
+        "title" => "Mettez à jour votre site",
+        "description" => "Mettez à jour votre site CraftMyWebsite"
+    ],
     "security" => [
         "title" => "CMW - Sécurité",
         "description" => "Gérez la sécurité de votre site",
