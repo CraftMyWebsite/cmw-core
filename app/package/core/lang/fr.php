@@ -79,6 +79,7 @@ return [
               "downloads" => "Nombre de téléchargement",
               "download" => "Télécharger",
           ],
+          "regen_config" => "Re-générer la config du thème"
       ],
       "manage" => [
           "title" => "Gérez votre thème <b>%theme%</b>",
@@ -110,6 +111,14 @@ return [
     "updates" => [
         "title" => "Mettez à jour votre site",
         "description" => "Mettez à jour votre site CraftMyWebsite"
+    ],
+    "security" => [
+        "title" => "CMW - Sécurité",
+        "description" => "Gérez la sécurité de votre site",
+        "captcha" => [
+          "title"  => "Gestion du captcha",
+            "type" => "Type de captcha",
+        ],
     ],
     "footer" => [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " Tous droits réservés.",

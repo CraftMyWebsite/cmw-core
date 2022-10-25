@@ -2,6 +2,7 @@
 
 use CMW\Manager\Lang\LangManager;
 use CMW\Model\Users\RolesModel;
+use CMW\Utils\SecurityService;
 
 $title = LangManager::translate("users.edit.title");
 $description = LangManager::translate("users.edit.desc");
@@ -17,6 +18,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
         <div class="row">
             <div class="col-6">
                 <form action="" method="post">
+                    <?php (new SecurityService())->insertHiddenToken() ?>
                     <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title"><?= LangManager::translate("users.users.user") ?>

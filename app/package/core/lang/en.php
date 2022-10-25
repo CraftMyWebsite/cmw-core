@@ -84,6 +84,7 @@ return [
                 "downloads" => "Downloads",
                 "download" => "Download",
             ],
+            "regen_config" => "Re-generate theme config"
         ],
         "manage" => [
             "title" => "Manage your theme <b>%theme%</b>",
@@ -114,6 +115,14 @@ return [
         "updates" => [
             "title" => "Update your website",
             "description" => "Update your CraftMyWebsite website"
+        ],
+    ],
+    "security" => [
+        "title" => "CMW - Security",
+        "description" => "Manage your website security",
+        "captcha" => [
+            "title"  => "Manage your captcha",
+            "type" => "Captcha type",
         ],
     ],
     "footer" => [

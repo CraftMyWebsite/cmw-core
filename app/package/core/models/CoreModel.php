@@ -13,7 +13,7 @@ use CMW\Manager\Database\DatabaseManager;
 class CoreModel extends DatabaseManager
 {
 
-    public function fetchOption($option): string
+    public function fetchOption(string $option): string
     {
         $db = self::getInstance();
         $req = $db->prepare('SELECT option_value FROM cmw_core_options WHERE option_name = ?');
@@ -24,22 +24,21 @@ class CoreModel extends DatabaseManager
     }
 
     /***
-     * @param $option
+     * @param string $option
      * @return string
      * @desc get the selected option
      */
-    public static function getOptionValue($option): string
+    public static function getOptionValue(string $option): string
     {
         $db = self::getInstance();
         $req = $db->prepare('SELECT option_value FROM cmw_core_options WHERE option_name = ?');
-        $req->execute(array($option));
 
-        return ($req->execute()) ? $req->fetch()["option_value"] : "";
+        return ($req->execute(array($option))) ? $req->fetch()["option_value"] : "";
     }
 
     public function fetchOptions(): array
     {
-        $db = $this->getInstance();
+        $db = self::getInstance();
         $req = $db->prepare('SELECT * FROM cmw_core_options');
 
         if ($req->execute()) {

@@ -75,7 +75,7 @@ class PagesController extends CoreController
             ->view();
     }
 
-    #[Link("/add", Link::POST, [], "/cmw-admin/pages")]
+    #[Link("/add", Link::POST, [], "/cmw-admin/pages", secure: false)]
     public function adminPagesAddPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.add");
@@ -123,7 +123,7 @@ class PagesController extends CoreController
             ->view();
     }
 
-    #[Link("/edit", Link::POST, [], "/cmw-admin/pages")]
+    #[Link("/edit", Link::POST, [], "/cmw-admin/pages", secure: false)]
     public function adminPagesEditPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.edit");

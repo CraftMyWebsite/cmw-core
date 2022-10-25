@@ -3,6 +3,7 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Api\APIManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Router\Link;
 use CMW\Router\RouterException;
@@ -86,8 +87,8 @@ class CoreController
     public function frontHome(): void
     {
         $view = new View("core", "home");
-        Response::sendAlert("success", "Ceci est un test", "Autre test");
-        Response::sendAlert("success", "Second alerte !", "Dingue");
+//        Response::sendAlert("success", "Ceci est un test", "Autre test");
+//        Response::sendAlert("success", "Second alerte !", "Dingue");
         $view->view();
     }
 

@@ -1,6 +1,7 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
+use CMW\Utils\SecurityService;
 
 $title = LangManager::translate("core.mail.config.title");
 $description = LangManager::translate("core.mail.config.description");
@@ -14,6 +15,7 @@ $description = LangManager::translate("core.mail.config.description");
         <div class="row">
             <div class="col-12">
                 <form action="" method="post">
+                    <?php (new SecurityService())->insertHiddenToken() ?>
                     <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title"><?= LangManager::translate("core.mail.config.title") ?> :</h3>
@@ -160,6 +162,7 @@ $description = LangManager::translate("core.mail.config.description");
                 </button>
             </div>
             <form action="test" method="post">
+                <?php (new SecurityService())->insertHiddenToken() ?>
                 <div class="modal-body">
                     <div class="form-group">
                         <p>

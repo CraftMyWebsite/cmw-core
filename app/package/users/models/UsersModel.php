@@ -431,7 +431,7 @@ class UsersModel extends DatabaseManager
             "pseudo" => $pseudo
         );
 
-        $sql = "SELECT * FROM `cmw_users` WHERE user_pseudo = :pseudo";
+        $sql = "SELECT user_id FROM `cmw_users` WHERE user_pseudo = :pseudo";
 
         $db = self::getInstance();
         $req = $db->prepare($sql);
@@ -449,7 +449,7 @@ class UsersModel extends DatabaseManager
             "email" => $email
         );
 
-        $sql = "SELECT * FROM `cmw_users` WHERE user_email = :email";
+        $sql = "SELECT user_id FROM `cmw_users` WHERE user_email = :email";
 
         $db = self::getInstance();
         $req = $db->prepare($sql);
@@ -459,6 +459,44 @@ class UsersModel extends DatabaseManager
         }
 
         return 0;
+    }
+
+    public function isEmailAvailable(int $userId, string $email): bool
+    {
+        $var = array(
+            "userId" => $userId,
+            "email" => $email
+        );
+
+        $sql = "SELECT user_id FROM `cmw_users` WHERE user_email = :email AND user_id != :userId";
+
+        $db = self::getInstance();
+        $req = $db->prepare($sql);
+
+        if ($req->execute($var)) {
+            return count($req->fetchAll()) <= 0;
+        }
+
+        return false;
+    }
+
+    public function isPseudoAvailable(int $userId, string $pseudo): bool
+    {
+        $var = array(
+            "userId" => $userId,
+            "pseudo" => $pseudo
+        );
+
+        $sql = "SELECT user_id FROM `cmw_users` WHERE user_pseudo = :pseudo AND user_id != :userId";
+
+        $db = self::getInstance();
+        $req = $db->prepare($sql);
+
+        if ($req->execute($var)) {
+            return count($req->fetchAll()) <= 0;
+        }
+
+        return false;
     }
 
     public function resetPassword(string $email): void
@@ -483,9 +521,9 @@ class UsersModel extends DatabaseManager
     private function generatePassword(): string
     {
         try {
-            return bin2hex(Utils::genId(random_int(15, 50)));
+            return bin2hex(Utils::genId(random_int(7, 12)));
         } catch (Exception $e) {
-            return bin2hex(Utils::genId(50));
+            return bin2hex(Utils::genId(10));
         }
 
     }

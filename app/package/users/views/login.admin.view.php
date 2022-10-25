@@ -1,4 +1,5 @@
 <?php use CMW\Manager\Lang\LangManager;
+use CMW\Utils\SecurityService;
 
 $title = LangManager::translate("users.login.title");
 $description = LangManager::translate("users.login.desc");
@@ -19,6 +20,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
         <div class="card-body login-card-body">
             <p class="login-box-msg"><?= LangManager::translate("users.login.title", lineBreak: true) ?></p>
             <form action="" method="post" class="mb-4">
+                <?php (new SecurityService())->insertHiddenToken() ?>
                 <div class="form-group">
                     <div class="input-group mb-3">
                         <div class="input-group-append">

@@ -1,6 +1,7 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
+use CMW\Utils\SecurityService;
 
 $title = LangManager::translate("users.settings.title");
 $description = LangManager::translate("users.settings.desc"); ?>
@@ -10,6 +11,7 @@ $description = LangManager::translate("users.settings.desc"); ?>
         <div class="row">
             <div class="col-12">
                 <form action="" method="post" enctype="multipart/form-data">
+                    <?php (new SecurityService())->insertHiddenToken() ?>
                     <div class="card card-primary">
                         <div class="card-header">
                             <h3 class="card-title"><?= LangManager::translate("users.settings.title") ?> :</h3>
