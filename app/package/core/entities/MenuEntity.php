@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Entity\Menus;
+namespace CMW\Entity\Core;
 
 class MenuEntity
 {

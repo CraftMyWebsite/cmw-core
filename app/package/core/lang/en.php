@@ -112,10 +112,13 @@ return [
                 ]
             ]
         ],
-        "updates" => [
-            "title" => "Update your website",
-            "description" => "Update your CraftMyWebsite website"
-        ],
+     "menus" => [
+         "title" => "Menus | Edit",
+         "desc" => "Edit main site menu",
+    ],
+    "updates" => [
+         "title" => "Update your website",
+         "description" => "Update your CraftMyWebsite website"
     ],
     "security" => [
         "title" => "CMW - Security",

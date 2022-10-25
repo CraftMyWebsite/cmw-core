@@ -15,6 +15,11 @@
       }
     },
     {
+      "name_menu": "Menus",
+      "icon_menu": "fas fa-bars",
+      "url_menu": "menus"
+    },
+    {
       "name_menu": "Mails",
       "icon_menu": "fas fa-envelope",
       "url_menu": "",

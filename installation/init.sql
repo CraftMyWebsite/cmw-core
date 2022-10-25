@@ -88,7 +88,21 @@ CREATE TABLE IF NOT EXISTS `cmw_users_settings`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `cmw_menus`
+(
+    `menu_id`        int(11)      NOT NULL,
+    `menu_name`      varchar(255) NOT NULL,
+    `menu_url`       varchar(255) NOT NULL,
+    `menu_level`     int(1)       NOT NULL,
+    `menu_parent_id` int(11)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
 
+ALTER TABLE `cmw_menus`
+    ADD PRIMARY KEY (`menu_id`);
+
+ALTER TABLE `cmw_menus`
+    MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `cmw_core_options`
     ADD UNIQUE KEY `option_name` (`option_name`);
