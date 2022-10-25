@@ -1,6 +1,7 @@
 <?php
 
 
+use CMW\Controller\Core\SecurityController;
 use CMW\Manager\Lang\LangManager;
 use CMW\Utils\SecurityService;
 
@@ -47,6 +48,21 @@ $description = "Description de votre page"; ?>
                     </div>
                 </div>
             </div>
+
+            <div class="form-group">
+                <div class="input-group mb-3" id="showHidePassword">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    </div>
+                    <input type="password" name="register_password_verify" class="form-control"
+                           placeholder="<?= LangManager::translate("users.users.repeat_pass") ?>">
+                    <div class="input-group-append">
+                        <a class="input-group-text" href="#"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <?php SecurityController::getPublicData(); ?>
 
 
             <div class="row">

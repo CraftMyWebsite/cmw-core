@@ -1,6 +1,7 @@
 <?php
 
 
+use CMW\Controller\Core\SecurityController;
 use CMW\Utils\SecurityService;
 
 $title = "Connexion";
@@ -44,6 +45,10 @@ $description = "Description de votre page"; ?>
                         <label for="login_keep_connect">Rester connecter</label>
                     </div>
                 </div>
+
+                <?php SecurityController::getPublicData(); ?>
+
+
                 <!-- /.col -->
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary btn-block">Se connecter</button>

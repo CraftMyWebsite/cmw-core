@@ -121,6 +121,14 @@ return [
             "description" => "Update your CraftMyWebsite website"
         ],
     ],
+    "security" => [
+        "title" => "CMW - Security",
+        "description" => "Manage your website security",
+        "captcha" => [
+            "title"  => "Manage your captcha",
+            "type" => "Captcha type",
+        ],
+    ],
     "footer" => [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " All right reserved.",
         "right" => "Thank you for using <a href='https://craftmywebsite.com/'>CraftMyWebsite</a>.",

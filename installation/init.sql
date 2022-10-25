@@ -168,7 +168,8 @@ CREATE INDEX role_id
     ON cmw_roles_permissions (role_id);
 
 INSERT INTO `cmw_core_options` (`option_name`, `option_value`, `option_updated`)
-VALUES ('theme', 'Sampler', NOW());
+VALUES ('theme', 'Sampler', NOW()),
+       ('captcha', 'none', NOW());
 
 
 INSERT INTO `cmw_roles` (`role_name`, `role_description`, `role_weight`)

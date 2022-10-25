@@ -3,6 +3,7 @@
 namespace CMW\Controller\Users;
 
 use CMW\Controller\Core\CoreController;
+use CMW\Controller\Core\SecurityController;
 use CMW\Controller\Menus\MenusController;
 use CMW\Controller\Users\PermissionsController;
 use CMW\Entity\Users\UserEntity;
@@ -44,6 +45,15 @@ class UsersController extends CoreController
     public static function isAdminLogged(): bool
     {
         return UsersModel::hasPermission(self::getSessionUser(), "core.dashboard");
+    }
+
+    /**
+     * @return bool
+     * @desc Return true if the current user / client is logged.
+     */
+    public static function isUserLogged(): bool
+    {
+        return isset($_SESSION['cmwUserId']);
     }
 
     public static function hasPermission(string ...$permissions): bool
@@ -105,9 +115,9 @@ class UsersController extends CoreController
         $this->userModel->update($id, $mail, $username, $firstname, $lastname, $_POST['roles']);
 
         //Todo Try to edit that
-        $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;
+        $_SESSION['toaster'][0]['title'] = "USERS_TOASTER_TITLE";
         $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = USERS_EDIT_TOASTER_SUCCESS;
+        $_SESSION['toaster'][0]['body'] = "USERS_EDIT_TOASTER_SUCCESS";
 
         [$pass, $passVerif] = Utils::filterInput("pass", "passVerif");
 
@@ -116,9 +126,9 @@ class UsersController extends CoreController
                 $this->userModel->updatePass($id, password_hash($pass, PASSWORD_BCRYPT));
             } else {
                 //Todo Try to edit that
-                $_SESSION['toaster'][1]['title'] = USERS_TOASTER_TITLE_ERROR;
+                $_SESSION['toaster'][1]['title'] = "USERS_TOASTER_TITLE_ERROR";
                 $_SESSION['toaster'][1]['type'] = "bg-danger";
-                $_SESSION['toaster'][1]['body'] = USERS_EDIT_TOASTER_PASS_ERROR;
+                $_SESSION['toaster'][1]['body'] = "USERS_EDIT_TOASTER_PASS_ERROR";
 
             }
 
@@ -174,10 +184,10 @@ class UsersController extends CoreController
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
-        if (UsersModel::getLoggedUser() == $id) {
-            $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE_ERROR;
+        if (UsersModel::getLoggedUser() === $id) {
+            $_SESSION['toaster'][0]['title'] = "USERS_TOASTER_TITLE_ERROR";
             $_SESSION['toaster'][0]['type'] = "bg-danger";
-            $_SESSION['toaster'][0]['body'] = USERS_STATE_TOASTER_ERROR;
+            $_SESSION['toaster'][0]['body'] = "USERS_STATE_TOASTER_ERROR";
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             die();
         }
@@ -186,9 +196,9 @@ class UsersController extends CoreController
 
         $this->userModel->changeState($id, $state);
 
-        $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;
+        $_SESSION['toaster'][0]['title'] = "USERS_TOASTER_TITLE";
         $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = USERS_STATE_TOASTER_SUCCESS;
+        $_SESSION['toaster'][0]['body'] = "USERS_STATE_TOASTER_SUCCESS";
 
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
@@ -198,12 +208,12 @@ class UsersController extends CoreController
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.delete");
 
-        if (UsersModel::getLoggedUser() == $id) {
+        if (UsersModel::getLoggedUser() === $id) {
 
             //Todo Try to remove that
-            $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE_ERROR;
+            $_SESSION['toaster'][0]['title'] = "USERS_TOASTER_TITLE_ERROR";
             $_SESSION['toaster'][0]['type'] = "bg-danger";
-            $_SESSION['toaster'][0]['body'] = USERS_DELETE_TOASTER_ERROR;
+            $_SESSION['toaster'][0]['body'] = "USERS_DELETE_TOASTER_ERROR";
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             die();
         }
@@ -211,9 +221,9 @@ class UsersController extends CoreController
         $this->userModel->delete($id);
 
         //Todo Try to remove that
-        $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;
+        $_SESSION['toaster'][0]['title'] = "USERS_TOASTER_TITLE";
         $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = USERS_DELETE_TOASTER_SUCCESS;
+        $_SESSION['toaster'][0]['body'] = "USERS_DELETE_TOASTER_SUCCESS";
 
         header("location: ../list");
     }
@@ -242,27 +252,33 @@ class UsersController extends CoreController
     #[Link('/login', Link::POST)]
     public function loginPost(): void
     {
-        [$mail, $password] = Utils::filterInput("login_email", "login_password");
+        if(SecurityController::checkCaptcha()) {
 
-        $infos = array(
-            "email" => $mail,
-            "password" => $password
-        );
-        $cookie = 0;
+            [$mail, $password] = Utils::filterInput("login_email", "login_password");
 
-        if (isset($_POST['login_keep_connect']) && $_POST['login_keep_connect']) {
-            $cookie = 1;
-        }
+            $infos = array(
+                "email" => $mail,
+                "password" => $password
+            );
+            $cookie = 0;
 
-        $userId = UsersModel::logIn($infos, $cookie);
-        if ($userId > 0 && $userId !== "ERROR") {
-            $this->userModel->updateLoggedTime($userId);
-            header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
+            if (isset($_POST['login_keep_connect']) && $_POST['login_keep_connect']) {
+                $cookie = 1;
+            }
 
+            $userId = UsersModel::logIn($infos, $cookie);
+            if ($userId > 0 && $userId !== "ERROR") {
+                $this->userModel->updateLoggedTime($userId);
+                header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
+
+            } else {
+                $_SESSION['toaster'][0]['title'] = "Désolé";
+                $_SESSION['toaster'][0]['body'] = "Cette combinaison email/mot de passe est erronée";
+                $_SESSION['toaster'][0]['type'] = "bg-danger";
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+            }
         } else {
-            $_SESSION['toaster'][0]['title'] = "Désolé";
-            $_SESSION['toaster'][0]['body'] = "Cette combinaison email/mot de passe est erronée";
-            $_SESSION['toaster'][0]['type'] = "bg-danger";
+            //TODO Toaster invalid captcha
             header('Location: ' . $_SERVER['HTTP_REFERER']);
         }
     }
@@ -338,15 +354,22 @@ class UsersController extends CoreController
             $_SESSION['toaster'][0]['title'] = "Désolé";
             $_SESSION['toaster'][0]['body'] = "Ce pseudo est déjà pris.";
             $_SESSION['toaster'][0]['type'] = "bg-danger";
-            header('Location: inscription');
+            header('Location: register');
         } else if ($this->userModel->checkEmail(filter_input(INPUT_POST, "register_email")) > 0) {
             $_SESSION['toaster'][0]['title'] = "Désolé";
             $_SESSION['toaster'][0]['body'] = "Cette e-mail est déjà prise.";
             $_SESSION['toaster'][0]['type'] = "bg-danger";
-            header('Location: inscription');
+            header('Location: register');
         } else {
 
-            [$mail, $pseudo, $password] = Utils::filterInput("register_email", "register_pseudo", "register_password");
+            [$mail, $pseudo, $password, $passwordVerify] = Utils::filterInput("register_email", "register_pseudo", "register_password", "register_password_verify");
+
+            if (!is_null($password) && $password !== $passwordVerify) {
+                $_SESSION['toaster'][0]['title'] = "Désolé";
+                $_SESSION['toaster'][0]['body'] = "Mots de passes non identiques";
+                $_SESSION['toaster'][0]['type'] = "bg-danger";
+                header('Location: register');
+            }
 
             $userEntity = $this->userModel->create($mail, $pseudo, "", "", array("2"));
 
@@ -431,7 +454,7 @@ class UsersController extends CoreController
     }
 
     #[Link('/profile/update', Link::POST)]
-    public function publicProfileUpdate()
+    public function publicProfileUpdate(): void
     {
         if (!isset($_SESSION['cmwUserId'])) {
             header('Location: ' . getenv('PATH_SUBFOLDER'));

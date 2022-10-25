@@ -2,6 +2,8 @@
 
 namespace CMW\Utils;
 
+use CMW\Model\Core\CoreModel;
+
 require("EnvBuilder.php");
 
 /**
@@ -179,5 +181,23 @@ class Utils
     public static function getApi(): string
     {
         return self::getEnv()->getValue("APIURL");
+    }
+
+    /**
+     * @return string
+     * @Desc Get the website name
+     */
+    public static function getSiteName(): string
+    {
+        return (new CoreModel())->fetchOption("name");
+    }
+
+    /**
+     * @return string
+     * @Desc Get the website description
+     */
+    public static function getSiteDescription(): string
+    {
+        return (new CoreModel())->fetchOption("description");
     }
 }

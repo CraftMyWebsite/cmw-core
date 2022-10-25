@@ -2,6 +2,7 @@
 
 namespace CMW\Manager\Error;
 
+use CMW\Controller\Core\ThemeController;
 use CMW\Manager\Permission\PermissionManager;
 use CMW\Utils\Utils;
 use DateTime;
@@ -15,7 +16,7 @@ class ErrorManager
 
     public function __invoke(): void
     {
-        $this->enableErrorDisplays();
+        self::enableErrorDisplays();
         $this->handleError();
         $this->invokeCheckPermissions();
     }
@@ -37,12 +38,19 @@ class ErrorManager
         return PermissionManager::canCreateFile(Utils::getEnv()->getValue("DIR") . $this->dirStorage);
     }
 
-    private function enableErrorDisplays(): void
+    public static function enableErrorDisplays(): void
     {
         $devMode = (int)(Utils::getEnv()->getValue("devMode") ?? 0);
         ini_set('display_errors', $devMode);
         ini_set('display_startup_errors', $devMode);
         error_reporting(E_ALL);
+    }
+
+    public static function disableErrorDisplays(): void
+    {
+        ini_set('display_errors', 0);
+        ini_set('display_startup_errors', 0);
+        error_reporting(0);
     }
 
     private function handleError(): void
@@ -138,6 +146,15 @@ class ErrorManager
 
         //Here, we get data page we don't want to redirect user, just show him an error.
         //Route /error get error file : $errorCode.view.php, if that file don't exist, we call default.view.php (from errors package)
+
+        $currentTheme = ThemeController::getCurrentTheme()->getName();
+        $defaultErrorFile = Utils::getEnv()->getValue("DIR") . "public/themes/$currentTheme/views/errors/default.view.php";
+
+        if(!file_exists($defaultErrorFile)){
+            self::getFallBackErrorPage($currentTheme);
+            return;
+        }
+
         $data = file_get_contents($pathUrl . "geterror/$errorCode");
 
         if (!$data) {
@@ -148,6 +165,17 @@ class ErrorManager
         $data = str_replace("{errorCode}", $errorCode, $data);
         echo $data;
 
+    }
+
+    private static function getFallBackErrorPage(string $currentTheme): void
+    {
+
+        echo <<<HTML
+                    <h1>Error, missing file !</h1>
+                    <div class="container">
+                        File missing : <pre>public/themes/$currentTheme/views/errors/default.view.php</pre>
+                    </div>
+                    HTML;
     }
 
 }

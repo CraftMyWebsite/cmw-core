@@ -108,13 +108,13 @@ return [
             ]
         ]
     ],
-    "menus" => [
-        "title" => "Menus | Editer",
-        "desc" => "Edition du menu du site",
-    ],
-    "updates" => [
-        "title" => "Mettez à jour votre site",
-        "description" => "Mettez à jour votre site CraftMyWebsite"
+    "security" => [
+        "title" => "CMW - Sécurité",
+        "description" => "Gérez la sécurité de votre site",
+        "captcha" => [
+          "title"  => "Gestion du captcha",
+            "type" => "Type de captcha",
+        ],
     ],
     "footer" => [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " Tous droits réservés.",
