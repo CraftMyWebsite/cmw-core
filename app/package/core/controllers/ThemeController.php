@@ -207,7 +207,7 @@ class ThemeController extends CoreController
     public function adminThemeManagePost(): void
     {
         foreach ($this->getCurrentThemeConfigSettings() as $conf => $value) {
-            $this->themeModel->updateThemeConfig($conf, $_POST[$conf], self::getCurrentTheme()->getName());
+            $this->themeModel->updateThemeConfig($conf, $_POST[$conf] ?? null, self::getCurrentTheme()->getName());
         }
 
         header("location: /cmw-admin/theme/manage");
