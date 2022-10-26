@@ -99,7 +99,7 @@ class APIManager
         return $response;
     }
 
-    public static function createResponse(string $message, int $code = 200, array $data = array(), $secure = true): bool|string
+    public static function createResponse(string $message = "", int $code = 200, array $data = array(), $secure = true): bool|string
     {
 
         header("Content-Type: application/json; charset=UTF-8");

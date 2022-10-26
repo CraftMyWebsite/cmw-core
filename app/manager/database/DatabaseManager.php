@@ -33,4 +33,12 @@ class DatabaseManager
         }
     }
 
+    public static function isMariadb(): bool
+    {
+        $pdo = self::getInstance();
+        $info = $pdo->query("SHOW VARIABLES like '%version%'")->fetchAll(PDO::FETCH_KEY_PAIR);
+
+        return str_contains($info['version'], "MariaDB");
+    }
+
 }
