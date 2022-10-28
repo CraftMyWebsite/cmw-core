@@ -25,9 +25,9 @@ class ErrorManager
     {
         if (!$this->checkPermissions()) {
             echo <<<HTML
-            <div style="text-align: center; background: #ed5263; padding: .2rem 1rem; width: 60%; border-radius: 6px; margin: 6px auto; word-wrap: break-word">
-                <h2 style="color: #52040b">[MISSING PERMISSIONS]<br> Cannot create log file !</h2>
-               <h3 style="">It seems that it is impossible to create a log file in the path: <b>{$this->dirStorage}</b></h3>
+            <div class="cmw--errors">
+                <h2>[MISSING PERMISSIONS]<br> Cannot create log file !</h2>
+               <h3>It seems that it is impossible to create a log file in the path: <b>{$this->dirStorage}</b></h3>
             </div>
         HTML;
         }
@@ -113,15 +113,15 @@ class ErrorManager
         $trace = preg_replace("/#(\d)/", "<b>#$1</b><br>", $e->getTraceAsString());
         $trace = preg_replace("/<br>/", "</code><code style='margin: .6rem 0; display: block'>", $trace);
         return <<<HTML
-            <div style="background: #ed5263; padding: .2rem 1rem; width: 60%; border-radius: 6px; margin: 6px auto; word-wrap: break-word">
-                <h2 style="color: #52040b">[Internal Exception] Oops...</h2>
+            <div class="cmw--errors">
+                <h2>[Internal Exception] Oops...</h2>
                 <ul>
                     <li><b>Error Type:</b> <code>$classType</code></li>
                     <li><b>Error Message:</b> <code>{$e->getMessage()}</code></li>
-                    <li><b>Location:</b> <code style="word-wrap: revert">{$e->getFile()}:{$e->getLine()}</code></li>
+                    <li><b>Location:</b> <code class="cmw--errors--location">{$e->getFile()}:{$e->getLine()}</code></li>
                 </ul>
                 <p>
-                    <u>Trace :</u> <code style="margin: .2rem 0">{$trace}</code>
+                    <u>Trace :</u> <code class="cmw--errors--trace">{$trace}</code>
                 </p>
                 
                 <small>This error has been saved in {$this->dirStorage}/{$this->getFileLogName()}</small>

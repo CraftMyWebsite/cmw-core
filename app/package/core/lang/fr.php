@@ -129,7 +129,8 @@ return [
         "delete" => "Supprimer",
         "delete_forever" => "Supprimer définitivement",
         "close" => "Fermer",
-        "send" => "Envoyer"
+        "send" => "Envoyer",
+        "download" => "Télécharger",
     ],
     "months" => '["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Decembre"]',
 ];
