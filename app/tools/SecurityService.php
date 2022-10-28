@@ -30,7 +30,7 @@ class SecurityService
 
     public function __construct($excludeUrl = null, &$post = null, &$session = null, &$server = null)
     {
-        $this->sessionTokenLabel = 'CSRF_TOKEN_SESS_ID_' . UsersModel::getCurrentUser()?->getId();
+        $this->sessionTokenLabel = 'CSRF_TOKEN_SESS_ID_' . UsersModel::getLoggedUser();
 
         if (!is_null($excludeUrl)) {
             $this->excludeUrl = $excludeUrl;

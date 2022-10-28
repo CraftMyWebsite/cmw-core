@@ -108,6 +108,10 @@ return [
             ]
         ]
     ],
+    "updates" => [
+        "title" => "Mettez à jour votre site",
+        "description" => "Mettez à jour votre site CraftMyWebsite"
+    ],
     "security" => [
         "title" => "CMW - Sécurité",
         "description" => "Gérez la sécurité de votre site",
@@ -128,5 +132,5 @@ return [
         "send" => "Envoyer",
         "download" => "Télécharger",
     ],
-    "months" => ["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Decembre"],
+    "months" => '["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Decembre"]',
 ];

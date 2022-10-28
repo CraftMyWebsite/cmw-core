@@ -52,5 +52,13 @@ class UserPictureEntity
         return $this->lastUpdate;
     }
 
+    /**
+     * @return string|null
+     * @desc Get absolute path
+     */
+    public function getImageLink(): ?string
+    {
+        return Utils::getEnv()->getValue("PATH_SUBFOLDER") . "public/uploads/users/" . $this->imageName;
+    }
 
 }
