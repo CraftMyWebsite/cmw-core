@@ -4,8 +4,6 @@ namespace CMW\Controller\Users;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\SecurityController;
-use CMW\Controller\Menus\MenusController;
-use CMW\Controller\Users\PermissionsController;
 use CMW\Entity\Users\UserEntity;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Users\PermissionsModel;
@@ -349,7 +347,7 @@ class UsersController extends CoreController
     #[Link('/register', Link::POST)]
     public function registerPost(): void
     {
-
+        if(SecurityController::checkCaptcha()) {
         if ($this->userModel->checkPseudo(filter_input(INPUT_POST, "register_pseudo")) > 0) {
             $_SESSION['toaster'][0]['title'] = "Désolé";
             $_SESSION['toaster'][0]['body'] = "Ce pseudo est déjà pris.";
@@ -397,6 +395,10 @@ class UsersController extends CoreController
 
             }
 
+        }
+        } else {
+            //TODO Toaster invalid captcha
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
         }
 
     }

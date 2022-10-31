@@ -33,7 +33,8 @@ return [
 		"disable_account" => "Désactiver le compte",
 		"delete_account" => "Supprimer le compte",
 		"toaster_success" => "Le compte a bien été mis à jours !",
-		"toaster_pass_error" => "Une erreur est survenue dans la modification du mot de passe.<br>Les mots de passes ne correspondent pas."
+		"toaster_pass_error" => "Une erreur est survenue dans la modification du mot de passe.<br>Les mots de passes ne correspondent pas.",
+        "reset_password" => "Réinitialisez le mot de passe"
 	],
 	"add" => [
 		"title" => "Utilisateurs | Ajouter",

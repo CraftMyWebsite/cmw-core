@@ -3,6 +3,7 @@
 use CMW\Manager\Lang\LangManager;
 use CMW\Model\Users\RolesModel;
 use CMW\Utils\SecurityService;
+use CMW\Utils\Utils;
 
 $title = LangManager::translate("users.edit.title");
 $description = LangManager::translate("users.edit.desc");
@@ -99,7 +100,8 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                         <!-- /.card-body -->
                         <div class="card-footer">
                             <button type="submit"
-                                    class="btn btn-primary float-right"><?= LangManager::translate("core.btn.save") ?></button>
+                                    class="btn btn-primary float-right"><?= LangManager::translate("core.btn.save") ?>
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -115,15 +117,31 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                         </p>
                         <p><b><?= LangManager::translate("users.users.last_connection") ?>
                                 :</b> <?= $user->getLastConnection() ?></p>
-                        <div>
+                        <div class="row">
                             <a href="../state/<?= $user->getId() ?>/<?= $user->getState() ?>" type="submit"
                                class="btn btn-<?= ($user->getState()) ? 'warning' : 'success' ?>"><i
                                         class="fa fa-user-slash"></i> <?= ($user->getState()) ? LangManager::translate("users.edit.disable_account") : LangManager::translate("users.edit.activate_account") ?>
                             </a>
 
-                            <a href="../delete/<?= $user->getId() ?>" type="submit" class="btn btn-danger"><i
-                                        class="fa fa-user-times"></i> <?= LangManager::translate("core.btn.delete") ?>
-                            </a>
+                            <div class="ml-3">
+                                <a href="../delete/<?= $user->getId() ?>" type="submit" class="btn btn-danger"><i
+                                            class="fa fa-user-times"></i> <?= LangManager::translate("core.btn.delete") ?>
+                                </a>
+                            </div>
+
+                            <!-- RESET PASSWORD -->
+                            <div class="ml-3">
+                                <form method="post"
+                                      action="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>login/forgot">
+                                    <?php (new SecurityService())->insertHiddenToken() ?>
+                                    <input type="hidden" value="<?= $user->getMail() ?>" name="mail">
+                                    <button type="submit" class="btn btn-warning">
+                                        <i class="fa fa-arrows-rotate"></i>
+                                        <?= LangManager::translate("users.edit.reset_password") ?>
+                                    </button>
+                                </form>
+                            </div>
+
                         </div>
                     </div>
                     <!-- /.card-body    -->
