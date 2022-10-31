@@ -33,7 +33,8 @@ return [
 		"disable_account" => "Deactivate the account",
 		"delete_account" => "Delete account",
 		"toaster_success" => "The account has been updated !",
-		"toaster_pass_error" => "An error occurred in changing the password.<br>The passwords do not match."
+		"toaster_pass_error" => "An error occurred in changing the password.<br>The passwords do not match.",
+        "reset_password" => "Reset password"
 	],
 	"add" => [
 		"title" => "Users | Add",
