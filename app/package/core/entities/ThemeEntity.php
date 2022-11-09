@@ -80,5 +80,13 @@ class ThemeEntity
     {
         return $this->packages;
     }
+    
+    /**
+     * @return string
+     */
+    public function getPath(): string
+    {
+        return Utils::getEnv()->getValue("PATH_SUBFOLDER") . 'public/themes/' . $this->name . '/';
+    }
 
 }
