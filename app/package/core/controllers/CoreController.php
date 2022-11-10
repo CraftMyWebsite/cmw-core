@@ -30,6 +30,10 @@ class CoreController
         self::$themePath = (new CoreModel())->fetchOption("theme"); //Get the current active theme
     }
 
+    public static function getThemePath(): string {
+        return self::$themePath;
+    }
+
     #[NoReturn] protected static function redirectToHome(): void
     {
         header('Location: ' . getenv('PATH_SUBFOLDER'));
