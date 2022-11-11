@@ -49,7 +49,7 @@ class APIManager
         return self::HEADER_KEY . ": " . self::getPassword();
     }
 
-    private static function generateHeader(string $url, $secure): CurlHandle|bool
+    private static function generateHeader(string $url, $secure, bool $isPost = false): CurlHandle|bool
     {
         $curlHandle = curl_init($url);
         $passwordAccess = self::getPassword();
@@ -58,6 +58,7 @@ class APIManager
             ? array(self::getSecureHeader())
             : array();
 
+        $isPost === true ? $headers[] .= 'Content-Type: application/x-www-form-urlencoded' : '';
 
         curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
@@ -67,20 +68,20 @@ class APIManager
     }
 
 
-    /**
-     * @throws \JsonException
-     */
     public static function postRequest(string $url, array $data = [], $secure = true): string|false
     {
         //todo verif if url is real URL.
 
         // TODO Add retry function
 
-        $curlHandle = self::generateHeader($url, $secure);
+        $curlHandle = self::generateHeader($url, $secure, true);
 
-        $parsedData = json_encode($data, JSON_THROW_ON_ERROR);
+        $parsedData = http_build_query($data);
         curl_setopt($curlHandle, CURLOPT_POST, 1);
         curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $parsedData);
+        curl_setopt($curlHandle, CURLOPT_TIMEOUT, 5);
+        curl_setopt($curlHandle, CURLOPT_ENCODING, "gzip");
+        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($curlHandle);
         curl_close($curlHandle);
         return $response;
