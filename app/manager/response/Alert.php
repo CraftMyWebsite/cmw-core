@@ -11,7 +11,8 @@ class Alert
         #[ExpectedValues(["success", "error", "warning"])]
         private readonly string $alertType,
         private readonly string $alertTitle,
-        private readonly string $alertMessage
+        private readonly string $alertMessage,
+        private readonly bool   $isAdmin
     )
     {
     }
@@ -40,7 +41,15 @@ class Alert
     {
         return $this->alertMessage;
     }
-    
+
+    /**
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->isAdmin;
+    }
+
     
 
 }

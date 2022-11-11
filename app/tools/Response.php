@@ -11,7 +11,9 @@ class Response
      * @return Alert[]
      */
     public static function getAlerts() : array {
-        if(!isset($_SESSION["alerts"])) $_SESSION["alerts"] = array();
+        if(!isset($_SESSION["alerts"])) {
+            $_SESSION["alerts"] = array();
+        }
         return $_SESSION["alerts"];
     }
 
@@ -19,9 +21,9 @@ class Response
         $_SESSION["alerts"] = array();
     }
 
-    public static function sendAlert(#[ExpectedValues(["success", "error", "warning"])] string $alertType, string $title, string $message): void
+    public static function sendAlert(#[ExpectedValues(["success", "error", "warning"])] string $alertType, string $title, string $message, bool $isAdmin = false): void
     {
-        $_SESSION["alerts"][] = self::createAlert($alertType, $title, $message);
+        $_SESSION["alerts"][] = self::createAlert($alertType, $title, $message, $isAdmin);
     }
 
     public static function sendJsonMessage(string $title, string $msg, int $statusCode = 200): void
@@ -29,9 +31,9 @@ class Response
         return;
     }
 
-    private static function createAlert(string $type, string $title, string $msg): Alert
+    private static function createAlert(string $type, string $title, string $msg, bool $isAdmin): Alert
     {
-        return new Alert($type, $title, $msg);
+        return new Alert($type, $title, $msg, $isAdmin);
     }
 
 }
