@@ -127,28 +127,25 @@ class Loader
         $theme = CoreController::getThemePath();
         if ($theme) {
 
-            $viewsPath = "./public/themes/$theme/views/";
-            $dirList = array_diff(scandir($viewsPath), array('.', '..'));
+            $viewsPath = "$theme/views/";
+            $dirList = Utils::getFoldersInFolder($viewsPath);
 
             foreach ($dirList as $package) {
                 $packagePath = $viewsPath . $package . "/";
 
-                if (is_dir($viewsPath . $package)) {
+                $packageDir = Utils::getFilesInFolder($packagePath);
 
-                    $packageDir = array_diff(scandir($packagePath), array('.', '..'));
-
-                    foreach ($packageDir as $file) {
-                        $packageFile = $packagePath . $file;
-                        if ($file === "router.php" && is_file($packageFile)) {
-                            require_once($packageFile);
-                        }
+                foreach ($packageDir as $file) {
+                    $packageFile = $packagePath . $file;
+                    if ($file === "router.php" && is_file($packageFile)) {
+                        require_once($packageFile);
                     }
-
                 }
 
             }
 
         }
+
 
         if (session_status() !== PHP_SESSION_ACTIVE) {
             ini_set('session.gc_maxlifetime', 600480); // 7 days
@@ -222,7 +219,7 @@ class Loader
         }
     }
 
-    public static function createSimpleRoute(string $path, string $fileName, string $package, ?string $name = null, int $weight = 1): void
+    public static function createSimpleRoute(string $path, string $fileName, string $package, ?string $name = null, int $weight = 2): void
     {
         self::getRouterInstance()->get($path, function () use ($package, $fileName) {
             View::basicPublicView($package, $fileName);

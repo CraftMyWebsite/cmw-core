@@ -111,7 +111,7 @@ class Utils
     public static function getLatestVersion(): string
     {
         try {
-            return json_decode(file_get_contents(self::getApi() .  "/getCmwLatest"), false, 512, JSON_THROW_ON_ERROR)->version;
+            return json_decode(file_get_contents(self::getApi() . "/getCmwLatest"), false, 512, JSON_THROW_ON_ERROR)->version;
         } catch (\JsonException $e) {
         }
     }
@@ -199,5 +199,51 @@ class Utils
     public static function getSiteDescription(): string
     {
         return (new CoreModel())->fetchOption("description");
+    }
+    
+    public static function getElementsInFolder(string $path): array
+    {
+        $src = is_dir($path);
+        if ($src) {
+            return array_diff(scandir($path), array('.', '..'));
+        }
+
+        return [];
+    }
+
+    public static function getFilesInFolder(string $path): array
+    {
+        $folder = self::getElementsInFolder($path);
+        if (empty($folder)) {
+            return [];
+        }
+
+        $arrayToReturn = [];
+        $path = (str_ends_with($path, '/')) ? $path : $path.'/';
+        foreach ($folder as $element) {
+            if(is_file($path.$element)) {
+                $arrayToReturn[] = $element;
+            }
+        }
+
+        return $arrayToReturn;
+    }
+
+    public static function getFoldersInFolder(string $path): array
+    {
+        $folder = self::getElementsInFolder($path);
+        if (empty($folder)) {
+            return [];
+        }
+
+        $arrayToReturn = [];
+        $path = (str_ends_with($path, '/')) ? $path : $path.'/';
+        foreach ($folder as $element) {
+            if(is_dir($path.$element)) {
+                $arrayToReturn[] = $element;
+            }
+        }
+
+        return $arrayToReturn;
     }
 }

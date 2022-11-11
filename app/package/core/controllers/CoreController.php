@@ -22,16 +22,16 @@ use JsonException;
  */
 class CoreController
 {
-    public static string $themePath;
+    public static string $themeName;
     public static array $availableLocales = ['fr' => 'Français', 'en' => 'English'];
 
     public function __construct()
     {
-        self::$themePath = (new CoreModel())->fetchOption("theme"); //Get the current active theme
+        self::$themeName = (new CoreModel())->fetchOption("theme"); //Get the current active theme
     }
 
     public static function getThemePath(): string {
-        return self::$themePath;
+        return (empty($themeName = self::$themeName)) ? "" : "./public/themes/$themeName/";
     }
 
     #[NoReturn] protected static function redirectToHome(): void
