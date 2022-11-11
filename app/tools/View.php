@@ -275,7 +275,11 @@ class View
         $alerts = Response::getAlerts();
         $alertContent = "";
         foreach ($alerts as $alert) {
-            $view = new View("alerts", $alert->getType());
+            if(!$alert->isAdmin()) {
+                $view = new View("alerts", $alert->getType());
+            } else {
+                $view = new View("core", "alerts/{$alert->getType()}", true);
+            }
             $view->addVariable("alert", $alert);
             $alertContent .= $view->loadFile();
         }
