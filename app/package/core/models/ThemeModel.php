@@ -22,9 +22,10 @@ class ThemeModel extends DatabaseManager
         $db = self::getInstance();
         $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config 
                                     WHERE theme_config_name = :config AND theme_config_theme = :theme');
+
         $req->execute(array("config" => $config, "theme" => $theme));
 
-        return ($req->execute()) ? $req->fetch()["theme_config_value"] : "";
+        return $req->fetch()["theme_config_value"] ?? "";
     }
 
     public function fetchThemeConfigs(string $theme): array
