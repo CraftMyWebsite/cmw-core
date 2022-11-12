@@ -124,7 +124,7 @@ class InstallerController
         $this->firstInstallSetInfos($subFolder, $timezone, $devMode);
 
         Utils::getEnv()->setOrEditValue("PATH_SUBFOLDER", $subFolder);
-        Utils::getEnv()->setOrEditValue("PATH_URL", (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . $subFolder);
+        Utils::getEnv()->setOrEditValue("PATH_URL", Utils::getCompleteUrl());
         Utils::getEnv()->setOrEditValue("PATH_ADMIN_VIEW", "admin/resources/views/");
         Utils::getEnv()->setOrEditValue("TIMEZONE", $timezone);
         Utils::getEnv()->setOrEditValue("DEVMODE", $devMode);

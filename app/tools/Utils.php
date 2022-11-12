@@ -165,6 +165,12 @@ class Utils
         ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https' ? 'https' : 'http';
     }
 
+
+    public static function getCompleteUrl(): string
+    {
+        return self::getHttpProtocol() . "://$_SERVER[HTTP_HOST]" . self::getEnv()->getValue("PATH_SUBFOLDER");
+    }
+
     /**
      * @return string
      * @desc Return the client ip, for local users -> 127.0.0.1
