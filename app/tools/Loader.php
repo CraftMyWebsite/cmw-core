@@ -2,6 +2,7 @@
 
 namespace CMW\Utils;
 
+use CMW\Controller\Core\CoreController;
 use CMW\Manager\Class\ClassManager;
 
 use CMW\Controller\Installer\InstallerController;
@@ -121,13 +122,37 @@ class Loader
             };
         });
 
+        //Load router files in front-end
+        new CoreController();
+        $theme = CoreController::getThemePath();
+        if ($theme) {
 
-            if (session_status() !== PHP_SESSION_ACTIVE ) {
-                ini_set('session.gc_maxlifetime', 600480); // 7 days
-                ini_set('session.cookie_lifetime', 600480); // 7 days
-                session_set_cookie_params(600480, Utils::getEnv()->getValue("PATH_SUBFOLDER"), null, false, true);
-                session_start();
+            $viewsPath = "$theme/views/";
+            $dirList = Utils::getFoldersInFolder($viewsPath);
+
+            foreach ($dirList as $package) {
+                $packagePath = $viewsPath . $package . "/";
+
+                $packageDir = Utils::getFilesInFolder($packagePath);
+
+                foreach ($packageDir as $file) {
+                    $packageFile = $packagePath . $file;
+                    if ($file === "router.php" && is_file($packageFile)) {
+                        require_once($packageFile);
+                    }
+                }
+
             }
+
+        }
+
+
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            ini_set('session.gc_maxlifetime', 600480); // 7 days
+            ini_set('session.cookie_lifetime', 600480); // 7 days
+            session_set_cookie_params(600480, Utils::getEnv()->getValue("PATH_SUBFOLDER"), null, false, true);
+            session_start();
+        }
 
     }
 
@@ -194,6 +219,13 @@ class Loader
         }
     }
 
+    public static function createSimpleRoute(string $path, string $fileName, string $package, ?string $name = null, int $weight = 2): void
+    {
+        self::getRouterInstance()->get($path, function () use ($package, $fileName) {
+            View::basicPublicView($package, $fileName);
+        }, $name, $weight);
+    }
+
     /**
      * @throws \ReflectionException
      */
@@ -232,7 +264,7 @@ class Loader
 
     public function installManager(): void
     {
-        $this->requireFile("installation","controllers/InstallerController.php", "models/InstallerModel.php"); //Todo See that
+        $this->requireFile("installation", "controllers/InstallerController.php", "models/InstallerModel.php"); //Todo See that
 
         self::initRoute(self::getValue("dir") . "installation/controllers/InstallerController.php");
         if (is_dir("installation")) {

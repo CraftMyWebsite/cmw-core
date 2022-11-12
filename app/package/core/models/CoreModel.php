@@ -23,7 +23,7 @@ class CoreModel extends DatabaseManager
         return $option['option_value'];
     }
 
-    /***
+    /**
      * @param string $option
      * @return string
      * @desc get the selected option
