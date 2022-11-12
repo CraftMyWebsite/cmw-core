@@ -123,27 +123,30 @@ class Loader
         });
 
         //Load router files in front-end
-        new CoreController();
-        $theme = CoreController::getThemePath();
-        if ($theme) {
 
-            $viewsPath = "$theme/views/";
-            $dirList = Utils::getFoldersInFolder($viewsPath);
+        if(Utils::getEnv()->getValue("INSTALLSTEP") === '-1') {
+            new CoreController();
+            $theme = CoreController::getThemePath();
+            if ($theme) {
 
-            foreach ($dirList as $package) {
-                $packagePath = $viewsPath . $package . "/";
+                $viewsPath = "$theme/views/";
+                $dirList = Utils::getFoldersInFolder($viewsPath);
 
-                $packageDir = Utils::getFilesInFolder($packagePath);
+                foreach ($dirList as $package) {
+                    $packagePath = $viewsPath . $package . "/";
 
-                foreach ($packageDir as $file) {
-                    $packageFile = $packagePath . $file;
-                    if ($file === "router.php" && is_file($packageFile)) {
-                        require_once($packageFile);
+                    $packageDir = Utils::getFilesInFolder($packagePath);
+
+                    foreach ($packageDir as $file) {
+                        $packageFile = $packagePath . $file;
+                        if ($file === "router.php" && is_file($packageFile)) {
+                            require_once($packageFile);
+                        }
                     }
+
                 }
 
             }
-
         }
 
 
