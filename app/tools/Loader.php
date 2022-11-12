@@ -101,6 +101,11 @@ class Loader
 
     public static function loadProject(): void
     {
+
+        if (!(new Loader)->isEnvValid()){
+            (new Loader)->updateEnv();
+        }
+
         spl_autoload_register(static function ($class) {
 
 
@@ -264,6 +269,24 @@ class Loader
 
     }
 
+    /**
+     * @return bool
+     * @desc Check if the current env config is valid
+     */
+    private function isEnvValid(): bool
+    {
+        return is_file(Utils::getEnv()->getValue("DIR") . "index.php");
+    }
+
+    /**
+     * @return void
+     * @desc Update DIR & PATH_URL ENV values
+     */
+    private function updateEnv(): void
+    {
+        Utils::getEnv()->setOrEditValue("DIR", dirname(__DIR__, 2) . "/");
+        Utils::getEnv()->setOrEditValue("PATH_URL", Utils::getCompleteUrl());
+    }
 
     public function installManager(): void
     {
