@@ -36,14 +36,17 @@ return [
         "error" => "Database error: ",
     ],
     "toaster" => [
-        "title" => "Information",
+        "success" => "Success",
+        "warning" => "Warning",
+        "error" => "Error",
         "config" => [
-            "edit" => [
-                "success" => "Configuration edit with success !"
-            ],
+            "success" => "Configuration edit with success !",
         ],
-        "delete" => [
-            "success" => "Delete with success !"
+        "mail" => [
+            "test" => "Mail send to %mail%"
+        ],
+        "theme" => [
+            "regenerate" => "Theme configuration regenerate"
         ],
     ],
     "datatables" => [

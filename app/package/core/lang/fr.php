@@ -31,14 +31,17 @@ return [
         "error" => "Erreur base de donnée: ",
     ],
     "toaster" => [
-        "title" => "Information",
+        "success" => "Succès",
+        "warning" => "Attention",
+        "error" => "Erreur",
         "config" => [
-            "edit" => [
-                "success" => "Configuration modifiée avec succès !"
-            ],
+            "success" => "Configuration modifiée avec succès !",
         ],
-        "delete" => [
-            "success" => "Supprimé avec succès !"
+        "mail" => [
+            "test" => "Mail envoyé à l'adresse %mail%"
+        ],
+        "theme" => [
+            "regenerate" => "Configuration du thème regénérée"
         ],
     ],
     "datatables" => [

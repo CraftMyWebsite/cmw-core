@@ -2,6 +2,7 @@
 
 namespace CMW\Controller\Core;
 
+use CMW\Controller\Users\UsersController;
 use CMW\Router\Link;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
@@ -15,6 +16,8 @@ class UpdatesController extends CoreController
     #[Link("/cms", Link::GET, [], "/cmw-admin/updates")]
     public function adminUpdates(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.update");
+
         View::createAdminView("core", "updates")
             ->view();
     }
@@ -22,6 +25,8 @@ class UpdatesController extends CoreController
     #[Link("/cms/install", Link::GET, [], "/cmw-admin/updates")]
     public function adminUpdatesInstall(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.update");
+
         /*
          * Download zip. (skip for the moment)
          * Extract zip and override files.

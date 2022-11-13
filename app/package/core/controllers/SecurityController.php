@@ -3,8 +3,11 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Core\CoreController;
+use CMW\Controller\Users\UsersController;
+use CMW\Manager\Lang\LangManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Router\Link;
+use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
 
@@ -21,6 +24,8 @@ class SecurityController extends CoreController
     #[Link("/security", Link::GET, [], "/cmw-admin")]
     public function adminSecurity(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.security.configuration");
+
         View::createAdminView("core", "security")
             ->addScriptAfter("app/package/core/views/resources/js/security.js")
             ->addVariableList(["captcha" => self::getCaptchaType()])
@@ -30,6 +35,8 @@ class SecurityController extends CoreController
     #[Link("/security/edit/captcha", Link::POST, [], "/cmw-admin")]
     public function adminSecurityEditCaptchaPost(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.security.configuration");
+
         $captcha = filter_input(INPUT_POST, "captcha");
 
         switch ($captcha){
@@ -47,6 +54,9 @@ class SecurityController extends CoreController
                 CoreModel::updateOption("captcha", "none");
                 break;
         }
+
+        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+            LangManager::translate("core.toaster.config.success"));
 
         header("Location: ../../security");
     }
