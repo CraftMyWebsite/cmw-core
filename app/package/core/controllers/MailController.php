@@ -2,9 +2,12 @@
 
 namespace CMW\Controller\Core;
 
+use CMW\Controller\Users\UsersController;
+use CMW\Manager\Lang\LangManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\MailModel;
 use CMW\Router\Link;
+use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
 use Exception;
@@ -111,6 +114,8 @@ class MailController extends CoreController
     #[Link("/configuration", Link::GET, [], "/cmw-admin/mail")]
     public function mailConfiguration(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.mail.configuration");
+
         $config = $this->mailModel->getConfig();
 
         View::createAdminView("core", "mailConfig")
@@ -126,11 +131,16 @@ class MailController extends CoreController
     #[Link("/configuration", Link::POST, [], "/cmw-admin/mail")]
     public function mailConfigurationPost(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.mail.configuration");
+
         [$mail, $mailReply, $addressSMTP, $user, $password, $port, $protocol, $footer, $enableSMTP] = Utils::filterInput(
             "mail", "mailReply", "addressSMTP", "user", "password", "port", "protocol", "footer", "enableSMTP");
 
 
         $this->mailModel->create($mail, $mailReply, $addressSMTP, $user, $password, $port, $protocol, $footer, (is_null($enableSMTP) ? 0 : 1));
+
+        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+            LangManager::translate("core.toaster.config.success"));
 
         header("Location: configuration");
     }
@@ -139,12 +149,16 @@ class MailController extends CoreController
     #[Link("/test", Link::POST, [], "/cmw-admin/mail", secure: true)]
     public function testMailConfigurationPost(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.mail.configuration");
+
         $receiver = filter_input(INPUT_POST,"receiver");
 
         $this->sendMail($receiver, "Test CraftMyWebsite - MAILS", "<p>Hello World !</p>");
-        header("Location: configuration");
 
-        //TODO ADD TOASTERS NOTIFICATIONS
+        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+            LangManager::translate("core.toaster.mail.test", ["%mail%" => $receiver]));
+
+        header("Location: configuration");
     }
 
 }

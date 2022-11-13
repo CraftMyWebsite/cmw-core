@@ -4,6 +4,7 @@ namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Api\APIManager;
+use CMW\Manager\Lang\LangManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Router\Link;
 use CMW\Router\RouterException;
@@ -45,6 +46,7 @@ class CoreController
     #[Link("/dashboard", Link::GET, [], "/cmw-admin")]
     public function adminDashboard(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard");
         //Redirect to the dashboard
         if ($_GET['url'] === "cmw-admin") {
             header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
@@ -56,6 +58,8 @@ class CoreController
     #[Link(path: "/configuration", method: Link::GET, scope: "/cmw-admin")]
     public function adminConfiguration(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
+
         View::createAdminView("core", "configuration")->view();
     }
 
@@ -65,8 +69,9 @@ class CoreController
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
 
         foreach ($_POST as $option_name => $option_value):
-            if ($option_name === "locale")
+            if ($option_name === "locale") {
                 Utils::getEnv()->editValue("LOCALE", $option_value);
+            }
 
             CoreModel::updateOption($option_name, $option_value);
         endforeach;
@@ -75,10 +80,8 @@ class CoreController
 
         echo Images::upload($_FILES['favicon'], "favicon", false, "favicon");
 
-        //TODO Remove that
-        $_SESSION['toaster'][0]['title'] = "CORE_TOASTER_TITLE";
-        $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = "CORE_TOASTER_CONFIG_EDIT_SUCCESS";
+        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+            LangManager::translate("core.toaster.config.success"));
 
         header("location: configuration");
     }
@@ -91,8 +94,6 @@ class CoreController
     public function frontHome(): void
     {
         $view = new View("core", "home");
-//        Response::sendAlert("success", "Ceci est un test", "Autre test");
-//        Response::sendAlert("success", "Second alerte !", "Dingue");
         $view->view();
     }
 
@@ -117,7 +118,6 @@ class CoreController
             ->setPackage("errors")
             ->setViewFile($errorToCall)
             ->view();
-
     }
 
     /**

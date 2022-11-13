@@ -2,10 +2,13 @@
 
 namespace CMW\Controller\Core;
 
+use CMW\Controller\Users\UsersController;
 use CMW\Entity\Core\ThemeEntity;
+use CMW\Manager\Lang\LangManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\ThemeModel;
 use CMW\Router\Link;
+use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
 use Error;
@@ -131,6 +134,8 @@ class ThemeController extends CoreController
     #[Link("/configuration", Link::GET, [], "/cmw-admin/theme")]
     public function adminThemeConfiguration(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
+
         $currentTheme = self::getCurrentTheme();
         $installedThemes = self::getInstalledThemes();
 
@@ -148,18 +153,29 @@ class ThemeController extends CoreController
     #[Link("/configuration", Link::POST, [], "/cmw-admin/theme")]
     public function adminThemeConfigurationPost(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
+
         $theme = filter_input(INPUT_POST, "theme");
 
         CoreModel::updateOption("theme", $theme);
+
+        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+            LangManager::translate("core.toaster.config.success"));
+
         header("Location: configuration");
     }
 
     #[Link("/configuration/regenerate", Link::POST, [], "/cmw-admin/theme")]
     public function adminThemeConfigurationRegeneratePost(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
+
         $themeName = self::getCurrentTheme()->getName();
         $this->themeModel->deleteThemeConfig($themeName);
         $this->installThemeSettings($themeName);
+
+        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+            LangManager::translate("core.toaster.theme.regenerate"));
 
         header("Location: ../configuration");
     }
@@ -167,6 +183,8 @@ class ThemeController extends CoreController
     #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/theme")]
     public function adminThemeInstallation(int $id): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
+
         try {
             $theme = json_decode(file_get_contents(Utils::getApi() . "/getThemeById=" . $id), false, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
@@ -199,6 +217,7 @@ class ThemeController extends CoreController
     #[Link("/manage", Link::GET, [], "/cmw-admin/theme")]
     public function adminThemeManage(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
         View::createAdminView("core", "themeManage")
             ->view();
     }
@@ -206,9 +225,14 @@ class ThemeController extends CoreController
     #[Link("/manage", Link::POST, [], "/cmw-admin/theme")]
     public function adminThemeManagePost(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
+
         foreach ($this->getCurrentThemeConfigSettings() as $conf => $value) {
             $this->themeModel->updateThemeConfig($conf, $_POST[$conf] ?? null, self::getCurrentTheme()->getName());
         }
+
+        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+            LangManager::translate("core.toaster.config.success"));
 
         header("location: /cmw-admin/theme/manage");
     }

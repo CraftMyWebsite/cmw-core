@@ -2,6 +2,7 @@
 
 namespace CMW\Controller\Core;
 
+use CMW\Controller\Users\UsersController;
 use CMW\Model\Core\MenusModel;
 use CMW\Router\Link;
 use CMW\Utils\View;
@@ -40,6 +41,8 @@ class MenusController extends CoreController
     #[Link("/", Link::GET, [], "/cmw-admin/menus")]
     public function adminMenus(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menus.configuration");
+
         $view = View::createAdminView('core', 'menus')
             ->addScriptBefore("app/package/core/views/resources/js/sortable.min.js")
             ->addScriptAfter("app/package/core/views/resources/js/menu.js");
