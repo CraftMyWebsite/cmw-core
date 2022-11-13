@@ -27,7 +27,7 @@ class ErrorManager
             echo <<<HTML
             <div class="cmw--errors">
                 <h2>[MISSING PERMISSIONS]<br> Cannot create log file !</h2>
-               <h3>It seems that it is impossible to create a log file in the path: <b>{$this->dirStorage}</b></h3>
+               <h3>It seems that it is impossible to create a log file in the path: <b>$this->dirStorage</b></h3>
             </div>
         HTML;
         }
@@ -55,6 +55,7 @@ class ErrorManager
 
     private function handleError(): void
     {
+
         register_shutdown_function(
             function () {
                 $this->checkForFatal();
@@ -70,11 +71,12 @@ class ErrorManager
                 $this->logException($e);
             }
         );
+
     }
 
     private function logError($num, $str, $file, $line): void
     {
-        $this->logException(new ErrorException($str, 0, $num, $file, $line));
+        throw new ErrorException($str, 0, $num, $file, $line);
     }
 
     private function logException(Throwable $e): void
