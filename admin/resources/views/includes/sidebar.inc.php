@@ -3,8 +3,11 @@
 /* @var CoreController $coreAdmin */
 
 use CMW\Controller\Core\CoreController;
+use CMW\Controller\Core\PackageController;
 use CMW\Entity\Users\UserEntity;
-use CMW\Manager\Lang\LangManager; ?>
+use CMW\Manager\Lang\LangManager;
+
+?>
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
@@ -39,31 +42,17 @@ use CMW\Manager\Lang\LangManager; ?>
                 </li>
 
                 <?php
+                foreach (PackageController::getInstalledPackages() as $package):
+                    foreach ($package->getMenus() as $menu):
+                        if ($menu->getSubmenu() !== null): ?>
 
-                //Get the package folders
-                $packagesFolder = 'app/package/';
-                $scannedDirectory = array_diff(scandir($packagesFolder), array('..', '.'));
-                foreach ($scannedDirectory as $package) :
-                    $strJsonFileContents = file_get_contents("app/package/$package/infos.json");
-                    try {
-                        $packageInfos = json_decode($strJsonFileContents, true, 512, JSON_THROW_ON_ERROR);
-                    } catch (JsonException $e) {
-                    }
-
-
-                    foreach ($packageInfos['menus'] as $packageMenus):
-
-                        $nameMenu = $packageMenus['name_menu_' . getenv("LOCALE")] ?? $packageMenus['name_menu'];
-
-                        if (isset($packageMenus["urls_submenu"])) :
-                            $urlsSubMenu = $packageMenus["urls_submenu_" . getenv("LOCALE")] ?? $packageMenus["urls_submenu"]; ?>
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
-                                    <i class="nav-icon <?= $packageMenus['icon_menu'] ?>"></i>
-                                    <p><?= $nameMenu ?><i class="right fas fa-angle-left"></i></p>
+                                    <i class="nav-icon <?= $menu->getIcon() ?>"></i>
+                                    <p><?= $menu->getName() ?><i class="right fas fa-angle-left"></i></p>
                                 </a>
                                 <ul class="nav nav-treeview">
-                                    <?php foreach ($urlsSubMenu as $subMenuName => $subMenuUrl) : ?>
+                                    <?php foreach ($menu->getSubmenu() as $subMenuName => $subMenuUrl): ?>
                                         <li class="nav-item">
                                             <a href="<?= getenv("PATH_SUBFOLDER") ?>cmw-admin/<?= $subMenuUrl ?>"
                                                class="nav-link">
@@ -76,10 +65,10 @@ use CMW\Manager\Lang\LangManager; ?>
 
                         <?php else : ?>
                             <li class="nav-item">
-                                <a href="<?= getenv("PATH_SUBFOLDER") ?>cmw-admin/<?= $packageMenus['url_menu'] ?>"
+                                <a href="<?= getenv("PATH_SUBFOLDER") ?>cmw-admin/<?= $menu->getUrl() ?>"
                                    class="nav-link">
-                                    <i class="nav-icon <?= $packageMenus['icon_menu'] ?>"></i>
-                                    <p><?= $nameMenu ?></p>
+                                    <i class="nav-icon <?= $menu->getIcon() ?>"></i>
+                                    <p><?= $menu->getName() ?></p>
                                 </a>
                             </li>
                         <?php endif; ?>

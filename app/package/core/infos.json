@@ -2,10 +2,10 @@
   "name": "core",
   "menus": [
     {
-      "name_menu": "Général",
+      "name_menu_fr": "Général",
       "icon_menu": "fas fa-th",
       "url_menu": "",
-      "urls_submenu": {
+      "urls_submenu_fr": {
         "Configuration": "configuration",
         "Sécurité": "security"
       },
@@ -15,15 +15,15 @@
       }
     },
     {
-      "name_menu": "Menus",
+      "name_menu_fr": "Menus",
       "icon_menu": "fas fa-bars",
       "url_menu": "menus"
     },
     {
-      "name_menu": "Mails",
+      "name_menu_fr": "Mails",
       "icon_menu": "fas fa-envelope",
       "url_menu": "",
-      "urls_submenu": {
+      "urls_submenu_fr": {
         "Configuration": "mail/configuration"
       },
       "urls_submenu_en": {
@@ -31,10 +31,10 @@
       }
     },
     {
-      "name_menu": "Thèmes",
+      "name_menu_fr": "Thèmes",
       "icon_menu": "fas fa-paintbrush",
       "url_menu": "",
-      "urls_submenu": {
+      "urls_submenu_fr": {
         "Configuration": "theme/configuration",
         "Gestion de votre thème": "theme/manage"
       },
@@ -44,10 +44,10 @@
       }
     },
     {
-      "name_menu": "Updates",
+      "name_menu_fr": "MAJ",
       "icon_menu": "fas fa-arrows-rotate",
       "url_menu": "",
-      "urls_submenu": {
+      "urls_submenu_fr": {
         "MAJ CMW": "updates/cms"
       },
       "urls_submenu_en": {
@@ -56,7 +56,16 @@
     }
   ],
 
-  "description": "Gère le coeur du CMS",
+  "description": [
+    {
+      "fr": "Gère le coeur du CMS",
+      "en": "Manage CMS core"
+    }
+  ],
+
   "version": "1.0.0",
-  "author": "CraftMyWebsite Team"
+  "author": "CraftMyWebsite Team",
+
+  "isGame": false,
+  "isCore": true
 }
