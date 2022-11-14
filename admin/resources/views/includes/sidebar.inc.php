@@ -44,7 +44,7 @@ use CMW\Manager\Lang\LangManager;
                 <?php
                 foreach (PackageController::getInstalledPackages() as $package):
                     foreach ($package->getMenus() as $menu):
-                        if ($menu->getSubmenu() !== null): ?>
+                        if (!empty($menu->getSubmenu())): ?>
 
                             <li class="nav-item">
                                 <a href="#" class="nav-link">
