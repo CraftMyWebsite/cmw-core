@@ -102,7 +102,7 @@ class Loader
     public static function loadProject(): void
     {
 
-        if (!(new Loader)->isEnvValid()){
+        if (!(new Loader)->isEnvValid()) {
             (new Loader)->updateEnv();
         }
 
@@ -129,7 +129,7 @@ class Loader
 
         //Load router files in front-end
 
-        if(Utils::getEnv()->getValue("INSTALLSTEP") === '-1') {
+        if (Utils::getEnv()->getValue("INSTALLSTEP") === '-1') {
             new CoreController();
             $theme = CoreController::getThemePath();
             if ($theme) {
@@ -290,17 +290,16 @@ class Loader
 
     public function installManager(): void
     {
-        $this->requireFile("installation", "controllers/InstallerController.php", "models/InstallerModel.php"); //Todo See that
-
-        self::initRoute(self::getValue("dir") . "installation/controllers/InstallerController.php");
         if (is_dir("installation")) {
-            if ((int)self::getValue("installStep") >= 0) {
+            if (Utils::getEnv()->getValue("INSTALLSTEP") !== '-1') {
+
+                $this->requireFile("installation", "controllers/InstallerController.php", "models/InstallerModel.php"); //Todo See that
+                self::initRoute(self::getValue("dir") . "installation/controllers/InstallerController.php");
 
                 InstallerController::goToInstall();
-
-            } elseif (!self::getValue("devMode")) {
-                Utils::deleteDirectory("installation");
             }
+        } elseif (!Utils::getEnv()->getValue("DEVMODE")) {
+            Utils::deleteDirectory("installation");
         }
     }
 
