@@ -4,26 +4,37 @@
 
 namespace CMW\Entity\Core;
 
+use CMW\Utils\Utils;
+
 class PackageEntity
 {
     private string $name;
-    private string $description;
+    private array $descriptions;
     private string $version;
     private string $author;
-    //todo menus
+    /** @var \CMW\Entity\Core\PackageMenusEntity|\CMW\Entity\Core\PackageMenusEntity[] $menus */
+    private array $menus;
+    private bool $isGame;
+    private bool $isCore;
 
     /**
      * @param string $name
-     * @param string $description
+     * @param array $descriptions
      * @param string $version
      * @param string $author
+     * @param null|\CMW\Entity\Core\PackageMenusEntity[] $menus
+     * @param bool $isGame
+     * @param bool $isCore
      */
-    public function __construct(string $name, string $description, string $version, string $author)
+    public function __construct(string $name, array $descriptions, string $version, string $author, ?array $menus, bool $isGame, bool $isCore)
     {
         $this->name = $name;
-        $this->description = $description;
+        $this->descriptions = $descriptions;
         $this->version = $version;
         $this->author = $author;
+        $this->menus = $menus;
+        $this->isGame = $isGame;
+        $this->isCore = $isCore;
     }
 
     /**
@@ -39,7 +50,15 @@ class PackageEntity
      */
     public function getDescription(): string
     {
-        return $this->description;
+        return $this->descriptions[Utils::getEnv()->getValue('LOCALE')];
+    }
+
+    /**
+     * @return array
+     */
+    public function getDescriptions(): array
+    {
+        return $this->descriptions;
     }
 
     /**
@@ -57,4 +76,30 @@ class PackageEntity
     {
         return $this->author;
     }
+
+    /**
+     * @return bool
+     */
+    public function isGame(): bool
+    {
+        return $this->isGame;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCore(): bool
+    {
+        return $this->isCore;
+    }
+
+    /**
+     * @return \CMW\Entity\Core\PackageMenusEntity[]
+     */
+    public function getMenus(): array
+    {
+        return $this->menus;
+    }
+
+
 }

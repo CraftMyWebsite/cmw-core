@@ -2,11 +2,11 @@
   "name": "pages",
   "menus": [
     {
-      "name_menu": "Pages",
+      "name_menu_fr": "Pages",
       "name_menu_en": "Pages",
       "icon_menu": "fas fa-copy",
       "url_menu": "",
-      "urls_submenu": {
+      "urls_submenu_fr": {
         "Liste": "pages/list",
         "Ajouter": "pages/add"
       },
@@ -16,13 +16,17 @@
       }
     }
   ],
-  "permissions": {
-    "Afficher la liste des pages": "pages.show",
-    "Ajouts d'une page": "pages.add",
-    "Modification d'une page": "pages.edit",
-    "Suppression d'une page": "pages.delete"
-  },
-  "description": "Gérer les pages du site",
+
+  "description": [
+    {
+      "fr": "Gérer les pages du site",
+      "en": "Manage your website pages"
+    }
+  ],
+
   "version": "1.0.0",
-  "author": "CraftMyWebsite Team"
+  "author": "CraftMyWebsite Team",
+
+  "isGame": false,
+  "isCore": false
 }

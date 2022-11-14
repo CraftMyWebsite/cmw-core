@@ -2,11 +2,11 @@
   "name": "users",
   "menus": [
     {
-      "name_menu": "Utilisateurs",
+      "name_menu_fr": "Utilisateurs",
       "name_menu_en": "Users",
       "icon_menu": "fas fa-user",
       "url_menu": "",
-      "urls_submenu": {
+      "urls_submenu_fr": {
         "Paramètres": "users/settings",
         "Liste": "users/list",
         "Ajouter": "users/add",
@@ -20,14 +20,17 @@
       }
     }
   ],
-  "permissions": {
-    "Afficher la liste des utilisateurs": "users.show",
-    "Ajouts d'un utilisateur": "users.add",
-    "Modification d'un utilisateur": "users.edit",
-    "Suppression d'un utilisateur": "users.delete",
-    "Gestion des rôles": "users.roles"
-  },
-  "description": "Gérer et afficher les utilisateurs du site",
+
+  "description": [
+    {
+      "fr": "Gérer et afficher les utilisateurs du site",
+      "en": "Manage your website users"
+    }
+  ],
+
   "version": "1.0.0",
-  "author": "CraftMyWebsite Team"
+  "author": "CraftMyWebsite Team",
+
+  "isGame": false,
+  "isCore": true
 }
