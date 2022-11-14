@@ -7,15 +7,15 @@ class PackageMenusEntity {
     private string $name;
     private string $icon;
     private string $url;
-    private ?array $submenu;
+    private array $submenu;
 
     /**
      * @param string $name
      * @param string $icon
      * @param string $url
-     * @param array|null $submenu
+     * @param array $submenu
      */
-    public function __construct(string $name, string $icon, string $url, ?array $submenu)
+    public function __construct(string $name, string $icon, string $url, array $submenu)
     {
         $this->name = $name;
         $this->icon = $icon;
@@ -48,9 +48,9 @@ class PackageMenusEntity {
     }
 
     /**
-     * @return array|null
+     * @return array
      */
-    public function getSubmenu(): ?array
+    public function getSubmenu(): array
     {
         return $this->submenu;
     }
