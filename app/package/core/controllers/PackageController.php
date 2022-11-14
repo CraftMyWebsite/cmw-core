@@ -75,7 +75,7 @@ class PackageController extends CoreController
                 $toReturn[] = new PackageMenusEntity(
                     $packageInfo['name_menu_' . Utils::getEnv()->getValue("LOCALE")],
                     $packageInfo['icon_menu'],
-                    "",
+                    $packageInfo['url_menu'],
                     []
                 );
             }
