@@ -96,5 +96,12 @@ return [
         "title" => "Users settings",
         "desc" => "Manage your users area settings",
         "default_picture" => "Default profile picture",
+        "resetPasswordMethod" => [
+            "label" => "Reinitialisation password method",
+            "options" => [
+                "0" => "New password sent by mail",
+                "1" => "Unique link sent by mail"
+            ],
+        ],
     ],
 ];

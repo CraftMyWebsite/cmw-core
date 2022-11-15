@@ -96,7 +96,7 @@ class UsersModel extends DatabaseManager
 
         $userPicture = new UserPictureEntity(
             $resUserPicture['users_pictures_user_id'] ?? $id,
-                $resUserPicture['users_pictures_image_name'] ?? ("default/" . (new UsersSettingsModel())->getSetting("defaultImage")),
+                $resUserPicture['users_pictures_image_name'] ?? ("default/" . UsersSettingsModel::getSetting("defaultImage")),
                 $resUserPicture['users_pictures_last_update'] ?? null
             );
 
@@ -501,11 +501,25 @@ class UsersModel extends DatabaseManager
 
     public function resetPassword(string $email): void
     {
+       if (UsersSettingsModel::getSetting("resetPasswordMethod") === "0"){
+            $this->resetPasswordMethodPasswordSendByMail($email);
+       } elseif (UsersSettingsModel::getSetting("resetPasswordMethod") === "1"){
+            $this->resetPasswordMethodUniqueLinkSendByMail($email);
+       }
+    }
+
+    public function resetPasswordMethodPasswordSendByMail(string $email): void
+    {
         $newPassword = $this->generatePassword();
 
         $this->updatePassWithMail($email, password_hash($newPassword, PASSWORD_BCRYPT));
 
         $this->sendResetPassword($email, $newPassword);
+    }
+
+    public function resetPasswordMethodUniqueLinkSendByMail(string $email): void
+    {
+        //TODO
     }
 
     public function sendResetPassword(string $email, string $password): void

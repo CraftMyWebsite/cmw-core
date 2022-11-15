@@ -14,7 +14,7 @@ use CMW\Manager\Database\DatabaseManager;
  */
 class UsersSettingsModel extends DatabaseManager
 {
-    public function getSetting(string $settingName): string
+    public static function getSetting(string $settingName): string
     {
         $db = self::getInstance();
         $req = $db->prepare('SELECT users_settings_value FROM cmw_users_settings WHERE users_settings_name = ?');
