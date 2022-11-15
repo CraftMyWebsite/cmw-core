@@ -50,7 +50,7 @@ use CMW\Entity\Users\UserEntity;
                             <hr class="dropdown-divider">
                         </li>
                         <li>
-                            <a class="dropdown-item text-danger" href="#">
+                            <a class="dropdown-item text-danger" href="/logout">
                                 <i class="fa-solid fa-right-from-bracket"></i>
                                 <span>Déconnexion</span>
                             </a>
