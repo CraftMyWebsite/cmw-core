@@ -11,13 +11,19 @@ function updateSortables() {
     // Loop through each nested sortable element
     for (let i = 0; i < nestedSortables.length; i++) {
         new Sortable(nestedSortables[i], {
+            handle: '.handle',
             group: 'nested',
             animation: 150,
             fallbackOnBody: true,
-            swapThreshold: 0.65
+            swapThreshold: 0.65,
+            onEnd: function (evt) {
+                updateStatus(evt)
+            },
         });
     }
 }
+
+
 
 function serialize(sortable) {
     let serialized = [];
@@ -31,6 +37,12 @@ function serialize(sortable) {
     }
     return serialized
 }
+
+
+function updateStatus(evt) {
+    console.log(evt.item.children[1].value)
+}
+
 
 // Add dropdown menu
 function addDropdown() {

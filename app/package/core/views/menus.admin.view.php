@@ -32,15 +32,34 @@ $description = LangManager::translate("core.menus.desc");
                     <div id="nested">
                         <div id="menus" class="list-group col nested-sortable">
 
-                            <div class="list-group-item nested-1">Dropdown
+                            <div class="list-group-item nested-1">
+                                <i class="fas fa-arrows-alt handle"></i>
+                                <p class="content-editable" contenteditable="true">Dropdown</p>
+
                                 <div class="list-group nested-sortable">
-                                    <div class="list-group-item nested-2">Dropdown 2.1</div>
-                                    <div class="list-group-item nested-2">Dropdown 2.3</div>
-                                    <div class="list-group-item nested-2">Dropdown 2.4</div>
+                                    <div class="list-group-item nested-2">
+                                        <i class="fas fa-arrows-alt handle"></i>
+                                        <input type="hidden" value="1" name="id[]" hidden>
+                                        <p class="content-editable" contenteditable="true">Dropdown 2.1</p>
+                                    </div>
+                                    <div class="list-group-item nested-2">
+                                        <i class="fas fa-arrows-alt handle"></i>
+                                        <input type="hidden" value="2" name="id[]" hidden>
+                                        <p class="content-editable" contenteditable="true">Dropdown 2.2</p>
+                                    </div>
+                                    <div class="list-group-item nested-2">
+                                        <i class="fas fa-arrows-alt handle"></i>
+                                        <input type="hidden" value="1" name="id[]" hidden>
+                                        <p class="content-editable" contenteditable="true">Dropdown 2.3</p>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="list-group-item nested-1">Item 1.2</div>
+                            <div class="list-group-item nested-1">
+                                <i class="fas fa-arrows-alt handle"></i>
+                                <input type="hidden" value="4" name="id[]" hidden>
+                                <p class="content-editable" contenteditable="true">Item</p>
+                            </div>
 
                         </div>
                     </div>
@@ -50,3 +69,14 @@ $description = LangManager::translate("core.menus.desc");
         </div>
     </div>
 </div>
+
+<script async>
+    /* Prevent enter on content editable*/
+    document.querySelectorAll('.content-editable').forEach(item => {
+        item.addEventListener('keypress', (evt) => {
+            if (evt.key === 'Enter') {
+                evt.preventDefault();
+            }
+        })
+    })
+</script>
