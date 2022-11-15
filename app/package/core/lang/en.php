@@ -110,7 +110,8 @@ return [
             "test" => [
                 "btn" => "Try your configuration",
                 "title" => "Try now your configuration",
-                "description" => "You can test your configuration by sending an email to your email address <br> <strong> Remember to save your configuration before starting the test</strong>",
+                "warning" => "Remember to save your configuration before starting the test !",
+                "description" => "You can test your configuration by sending an email to your email address.",
                 "receiverMail" => "Recipient address",
                 "receiverMailPlaceholder" => "Enter your mail",
             ]
