@@ -96,5 +96,12 @@ return [
         "title" => "Paramètres utilisateurs",
         "desc" => "Gérez les paramètres de la partie utilisateur de votre site",
         "default_picture" => "Image de profil par défaut",
+        "resetPasswordMethod" => [
+            "label" => "Méthode de réinitialisations du mot de passe",
+            "options" => [
+                "0" => "Mot de passé envoyé par mail",
+                "1" => "Lien unique envoyé par mail"
+            ],
+        ],
     ],
 ];

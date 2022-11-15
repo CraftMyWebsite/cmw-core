@@ -65,7 +65,7 @@ class UserPictureModel extends DatabaseManager
 
     public function userHasDefaultImage(int $userId): bool
     {
-        return  is_file(Utils::getEnv()->getValue("DIR") . "public/uploads/users/default/" . (new UsersSettingsModel())->getSetting("defaultImage")) && !$this->userHasImage($userId);
+        return  is_file(Utils::getEnv()->getValue("DIR") . "public/uploads/users/default/" . UsersSettingsModel::getSetting("defaultImage")) && !$this->userHasImage($userId);
     }
 
     /**

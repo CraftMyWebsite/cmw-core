@@ -3,10 +3,13 @@
 namespace CMW\Controller\Users;
 
 use CMW\Controller\Core\CoreController;
+use CMW\Manager\Lang\LangManager;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Users\UsersSettingsModel;
 use CMW\Router\Link;
 use CMW\Utils\Images;
+use CMW\Utils\Response;
+use CMW\Utils\Utils;
 use CMW\Utils\View;
 
 /**
@@ -17,6 +20,14 @@ use CMW\Utils\View;
  */
 class UsersSettingsController extends CoreController
 {
+    private UsersSettingsModel $settingsModel;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->settingsModel = new UsersSettingsModel();
+    }
+
     /**
      * @throws \CMW\Router\RouterException
      */
@@ -28,17 +39,29 @@ class UsersSettingsController extends CoreController
 
 
         View::createAdminView("users", "settings")
+            ->addVariableList(["settings" => $this->settingsModel])
             ->view();
     }
 
     #[Link("/settings", Link::POST, [], "/cmw-admin/users")]
     public function settingsPost(): void
     {
-        $defaultPicture = $_FILES['defaultPicture'];
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings");
 
-        $newDefaultImage = Images::upload($defaultPicture, "users/default");
+        if(!isset($_FILES['defaultPicture'])) {
+            $defaultPicture = $_FILES['defaultPicture'];
 
-        UsersSettingsModel::updateSetting("defaultImage", $newDefaultImage);
+            $newDefaultImage = Images::upload($defaultPicture, "users/default");
+
+            UsersSettingsModel::updateSetting("defaultImage", $newDefaultImage);
+        }
+
+        [$resetPasswordMethod] = Utils::filterInput("resetPasswordMethod");
+
+        UsersSettingsModel::updateSetting("resetPasswordMethod", $resetPasswordMethod);
+
+        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+            LangManager::translate("core.toaster.config.success"));
 
         header("Location: settings");
     }

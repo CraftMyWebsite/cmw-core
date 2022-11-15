@@ -39,7 +39,7 @@ class UserPictureEntity
     {
         if(!is_file(Utils::getEnv()->getValue("DIR") . "public/uploads/users/" . $this->imageName))
         {
-            return "default/" . (new UsersSettingsModel())->getSetting("defaultImage");
+            return "default/" . UsersSettingsModel::getSetting("defaultImage");
         }
         return $this->imageName;
     }
