@@ -5,6 +5,7 @@ namespace CMW\Controller\Installer;
 use CMW\Controller\Core\ThemeController;
 use CMW\Controller\Installer\Games\FabricGames;
 use CMW\Router\Link;
+use CMW\Router\LinkStorage;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
 use InstallerModel;
@@ -135,6 +136,9 @@ class InstallerController
 
         // Install the default theme settings
         (new ThemeController())->installThemeSettings(ThemeController::getCurrentTheme()->getName());
+
+        //Init default routes
+        (new LinkStorage())->storeDefaultRoutes();
 
         Utils::getEnv()->editValue("installStep", 1);
 
