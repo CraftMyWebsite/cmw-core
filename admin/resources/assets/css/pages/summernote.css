@@ -1,0 +1,15 @@
+body.theme-dark .note-editor .dropdown-toggle:after {
+    all: unset
+}
+
+body.theme-dark .note-editor .note-dropdown-menu, .note-editor .note-modal-footer {
+    box-sizing: content-box
+}
+
+.note-editor .dropdown-toggle:after {
+    all: unset
+}
+
+.note-editor .note-dropdown-menu, .note-editor .note-modal-footer {
+    box-sizing: content-box
+}
