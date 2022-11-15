@@ -164,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `cmw_theme_config`
 ) ENGINE = InnoDB
   CHARSET = utf8mb4;
 
-CREATE TABLE `cmw22`.`cmw_core_routes`
+CREATE TABLE IF NOT EXISTS `cmw_core_routes`
 (
     `core_routes_id`            INT                                   NOT NULL AUTO_INCREMENT,
     `core_routes_slug`          VARCHAR(300)                          NOT NULL,
