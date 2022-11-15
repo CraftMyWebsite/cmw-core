@@ -9,6 +9,8 @@ use CMW\Entity\Pages\pagesEntity;
 use CMW\Model\Pages\PagesModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Router\Link;
+use CMW\Router\LinkStorage;
+use CMW\Utils\Utils;
 use CMW\Utils\View;
 use JetBrains\PhpStorm\NoReturn;
 
@@ -84,12 +86,16 @@ class PagesController extends CoreController
 
         $page = new PagesModel();
         $pageTitle = filter_input(INPUT_POST, "news_title");
-        $pageSlug = filter_input(INPUT_POST, "news_slug");
+        $pageSlug = Utils::normalizeForSlug(filter_input(INPUT_POST, "news_slug"));
         $pageContent = filter_input(INPUT_POST, "news_content");
         $pageState = filter_input(INPUT_POST, "page_state");
         $userId = $user::getLoggedUser();
 
         $pageEntity = $page->createPage($pageTitle, $pageSlug, $pageContent, $userId, $pageState);
+
+        //Add route
+        (new LinkStorage())->storeRoute('p/' . $pageSlug, 'page', 'Page | ' . $pageTitle, 'GET',
+            'false', 'false', 1);
 
         echo $pageEntity?->getId() ?? -1;
     }
