@@ -6,11 +6,22 @@ use CMW\Utils\Utils; ?>
         <div class="float-start">
             <p><?= LangManager::translate("core.footer.left", lineBreak: true) ?></p>
         </div>
-        <div class="float-end">
-            <p>
-                <?= LangManager::translate("core.footer.right") . " " . Utils::getVersion() ?>
-            </p>
-        </div>
+        <?php if (Utils::getVersion() != Utils::getLatestVersion()): ?>
+            <div class="float-end">
+                <p class="text-center">
+                    <a href="/cmw-admin/updates/cms"><?= LangManager::translate("core.footer.used") . "<span class='text-danger font-bold'>" . Utils::getVersion() ?></span> !<br>
+                    <?= LangManager::translate("core.footer.upgrade") . "<span class='text-success font-bold'>" . Utils::getLatestVersion() ?></span> !</a>
+                </p>
+            </div>
+        <?php else: ?>
+            <div class="float-end">
+                <p>
+                    <?= LangManager::translate("core.footer.right") . " " . Utils::getVersion() ?>
+                </p>
+            </div>
+        <?php endif; ?>
+        
+
     </div>
 </footer>
 <!--IMPORTANT : Fermetures des DIV de sidebar et contenue-->
