@@ -6,58 +6,36 @@ use CMW\Utils\SecurityService;
 
 $title = "Connexion";
 $description = "Description de votre page"; ?>
-
-
-<section>
-    <div class="container">
-
-
-        <form action="" method="post" class="mb-4">
-            <?php (new SecurityService())->insertHiddenToken() ?>
-            <div class="form-group">
-                <div class="input-group mb-3">
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-envelope"></span>
+<section class="page-section" id="contact">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-8 col-xl-6 text-center">
+                <h2 class="mt-0">Connexion</h2>
+                <hr class="divider">
+            </div>
+        </div>
+        <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
+            <div class="col-lg-6">
+                <form action="" method="post" class="mb-4">
+                    <?php (new SecurityService())->insertHiddenToken() ?>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" name="login_email" type="email" placeholder="Votre mail" required>
+                        <label for="name">E-Mail</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control" type="password" name="login_password" placeholder="****" required>
+                        <label for="email">Mot de passe</label>
+                    </div>
+                    <div class="col-12 mb-2">
+                        <div class="icheck-primary">
+                            <input type="checkbox" id="login_keep_connect" name="login_keep_connect">
+                            <label for="login_keep_connect">Rester connecter</label>
                         </div>
                     </div>
-                    <input name="login_email" type="email" class="form-control" placeholder="email">
-                </div>
+                    <?php SecurityController::getPublicData(); ?>
+                    <div class="d-grid"><button class="btn btn-primary btn-xl" type="submit">Connexion</button></div>
+                </form>
             </div>
-            <div class="form-group">
-                <div class="input-group mb-3" id="showHidePassword">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                    </div>
-                    <input type="password" name="login_password" class="form-control"
-                           placeholder="*****">
-                    <div class="input-group-append">
-                        <a class="input-group-text" href="#"><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="icheck-primary">
-                        <input type="checkbox" id="login_keep_connect" name="login_keep_connect">
-                        <label for="login_keep_connect">Rester connecter</label>
-                    </div>
-                </div>
-
-                <?php SecurityController::getPublicData(); ?>
-
-
-                <!-- /.col -->
-                <div class="col-12">
-                    <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
-                </div>
-
-                <a href="register">Inscription</a>
-                <!-- /.col -->
-            </div>
-        </form>
-
+        </div>
     </div>
 </section>

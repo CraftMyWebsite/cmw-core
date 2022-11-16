@@ -9,29 +9,19 @@ use CMW\Utils\View;
 /* @var array $includes */
 
 ?>
-
 <!DOCTYPE html>
-<html lang="fr-FR">
+<html lang="fr">
 <head>
-
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <?= $core->cmwHead($title, $description) ?>
-
-    <!-- Theme style -->
-    <link rel="stylesheet" type="text/css"
-          href="<?= getenv("PATH_SUBFOLDER") ?>public/themes/Sampler/assets/css/main.css">
-
-    <?= Images::getFaviconInclude() ?>
-
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="<?= getenv("PATH_SUBFOLDER") ?>public/themes/Sampler/assets/favicon.ico" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="<?= getenv("PATH_SUBFOLDER") ?>public/themes/Sampler/assets/css/styles.css" rel="stylesheet" />
     <?php
     View::loadInclude($includes, "beforeScript", "styles");
     ?>
 </head>
-<style>
-    * {
-        background-color: <?= ThemeModel::fetchConfigValue('backgroundColor') ?> !important;
-    }
-</style>
-<body>
-<?= $core->cmwWarn() ?>
-
-
+<body id="page-top">
+    <?= $core->cmwWarn() ?>
