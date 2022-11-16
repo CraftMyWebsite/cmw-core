@@ -126,7 +126,9 @@ return [
     ],
     "footer" => [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " Tous droits réservés.",
-        "right" => "Merci d'utiliser <a href='https://craftmywebsite.com/'>CraftMyWebsite</a>.",
+        "right" => "Merci d'utiliser <a target='_blank' href='https://craftmywebsite.fr/'>CraftMyWebsite</a>.",
+        "used" => "Vous utilisez la version ",
+        "upgrade" => "Veuillez mettre à jours vers ",
     ],
     "btn" => [
         "save" => "Sauvegarder",
