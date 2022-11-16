@@ -1,4 +1,4 @@
-<?phpuse CMW\Manager\Lang\LangManager;use CMW\Model\Core\ThemeModel;use CMW\Utils\SecurityService;?>
+<?php use CMW\Manager\Lang\LangManager;use CMW\Model\Core\ThemeModel;use CMW\Utils\SecurityService;?>
 <!-------------->
 <!--Navigation-->
 <!-------------->
