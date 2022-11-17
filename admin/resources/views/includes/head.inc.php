@@ -15,7 +15,7 @@ use CMW\Utils\Images;
     <script src="<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/js/initTheme.js"></script>
     
     <!--EXTENSION-->
-    <link rel="stylesheet" href="<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/extensions/choices.js/public/assets/styles/choices.css"/>
+    <link rel="stylesheet" href="<?=getenv("PATH_SUBFOLDER")?>admin/resources/vendors/choices.js/public/assets/styles/choices.css"/>
     <!--IMPORT BASIQUE-->
     <link rel="stylesheet" href="<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/css/main/app.css" />
     <link rel="stylesheet" href="<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/css/main/app-dark.css" />
@@ -24,9 +24,9 @@ use CMW\Utils\Images;
     <script src="<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/js/initTheme.js"></script>
 
     <link rel="stylesheet" href="<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/css/pages/summernote.css" />
-    <link rel="stylesheet" href="<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/extensions/summernote/summernote-lite.css"/>
+    <link rel="stylesheet" href="<?=getenv("PATH_SUBFOLDER")?>admin/resources/vendors/summernote/summernote-lite.css"/>
 
-    <link rel="stylesheet" href="<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/extensions/simple-datatables/style.css"/>
+    <link rel="stylesheet" href="<?=getenv("PATH_SUBFOLDER")?>admin/resources/vendors/simple-datatables/style.css"/>
     <link rel="stylesheet" href="<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/css/pages/simple-datatables.css" />
 
 </head>
@@ -68,7 +68,7 @@ use CMW\Utils\Images;
         font-style: normal;
         font-weight: 400;
         font-display: auto;
-        src: url("<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/extensions/summernote/font/summernote.eot?#iefix") format("embedded-opentype"), url("<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/extensions/summernote/font/summernote.woff2") format("woff2"), url("<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/extensions/summernote/font/summernote.woff") format("woff"), url("<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/extensions/summernote/font/summernote.ttf") format("truetype");
+        src: url("<?=getenv("PATH_SUBFOLDER")?>admin/resources/vendors/summernote/font/summernote.eot?#iefix") format("embedded-opentype"), url("<?=getenv("PATH_SUBFOLDER")?>admin/resources/vendors/summernote/font/summernote.woff2") format("woff2"), url("<?=getenv("PATH_SUBFOLDER")?>admin/resources/vendors/summernote/font/summernote.woff") format("woff"), url("<?=getenv("PATH_SUBFOLDER")?>admin/resources/vendors/summernote/font/summernote.ttf") format("truetype");
     }
 </style>
 

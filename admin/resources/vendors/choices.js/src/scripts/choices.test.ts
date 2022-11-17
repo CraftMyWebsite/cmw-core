@@ -5,7 +5,7 @@ import sinonChai from 'sinon-chai';
 import Choices from './choices';
 
 import { EVENTS, ACTION_TYPES, KEY_CODES } from './constants';
-import { WrappedSelect, WrappedInput } from './components/index';
+import { WrappedSelect, WrappedInput } from './components';
 import { removeItem } from './actions/items';
 import templates from './templates';
 import { Choice } from './interfaces/choice';

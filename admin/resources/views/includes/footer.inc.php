@@ -35,17 +35,17 @@ use CMW\Utils\Utils; ?>
 <script src="<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/js/app.js"></script>
 
 <!--EXTENSION select choice-->
-<script src="<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
+<script src="<?=getenv("PATH_SUBFOLDER")?>admin/resources/vendors/choices.js/public/assets/scripts/choices.js"></script>
 <script src="<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/js/pages/form-element-select.js"></script>
 <!--EXTENSION summernote-->
-<script src="<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/extensions/jquery/jquery.min.js"></script>
-<script src="<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/extensions/summernote/summernote-lite.min.js"></script>
+<script src="<?=getenv("PATH_SUBFOLDER")?>admin/resources/vendors/jquery/jquery.min.js"></script>
+<script src="<?=getenv("PATH_SUBFOLDER")?>admin/resources/vendors/summernote/summernote-lite.min.js"></script>
 <script src="<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/js/pages/summernote.js"></script>
 <!--EXTENSION summernote-->
-<script src="<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
+<script src="<?=getenv("PATH_SUBFOLDER")?>admin/resources/vendors/simple-datatables/umd/simple-datatables.js"></script>
 <script src="<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/js/pages/simple-datatables.js"></script>
 <!-- Need: Apexcharts -->
-<script src="<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/extensions/apexcharts/apexcharts.min.js"></script>
+<script src="<?=getenv("PATH_SUBFOLDER")?>admin/resources/vendors/apexcharts/apexcharts.min.js"></script>
 <script src="<?=getenv("PATH_SUBFOLDER")?>admin/resources/assets/js/pages/dashboard.js"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@ import { Choice } from '../interfaces/choice';
 import { Group } from '../interfaces/group';
 import { Item } from '../interfaces/item';
 import { State } from '../interfaces/state';
-import rootReducer from '../reducers/index';
+import rootReducer from '../reducers';
 
 export default class Store {
   _store: IStore;

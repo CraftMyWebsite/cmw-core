@@ -15,7 +15,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: auto;
-    src: url("./font/summernote.eot?#iefix") format("embedded-opentype"), url("./font/summernote.woff2") format("woff2"), url("./font/summernote.woff") format("woff"), url("./font/summernote.ttf") format("truetype");
+    src: url("font/summernote.eot?#iefix") format("embedded-opentype"), url("font/summernote.woff2") format("woff2"), url("font/summernote.woff") format("woff"), url("font/summernote.ttf") format("truetype");
 }
 [class^=note-icon]:before,
 [class*=" note-icon"]:before {
@@ -819,4 +819,4 @@ html .note-fullscreen-body, body .note-fullscreen-body {
     font-size: 13px;
 }
 
-/*# sourceMappingURL=summernote-bs4.css.map*/
+/*# sourceMappingURL=summernote-bs5.css.map*/
