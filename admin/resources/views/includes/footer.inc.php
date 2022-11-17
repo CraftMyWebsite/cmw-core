@@ -40,19 +40,3 @@ use CMW\Utils\Utils;
 
 <script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/js/bootstrap.js"></script>
 <script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/js/app.js"></script>
-
-<!-- TODO REMOVE THAT -->
-
-<!--EXTENSION select choice-->
-<script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/choices.js/public/assets/scripts/choices.js"></script>
-<script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/js/pages/form-element-select.js"></script>
-<!--EXTENSION summernote-->
-<script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/jquery/jquery.min.js"></script>
-<script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/summernote/summernote-lite.min.js"></script>
-<script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/js/pages/summernote.js"></script>
-<!--EXTENSION summernote-->
-<script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/simple-datatables/umd/simple-datatables.js"></script>
-<script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/js/pages/simple-datatables.js"></script>
-<!-- Need: Apexcharts -->
-<script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/apexcharts/apexcharts.min.js"></script>
-<script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/js/pages/dashboard.js"></script>
