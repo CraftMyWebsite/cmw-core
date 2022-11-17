@@ -2,6 +2,7 @@
 use CMW\Manager\Lang\LangManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Utils\SecurityService;
+use CMW\Utils\Utils;
 
 $title = LangManager::translate("core.config.title");
 $description = LangManager::translate("core.config.desc"); 
@@ -66,3 +67,9 @@ $description = LangManager::translate("core.config.desc");
         </div>
     </div>
 </section>
+
+
+
+<!--EXTENSION select choice-->
+<script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/choices.js/public/assets/scripts/choices.js"></script>
+<script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/js/pages/form-element-select.js"></script>

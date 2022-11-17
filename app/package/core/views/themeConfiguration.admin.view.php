@@ -2,6 +2,7 @@
 
 use CMW\Manager\Lang\LangManager;
 use CMW\Utils\SecurityService;
+use CMW\Utils\Utils;
 
 /* @var $currentTheme \CMW\Entity\Core\ThemeEntity */
 /* @var $installedThemes \CMW\Entity\Core\ThemeEntity[] */
@@ -107,3 +108,8 @@ $description = LangManager::translate("core.theme.config.description"); ?>
         </div>
     </div>
 </div>
+
+
+<!--EXTENSION simpledatabase-->
+<script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/simple-datatables/umd/simple-datatables.js"></script>
+<script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/js/pages/simple-datatables.js"></script>
