@@ -2,6 +2,7 @@
 
 use CMW\Manager\Lang\LangManager;
 use CMW\Utils\SecurityService;
+use CMW\Utils\Utils;
 
 $title = LangManager::translate("core.mail.config.title");
 $description = LangManager::translate("core.mail.config.description");

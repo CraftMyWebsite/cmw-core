@@ -20611,7 +20611,7 @@ textarea.form-control-lg {
 
 .sidebar-wrapper .sidebar-header img {
     height: 2.5rem;
-    filter: invert(1);
+    filter: brightness(197%) invert(100%) hue-rotate(193deg);
 }
 
 .sidebar-wrapper .sidebar-toggler.x {

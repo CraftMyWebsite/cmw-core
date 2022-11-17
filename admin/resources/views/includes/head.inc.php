@@ -16,7 +16,6 @@ use CMW\Utils\Utils;
     <meta name="description" content="<?= $description ?>">
     <meta name="robots" content="NOINDEX, NOFOLLOW">
 
-    <script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/js/initTheme.js"></script>
     <script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/js/darkMode.js"></script>
 
     <!--EXTENSION-->
@@ -31,15 +30,6 @@ use CMW\Utils\Utils;
           href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/images/logo/favicon.ico"/>
     <link rel="stylesheet"
           href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/fontawesome-free/css/fa-all.min.css"/>
-    <link rel="stylesheet"
-          href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/css/pages/summernote.css"/>
-    <link rel="stylesheet"
-          href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/summernote/summernote-lite.css"/>
-
-    <link rel="stylesheet"
-          href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/simple-datatables/style.css"/>
-    <link rel="stylesheet"
-          href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/css/pages/simple-datatables.css"/>
 
 </head>
 
@@ -91,5 +81,8 @@ use CMW\Utils\Utils;
 </style>
 
 <body>
-
+<script>
+    const theme = localStorage.getItem('theme') || 'light';
+    document.body.className = theme;
+  </script>
 <div id="app">
