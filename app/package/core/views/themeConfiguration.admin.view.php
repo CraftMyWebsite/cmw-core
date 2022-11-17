@@ -108,8 +108,3 @@ $description = LangManager::translate("core.theme.config.description"); ?>
         </div>
     </div>
 </div>
-
-
-<!--EXTENSION simpledatabase-->
-<script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/simple-datatables/umd/simple-datatables.js"></script>
-<script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/js/pages/simple-datatables.js"></script>

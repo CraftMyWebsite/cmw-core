@@ -119,11 +119,9 @@ class MailController extends CoreController
         $config = $this->mailModel->getConfig();
 
         View::createAdminView("core", "mailConfig")
-            ->addScriptBefore("admin/resources/vendors/summernote/summernote.min.js",
-                "admin/resources/vendors/summernote/summernote-bs4.min.js",
-                "app/package/core/views/resources/js/mailConfig.js")
-            ->addStyle("admin/resources/vendors/summernote/summernote-bs4.min.css",
-                "admin/resources/vendors/summernote/summernote.min.css")
+            ->addScriptBefore("app/package/core/views/resources/js/mailConfig.js")
+            ->addStyle("admin/resources/vendors/summernote/summernote-lite.css","admin/resources/assets/css/pages/summernote.css")
+            ->addScriptAfter("admin/resources/vendors/jquery/jquery.min.js","admin/resources/vendors/summernote/summernote-lite.min.js","admin/resources/assets/js/pages/summernote.js")
             ->addVariableList(['config' => $config])
             ->view();
     }

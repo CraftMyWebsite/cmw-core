@@ -184,9 +184,3 @@ $description = LangManager::translate("core.mail.config.description");
         </div>
     </div>
 </div>
-
-
-<!--EXTENSION summernote-->
-<script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/jquery/jquery.min.js"></script>
-<script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/summernote/summernote-lite.min.js"></script>
-<script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/js/pages/summernote.js"></script>

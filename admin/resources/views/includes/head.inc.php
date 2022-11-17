@@ -30,15 +30,6 @@ use CMW\Utils\Utils;
           href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/images/logo/favicon.ico"/>
     <link rel="stylesheet"
           href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/fontawesome-free/css/fa-all.min.css"/>
-    <link rel="stylesheet"
-          href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/css/pages/summernote.css"/>
-    <link rel="stylesheet"
-          href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/summernote/summernote-lite.css"/>
-
-    <link rel="stylesheet"
-          href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/simple-datatables/style.css"/>
-    <link rel="stylesheet"
-          href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/css/pages/simple-datatables.css"/>
 
 </head>
 
