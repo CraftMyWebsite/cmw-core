@@ -3,55 +3,44 @@
   "menus": [
     {
       "name_menu_fr": "Général",
+      "name_menu_en": "General",
       "icon_menu": "fas fa-th",
       "url_menu": "",
       "urls_submenu_fr": {
         "Configuration": "configuration",
-        "Sécurité": "security"
+        "Sécurité": "security",
+        "Mises à jours": "updates/cms"
       },
       "urls_submenu_en": {
         "Configuration": "configuration",
-        "Security": "security"
+        "Security": "security",
+        "Updates": "updates/cms"
       }
     },
     {
+      "name_menu_fr": "Mails",
+      "name_menu_en": "Mails",
+      "icon_menu": "fas fa-envelope",
+      "url_menu": "mail/configuration"
+    },
+    {
       "name_menu_fr": "Menus",
+      "name_menu_en": "Menus",
       "icon_menu": "fas fa-bars",
       "url_menu": "menus"
     },
     {
-      "name_menu_fr": "Mails",
-      "icon_menu": "fas fa-envelope",
-      "url_menu": "",
-      "urls_submenu_fr": {
-        "Configuration": "mail/configuration"
-      },
-      "urls_submenu_en": {
-        "Configuration": "mail/configuration"
-      }
-    },
-    {
       "name_menu_fr": "Thèmes",
+      "name_menu_en": "Themes",
       "icon_menu": "fas fa-paintbrush",
       "url_menu": "",
       "urls_submenu_fr": {
         "Configuration": "theme/configuration",
-        "Gestion de votre thème": "theme/manage"
+        "Apparence": "theme/manage"
       },
       "urls_submenu_en": {
         "Configuration": "theme/configuration",
-        "Manage your theme": "theme/manage"
-      }
-    },
-    {
-      "name_menu_fr": "MAJ",
-      "icon_menu": "fas fa-arrows-rotate",
-      "url_menu": "",
-      "urls_submenu_fr": {
-        "MAJ CMW": "updates/cms"
-      },
-      "urls_submenu_en": {
-        "MAJ CMW": "update/cms"
+        "Appearance": "theme/manage"
       }
     }
   ],

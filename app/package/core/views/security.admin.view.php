@@ -8,25 +8,23 @@ $title = LangManager::translate("core.security.title");
 $description = LangManager::translate("core.security.description");
 /* @var string $captcha */
 ?>
-
-<div class="content">
-
-    <div class="container-fluid">
-        <div class="row">
-
-            <!-- Add new rewards -->
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><?= LangManager::translate("core.security.captcha.title") ?></h3>
-                    </div>
-                    <div class="card-body">
-                        <form action="security/edit/captcha" method="post">
-                            <?php (new SecurityService())->insertHiddenToken() ?>
-
-                            <label><?= LangManager::translate("core.security.captcha.type") ?></label>
-                            <select id="captcha" name="captcha" class="form-control" required
-                                    onclick="generateCaptchaInputs()">
+<div class="d-flex flex-wrap justify-content-between">
+    <h3><i class="fa-solid fa-gears"></i> <span class="m-lg-auto">Sécurité</span></h3>
+    <div class="buttons"><button form="captchaConfig" type="submit" class="btn btn-primary">Sauvegarder</button></div>
+</div>
+<section class="row">
+    <div class="col-12 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h4><?= LangManager::translate("core.security.captcha.title") ?></h4>
+            </div>
+            <div class="card-body">
+                <form id="captchaConfig" action="security/edit/captcha" method="post">
+                    <?php (new SecurityService())->insertHiddenToken() ?>
+                    <div class="row">
+                        <h6><?= LangManager::translate("core.security.captcha.type") ?> :</h6>
+                        <fieldset class="form-group">
+                            <select id="captcha" name="captcha" class="form-select" required onclick="generateCaptchaInputs()">
                                 <option value="captcha-none" <?= $captcha === "none" ? "selected" : "" ?>>
                                     Pas de catpcha
                                 </option>
@@ -37,21 +35,38 @@ $description = LangManager::translate("core.security.description");
                                     RECaptcha
                                 </option>
                             </select>
-
-                            <!-- JS container -->
-                            <div id="security-content-wrapper" class="mt-3"></div>
-
-                            <input type="submit" value="Sauvegarder" class="btn btn-primary float-right">
-                        </form>
+                        </fieldset>
+                        <div id="security-content-wrapper" class="mt-3"></div>
                     </div>
-                </div>
-
+                </form>
             </div>
-
         </div>
     </div>
+    <div class="col-12 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>Double authentification</h4>
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="row">
+                        <h6>Obligation :</h6>
+                        <fieldset class="form-group">
+                            <select class="form-select" id="basicSelect">
+                                <option>Aucune</option>
+                                <option>Pour le staff</option>
+                                <option>Pour tout les utilisateurs</option>
+                            </select>
+                        </fieldset>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
 
-</div>
+
+
 
 <script>
 
@@ -64,10 +79,13 @@ $description = LangManager::translate("core.security.description");
         divWrapper.setAttribute("class", "row");
 
         let divPrepend = document.createElement("div");
-        divPrepend.setAttribute("class", "col-sm-6");
+        divPrepend.setAttribute("class", "col-md-6");
 
         let divPrepend2 = document.createElement("div");
-        divPrepend2.setAttribute("class", "col-sm-6");
+        divPrepend2.setAttribute("class", "col-md-6");
+
+        let divInfoCaptcha = document.createElement("p");
+        divInfoCaptcha.innerHTML += 'Obtenez vos clé ici gratuitement : <a href="https://www.hcaptcha.com/" target="_blank">https://www.hcaptcha.com/</a>';
 
         let divFormGroupSiteKey = document.createElement("div");
         divFormGroupSiteKey.setAttribute("class", "form-group");
@@ -76,10 +94,10 @@ $description = LangManager::translate("core.security.description");
         divFormGroupSecretKey.setAttribute("class", "form-group");
 
         let labelSiteKey = document.createElement("label");
-        labelSiteKey.innerText = "Site Key";
+        labelSiteKey.innerHTML += "<h6>Site Key :</h6>";
 
         let labelSecreteKey = document.createElement("label");
-        labelSecreteKey.innerText = "Secret Key";
+        labelSecreteKey.innerHTML += "<h6>Secret Key :</h6>";
 
         let inputSiteKey = document.createElement("input");
         inputSiteKey.setAttribute("value", '<?= Utils::getEnv()->getValue("HCAPTCHA_SITE_KEY") ?>');
@@ -110,6 +128,8 @@ $description = LangManager::translate("core.security.description");
         divFormGroupSecretKey.append(labelSecreteKey);
         divFormGroupSecretKey.append(inputSecretKey);
 
+        parent.append(divInfoCaptcha);
+
     }
 
     const generateRecaptchaInputs = (parent = null) => {
@@ -123,10 +143,13 @@ $description = LangManager::translate("core.security.description");
         divWrapper.setAttribute("class", "row");
 
         let divPrepend = document.createElement("div");
-        divPrepend.setAttribute("class", "col-sm-6");
+        divPrepend.setAttribute("class", "col-md-6");
 
         let divPrepend2 = document.createElement("div");
-        divPrepend2.setAttribute("class", "col-sm-6");
+        divPrepend2.setAttribute("class", "col-md-6");
+
+        let divInfoCaptcha = document.createElement("p");
+        divInfoCaptcha.innerHTML += 'Obtenez vos clé ici gratuitement : <a href="https://www.google.com/recaptcha/" target="_blank">https://www.google.com/recaptcha/</a>';
 
         let divFormGroupSiteKey = document.createElement("div");
         divFormGroupSiteKey.setAttribute("class", "form-group");
@@ -135,10 +158,10 @@ $description = LangManager::translate("core.security.description");
         divFormGroupSecretKey.setAttribute("class", "form-group");
 
         let labelSiteKey = document.createElement("label");
-        labelSiteKey.innerText = "Site Key";
+        labelSiteKey.innerHTML += "<h6>Site Key :</h6>";
 
         let labelSecreteKey = document.createElement("label");
-        labelSecreteKey.innerText = "Secret Key";
+        labelSecreteKey.innerHTML += "<h6>Secret Key :</h6>";
 
         let inputSiteKey = document.createElement("input");
         inputSiteKey.setAttribute("value", '<?= Utils::getEnv()->getValue("RECAPTCHA_SITE_KEY") ?>');
@@ -168,6 +191,8 @@ $description = LangManager::translate("core.security.description");
         divPrepend2.append(divFormGroupSecretKey);
         divFormGroupSecretKey.append(labelSecreteKey);
         divFormGroupSecretKey.append(inputSecretKey);
+
+        parent.append(divInfoCaptcha);
 
     }
 </script>

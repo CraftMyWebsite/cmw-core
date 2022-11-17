@@ -110,7 +110,8 @@ return [
             "test" => [
                 "btn" => "Try your configuration",
                 "title" => "Try now your configuration",
-                "description" => "You can test your configuration by sending an email to your email address <br> <strong> Remember to save your configuration before starting the test</strong>",
+                "warning" => "Remember to save your configuration before starting the test !",
+                "description" => "You can test your configuration by sending an email to your email address.",
                 "receiverMail" => "Recipient address",
                 "receiverMailPlaceholder" => "Enter your mail",
             ]
@@ -134,7 +135,9 @@ return [
     ],
     "footer" => [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " All right reserved.",
-        "right" => "Thank you for using <a href='https://craftmywebsite.com/'>CraftMyWebsite</a>.",
+        "right" => "Thank you for using <a target='_blank' href='https://craftmywebsite.fr/'>CraftMyWebsite</a>.",
+        "used" => "You are using the version ",
+        "upgrade" => "Please update to ",
     ],
     "btn" => [
         "save" => "Save",

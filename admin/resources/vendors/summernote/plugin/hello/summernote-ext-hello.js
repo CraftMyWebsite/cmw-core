@@ -44,7 +44,7 @@
 
       // This events will be attached when editor is initialized.
       this.events = {
-        // This will be called after package are initialized.
+        // This will be called after modules are initialized.
         'summernote.init': function(we, e) {
           // eslint-disable-next-line
           console.log('summernote initialized', we, e);

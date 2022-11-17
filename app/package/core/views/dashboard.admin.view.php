@@ -1,12 +1,9 @@
 <?php use CMW\Manager\Lang\LangManager;
 
 $title = LangManager::translate("core.dashboard.title");
-$description = LangManager::translate("core.dashboard.desc"); ?>
+$description = LangManager::translate("core.dashboard.desc"); 
+?>
 
-        <div class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <!-- Contenu ici -->
-                </div>
-            </div>
-        </div>
+<h3>
+    <span class="m-lg-auto">Tableau de bord</span>
+</h3>
