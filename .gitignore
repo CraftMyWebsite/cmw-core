@@ -21,6 +21,7 @@ __MACOSX/
 # Exclude all other views, only if view refer to a core package (Core, Users, Menus...)
 /public/themes/*
 !/public/themes/Sampler/views
+!/public/themes/Sampler/resources
 /public/themes/Sampler/views/*
 
 !/public/themes/Sampler/views/includes
