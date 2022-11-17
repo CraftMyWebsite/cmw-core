@@ -40,3 +40,4 @@ use CMW\Utils\Utils;
 
 <script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/js/bootstrap.js"></script>
 <script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/js/app.js"></script>
+<script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/js/tooltip.js"></script>
