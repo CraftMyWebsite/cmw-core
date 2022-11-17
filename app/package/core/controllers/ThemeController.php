@@ -228,7 +228,9 @@ class ThemeController extends CoreController
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
 
         foreach ($this->getCurrentThemeConfigSettings() as $conf => $value) {
-            $this->themeModel->updateThemeConfig($conf, $_POST[$conf] ?? null, self::getCurrentTheme()->getName());
+            if(!isset($_POST[$conf]) || !empty($_POST[$conf])) {
+                $this->themeModel->updateThemeConfig($conf, $_POST[$conf] ?? "false", self::getCurrentTheme()->getName());
+            }
         }
 
         Response::sendAlert("success", LangManager::translate("core.toaster.success"),

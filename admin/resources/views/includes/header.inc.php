@@ -2,8 +2,11 @@
 
 use CMW\Manager\Lang\LangManager;
 use CMW\Entity\Users\UserEntity;
+use CMW\Model\Users\UsersModel;
+use CMW\Utils\Utils;
+
+/* @var UserEntity $userAdmin */
 ?>
-<!--DOIT ÊTRE INCLUS POUR LE CONTENUE DES PAGES-->
 <div id="main" class="layout-navbar">
 
     <nav class="navbar navbar-expand navbar-light navbar-top">
@@ -32,19 +35,22 @@ use CMW\Entity\Users\UserEntity;
                    <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="user-menu d-flex">
                             <div class="user-name text-end me-3">
-                                <h6 class="mb-0"><?= $userAdmin->getUsername() ?></h6>
-                                <p class="mb-0 text-sm text-gray-600">Super admin</p>
+                                <h6 class="mb-0"><?= UsersModel::getCurrentUser()->getUsername() ?></h6>
+                                <p class="mb-0 text-sm text-gray-600"><?= UsersModel::getCurrentUser()->getHighestRole()->getName() ?></p>
                             </div>
                             <div class="user-img d-none d-lg-flex align-items-center">
                                 <div class="avatar avatar-md">
-                                    <img src="<?= getenv('PATH_SUBFOLDER') ?>public/uploads/users/<?= $userAdmin->getUserPicture()->getImageName() ?>" alt="<?= LangManager::translate("core.alt.logo", lineBreak: true) ?>">
+                                    <img src="<?= UsersModel::getCurrentUser()->getUserPicture()->getImageLink() ?>" alt="<?= LangManager::translate("users.users.image.image_alt", ['username' => UsersModel::getCurrentUser()->getUsername()]) ?>">
                                 </div>
                             </div>
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="min-width: 11rem">
                         <li>
-                            <a class="dropdown-item" href="#"><i class="fa-solid fa-user"></i> Mon profil</a>
+                            <a class="dropdown-item" href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'cmw-admin/users/edit/' . UsersModel::getCurrentUser()->getId() ?>">
+                                <i class="fa-solid fa-user"></i>
+                                <?= LangManager::translate("users.users.link_profile") ?>
+                            </a>
                         </li>
                         <li>
                             <hr class="dropdown-divider">
@@ -52,7 +58,7 @@ use CMW\Entity\Users\UserEntity;
                         <li>
                             <a class="dropdown-item text-danger" href="/logout">
                                 <i class="fa-solid fa-right-from-bracket"></i>
-                                <span>Déconnexion</span>
+                                <span><?= LangManager::translate("users.users.logout") ?></span>
                             </a>
                         </li>
                     </ul>

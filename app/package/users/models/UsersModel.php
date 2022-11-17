@@ -100,6 +100,7 @@ class UsersModel extends DatabaseManager
                 $resUserPicture['users_pictures_last_update'] ?? null
             );
 
+        $highestRole = $this->getUserHighestRole($res['user_id']);
 
 
         return new UserEntity(
@@ -111,9 +112,10 @@ class UsersModel extends DatabaseManager
             $res["user_state"],
             $res["user_logged"],
             $roles,
+            $highestRole,
             $res["user_created"],
             $res["user_updated"],
-            $userPicture ?? null
+            $userPicture
         );
     }
 
@@ -422,6 +424,38 @@ class UsersModel extends DatabaseManager
         }
 
         return $toReturn;
+    }
+
+
+    /**
+     * @param int $userId
+     * @return \CMW\Entity\Users\RoleEntity|null
+     */
+    public function getUserHighestRole(int $userId): ?RoleEntity
+    {
+        $rolesModel = new RolesModel();
+
+        $sql = "SELECT cmw_users_roles.role_id 
+                FROM cmw_users_roles
+                JOIN cmw_roles ON cmw_users_roles.role_id = cmw_roles.role_id
+                WHERE user_id = :user_id
+                ORDER BY cmw_roles.role_weight DESC
+                LIMIT 1";
+
+        $db = self::getInstance();
+        $req = $db->prepare($sql);
+
+        if (!$req->execute(array("user_id" => $userId))) {
+            return null;
+        }
+
+        $res = $req->fetch();
+
+        if(empty($res)){
+            return null;
+        }
+
+        return $rolesModel->getRoleById($res["role_id"]);
     }
 
 

@@ -12,8 +12,9 @@ class UserEntity
     private string $userLastName;
     private int $userState;
     private string $userLastConnection;
-    /** @var \CMW\Entity\Roles\RoleEntity|\CMW\Entity\Roles\RoleEntity[] $userRoles */
+    /** @var \CMW\Entity\Users\RoleEntity|\CMW\Entity\Users\RoleEntity[] $userRoles */
     private array $userRoles;
+    private ?RoleEntity $userHighestRole;
     private string $userCreated;
     private string $userUpdated;
     private ?UserPictureEntity $userPicture;
@@ -28,11 +29,12 @@ class UserEntity
      * @param int $userState
      * @param string $userLastConnection
      * @param \CMW\Entity\Users\RoleEntity[] $userRoles
+     * @param ?\CMW\Entity\Users\RoleEntity $userHighestRole
      * @param string $userCreated
      * @param string $userUpdated
      * @param \CMW\Entity\Users\UserPictureEntity|null $userPicture
      */
-    public function __construct(int $userId, string $userMail, string $userUsername, string $userFirstName, string $userLastName, int $userState, string $userLastConnection, array $userRoles, string $userCreated, string $userUpdated, ?UserPictureEntity $userPicture)
+    public function __construct(int $userId, string $userMail, string $userUsername, string $userFirstName, string $userLastName, int $userState, string $userLastConnection, array $userRoles, ?RoleEntity $userHighestRole, string $userCreated, string $userUpdated, ?UserPictureEntity $userPicture)
     {
         $this->userId = $userId;
         $this->userMail = $userMail;
@@ -42,6 +44,7 @@ class UserEntity
         $this->userState = $userState;
         $this->userLastConnection = $userLastConnection;
         $this->userRoles = $userRoles;
+        $this->userHighestRole = $userHighestRole;
         $this->userCreated = $userCreated;
         $this->userUpdated = $userUpdated;
         $this->userPicture = $userPicture;
@@ -109,6 +112,14 @@ class UserEntity
     public function getRoles(): array
     {
         return $this->userRoles;
+    }
+
+    /**
+     * @return ?\CMW\Entity\Users\RoleEntity
+     */
+    public function getHighestRole(): ?RoleEntity
+    {
+        return $this->userHighestRole;
     }
 
     /**
