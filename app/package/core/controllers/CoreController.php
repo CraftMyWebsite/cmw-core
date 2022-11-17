@@ -52,7 +52,9 @@ class CoreController
             header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
         }
 
-        View::createAdminView("core", "dashboard")->view();
+        View::createAdminView("core", "dashboard")
+        ->addScriptAfter("admin/resources/vendors/apexcharts/apexcharts.min.js","admin/resources/assets/js/pages/dashboard.js")
+        ->view();
     }
 
     #[Link(path: "/configuration", method: Link::GET, scope: "/cmw-admin")]
@@ -60,7 +62,10 @@ class CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
 
-        View::createAdminView("core", "configuration")->view();
+        View::createAdminView("core", "configuration")
+        ->addStyle("admin/resources/vendors/choices.js/public/assets/styles/choices.css")
+        ->addScriptAfter("admin/resources/vendors/choices.js/public/assets/scripts/choices.js","admin/resources/assets/js/pages/form-element-select.js")
+        ->view();
     }
 
     #[Link(path: "/configuration", method: Link::POST, scope: "/cmw-admin")]

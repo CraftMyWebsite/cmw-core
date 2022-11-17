@@ -18,9 +18,6 @@ use CMW\Utils\Utils;
 
     <script src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/js/darkMode.js"></script>
 
-    <!--EXTENSION-->
-    <link rel="stylesheet"
-          href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/choices.js/public/assets/styles/choices.css"/>
     <!--IMPORT BASIQUE-->
     <link rel="stylesheet"
           href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/css/main/app.css"/>
