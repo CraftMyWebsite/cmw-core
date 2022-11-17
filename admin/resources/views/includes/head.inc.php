@@ -29,8 +29,8 @@ use CMW\Utils\Utils;
           href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/css/main/app-dark.css"/>
     <link rel="icon" type="image/x-icon"
           href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/images/logo/favicon.ico"/>
-    <script src="https://kit.fontawesome.com/eced519d56.js" crossorigin="anonymous"></script>
-
+    <link rel="stylesheet"
+          href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/fontawesome-free/css/fa-all.min.css"/>
     <link rel="stylesheet"
           href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/css/pages/summernote.css"/>
     <link rel="stylesheet"
