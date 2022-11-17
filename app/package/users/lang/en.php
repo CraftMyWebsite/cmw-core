@@ -88,9 +88,10 @@ return [
             "title" => "Profile picture",
             "last_update" => "Last update",
             "placeholder_input" => "Choose the profile picture",
-            "image_alt" => "Profile picture of ",
+            "image_alt" => "Profile picture of %username%",
             "reset" => "Reset image"
         ],
+        "link_profile" => "Go to my profile",
 	],
     "settings" => [
         "title" => "Users settings",

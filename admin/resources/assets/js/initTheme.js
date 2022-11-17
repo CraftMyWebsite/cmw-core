@@ -1,1 +1,7 @@
-(()=>{var e=document.body;"theme-dark"==localStorage.getItem("theme")?e.classList.add("theme-dark"):e.classList.add("theme-light")})();
+const body = document.body;
+
+if (localStorage.getItem('cmwDarkMode') === 'theme-dark') {
+    body.classList.add("theme-dark");
+} else {
+    body.classList.add("theme-light");
+}
