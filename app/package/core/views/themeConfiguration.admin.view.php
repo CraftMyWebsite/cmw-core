@@ -94,16 +94,17 @@ $description = LangManager::translate("core.theme.config.description"); ?>
                 </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal">
-                    <i class="bx bx-x d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block">Annuler</span>
-                </button>
-                <form action="configuration/regenerate" method="post">
-                    <?php (new SecurityService())->insertHiddenToken() ?>
-                    <button type="submit" class="btn btn-danger float-left">
-                        Confirmer
-                    </button>
-                </form>
+                <div class="buttons">
+                    <form action="configuration/regenerate" method="post">
+                        <?php (new SecurityService())->insertHiddenToken() ?>
+                        <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal">
+                            Annuler
+                        </button>
+                        <button type="submit" class="btn btn-danger">
+                            Confirmer
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
