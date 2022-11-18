@@ -1,116 +1,243 @@
-<?php
+<div class="d-flex flex-wrap justify-content-between">
+    <h3><i class="fa-solid fa-sliders"></i> <span class="m-lg-auto">Gestion</span></h3>
+</div>
 
-use CMW\Manager\Lang\LangManager;
-
-$title = LangManager::translate("users.list.title");
-$description = LangManager::translate("users.list.desc"); ?>
-
-<?php $styles = '<link rel="stylesheet" href="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-bs4/css/dataTables.bootstrap4.min.css">
-<link rel="stylesheet" href="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-responsive/css/responsive.bootstrap4.min.css">'; ?>
-
-<?php $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables/jquery.dataTables.min.js"></script>
-<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/vendors/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script>
-    $(function () {
-        $("#users_table").DataTable({
-            "responsive": true, 
-            "lengthChange": false, 
-            "autoWidth": false,
-            language: {
-                processing:     "' . LangManager::translate("core.datatables.list.processing") . '",
-                search:         "' . LangManager::translate("core.datatables.list.search") . '",
-                lengthMenu:    "' . LangManager::translate("core.datatables.list.lenghtmenu") . '",
-                info:           "' . LangManager::translate("core.datatables.list.info") . '",
-                infoEmpty:      "' . LangManager::translate("core.datatables.list.info_empty") . '",
-                infoFiltered:   "' . LangManager::translate("core.datatables.list.info_filtered") . '",
-                infoPostFix:    "' . LangManager::translate("core.datatables.list.info_postfix") . '",
-                loadingRecords: "' . LangManager::translate("core.datatables.list.loadingrecords") . '",
-                zeroRecords:    "' . LangManager::translate("core.datatables.list.zerorecords") . '",
-                emptyTable:     "' . LangManager::translate("core.datatables.list.emptytable") . '",
-                paginate: {
-                    first:      "' . LangManager::translate("core.datatables.list.first") . '",
-                    previous:   "' . LangManager::translate("core.datatables.list.previous") . '",
-                    next:       "' . LangManager::translate("core.datatables.list.next") . '",
-                    last:       "' . LangManager::translate("core.datatables.list.last") . '"
-                },
-                aria: {
-                    sortAscending:  "' . LangManager::translate("core.datatables.list.sort.ascending") . '",
-                    sortDescending: "' . LangManager::translate("core.datatables.list.sort.descending") . '"
-                }
-            },
-        });
-    });
-</script>'; ?>
-
-<!-- main-content -->
-<div class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Contenu ici -->
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><?= LangManager::translate("users.list.card_title") ?></h3>
+<section class="row">
+    <div class="col-12 col-lg-3">
+        <div class="card">
+            <div class="card-header">
+                <h4>Ajouter un utilisateur</h4>
+            </div>
+            <div class="card-body">
+                <form>
+                    <h6>E-Mail :</h6>
+                    <div class="form-group position-relative has-icon-left">
+                        <input type="email" class="form-control" placeholder="E-Mail">
+                        <div class="form-control-icon">
+                            <i class="fa-solid fa-at"></i>
+                        </div>
                     </div>
-                    <!-- /.card-header -->
-                    <div class="card-body">
-                        <table id="users_table" class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th><?= LangManager::translate("users.users.mail") ?></th>
-                                <th><?= LangManager::translate("users.users.pseudo") ?></th>
-                                <th><?= LangManager::translate("users.users.firstname") ?></th>
-                                <th><?= LangManager::translate("users.users.surname") ?></th>
-                                <th><?= LangManager::translate("users.users.role") ?></th>
-                                <th><?= LangManager::translate("users.users.creation") ?></th>
-                                <th><?= LangManager::translate("users.users.last_edit") ?></th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php /** @var \CMW\Entity\Users\UserEntity[] $userList */
-                            foreach ($userList as $user) : ?>
-                                <tr>
-                                    <td><?= $user->getMail() ?></td>
-                                    <td><?= $user->getUsername() ?></td>
-                                    <td><?= $user->getFirstName() ?></td>
-                                    <td><?= $user->getLastName() ?></td>
-                                    <td><?php $i = 1;
-                                        foreach ($user->getRoles() as $role): ?>
-                                            <?= $i !== 1 ? ", {$role->getName()}" : $role->getName() ?>
-                                            <?php $i++;
-                                        endforeach; ?>
-                                    </td>
-                                    <td><?= $user->getCreated() ?></td>
-                                    <td><?= $user->getUpdated() ?></td>
-                                    <td><a href="../users/edit/<?= $user->getId() ?>"><i
-                                                    class="fa fa-cog"></i></a></td>
-                                </tr>
-                            <?php endforeach; ?>
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <th><?= LangManager::translate("users.users.mail") ?></th>
-                                <th><?= LangManager::translate("users.users.pseudo") ?></th>
-                                <th><?= LangManager::translate("users.users.firstname") ?></th>
-                                <th><?= LangManager::translate("users.users.surname") ?></th>
-                                <th><?= LangManager::translate("users.users.role") ?></th>
-                                <th><?= LangManager::translate("users.users.creation") ?></th>
-                                <th><?= LangManager::translate("users.users.last_edit") ?></th>
-                                <th></th>
-                            </tr>
-                            </tfoot>
-                        </table>
+                    <h6>Pseudo :</h6>
+                    <div class="form-group position-relative has-icon-left">
+                        <input type="text" class="form-control" placeholder="Pseudo">
+                        <div class="form-control-icon">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
                     </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
+                    <h6>Prénom :</h6>
+                    <div class="form-group position-relative has-icon-left">
+                        <input type="text" class="form-control" placeholder="Prénom">
+                        <div class="form-control-icon">
+                            <i class="fa-solid fa-id-card"></i>
+                        </div>
+                    </div>
+                    <h6>Nom :</h6>
+                    <div class="form-group position-relative has-icon-left">
+                        <input type="text" class="form-control" placeholder="Nom">
+                        <div class="form-control-icon">
+                            <i class="fa-solid fa-signature"></i>
+                        </div>
+                    </div>
+                    <h6>Rôles :</h6>
+                    <fieldset class="form-group">
+                        <select class="form-select" id="basicSelect">
+                            <option>Sampler</option>
+                            <option>Wipe</option>
+                            <option>Vega</option>
+                        </select>
+                    </fieldset>
+                    <h6>Mot de passe :</h6>
+                    <div class="form-group position-relative has-icon-left">
+                        <input type="password" class="form-control" placeholder="••••">
+                        <div class="form-control-icon">
+                            <i class="fa-solid fa-unlock"></i>
+                        </div>
+                    </div>
+                    <div class="text-center"><button type="submit" class="btn btn-primary">Ajouter</button></div>
+                </form>
             </div>
         </div>
-        <!-- /.row -->
+    </div>
+    <div class="col-12 col-lg-9">
+        <div class="card">
+            <div class="card-header">
+                <h4>Liste des utilisateurs inscrits</h4>
+            </div>
+            <div class="card-body">
+                <table class="table" id="table1">
+                    <thead>
+                    <tr>
+                        <th class="text-center">E-mail</th>
+                        <th class="text-center">Pseudo</th>
+                        <th class="text-center">Prénom</th>
+                        <th class="text-center">Nom</th>
+                        <th class="text-center">Rôles</th>
+                        <th class="text-center">Membre depuis</th>
+                        <th class="text-center">Profil édité le</th>
+                        <th class="text-center">Éditer</th>
+                    </tr>
+                    </thead>
+                    <tbody class="text-center">
+                    <tr>
+                        <td>leo.goigoux@gmail.com</td>
+                        <td>Zomb</td>
+                        <td>Léo</td>
+                        <td>Goigoux</td>
+                        <td>Administrateur</td>
+                        <td>2022-11-14 19:32:25</td>
+                        <td>2022-11-14 19:32:25</td>
+                        <td>
+                            <i data-bs-toggle="modal" data-bs-target="#userEditModal" class="text-primary fa-solid fa-gears"></i>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--Modale d'édition-->
+<div class="modal fade modal-xl" id="userEditModal" tabindex="-1" role="dialog" aria-labelledby="roleEditModalTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="roleEditModalTitle">Édition de Zomb</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><i data-feather="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <form>
+                                        <div class="row">
+                                            <h6>A propos :</h6>
+                                            <p><b>Date de création :</b> 2022-11-14 19:32:25</p>
+                                            <p><b>Date de modification :</b> 2022-11-14 19:32:25</p>
+                                            <p><b>Dernière visite :</b> 2022-11-14 19:32:25</p>
+                                        </div>
+                                        <div class="d-lg-flex flex-wrap justify-content-between">
+                                            <button type="submit" class="btn btn-primary">
+                                                <span class="d-sm-block">Reset MDP</span>
+                                            </button>
+                                            <button type="submit" class="btn btn-warning">
+                                                <span class="d-sm-block">Bloquer</span>
+                                            </button>
+                                            <button type="submit" class="btn btn-danger">
+                                                <span class="d-sm-block">Supprimer</span>
+                                            </button>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <form>
+                                        <div class="row">
+                                            <h6>Image de profil :</h6>
+                                            <p>Dernière modification: 2022-11-14 19:32:25</p>
+                                            <div class="text-center ">
+                                                <img class="w-25 border" src="https://theme.voyza.fr/public/uploads/users/default/defaultImage.jpg" alt="Image introuvable !">
+                                            </div>
+
+                                        </div>
+                                            <input class="form-control w-75 mx-auto form-control-sm" type="file" id="formFile">
+                                        <div class="text-center mt-1">
+                                            <button type="submit" class="btn btn-primary">
+                                                <span class="d-sm-block">Réinitialiser l'image</span>
+                                            </button>
+                                        </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <h6>E-Mail :</h6>
+                            <div class="form-group position-relative has-icon-left">
+                                <input type="email" class="form-control" placeholder="E-Mail">
+                                <div class="form-control-icon">
+                                    <i class="fa-solid fa-at"></i>
+                                </div>
+                            </div>
+                            <h6>Prénom :</h6>
+                            <div class="form-group position-relative has-icon-left">
+                                <input type="text" class="form-control" placeholder="Prénom">
+                                <div class="form-control-icon">
+                                    <i class="fa-solid fa-id-card"></i>
+                                </div>
+                            </div>
+                            <h6>Rôles :</h6>
+                            <fieldset class="form-group">
+                                <select class="form-select" id="basicSelect">
+                                    <option>Sampler</option>
+                                    <option>Wipe</option>
+                                    <option>Vega</option>
+                                </select>
+                            </fieldset>
+                            <h6>Mot de passe :</h6>
+                            <div class="form-group position-relative has-icon-left">
+                                <input type="password" class="form-control" placeholder="••••">
+                                <div class="form-control-icon">
+                                    <i class="fa-solid fa-unlock"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <h6>Pseudo :</h6>
+                            <div class="form-group position-relative has-icon-left">
+                                <input type="text" class="form-control" placeholder="Pseudo">
+                                <div class="form-control-icon">
+                                    <i class="fa-solid fa-user"></i>
+                                </div>
+                            </div>
+                            <h6>Nom :</h6>
+                            <div class="form-group position-relative has-icon-left">
+                                <input type="text" class="form-control" placeholder="Nom">
+                                <div class="form-control-icon">
+                                    <i class="fa-solid fa-signature"></i>
+                                </div>
+                            </div>
+                            <h6>Repeter mot de passe :</h6>
+                            <div class="form-group position-relative has-icon-left">
+                                <input type="password" class="form-control" placeholder="••••">
+                                <div class="form-control-icon">
+                                    <i class="fa-solid fa-unlock"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                    <i class="bx bx-x d-block d-sm-none"></i>
+                    <span class="d-sm-block">Annuler</span>
+                </button>
+                <button type="submit" class="btn btn-primary ml-1" data-bs-dismiss="modal">
+                    <i class="bx bx-check d-block d-sm-none"></i>
+                    <span class="d-sm-block">Confirmer</span>
+                </button>
+            </div>
+            </form>
+        </div>
     </div>
 </div>
-<!-- /.main-content -->
