@@ -3,6 +3,7 @@
 namespace CMW\Utils;
 
 use CMW\Model\Core\CoreModel;
+use ReflectionClass;
 
 require("EnvBuilder.php");
 
@@ -262,5 +263,19 @@ class Utils
         }
 
         return $arrayToReturn;
+    }
+
+    /**
+     * @param $object
+     * @return array
+     */
+    public static function objectToArray($object): array
+    {
+        $reflectionClass = new ReflectionClass(get_class($object));
+        $array = array();
+        foreach ($reflectionClass->getProperties() as $property) {
+            $array[$property->getName()] = $property->getValue($object);
+        }
+        return $array;
     }
 }

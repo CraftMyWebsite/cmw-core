@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .ps {
     -ms-overflow-style: none;
     overflow: hidden !important;
@@ -80,7 +81,6 @@
     }
 }
 
-@charset "UTF-8";
 /*!
  * Bootstrap  v5.2.0 (https://getbootstrap.com/)
  * Copyright 2011-2022 The Bootstrap Authors
@@ -159,7 +159,12 @@
     --bs-border-radius-2xl: 2rem;
     --bs-border-radius-pill: 50rem;
     --bs-code-color: #d63384;
-    --bs-highlight-bg: #fcf8e3
+    --bs-highlight-bg: #fcf8e3;
+    --bs-scroll-height: 75vh;
+    --bs-breadcrumb-font-size: var(--bs-body-font-size);
+    --bs-breadcrumb-divider: '';
+
+
 }
 
 *, :after, :before {
@@ -182,7 +187,6 @@ body {
     font-weight: var(--bs-body-font-weight);
     line-height: var(--bs-body-line-height);
     margin: 0;
-    text-align: var(--bs-body-text-align)
 }
 
 hr {
@@ -739,7 +743,7 @@ progress {
 }
 
 .col {
-    flex: 1 0 0%
+    flex: 1 0 0
 }
 
 .row-cols-auto > * {
@@ -936,7 +940,7 @@ progress {
 
 @media (min-width: 576px) {
     .col-sm {
-        flex: 1 0 0%
+        flex: 1 0 0
     }
 
     .row-cols-sm-auto > * {
@@ -1138,7 +1142,7 @@ progress {
 
 @media (min-width: 768px) {
     .col-md {
-        flex: 1 0 0%
+        flex: 1 0 0
     }
 
     .row-cols-md-auto > * {
@@ -1340,7 +1344,7 @@ progress {
 
 @media (min-width: 992px) {
     .col-lg {
-        flex: 1 0 0%
+        flex: 1 0 0
     }
 
     .row-cols-lg-auto > * {
@@ -1542,7 +1546,7 @@ progress {
 
 @media (min-width: 1200px) {
     .col-xl {
-        flex: 1 0 0%
+        flex: 1 0 0
     }
 
     .row-cols-xl-auto > * {
@@ -1744,7 +1748,7 @@ progress {
 
 @media (min-width: 1400px) {
     .col-xxl {
-        flex: 1 0 0%
+        flex: 1 0 0
     }
 
     .row-cols-xxl-auto > * {
@@ -2742,7 +2746,7 @@ textarea.form-control-lg {
     color: transparent
 }
 
-.form-floating > .form-control-plaintext:not(:-moz-placeholder-shown), .form-floating > .form-control:not(:-moz-placeholder-shown) {
+.form-floating > .form-control-plaintext:not(:placeholder-shown), .form-floating > .form-control:not(:placeholder-shown) {
     padding-bottom: .625rem;
     padding-top: 1.625rem
 }
@@ -2762,7 +2766,7 @@ textarea.form-control-lg {
     padding-top: 1.625rem
 }
 
-.form-floating > .form-control:not(:-moz-placeholder-shown) ~ label {
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
     opacity: .65;
     transform: scale(.85) translateY(-.5rem) translateX(.15rem)
 }
@@ -3040,7 +3044,7 @@ textarea.form-control-lg {
 .btn {
     --bs-btn-padding-x: 0.75rem;
     --bs-btn-padding-y: 0.375rem;
-    --bs-btn-font-family: ;
+    --bs-btn-font-family: '';
     --bs-btn-font-size: 1rem;
     --bs-btn-font-weight: 400;
     --bs-btn-line-height: 1.5;
@@ -3800,7 +3804,7 @@ textarea.form-control-lg {
     --bs-dropdown-color: #dee2e6;
     --bs-dropdown-bg: #343a40;
     --bs-dropdown-border-color: rgba(0, 0, 0, .15);
-    --bs-dropdown-box-shadow: ;
+    --bs-dropdown-box-shadow: '';
     --bs-dropdown-link-color: #dee2e6;
     --bs-dropdown-link-hover-color: #fff;
     --bs-dropdown-divider-bg: #bdc7d1;
@@ -3904,7 +3908,7 @@ textarea.form-control-lg {
 .nav {
     --bs-nav-link-padding-x: 1rem;
     --bs-nav-link-padding-y: 0.5rem;
-    --bs-nav-link-font-weight: ;
+    --bs-nav-link-font-weight: '';
     --bs-nav-link-color: var(--bs-link-color);
     --bs-nav-link-hover-color: var(--bs-link-hover-color);
     --bs-nav-link-disabled-color: #6c757d;
@@ -3918,7 +3922,6 @@ textarea.form-control-lg {
 .nav-link {
     color: var(--bs-nav-link-color);
     display: block;
-    font-size: var(--bs-nav-link-font-size);
     font-weight: var(--bs-nav-link-font-weight);
     padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
     text-decoration: none;
@@ -4082,7 +4085,7 @@ textarea.form-control-lg {
 .navbar-nav {
     --bs-nav-link-padding-x: 0;
     --bs-nav-link-padding-y: 0.5rem;
-    --bs-nav-link-font-weight: ;
+    --bs-nav-link-font-weight: '';
     --bs-nav-link-color: var(--bs-navbar-color);
     --bs-nav-link-hover-color: var(--bs-navbar-hover-color);
     --bs-nav-link-disabled-color: var(--bs-navbar-disabled-color);
@@ -4523,9 +4526,9 @@ textarea.form-control-lg {
     --bs-card-cap-padding-y: 1.5rem;
     --bs-card-cap-padding-x: 1.5rem;
     --bs-card-cap-bg: #fff;
-    --bs-card-cap-color: ;
-    --bs-card-height: ;
-    --bs-card-color: ;
+    --bs-card-cap-color: '';
+    --bs-card-height: '';
+    --bs-card-color: '';
     --bs-card-bg: #fff;
     --bs-card-img-overlay-padding: 1rem;
     --bs-card-group-margin: 0.75rem;
@@ -4664,7 +4667,7 @@ textarea.form-control-lg {
     }
 
     .card-group > .card {
-        flex: 1 0 0%;
+        flex: 1 0 0;
         margin-bottom: 0
     }
 
@@ -4856,8 +4859,8 @@ textarea.form-control-lg {
     --bs-breadcrumb-padding-x: 0;
     --bs-breadcrumb-padding-y: 0;
     --bs-breadcrumb-margin-bottom: 1rem;
-    --bs-breadcrumb-bg: ;
-    --bs-breadcrumb-border-radius: ;
+    --bs-breadcrumb-bg: '';
+    --bs-breadcrumb-border-radius: '';
     --bs-breadcrumb-divider-color: #6c757d;
     --bs-breadcrumb-item-padding-x: 0.5rem;
     --bs-breadcrumb-item-active-color: #6c757d;
@@ -5686,7 +5689,6 @@ textarea.form-control-lg {
     max-width: 100%;
     pointer-events: none;
     position: absolute;
-    width: -webkit-max-content;
     width: -moz-max-content;
     width: max-content;
     z-index: 1090
@@ -5723,7 +5725,7 @@ textarea.form-control-lg {
     --bs-modal-width: 500px;
     --bs-modal-padding: 1rem;
     --bs-modal-margin: 0.5rem;
-    --bs-modal-color: ;
+    --bs-modal-color: '';
     --bs-modal-bg: #fff;
     --bs-modal-border-color: rgba(0, 0, 0, .2);
     --bs-modal-border-width: 1px;
@@ -5737,7 +5739,7 @@ textarea.form-control-lg {
     --bs-modal-header-border-width: 1px;
     --bs-modal-title-line-height: 1.5;
     --bs-modal-footer-gap: 0.5rem;
-    --bs-modal-footer-bg: ;
+    --bs-modal-footer-bg: '';
     --bs-modal-footer-border-color: var(--bs-border-color);
     --bs-modal-footer-border-width: 1px;
     display: none;
@@ -6160,7 +6162,7 @@ textarea.form-control-lg {
     --bs-popover-header-padding-x: 1rem;
     --bs-popover-header-padding-y: 0.5rem;
     --bs-popover-header-font-size: 1rem;
-    --bs-popover-header-color: var(--bs-heading-color);
+    --bs-popover-header-color: var(--bs-body-color);
     --bs-popover-header-bg: #f0f0f0;
     --bs-popover-body-padding-x: 1rem;
     --bs-popover-body-padding-y: 1rem;
@@ -6594,7 +6596,7 @@ textarea.form-control-lg {
     --bs-offcanvas-height: 30vh;
     --bs-offcanvas-padding-x: 1rem;
     --bs-offcanvas-padding-y: 1rem;
-    --bs-offcanvas-color: ;
+    --bs-offcanvas-color: '';
     --bs-offcanvas-bg: #fff;
     --bs-offcanvas-border-width: 1px;
     --bs-offcanvas-border-color: rgba(0, 0, 0, .2);
@@ -7188,7 +7190,6 @@ textarea.form-control-lg {
 .placeholder-wave {
     -webkit-animation: placeholder-wave 2s linear infinite;
     animation: placeholder-wave 2s linear infinite;
-    -webkit-mask-image: linear-gradient(130deg, #000 55%, rgba(0, 0, 0, .8) 75%, #000 95%);
     mask-image: linear-gradient(130deg, #000 55%, rgba(0, 0, 0, .8) 75%, #000 95%);
     -webkit-mask-size: 200% 100%;
     mask-size: 200% 100%
@@ -12200,11 +12201,6 @@ textarea.form-control-lg {
     }
 }
 
-@font-face {
-    font-display: block;
-    font-family: bootstrap-icons;
-    src: url(/admin/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff2?ea98e12d2d58747f9fc557577a85042e) format("woff2"), url(/admin/assets/fonts/vendor/bootstrap-icons/bootstrap-icons.woff?e559bf06bc84fd9525e61ead369f2a7e) format("woff")
-}
 
 .bi:before, [class*=" bi-"]:before, [class^=bi-]:before {
     -webkit-font-smoothing: antialiased;
@@ -20640,7 +20636,6 @@ textarea.form-control-lg {
     align-items: center;
     border-radius: .5rem;
     color: #25396f;
-    display: block;
     display: flex;
     font-size: 1rem;
     padding: .2rem 1rem;
@@ -20867,7 +20862,7 @@ textarea.form-control-lg {
 
 .navbar-top .notification-icon i {
     font-size: 20px;
-    vertical-align: -moz-middle-with-baseline
+    vertical-align: 0;
 }
 
 .layout-horizontal .header-top {
@@ -21011,7 +21006,6 @@ textarea.form-control-lg {
 
 .layout-horizontal .main-navbar .subsubmenu {
     background-color: #fff;
-    border-radius: .2rem;
     border-radius: .3rem;
     box-shadow: 0 5px 20px hsla(0, 0%, 39%, .1);
     display: flex;
@@ -21023,7 +21017,6 @@ textarea.form-control-lg {
     padding: .5rem;
     position: absolute;
     top: 125%;
-    top: 1rem;
     transition: all .3s cubic-bezier(0, .55, .45, 1);
     visibility: hidden;
     z-index: 999
@@ -21527,6 +21520,16 @@ a {
 
 .btn-xl {
     padding: 1rem 2rem
+}
+
+.btn-clear {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
 }
 
 .icon-mid:before {

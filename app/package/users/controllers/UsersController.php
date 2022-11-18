@@ -14,6 +14,7 @@ use CMW\Router\Link;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
 use JetBrains\PhpStorm\NoReturn;
+use JsonException;
 
 /**
  * Class: @usersController
@@ -82,7 +83,9 @@ class UsersController extends CoreController
         View::createAdminView("users", "manage")
             ->addVariableList(["userList" => $userList, "roles" => $roles])
             ->addStyle("admin/resources/vendors/simple-datatables/style.css","admin/resources/assets/css/pages/simple-datatables.css")
-            ->addScriptAfter("admin/resources/vendors/simple-datatables/umd/simple-datatables.js","admin/resources/assets/js/pages/simple-datatables.js")
+            ->addScriptBefore("app/package/users/views/assets/js/edit.js")
+            ->addScriptAfter("admin/resources/vendors/simple-datatables/umd/simple-datatables.js",
+                "admin/resources/assets/js/pages/simple-datatables.js")
             ->view();
     }
 
@@ -108,6 +111,43 @@ class UsersController extends CoreController
         ))
             ->view();
     }
+
+    #[Link("/getUser/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
+    public function admingetUser(int $id): void
+    {
+        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+
+        $user = (new UsersModel())->getUserById($id);
+
+        $roles = [];
+
+        foreach ($user?->getRoles() as $role){
+            $roles[] .= $role->getName();
+        }
+
+        $data = [
+            "id" => $user?->getId(),
+            "mail" => $user?->getMail(),
+            "username" => $user?->getUsername(),
+            "firstName" => $user?->getFirstName() ?? "",
+            "lastName" => $user?->getLastName() ?? "",
+            "state" => $user?->getState(),
+            "lastConnection" => $user?->getLastConnection(),
+            "dateCreated" => $user?->getCreated(),
+            "dateUpdated" => $user?->getUpdated(),
+            "pictureLink" => $user?->getUserPicture()?->getImageLink(),
+            "pictureLastUpdate" => $user?->getUserPicture()?->getLastUpdate(),
+            "userHighestRole" => $user?->getHighestRole()?->getName(),
+            "roles" => $roles
+        ];
+
+        try {
+            print_r(json_encode($data, JSON_THROW_ON_ERROR));
+        } catch (JsonException) {
+            print("ERROR");
+        }
+    }
+
 
     #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users")]
     #[NoReturn] public function adminUsersEditPost(int $id): void
@@ -137,7 +177,7 @@ class UsersController extends CoreController
 
         }
 
-        header("location: ../edit/" . $id);
+        header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
     #[Link("/add", Link::GET, [], "/cmw-admin/users")]
@@ -179,7 +219,7 @@ class UsersController extends CoreController
 
         $this->userModel->updatePass($userEntity?->getId(), password_hash(filter_input(INPUT_POST, "password"), PASSWORD_BCRYPT));
 
-        header("location: ../users/list");
+        header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
     #[Link("/state/:id/:state", Link::GET, ["id" => "[0-9]+", "state" => "[0-9]+"], "/cmw-admin/users")]
@@ -247,7 +287,7 @@ class UsersController extends CoreController
     {
         $this->userPictureModel->deleteUserPicture($id);
 
-        header("Location: ../../edit/$id");
+        header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
     // PUBLIC SECTION

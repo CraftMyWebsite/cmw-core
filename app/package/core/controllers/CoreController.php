@@ -69,8 +69,6 @@ class CoreController
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
 
         View::createAdminView("core", "configuration")
-        ->addStyle("admin/resources/vendors/choices.js/public/assets/styles/choices.css")
-        ->addScriptAfter("admin/resources/vendors/choices.js/public/assets/scripts/choices.js","admin/resources/assets/js/pages/form-element-select.js")
         ->view();
     }
 

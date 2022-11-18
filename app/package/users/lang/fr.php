@@ -23,6 +23,10 @@ return [
 		"desc" => "Gérez les utilisateurs de votre site",
 		"card_title_list" => "Liste des utilisateurs inscrits",
 		"card_title_add" => "Ajouter un utilisateur",
+        "edit" => [
+            "title" => "Édition de ",
+            "about" => "A propos"
+        ],
 	],
 	"roles" => [
 		"list_card_title" => "Liste des rôles",

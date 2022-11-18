@@ -23,6 +23,10 @@ return [
         "desc" => "Manage your website users",
         "card_title_list" => "List of registered users",
         "card_title_add" => "Add a new user",
+        "edit" => [
+            "title" => "Editing of ",
+            "about" => "About  "
+        ],
     ],
 	"roles" => [
 		"list_card_title" => "List of roles",
