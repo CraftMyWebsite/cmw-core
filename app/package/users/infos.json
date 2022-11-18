@@ -7,11 +7,11 @@
       "icon_menu": "fas fa-user",
       "url_menu": "",
       "urls_submenu_fr": {
-        "Gestion": "users/list",
+        "Gestion": "users/manage",
         "Paramètres": "users/settings"
       },
       "urls_submenu_en": {
-        "Management": "users/list",
+        "Management": "users/manage",
         "Settings": "users/settings"
       }
     }

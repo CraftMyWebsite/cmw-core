@@ -206,7 +206,18 @@ class Utils
     {
         return (new CoreModel())->fetchOption("description");
     }
-    
+
+    public static function getSiteLogoPath(): string
+    {
+        $logoName = self::getFilesInFolder(self::getEnv()->getValue("DIR") . "public/uploads/logo");
+
+        if($logoName !== []){
+            return self::getEnv()->getValue("DIR") . "public/uploads/logo/" . $logoName[0];
+        }
+
+        return self::getEnv()->getValue("DIR") . "admin/resources/assets/images/logo/logo_compact.png";
+    }
+
     public static function getElementsInFolder(string $path): array
     {
         $src = is_dir($path);

@@ -1,4 +1,0 @@
-Ne pas oublié d'ajouter ceci dans UsersController.php ligne 81/82 pour que la table de donnée fonctionne:
-
-->addStyle("admin/resources/vendors/simple-datatables/style.css","admin/resources/assets/css/pages/simple-datatables.css")
-->addScriptAfter("admin/resources/vendors/simple-datatables/umd/simple-datatables.js","admin/resources/assets/js/pages/simple-datatables.js")

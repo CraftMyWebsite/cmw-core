@@ -1,59 +1,78 @@
+<?php
+
+use CMW\Manager\Lang\LangManager;
+
+/** @var \CMW\Entity\Users\UserEntity $user */
+/** @var \CMW\Entity\Users\RoleEntity[] $roles */
+/** @var \CMW\Entity\Users\UserEntity[] $userList */
+
+$title = LangManager::translate("users.manage.title");
+$description = LangManager::translate("users.manage.desc"); ?>
+
 <div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fa-solid fa-sliders"></i> <span class="m-lg-auto">Gestion</span></h3>
+    <h3><i class="fa-solid fa-sliders"></i> <span
+                class="m-lg-auto"><?= LangManager::translate("users.manage.title") ?></span></h3>
 </div>
 
 <section class="row">
     <div class="col-12 col-lg-3">
         <div class="card">
             <div class="card-header">
-                <h4>Ajouter un utilisateur</h4>
+                <h4><?= LangManager::translate("users.manage.card_title_add") ?></h4>
             </div>
             <div class="card-body">
-                <form>
-                    <h6>E-Mail :</h6>
+                <form method="post" action="add">
+                    <h6><?= LangManager::translate("users.users.mail") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
-                        <input type="email" class="form-control" placeholder="E-Mail">
+                        <input type="email" class="form-control" name="email" required
+                               placeholder="<?= LangManager::translate("users.users.mail") ?>">
                         <div class="form-control-icon">
                             <i class="fa-solid fa-at"></i>
                         </div>
                     </div>
-                    <h6>Pseudo :</h6>
+                    <h6><?= LangManager::translate("users.users.pseudo") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
-                        <input type="text" class="form-control" placeholder="Pseudo">
+                        <input type="text" class="form-control" name="pseudo" required
+                               placeholder="<?= LangManager::translate("users.users.pseudo") ?>">
                         <div class="form-control-icon">
                             <i class="fa-solid fa-user"></i>
                         </div>
                     </div>
-                    <h6>Prénom :</h6>
+                    <h6><?= LangManager::translate("users.users.firstname") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
-                        <input type="text" class="form-control" placeholder="Prénom">
+                        <input type="text" class="form-control" name="firstname"
+                               placeholder="<?= LangManager::translate("users.users.firstname") ?>">
                         <div class="form-control-icon">
                             <i class="fa-solid fa-id-card"></i>
                         </div>
                     </div>
-                    <h6>Nom :</h6>
+                    <h6><?= LangManager::translate("users.users.surname") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
-                        <input type="text" class="form-control" placeholder="Nom">
+                        <input type="text" class="form-control" name="surname"
+                               placeholder="<?= LangManager::translate("users.users.surname") ?>">
                         <div class="form-control-icon">
                             <i class="fa-solid fa-signature"></i>
                         </div>
                     </div>
-                    <h6>Rôles :</h6>
+                    <h6><?= LangManager::translate("users.users.role") ?> :</h6>
                     <fieldset class="form-group">
-                        <select class="form-select" id="basicSelect">
-                            <option>Sampler</option>
-                            <option>Wipe</option>
-                            <option>Vega</option>
+                        <select class="form-select" name="roles[]" id="basicSelect" required>
+                            <?php foreach ($roles as $role) : ?>
+                                <option value="<?= $role->getId() ?>"><?= $role->getName() ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </fieldset>
-                    <h6>Mot de passe :</h6>
+                    <h6><?= LangManager::translate("users.users.password") ?>:</h6>
                     <div class="form-group position-relative has-icon-left">
-                        <input type="password" class="form-control" placeholder="••••">
+                        <input type="password" class="form-control" name="password" placeholder="••••" required>
                         <div class="form-control-icon">
                             <i class="fa-solid fa-unlock"></i>
                         </div>
                     </div>
-                    <div class="text-center"><button type="submit" class="btn btn-primary">Ajouter</button></div>
+                    <div class="text-center">
+                        <button type="submit"
+                                class="btn btn-primary"><?= LangManager::translate("core.btn.add") ?></button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -61,35 +80,34 @@
     <div class="col-12 col-lg-9">
         <div class="card">
             <div class="card-header">
-                <h4>Liste des utilisateurs inscrits</h4>
+                <h4><?= LangManager::translate("users.manage.card_title_list") ?></h4>
             </div>
             <div class="card-body">
                 <table class="table" id="table1">
                     <thead>
                     <tr>
-                        <th class="text-center">E-mail</th>
-                        <th class="text-center">Pseudo</th>
-                        <th class="text-center">Prénom</th>
-                        <th class="text-center">Nom</th>
-                        <th class="text-center">Rôles</th>
-                        <th class="text-center">Membre depuis</th>
-                        <th class="text-center">Profil édité le</th>
-                        <th class="text-center">Éditer</th>
+                        <th class="text-center"><?= LangManager::translate("users.users.mail") ?></th>
+                        <th class="text-center"><?= LangManager::translate("users.users.pseudo") ?></th>
+                        <th class="text-center"><?= LangManager::translate("users.users.role") ?></th>
+                        <th class="text-center"><?= LangManager::translate("users.users.creation") ?></th>
+                        <th class="text-center"><?= LangManager::translate("users.users.last_connection") ?></th>
+                        <th class="text-center"><?= LangManager::translate("core.btn.edit") ?></th>
                     </tr>
                     </thead>
                     <tbody class="text-center">
-                    <tr>
-                        <td>leo.goigoux@gmail.com</td>
-                        <td>Zomb</td>
-                        <td>Léo</td>
-                        <td>Goigoux</td>
-                        <td>Administrateur</td>
-                        <td>2022-11-14 19:32:25</td>
-                        <td>2022-11-14 19:32:25</td>
-                        <td>
-                            <i data-bs-toggle="modal" data-bs-target="#userEditModal" class="text-primary fa-solid fa-gears"></i>
-                        </td>
-                    </tr>
+                    <?php foreach ($userList as $user) : ?>
+                        <tr>
+                            <td><?= $user->getMail() ?></td>
+                            <td><?= $user->getUsername() ?></td>
+                            <td><?= $user->getHighestRole()?->getName() ?></td>
+                            <td><?= $user->getCreated() ?></td>
+                            <td><?= $user->getLastConnection() ?></td>
+                            <td>
+                                <i data-bs-toggle="modal" data-bs-target="#userEditModal"
+                                   class="text-primary fa-solid fa-gears"></i>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
@@ -98,18 +116,7 @@
 </section>
 
 
-
-
-
-
-
-
-
-
-
-
-
-<!--Modale d'édition-->
+<!-- Modal Edit -->
 <div class="modal fade modal-xl" id="userEditModal" tabindex="-1" role="dialog" aria-labelledby="roleEditModalTitle"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
@@ -154,11 +161,14 @@
                                             <h6>Image de profil :</h6>
                                             <p>Dernière modification: 2022-11-14 19:32:25</p>
                                             <div class="text-center ">
-                                                <img class="w-25 border" src="https://theme.voyza.fr/public/uploads/users/default/defaultImage.jpg" alt="Image introuvable !">
+                                                <img class="w-25 border"
+                                                     src="https://theme.voyza.fr/public/uploads/users/default/defaultImage.jpg"
+                                                     alt="Image introuvable !">
                                             </div>
 
                                         </div>
-                                            <input class="form-control w-75 mx-auto form-control-sm" type="file" id="formFile">
+                                        <input class="form-control w-75 mx-auto form-control-sm" type="file"
+                                               id="formFile">
                                         <div class="text-center mt-1">
                                             <button type="submit" class="btn btn-primary">
                                                 <span class="d-sm-block">Réinitialiser l'image</span>

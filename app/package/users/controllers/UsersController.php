@@ -69,15 +69,20 @@ class UsersController extends CoreController
     }
 
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/users")]
-    #[Link("/list", Link::GET, [], "/cmw-admin/users")]
+    #[Link("/manage", Link::GET, [], "/cmw-admin/users")]
     public function adminUsersList(): void
     {
 
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
         $userList = $this->userModel->getUsers();
+        $roles = $this->roleModel->getRoles();
 
-        View::createAdminView("users", "list")->addVariable("userList", $userList)
+
+        View::createAdminView("users", "manage")
+            ->addVariableList(["userList" => $userList, "roles" => $roles])
+            ->addStyle("admin/resources/vendors/simple-datatables/style.css","admin/resources/assets/css/pages/simple-datatables.css")
+            ->addScriptAfter("admin/resources/vendors/simple-datatables/umd/simple-datatables.js","admin/resources/assets/js/pages/simple-datatables.js")
             ->view();
     }
 
@@ -168,11 +173,11 @@ class UsersController extends CoreController
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.add");
 
-        [$mail, $username, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "name", "lastname");
+        [$mail, $username, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "firstname", "surname");
 
         $userEntity = $this->userModel->create($mail, $username, $firstname, $lastname, $_POST['roles']);
 
-        $this->userModel->updatePass($userEntity?->getId(), password_hash(filter_input(INPUT_POST, "pass"), PASSWORD_BCRYPT));
+        $this->userModel->updatePass($userEntity?->getId(), password_hash(filter_input(INPUT_POST, "password"), PASSWORD_BCRYPT));
 
         header("location: ../users/list");
     }

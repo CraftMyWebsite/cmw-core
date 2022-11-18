@@ -17,7 +17,10 @@ return [
         "title" => "Configuration",
         "desc" => "Configure your CMW website !",
         "favicon" => "Edit your website favicon",
-        "favicon_tips" => 'CraftMyWebsite allow only <a href="https://www.icoconverter.com" target="_blank">.ico</a> for better performances.'
+        "favicon_tips" => 'CraftMyWebsite allow only <a href="https://www.icoconverter.com" target="_blank">.ico</a> for better performances.',
+        "dateFormat" => "Date formatting",
+        "dateFormatTooltip" => "You can customise the way you display the dates",
+        "custom" => "-- Customize-moi --",
     ],
     "lang" => [
         "title" => "Languages",
@@ -144,7 +147,9 @@ return [
         "delete" => "Delete",
         "delete_forever" => "Delete forever",
         "close" => "Close",
-        "send" => "Send"
+        "send" => "Send",
+        "add" => "Add",
+        "edit" => "Edit",
     ],
     "months" => '["January","February","March","April","May","June","July","August","September","October","November","December"]'
 ];
