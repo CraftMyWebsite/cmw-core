@@ -73,7 +73,6 @@ class UsersController extends CoreController
     #[Link("/manage", Link::GET, [], "/cmw-admin/users")]
     public function adminUsersList(): void
     {
-
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
         $userList = $this->userModel->getUsers();
@@ -94,22 +93,6 @@ class UsersController extends CoreController
         if (!(self::hasPermission(...$permCode))) {
             self::redirectToHome();
         }
-    }
-
-    #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
-    public function adminUsersEdit(int $id): void
-    {
-        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
-
-        $userEntity = $this->userModel->getUserById($id);
-
-        $roles = $this->roleModel->getRoles();
-
-        View::createAdminView("users", "user")->addVariableList(array(
-            "user" => $userEntity,
-            "roles" => $roles
-        ))
-            ->view();
     }
 
     #[Link("/getUser/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
@@ -180,33 +163,6 @@ class UsersController extends CoreController
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
-    #[Link("/add", Link::GET, [], "/cmw-admin/users")]
-    public function adminUsersAdd(): void
-    {
-        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
-
-        $roles = $this->roleModel->getRoles();
-
-        View::createAdminView("users", "add")->addVariable("roles", $roles)
-            ->view();
-    }
-
-
-    //Useless ?
-    public function rolesTest(): void
-    {
-
-        $permissions = new PermissionsController();
-        $permModel = new PermissionsModel();
-
-        $view = View::createAdminView("users", "test")->addVariableList(array(
-            "perms" => $permissions,
-            "pmodel" => $permModel
-        ));
-        $view->view();
-
-    }
-
 
     #[Link("/add", Link::POST, [], "/cmw-admin/users")]
     public function adminUsersAddPost(): void
@@ -268,23 +224,27 @@ class UsersController extends CoreController
         $_SESSION['toaster'][0]['type'] = "bg-success";
         $_SESSION['toaster'][0]['body'] = "USERS_DELETE_TOASTER_SUCCESS";
 
-        header("location: ../list");
+        header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
     #[Link("/picture/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users")]
     #[NoReturn] public function adminUsersEditPicturePost(int $id): void
     {
+        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+
         $image = $_FILES['profilePicture'];
 
 
         $this->userPictureModel->uploadImage($id, $image);
 
-        header("Location: ../../edit/$id");
+        header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
     #[Link("/picture/reset/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
     #[NoReturn] public function adminUsersResetPicture(int $id): void
     {
+        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+
         $this->userPictureModel->deleteUserPicture($id);
 
         header("location: " . $_SERVER['HTTP_REFERER']);

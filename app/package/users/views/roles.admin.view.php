@@ -39,10 +39,8 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                                     <i class="text-primary fa-solid fa-gears"></i>
                                 </a>
 
-                                <button class="btn-clear">
-                                    <i data-bs-toggle="modal" onclick="deleteRole(<?= $role->getId() ?>)"
-                                       data-bs-target="#roleDeleteModal"
-                                       class="ms-2 text-danger fa-solid fa-trash"></i>
+                                <button class="btn-clear" onclick="deleteRole(<?= $role->getId() ?>)">
+                                    <i class="ms-2 text-danger fa-solid fa-trash"></i>
                                 </button>
                             </td>
                         </tr>
@@ -134,7 +132,7 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
 <!-- MODAL DELETE ROLE -->
 <script>
     const modalDeleteRole = (roleId, roleName) => {
-        return `<div class="modal fade" id="roleDeleteModal" tabindex="-1" role="dialog" aria-labelledby="roleDeleteModalTitle"
+        return `<div class="modal fade" id="roleDeleteModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="roleDeleteModalTitle"
              aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable"
                  role="document">
@@ -165,4 +163,25 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
             </div>
         </div>`
     }
+</script>
+
+<!-- Trigger perm * and disabled all others perms checkbox -->
+<script>
+    const inputs = document.getElementsByClassName("permission-input")
+
+    const checkChild = (parentElement) => {
+        const group = parentElement.parentElement.parentElement.parentElement.parentElement
+        const els = group.getElementsByClassName("permission-input")
+        for (const item of els) {
+            item.parentElement.parentElement.parentElement.classList.toggle("d-none")
+        }
+        parentElement.parentElement.parentElement.parentElement.classList.toggle("d-none")
+    }
+
+    for (const inp of inputs) {
+
+        inp.onchange = () => checkChild(inp);
+
+    }
+
 </script>

@@ -153,7 +153,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
                                             <a href="state/${data.id}/${data.state}" class="btn btn-${data.state ? 'warning' : 'success'}">
                                                 <span class="d-sm-block">
                                                 <?='${data.state}' ? LangManager::translate("users.edit.disable_account") :
-                                                    LangManager::translate("users.edit.activate_account") ?>
+            LangManager::translate("users.edit.activate_account") ?>
                                                 </span>
                                             </a>
                                             <a href="delete/${data.id}" class="btn btn-danger">

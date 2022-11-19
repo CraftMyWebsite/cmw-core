@@ -1,9 +1,8 @@
 /* DELETE ROLE */
-
 const deleteRole = (roleId) => {
 
     document.getElementById('app').innerHTML += modalDeleteRole(roleId)
-    let modalEl = document.getElementById('roleEditModal')
+    let modalEl = document.getElementById('roleDeleteModal')
 
     const myModal = bootstrap.Modal.getOrCreateInstance(modalEl)
     myModal.show()
@@ -12,11 +11,6 @@ const deleteRole = (roleId) => {
         modalEl.remove()
     })
 }
-
-const storeRoleId = (roleId) => {
-    document.cookie = 'editRoleId=' + roleId
-}
-
 
 
 /* EDIT ROLE */
@@ -36,6 +30,4 @@ const fillEditModal = (roleId) => {
                 modalEl.remove()
             })
         })
-
-
 }

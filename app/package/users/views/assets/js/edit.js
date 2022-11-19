@@ -30,6 +30,4 @@ const fillEditModal = () => {
                 modalEl.remove()
             })
         })
-
-
 }
