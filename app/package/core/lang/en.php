@@ -1,6 +1,7 @@
 <?php
 
 return [
+    "general" => "General",
     "welcome" => "Welcome !",
     "eat" => [
         "pasta" => "Eat pastas !",

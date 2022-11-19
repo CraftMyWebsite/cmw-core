@@ -1,6 +1,7 @@
 <?php
 
 return [
+    "general" => "Général",
     "alt" => [
         "logo" => "Logo CMW",
     ],
