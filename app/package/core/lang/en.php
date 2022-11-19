@@ -150,6 +150,8 @@ return [
         "send" => "Send",
         "add" => "Add",
         "edit" => "Edit",
+        "action" => "Action",
+        "confirm" => "Confirm",
     ],
     "months" => '["January","February","March","April","May","June","July","August","September","October","November","December"]'
 ];

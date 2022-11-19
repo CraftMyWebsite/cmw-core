@@ -8,11 +8,13 @@
       "url_menu": "",
       "urls_submenu_fr": {
         "Gestion": "users/manage",
-        "Paramètres": "users/settings"
+        "Paramètres": "users/settings",
+        "Rôles": "roles/manage"
       },
       "urls_submenu_en": {
         "Management": "users/manage",
-        "Settings": "users/settings"
+        "Settings": "users/settings",
+        "Roles": "roles/manage"
       }
     }
   ],

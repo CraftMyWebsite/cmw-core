@@ -3,14 +3,14 @@
 namespace CMW\Controller\Users;
 
 use CMW\Controller\Core\CoreController;
-
 use CMW\Model\Users\PermissionsModel;
 use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UsersModel;
-
 use CMW\Router\Link;
+use CMW\Utils\Utils;
 use CMW\Utils\View;
 use JetBrains\PhpStorm\NoReturn;
+use JsonException;
 
 /**
  * Class: @rolesController
@@ -36,14 +36,24 @@ class RolesController extends CoreController
     }
 
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/roles")]
-    #[Link("/list", Link::GET, [], "/cmw-admin/roles")]
-    public function adminRolesList(): void
+    #[Link("/manage", Link::GET, [], "/cmw-admin/roles")]
+    public function adminRolesManage(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
         $rolesList = $this->roleModel->getRoles();
+        $permissionController = new PermissionsController();
+        $permissionModel = new PermissionsModel();
+        $rolesModel = new RolesModel();
 
-        View::createAdminView("users", "roles.list")->addVariable("rolesList", $rolesList)
+        //Try to improve that ?
+        require_once(Utils::getEnv()->getValue("DIR") . "app/package/users/functions/loadPermissions.php");
+
+
+        View::createAdminView("users", "roles")
+            ->addScriptBefore("app/package/users/views/assets/js/manageRoles.js")
+            ->addVariableList(["rolesList" => $rolesList, "permissionController" => $permissionController,
+                "permissionModel" => $permissionModel, "rolesModel" => $rolesModel])
             ->view();
     }
 
@@ -56,7 +66,7 @@ class RolesController extends CoreController
         $permissionModel = new PermissionsModel();
 
         //Try to improve that ?
-        require_once (getenv("DIR") . "app/package/users/functions/loadPermissions.php");
+        require_once(getenv("DIR") . "app/package/users/functions/loadPermissions.php");
 
 
         View::createAdminView("users", "roles.add")->addVariableList(array(
@@ -79,11 +89,11 @@ class RolesController extends CoreController
         $role->createRole($roleName, $roleDescription, $roleWeight, $permList);
 
 
-        $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;
+        $_SESSION['toaster'][0]['title'] = "USERS_TOASTER_TITLE";
         $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = USERS_ROLE_ADD_TOASTER_SUCCESS;
+        $_SESSION['toaster'][0]['body'] = "USERS_ROLE_ADD_TOASTER_SUCCESS";
 
-        header("location: ../roles/list/");
+        header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
     #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
@@ -95,7 +105,7 @@ class RolesController extends CoreController
         $permissionModel = new PermissionsModel();
 
         //Try to improve that ?
-        require_once (getenv("DIR") . "app/package/users/functions/loadPermissions.php");
+        require_once(getenv("DIR") . "app/package/users/functions/loadPermissions.php");
 
         View::createAdminView("users", "roles.edit")->addVariableList(array(
             "permissionController" => $permissionController,
@@ -119,11 +129,11 @@ class RolesController extends CoreController
         $this->roleModel->updateRole($roleName, $roleDescription, $id, $roleWeight, $permList);
 
         //Todo Try to remove that
-        $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;
+        $_SESSION['toaster'][0]['title'] = "USERS_TOASTER_TITLE";
         $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = USERS_ROLE_EDIT_TOASTER_SUCCESS;
+        $_SESSION['toaster'][0]['body'] = "USERS_ROLE_EDIT_TOASTER_SUCCESS";
 
-        header("location: ../list/");
+        header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
     #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
@@ -134,10 +144,44 @@ class RolesController extends CoreController
         $this->roleModel->deleteRole($id);
 
         //Todo Try to remove that
-        $_SESSION['toaster'][0]['title'] = USERS_TOASTER_TITLE;
+        $_SESSION['toaster'][0]['title'] = "USERS_TOASTER_TITLE";
         $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = USERS_ROLE_EDIT_TOASTER_SUCCESS;
+        $_SESSION['toaster'][0]['body'] = "USERS_ROLE_EDIT_TOASTER_SUCCESS";
 
-        header("location: ../list/");
+        header("location: " . $_SERVER['HTTP_REFERER']);
     }
+
+    #[Link("/getRole/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
+    public function admingetRole(int $id): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
+
+        $_SESSION['editRoleId'] = $id;
+
+        $role = (new RolesModel())->getRoleById($id);
+
+        $rolePermissions = [];
+
+        foreach ($role?->getPermissions() as $permission) {
+            if ($permission->hasParent()) {
+                $rolePermissions[$permission->getId()] = $permission->getParent()?->getCode();
+            }
+            $rolePermissions[$permission->getId()] = $permission->getCode();
+        }
+
+        $data = [
+            "id" => $role?->getId(),
+            "name" => $role?->getName(),
+            "weight" => $role?->getWeight(),
+            "description" => $role?->getDescription(),
+            "permissions" => $rolePermissions
+        ];
+
+        try {
+            print_r(json_encode($data, JSON_THROW_ON_ERROR));
+        } catch (JsonException) {
+            print("ERROR");
+        }
+    }
+
 }
