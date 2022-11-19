@@ -24,10 +24,8 @@ function generateCheckBox(PermissionEntity $permission, string $codeValue, bool 
 /**
  * @param \CMW\Entity\Users\PermissionEntity[] $permissionList
  */
-function showPermission(PermissionsModel $permissionModel, array $permissionList, ?RolesModel $rolesModel = null, mixed $roleId = null): void
+function showPermission(PermissionsModel $permissionModel, array $permissionList, ?RolesModel $rolesModel = null, ?RoleEntity $roleEntity = null): void
 {
-    $roleEntity = (new RolesModel())->getRoleById($roleId);
-    Utils::debugR($roleEntity);
 
     foreach ($permissionList as $p) {
         $hasChild = $permissionModel->hasChild($p->getId());
