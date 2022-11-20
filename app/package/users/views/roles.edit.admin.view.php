@@ -15,79 +15,64 @@ use CMW\Utils\SecurityService;
 
 $title = LangManager::translate("users.roles.manage.title");
 $description = LangManager::translate("users.roles.manage.desc"); ?>
-
-
-<div >
-    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable"
-         role="document">
-        <div class="modal-content">
+<section>
+    <div class="card">
+        <div class="card-header">
+            <h4><?= LangManager::translate('users.roles.manage.edit_title') ?>
+                        <?= $role->getName() ?></h4>
+        </div>
+        <div class="card-body">
             <form method="post" action="">
-                <?php (new SecurityService())->insertHiddenToken() ?>
-                <div class="modal-header">
-                    <h5 class="modal-title"
-                        id="roleEditModalTitle"><?= LangManager::translate('users.roles.manage.edit_title') ?>
-                        <?= $role->getName() ?>
-                    </h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><i
-                                data-feather="x"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-12 col-lg-6">
-                            <h6><?= LangManager::translate("users.users.role") ?> :</h6>
-                            <div class="form-group position-relative has-icon-left">
-                                <input type="text" class="form-control"
-                                       value="<?= $role->getName() ?>"
-                                       placeholder="<?= LangManager::translate("users.users.role") ?>" required>
-                                <div class="form-control-icon">
-                                    <i class="fa-solid fa-id-card-clip"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <h6><?= LangManager::translate('users.users.weight') ?> :
-                                <i data-bs-toggle="tooltip"
-                                   title="<?= LangManager::translate('users.roles.manage.weightTips') ?>"
-                                   class="fa-sharp fa-solid fa-circle-question"></i>
-                            </h6>
-                            <div class="form-group position-relative has-icon-left">
-                                <input type="number" class="form-control" value="<?= $role->getWeight() ?>" placeholder="1"
-                                       required>
-                                <div class="form-control-icon">
-                                    <i class="fa-solid fa-weight-hanging"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <h6><?= LangManager::translate("users.users.role_description") ?> :</h6>
+            <?php (new SecurityService())->insertHiddenToken() ?>
+            <div class="row">
+                <div class="col-12 col-lg-6">
+                    <h6><?= LangManager::translate("users.users.role") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
                         <input type="text" class="form-control"
-                               value="<?= $role->getDescription() ?>"
-                               placeholder="<?= LangManager::translate("users.users.role_description") ?>" required>
+                               value="<?= $role->getName() ?>"
+                               placeholder="<?= LangManager::translate("users.users.role") ?>" required>
                         <div class="form-control-icon">
-                            <i class="fa-solid fa-circle-info"></i>
+                            <i class="fa-solid fa-id-card-clip"></i>
                         </div>
                     </div>
-                    <h6><?= LangManager::translate("users.roles.manage.permissions_list") ?> :</h6>
-                    <div class="row mx-auto">
-                        <?php showPermission($permissionModel, $permissionController->getParents(), $roleModel, $role); ?>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <h6><?= LangManager::translate('users.users.weight') ?> :
+                        <i data-bs-toggle="tooltip"
+                           title="<?= LangManager::translate('users.roles.manage.weightTips') ?>"
+                           class="fa-sharp fa-solid fa-circle-question"></i>
+                    </h6>
+                    <div class="form-group position-relative has-icon-left">
+                        <input type="number" class="form-control" value="<?= $role->getWeight() ?>" placeholder="1"
+                               required>
+                        <div class="form-control-icon">
+                            <i class="fa-solid fa-weight-hanging"></i>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                        <i class="bx bx-x d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.close") ?></span>
-                    </button>
-                    <button type="submit" class="btn btn-primary ml-1" data-bs-dismiss="modal">
-                        <i class="bx bx-check d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.edit") ?></span>
-                    </button>
+            </div>
+            <h6><?= LangManager::translate("users.users.role_description") ?> :</h6>
+            <div class="form-group position-relative has-icon-left">
+                <input type="text" class="form-control"
+                       value="<?= $role->getDescription() ?>"
+                       placeholder="<?= LangManager::translate("users.users.role_description") ?>" required>
+                <div class="form-control-icon">
+                    <i class="fa-solid fa-circle-info"></i>
                 </div>
+            </div>
+            <h6><?= LangManager::translate("users.roles.manage.permissions_list") ?> :</h6>
+            <div class="row mx-auto">
+                <?php showPermission($permissionModel, $permissionController->getParents(), $roleModel, $role); ?>
+            </div>
+
+
+            <div class="text-end ">
+                <button type="submit" class="btn btn-primary"><?= LangManager::translate("core.btn.edit") ?></button>
+            </div>
             </form>
         </div>
     </div>
-</div>
+</section>
 
 <!-- Trigger perm * and disabled all others perms checkbox -->
 <script>

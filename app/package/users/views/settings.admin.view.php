@@ -39,6 +39,8 @@ $description = LangManager::translate("users.settings.desc"); ?>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="col-12 col-lg-6">
             <div class="card">
                 <div class="card-header">
                     <h4><?= LangManager::translate("users.users.password") ?>
@@ -63,7 +65,8 @@ $description = LangManager::translate("users.settings.desc"); ?>
                             </select>
                         </fieldset>
                     </div>
-
                 </div>
+            </div>
+        </div>
     </section>
 </form>

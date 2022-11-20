@@ -221,7 +221,9 @@ class ThemeController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
         View::createAdminView("core", "themeManage")
-            ->view();
+        ->addStyle("admin/resources/vendors/summernote/summernote-lite.css","admin/resources/assets/css/pages/summernote.css")
+        ->addScriptAfter("admin/resources/vendors/jquery/jquery.min.js","admin/resources/vendors/summernote/summernote-lite.min.js","admin/resources/assets/js/pages/summernote.js")
+        ->view();
     }
 
     #[Link("/manage", Link::POST, [], "/cmw-admin/theme")]

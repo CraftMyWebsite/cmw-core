@@ -74,6 +74,8 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                     </button>
                 </div>
                 <div class="modal-body">
+                <div class="card-in-card mt-4">
+                <div class="card-body">
                     <div class="row">
                         <div class="col-12 col-lg-6">
                             <h6><?= LangManager::translate("users.users.role") ?> :</h6>
@@ -99,30 +101,34 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                             </div>
                         </div>
                     </div>
-                    <h6><?= LangManager::translate("users.users.role_description") ?> :</h6>
-                    <div class="form-group position-relative has-icon-left">
-                        <input type="text" class="form-control" name="description"
-                               placeholder="<?= LangManager::translate("users.users.role_description") ?>" required>
-                        <div class="form-control-icon">
-                            <i class="fa-solid fa-circle-info"></i>
+                        <h6><?= LangManager::translate("users.users.role_description") ?> :</h6>
+                        <div class="form-group position-relative has-icon-left">
+                            <input type="text" class="form-control" name="description"
+                                   placeholder="<?= LangManager::translate("users.users.role_description") ?>" required>
+                            <div class="form-control-icon">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </div>
                         </div>
                     </div>
-                    <h6><?= LangManager::translate("users.roles.manage.permissions_list") ?> :</h6>
-                    <div class="row mx-auto">
-
-                        <?php showPermission($permissionModel, $permissionController->getParents()) ?>
-
+                </div>
+                <div class="card-in-card mt-4">
+                    <div class="card-body">
+                        <h6><?= LangManager::translate("users.roles.manage.permissions_list") ?> :</h6>
+                                        <div class="row mx-auto">
+                                        <?php showPermission($permissionModel, $permissionController->getParents()) ?>
+                    </div>
+                </div>     
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                        <i class="bx bx-x d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.close") ?></span>
-                    </button>
-                    <button type="submit" class="btn btn-primary ml-1" data-bs-dismiss="modal">
-                        <i class="bx bx-check d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block"><?= LangManager::translate("core.btn.add") ?></span>
-                    </button>
+                    <div class="button">
+                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                        <?= LangManager::translate("core.btn.close") ?>
+                        </button>
+                        <button type="submit" class="btn btn-primary ml-1" data-bs-dismiss="modal">
+                            <?= LangManager::translate("core.btn.add") ?>
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -150,14 +156,14 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                         </p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block"><?= LangManager::translate('core.btn.close') ?></span>
-                        </button>
-                        <a href="delete/${roleId}" class="btn btn-danger ml-1">
-                            <i class="bx bx-check d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block"><?= LangManager::translate('core.btn.confirm') ?></span>
-                        </a>
+                        <div class="buttons">
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                                <?= LangManager::translate('core.btn.close') ?>
+                            </button>
+                            <a href="delete/${roleId}" class="btn btn-danger ml-1">
+                                <?= LangManager::translate('core.btn.confirm') ?>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
