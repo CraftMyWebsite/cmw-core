@@ -38,6 +38,20 @@ class EnvBuilder
 
     }
 
+    public function __get(string $key)
+    {
+        return $this->getValue($key);
+    }
+
+    public function __set(string $key, string $value) {
+        $this->setOrEditValue($key, $value);
+    }
+
+    public function __isset(string $key)
+    {
+        return $this->valueExist($key);
+    }
+
     private function doWithFile(Closure $fn): void
     {
 
