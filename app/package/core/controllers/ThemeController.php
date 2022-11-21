@@ -231,7 +231,7 @@ class ThemeController extends CoreController
 
         foreach ($this->getCurrentThemeConfigSettings() as $conf => $value) {
             if(!isset($_POST[$conf]) || !empty($_POST[$conf])) {
-                $this->themeModel->updateThemeConfig($conf, $_POST[$conf] ?? "false", self::getCurrentTheme()->getName());
+                $this->themeModel->updateThemeConfig($conf, $_POST[$conf] ?? "0", self::getCurrentTheme()->getName());
             }
         }
 
