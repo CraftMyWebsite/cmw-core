@@ -3,6 +3,7 @@
 namespace CMW\Utils;
 
 use CMW\Model\Core\CoreModel;
+use ReflectionClass;
 
 require("EnvBuilder.php");
 
@@ -206,7 +207,18 @@ class Utils
     {
         return (new CoreModel())->fetchOption("description");
     }
-    
+
+    public static function getSiteLogoPath(): string
+    {
+        $logoName = self::getFilesInFolder(self::getEnv()->getValue("DIR") . "public/uploads/logo");
+
+        if($logoName !== []){
+            return self::getEnv()->getValue("DIR") . "public/uploads/logo/" . $logoName[0];
+        }
+
+        return self::getEnv()->getValue("DIR") . "admin/resources/assets/images/logo/logo_compact.png";
+    }
+
     public static function getElementsInFolder(string $path): array
     {
         $src = is_dir($path);
@@ -251,5 +263,35 @@ class Utils
         }
 
         return $arrayToReturn;
+    }
+
+    /**
+     * @param $object
+     * @return array
+     */
+    public static function objectToArray($object): array
+    {
+        $reflectionClass = new ReflectionClass(get_class($object));
+        $array = array();
+        foreach ($reflectionClass->getProperties() as $property) {
+            $array[$property->getName()] = $property->getValue($object);
+        }
+        return $array;
+    }
+
+    /**
+     * @param string $targetUrl
+     * @return bool
+     * @desc Useful function for active navbar page
+     */
+    public static function isCurrentPageActive(string $targetUrl): bool
+    {
+        if (self::getEnv()->getValue('PATH_SUBFOLDER') !== "/") {
+            $currentUrl = str_replace(self::getEnv()->getValue('PATH_SUBFOLDER'), '', $_SERVER['REQUEST_URI']);
+        }else{
+            $currentUrl = $_SERVER['REQUEST_URI'];
+        }
+
+        return $currentUrl === $targetUrl || $currentUrl === $targetUrl . '/' || $currentUrl === $targetUrl . '#';
     }
 }

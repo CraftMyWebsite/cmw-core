@@ -53,28 +53,28 @@ class MailController extends CoreController
             //Server settings
             $mail->SMTPDebug = SMTP::DEBUG_OFF;                    //To enable verbose debug output → SMTP::DEBUG_SERVER;
             $mail->isSMTP();                                       //Send using SMTP
-            $mail->Host = $config->getAddressSMTP();               //Set the SMTP server to send through
+            $mail->Host = $config?->getAddressSMTP();               //Set the SMTP server to send through
             $mail->SMTPAuth = true;                                //Enable SMTP authentication
-            $mail->Username = $config->getUser();                  //SMTP username
-            $mail->Password = $config->getPassword();              //SMTP password
-            $mail->SMTPSecure = $config->getProtocol();            //TLS OR SSL
-            $mail->Port = $config->getPort();                      //TCP port
+            $mail->Username = $config?->getUser();                  //SMTP username
+            $mail->Password = $config?->getPassword();              //SMTP password
+            $mail->SMTPSecure = $config?->getProtocol();            //TLS OR SSL
+            $mail->Port = $config?->getPort();                      //TCP port
             $mail->CharSet = 'UTF-8';
 
             //Receiver config
-            $mail->setFrom($config->getMail(), (new CoreModel())->fetchOption("name"));
+            $mail->setFrom($config?->getMail(), (new CoreModel())->fetchOption("name"));
             $mail->addAddress($receiver);
-            $mail->addReplyTo($config->getMailReply());
+            $mail->addReplyTo($config?->getMailReply());
 
             //Content
             $mail->isHTML(true);
             $mail->Subject = $subject;
-            $mail->Body = $body . "<br>" . $config->getFooter();
+            $mail->Body = $body . "<br>" . $config?->getFooter();
 
             //Send mail
             $mail->send();
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            echo "Message could not be sent. Mailer Error: $mail->ErrorInfo";
         }
     }
 

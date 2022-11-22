@@ -66,7 +66,7 @@ class Images
         self::createDirectory($dirName); //Create the directory if this is necessary
 
 
-        $path = getenv("DIR") . "public/uploads/" . $dirName;
+        $path = Utils::getEnv()->getValue('DIR') . "public/uploads/" . $dirName;
 
 
         if (!empty($dirName) && $dirName !== "/" && !is_dir($path)) {
@@ -134,7 +134,7 @@ class Images
      */
     private static function createDirectory(string $dirName): void
     {
-        if (!file_exists(getenv("DIR") . "public/uploads/" . $dirName) && !mkdir($concurrentDirectory = getenv("DIR") . "public/uploads/" . $dirName) && !is_dir($concurrentDirectory)) {
+        if (!file_exists( Utils::getEnv()->getValue('DIR') . "public/uploads/" . $dirName) && !mkdir($concurrentDirectory = Utils::getEnv()->getValue('DIR') . "public/uploads/" . $dirName, 0777, true) && !is_dir($concurrentDirectory)) {
             throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
     }

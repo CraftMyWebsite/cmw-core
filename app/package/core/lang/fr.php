@@ -1,6 +1,7 @@
 <?php
 
 return [
+    "general" => "Général",
     "alt" => [
         "logo" => "Logo CMW",
     ],
@@ -12,7 +13,10 @@ return [
         "title" => "Configuration",
         "desc" => "Configurez votre site CMW !",
         "favicon" => "Modifiez le favicon de votre site",
-        "favicon_tips" => 'CraftMyWebsite accepte uniquement les images <a href="https://www.icoconverter.com" target="_blank">.ico</a> pour des soucis de performances.'
+        "favicon_tips" => 'CraftMyWebsite accepte uniquement les images <a href="https://www.icoconverter.com" target="_blank">.ico</a> pour des soucis de performances.',
+        "dateFormat" => "Format des dates",
+        "dateFormatTooltip" => "Vous pouvez personalisé le façon dont vous affichez les dates",
+        "custom" => "-- Personnalisez-moi --",
     ],
     "lang" => [
         "title" => "Langues",
@@ -137,6 +141,10 @@ return [
         "close" => "Fermer",
         "send" => "Envoyer",
         "download" => "Télécharger",
+        "add" => "Ajouter",
+        "edit" => "Modifier",
+        "action" => "Action",
+        "confirm" => "Confirmer",
     ],
     "months" => '["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Decembre"]',
 ];

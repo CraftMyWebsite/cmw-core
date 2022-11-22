@@ -25,6 +25,7 @@ class CoreController
 {
     public static string $themeName;
     public static array $availableLocales = ['fr' => 'Français', 'en' => 'English'];
+    public static array $exampleDateFormat = ["d-m-Y H:i:s", "d-m-Y Hh im ss", "d/m/Y H:i:s", "d/m/Y à H\h i\m s\s", "d/m/Y à H\h i\m", "d/m/Y at H\h i\m s\s"];
 
     public function __construct()
     {
@@ -33,6 +34,11 @@ class CoreController
 
     public static function getThemePath(): string {
         return (empty($themeName = self::$themeName)) ? "" : "./public/themes/$themeName/";
+    }
+
+    public static function formatDate(string $date): string
+    {
+        return date((new CoreModel())->fetchOption("dateFormat"), strtotime($date));
     }
 
     #[NoReturn] protected static function redirectToHome(): void
@@ -63,8 +69,6 @@ class CoreController
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
 
         View::createAdminView("core", "configuration")
-        ->addStyle("admin/resources/vendors/choices.js/public/assets/styles/choices.css")
-        ->addScriptAfter("admin/resources/vendors/choices.js/public/assets/scripts/choices.js","admin/resources/assets/js/pages/form-element-select.js")
         ->view();
     }
 

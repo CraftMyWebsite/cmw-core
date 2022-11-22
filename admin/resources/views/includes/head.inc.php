@@ -27,6 +27,8 @@ use CMW\Utils\Utils;
           href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/assets/images/logo/favicon.ico"/>
     <link rel="stylesheet"
           href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/fontawesome-free/css/fa-all.min.css"/>
+    <link rel="stylesheet"
+          href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>admin/resources/vendors/choices.js/public/assets/styles/choices.css"/>
 
 </head>
 

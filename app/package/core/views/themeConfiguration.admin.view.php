@@ -2,7 +2,6 @@
 
 use CMW\Manager\Lang\LangManager;
 use CMW\Utils\SecurityService;
-use CMW\Utils\Utils;
 
 /* @var $currentTheme \CMW\Entity\Core\ThemeEntity */
 /* @var $installedThemes \CMW\Entity\Core\ThemeEntity[] */
@@ -26,20 +25,23 @@ $description = LangManager::translate("core.theme.config.description"); ?>
                     <?php (new SecurityService())->insertHiddenToken() ?>
                     <h6>Actif :</h6>
                     <fieldset class="form-group">
-                    <select class="form-select" id="basicSelect" name="theme">
-                        <?php foreach ($installedThemes as $theme): ?>
-                        <option value="<?= $theme->getName() ?>" <?= $theme->getName() === $currentTheme->getName() ? "selected" : "" ?>>
-                            <?= $theme->getName() ?>
-                        </option>
-                        <?php endforeach; ?>
-                    </select>
+                        <select class="form-select" id="basicSelect" name="theme">
+                            <?php foreach ($installedThemes as $theme): ?>
+                                <option value="<?= $theme->getName() ?>" <?= $theme->getName() === $currentTheme->getName() ? "selected" : "" ?>>
+                                    <?= $theme->getName() ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </fieldset>
-                <div class="d-flex flex-wrap justify-content-between mt-4">
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#confirmModal"class="btn btn-warning">Réinitialiser</button>
-                        <button type="submit" class="btn btn-primary"><?= LangManager::translate("core.btn.save") ?></button>
-                    
-                </div>
-            </form>
+                    <div class="d-flex flex-wrap justify-content-between mt-4">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#confirmModal"
+                                class="btn btn-warning">Réinitialiser
+                        </button>
+                        <button type="submit"
+                                class="btn btn-primary"><?= LangManager::translate("core.btn.save") ?></button>
+
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -60,14 +62,16 @@ $description = LangManager::translate("core.theme.config.description"); ?>
                     </tr>
                     </thead>
                     <tbody class="text-center">
-                        <?php foreach ($themesList as $theme): ?>
-                    <tr>
-                        <td class="text-center"><?= $theme->title ?></td>
-                        <td class="text-center"><?= $theme->version ?></td>
-                        <td class="text-center"><?= $theme->version_cmw ?></td>
-                        <td class="text-center"><?= $theme->downloads ?></td>
-                        <td class="text-center"><a href="install/<?= $theme->id ?>"class="btn btn-sm btn-primary"><i class="fa-solid fa-download"></i> Installer</a></td>
-                    </tr>
+                    <?php foreach ($themesList as $theme): ?>
+                        <tr>
+                            <td class="text-center"><?= $theme->title ?></td>
+                            <td class="text-center"><?= $theme->version ?></td>
+                            <td class="text-center"><?= $theme->version_cmw ?></td>
+                            <td class="text-center"><?= $theme->downloads ?></td>
+                            <td class="text-center"><a href="install/<?= $theme->id ?>"
+                                                       class="btn btn-sm btn-primary"><i
+                                            class="fa-solid fa-download"></i> Installer</a></td>
+                        </tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
@@ -75,7 +79,6 @@ $description = LangManager::translate("core.theme.config.description"); ?>
         </div>
     </div>
 </section>
-
 
 
 <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalTitle"
@@ -94,18 +97,18 @@ $description = LangManager::translate("core.theme.config.description"); ?>
                 </p>
             </div>
             <div class="modal-footer">
-                <div class="buttons">
-                    <form action="configuration/regenerate" method="post">
-                        <?php (new SecurityService())->insertHiddenToken() ?>
+                <form action="configuration/regenerate" method="post">
+                    <?php (new SecurityService())->insertHiddenToken() ?>
+                    <div class="button">
                         <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal">
                             Annuler
                         </button>
-                        <button type="submit" class="btn btn-danger">
+                        <button type="submit" class="btn btn-danger float-left">
                             Confirmer
                         </button>
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 </div>

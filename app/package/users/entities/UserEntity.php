@@ -2,6 +2,8 @@
 
 namespace CMW\Entity\Users;
 
+use CMW\Controller\Core\CoreController;
+
 class UserEntity
 {
 
@@ -100,10 +102,11 @@ class UserEntity
 
     /**
      * @return string
+     * @Desc date
      */
     public function getLastConnection(): string
     {
-        return $this->userLastConnection;
+        return CoreController::formatDate($this->userLastConnection);
     }
 
     /**
@@ -124,18 +127,20 @@ class UserEntity
 
     /**
      * @return string
+     * @desc date
      */
     public function getCreated(): string
     {
-        return $this->userCreated;
+        return CoreController::formatDate($this->userCreated);
     }
 
     /**
      * @return string
+     * @desc date
      */
     public function getUpdated(): string
     {
-        return $this->userUpdated;
+        return CoreController::formatDate($this->userUpdated);
     }
 
     /**

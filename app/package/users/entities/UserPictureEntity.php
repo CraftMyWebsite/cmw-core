@@ -3,6 +3,9 @@
 namespace CMW\Entity\Users;
 
 
+use CMW\Controller\Core\CoreController;
+use CMW\Controller\Users\UsersController;
+use CMW\Model\Users\UsersModel;
 use CMW\Model\Users\UsersSettingsModel;
 use CMW\Utils\Utils;
 
@@ -46,10 +49,15 @@ class UserPictureEntity
 
     /**
      * @return string|null
+     * @desc date
      */
     public function getLastUpdate(): ?string
     {
-        return $this->lastUpdate;
+        if (!is_null($this->lastUpdate))
+        {
+            return CoreController::formatDate($this->lastUpdate);
+        }
+        return (new UsersModel())->getUserById($this->userId)?->getCreated();
     }
 
     /**

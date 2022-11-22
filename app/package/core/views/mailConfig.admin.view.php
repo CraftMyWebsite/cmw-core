@@ -129,7 +129,7 @@ $description = LangManager::translate("core.mail.config.description");
                         </div>
                     </div>
                     <h6><?= LangManager::translate("core.mail.config.footer") ?> :</h6>
-                    <textarea name="footer" id="summernote"><?= $config?->getFooter() ?></textarea>
+                    <textarea name="footer" id="summernote-1"><?= $config?->getFooter() ?></textarea>
                 </form>
             </div>
         </div>
@@ -172,7 +172,7 @@ $description = LangManager::translate("core.mail.config.description");
                 </form>
             </div>
             <div class="modal-footer">
-                <div class="buttons">
+                <div class="button">
                     <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
                         <?= LangManager::translate("core.btn.close") ?>
                     </button>

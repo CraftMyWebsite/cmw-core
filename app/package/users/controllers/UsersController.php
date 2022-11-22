@@ -14,6 +14,7 @@ use CMW\Router\Link;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
 use JetBrains\PhpStorm\NoReturn;
+use JsonException;
 
 /**
  * Class: @usersController
@@ -69,15 +70,21 @@ class UsersController extends CoreController
     }
 
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/users")]
-    #[Link("/list", Link::GET, [], "/cmw-admin/users")]
+    #[Link("/manage", Link::GET, [], "/cmw-admin/users")]
     public function adminUsersList(): void
     {
-
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
         $userList = $this->userModel->getUsers();
+        $roles = $this->roleModel->getRoles();
 
-        View::createAdminView("users", "list")->addVariable("userList", $userList)
+
+        View::createAdminView("users", "manage")
+            ->addVariableList(["userList" => $userList, "roles" => $roles])
+            ->addStyle("admin/resources/vendors/simple-datatables/style.css","admin/resources/assets/css/pages/simple-datatables.css")
+            ->addScriptBefore("app/package/users/views/assets/js/edit.js")
+            ->addScriptAfter("admin/resources/vendors/simple-datatables/umd/simple-datatables.js",
+                "admin/resources/assets/js/pages/simple-datatables.js")
             ->view();
     }
 
@@ -88,21 +95,42 @@ class UsersController extends CoreController
         }
     }
 
-    #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
-    public function adminUsersEdit(int $id): void
+    #[Link("/getUser/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
+    public function admingetUser(int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
-        $userEntity = $this->userModel->getUserById($id);
+        $user = (new UsersModel())->getUserById($id);
 
-        $roles = $this->roleModel->getRoles();
+        $roles = [];
 
-        View::createAdminView("users", "user")->addVariableList(array(
-            "user" => $userEntity,
+        foreach ($user?->getRoles() as $role){
+            $roles[] .= $role->getName();
+        }
+
+        $data = [
+            "id" => $user?->getId(),
+            "mail" => $user?->getMail(),
+            "username" => $user?->getUsername(),
+            "firstName" => $user?->getFirstName() ?? "",
+            "lastName" => $user?->getLastName() ?? "",
+            "state" => $user?->getState(),
+            "lastConnection" => $user?->getLastConnection(),
+            "dateCreated" => $user?->getCreated(),
+            "dateUpdated" => $user?->getUpdated(),
+            "pictureLink" => $user?->getUserPicture()?->getImageLink(),
+            "pictureLastUpdate" => $user?->getUserPicture()?->getLastUpdate(),
+            "userHighestRole" => $user?->getHighestRole()?->getName(),
             "roles" => $roles
-        ))
-            ->view();
+        ];
+
+        try {
+            print_r(json_encode($data, JSON_THROW_ON_ERROR));
+        } catch (JsonException) {
+            print("ERROR");
+        }
     }
+
 
     #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users")]
     #[NoReturn] public function adminUsersEditPost(int $id): void
@@ -132,34 +160,7 @@ class UsersController extends CoreController
 
         }
 
-        header("location: ../edit/" . $id);
-    }
-
-    #[Link("/add", Link::GET, [], "/cmw-admin/users")]
-    public function adminUsersAdd(): void
-    {
-        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
-
-        $roles = $this->roleModel->getRoles();
-
-        View::createAdminView("users", "add")->addVariable("roles", $roles)
-            ->view();
-    }
-
-
-    //Useless ?
-    public function rolesTest(): void
-    {
-
-        $permissions = new PermissionsController();
-        $permModel = new PermissionsModel();
-
-        $view = View::createAdminView("users", "test")->addVariableList(array(
-            "perms" => $permissions,
-            "pmodel" => $permModel
-        ));
-        $view->view();
-
+        header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
 
@@ -168,13 +169,13 @@ class UsersController extends CoreController
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.add");
 
-        [$mail, $username, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "name", "lastname");
+        [$mail, $username, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "firstname", "surname");
 
         $userEntity = $this->userModel->create($mail, $username, $firstname, $lastname, $_POST['roles']);
 
-        $this->userModel->updatePass($userEntity?->getId(), password_hash(filter_input(INPUT_POST, "pass"), PASSWORD_BCRYPT));
+        $this->userModel->updatePass($userEntity?->getId(), password_hash(filter_input(INPUT_POST, "password"), PASSWORD_BCRYPT));
 
-        header("location: ../users/list");
+        header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
     #[Link("/state/:id/:state", Link::GET, ["id" => "[0-9]+", "state" => "[0-9]+"], "/cmw-admin/users")]
@@ -223,26 +224,30 @@ class UsersController extends CoreController
         $_SESSION['toaster'][0]['type'] = "bg-success";
         $_SESSION['toaster'][0]['body'] = "USERS_DELETE_TOASTER_SUCCESS";
 
-        header("location: ../list");
+        header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
     #[Link("/picture/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users")]
     #[NoReturn] public function adminUsersEditPicturePost(int $id): void
     {
+        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+
         $image = $_FILES['profilePicture'];
 
 
         $this->userPictureModel->uploadImage($id, $image);
 
-        header("Location: ../../edit/$id");
+        header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
     #[Link("/picture/reset/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
     #[NoReturn] public function adminUsersResetPicture(int $id): void
     {
+        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+
         $this->userPictureModel->deleteUserPicture($id);
 
-        header("Location: ../../edit/$id");
+        header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
     // PUBLIC SECTION

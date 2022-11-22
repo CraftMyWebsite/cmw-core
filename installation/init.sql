@@ -185,7 +185,8 @@ CREATE INDEX role_id
 
 INSERT INTO `cmw_core_options` (`option_name`, `option_value`, `option_updated`)
 VALUES ('theme', 'Sampler', NOW()),
-       ('captcha', 'none', NOW());
+       ('captcha', 'none', NOW()),
+       ('dateFormat', 'd-m-Y H:i:s', NOW());
 
 
 INSERT INTO `cmw_roles` (`role_name`, `role_description`, `role_weight`)

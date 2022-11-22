@@ -1,3 +1,18 @@
+/* CUSTOM SCROLLBAR */
+body.theme-dark ::-webkit-scrollbar {
+  width: 10px;
+}
+body.theme-dark ::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 2px black; 
+}
+body.theme-dark ::-webkit-scrollbar-thumb {
+  background: #A8B1BF;
+}
+body.theme-dark ::-webkit-scrollbar-thumb:hover {
+  background: black; 
+}
+
+
 @charset "UTF-8";
 body.theme-dark {
     --bs-blue: #435ebe;
@@ -4430,6 +4445,36 @@ body.theme-dark .card {
     word-wrap: break-word;
     background-clip: border-box;
     background-color: var(--bs-card-bg);
+    border: var(--bs-card-border-width) solid var(--bs-card-border-color);
+    border-radius: var(--bs-card-border-radius);
+    display: flex;
+    flex-direction: column;
+    height: var(--bs-card-height);
+    min-width: 0;
+    position: relative
+}
+
+body.theme-dark .card-in-card {
+    --bs-card-spacer-y: 1rem;
+    --bs-card-spacer-x: 1rem;
+    --bs-card-title-spacer-y: 0.5rem;
+    --bs-card-border-width: 1px;
+    --bs-card-border-color: rgba(0, 0, 0, .125);
+    --bs-card-border-radius: 0.7rem;
+    --bs-card-box-shadow: -8px 12px 18px 0 rgba(25, 42, 70, .13);
+    --bs-card-inner-border-radius: calc(0.7rem - 1px);
+    --bs-card-cap-padding-y: 1.5rem;
+    --bs-card-cap-padding-x: 1.5rem;
+    --bs-card-cap-bg: #1e1e2d;
+    --bs-card-cap-color: ;
+    --bs-card-height: ;
+    --bs-card-color: ;
+    --bs-card-in-card-bg: #1B1B29;
+    --bs-card-img-overlay-padding: 1rem;
+    --bs-card-group-margin: 0.75rem;
+    word-wrap: break-word;
+    background-clip: border-box;
+    background-color: var(--bs-card-in-card-bg);
     border: var(--bs-card-border-width) solid var(--bs-card-border-color);
     border-radius: var(--bs-card-border-radius);
     display: flex;

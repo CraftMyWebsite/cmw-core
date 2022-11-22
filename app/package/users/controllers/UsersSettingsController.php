@@ -48,7 +48,7 @@ class UsersSettingsController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings");
 
-        if(!isset($_FILES['defaultPicture'])) {
+        if($_FILES['defaultPicture']['name'] !== "" ) {
             $defaultPicture = $_FILES['defaultPicture'];
 
             $newDefaultImage = Images::upload($defaultPicture, "users/default");
