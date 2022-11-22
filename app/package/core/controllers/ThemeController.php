@@ -250,21 +250,20 @@ class ThemeController extends CoreController
              $aresFiles['__images__'][$conf] = true;
 
              //If file is empty, we don't update the config.
-             if ($file['name'] === "" ){
-                 break;
+             if ($file['name'] !== "" ) {
+                 
+                 $imageName = Images::upload($file, self::getCurrentTheme()->getName() . "/img");
+                 $remoteImageValue = ThemeModel::fetchConfigValue($conf);
+                 $localImageValue = (new ThemeController())->getCurrentThemeConfigSetting($conf);
+
+                 if ($remoteImageValue !== $file && $remoteImageValue !== $localImageValue) {
+                     Images::deleteImage(self::getCurrentTheme()->getName() . "/img/$remoteImageValue");
+                 }
+
+                 $this->themeModel->updateThemeConfig($conf, $imageName, self::getCurrentTheme()->getName());
              }
-
-            $imageName =  Images::upload($file, self::getCurrentTheme()->getName() . "/img");
-            $remoteImageValue = ThemeModel::fetchConfigValue($conf);
-            $localImageValue = (new ThemeController())->getCurrentThemeConfigSetting($conf);
-
-            if($remoteImageValue !== $file && $remoteImageValue !== $localImageValue){
-                Images::deleteImage(self::getCurrentTheme()->getName() . "/img/$remoteImageValue");
-            }
-
-            $this->themeModel->updateThemeConfig($conf, $imageName, self::getCurrentTheme()->getName());
-
         }
+
 
         // Manage inputs
         foreach ($this->getCurrentThemeConfigSettings() as $conf => $value) {
