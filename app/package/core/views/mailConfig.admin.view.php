@@ -176,9 +176,9 @@ $description = LangManager::translate("core.mail.config.description");
                     <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
                         <?= LangManager::translate("core.btn.close") ?>
                     </button>
-                <button form="sendMail" type="submit" class="btn btn-primary ml-1" data-bs-dismiss="modal">
-                    <?= LangManager::translate("core.btn.send") ?>
-                </button>
+                    <button form="sendMail" type="submit" class="btn btn-primary ml-1" data-bs-dismiss="modal">
+                        <?= LangManager::translate("core.btn.send") ?>
+                    </button>
                 </div>
             </div>
         </div>
