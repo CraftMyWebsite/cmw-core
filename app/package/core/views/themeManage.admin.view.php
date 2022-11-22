@@ -13,7 +13,7 @@ $description = LangManager::translate("core.theme.manage.description"); ?>
 </div>
 <!-- THEME CONFIG FILE -->
 
-<form id="ThemeSettings" action="" method="post">
+<form id="ThemeSettings" action="" method="post" enctype="multipart/form-data">
     <?php (new SecurityService())->insertHiddenToken() ?>
     <div class="row">
         <div class="card">
