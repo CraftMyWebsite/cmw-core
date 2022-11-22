@@ -1,4 +1,4 @@
-$("#summernote").summernote({
+$("textarea[id^=summernote-]").summernote({
   tabsize: 2,
   height: 160,
   toolbar: [
