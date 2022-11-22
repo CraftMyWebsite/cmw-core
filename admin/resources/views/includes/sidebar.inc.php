@@ -28,6 +28,7 @@ use CMW\Utils\Utils;
                     </a>
                 </li>
                 <?php
+
                 foreach (PackageController::getInstalledPackages() as $package):
                     foreach ($package->getMenus() as $menu):
                         if (!empty($menu->getSubmenu())):
@@ -39,8 +40,8 @@ use CMW\Utils\Utils;
                                     <span><?= $menu->getName() ?></span>
                                 </a>
                                 <ul class="submenu <?= in_array($currentSlug, $menu->getSubmenu(), true) ? 'active' : ''?>">
-                                    <?php foreach ($menu->getSubmenu() as $subMenuName => $subMenuUrl): ?>
-                                        <li class="submenu-item <?= Utils::isCurrentPageActive('cmw-admin/' . $subMenuUrl) ? 'active' : '' ?>">
+                                    <?php foreach ($menu->getSubmenu() as $subMenuName => $subMenuUrl):?>
+                                        <li class="submenu-item <?= Utils::isCurrentPageActive(Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'cmw-admin/' . $subMenuUrl) ? 'active' : '' ?>">
                                             <a href="<?= Utils::getEnv()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $subMenuUrl ?>">
                                                 <?= $subMenuName ?>
                                             </a>
@@ -49,7 +50,7 @@ use CMW\Utils\Utils;
                                 </ul>
                             </li>
                         <?php else : ?>
-                            <li class="sidebar-item <?= Utils::isCurrentPageActive('cmw-admin/' . $menu->getUrl()) ? 'active' : '' ?>">
+                            <li class="sidebar-item <?= Utils::isCurrentPageActive(Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'cmw-admin/' . $menu->getUrl()) ? 'active' : '' ?>">
                                 <a href="<?= Utils::getEnv()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $menu->getUrl() ?>"
                                    class="sidebar-link">
                                     <i class="<?= $menu->getIcon() ?>"></i>
