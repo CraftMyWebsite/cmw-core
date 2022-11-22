@@ -1,4 +1,5 @@
-<?php use CMW\Manager\Lang\LangManager;use CMW\Model\Core\ThemeModel;use CMW\Utils\SecurityService;?>
+<?php use CMW\Controller\Core\ThemeController;
+use CMW\Manager\Lang\LangManager;use CMW\Model\Core\ThemeModel;use CMW\Utils\SecurityService;?>
 <!-------------->
 <!--Navigation-->
 <!-------------->
@@ -31,7 +32,17 @@
         <div class="form-group">
             <label for="backgroundColor">Couleur d'arrière plan</label>
             <input type="color" id="backgroundColor" name="backgroundColor" value="<?= ThemeModel::fetchConfigValue('backgroundColor') ?>">
-            </div>
+        </div>
+        <div class="form-group">
+            <label for="backgroundColor">Image 1</label>
+            <input type="file" id="img1" name="img1" value="<?= ThemeModel::fetchConfigValue('img1') ?>">
+            <img src='<?= ThemeModel::fetchImageLink("img1") ?>' height="150px" width="150px">
+        </div>
+        <div class="form-group">
+            <label for="backgroundColor">Image 2</label>
+            <input type="file" id="img2" name="img2" value="<?= ThemeModel::fetchConfigValue('img2') ?>">
+            <img src='<?= ThemeModel::fetchImageLink("img2") ?>'  height="150px" width="150px">
+        </div>
     </div>
     <div class="tab-pane fade py-2" id="setting2" role="tabpanel" aria-labelledby="setting2-tab">
         Vos options 2

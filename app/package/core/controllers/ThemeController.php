@@ -8,6 +8,7 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\ThemeModel;
 use CMW\Router\Link;
+use CMW\Utils\Images;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
@@ -109,6 +110,17 @@ class ThemeController extends CoreController
         }
 
         return $content;
+    }
+
+    /**
+     * @param string $setting
+     * @return ?string
+     * @Desc Return a specific local setting
+     */
+    public function getCurrentThemeConfigSetting(string $setting): ?string
+    {
+
+        return $this->getCurrentThemeConfigSettings()[$setting] ?? null;
     }
 
     public function installThemeSettings(String $theme): void
@@ -229,8 +241,36 @@ class ThemeController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
 
+        $aresFiles = [];
+
+        // Manage files
+        foreach ($_FILES as $conf => $file){
+             $aresFiles['__images__'][$conf] = true;
+
+             //If file is empty, we don't update the config.
+             if ($file['name'] === "" ){
+                 break;
+             }
+
+            $imageName =  Images::upload($file, self::getCurrentTheme()->getName() . "/img");
+            $remoteImageValue = ThemeModel::fetchConfigValue($conf);
+            $localImageValue = (new ThemeController())->getCurrentThemeConfigSetting($conf);
+
+            if($remoteImageValue !== $file && $remoteImageValue !== $localImageValue){
+                Images::deleteImage(self::getCurrentTheme()->getName() . "/img/$remoteImageValue");
+            }
+
+            $this->themeModel->updateThemeConfig($conf, $imageName, self::getCurrentTheme()->getName());
+
+        }
+
+        // Manage inputs
         foreach ($this->getCurrentThemeConfigSettings() as $conf => $value) {
-            if(!isset($_POST[$conf]) || !empty($_POST[$conf])) {
+            if (isset($aresFiles['__images__'][$conf])) {
+                break;
+            }
+
+            if (!isset($_POST[$conf]) || !empty($_POST[$conf])) {
                 $this->themeModel->updateThemeConfig($conf, $_POST[$conf] ?? "0", self::getCurrentTheme()->getName());
             }
         }

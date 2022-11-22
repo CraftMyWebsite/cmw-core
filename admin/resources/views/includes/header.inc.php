@@ -17,7 +17,7 @@ use CMW\Utils\Utils;
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a href="#" target="_blank" class="ms-4">
+            <a href="<?= Utils::getEnv()->getValue('PATH_URL') ?>" target="_blank" class="ms-4">
                 <i style="font-size: 1.5rem" class="fa-solid fa-up-right-from-square"></i>
             </a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">

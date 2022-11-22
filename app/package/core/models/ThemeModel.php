@@ -4,6 +4,7 @@ namespace CMW\Model\Core;
 
 use CMW\Controller\Core\ThemeController;
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Utils\Utils;
 
 /**
  * Class: @ThemeModel
@@ -13,6 +14,15 @@ use CMW\Manager\Database\DatabaseManager;
  */
 class ThemeModel extends DatabaseManager
 {
+    /**
+     * @param string $config
+     * @param string|null $theme
+     * <p>
+     * If empty, we take the current active theme
+     * </p>
+     * @return string|null
+     * @desc Fetch config data
+     */
     public static function fetchConfigValue(string $config, string $theme = null): ?string
     {
         if ($theme === null) {
@@ -26,6 +36,37 @@ class ThemeModel extends DatabaseManager
         $req->execute(array("config" => $config, "theme" => $theme));
 
         return $req->fetch()["theme_config_value"] ?? "";
+    }
+
+    /**
+     * @param string $configName
+     * @param string|null $theme
+     * <p>
+     * If empty, we take the current active theme
+     * </p>
+     * @return string|null
+     * @desc Fetch config data
+     */
+    public static function fetchImageLink(string $configName, string $theme = null): ?string
+    {
+        if ($theme === null) {
+            $theme = ThemeController::getCurrentTheme()->getName();
+        }
+
+        $db = self::getInstance();
+        $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config 
+                                    WHERE theme_config_name = :config AND theme_config_theme = :theme');
+
+        $req->execute(array("config" => $configName, "theme" => $theme));
+
+        $value = $req->fetch()["theme_config_value"] ?? "";
+        $localValue = (new ThemeController())->getCurrentThemeConfigSetting($configName);
+
+        if($value === $localValue){
+            return Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'public/themes/' . $theme . '/' . $localValue;
+        }
+
+        return Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'public/uploads/' . $theme . '/img/' . $value;
     }
 
     public function fetchThemeConfigs(string $theme): array
