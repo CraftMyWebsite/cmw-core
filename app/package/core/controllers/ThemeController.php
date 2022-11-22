@@ -251,16 +251,22 @@ class ThemeController extends CoreController
 
              //If file is empty, we don't update the config.
              if ($file['name'] !== "" ) {
-                 
+
                  $imageName = Images::upload($file, self::getCurrentTheme()->getName() . "/img");
-                 $remoteImageValue = ThemeModel::fetchConfigValue($conf);
-                 $localImageValue = (new ThemeController())->getCurrentThemeConfigSetting($conf);
+                 if (is_file($imageName)) {
+                     $remoteImageValue = ThemeModel::fetchConfigValue($conf);
+                     $localImageValue = (new ThemeController())->getCurrentThemeConfigSetting($conf);
 
-                 if ($remoteImageValue !== $file && $remoteImageValue !== $localImageValue) {
-                     Images::deleteImage(self::getCurrentTheme()->getName() . "/img/$remoteImageValue");
+                     if ($remoteImageValue !== $file && $remoteImageValue !== $localImageValue) {
+                         Images::deleteImage(self::getCurrentTheme()->getName() . "/img/$remoteImageValue");
+                     }
+
+                     $this->themeModel->updateThemeConfig($conf, $imageName, self::getCurrentTheme()->getName());
+                 } else {
+                     Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                          $conf . " => " . $imageName);
+
                  }
-
-                 $this->themeModel->updateThemeConfig($conf, $imageName, self::getCurrentTheme()->getName());
              }
         }
 
