@@ -196,7 +196,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
                         <div class="col-12 col-lg-6">
                             <h6><?= LangManager::translate("users.users.mail") ?> :</h6>
                                 <div class="form-group position-relative has-icon-left">
-                                    <input type="email" class="form-control",value="${data.mail}" name="email" placeholder="<?= LangManager::translate("users.users.mail") ?>" required>
+                                    <input type="email" class="form-control" value="${data.mail}" name="email" placeholder="<?= LangManager::translate("users.users.mail") ?>" required>
                                     <div class="form-control-icon">
                                         <i class="fa-solid fa-at"></i>
                                     </div>
