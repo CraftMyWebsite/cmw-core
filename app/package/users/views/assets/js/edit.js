@@ -31,3 +31,18 @@ const fillEditModal = () => {
             })
         })
 }
+
+
+const generatePassword = (inputId, passwordLength = 15) => {
+    const chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()-_ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let password = "";
+
+    for (let i = 0; i <= passwordLength; i++) {
+        let randomNumber = Math.floor(Math.random() * chars.length);
+        password += chars.substring(randomNumber, randomNumber + 1);
+    }
+
+    document.getElementById(inputId).value = password;
+
+    navigator.clipboard.writeText(password);
+}

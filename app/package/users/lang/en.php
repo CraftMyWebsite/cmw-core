@@ -27,6 +27,7 @@ return [
             "title" => "Editing of ",
             "about" => "About  "
         ],
+        "randomPasswordTooltip" => "Generate a secure random password. The password will be past on your clipboard",
     ],
     "edit" => [
         "title" => "Users | Edition",

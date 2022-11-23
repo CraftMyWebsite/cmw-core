@@ -27,7 +27,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
                     <?php (new SecurityService())->insertHiddenToken() ?>
                     <h6><?= LangManager::translate("users.users.mail") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
-                        <input type="email" class="form-control" name="email" required
+                        <input type="email" class="form-control" name="email" required autocomplete="off"
                                placeholder="<?= LangManager::translate("users.users.mail") ?>">
                         <div class="form-control-icon">
                             <i class="fa-solid fa-at"></i>
@@ -35,7 +35,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
                     </div>
                     <h6><?= LangManager::translate("users.users.pseudo") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
-                        <input type="text" class="form-control" name="pseudo" required
+                        <input type="text" class="form-control" name="pseudo" required autocomplete="off"
                                placeholder="<?= LangManager::translate("users.users.pseudo") ?>">
                         <div class="form-control-icon">
                             <i class="fa-solid fa-user"></i>
@@ -43,7 +43,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
                     </div>
                     <h6><?= LangManager::translate("users.users.firstname") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
-                        <input type="text" class="form-control" name="firstname"
+                        <input type="text" class="form-control" name="firstname" autocomplete="off"
                                placeholder="<?= LangManager::translate("users.users.firstname") ?>">
                         <div class="form-control-icon">
                             <i class="fa-solid fa-id-card"></i>
@@ -51,7 +51,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
                     </div>
                     <h6><?= LangManager::translate("users.users.surname") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
-                        <input type="text" class="form-control" name="surname"
+                        <input type="text" class="form-control" name="surname" autocomplete="off"
                                placeholder="<?= LangManager::translate("users.users.surname") ?>">
                         <div class="form-control-icon">
                             <i class="fa-solid fa-signature"></i>
@@ -65,15 +65,24 @@ $description = LangManager::translate("users.manage.desc"); ?>
                             <?php endforeach; ?>
                         </select>
                     </fieldset>
-                    <h6><?= LangManager::translate("users.users.password") ?>:</h6>
-                    <div class="form-group position-relative has-icon-left">
-                        <input type="password" class="form-control" name="password" placeholder="••••" required>
-                        <div class="form-control-icon">
+                    <h6><?= LangManager::translate("users.users.password") ?>: </h6>
+                    <div class="form-group input-group position-relative has-icon-left">
+                        <input type="password" class="form-control" name="password" id="password"
+                               placeholder="••••" autocomplete="off" required
+                               aria-describedby="button-generate">
+                        <div class="btn-clear form-control-icon">
                             <i class="fa-solid fa-unlock"></i>
                         </div>
+                        <button class="btn btn-secondary" type="button" id="button-generate"
+                                onclick="generatePassword('password')"
+                                data-bs-toggle="tooltip"
+                                title="<?= LangManager::translate('users.manage.randomPasswordTooltip') ?>">
+                            <i class="fa-solid fa-rotate"></i>
+                        </button>
                     </div>
                     <div class="text-center">
-                        <button type="submit" class="btn btn-primary"><?= LangManager::translate("core.btn.add") ?></button>
+                        <button type="submit"
+                                class="btn btn-primary"><?= LangManager::translate("core.btn.add") ?></button>
                     </div>
                 </form>
             </div>
