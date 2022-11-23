@@ -27,6 +27,7 @@ return [
             "title" => "Édition de ",
             "about" => "A propos"
         ],
+        "randomPasswordTooltip" => "Générez un mot de passe sécuirsé en un clic. Le mot de passe sera aussi dans votre presse papier",
     ],
     "edit" => [
         "title" => "Utilisateurs | Edition",
