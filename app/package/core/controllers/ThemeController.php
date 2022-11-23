@@ -253,7 +253,7 @@ class ThemeController extends CoreController
              if ($file['name'] !== "" ) {
 
                  $imageName = Images::upload($file, self::getCurrentTheme()->getName() . "/img");
-                 if (is_file($imageName)) {
+                 if (!str_contains($imageName, "ERROR")) {
                      $remoteImageValue = ThemeModel::fetchConfigValue($conf);
                      $localImageValue = (new ThemeController())->getCurrentThemeConfigSetting($conf);
 
@@ -265,7 +265,6 @@ class ThemeController extends CoreController
                  } else {
                      Response::sendAlert("error", LangManager::translate("core.toaster.error"),
                           $conf . " => " . $imageName);
-
                  }
              }
         }
@@ -285,7 +284,7 @@ class ThemeController extends CoreController
         Response::sendAlert("success", LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
-        header("location: /cmw-admin/theme/manage");
+        header("location: manage");
     }
 
 }
