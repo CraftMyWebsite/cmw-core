@@ -21,7 +21,7 @@ use CMW\Utils\Utils;
         <div class="sidebar-menu">
             <ul class="menu">
                 <li class="sidebar-title"><?= LangManager::translate('core.general') ?></li>
-                <li class="sidebar-item <?= Utils::isCurrentPageActive('cmw-admin/dashboard') ? 'active' : '' ?>">
+                <li class="sidebar-item <?= Utils::isCurrentPageActive(Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'cmw-admin/dashboard') ? 'active' : '' ?>">
                     <a href="<?= Utils::getEnv()->getValue("PATH_SUBFOLDER") ?>cmw-admin/dashboard"
                        class="sidebar-link">
                         <i class="fa-solid fa-table-columns"></i>
