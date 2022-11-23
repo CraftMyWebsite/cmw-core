@@ -286,11 +286,8 @@ class Utils
      */
     public static function isCurrentPageActive(string $targetUrl): bool
     {
-        if (self::getEnv()->getValue('PATH_SUBFOLDER') !== "/") {
-            $currentUrl = str_replace(self::getEnv()->getValue('PATH_SUBFOLDER'), '', $_SERVER['REQUEST_URI']);
-        }else{
-            $currentUrl = $_SERVER['REQUEST_URI'];
-        }
+
+        $currentUrl = $_SERVER['REQUEST_URI'];
 
         return $currentUrl === $targetUrl || $currentUrl === $targetUrl . '/' || $currentUrl === $targetUrl . '#';
     }
