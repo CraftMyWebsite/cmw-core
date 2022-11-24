@@ -40,13 +40,8 @@ class PagesController extends CoreController
         $pagesList = $this->pagesModel->getPages();
 
         View::createAdminView('pages', 'list')
-            ->addScriptBefore("admin/resources/vendors/bootstrap/js/bootstrap.bundle.min.js",
-                "admin/resources/vendors/datatables/jquery.dataTables.min.js",
-                "admin/resources/vendors/datatables-bs4/js/dataTables.bootstrap4.min.js",
-                "admin/resources/vendors/datatables-responsive/js/dataTables.responsive.min.js",
-                "admin/resources/vendors/datatables-responsive/js/responsive.bootstrap4.min.js")
-            ->addStyle("admin/resources/vendors/datatables-bs4/css/dataTables.bootstrap4.min.css",
-                "admin/resources/vendors/datatables-responsive/css/responsive.bootstrap4.min.css")
+            ->addStyle("admin/resources/vendors/simple-datatables/style.css","admin/resources/assets/css/pages/simple-datatables.css")
+            ->addScriptAfter("admin/resources/vendors/simple-datatables/umd/simple-datatables.js","admin/resources/assets/js/pages/simple-datatables.js")
             ->addVariableList(["pagesList" => $pagesList])
             ->view();
     }
@@ -57,23 +52,8 @@ class PagesController extends CoreController
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.add");
 
         View::createAdminView('pages', 'add')
-            ->addScriptBefore("admin/resources/vendors/editorjs/plugins/header.js",
-                "admin/resources/vendors/editorjs/plugins/image.js",
-                "admin/resources/vendors/editorjs/plugins/delimiter.js",
-                "admin/resources/vendors/editorjs/plugins/list.js",
-                "admin/resources/vendors/editorjs/plugins/quote.js",
-                "admin/resources/vendors/editorjs/plugins/code.js",
-                "admin/resources/vendors/editorjs/plugins/table.js",
-                "admin/resources/vendors/editorjs/plugins/link.js",
-                "admin/resources/vendors/editorjs/plugins/warning.js",
-                "admin/resources/vendors/editorjs/plugins/embed.js",
-                "admin/resources/vendors/editorjs/plugins/marker.js",
-                "admin/resources/vendors/editorjs/plugins/underline.js",
-                "admin/resources/vendors/editorjs/plugins/drag-drop.js",
-                "admin/resources/vendors/editorjs/plugins/undo.js",
-                "admin/resources/vendors/editorjs/editor.js")
-            ->addScriptAfter("app/package/pages/views/assets/js/main.js")
-            ->addStyle("app/package/pages/views/assets/css/editor.css")
+            ->addStyle("admin/resources/vendors/summernote/summernote-lite.css","admin/resources/assets/css/pages/summernote.css")
+            ->addScriptAfter("admin/resources/vendors/jquery/jquery.min.js","admin/resources/vendors/summernote/summernote-lite.min.js","admin/resources/assets/js/pages/summernote.js")
             ->view();
     }
 
@@ -108,23 +88,8 @@ class PagesController extends CoreController
         $page = $this->pagesModel->getPageBySlug($slug);
 
         View::createAdminView('pages', 'edit')
-            ->addScriptBefore("admin/resources/vendors/editorjs/plugins/header.js",
-                "admin/resources/vendors/editorjs/plugins/image.js",
-                "admin/resources/vendors/editorjs/plugins/delimiter.js",
-                "admin/resources/vendors/editorjs/plugins/list.js",
-                "admin/resources/vendors/editorjs/plugins/quote.js",
-                "admin/resources/vendors/editorjs/plugins/code.js",
-                "admin/resources/vendors/editorjs/plugins/table.js",
-                "admin/resources/vendors/editorjs/plugins/link.js",
-                "admin/resources/vendors/editorjs/plugins/warning.js",
-                "admin/resources/vendors/editorjs/plugins/embed.js",
-                "admin/resources/vendors/editorjs/plugins/marker.js",
-                "admin/resources/vendors/editorjs/plugins/underline.js",
-                "admin/resources/vendors/editorjs/plugins/drag-drop.js",
-                "admin/resources/vendors/editorjs/plugins/undo.js",
-                "admin/resources/vendors/editorjs/editor.js")
-            ->addScriptAfter("app/package/pages/views/assets/js/main.js")
-            ->addStyle("app/package/pages/views/assets/css/editor.css")
+            ->addStyle("admin/resources/vendors/summernote/summernote-lite.css","admin/resources/assets/css/pages/summernote.css")
+            ->addScriptAfter("admin/resources/vendors/jquery/jquery.min.js","admin/resources/vendors/summernote/summernote-lite.min.js","admin/resources/assets/js/pages/summernote.js")
             ->addVariableList(["page" => $page])
             ->view();
     }
