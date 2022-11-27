@@ -27,14 +27,23 @@ const fillEditModal = (roleId) => {
         .then((response) => response.json())
         .then((data) => {
             console.log(data)
-            document.getElementById('app').innerHTML += modalEditData(data)
-            let modalEl = document.getElementById('roleEditModal')
 
-            const myModal = bootstrap.Modal.getOrCreateInstance(modalEl)
-            myModal.show()
+            const editModalDOM = modalEditData(roleId);
 
-            modalEl.addEventListener('hidden.bs.modal', function (event) {
-                modalEl.remove()
-            })
+            const editModalContainer     = document.createElement('div');
+            editModalContainer.id        = "editModalContainer";
+            editModalContainer.innerHTML = editModalDOM;
+
+            const appElement = document.getElementById("app");
+            if (!appElement) return;
+
+            appElement.insertAdjacentElement("beforeend", editModalContainer);
+
+            const modalContainer = document.getElementById("roleEditModal"),
+                  modalElement   = bootstrap.Modal.getOrCreateInstance(modalContainer)
+
+            modalElement.show()
+
+            modalContainer.addEventListener('hidden.bs.modal', () => editModalContainer.remove());
         })
 }
