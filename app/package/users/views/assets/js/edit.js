@@ -19,16 +19,26 @@ const fillEditModal = () => {
     fetch(`../users/getUser/${userId}`)
         .then((response) => response.json())
         .then((data) => {
-            document.getElementById('app').innerHTML += modalData(data)
-            let modalEl = document.getElementById('userEditModal')
+            const modalDataCtx = modalData(data)
 
-            const myModal = bootstrap.Modal.getOrCreateInstance(modalEl)
-            myModal.show()
+            const editModalContainer     = document.createElement('div');
+            editModalContainer.id        = "editModelContainer";
+            editModalContainer.innerHTML = modalDataCtx;
 
-            modalEl.addEventListener('hidden.bs.modal', function (event) {
+            const appElement = document.getElementById("app");
+            if (!appElement) return;
+
+            appElement.insertAdjacentElement("beforeend", editModalContainer);
+
+            const modalContainer = document.getElementById("userEditModal"),
+                  modalElement   = bootstrap.Modal.getOrCreateInstance(modalContainer)
+
+            modalElement.show()
+
+            modalContainer.addEventListener('hidden.bs.modal', () => {
                 clearEditUserId()
-                modalEl.remove()
-            })
+                editModalContainer.remove()
+            });
         })
 }
 
