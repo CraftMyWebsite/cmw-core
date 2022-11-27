@@ -137,37 +137,37 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
 
 <!-- MODAL DELETE ROLE -->
 <script>
-    const modalDeleteRole = (roleId, roleName) => {
-        return `<div class="modal fade" id="roleDeleteModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="roleDeleteModalTitle"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable"
-                 role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title"
-                            id="roleDeleteModalTitle"><?= LangManager::translate('users.roles.manage.delete.title') ?></h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><i
-                            data-feather="x"></i>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>
-                            <?= LangManager::translate('users.roles.manage.delete.content') ?>
-                        </p>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="buttons">
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-                                <?= LangManager::translate('core.btn.close') ?>
-                            </button>
-                            <a href="delete/${roleId}" class="btn btn-danger ml-1">
-                                <?= LangManager::translate('core.btn.confirm') ?>
-                            </a>
+    const modalDeleteRole = roleId => {
+        return '' +
+                `<div class="modal fade" id="roleDeleteModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="roleDeleteModalTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="roleDeleteModalTitle">
+                                    <?= LangManager::translate('users.roles.manage.delete.title') ?>
+                                </h5>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <i data-feather="x"></i>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>
+                                    <?= LangManager::translate('users.roles.manage.delete.content') ?>
+                                </p>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="buttons">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                                        <?= LangManager::translate('core.btn.close') ?>
+                                    </button>
+                                    <a href="delete/${roleId}" class="btn btn-danger ml-1">
+                                        <?= LangManager::translate('core.btn.confirm') ?>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>`
+                </div>`
     }
 </script>
 

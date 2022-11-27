@@ -1,15 +1,22 @@
 /* DELETE ROLE */
 const deleteRole = (roleId) => {
+    const deleteModalDOM = modalDeleteRole(roleId);
 
-    document.getElementById('app').innerHTML += modalDeleteRole(roleId)
-    let modalEl = document.getElementById('roleDeleteModal')
+    const deleteModalContainer     = document.createElement('div');
+    deleteModalContainer.id        = "deleteModalContainer";
+    deleteModalContainer.innerHTML = deleteModalDOM;
 
-    const myModal = bootstrap.Modal.getOrCreateInstance(modalEl)
-    myModal.show()
+    const appElement = document.getElementById("app");
+    if (!appElement) return;
 
-    modalEl.addEventListener('hidden.bs.modal', function (event) {
-        modalEl.remove()
-    })
+    appElement.insertAdjacentElement("beforeend", deleteModalContainer);
+
+    const modalContainer = document.getElementById("roleDeleteModal"),
+          modalElement   = bootstrap.Modal.getOrCreateInstance(modalContainer)
+
+    modalElement.show()
+
+    modalContainer.addEventListener('hidden.bs.modal', () => deleteModalContainer.remove());
 }
 
 
