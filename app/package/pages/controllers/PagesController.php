@@ -3,9 +3,7 @@
 namespace CMW\Controller\pages;
 
 use CMW\Controller\Core\CoreController;
-use CMW\Controller\Menus\MenusController;
 use CMW\Controller\Users\UsersController;
-use CMW\Entity\Pages\pagesEntity;
 use CMW\Model\Pages\PagesModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Router\Link;
@@ -52,9 +50,24 @@ class PagesController extends CoreController
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.add");
 
         View::createAdminView('pages', 'add')
-            ->addStyle("admin/resources/vendors/summernote/summernote-lite.css","admin/resources/assets/css/pages/summernote.css")
-            ->addScriptAfter("admin/resources/vendors/jquery/jquery.min.js","admin/resources/vendors/summernote/summernote-lite.min.js","admin/resources/assets/js/pages/summernote.js")
+            ->addScriptBefore("admin/resources/vendors/editorjs/plugins/header.js",
+                "admin/resources/vendors/editorjs/plugins/image.js",
+                "admin/resources/vendors/editorjs/plugins/delimiter.js",
+                "admin/resources/vendors/editorjs/plugins/list.js",
+                "admin/resources/vendors/editorjs/plugins/quote.js",
+                "admin/resources/vendors/editorjs/plugins/code.js",
+                "admin/resources/vendors/editorjs/plugins/table.js",
+                "admin/resources/vendors/editorjs/plugins/link.js",
+                "admin/resources/vendors/editorjs/plugins/warning.js",
+                "admin/resources/vendors/editorjs/plugins/embed.js",
+                "admin/resources/vendors/editorjs/plugins/marker.js",
+                "admin/resources/vendors/editorjs/plugins/underline.js",
+                "admin/resources/vendors/editorjs/plugins/drag-drop.js",
+                "admin/resources/vendors/editorjs/plugins/undo.js",
+                "admin/resources/vendors/editorjs/editor.js")
             ->view();
+
+        include_once (Utils::getEnv()->getValue('DIR') . "app/package/pages/views/assets/js/initEditor.php");
     }
 
     #[Link("/add", Link::POST, [], "/cmw-admin/pages", secure: false)]
