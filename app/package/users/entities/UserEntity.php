@@ -13,6 +13,7 @@ class UserEntity
     private string $userFirstName;
     private string $userLastName;
     private int $userState;
+    private string $userKey;
     private string $userLastConnection;
     /** @var \CMW\Entity\Users\RoleEntity|\CMW\Entity\Users\RoleEntity[] $userRoles */
     private array $userRoles;
@@ -29,6 +30,7 @@ class UserEntity
      * @param string $userFirstName
      * @param string $userLastName
      * @param int $userState
+     * @param string $userKey
      * @param string $userLastConnection
      * @param \CMW\Entity\Users\RoleEntity[] $userRoles
      * @param ?\CMW\Entity\Users\RoleEntity $userHighestRole
@@ -36,7 +38,7 @@ class UserEntity
      * @param string $userUpdated
      * @param \CMW\Entity\Users\UserPictureEntity|null $userPicture
      */
-    public function __construct(int $userId, string $userMail, string $userUsername, string $userFirstName, string $userLastName, int $userState, string $userLastConnection, array $userRoles, ?RoleEntity $userHighestRole, string $userCreated, string $userUpdated, ?UserPictureEntity $userPicture)
+    public function __construct(int $userId, string $userMail, string $userUsername, string $userFirstName, string $userLastName, int $userState, string $userKey, string $userLastConnection, array $userRoles, ?RoleEntity $userHighestRole, string $userCreated, string $userUpdated, ?UserPictureEntity $userPicture)
     {
         $this->userId = $userId;
         $this->userMail = $userMail;
@@ -44,6 +46,7 @@ class UserEntity
         $this->userFirstName = $userFirstName;
         $this->userLastName = $userLastName;
         $this->userState = $userState;
+        $this->userKey = $userKey;
         $this->userLastConnection = $userLastConnection;
         $this->userRoles = $userRoles;
         $this->userHighestRole = $userHighestRole;
@@ -98,6 +101,14 @@ class UserEntity
     public function getState(): int
     {
         return $this->userState;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserKey(): string
+    {
+        return $this->userKey;
     }
 
     /**

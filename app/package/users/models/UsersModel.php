@@ -110,6 +110,7 @@ class UsersModel extends DatabaseManager
             $res["user_firstname"] ?? "",
             $res["user_lastname"] ?? "",
             $res["user_state"],
+            $res["user_key"],
             $res["user_logged"],
             $roles,
             $highestRole,
