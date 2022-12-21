@@ -11,6 +11,7 @@ return [
 	],
 	"list" => [
 		"title" => "Pages | List",
+		"sub_title" => "Pages",
 		"desc" => "Pages list",
 	],
 	"publish" => "Publish page",
@@ -18,9 +19,12 @@ return [
 
 	"title" => "Title",
 	"author" => "Author",
+	"link" => "Link",
 
 	"creation" => [
 		"date" => "Creation date",
+		"add" => "Add new page",
+		"content" => "Content",
 	],
 	"content" => [
 		"placeholder" => "Start typing or click the \"+\" to choose a block to add...",

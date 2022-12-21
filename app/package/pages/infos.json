@@ -5,15 +5,7 @@
       "name_menu_fr": "Pages",
       "name_menu_en": "Pages",
       "icon_menu": "fas fa-copy",
-      "url_menu": "",
-      "urls_submenu_fr": {
-        "Liste": "pages/list",
-        "Ajouter": "pages/add"
-      },
-      "urls_submenu_en": {
-        "List": "pages/list",
-        "Add": "pages/add"
-      }
+      "url_menu": "pages/list"
     }
   ],
 
