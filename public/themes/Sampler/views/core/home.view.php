@@ -9,7 +9,7 @@ $description = "page d'accueil de CraftMyWebsite"; ?>
 
 <!-- Masthead-->
 <header class="masthead"
-style="background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url('<?= getenv("PATH_SUBFOLDER") ?>public/themes/Sampler/assets/img/bg-masthead.jpg');"
+style="background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url('<?= getenv("PATH_SUBFOLDER") ?>public/themes/Sampler/resources/assets/img/bg-masthead.jpg');"
 >
     <div class="container px-4 px-lg-5 h-100">
         <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
