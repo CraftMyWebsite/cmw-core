@@ -8,7 +8,7 @@ $description = LangManager::translate("core.dashboard.desc");
 ?>
 
 <div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fa-solid fa-table-columns"></i> <span class="m-lg-auto">Tableau de bord</span></h3>
+    <h3><i class="fa-solid fa-table-columns"></i> <span class="m-lg-auto"><?= LangManager::translate("core.dashboard.title") ?></span></h3>
 </div>
 
 <div class="page-content">
@@ -25,7 +25,7 @@ $description = LangManager::translate("core.dashboard.desc");
                                     </div>
                                 </div>
                                 <div class="col-sm-8">
-                                    <h6 class="text-muted font-semibold">Membres totaux</h6>
+                                    <h6 class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.total_member") ?></h6>
                                     <h6 class="font-extrabold mb-0">4</h6>
                                 </div>
                             </div>
@@ -42,7 +42,7 @@ $description = LangManager::translate("core.dashboard.desc");
                                     </div>
                                 </div>
                                 <div class="col-sm-8">
-                                    <h6 class="text-muted font-semibold">Record de visites</h6>
+                                    <h6 class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.best_views") ?></h6>
                                     <h6 class="font-extrabold mb-0">80000</h6>
                                 </div>
                             </div>
@@ -59,7 +59,7 @@ $description = LangManager::translate("core.dashboard.desc");
                                     </div>
                                 </div>
                                 <div class="col-sm-8">
-                                    <h6 class="text-muted font-semibold">Membres totaux</h6>
+                                    <h6 class="text-muted font-semibold">Not defined</h6>
                                     <h6 class="font-extrabold mb-0">4</h6>
                                 </div>
                             </div>
@@ -76,7 +76,7 @@ $description = LangManager::translate("core.dashboard.desc");
                                     </div>
                                 </div>
                                 <div class="col-sm-8">
-                                    <h6 class="text-muted font-semibold">Membres totaux</h6>
+                                    <h6 class="text-muted font-semibold">Not defined</h6>
                                     <h6 class="font-extrabold mb-0">4</h6>
                                 </div>
                             </div>
@@ -89,7 +89,7 @@ $description = LangManager::translate("core.dashboard.desc");
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Nombres de visites</h4>
+                            <h4><?= LangManager::translate("core.dashboard.numbers_views") ?></h4>
                         </div>
                         <div class="card-body">
                             <div id="chart-profile-visit"></div>
@@ -108,20 +108,20 @@ $description = LangManager::translate("core.dashboard.desc");
                         </div>
                         <div class="ms-3 name">
                             <h5 class="font-bold"><?= UsersModel::getCurrentUser()->getUsername() ?></h5>
-                            <h6 class="text-muted mb-0">Bienvenue <span style="text-transform: lowercase;"><?= UsersModel::getCurrentUser()->getHighestRole()->getName() ?></span></h6>
+                            <h6 class="text-muted mb-0"><?= LangManager::translate("core.dashboard.welcome") ?> <span style="text-transform: lowercase;"><?= UsersModel::getCurrentUser()->getHighestRole()->getName() ?></span></h6>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="card">
                 <div class="card-header">
-                    <h5>Information du site</h5>
+                    <h5><?= LangManager::translate("core.dashboard.site_info") ?></h5>
                 </div>
                 <div class="card-body ">
-                    <p>Nom : <b><?= CoreModel::getOptionValue("name") ?></b></p>
-                    <p>Description :<span class="text-muted"><?= CoreModel::getOptionValue("description") ?></span></p>
+                    <p><?= LangManager::translate("core.dashboard.name") ?> <b><?= CoreModel::getOptionValue("name") ?></b></p>
+                    <p><?= LangManager::translate("core.dashboard.description") ?> <span class="text-muted"><?= CoreModel::getOptionValue("description") ?></span></p>
                         <div class="px-4 text-center">
-                            <a href="<?= Utils::getHttpProtocol() . '://' . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . "cmw-admin/configuration" ?>" class="btn btn-primary float-right">Modifier ces informations<br></a>
+                            <a href="<?= Utils::getHttpProtocol() . '://' . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . "cmw-admin/configuration" ?>" class="btn btn-primary float-right"><?= LangManager::translate("core.dashboard.edit") ?><br></a>
                         </div>
                 </div>
             </div>
