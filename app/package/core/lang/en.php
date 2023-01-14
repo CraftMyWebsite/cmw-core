@@ -2,17 +2,20 @@
 
 return [
     "general" => "General",
-    "welcome" => "Welcome !",
-    "eat" => [
-        "pasta" => "Eat pastas !",
-        "potatoes" => "Eat pastas %name% !",
-    ],
     "alt" => [
         "logo" => "Logo CMW",
     ],
     "dashboard" => [
         "title" => "Dashboard",
-        "desc" => "Welcome to your administration panel!"
+        "desc" => "Welcome to your administration panel!",
+        "total_member" => "Total Members",
+        "best_views" => "Record of visits",
+        "numbers_views" => "Number of visits",
+        "welcome" => "Welcome",
+        "site_info" => "Site Information",
+        "name" => "Name :",
+        "description" => "Description :",
+        "edit" => "Modify this information",
     ],
     "config" => [
         "title" => "Configuration",

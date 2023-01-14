@@ -6,8 +6,16 @@ return [
         "logo" => "Logo CMW",
     ],
     "dashboard" => [
-        "title" => "Dashboard",
-        "desc" => "Bienvenue sur votre panneau d'administration !"
+        "title" => "Tableau de bord",
+        "desc" => "Bienvenue sur votre panneau d'administration !",
+        "total_member" => "Membres totaux",
+        "best_views" => "Record de visites",
+        "numbers_views" => "Nombres de visites",
+        "welcome" => "Bienvenue",
+        "site_info" => "Information du site",
+        "name" => "Nom :",
+        "description" => "Description :",
+        "edit" => "Modifier ces informations",
     ],
     "config" => [
         "title" => "Configuration",
