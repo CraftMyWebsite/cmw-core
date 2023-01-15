@@ -46,6 +46,7 @@ return [
         "success" => "Succès",
         "warning" => "Attention",
         "error" => "Erreur",
+        "internalError" => "Erreur interne",
         "config" => [
             "success" => "Configuration modifiée avec succès !",
         ],
