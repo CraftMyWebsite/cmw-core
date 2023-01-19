@@ -10,6 +10,8 @@ use JsonException;
 class PackageController extends CoreController
 {
 
+    static array $corePackages = ['core', 'menus', 'pages', 'users'];
+
     /**
      * @return PackageEntity[]
      */
@@ -19,6 +21,22 @@ class PackageController extends CoreController
         $packagesFolder = 'app/package/';
         $contentDirectory = array_diff(scandir("$packagesFolder/"), array('..', '.'));
         foreach ($contentDirectory as $package) {
+            if (file_exists("$packagesFolder/$package/infos.json") && !in_array($package, self::$corePackages, true)) {
+                $toReturn[] = self::getPackage($package);
+            }
+        }
+
+        return $toReturn;
+    }
+
+    /**
+     * @return PackageEntity[]
+     */
+    public static function getCorePackages(): array
+    {
+        $toReturn = array();
+        $packagesFolder = 'app/package/';
+        foreach (self::$corePackages as $package) {
             if (file_exists("$packagesFolder/$package/infos.json")) {
                 $toReturn[] = self::getPackage($package);
             }

@@ -2,6 +2,9 @@
 
 return [
     "general" => "General",
+    "package" => "Package",
+    "packages" => "Packages",
+    "themes" => "Themes",
     "alt" => [
         "logo" => "Logo CMW",
     ],
