@@ -5,6 +5,16 @@ return [
     "alt" => [
         "logo" => "Logo CMW",
     ],
+    "condition" => [
+        "title" => "Terms and conditions",
+        "cgv" => "General condition of sale (CGV)",
+        "cgu" => "General conditions of use (CGU)",
+        "activecgv" => "Enable this terms",
+        "activecgu" => "Enable this terms",
+        "content" => "Content :",
+        "updateby" => "Updated by",
+        "on" => "on",
+    ],
     "dashboard" => [
         "title" => "Dashboard",
         "desc" => "Welcome to your administration panel!",

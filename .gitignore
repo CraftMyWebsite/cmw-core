@@ -25,7 +25,7 @@ __MACOSX/
 /public/themes/Sampler/views/*
 
 !/public/themes/Sampler/views/includes
-!/public/themes/Sampler/views/core
+!/public/themes/Sampler/views/core/*.php
 !/public/themes/Sampler/views/users
 !/public/themes/Sampler/views/errors
 !/public/themes/Sampler/views/alerts

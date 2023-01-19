@@ -8,11 +8,13 @@
       "url_menu": "",
       "urls_submenu_fr": {
         "Configuration": "configuration",
+        "Conditions general": "condition",
         "Sécurité": "security",
         "Mises à jours": "updates/cms"
       },
       "urls_submenu_en": {
         "Configuration": "configuration",
+        "Terms and conditions": "condition",
         "Security": "security",
         "Updates": "updates/cms"
       }

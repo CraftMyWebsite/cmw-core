@@ -5,6 +5,16 @@ return [
     "alt" => [
         "logo" => "Logo CMW",
     ],
+    "condition" => [
+        "title" => "Condition general",
+        "cgv" => "Condition général de vente (CGV)",
+        "cgu" => "Condition général d'utilisation (CGU)",
+        "activecgv" => "Activer les CGV",
+        "activecgu" => "Activer les CGU",
+        "content" => "Contenue :",
+        "updateby" => "Mis à jour par",
+        "on" => "le",
+    ],
     "dashboard" => [
         "title" => "Tableau de bord",
         "desc" => "Bienvenue sur votre panneau d'administration !",
