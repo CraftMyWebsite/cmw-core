@@ -98,6 +98,28 @@ CREATE TABLE IF NOT EXISTS `cmw_menus`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
+# Condition general !
+  CREATE TABLE IF NOT EXISTS `cmw_condition`
+(
+    `condition_id`        INT(11)      NOT NULL,
+    `condition_content`       longtext NOT NULL,
+    `condition_state`     TINYINT(1)   NOT NULL DEFAULT '1',
+    `condition_updated` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `condition_author`     INT(11)      NOT NULL
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
+
+ALTER TABLE `cmw_condition`
+    ADD PRIMARY KEY (`condition_id`);
+
+ALTER TABLE `cmw_condition`
+    MODIFY `condition_id` INT(11) NOT NULL AUTO_INCREMENT;
+
+INSERT INTO `cmw_condition` (`condition_content`, `condition_author`)
+VALUES ('Veuillez écrire votre CGV !','1'),
+       ('Veuillez écrire votre CGU !','1');
+# FIN : Condition general !
+
 ALTER TABLE `cmw_menus`
     ADD PRIMARY KEY (`menu_id`);
 
