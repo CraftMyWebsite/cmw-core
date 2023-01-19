@@ -2,17 +2,15 @@
 
 namespace CMW\Controller\Core;
 
-use CMW\Model\Core\ConditionModel;
-
-use CMW\Controller\Core\CoreController;
+use CMW\Controller\Users\UsersController;
 use CMW\Manager\Lang\LangManager;
-use CMW\Model\Core\CoreModel;
+use CMW\Model\Core\ConditionModel;
+use CMW\Model\users\UsersModel;
 use CMW\Router\Link;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
-use CMW\Controller\Users\UsersController;
-use CMW\Model\users\UsersModel;
+
 /**
  * Class: @ConditionController
  * @package Condition
@@ -22,7 +20,7 @@ use CMW\Model\users\UsersModel;
 class ConditionController extends CoreController
 {
 
-	private ConditionModel $conditionModel;
+    private ConditionModel $conditionModel;
 
     public function __construct()
     {
@@ -37,12 +35,15 @@ class ConditionController extends CoreController
 
         $cgv = $this->conditionModel->getCGV();
         $cgu = $this->conditionModel->getCGU();
-        
+
         View::createAdminView("core", "condition")
-        ->addStyle("admin/resources/vendors/summernote/summernote-lite.css","admin/resources/assets/css/pages/summernote.css")
-        ->addScriptAfter("admin/resources/vendors/jquery/jquery.min.js","admin/resources/vendors/summernote/summernote-lite.min.js","admin/resources/assets/js/pages/summernote.js")
-        ->addVariableList(["cgv" => $cgv,"cgu" => $cgu])
-        ->view();
+            ->addStyle("admin/resources/vendors/summernote/summernote-lite.css",
+                "admin/resources/assets/css/pages/summernote.css")
+            ->addScriptAfter("admin/resources/vendors/jquery/jquery.min.js",
+                "admin/resources/vendors/summernote/summernote-lite.min.js",
+                "admin/resources/assets/js/pages/summernote.js")
+            ->addVariableList(["cgv" => $cgv, "cgu" => $cgu])
+            ->view();
     }
 
     #[Link("/condition", Link::POST, [], "/cmw-admin")]
@@ -50,16 +51,19 @@ class ConditionController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard");
 
-        [$conditionId, $conditionContent, $conditionState] = Utils::filterInput("conditionId", "conditionContent", "conditionState");
+        [$conditionId, $conditionContent, $conditionState] = Utils::filterInput("conditionId",
+            "conditionContent", "conditionState");
 
         //Get the current author
         $user = new UsersModel;
         $userEntity = $user->getUserById($_SESSION['cmwUserId']);
         $conditionAuthor = $userEntity?->getId();
 
-        $this->conditionModel->updateCondition($conditionId, $conditionContent, $conditionState === NULL ? 0 : 1, $conditionAuthor);
+        $this->conditionModel->updateCondition($conditionId, $conditionContent,
+            $conditionState === NULL ? 0 : 1, $conditionAuthor);
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"), LangManager::translate("core.toaster.config.success"));
+        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+            LangManager::translate("core.toaster.config.success"));
 
         header("Location: condition");
     }
