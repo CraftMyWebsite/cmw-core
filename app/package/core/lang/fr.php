@@ -5,9 +5,27 @@ return [
     "alt" => [
         "logo" => "Logo CMW",
     ],
+    "condition" => [
+        "title" => "Condition general",
+        "cgv" => "Condition général de vente (CGV)",
+        "cgu" => "Condition général d'utilisation (CGU)",
+        "activecgv" => "Activer les CGV",
+        "activecgu" => "Activer les CGU",
+        "content" => "Contenue :",
+        "updateby" => "Mis à jour par",
+        "on" => "le",
+    ],
     "dashboard" => [
-        "title" => "Dashboard",
-        "desc" => "Bienvenue sur votre panneau d'administration !"
+        "title" => "Tableau de bord",
+        "desc" => "Bienvenue sur votre panneau d'administration !",
+        "total_member" => "Membres totaux",
+        "best_views" => "Record de visites",
+        "numbers_views" => "Nombres de visites",
+        "welcome" => "Bienvenue",
+        "site_info" => "Information du site",
+        "name" => "Nom :",
+        "description" => "Description :",
+        "edit" => "Modifier ces informations",
     ],
     "config" => [
         "title" => "Configuration",

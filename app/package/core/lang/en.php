@@ -2,17 +2,30 @@
 
 return [
     "general" => "General",
-    "welcome" => "Welcome !",
-    "eat" => [
-        "pasta" => "Eat pastas !",
-        "potatoes" => "Eat pastas %name% !",
-    ],
     "alt" => [
         "logo" => "Logo CMW",
     ],
+    "condition" => [
+        "title" => "Terms and conditions",
+        "cgv" => "General condition of sale (CGV)",
+        "cgu" => "General conditions of use (CGU)",
+        "activecgv" => "Enable this terms",
+        "activecgu" => "Enable this terms",
+        "content" => "Content :",
+        "updateby" => "Updated by",
+        "on" => "on",
+    ],
     "dashboard" => [
         "title" => "Dashboard",
-        "desc" => "Welcome to your administration panel!"
+        "desc" => "Welcome to your administration panel!",
+        "total_member" => "Total Members",
+        "best_views" => "Record of visits",
+        "numbers_views" => "Number of visits",
+        "welcome" => "Welcome",
+        "site_info" => "Site Information",
+        "name" => "Name :",
+        "description" => "Description :",
+        "edit" => "Modify this information",
     ],
     "config" => [
         "title" => "Configuration",

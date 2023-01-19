@@ -11,7 +11,7 @@ $description = LangManager::translate("core.config.desc");
 ?>
 
 <div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fa-solid fa-gavel"></i> <span class="m-lg-auto">Condition general</span></h3>
+    <h3><i class="fa-solid fa-gavel"></i> <span class="m-lg-auto"><?= LangManager::translate("core.condition.title") ?></span></h3>
 </div>
 
 <section class="row">
@@ -21,21 +21,21 @@ $description = LangManager::translate("core.config.desc");
                 <?php (new SecurityService())->insertHiddenToken() ?>
                 <div class="card-header">
                     <div class="d-flex flex-wrap justify-content-between">
-                        <h4>Condition général de vente (CGV)</h4>
+                        <h4><?= LangManager::translate("core.condition.cgv") ?></h4>
 
                         <input type="text" name="conditionId" value="<?= $cgv->getConditionId() ?>" hidden>
                         <div class="form-check-reverse form-switch">
-                            <label class="form-check-label" for="conditionState">Activer les CGV</label>
+                            <label class="form-check-label" for="conditionState"><?= LangManager::translate("core.condition.activecgv") ?></label>
                             <input class="form-check-input" type="checkbox" id="conditionState"
                                    name="conditionState" <?= $cgv->isConditionState() ? 'checked' : '' ?>>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <h6>Contenue :</h6>
+                    <h6><?= LangManager::translate("core.condition.content") ?></h6>
                     <textarea name="conditionContent" id="summernote-2"><?= $cgv->getConditionContent() ?></textarea>
-                    <p>Mis à jour par <?= $cgv->getConditionAuthor()->getUsername() ?>
-                        le <?= $cgv->getConditionUpdate() ?></p>
+                    <p><?= LangManager::translate("core.condition.updateby") ?> <?= $cgv->getConditionAuthor()->getUsername() ?>
+                        <?= LangManager::translate("core.condition.on") ?> <?= $cgv->getConditionUpdate() ?></p>
                     <div class="text-center mt-2">
                         <button type="submit" class="btn btn-primary float-right">
                             <?= LangManager::translate("core.btn.save") ?>
@@ -51,20 +51,20 @@ $description = LangManager::translate("core.config.desc");
                 <?php (new SecurityService())->insertHiddenToken() ?>
                 <div class="card-header">
                     <div class="d-flex flex-wrap justify-content-between">
-                        <h4>Condition général d'utilisation (CGU)</h4>
+                        <h4><?= LangManager::translate("core.condition.cgu") ?></h4>
                         <input type="text" name="conditionId" value="<?= $cgu->getConditionId() ?>" hidden>
                         <div class="form-check-reverse form-switch">
-                            <label class="form-check-label" for="conditionState">Activer les CGU</label>
+                            <label class="form-check-label" for="conditionState"><?= LangManager::translate("core.condition.activecgu") ?></label>
                             <input class="form-check-input" type="checkbox" id="conditionState"
                                    name="conditionState" <?= $cgu->isConditionState() ? 'checked' : '' ?>>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <h6>Contenue :</h6>
+                    <h6><?= LangManager::translate("core.condition.content") ?></h6>
                     <textarea name="conditionContent" id="summernote-2"><?= $cgu->getConditionContent() ?></textarea>
-                    <p>Mis à jour par <?= $cgu->getConditionAuthor()->getUsername() ?>
-                        le <?= $cgu->getConditionUpdate() ?></p>
+                    <p><?= LangManager::translate("core.condition.updateby") ?> <?= $cgu->getConditionAuthor()->getUsername() ?>
+                        <?= LangManager::translate("core.condition.on") ?> <?= $cgu->getConditionUpdate() ?></p>
                     <div class="text-center mt-2">
                         <button type="submit" class="btn btn-primary float-right">
                             <?= LangManager::translate("core.btn.save") ?>
