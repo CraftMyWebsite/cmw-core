@@ -28,6 +28,40 @@ use CMW\Utils\Utils;
                         <span><?= LangManager::translate("core.dashboard.title") ?></span>
                     </a>
                 </li>
+                <?php foreach (PackageController::getCorePackages() as $package):
+                    foreach ($package->getMenus() as $menu):
+                        if (!empty($menu->getSubmenu())):
+                            $currentSlug = str_replace(Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'cmw-admin/', '', $_SERVER['REQUEST_URI']); ?>
+
+                            <li class="sidebar-item has-sub <?= in_array($currentSlug, $menu->getSubmenu(), true) ? 'active' : '' ?>">
+                                <a href="#" class="sidebar-link">
+                                    <i class="<?= $menu->getIcon() ?>"></i>
+                                    <span><?= $menu->getName() ?></span>
+                                </a>
+                                <ul class="submenu <?= in_array($currentSlug, $menu->getSubmenu(), true) ? 'active' : '' ?>">
+                                    <?php foreach ($menu->getSubmenu() as $subMenuName => $subMenuUrl): ?>
+                                        <li class="submenu-item <?= Utils::isCurrentPageActive(Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'cmw-admin/' . $subMenuUrl) ? 'active' : '' ?>">
+                                            <a href="<?= Utils::getEnv()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $subMenuUrl ?>">
+                                                <?= $subMenuName ?>
+                                            </a>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </li>
+                        <?php else : ?>
+                            <li class="sidebar-item <?= Utils::isCurrentPageActive(Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'cmw-admin/' . $menu->getUrl()) ? 'active' : '' ?>">
+                                <a href="<?= Utils::getEnv()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $menu->getUrl() ?>"
+                                   class="sidebar-link">
+                                    <i class="<?= $menu->getIcon() ?>"></i>
+                                    <span><?= $menu->getName() ?></span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+
+                <li class="sidebar-title"><?= LangManager::translate('core.packages') ?></li>
+
                 <?php foreach (PackageController::getInstalledPackages() as $package):
                     foreach ($package->getMenus() as $menu):
                         if (!empty($menu->getSubmenu())):
@@ -59,8 +93,7 @@ use CMW\Utils\Utils;
                         <?php endif; ?>
                     <?php endforeach; ?>
                 <?php endforeach; ?>
-                <li class="sidebar-title">Thèmes</li>
-                <li class="sidebar-title">Packages</li>
+
             </ul>
         </div>
     </div>
