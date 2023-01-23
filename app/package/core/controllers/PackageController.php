@@ -47,6 +47,10 @@ class PackageController extends CoreController
 
     public static function getPackage(string $package): ?PackageEntity
     {
+        
+        if (!file_exists("app/package/$package/infos.json")){
+            return null;
+        }
 
         try {
             $strJsonFileContents = file_get_contents("app/package/$package/infos.json");
