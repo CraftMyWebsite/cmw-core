@@ -24,6 +24,8 @@ return [
         "total_member" => "Total Members",
         "best_views" => "Record of visits",
         "numbers_views" => "Number of visits",
+        "monthly_visits" => "Monthly visits",
+        "total_visits" => "Total visits",
         "welcome" => "Welcome",
         "site_info" => "Site Information",
         "name" => "Name :",

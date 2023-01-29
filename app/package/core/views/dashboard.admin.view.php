@@ -1,5 +1,6 @@
 <?php 
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Metrics\VisitsMetricsManager;
 use CMW\Utils\Utils;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Core\CoreModel;
@@ -43,7 +44,7 @@ $description = LangManager::translate("core.dashboard.desc");
                                 </div>
                                 <div class="col-sm-8">
                                     <h6 class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.best_views") ?></h6>
-                                    <h6 class="font-extrabold mb-0">80000</h6>
+                                    <h6 class="font-extrabold mb-0">---</h6>
                                 </div>
                             </div>
                         </div>
@@ -59,8 +60,8 @@ $description = LangManager::translate("core.dashboard.desc");
                                     </div>
                                 </div>
                                 <div class="col-sm-8">
-                                    <h6 class="text-muted font-semibold">Not defined</h6>
-                                    <h6 class="font-extrabold mb-0">4</h6>
+                                    <h6 class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.monthly_visits") ?></h6>
+                                    <h6 class="font-extrabold mb-0"><?= (new VisitsMetricsManager())->getVisitsNumber("monthly") ?></h6>
                                 </div>
                             </div>
                         </div>
@@ -76,15 +77,15 @@ $description = LangManager::translate("core.dashboard.desc");
                                     </div>
                                 </div>
                                 <div class="col-sm-8">
-                                    <h6 class="text-muted font-semibold">Not defined</h6>
-                                    <h6 class="font-extrabold mb-0">4</h6>
+                                    <h6 class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.total_visits") ?></h6>
+                                    <h6 class="font-extrabold mb-0"><?= (new VisitsMetricsManager())->getVisitsNumber("all") ?></h6>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-                      <!--Visite chartjs-->
+                      <!-- //TODO Visits chartjs -->
             <div class="row">
                 <div class="col-12">
                     <div class="card">

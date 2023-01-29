@@ -3,6 +3,7 @@
 namespace CMW\Router;
 
 use Closure;
+use CMW\Manager\Metrics\VisitsMetricsManager;
 use CMW\Utils\SecurityService;
 use ReflectionMethod;
 
@@ -104,6 +105,7 @@ class Router
         $matchedRoute = $this->getRouteByUrl($this->url);
 
         if (!is_null($matchedRoute)) {
+            (new VisitsMetricsManager())->registerVisit($matchedRoute);
             self::setActualRoute($matchedRoute);
             return $matchedRoute->call();
         }

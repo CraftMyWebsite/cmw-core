@@ -99,13 +99,13 @@ CREATE TABLE IF NOT EXISTS `cmw_menus`
   DEFAULT CHARSET = utf8mb4;
 
 # Condition general !
-  CREATE TABLE IF NOT EXISTS `cmw_condition`
+CREATE TABLE IF NOT EXISTS `cmw_condition`
 (
-    `condition_id`        INT(11)      NOT NULL,
-    `condition_content`       longtext NOT NULL,
-    `condition_state`     TINYINT(1)   NOT NULL DEFAULT '1',
-    `condition_updated` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `condition_author`     INT(11)      NOT NULL
+    `condition_id`      INT(11)    NOT NULL,
+    `condition_content` LONGTEXT   NOT NULL,
+    `condition_state`   TINYINT(1) NOT NULL DEFAULT '1',
+    `condition_updated` TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `condition_author`  INT(11)    NOT NULL
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
@@ -116,8 +116,8 @@ ALTER TABLE `cmw_condition`
     MODIFY `condition_id` INT(11) NOT NULL AUTO_INCREMENT;
 
 INSERT INTO `cmw_condition` (`condition_content`, `condition_author`)
-VALUES ('Veuillez écrire votre CGV !','1'),
-       ('Veuillez écrire votre CGU !','1');
+VALUES ('Veuillez écrire votre CGV !', '1'),
+       ('Veuillez écrire votre CGU !', '1');
 # FIN : Condition general !
 
 ALTER TABLE `cmw_menus`
@@ -201,6 +201,19 @@ CREATE TABLE IF NOT EXISTS `cmw_core_routes`
     PRIMARY KEY (`core_routes_id`)
 ) ENGINE = InnoDB
   CHARSET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `cmw_visits`
+(
+    `visits_id`       INT(11)      NOT NULL AUTO_INCREMENT,
+    `visits_ip`       VARCHAR(39)  NOT NULL,
+    `visits_date`     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `visits_path`     VARCHAR(255) NOT NULL,
+    `visits_package`  VARCHAR(255)          DEFAULT NULL,
+    `visits_code`     INT(4)       NOT NULL,
+    `visits_is_admin` TINYINT(4)   NOT NULL DEFAULT '0',
+    PRIMARY KEY (`visits_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
 
 CREATE INDEX role_id
     ON cmw_roles_permissions (role_id);
