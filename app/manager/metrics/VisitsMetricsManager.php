@@ -52,7 +52,7 @@ class VisitsMetricsManager extends DatabaseManager
 
     private function getFileLineNumber(): int
     {
-        if (file_exists($this->fileName)) {
+        if (stream_resolve_include_path($this->fileName)) {
             return count(file($this->fileName));
         }
 

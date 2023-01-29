@@ -8,6 +8,7 @@ __MACOSX/
 #Exclude log files except the .gitignore
 /app/storage/logs/*
 !/app/storage/logs/.gitkeep
+/app/storage/visits/history.log
 
 # Exclude all other packages, only if package is "core" (Core, Users, Menus...)
 !/app/package
