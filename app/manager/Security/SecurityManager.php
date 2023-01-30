@@ -7,7 +7,7 @@ use CMW\Model\Users\UsersModel;
 use Error;
 use Exception;
 
-class SecurityManager
+class SecurityManager extends HoneyInput
 {
 
     private string $formTokenLabel = 'security-csrf-token';
@@ -61,6 +61,8 @@ class SecurityManager
         $csrfToken = $this->getCSRFToken();
 
         echo "<input type=\"hidden\"" . " name=\"" . $this->xssafe($this->formTokenLabel) . "\"" . " value=\"" . $this->xssafe($csrfToken) . "\"" . " />";
+
+        $this->generateHoneyInput();
     }
 
     public function getCSRFToken()
@@ -95,13 +97,10 @@ class SecurityManager
     {
         $currentUrl = $this->getCurrentRequestUrl();
         if (!empty($this->post) && !in_array($currentUrl, $this->excludeUrl, true)) {
-            $isAntiCSRF = $this->validateRequest();
-            if (!$isAntiCSRF) {
-                // CSRF attack attempt
-                // CSRF attempt is detected. Need not reveal that information
-                // to the attacker, so just failing without info.
-                // Error code 1837 stands for CSRF attempt and this is for
-                // our identification purposes.
+            if (!$this->validateRequest()) {
+                return false;
+            }
+            if (!$this->checkHoneyInput()) {
                 return false;
             }
             return true;
