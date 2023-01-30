@@ -2,7 +2,7 @@
 
 use CMW\Manager\Lang\LangManager;
 use CMW\Model\Users\UsersSettingsModel;
-use CMW\Utils\SecurityService;
+use CMW\Manager\Security\SecurityManager;
 use CMW\Utils\Utils;
 
 /* @var \CMW\Model\Users\UsersSettingsModel $settings */
@@ -20,7 +20,7 @@ $description = LangManager::translate("users.settings.desc"); ?>
     </div>
     <section class="row">
         <div class="col-12 col-lg-6">
-            <?php (new SecurityService())->insertHiddenToken() ?>
+            <?php (new SecurityManager())->insertHiddenToken() ?>
             <div class="card">
                 <div class="card-header">
                     <h4><?= LangManager::translate("users.settings.visualIdentity") ?></h4>

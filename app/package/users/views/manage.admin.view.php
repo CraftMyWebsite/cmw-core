@@ -1,7 +1,7 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\SecurityService;
+use CMW\Manager\Security\SecurityManager;
 use CMW\Utils\Utils;
 
 /** @var \CMW\Entity\Users\UserEntity $user */
@@ -24,7 +24,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
             </div>
             <div class="card-body">
                 <form method="post" action="add">
-                    <?php (new SecurityService())->insertHiddenToken() ?>
+                    <?php (new SecurityManager())->insertHiddenToken() ?>
                     <h6><?= LangManager::translate("users.users.mail") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
                         <input type="email" class="form-control" name="email" required autocomplete="off"
@@ -143,7 +143,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
                         <div class="card-in-card">
                             <div class="card-body">
                                 <form action="picture/edit/${data.id}" method="post" enctype="multipart/form-data">
-                                <?php (new SecurityService())->insertHiddenToken() ?>
+                                <?php (new SecurityManager())->insertHiddenToken() ?>
                                         <h6><?= LangManager::translate("users.users.image.title") ?> :</h6>
                                         <p><?= LangManager::translate("users.users.image.last_update") ?>: ${data.pictureLastUpdate}</p>
                                         <div class="text-center ">
@@ -172,7 +172,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
                                 </div>
                                 <div class="d-lg-flex flex-wrap justify-content-between">
                                     <form method="post" action="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>login/forgot">
-                                        <?php (new SecurityService())->insertHiddenToken() ?>
+                                        <?php (new SecurityManager())->insertHiddenToken() ?>
                                         <input type="hidden" value="${data.mail}" name="mail">
                                         <button type="submit" class="btn btn-warning">
                                             <span class="d-sm-block"><?= LangManager::translate("users.edit.reset_password") ?></span>
@@ -189,7 +189,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
                 </div>
 
                 <form action="edit/${data.id}" method="post">
-                <?php (new SecurityService())->insertHiddenToken() ?>
+                <?php (new SecurityManager())->insertHiddenToken() ?>
                 <div class="card-in-card mt-4">
                     <div class="card-body">
                         <div class="row">

@@ -1,7 +1,7 @@
 <?php use CMW\Controller\Core\CoreController;
 use CMW\Manager\Lang\LangManager;
 use CMW\Model\Core\CoreModel;
-use CMW\Utils\SecurityService;
+use CMW\Manager\Security\SecurityManager;
 
 $title = LangManager::translate("core.config.title");
 $description = LangManager::translate("core.config.desc");
@@ -21,7 +21,7 @@ $description = LangManager::translate("core.config.desc");
             </div>
             <div class="card-body">
                 <form id="Configuration" action="" method="post" enctype="multipart/form-data">
-                    <?php (new SecurityService())->insertHiddenToken() ?>
+                    <?php (new SecurityManager())->insertHiddenToken() ?>
                     <div class="row">
                         <div class="col-md-6">
                             <h6><?= LangManager::translate("core.website.name") ?> :</h6>

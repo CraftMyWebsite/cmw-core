@@ -1,7 +1,7 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\SecurityService;
+use CMW\Manager\Security\SecurityManager;
 use CMW\Utils\Utils;
 
 $title = LangManager::translate("core.security.title");
@@ -20,7 +20,7 @@ $description = LangManager::translate("core.security.description");
             </div>
             <div class="card-body">
                 <form id="captchaConfig" action="security/edit/captcha" method="post">
-                    <?php (new SecurityService())->insertHiddenToken() ?>
+                    <?php (new SecurityManager())->insertHiddenToken() ?>
                     <div class="row">
                         <h6><?= LangManager::translate("core.security.captcha.type") ?> :</h6>
                         <fieldset class="form-group">

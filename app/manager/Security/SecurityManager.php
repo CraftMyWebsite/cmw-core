@@ -1,13 +1,13 @@
 <?php
 
-namespace CMW\Utils;
+namespace CMW\Manager\Security;
 
 
 use CMW\Model\Users\UsersModel;
 use Error;
 use Exception;
 
-class SecurityService
+class SecurityManager
 {
 
     private string $formTokenLabel = 'security-csrf-token';

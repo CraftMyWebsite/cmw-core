@@ -4,7 +4,7 @@ namespace CMW\Router;
 
 use Closure;
 use CMW\Manager\Metrics\VisitsMetricsManager;
-use CMW\Utils\SecurityService;
+use CMW\Manager\Security\SecurityManager;
 use ReflectionMethod;
 
 /**
@@ -174,7 +174,7 @@ class Router
 
             if($link->isSecure()) {
                 //Check security before send post request
-                $security = new SecurityService();
+                $security = new SecurityManager();
 
                 if (!empty($security->validate())) {
                     $security->unsetToken();  //Remove the token from the session...

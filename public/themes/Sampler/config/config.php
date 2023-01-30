@@ -1,5 +1,5 @@
 <?php use CMW\Controller\Core\ThemeController;
-use CMW\Manager\Lang\LangManager;use CMW\Model\Core\ThemeModel;use CMW\Utils\SecurityService;?>
+use CMW\Manager\Lang\LangManager;use CMW\Model\Core\ThemeModel;use CMW\Manager\Security\SecurityManager;?>
 <!-------------->
 <!--Navigation-->
 <!-------------->

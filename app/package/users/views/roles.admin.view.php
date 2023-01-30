@@ -4,7 +4,7 @@ use CMW\Controller\Users\PermissionsController;
 use CMW\Manager\Lang\LangManager;
 use CMW\Model\Users\PermissionsModel;
 use CMW\Model\Users\RolesModel;
-use CMW\Utils\SecurityService;
+use CMW\Manager\Security\SecurityManager;
 
 /* @var \CMW\Entity\Users\RoleEntity[] $rolesList */
 /**@var PermissionsController $permissionController */
@@ -65,7 +65,7 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
     <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <form method="post" action="add">
-                <?php (new SecurityService())->insertHiddenToken() ?>
+                <?php (new SecurityManager())->insertHiddenToken() ?>
                 <div class="modal-header">
                     <h5 class="modal-title"
                         id="roleAddModalTitle"><?= LangManager::translate("users.roles.manage.add") ?> </h5>

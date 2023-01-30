@@ -1,7 +1,7 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\SecurityService;
+use CMW\Manager\Security\SecurityManager;
 
 /* @var $currentTheme \CMW\Entity\Core\ThemeEntity */
 /* @var $installedThemes \CMW\Entity\Core\ThemeEntity[] */
@@ -22,7 +22,7 @@ $description = LangManager::translate("core.theme.config.description"); ?>
             </div>
             <div class="card-body">
                 <form action="" method="post">
-                    <?php (new SecurityService())->insertHiddenToken() ?>
+                    <?php (new SecurityManager())->insertHiddenToken() ?>
                     <h6>Actif :</h6>
                     <fieldset class="form-group">
                         <select class="form-select" id="basicSelect" name="theme">
@@ -98,7 +98,7 @@ $description = LangManager::translate("core.theme.config.description"); ?>
             </div>
             <div class="modal-footer">
                 <form action="configuration/regenerate" method="post">
-                    <?php (new SecurityService())->insertHiddenToken() ?>
+                    <?php (new SecurityManager())->insertHiddenToken() ?>
                     <div class="button">
                         <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal">
                             Annuler

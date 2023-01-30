@@ -2,7 +2,7 @@
 
 use CMW\Controller\Core\CoreController;
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\SecurityService;
+use CMW\Manager\Security\SecurityManager;
 use CMW\Utils\Utils;
 
 $title = LangManager::translate("core.config.title");
@@ -21,7 +21,7 @@ $description = LangManager::translate("core.config.desc");
     <div class="col-12 col-lg-6">
         <div class="card">
             <form action="" method="post" enctype="multipart/form-data">
-                <?php (new SecurityService())->insertHiddenToken() ?>
+                <?php (new SecurityManager())->insertHiddenToken() ?>
                 <div class="card-header">
                     <div class="d-flex flex-wrap justify-content-between">
                         <h4><?= LangManager::translate("core.condition.cgv") ?></h4>
@@ -52,7 +52,7 @@ $description = LangManager::translate("core.config.desc");
     <div class="col-12 col-lg-6">
         <div class="card">
             <form action="" method="post" enctype="multipart/form-data">
-                <?php (new SecurityService())->insertHiddenToken() ?>
+                <?php (new SecurityManager())->insertHiddenToken() ?>
                 <div class="card-header">
                     <div class="d-flex flex-wrap justify-content-between">
                         <h4><?= LangManager::translate("core.condition.cgu") ?></h4>

@@ -1,14 +1,14 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\SecurityService;
+use CMW\Manager\Security\SecurityManager;
 
 ?>
 <div class="card">
     <div class="card-body login-card-body">
         <p class="login-box-msg"><?= LangManager::translate("users.login.forgot_password.desc") ?></p>
         <form action="" method="post">
-            <?php (new SecurityService())->insertHiddenToken() ?>
+            <?php (new SecurityManager())->insertHiddenToken() ?>
             <div class="input-group mb-3">
                 <input type="email" class="form-control" name="mail" placeholder="<?= LangManager::translate("users.users.mail") ?>">
                 <div class="input-group-append">

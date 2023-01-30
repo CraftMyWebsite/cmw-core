@@ -1,8 +1,7 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\SecurityService;
-use CMW\Utils\Utils;
+use CMW\Manager\Security\SecurityManager;
 
 $title = LangManager::translate("core.mail.config.title");
 $description = LangManager::translate("core.mail.config.description");
@@ -23,7 +22,7 @@ $description = LangManager::translate("core.mail.config.description");
                 <div class="d-flex flex-wrap justify-content-between">
                     <h4><?= LangManager::translate("core.mail.config.title") ?></h4>
                     <form id="smtpConfig" action="" method="post">
-                    <?php (new SecurityService())->insertHiddenToken() ?>
+                    <?php (new SecurityManager())->insertHiddenToken() ?>
                     <div class="form-check-reverse form-switch">
                         <label class="form-check-label" for="enableSMTP">SMTP</label>
                         <input class="form-check-input" type="checkbox" id="enableSMTP" name="enableSMTP" value="<?= $config?->isEnable() ?>" <?= $config?->isEnable() ? 'checked' : '' ?>>
@@ -161,7 +160,7 @@ $description = LangManager::translate("core.mail.config.description");
                     <?= LangManager::translate("core.mail.config.test.description") ?>
                 </p>
                 <form id="sendMail" action="test" method="post">
-                <?php (new SecurityService())->insertHiddenToken() ?>
+                <?php (new SecurityManager())->insertHiddenToken() ?>
                     <h6><?= LangManager::translate("core.mail.config.test.receiverMail") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
                         <input type="email" class="form-control" id="receiver" name="receiver" placeholder="<?= LangManager::translate('core.mail.config.test.receiverMailPlaceholder') ?>" required>

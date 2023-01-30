@@ -2,7 +2,7 @@
 
 use CMW\Controller\Core\ThemeController;
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\SecurityService;
+use CMW\Manager\Security\SecurityManager;
 
 $title = LangManager::translate("core.theme.manage.title", ["theme" => ThemeController::getCurrentTheme()->getName()]);
 $description = LangManager::translate("core.theme.manage.description"); ?>
@@ -14,7 +14,7 @@ $description = LangManager::translate("core.theme.manage.description"); ?>
 <!-- THEME CONFIG FILE -->
 
 <form id="ThemeSettings" action="" method="post" enctype="multipart/form-data">
-    <?php (new SecurityService())->insertHiddenToken() ?>
+    <?php (new SecurityManager())->insertHiddenToken() ?>
     <div class="row">
         <div class="card">
             <div class="card-body">

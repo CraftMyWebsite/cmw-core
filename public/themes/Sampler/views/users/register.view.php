@@ -3,7 +3,7 @@
 
 use CMW\Controller\Core\SecurityController;
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\SecurityService;
+use CMW\Manager\Security\SecurityManager;
 
 $title = "Inscription";
 $description = "Description de votre page"; ?>
@@ -13,7 +13,7 @@ $description = "Description de votre page"; ?>
     <div class="container">
 
         <form action="" method="post" class="mb-4">
-            <?php (new SecurityService())->insertHiddenToken() ?>
+            <?php (new SecurityManager())->insertHiddenToken() ?>
             <div class="form-group">
                 <div class="input-group mb-3">
                     <div class="input-group-append">

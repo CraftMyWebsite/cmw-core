@@ -2,7 +2,7 @@
 
 
 use CMW\Controller\Core\SecurityController;
-use CMW\Utils\SecurityService;
+use CMW\Manager\Security\SecurityManager;
 
 $title = "Connexion";
 $description = "Description de votre page"; ?>
@@ -17,7 +17,7 @@ $description = "Description de votre page"; ?>
         <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
             <div class="col-lg-6">
                 <form action="" method="post" class="mb-4">
-                    <?php (new SecurityService())->insertHiddenToken() ?>
+                    <?php (new SecurityManager())->insertHiddenToken() ?>
                     <div class="form-floating mb-3">
                         <input class="form-control" name="login_email" type="email" placeholder="Votre mail" required>
                         <label for="name">E-Mail</label>
