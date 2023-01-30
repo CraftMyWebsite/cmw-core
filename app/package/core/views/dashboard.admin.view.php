@@ -27,7 +27,7 @@ $description = LangManager::translate("core.dashboard.desc");
                                 </div>
                                 <div class="col-sm-8">
                                     <h6 class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.total_member") ?></h6>
-                                    <h6 class="font-extrabold mb-0">4</h6>
+                                    <h6 class="font-extrabold mb-0"><?= (new UsersModel())->countUsers() ?></h6>
                                 </div>
                             </div>
                         </div>

@@ -125,6 +125,21 @@ class UsersModel extends DatabaseManager
         return !isset($_SESSION['cmwUserId']) ? null : (new self)->getUserById($_SESSION['cmwUserId']);
     }
 
+    public function countUsers(): int
+    {
+        $sql = "select count('users_id') as `result` from cmw_users";
+        $db = self::getInstance();
+
+        $res = $db->prepare($sql);
+
+        if ($res->execute()) {
+            return $res->fetch()['result'];
+        }
+
+        return 0;
+    }
+
+
     public function getUsers(): array
     {
         $sql = "select user_id from cmw_users";
