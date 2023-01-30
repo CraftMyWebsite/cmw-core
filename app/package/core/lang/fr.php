@@ -24,6 +24,8 @@ return [
         "total_member" => "Membres totaux",
         "best_views" => "Record de visites",
         "numbers_views" => "Nombres de visites",
+        "monthly_visits" => "Visites du mois",
+        "total_visits" => "Visistes totales",
         "welcome" => "Bienvenue",
         "site_info" => "Information du site",
         "name" => "Nom :",
