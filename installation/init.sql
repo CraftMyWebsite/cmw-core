@@ -98,24 +98,24 @@ CREATE TABLE IF NOT EXISTS `cmw_menus`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-# Condition general !
-CREATE TABLE IF NOT EXISTS `cmw_condition`
+CREATE TABLE IF NOT EXISTS `cmw_core_condition`
 (
-    `condition_id`      INT(11)    NOT NULL,
-    `condition_content` LONGTEXT   NOT NULL,
-    `condition_state`   TINYINT(1) NOT NULL DEFAULT '1',
-    `condition_updated` TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `condition_author`  INT(11)    NOT NULL
+    `condition_id`          INT(11)    NOT NULL AUTO_INCREMENT,
+    `condition_content`     LONGTEXT   NOT NULL,
+    `condition_state`       TINYINT(1) NOT NULL DEFAULT '1',
+    `condition_updated`     TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `condition_last_editor` INT(11)             DEFAULT NULL,
+    PRIMARY KEY (`condition_id`),
+    KEY `condition_author` (`condition_last_editor`),
+    KEY `condition_last_editor` (`condition_last_editor`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-ALTER TABLE `cmw_condition`
-    ADD PRIMARY KEY (`condition_id`);
+ALTER TABLE `cmw_core_condition`
+    ADD CONSTRAINT `cmw_core_condition_ibfk_1` FOREIGN KEY (`condition_last_editor`) REFERENCES `cmw_users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+COMMIT;
 
-ALTER TABLE `cmw_condition`
-    MODIFY `condition_id` INT(11) NOT NULL AUTO_INCREMENT;
-
-INSERT INTO `cmw_condition` (`condition_content`, `condition_author`)
+INSERT INTO `cmw_core_condition` (`condition_content`, `condition_last_editor`)
 VALUES ('Veuillez écrire votre CGV !', '1'),
        ('Veuillez écrire votre CGU !', '1');
 # FIN : Condition general !

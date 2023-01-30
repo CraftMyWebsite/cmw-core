@@ -54,13 +54,8 @@ class ConditionController extends CoreController
         [$conditionId, $conditionContent, $conditionState] = Utils::filterInput("conditionId",
             "conditionContent", "conditionState");
 
-        //Get the current author
-        $user = new UsersModel;
-        $userEntity = $user->getUserById($_SESSION['cmwUserId']);
-        $conditionAuthor = $userEntity?->getId();
-
         $this->conditionModel->updateCondition($conditionId, $conditionContent,
-            $conditionState === NULL ? 0 : 1, $conditionAuthor);
+            $conditionState === NULL ? 0 : 1, $_SESSION['cmwUserId']);
 
         Response::sendAlert("success", LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));

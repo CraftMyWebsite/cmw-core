@@ -13,7 +13,7 @@ class ConditionModel extends DatabaseManager
      */
     public function getCGU(): ?ConditionEntity
     {
-        $sql = "SELECT * FROM cmw_condition WHERE condition_id = 2";
+        $sql = "SELECT * FROM cmw_core_condition WHERE condition_id = 2";
 
         $db = self::getInstance();
         $res = $db->prepare($sql);
@@ -24,7 +24,7 @@ class ConditionModel extends DatabaseManager
 
         $res = $res->fetch();
 
-        $author = (new UsersModel())->getUserById($res["condition_author"]);
+        $author = (new UsersModel())->getUserById($res["condition_last_editor"]);
 
         return new ConditionEntity(
             $res['condition_id'],
@@ -51,8 +51,8 @@ class ConditionModel extends DatabaseManager
             "conditionAuthor" => $conditionAuthor,
         );
 
-        $sql = "UPDATE cmw_condition SET condition_content = :conditionContent, condition_state = :conditionState, 
-                         condition_author = :conditionAuthor WHERE condition_id = :conditionId";
+        $sql = "UPDATE cmw_core_condition SET condition_content = :conditionContent, condition_state = :conditionState, 
+                         condition_last_editor = :conditionAuthor WHERE condition_id = :conditionId";
 
         $db = self::getInstance();
         $req = $db->prepare($sql);
@@ -68,7 +68,7 @@ class ConditionModel extends DatabaseManager
      */
     public function getCGV(): ?ConditionEntity
     {
-        $sql = "SELECT * FROM cmw_condition WHERE condition_id = 1";
+        $sql = "SELECT * FROM cmw_core_condition WHERE condition_id = 1";
 
         $db = self::getInstance();
         $res = $db->prepare($sql);
@@ -80,7 +80,7 @@ class ConditionModel extends DatabaseManager
 
         $res = $res->fetch();
 
-        $author = (new UsersModel())->getUserById($res["condition_author"]);
+        $author = (new UsersModel())->getUserById($res["condition_last_editor"]);
 
         return new ConditionEntity(
             $res['condition_id'],

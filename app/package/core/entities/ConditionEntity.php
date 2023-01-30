@@ -6,65 +6,65 @@ use CMW\Entity\Users\UserEntity;
 
 class ConditionEntity
 {
-    private int $conditionId;
-    private string $conditionContent;
-    private bool $conditionState;
-    private string $conditionUpdate;
-    private UserEntity $conditionAuthor;
+    private int $id;
+    private string $content;
+    private bool $state;
+    private string $update;
+    private ?UserEntity $lastEditor;
 
     /**
-     * @param int $conditionId
-     * @param string $conditionContent
-     * @param bool $conditionState
-     * @param string $conditionUpdate
-     * @param \CMW\Entity\Users\UserEntity $conditionAuthor
+     * @param int $id
+     * @param string $content
+     * @param bool $state
+     * @param string $update
+     * @param ?\CMW\Entity\Users\UserEntity $lastEditor
      */
-    public function __construct(int $conditionId, string $conditionContent, bool $conditionState, string $conditionUpdate, UserEntity $conditionAuthor)
+    public function __construct(int $id, string $content, bool $state, string $update, ?UserEntity $lastEditor)
     {
-        $this->conditionId = $conditionId;
-        $this->conditionContent = $conditionContent;
-        $this->conditionState = $conditionState;
-        $this->conditionUpdate = $conditionUpdate;
-        $this->conditionAuthor = $conditionAuthor;
+        $this->id = $id;
+        $this->content = $content;
+        $this->state = $state;
+        $this->update = $update;
+        $this->lastEditor = $lastEditor;
     }
 
     /**
      * @return int
      */
-    public function getConditionId(): int
+    public function getId(): int
     {
-        return $this->conditionId;
+        return $this->id;
     }
 
     /**
      * @return string
      */
-    public function getConditionContent(): string
+    public function getContent(): string
     {
-        return $this->conditionContent;
+        return $this->content;
     }
 
     /**
      * @return bool
      */
-    public function isConditionState(): bool
+    public function isState(): bool
     {
-        return $this->conditionState;
+        return $this->state;
     }
 
     /**
      * @return string
      */
-    public function getConditionUpdate(): string
+    public function getUpdate(): string
     {
-        return $this->conditionUpdate;
+        return $this->update;
     }
 
     /**
-     * @return \CMW\Entity\Users\UserEntity
+     * @return ?\CMW\Entity\Users\UserEntity
      */
-    public function getConditionAuthor(): UserEntity
+    public function getLastEditor(): ?UserEntity
     {
-        return $this->conditionAuthor;
+        return $this->lastEditor;
     }
 }
