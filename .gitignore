@@ -4,6 +4,7 @@
 __MACOSX/
 
 /app/package/*/.idea/
+/public/themes/*/.idea/
 
 #Exclude log files except the .gitignore
 /app/storage/logs/*
