@@ -100,25 +100,13 @@ CREATE TABLE IF NOT EXISTS `cmw_menus`
 
 CREATE TABLE IF NOT EXISTS `cmw_core_condition`
 (
-    `condition_id`          INT(11)    NOT NULL AUTO_INCREMENT,
+    `condition_id`          INT(11)    NOT NULL,
     `condition_content`     LONGTEXT   NOT NULL,
     `condition_state`       TINYINT(1) NOT NULL DEFAULT '1',
     `condition_updated`     TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `condition_last_editor` INT(11)             DEFAULT NULL,
-    PRIMARY KEY (`condition_id`),
-    KEY `condition_author` (`condition_last_editor`),
-    KEY `condition_last_editor` (`condition_last_editor`)
+    `condition_last_editor` INT(11)             DEFAULT NULL
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-
-ALTER TABLE `cmw_core_condition`
-    ADD CONSTRAINT `cmw_core_condition_ibfk_1` FOREIGN KEY (`condition_last_editor`) REFERENCES `cmw_users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE;
-COMMIT;
-
-INSERT INTO `cmw_core_condition` (`condition_content`, `condition_last_editor`)
-VALUES ('Veuillez écrire votre CGV !', '1'),
-       ('Veuillez écrire votre CGU !', '1');
-# FIN : Condition general !
 
 ALTER TABLE `cmw_menus`
     ADD PRIMARY KEY (`menu_id`);
@@ -163,6 +151,22 @@ COMMIT;
 ALTER TABLE `cmw_users_pictures`
     ADD CONSTRAINT `cmw_users_pictures_ibfk_1` FOREIGN KEY (`users_pictures_user_id`) REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
+
+ALTER TABLE `cmw_core_condition`
+    ADD PRIMARY KEY (`condition_id`),
+    ADD KEY `condition_author` (`condition_last_editor`),
+    ADD KEY `condition_last_editor` (`condition_last_editor`);
+	
+ALTER TABLE `cmw_core_condition`
+    MODIFY `condition_id` INT(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `cmw_core_condition`
+    ADD CONSTRAINT `cmw_core_condition_ibfk_1` FOREIGN KEY (`condition_last_editor`) REFERENCES `cmw_users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+COMMIT;
+
+INSERT INTO `cmw_core_condition` (`condition_content`)
+VALUES ('Veuillez écrire votre CGV !'),
+       ('Veuillez écrire votre CGU !');
 
 CREATE TABLE IF NOT EXISTS cmw_roles_permissions
 (
