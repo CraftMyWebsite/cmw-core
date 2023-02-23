@@ -174,11 +174,17 @@ class Utils
 
     /**
      * @return string
-     * @desc Return the client ip, for local users -> 127.0.0.1
+     * @desc Return the client ip, for local users -> 127.0.0.1, if IP not vlaid -> 0.0.0.0
      */
     public static function getClientIp(): string
     {
-        return $_SERVER['HTTP_CLIENT_IP'] ?? ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR']);
+        $clientIp = $_SERVER['HTTP_CLIENT_IP'] ?? ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR']);
+
+        if(!filter_var($clientIp,  FILTER_VALIDATE_IP)){
+            return "0.0.0.0";
+        }
+
+        return $clientIp;
     }
 
     /**
