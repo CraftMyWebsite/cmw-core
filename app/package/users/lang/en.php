@@ -102,6 +102,7 @@ return [
         "role_description" => "Description",
         "role_name" => "Name",
         "password" => "Password",
+        "pass" => "••••••••",
         "new_password" => "Change your password",
         "repeat_pass" => "Retype password",
         "toaster_title" => "Information",
