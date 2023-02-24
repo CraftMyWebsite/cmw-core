@@ -102,7 +102,6 @@ return [
         "role_description" => "Description",
         "role_name" => "Nom",
         "password" => "Mot de passe",
-        "pass" => "••••••••",
         "new_password" => "Modifier le mot de passe",
         "repeat_pass" => "Retaper le mot de passe",
         "toaster_title" => "Information",
