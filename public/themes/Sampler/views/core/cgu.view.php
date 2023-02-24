@@ -11,8 +11,8 @@ $description = "Description de votre page";
 
 <section class="page-section">
     <div class="container">
-        <?= $cgu->getConditionContent() ?><br>
-        <?= $cgu->getConditionAuthor()->getUsername() ?>
-        <?= $cgu->getConditionUpdate() ?>
+        <?= $cgu->getContent() ?><br>
+        <?= $cgu->getLastEditor()->getUsername() ?>
+        <?= $cgu->getUpdate() ?>
     </div>
 </section>
