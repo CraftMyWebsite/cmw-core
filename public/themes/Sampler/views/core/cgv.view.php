@@ -11,9 +11,9 @@ $description = "Description de votre page";
 
 <section class="page-section">
     <div class="container">
-        <?= $cgv->getConditionContent() ?><br>
-        <?= $cgv->getConditionAuthor()->getUsername() ?>
-        <?= $cgv->getConditionUpdate() ?>
+        <?= $cgv->getContent() ?><br>
+        <?= $cgv->getLastEditor()->getUsername() ?>
+        <?= $cgv->getUpdate() ?>
     </div>
 </section>
 
