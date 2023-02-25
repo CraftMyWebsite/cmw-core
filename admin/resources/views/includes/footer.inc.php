@@ -1,6 +1,7 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Updater\UpdatesManager;
 use CMW\Utils\Utils;
 
 ?>
@@ -10,20 +11,20 @@ use CMW\Utils\Utils;
         <div class="float-start">
             <p><?= LangManager::translate("core.footer.left") ?></p>
         </div>
-        <?php if (Utils::getVersion() !== Utils::getLatestVersion()): ?>
+        <?php if (UpdatesManager::checkNewUpdateAvailable()): ?>
             <div class="float-end">
                 <p class="text-center">
                     <a href="/cmw-admin/updates/cms">
-                        <span><?= LangManager::translate("core.footer.used") . "<span class='text-danger font-bold'>" . Utils::getVersion() ?></span>!
+                        <span><?= LangManager::translate("core.footer.used") . "<span class='text-danger font-bold'>" . UpdatesManager::getVersion() ?></span>!
                         <br>
-                        <span><?= LangManager::translate("core.footer.upgrade") . "<span class='text-success font-bold'>" . Utils::getLatestVersion() ?></span>!
+                        <span><?= LangManager::translate("core.footer.upgrade") . "<span class='text-success font-bold'>" . UpdatesManager::getLatestVersion() ?></span>!
                     </a>
                 </p>
             </div>
         <?php else: ?>
             <div class="float-end">
                 <p>
-                    <?= LangManager::translate("core.footer.right") . " " . Utils::getVersion() ?>
+                    <?= LangManager::translate("core.footer.right") . " " . UpdatesManager::getVersion() ?>
                 </p>
             </div>
         <?php endif; ?>

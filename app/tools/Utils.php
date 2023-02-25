@@ -104,24 +104,6 @@ class Utils
         return rmdir($dir);
     }
 
-    public static function getVersion(): string
-    {
-        return self::getEnv()->getValue("VERSION");
-    }
-
-    public static function getLatestVersion(): string
-    {
-        try {
-            return json_decode(file_get_contents(self::getApi() . "/getCmwLatest"), false, 512, JSON_THROW_ON_ERROR)->version;
-        } catch (\JsonException $e) {
-        }
-    }
-
-    public static function isNewUpdateAvailable(): bool
-    {
-        return self::getVersion() !== self::getLatestVersion();
-    }
-
     public static function getEnv(): EnvBuilder
     {
         return self::$env;

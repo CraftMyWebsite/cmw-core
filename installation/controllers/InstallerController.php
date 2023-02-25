@@ -129,6 +129,7 @@ class InstallerController
         Utils::getEnv()->setOrEditValue("PATH_ADMIN_VIEW", "admin/resources/views/");
         Utils::getEnv()->setOrEditValue("TIMEZONE", $timezone);
         Utils::getEnv()->setOrEditValue("DEVMODE", $devMode);
+        Utils::getEnv()->setOrEditValue("UPDATE_CHECKER", "1");
 
 
         //Todo Throw error
