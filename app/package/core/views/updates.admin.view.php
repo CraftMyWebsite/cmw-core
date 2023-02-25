@@ -1,8 +1,7 @@
 <?php
 
-use CMW\Controller\Core\ThemeController;
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\Utils;
+use CMW\Manager\Updater\UpdatesManager;
 
 $title = LangManager::translate("core.updates.title");
 $description = LangManager::translate("core.updates.description"); ?>
@@ -18,15 +17,19 @@ $description = LangManager::translate("core.updates.description"); ?>
                 <h4>CraftMyWebsite</h4>
             </div>
             <div class="card-body">
-                <p>Version installé : 
-                    <?php if (Utils::getVersion() != Utils::getLatestVersion()) {echo "<b class='text-danger'>". Utils::getVersion() . "</b>";} else {echo "<b class='text-sucess'>". Utils::getVersion() . "</b>";}
+                <p>Version installé :
+                    <?php if (UpdatesManager::getVersion() !== UpdatesManager::getLatestVersion()) {
+                        echo "<b class='text-danger'>" . UpdatesManager::getVersion() . "</b>";
+                    } else {
+                        echo "<b class='text-sucess'>" . UpdatesManager::getVersion() . "</b>";
+                    }
                     ?>
                 </p>
-                <p>Dernière version : <b><?= Utils::getLatestVersion() ?></b></p>
-                <?php if (Utils::isNewUpdateAvailable()): ?>
-                <div class="buttons text-center">
-                    <a href="cms/install" type="button" class="btn btn-primary">Mettre à jours</a>
-                </div>
+                <p>Dernière version : <b><?= UpdatesManager::getLatestVersion() ?></b></p>
+                <?php if (UpdatesManager::checkNewUpdateAvailable()): ?>
+                    <div class="buttons text-center">
+                        <a href="cms/install" type="button" class="btn btn-primary">Mettre à jours</a>
+                    </div>
                 <?php endif; ?>
             </div>
         </div>
@@ -90,7 +93,7 @@ $description = LangManager::translate("core.updates.description"); ?>
             </div>
             <div class="modal-body">
                 <p>
-                    Attention, ceci va réinitialiser tout les paramètres par defaut de votre thème, êtes vous sûr de
+                    Attention, ceci va réinitialiser tous les paramètres par defaut de votre thème, êtes-vous sûr de
                     vouloir continuer ?
                 </p>
             </div>
