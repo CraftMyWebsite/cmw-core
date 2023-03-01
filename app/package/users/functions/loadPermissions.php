@@ -42,10 +42,8 @@ function showPermission(PermissionsModel $permissionModel, array $permissionList
         $hasRole = !is_null($rolesModel) && !is_null($roleEntity) && $rolesModel->roleHasPermission($roleEntity->getId(), $permissionModel->getFullPermissionCodeById($p->getId()));
 
         $codeValue = $p->getCode() . (($hasChild) ? ".*" : "");
-        if (!$hasChild) {
-            echo generateCheckBox($p, $codeValue, $hasRole);
-        }
 
+        echo generateCheckBox($p, $codeValue, $hasRole);
 
         if ($hasChild) {
             showPermission($permissionModel, $permissionModel->getPermissionByParentId($p->getId()));
