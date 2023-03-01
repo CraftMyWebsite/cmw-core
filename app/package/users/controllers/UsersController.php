@@ -159,7 +159,7 @@ class UsersController extends CoreController
         $this->userModel->update($id, $mail, $username, $firstname, $lastname, $_POST['roles']);
 
         //Todo Try to edit that
-        Response::sendAlert("success", "Succès", "L'utilisateur vien d'être éditer");
+        Response::sendAlert("success", LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.user_edited"));
 
         [$pass, $passVerif] = Utils::filterInput("pass", "passVerif");
 
@@ -167,7 +167,7 @@ class UsersController extends CoreController
             if ($pass === $passVerif) {
                 $this->userModel->updatePass($id, password_hash($pass, PASSWORD_BCRYPT));
             } else {
-                Response::sendAlert("error", "Erreur", "Le mot de passe n'as pas changé, vous n'avez pas taper les mêmes mot de passe");
+                Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.pass_change_faild"));
 
             }
 
@@ -197,9 +197,7 @@ class UsersController extends CoreController
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
         if (UsersModel::getLoggedUser() === $id) {
-            $_SESSION['toaster'][0]['title'] = "USERS_TOASTER_TITLE_ERROR";
-            $_SESSION['toaster'][0]['type'] = "bg-danger";
-            $_SESSION['toaster'][0]['body'] = "USERS_STATE_TOASTER_ERROR";
+            Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.impossible"));
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             die();
         }
@@ -208,9 +206,7 @@ class UsersController extends CoreController
 
         $this->userModel->changeState($id, $state);
 
-        $_SESSION['toaster'][0]['title'] = "USERS_TOASTER_TITLE";
-        $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = "USERS_STATE_TOASTER_SUCCESS";
+        Response::sendAlert("success", LangManager::translate("users.toaster.success"),"Ok !");
 
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
@@ -223,9 +219,7 @@ class UsersController extends CoreController
         if (UsersModel::getLoggedUser() === $id) {
 
             //Todo Try to remove that
-            $_SESSION['toaster'][0]['title'] = "USERS_TOASTER_TITLE_ERROR";
-            $_SESSION['toaster'][0]['type'] = "bg-danger";
-            $_SESSION['toaster'][0]['body'] = "USERS_DELETE_TOASTER_ERROR";
+            Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.impossible_user"));
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             die();
         }
@@ -233,7 +227,7 @@ class UsersController extends CoreController
         $this->userModel->delete($id);
 
         //Todo Try to remove that
-        Response::sendAlert("success", "Succès", "L'utilistateur à été supprimer");
+        Response::sendAlert("success", LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.user_deleted"));
 
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
@@ -246,7 +240,7 @@ class UsersController extends CoreController
         $image = $_FILES['profilePicture'];
 
 
-        $this->userPictureModel->deleteUserPicture($id, $image);
+        $this->userPictureModel->uploadImage($id, $image);
 
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
@@ -286,9 +280,7 @@ class UsersController extends CoreController
                 header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
 
             } else {
-                $_SESSION['toaster'][0]['title'] = "Désolé";
-                $_SESSION['toaster'][0]['body'] = "Cette combinaison email/mot de passe est erronée";
-                $_SESSION['toaster'][0]['type'] = "bg-danger";
+                Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.mail_pass_matching"));
                 header('Location: ' . $_SERVER['HTTP_REFERER']);
             }
         } else {
@@ -365,23 +357,17 @@ class UsersController extends CoreController
     {
         if(SecurityController::checkCaptcha()) {
         if ($this->userModel->checkPseudo(filter_input(INPUT_POST, "register_pseudo")) > 0) {
-            $_SESSION['toaster'][0]['title'] = "Désolé";
-            $_SESSION['toaster'][0]['body'] = "Ce pseudo est déjà pris.";
-            $_SESSION['toaster'][0]['type'] = "bg-danger";
+            Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.used_pseudo"));
             header('Location: register');
         } else if ($this->userModel->checkEmail(filter_input(INPUT_POST, "register_email")) > 0) {
-            $_SESSION['toaster'][0]['title'] = "Désolé";
-            $_SESSION['toaster'][0]['body'] = "Cette e-mail est déjà prise.";
-            $_SESSION['toaster'][0]['type'] = "bg-danger";
+            Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.used_mail"));
             header('Location: register');
         } else {
 
             [$mail, $pseudo, $password, $passwordVerify] = Utils::filterInput("register_email", "register_pseudo", "register_password", "register_password_verify");
 
             if (!is_null($password) && $password !== $passwordVerify) {
-                $_SESSION['toaster'][0]['title'] = "Désolé";
-                $_SESSION['toaster'][0]['body'] = "Mots de passes non identiques";
-                $_SESSION['toaster'][0]['type'] = "bg-danger";
+                Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.not_same_pass"));
                 header('Location: register');
             }
 
@@ -405,9 +391,7 @@ class UsersController extends CoreController
                 header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
 
 
-                $_SESSION['toaster'][0]['title'] = "Inscription réussie";
-                $_SESSION['toaster'][0]['type'] = "bg-success";
-                $_SESSION['toaster'][0]['body'] = "Bienvenue sur " . CoreModel::getOptionValue("name");
+                Response::sendAlert("success", LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.welcome"));
 
             }
 
@@ -501,9 +485,7 @@ class UsersController extends CoreController
                 $this->userModel->updatePass($userId, password_hash($pass, PASSWORD_BCRYPT));
             } else {
                 //Todo Try to edit that
-                $_SESSION['toaster'][1]['title'] = "USERS_TOASTER_TITLE_ERROR";
-                $_SESSION['toaster'][1]['type'] = "bg-danger";
-                $_SESSION['toaster'][1]['body'] = "USERS_EDIT_TOASTER_PASS_ERROR";
+                Response::sendAlert("error", LangManager::translate("users.toaster.error"),"Je sais pas ?");
             }
         }
 
