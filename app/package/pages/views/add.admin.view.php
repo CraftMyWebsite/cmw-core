@@ -11,6 +11,7 @@ $description = LangManager::translate("pages.add.desc");
                 class="m-lg-auto"><?= LangManager::translate("pages.add.title") ?></span></h3>
 </div>
 
+    
 <section>
     <div class="card">
         <div class="card-body">
@@ -45,7 +46,7 @@ $description = LangManager::translate("pages.add.desc");
             <h6><?= LangManager::translate("pages.creation.content") ?> :</h6>
 
             <div>
-                <div id="editorjs"></div>
+                <div class="card-in-card" id="editorjs"></div>
             </div>
 
             <div class="text-center mt-2">
@@ -55,3 +56,139 @@ $description = LangManager::translate("pages.add.desc");
         </div>
     </div>
 </section>
+
+
+
+
+    <!-- Initialization -->
+    <script>
+    let editor = new EditorJS({
+        placeholder: "Commencez à taper ou cliquez sur le \"+\" pour choisir un bloc à ajouter...",
+        logLevel: "ERROR",
+        readOnly: false,
+        holder: "editorjs",
+        /**
+         * Tools list
+         */
+        tools: {
+            header: {
+                class: Header,
+                config: {
+                    placeholder: "Entrez un titre",
+                    levels: [2, 3, 4],
+                    defaultLevel: 2
+                }  
+            },
+
+            image: {
+                class: ImageTool,
+                config: {
+                    uploader: {
+                        uploadByFile(file) {
+                        let formData = new FormData();
+                        formData.append("file", file, file["name"]);
+                        return fetch("<?php getenv("PATH_SUBFOLDER") ?>admin/resources/vendors/editorjs/upload_file.php", {
+                            method:"POST",
+                            body:formData
+                        }).then(res=>res.json())
+                            .then(response => {
+                                return {
+                                    success: 1,
+                                    file: {
+                                        url: "<?php getenv("PATH_SUBFOLDER")?>public/uploads/"+response
+                                    }
+                                }
+                            })
+                        }
+                    }
+                }
+            },
+            list: List,
+            quote: {
+                class: Quote,
+                config: {
+                    quotePlaceholder: "",
+                    captionPlaceholder: "Auteur",
+                },
+            },
+            warning: Warning,
+            code: CodeTool,
+            delimiter: Delimiter,
+            table: Table,
+            embed: {
+                class: Embed,
+                config: {
+                    services: {
+                        youtube: true,
+                        coub: true
+                    }
+                }
+            },
+            Marker: Marker,
+            underline: Underline,
+        },
+        defaultBlock: "paragraph",
+        /**
+         * Initial Editor data
+         */
+        data: {},
+        onReady: function(){
+            new Undo({ editor });
+            const undo = new Undo({ editor });
+            new DragDrop(editor);
+        },
+        onChange: function() {}
+    });
+    /**
+     * Saving button
+     */
+    const saveButton = document.getElementById("saveButton");
+    /**
+     * Saving action
+     */
+    saveButton.addEventListener("click", function () {
+        let page_state = 1;
+        if (jQuery("#draft").is(":checked")) {
+            page_state = 2;
+        }
+        editor.save()
+        .then((savedData) => {
+            if(jQuery("#page_id").val()) {
+                $.ajax({
+                    url : "<?php getenv("PATH_SUBFOLDER") ?>/cmw-admin/pages/edit",
+                    type : "POST",
+                    data : {
+                        "news_id" : jQuery("#page_id").val(),
+                        "news_title" : jQuery("#title").val(),
+                        "news_slug" : jQuery("#slug").val(),
+                        "news_content" : JSON.stringify(savedData),
+                        "page_state" : page_state
+                    },
+                    success: function (data) {
+                        console.log(data)
+                        alert("Page editer");
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    url : "<?php getenv("PATH_SUBFOLDER") ?>/cmw-admin/pages/add",
+                    type : "POST",
+                    data : {
+                        "news_title" : jQuery("#title").val(),
+                        "news_slug" : jQuery("#slug").val(),
+                        "news_content" : JSON.stringify(savedData),
+                        "page_state" : page_state
+                    },
+                    success: function (data) {
+                        jQuery("#page_id").val(data);
+                        alert("Page créer");
+                    }
+                });
+            }
+        })
+        .catch((error) => {
+            alert("Page capoute");
+        });
+    });
+    </script>

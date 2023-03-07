@@ -65,9 +65,8 @@ class PagesController extends CoreController
                 "admin/resources/vendors/editorjs/plugins/drag-drop.js",
                 "admin/resources/vendors/editorjs/plugins/undo.js",
                 "admin/resources/vendors/editorjs/editor.js")
+            ->addScriptAfter("admin/resources/vendors/jquery/jquery.min.js")
             ->view();
-
-        include_once (Utils::getEnv()->getValue('DIR') . "app/package/pages/views/assets/js/initEditor.php");
     }
 
     #[Link("/add", Link::POST, [], "/cmw-admin/pages", secure: false)]
