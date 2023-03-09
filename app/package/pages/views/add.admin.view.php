@@ -15,12 +15,13 @@ $description = LangManager::translate("pages.add.desc");
 <section>
     <div class="card">
         <div class="card-body">
+            <form>
             <div class="row">
                 <div class="col-12 col-lg-6">
                     <h6><?= LangManager::translate("pages.title") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
                         <input type="hidden" id="page_id" name="page_id">
-                        <input type="text" class="form-control" name="title" required
+                        <input type="text" class="form-control" id="title" required
                                placeholder="<?= LangManager::translate("pages.title") ?>" maxlength="255">
                         <div class="form-control-icon">
                             <i class="fas fa-heading"></i>
@@ -33,7 +34,7 @@ $description = LangManager::translate("pages.add.desc");
                         <span class="input-group-text"
                               id="inputGroup-sizing-default"><?= Utils::getHttpProtocol() . '://' . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . "p/" ?></span>
                         <input type="text" id="slug" class="form-control" placeholder="<?= LangManager::translate("pages.link") ?>"
-                               aria-label="Slug" aria-describedby="inputGroup-sizing-default" required>
+                               aria-label="Slug" aria-describedby="inputGroup-sizing-default" name="news_slug" required>
                     </div>
 
                 </div>
@@ -50,9 +51,9 @@ $description = LangManager::translate("pages.add.desc");
             </div>
 
             <div class="text-center mt-2">
-                <button id="saveButton" type="submit"
-                        class="btn btn-primary"><?= LangManager::translate("core.btn.add") ?></button>
+                <button id="saveButton" type="submit" disabled="disabled" class="btn btn-primary"><i class="fa-solid fa-spinner fa-spin-pulse"></i> <?= LangManager::translate("pages.add.create") ?></button>
             </div>
+        </form>
         </div>
     </div>
 </section>
@@ -62,6 +63,27 @@ $description = LangManager::translate("pages.add.desc");
 
     <!-- Initialization -->
     <script>
+        /**
+         * Check inpt befor send
+         */
+    let input_title = document.querySelector("#title");
+    let input_slug = document.querySelector("#slug");
+    let button = document.querySelector("#saveButton");
+    input_title.addEventListener("change", stateHandle);
+    input_slug.addEventListener("change", stateHandle);
+    function stateHandle() {
+     if (document.querySelector("#title").value !="" && document.querySelector("#slug").value !="") {
+      button.disabled = false;
+      button.innerHTML = "<?= LangManager::translate("core.btn.add") ?>";
+     }
+     else {
+      button.disabled = true;
+      button.innerHTML = "<i class='fa-solid fa-spinner fa-spin-pulse'></i> <?= LangManager::translate("pages.add.create") ?>";
+     }
+    }
+    /**
+    * EditorJS
+    */
     let editor = new EditorJS({
         placeholder: "Commencez à taper ou cliquez sur le \"+\" pour choisir un bloc à ajouter...",
         logLevel: "ERROR",
@@ -112,7 +134,7 @@ $description = LangManager::translate("pages.add.desc");
                 },
             },
             warning: Warning,
-            code: CodeTool,
+            code: editorjsCodeflask,
             delimiter: Delimiter,
             table: Table,
             embed: {
@@ -165,8 +187,11 @@ $description = LangManager::translate("pages.add.desc");
                         "page_state" : page_state
                     },
                     success: function (data) {
-                        console.log(data)
-                        alert("Page editer");
+                        console.log ("Id :" + jQuery("#page_id").val());
+                        console.log ("Titre :" + jQuery("#title").val());
+                        console.log ("Slug :" + jQuery("#slug").val());
+                        console.log ("Content :" + JSON.stringify(savedData));
+                        console.log ("State :" + page_state);
                     }
                 });
             }
@@ -182,7 +207,10 @@ $description = LangManager::translate("pages.add.desc");
                     },
                     success: function (data) {
                         jQuery("#page_id").val(data);
-                        alert("Page créer");
+                        console.log ("Titre :" + jQuery("#title").val());
+                        console.log ("Slug :" + jQuery("#slug").val());
+                        console.log ("Content :" + JSON.stringify(savedData));
+                        console.log ("State :" + page_state);
                     }
                 });
             }
