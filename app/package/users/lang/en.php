@@ -31,6 +31,9 @@ return [
         "impossible_user" => "Unable to delete this user",
         "user_deleted" => "User deleted",
         "mail_pass_matching" => "This email/password combination is wrong",
+        "role_added" => "Role added",
+        "role_edit" => "Role edited",
+        "role_deleted" => "Role deleted"
     ],
     "manage" => [
         "title" => "Manage users",

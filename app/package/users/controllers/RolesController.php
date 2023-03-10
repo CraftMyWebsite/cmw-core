@@ -3,10 +3,12 @@
 namespace CMW\Controller\Users;
 
 use CMW\Controller\Core\CoreController;
+use CMW\Manager\Lang\LangManager;
 use CMW\Model\Users\PermissionsModel;
 use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Router\Link;
+use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
 use JetBrains\PhpStorm\NoReturn;
@@ -27,9 +29,9 @@ class RolesController extends CoreController
     private PermissionsModel $permissionsModel;
 
 
-    public function __construct($theme_path = null)
+    public function __construct()
     {
-        parent::__construct($theme_path);
+        parent::__construct();
         $this->userModel = new UsersModel();
         $this->roleModel = new RolesModel();
         $this->permissionsModel = new PermissionsModel();
@@ -88,10 +90,8 @@ class RolesController extends CoreController
         $roleWeight = filter_input(INPUT_POST, "weight", FILTER_SANITIZE_NUMBER_INT);
         $role->createRole($roleName, $roleDescription, $roleWeight, $permList);
 
-
-        $_SESSION['toaster'][0]['title'] = "USERS_TOASTER_TITLE";
-        $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = "USERS_ROLE_ADD_TOASTER_SUCCESS";
+        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+            LangManager::translate('users.toaster_role_added'));
 
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
@@ -105,7 +105,7 @@ class RolesController extends CoreController
         $permissionModel = new PermissionsModel();
 
         //Try to improve that ?
-        require_once(getenv("DIR") . "app/package/users/functions/loadPermissions.php");
+        require_once(Utils::getEnv()->getValue("DIR") . "app/package/users/functions/loadPermissions.php");
 
         View::createAdminView("users", "roles.edit")->addVariableList(array(
             "permissionController" => $permissionController,
@@ -128,10 +128,9 @@ class RolesController extends CoreController
 
         $this->roleModel->updateRole($roleName, $roleDescription, $id, $roleWeight, $permList);
 
-        //Todo Try to remove that
-        $_SESSION['toaster'][0]['title'] = "USERS_TOASTER_TITLE";
-        $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = "USERS_ROLE_EDIT_TOASTER_SUCCESS";
+        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+            LangManager::translate('users.toaster_role_edited'));
+
 
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
@@ -143,10 +142,9 @@ class RolesController extends CoreController
 
         $this->roleModel->deleteRole($id);
 
-        //Todo Try to remove that
-        $_SESSION['toaster'][0]['title'] = "USERS_TOASTER_TITLE";
-        $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = "USERS_ROLE_EDIT_TOASTER_SUCCESS";
+        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+            LangManager::translate('users.toaster_role_deleted'));
+
 
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
