@@ -88,7 +88,7 @@ $description = LangManager::translate("pages.edit.desc");
                         uploadByFile(file) {
                         let formData = new FormData();
                         formData.append("file", file, file["name"]);
-                        return fetch("<?php getenv("PATH_SUBFOLDER") ?>admin/resources/vendors/editorjs/upload_file.php", {
+                        return fetch("<?php Utils::getEnv()->getValue("DIR") ?>admin/resources/vendors/editorjs/upload_file.php", {
                             method:"POST",
                             body:formData
                         }).then(res=>res.json())
@@ -96,7 +96,7 @@ $description = LangManager::translate("pages.edit.desc");
                                 return {
                                     success: 1,
                                     file: {
-                                        url: "<?php getenv("PATH_SUBFOLDER")?>public/uploads/"+response
+                                        url: "<?php Utils::getEnv()->getValue("PATH_SUBFOLDER")?>public/uploads/"+response
                                     }
                                 }
                             })

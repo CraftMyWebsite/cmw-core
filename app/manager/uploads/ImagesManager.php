@@ -1,11 +1,11 @@
 <?php
 
-namespace CMW\Utils;
+namespace CMW\Manager\Uploads;
 
 use Exception;
 use RuntimeException;
 
-class Images
+class ImagesManager
 {
     protected static string $returnName;
     private static array $allowedTypes = [

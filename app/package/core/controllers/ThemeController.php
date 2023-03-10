@@ -5,10 +5,10 @@ namespace CMW\Controller\Core;
 use CMW\Controller\Users\UsersController;
 use CMW\Entity\Core\ThemeEntity;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Uploads\ImagesManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\ThemeModel;
 use CMW\Router\Link;
-use CMW\Utils\Images;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
@@ -252,13 +252,13 @@ class ThemeController extends CoreController
              //If file is empty, we don't update the config.
              if ($file['name'] !== "" ) {
 
-                 $imageName = Images::upload($file, self::getCurrentTheme()->getName() . "/img");
+                 $imageName = ImagesManager::upload($file, self::getCurrentTheme()->getName() . "/img");
                  if (!str_contains($imageName, "ERROR")) {
                      $remoteImageValue = ThemeModel::fetchConfigValue($conf);
                      $localImageValue = (new ThemeController())->getCurrentThemeConfigSetting($conf);
 
                      if ($remoteImageValue !== $file && $remoteImageValue !== $localImageValue) {
-                         Images::deleteImage(self::getCurrentTheme()->getName() . "/img/$remoteImageValue");
+                         ImagesManager::deleteImage(self::getCurrentTheme()->getName() . "/img/$remoteImageValue");
                      }
 
                      $this->themeModel->updateThemeConfig($conf, $imageName, self::getCurrentTheme()->getName());

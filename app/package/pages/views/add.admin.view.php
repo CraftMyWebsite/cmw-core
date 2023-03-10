@@ -109,15 +109,16 @@ $description = LangManager::translate("pages.add.desc");
                         uploadByFile(file) {
                         let formData = new FormData();
                         formData.append("file", file, file["name"]);
-                        return fetch("<?php getenv("PATH_SUBFOLDER") ?>admin/resources/vendors/editorjs/upload_file.php", {
+                        return fetch("uploadImage/add", {
                             method:"POST",
                             body:formData
                         }).then(res=>res.json())
                             .then(response => {
+                                console.log("Response:" + response)
                                 return {
                                     success: 1,
                                     file: {
-                                        url: "<?php getenv("PATH_SUBFOLDER")?>public/uploads/"+response
+                                        url: "<?php Utils::getEnv()->getValue("PATH_SUBFOLDER")?>public/uploads/editor/"+response
                                     }
                                 }
                             })
