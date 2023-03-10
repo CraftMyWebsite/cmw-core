@@ -1,8 +1,7 @@
 <?php
 
 namespace CMW\Controller\Users;
-use CMW\Utils\Response;
-use CMW\Manager\Lang\LangManager;
+
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\SecurityController;
 use CMW\Entity\Users\UserEntity;
@@ -14,6 +13,8 @@ use CMW\Model\Users\UsersModel;
 use CMW\Router\Link;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
+use CMW\Manager\Lang\LangManager;
+use CMW\Utils\Response;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
@@ -133,6 +134,22 @@ class UsersController extends CoreController
     }
 
 
+    #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
+    public function adminUsersEdit(int $id): void
+    {
+        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+
+        $userEntity = $this->userModel->getUserById($id);
+
+        $roles = $this->roleModel->getRoles();
+
+        View::createAdminView("users", "user")->addVariableList(array(
+            "user" => $userEntity,
+            "roles" => $roles
+        ))
+            ->view();
+    }
+
     #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users")]
     #[NoReturn] public function adminUsersEditPost(int $id): void
     {
@@ -150,14 +167,13 @@ class UsersController extends CoreController
             if ($pass === $passVerif) {
                 $this->userModel->updatePass($id, password_hash($pass, PASSWORD_BCRYPT));
             } else {
-                //Todo Try to edit that
                 Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.pass_change_faild"));
 
             }
 
         }
 
-        header("location: " . $_SERVER['HTTP_REFERER']);
+        header("location: ../edit/" . $id);
     }
 
 
@@ -190,7 +206,7 @@ class UsersController extends CoreController
 
         $this->userModel->changeState($id, $state);
 
-        Response::sendAlert("success", "Succès","Ok !");
+        Response::sendAlert("success", LangManager::translate("users.toaster.success"),"Ok !");
 
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
@@ -342,7 +358,6 @@ class UsersController extends CoreController
         if(SecurityController::checkCaptcha()) {
         if ($this->userModel->checkPseudo(filter_input(INPUT_POST, "register_pseudo")) > 0) {
             Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.used_pseudo"));
-
             header('Location: register');
         } else if ($this->userModel->checkEmail(filter_input(INPUT_POST, "register_email")) > 0) {
             Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.used_mail"));
@@ -374,6 +389,8 @@ class UsersController extends CoreController
             if ($userId > 0 && $userId !== "ERROR") {
                 $this->userModel->updateLoggedTime($userId);
                 header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
+
+
                 Response::sendAlert("success", LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.welcome"));
 
             }

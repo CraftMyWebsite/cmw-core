@@ -2,7 +2,7 @@
 
 use CMW\Manager\Lang\LangManager;
 use CMW\Utils\Utils;
-
+use CMW\Utils\Response;
 $title = LangManager::translate("pages.edit.title");
 $description = LangManager::translate("pages.edit.desc");
 
@@ -12,7 +12,7 @@ $description = LangManager::translate("pages.edit.desc");
 ?>
 <div class="d-flex flex-wrap justify-content-between">
     <h3><i class="fa-solid fa-file-lines"></i> <span
-                class="m-lg-auto"><?= LangManager::translate("pages.edit.title") ?></span></h3>
+                class="m-lg-auto"><?= LangManager::translate("pages.edit.title") ?> : <?= $page->getTitle() ?></span></h3>
 </div>
 
 <section>
@@ -23,7 +23,7 @@ $description = LangManager::translate("pages.edit.desc");
                     <h6><?= LangManager::translate("pages.title") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
                         <input type="hidden" id="page_id" name="page_id" value="<?= $page->getId() ?>">
-                        <input type="text" class="form-control" name="title" required
+                        <input type="text" class="form-control" id="title" name="title" required
                                placeholder="<?= LangManager::translate("pages.title") ?>" maxlength="255"
                                value="<?= $page->getTitle() ?>">
                         <div class="form-control-icon">
@@ -53,11 +53,131 @@ $description = LangManager::translate("pages.edit.desc");
             <div id="editorjs"></div>
 
             <div class="text-center mt-2">
-                <a class="btn btn-danger"
-                   href="../delete/<?= $page->getId() ?>"><?= LangManager::translate("core.btn.delete") ?></a>
+
                 <button id="saveButton" type="submit"
                         class="btn btn-primary"><?= LangManager::translate("core.btn.edit") ?></button>
             </div>
         </div>
     </div>
 </section>
+
+   <!-- Initialization -->
+    <script>
+    let editor = new EditorJS({
+        placeholder: "Commencez à taper ou cliquez sur le \"+\" pour choisir un bloc à ajouter...",
+        logLevel: "ERROR",
+        readOnly: false,
+        holder: "editorjs",
+        /**
+         * Tools list
+         */
+        tools: {
+            header: {
+                class: Header,
+                config: {
+                    placeholder: "Entrez un titre",
+                    levels: [2, 3, 4],
+                    defaultLevel: 2
+                }  
+            },
+
+            image: {
+                class: ImageTool,
+                config: {
+                    uploader: {
+                        uploadByFile(file) {
+                        let formData = new FormData();
+                        formData.append("file", file, file["name"]);
+                        return fetch("<?php getenv("PATH_SUBFOLDER") ?>admin/resources/vendors/editorjs/upload_file.php", {
+                            method:"POST",
+                            body:formData
+                        }).then(res=>res.json())
+                            .then(response => {
+                                return {
+                                    success: 1,
+                                    file: {
+                                        url: "<?php getenv("PATH_SUBFOLDER")?>public/uploads/"+response
+                                    }
+                                }
+                            })
+                        }
+                    }
+                }
+            },
+            list: List,
+            quote: {
+                class: Quote,
+                config: {
+                    quotePlaceholder: "",
+                    captionPlaceholder: "Auteur",
+                },
+            },
+            warning: Warning,
+            code: editorjsCodeflask,
+            delimiter: Delimiter,
+            table: Table,
+            embed: {
+                class: Embed,
+                config: {
+                    services: {
+                        youtube: true,
+                        coub: true
+                    }
+                }
+            },
+            Marker: Marker,
+            underline: Underline,
+        },
+        defaultBlock: "paragraph",
+        /**
+         * Initial Editor data
+         */
+        data: <?= $page->getContent() ?>,
+        onReady: function(){
+            new Undo({ editor });
+            const undo = new Undo({ editor });
+            new DragDrop(editor);
+        },
+        onChange: function() {}
+    });
+    /**
+     * Saving button
+     */
+    const saveButton = document.getElementById("saveButton");
+    /**
+     * Saving action
+     */
+    saveButton.addEventListener("click", function () {
+        let page_state = 1;
+        if (jQuery("#draft").is(":checked")) {
+            page_state = 2;
+        }
+        editor.save()
+        .then((savedData) => {
+                $.ajax({
+                    url : "<?php getenv("PATH_SUBFOLDER") ?>/cmw-admin/pages/edit",
+                    type : "POST",
+                    data : {
+                        "news_id" : jQuery("#page_id").val(),
+                        "news_title" : jQuery("#title").val(),
+                        "news_slug" : jQuery("#slug").val(),
+                        "news_content" : JSON.stringify(savedData),
+                        "page_state" : page_state
+                    },
+                    success: function (data) {
+                        console.log ("Id :" + jQuery("#page_id").val());
+                        console.log ("Titre :" + jQuery("#title").val());
+                        console.log ("Slug :" + jQuery("#slug").val());
+                        console.log ("Content :" + JSON.stringify(savedData));
+                        console.log ("State :" + page_state);
+                        saveButton.innerHTML = "<i style='color: #16C329;' class='fa-solid fa-check fa-shake'></i> Ok !";
+                        setTimeout(() => { saveButton.innerHTML = "<?= LangManager::translate("core.btn.edit") ?>"; }, 1000);
+                        
+                    }
+                });
+        })
+        .catch((error) => {
+            alert("Page capoute");
+        });
+    });
+    </script>

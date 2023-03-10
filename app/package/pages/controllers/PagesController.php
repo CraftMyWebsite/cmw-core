@@ -11,6 +11,7 @@ use CMW\Router\LinkStorage;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
 use JetBrains\PhpStorm\NoReturn;
+use CMW\Utils\Response;
 
 /**
  * Class: @pagesController
@@ -55,7 +56,7 @@ class PagesController extends CoreController
                 "admin/resources/vendors/editorjs/plugins/delimiter.js",
                 "admin/resources/vendors/editorjs/plugins/list.js",
                 "admin/resources/vendors/editorjs/plugins/quote.js",
-                "admin/resources/vendors/editorjs/plugins/code.js",
+                "admin/resources/vendors/editorjs/plugins/editorjs-codeflask.js",
                 "admin/resources/vendors/editorjs/plugins/table.js",
                 "admin/resources/vendors/editorjs/plugins/link.js",
                 "admin/resources/vendors/editorjs/plugins/warning.js",
@@ -65,9 +66,8 @@ class PagesController extends CoreController
                 "admin/resources/vendors/editorjs/plugins/drag-drop.js",
                 "admin/resources/vendors/editorjs/plugins/undo.js",
                 "admin/resources/vendors/editorjs/editor.js")
+            ->addScriptAfter("admin/resources/vendors/jquery/jquery.min.js")
             ->view();
-
-        include_once (Utils::getEnv()->getValue('DIR') . "app/package/pages/views/assets/js/initEditor.php");
     }
 
     #[Link("/add", Link::POST, [], "/cmw-admin/pages", secure: false)]
@@ -101,8 +101,22 @@ class PagesController extends CoreController
         $page = $this->pagesModel->getPageBySlug($slug);
 
         View::createAdminView('pages', 'edit')
-            ->addStyle("admin/resources/vendors/summernote/summernote-lite.css","admin/resources/assets/css/pages/summernote.css")
-            ->addScriptAfter("admin/resources/vendors/jquery/jquery.min.js","admin/resources/vendors/summernote/summernote-lite.min.js","admin/resources/assets/js/pages/summernote.js")
+            ->addScriptBefore("admin/resources/vendors/editorjs/plugins/header.js",
+                "admin/resources/vendors/editorjs/plugins/image.js",
+                "admin/resources/vendors/editorjs/plugins/delimiter.js",
+                "admin/resources/vendors/editorjs/plugins/list.js",
+                "admin/resources/vendors/editorjs/plugins/quote.js",
+                "admin/resources/vendors/editorjs/plugins/editorjs-codeflask.js",
+                "admin/resources/vendors/editorjs/plugins/table.js",
+                "admin/resources/vendors/editorjs/plugins/link.js",
+                "admin/resources/vendors/editorjs/plugins/warning.js",
+                "admin/resources/vendors/editorjs/plugins/embed.js",
+                "admin/resources/vendors/editorjs/plugins/marker.js",
+                "admin/resources/vendors/editorjs/plugins/underline.js",
+                "admin/resources/vendors/editorjs/plugins/drag-drop.js",
+                "admin/resources/vendors/editorjs/plugins/undo.js",
+                "admin/resources/vendors/editorjs/editor.js")
+            ->addScriptAfter("admin/resources/vendors/jquery/jquery.min.js")
             ->addVariableList(["page" => $page])
             ->view();
     }
@@ -123,6 +137,7 @@ class PagesController extends CoreController
         $pageEntity = $page->updatePage($id, $slug, $title, $content, $state);
 
         echo $pageEntity?->getId() ?? -1;
+
     }
 
     #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/pages")]
@@ -156,8 +171,11 @@ class PagesController extends CoreController
 
         //Include the public view file ("public/themes/$themePath/views/pages/main.view.php")
         $view = new View('pages', 'main');
+        $view->addScriptBefore("admin/resources/vendors/highlight/highlight.min.js","admin/resources/vendors/highlight/highlightAll.js");
+        $view->addStyle("admin/resources/vendors/highlight/rainbow.css");//Can be a choice
         $view->addVariableList( ["pages" => $page, "page" => $pageEntity]);
         $view->view();
+        
     }
 
 

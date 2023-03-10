@@ -2,17 +2,24 @@
 
 return [
 	"add" => [
-		"title" => "Pages | Créer",
+		"title" => "Créer",
 		"desc" => "Créer une nouvelle page",
+		"create" => "Créer pour enregistrer"
 	],
 	"edit" => [
-		"title" => "Pages | Édition",
+		"title" => "Édition",
 		"desc" => "Modifiez votre page",
 	],
+	"delete" => [
+		"message" => "La suppression de cette page est définitive !<br>Aucun retour possible !",
+		"button" => "Supprimer",
+	],
 	"list" => [
-		"title" => "Pages | Liste",
+		"title" => "Liste des pages",
 		"sub_title" => "Pages",
 		"desc" => "Liste des pages du site",
+		"yes" => "Oui",
+		"no" => "Non",
 	],
 	"publish" => "Publication de la page",
 	"draft" => "Brouillon",
@@ -23,6 +30,7 @@ return [
 
 	"creation" => [
 		"date" => "Date de création",
+		"update" => "Date de modification",
 		"add" => "Ajouter une page",
 		"content" => "Contenu",
 	],

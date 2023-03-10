@@ -28,7 +28,7 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                 <div class="col-12 col-lg-6">
                     <h6><?= LangManager::translate("users.users.role") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
-                        <input type="text" class="form-control"
+                        <input type="text" class="form-control" name="name"
                                value="<?= $role->getName() ?>"
                                placeholder="<?= LangManager::translate("users.users.role") ?>" required>
                         <div class="form-control-icon">
@@ -43,7 +43,7 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                            class="fa-sharp fa-solid fa-circle-question"></i>
                     </h6>
                     <div class="form-group position-relative has-icon-left">
-                        <input type="number" class="form-control" value="<?= $role->getWeight() ?>" placeholder="1"
+                        <input type="number" name="weight" class="form-control" value="<?= $role->getWeight() ?>" placeholder="1"
                                required>
                         <div class="form-control-icon">
                             <i class="fa-solid fa-weight-hanging"></i>
@@ -53,7 +53,7 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
             </div>
             <h6><?= LangManager::translate("users.users.role_description") ?> :</h6>
             <div class="form-group position-relative has-icon-left">
-                <input type="text" class="form-control"
+                <input type="text" class="form-control" name="description"
                        value="<?= $role->getDescription() ?>"
                        placeholder="<?= LangManager::translate("users.users.role_description") ?>" required>
                 <div class="form-control-icon">

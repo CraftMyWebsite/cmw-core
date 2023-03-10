@@ -62,7 +62,7 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
 <!--MODAL ADD ROLE -->
 <div class="modal fade modal-xl" id="roleAddModal" tabindex="-1" role="dialog" aria-labelledby="roleAddModalTitle"
      aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-centered" role="document">
         <div class="modal-content">
             <form method="post" action="add">
                 <?php (new SecurityManager())->insertHiddenToken() ?>
@@ -125,7 +125,7 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                         <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
                         <?= LangManager::translate("core.btn.close") ?>
                         </button>
-                        <button type="submit" class="btn btn-primary ml-1" data-bs-dismiss="modal">
+                        <button type="submit" class="btn btn-primary ml-1" >
                             <?= LangManager::translate("core.btn.add") ?>
                         </button>
                     </div>
