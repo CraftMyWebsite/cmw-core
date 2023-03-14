@@ -173,7 +173,7 @@ class PagesController extends CoreController
 
 
         try {
-            print(json_encode(ImagesManager::upload($_FILES['file']['name'], "editor"), JSON_THROW_ON_ERROR));
+            print(json_encode(ImagesManager::upload($_FILES['image'], "editor"), JSON_THROW_ON_ERROR));
         } catch (JsonException $e) {
             echo $e;
         }

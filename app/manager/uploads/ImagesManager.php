@@ -2,6 +2,7 @@
 
 namespace CMW\Manager\Uploads;
 
+use CMW\Utils\Utils;
 use Exception;
 use RuntimeException;
 
@@ -185,21 +186,15 @@ class ImagesManager
             //  \xFF\xE2\xHH\xLLICC_PROFILE  - ICC
             //  \xFF\xED\xHH\xLLPhotoshop    - PH
             while (preg_match('/\xFF[\xE1\xE2\xED\xEE](.)(.)(exif|photoshop|http:|icc_profile|adobe)/si', $buffer, $match, PREG_OFFSET_CAPTURE)) {
-                Utils::debugConsole("found: '{$match[3][0]}' marker\n");
                 $len = ord($match[1][0]) * 256 + ord($match[2][0]);
-
-                Utils::debugConsole("length: $len bytes\n");
-                Utils::debugConsole("write: {$match[0][1]} bytes to output file\n");
 
                 fwrite($fdOut, substr($buffer, 0, $match[0][1]));
                 $filepos = $match[0][1] + 2 + $len - strlen($buffer);
                 fseek($fdIn, $filepos, SEEK_CUR);
 
-                Utils::debugConsole("seek to: " . ftell($fdIn) . "\n");
 
                 $buffer = fread($fdIn, $bufferLen);
             }
-            Utils::debugConsole("write: " . strlen($buffer) . " bytes to output file\n");
             fwrite($fdOut, $buffer, strlen($buffer));
         }
         fclose($fdOut);
