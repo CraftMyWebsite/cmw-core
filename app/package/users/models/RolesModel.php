@@ -116,14 +116,15 @@ class RolesModel extends DatabaseManager
 
     /**
      * @return PermissionEntity[]
+     * @param int $roleId
      */
-    public function getPermissions(int $id): array
+    public function getPermissions(int $roleId): array
     {
         $sql = "SELECT permission_id FROM cmw_roles_permissions WHERE role_id = :role_id";
         $db = self::getInstance();
         $res = $db->prepare($sql);
 
-        if (!$res->execute(array("role_id" => $id))) {
+        if (!$res->execute(array("role_id" => $roleId))) {
             return array();
         }
 

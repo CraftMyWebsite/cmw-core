@@ -79,12 +79,7 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
     const inputs = document.getElementsByClassName("permission-input")
 
     const checkChild = (parentElement) => {
-        const group = parentElement.parentElement.parentElement.parentElement.parentElement
-        const els = group.getElementsByClassName("permission-input")
-        for (const item of els) {
-            item.parentElement.parentElement.parentElement.classList.toggle("d-none")
-        }
-        parentElement.parentElement.parentElement.parentElement.classList.toggle("d-none")
+        parentElement.parentElement.parentElement.children.item(1).classList.toggle("d-none")
     }
 
     for (const inp of inputs) {

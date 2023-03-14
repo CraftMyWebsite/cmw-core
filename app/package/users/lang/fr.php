@@ -31,6 +31,9 @@ return [
         "impossible_user" => "Impossible de supprimé cet utilisateur",
         "user_deleted" => "Utilisateur supprimé",
         "mail_pass_matching" => "Cette combinaison email/mot de passe est erronée",
+        "role_added" => "Rôle ajouté",
+        "role_edit" => "Rôle modifié",
+        "role_deleted" => "Rôle supprimé"
     ],
     "manage" => [
         "title" => "Gestion des utilisateurs",

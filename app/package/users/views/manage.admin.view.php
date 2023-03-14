@@ -27,7 +27,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
                     <?php (new SecurityManager())->insertHiddenToken() ?>
                     <h6><?= LangManager::translate("users.users.mail") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
-                        <input type="email" class="form-control" name="email" required autocomplete="off"
+                        <input type="email" class="form-control" name="email" autocomplete="off"
                                placeholder="<?= LangManager::translate("users.users.mail") ?>" required>
                         <div class="form-control-icon">
                             <i class="fa-solid fa-at"></i>
@@ -35,7 +35,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
                     </div>
                     <h6><?= LangManager::translate("users.users.pseudo") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
-                        <input type="text" class="form-control" name="pseudo" required autocomplete="off"
+                        <input type="text" class="form-control" name="pseudo" autocomplete="off"
                                placeholder="<?= LangManager::translate("users.users.pseudo") ?>" required>
                         <div class="form-control-icon">
                             <i class="fa-solid fa-user"></i>
@@ -44,8 +44,11 @@ $description = LangManager::translate("users.manage.desc"); ?>
                     <h6><?= LangManager::translate("users.users.password") ?> : </h6>
                     <div class="input-group mb-3">
                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                        <input name="password" id="password" type="password" class="form-control" autocomplete="off" aria-describedby="button-generate">
-                        <button onclick="generatePassword('password')" data-bs-toggle="tooltip" id="button-generate" class="btn btn-primary" type="button" title="<?= LangManager::translate('users.manage.randomPasswordTooltip') ?>">
+                        <input name="password" id="password" type="password" class="form-control" autocomplete="off"
+                               aria-describedby="button-generate">
+                        <button onclick="generatePassword('password')" data-bs-toggle="tooltip" id="button-generate"
+                                class="btn btn-primary" type="button"
+                                title="<?= LangManager::translate('users.manage.randomPasswordTooltip') ?>">
                             <i class="fa-solid fa-rotate"></i>
                         </button>
                     </div>
@@ -91,33 +94,39 @@ $description = LangManager::translate("users.manage.desc"); ?>
                             <td><?= $user->getCreated() ?></td>
                             <td><?= $user->getLastConnection() ?></td>
                             <td>
-                                <a class="me-3 " href="/cmw-admin/users/edit/<?= $user->getId() ?>">
+                                <a class="me-3 "
+                                   href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>cmw-admin/users/edit/<?= $user->getId() ?>">
                                     <i class="text-primary fa-solid fa-gears"></i>
                                 </a>
                                 <a type="button" data-bs-toggle="modal" data-bs-target="#delete-<?= $user->getId() ?>">
-                            <i class="text-danger fas fa-trash-alt"></i>
-                        </a>
-                        <div class="modal fade text-left" id="delete-<?= $user->getId() ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-                                <div class="modal-content">
-                                        <div class="modal-header bg-danger">
-                                        <h5 class="modal-title white" id="myModalLabel160">Supprimer <?= $user->getUsername() ?> ?</h5>
-                                    </div>
-                                    <div class="modal-body text-left">
-                                        La suppression de cet utilisateur est définitive !<br>
-                                        Aucun retour possible !
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                                            <span class=""><?= LangManager::translate("core.btn.close") ?></span>
-                                        </button>
-                                        <a href="/cmw-admin/users/delete/<?= $user->getId() ?>" class="btn btn-danger">
-                                            <span class=""><?= LangManager::translate("contact.message.delete") ?></span>
-                                        </a>
+                                    <i class="text-danger fas fa-trash-alt"></i>
+                                </a>
+                                <div class="modal fade text-left" id="delete-<?= $user->getId() ?>" tabindex="-1"
+                                     role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                                         role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-danger">
+                                                <h5 class="modal-title white" id="myModalLabel160">
+                                                    Supprimer <?= $user->getUsername() ?> ?</h5>
+                                            </div>
+                                            <div class="modal-body text-left">
+                                                La suppression de cet utilisateur est définitive !<br>
+                                                Aucun retour possible !
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-light-secondary"
+                                                        data-bs-dismiss="modal">
+                                                    <span class=""><?= LangManager::translate("core.btn.close") ?></span>
+                                                </button>
+                                                <a href="/cmw-admin/users/delete/<?= $user->getId() ?>"
+                                                   class="btn btn-danger">
+                                                    <span class=""><?= LangManager::translate("contact.message.delete") ?></span>
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
                             </td>
                         </tr>
                     <?php endforeach; ?>

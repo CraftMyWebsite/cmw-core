@@ -21585,3 +21585,7 @@ a {
 .z-1 {
     z-index: 1
 }
+
+.perms-child {
+    margin-left: -8px;
+}
