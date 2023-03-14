@@ -155,7 +155,7 @@ class PagesModel extends DatabaseManager
 
     private function translatePage($content): string
     {
-        $content = json_decode($content, false, 512);
+        $content = json_decode($content, false);
 
         $blocks = $content->blocks;
         $convertedHtml = "";
@@ -193,7 +193,7 @@ class PagesModel extends DatabaseManager
                     break;
 
                 case "image":
-                    $src = $block->data->url;
+                    $src = $block->data->file->url;
                     $caption = $block->data->caption;
                     $convertedHtml .=
                         <<<HTML

@@ -3,6 +3,7 @@
 use CMW\Manager\Lang\LangManager;
 use CMW\Utils\Utils;
 use CMW\Utils\Response;
+
 $title = LangManager::translate("pages.edit.title");
 $description = LangManager::translate("pages.edit.desc");
 
@@ -12,7 +13,8 @@ $description = LangManager::translate("pages.edit.desc");
 ?>
 <div class="d-flex flex-wrap justify-content-between">
     <h3><i class="fa-solid fa-file-lines"></i> <span
-                class="m-lg-auto"><?= LangManager::translate("pages.edit.title") ?> : <?= $page->getTitle() ?></span></h3>
+                class="m-lg-auto"><?= LangManager::translate("pages.edit.title") ?> : <?= $page->getTitle() ?></span>
+    </h3>
 </div>
 
 <section>
@@ -44,7 +46,7 @@ $description = LangManager::translate("pages.edit.desc");
             </div>
             <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" id="draft"
-                       name="draft" <?= $page->getState() === 2 ? "checked" : ""; ?>>
+                       name="draft" <?= $page->getState() === 2 ? "checked" : "" ?>>
                 <label class="form-check-label" for="draft"><h6><?= LangManager::translate("pages.draft") ?></h6>
                 </label>
             </div>
@@ -61,8 +63,8 @@ $description = LangManager::translate("pages.edit.desc");
     </div>
 </section>
 
-   <!-- Initialization -->
-    <script>
+<!-- Initialization -->
+<script>
     let editor = new EditorJS({
         placeholder: "Commencez à taper ou cliquez sur le \"+\" pour choisir un bloc à ajouter...",
         logLevel: "ERROR",
@@ -78,7 +80,7 @@ $description = LangManager::translate("pages.edit.desc");
                     placeholder: "Entrez un titre",
                     levels: [2, 3, 4],
                     defaultLevel: 2
-                }  
+                }
             },
 
             image: {
@@ -86,20 +88,20 @@ $description = LangManager::translate("pages.edit.desc");
                 config: {
                     uploader: {
                         uploadByFile(file) {
-                        let formData = new FormData();
-                        formData.append("file", file, file["name"]);
-                        return fetch("<?php getenv("PATH_SUBFOLDER") ?>admin/resources/vendors/editorjs/upload_file.php", {
-                            method:"POST",
-                            body:formData
-                        }).then(res=>res.json())
-                            .then(response => {
-                                return {
-                                    success: 1,
-                                    file: {
-                                        url: "<?php getenv("PATH_SUBFOLDER")?>public/uploads/"+response
+                            let formData = new FormData();
+                            formData.append("image", file);
+                            return fetch("<?= Utils::getEnv()->getValue("PATH_SUBFOLDER")?>cmw-admin/pages/uploadImage/edit", {
+                                method: "POST",
+                                body: formData
+                            }).then(res => res.json())
+                                .then(response => {
+                                    return {
+                                        success: 1,
+                                        file: {
+                                            url: "<?= Utils::getEnv()->getValue("PATH_URL")?>public/uploads/editor/" + response
+                                        }
                                     }
-                                }
-                            })
+                                })
                         }
                     }
                 }
@@ -133,12 +135,13 @@ $description = LangManager::translate("pages.edit.desc");
          * Initial Editor data
          */
         data: <?= $page->getContent() ?>,
-        onReady: function(){
-            new Undo({ editor });
-            const undo = new Undo({ editor });
+        onReady: function () {
+            new Undo({editor});
+            const undo = new Undo({editor});
             new DragDrop(editor);
         },
-        onChange: function() {}
+        onChange: function () {
+        }
     });
     /**
      * Saving button
@@ -153,31 +156,33 @@ $description = LangManager::translate("pages.edit.desc");
             page_state = 2;
         }
         editor.save()
-        .then((savedData) => {
+            .then((savedData) => {
                 $.ajax({
-                    url : "<?php getenv("PATH_SUBFOLDER") ?>/cmw-admin/pages/edit",
-                    type : "POST",
-                    data : {
-                        "news_id" : jQuery("#page_id").val(),
-                        "news_title" : jQuery("#title").val(),
-                        "news_slug" : jQuery("#slug").val(),
-                        "news_content" : JSON.stringify(savedData),
-                        "page_state" : page_state
+                    url: "<?= Utils::getEnv()->getValue("PATH_SUBFOLDER") ?>//cmw-admin/pages/edit",
+                    type: "POST",
+                    data: {
+                        "news_id": jQuery("#page_id").val(),
+                        "news_title": jQuery("#title").val(),
+                        "news_slug": jQuery("#slug").val(),
+                        "news_content": JSON.stringify(savedData),
+                        "page_state": page_state
                     },
                     success: function (data) {
-                        console.log ("Id :" + jQuery("#page_id").val());
-                        console.log ("Titre :" + jQuery("#title").val());
-                        console.log ("Slug :" + jQuery("#slug").val());
-                        console.log ("Content :" + JSON.stringify(savedData));
-                        console.log ("State :" + page_state);
+                        console.log("Id :" + jQuery("#page_id").val());
+                        console.log("Titre :" + jQuery("#title").val());
+                        console.log("Slug :" + jQuery("#slug").val());
+                        console.log("Content :" + JSON.stringify(savedData));
+                        console.log("State :" + page_state);
                         saveButton.innerHTML = "<i style='color: #16C329;' class='fa-solid fa-check fa-shake'></i> Ok !";
-                        setTimeout(() => { saveButton.innerHTML = "<?= LangManager::translate("core.btn.edit") ?>"; }, 1000);
-                        
+                        setTimeout(() => {
+                            saveButton.innerHTML = "<?= LangManager::translate("core.btn.edit") ?>";
+                        }, 1000);
+
                     }
                 });
-        })
-        .catch((error) => {
-            alert("Page capoute");
-        });
+            })
+            .catch((error) => {
+                alert("Page capoute");
+            });
     });
-    </script>
+</script>

@@ -4,10 +4,10 @@ namespace CMW\Controller\Users;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Uploads\ImagesManager;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Users\UsersSettingsModel;
 use CMW\Router\Link;
-use CMW\Utils\Images;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
@@ -51,7 +51,7 @@ class UsersSettingsController extends CoreController
         if($_FILES['defaultPicture']['name'] !== "" ) {
             $defaultPicture = $_FILES['defaultPicture'];
 
-            $newDefaultImage = Images::upload($defaultPicture, "users/default");
+            $newDefaultImage = ImagesManager::upload($defaultPicture, "users/default");
 
             UsersSettingsModel::updateSetting("defaultImage", $newDefaultImage);
         }

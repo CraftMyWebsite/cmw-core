@@ -5,10 +5,11 @@ namespace CMW\Controller\Core;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Api\APIManager;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Updater\UpdatesManager;
+use CMW\Manager\Uploads\ImagesManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Router\Link;
 use CMW\Router\RouterException;
-use CMW\Utils\Images;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
@@ -87,7 +88,7 @@ class CoreController
 
         //update favicon
 
-        echo Images::upload($_FILES['favicon'], "favicon", false, "favicon");
+        echo ImagesManager::upload($_FILES['favicon'], "favicon", false, "favicon");
 
         Response::sendAlert("success", LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
@@ -175,7 +176,7 @@ class CoreController
      */
     public function cmwFooter(): string
     {
-        $version = Utils::getVersion();
+        $version = UpdatesManager::getVersion();
         //Todo Set that in lang
         return <<<HTML
             <p>Un site fièrement propulsé par <a href='https://craftmywebsite.fr/'>CraftMyWebsite $version</a></p>

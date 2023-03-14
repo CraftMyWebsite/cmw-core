@@ -4,6 +4,7 @@ namespace CMW\Controller\pages;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Uploads\ImagesManager;
 use CMW\Model\Pages\PagesModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Router\Link;
@@ -12,6 +13,7 @@ use CMW\Utils\Utils;
 use CMW\Utils\View;
 use JetBrains\PhpStorm\NoReturn;
 use CMW\Utils\Response;
+use JsonException;
 
 /**
  * Class: @pagesController
@@ -153,6 +155,29 @@ class PagesController extends CoreController
         $_SESSION['toaster'][0]['body'] = "CORE_TOASTER_DELETE_SUCCESS";
 
         header("location: ../list");
+    }
+
+    /**
+     * @param string $type => add, edit
+     * @return void
+     */
+    #[Link("/uploadImage/:type", Link::POST, ["type" => ".*?"], "/cmw-admin/pages", secure: false)]
+    public function adminPagesUploadImagePost(string $type): void
+    {
+
+        if ($type === "add") {
+            UsersController::hasPermission("core.dashboard", "pages.add");
+        } else {
+            UsersController::hasPermission("core.dashboard", "pages.edit");
+        }
+
+
+        try {
+            print(json_encode(ImagesManager::upload($_FILES['image'], "editor"), JSON_THROW_ON_ERROR));
+        } catch (JsonException $e) {
+            echo $e;
+        }
+
     }
 
 

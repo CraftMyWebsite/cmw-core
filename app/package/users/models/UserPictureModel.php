@@ -4,7 +4,7 @@ namespace CMW\Model\Users;
 
 use CMW\Entity\Users\UserPictureEntity;
 use CMW\Manager\Database\DatabaseManager;
-use CMW\Utils\Images;
+use CMW\Manager\Uploads\ImagesManager;
 use CMW\Utils\Utils;
 use Exception;
 
@@ -34,7 +34,7 @@ class UserPictureModel extends DatabaseManager
 
 
         //Upload image on the server
-        $imageName = Images::upload($image, 'users');
+        $imageName = ImagesManager::upload($image, 'users');
 
         $sql = "INSERT INTO cmw_users_pictures (users_pictures_user_id, users_pictures_image_name) VALUES (:userId, :imageName)";
         $db = self::getInstance();
@@ -85,11 +85,11 @@ class UserPictureModel extends DatabaseManager
 
         //Delete older image if this isn't the default image
         if (!$this->userHasDefaultImage($userId)) {
-            Images::deleteImage($olderImageName, 'users');
+            ImagesManager::deleteImage($olderImageName, 'users');
         }
 
         //Upload image on the server
-        $imageName = Images::upload($image, 'users');
+        $imageName = ImagesManager::upload($image, 'users');
 
 
         $sql = "UPDATE cmw_users_pictures SET users_pictures_image_name = :imageName, 
@@ -134,7 +134,7 @@ class UserPictureModel extends DatabaseManager
 
         $imageName = $this->getImageByUserId($userId)->getImageName();
 
-        Images::deleteImage($imageName, "users");
+        ImagesManager::deleteImage($imageName, "users");
 
         $sql = "DELETE FROM cmw_users_pictures WHERE users_pictures_user_id = :userId";
         $db = self::getInstance();

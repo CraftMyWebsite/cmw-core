@@ -11,79 +11,82 @@ $description = LangManager::translate("pages.add.desc");
                 class="m-lg-auto"><?= LangManager::translate("pages.add.title") ?></span></h3>
 </div>
 
-    
+
 <section>
     <div class="card">
         <div class="card-body">
             <form>
-            <div class="row">
-                <div class="col-12 col-lg-6">
-                    <h6><?= LangManager::translate("pages.title") ?> :</h6>
-                    <div class="form-group position-relative has-icon-left">
-                        <input type="hidden" id="page_id" name="page_id">
-                        <input type="text" class="form-control" id="title" required
-                               placeholder="<?= LangManager::translate("pages.title") ?>" maxlength="255">
-                        <div class="form-control-icon">
-                            <i class="fas fa-heading"></i>
+                <div class="row">
+                    <div class="col-12 col-lg-6">
+                        <h6><?= LangManager::translate("pages.title") ?> :</h6>
+                        <div class="form-group position-relative has-icon-left">
+                            <input type="hidden" id="page_id" name="page_id">
+                            <input type="text" class="form-control" id="title" required
+                                   placeholder="<?= LangManager::translate("pages.title") ?>" maxlength="255">
+                            <div class="form-control-icon">
+                                <i class="fas fa-heading"></i>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-12 col-lg-6">
-                    <h6>URL :</h6>
-                    <div class="input-group mb-3">
+                    <div class="col-12 col-lg-6">
+                        <h6>URL :</h6>
+                        <div class="input-group mb-3">
                         <span class="input-group-text"
                               id="inputGroup-sizing-default"><?= Utils::getHttpProtocol() . '://' . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . "p/" ?></span>
-                        <input type="text" id="slug" class="form-control" placeholder="<?= LangManager::translate("pages.link") ?>"
-                               aria-label="Slug" aria-describedby="inputGroup-sizing-default" name="news_slug" required>
+                            <input type="text" id="slug" class="form-control"
+                                   placeholder="<?= LangManager::translate("pages.link") ?>"
+                                   aria-label="Slug" aria-describedby="inputGroup-sizing-default" name="news_slug"
+                                   required>
+                        </div>
+
                     </div>
-
                 </div>
-            </div>
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="draft" name="draft">
-                <label class="form-check-label" for="draft"><h6><?= LangManager::translate("pages.draft") ?></h6>
-                </label>
-            </div>
-            <h6><?= LangManager::translate("pages.creation.content") ?> :</h6>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="draft" name="draft">
+                    <label class="form-check-label" for="draft"><h6><?= LangManager::translate("pages.draft") ?></h6>
+                    </label>
+                </div>
+                <h6><?= LangManager::translate("pages.creation.content") ?> :</h6>
 
-            <div>
-                <div class="card-in-card" id="editorjs"></div>
-            </div>
+                <div>
+                    <div class="card-in-card" id="editorjs"></div>
+                </div>
 
-            <div class="text-center mt-2">
-                <button id="saveButton" type="submit" disabled="disabled" class="btn btn-primary"><i class="fa-solid fa-spinner fa-spin-pulse"></i> <?= LangManager::translate("pages.add.create") ?></button>
-            </div>
-        </form>
+                <div class="text-center mt-2">
+                    <button id="saveButton" type="submit" disabled="disabled" class="btn btn-primary"><i
+                                class="fa-solid fa-spinner fa-spin-pulse"></i> <?= LangManager::translate("pages.add.create") ?>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </section>
 
 
-
-
-    <!-- Initialization -->
-    <script>
-        /**
-         * Check inpt befor send
-         */
+<!-- Initialization -->
+<script>
+    /**
+     * Check inpt befor send
+     */
     let input_title = document.querySelector("#title");
     let input_slug = document.querySelector("#slug");
     let button = document.querySelector("#saveButton");
     input_title.addEventListener("change", stateHandle);
     input_slug.addEventListener("change", stateHandle);
+
     function stateHandle() {
-     if (document.querySelector("#title").value !="" && document.querySelector("#slug").value !="") {
-      button.disabled = false;
-      button.innerHTML = "<?= LangManager::translate("core.btn.add") ?>";
-     }
-     else {
-      button.disabled = true;
-      button.innerHTML = "<i class='fa-solid fa-spinner fa-spin-pulse'></i> <?= LangManager::translate("pages.add.create") ?>";
-     }
+        if (document.querySelector("#title").value != "" && document.querySelector("#slug").value != "") {
+            button.disabled = false;
+            button.innerHTML = "<?= LangManager::translate("core.btn.add") ?>";
+        } else {
+            button.disabled = true;
+            button.innerHTML = "<i class='fa-solid fa-spinner fa-spin-pulse'></i> <?= LangManager::translate("pages.add.create") ?>";
+        }
     }
+
     /**
-    * EditorJS
-    */
+     * EditorJS
+     */
     let editor = new EditorJS({
         placeholder: "Commencez à taper ou cliquez sur le \"+\" pour choisir un bloc à ajouter...",
         logLevel: "ERROR",
@@ -99,7 +102,7 @@ $description = LangManager::translate("pages.add.desc");
                     placeholder: "Entrez un titre",
                     levels: [2, 3, 4],
                     defaultLevel: 2
-                }  
+                }
             },
 
             image: {
@@ -107,20 +110,20 @@ $description = LangManager::translate("pages.add.desc");
                 config: {
                     uploader: {
                         uploadByFile(file) {
-                        let formData = new FormData();
-                        formData.append("file", file, file["name"]);
-                        return fetch("<?php getenv("PATH_SUBFOLDER") ?>admin/resources/vendors/editorjs/upload_file.php", {
-                            method:"POST",
-                            body:formData
-                        }).then(res=>res.json())
-                            .then(response => {
-                                return {
-                                    success: 1,
-                                    file: {
-                                        url: "<?php getenv("PATH_SUBFOLDER")?>public/uploads/"+response
+                            let formData = new FormData();
+                            formData.append('image', file);
+                            return fetch("<?= Utils::getEnv()->getValue("PATH_SUBFOLDER")?>cmw-admin/pages/uploadImage/add", {
+                                method: "POST",
+                                body: formData
+                            }).then(res => res.json())
+                                .then(response => {
+                                    return {
+                                        success: 1,
+                                        file: {
+                                            url: "<?= Utils::getEnv()->getValue("PATH_URL")?>public/uploads/editor/" + response
+                                        }
                                     }
-                                }
-                            })
+                                })
                         }
                     }
                 }
@@ -154,12 +157,13 @@ $description = LangManager::translate("pages.add.desc");
          * Initial Editor data
          */
         data: {},
-        onReady: function(){
-            new Undo({ editor });
-            const undo = new Undo({ editor });
+        onReady: function () {
+            new Undo({editor});
+            const undo = new Undo({editor});
             new DragDrop(editor);
         },
-        onChange: function() {}
+        onChange: function () {
+        }
     });
     /**
      * Saving button
@@ -174,49 +178,48 @@ $description = LangManager::translate("pages.add.desc");
             page_state = 2;
         }
         editor.save()
-        .then((savedData) => {
-            if(jQuery("#page_id").val()) {
-                $.ajax({
-                    url : "<?php getenv("PATH_SUBFOLDER") ?>/cmw-admin/pages/edit",
-                    type : "POST",
-                    data : {
-                        "news_id" : jQuery("#page_id").val(),
-                        "news_title" : jQuery("#title").val(),
-                        "news_slug" : jQuery("#slug").val(),
-                        "news_content" : JSON.stringify(savedData),
-                        "page_state" : page_state
-                    },
-                    success: function (data) {
-                        console.log ("Id :" + jQuery("#page_id").val());
-                        console.log ("Titre :" + jQuery("#title").val());
-                        console.log ("Slug :" + jQuery("#slug").val());
-                        console.log ("Content :" + JSON.stringify(savedData));
-                        console.log ("State :" + page_state);
-                    }
-                });
-            }
-            else {
-                $.ajax({
-                    url : "<?php getenv("PATH_SUBFOLDER") ?>/cmw-admin/pages/add",
-                    type : "POST",
-                    data : {
-                        "news_title" : jQuery("#title").val(),
-                        "news_slug" : jQuery("#slug").val(),
-                        "news_content" : JSON.stringify(savedData),
-                        "page_state" : page_state
-                    },
-                    success: function (data) {
-                        jQuery("#page_id").val(data);
-                        console.log ("Titre :" + jQuery("#title").val());
-                        console.log ("Slug :" + jQuery("#slug").val());
-                        console.log ("Content :" + JSON.stringify(savedData));
-                        console.log ("State :" + page_state);
-                    }
-                });
-            }
-        })
-        .catch((error) => {
-            alert("Page capoute");
-        });
+            .then((savedData) => {
+                if (jQuery("#page_id").val()) {
+                    $.ajax({
+                        url: "<?= Utils::getEnv()->getValue("PATH_SUBFOLDER") ?>/cmw-admin/pages/edit",
+                        type: "POST",
+                        data: {
+                            "news_id": jQuery("#page_id").val(),
+                            "news_title": jQuery("#title").val(),
+                            "news_slug": jQuery("#slug").val(),
+                            "news_content": JSON.stringify(savedData),
+                            "page_state": page_state
+                        },
+                        success: function (data) {
+                            console.log("Id :" + jQuery("#page_id").val());
+                            console.log("Titre :" + jQuery("#title").val());
+                            console.log("Slug :" + jQuery("#slug").val());
+                            console.log("Content :" + JSON.stringify(savedData));
+                            console.log("State :" + page_state);
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: "<?= Utils::getEnv()->getValue("PATH_SUBFOLDER") ?>/cmw-admin/pages/add",
+                        type: "POST",
+                        data: {
+                            "news_title": jQuery("#title").val(),
+                            "news_slug": jQuery("#slug").val(),
+                            "news_content": JSON.stringify(savedData),
+                            "page_state": page_state
+                        },
+                        success: function (data) {
+                            jQuery("#page_id").val(data);
+                            console.log("Titre :" + jQuery("#title").val());
+                            console.log("Slug :" + jQuery("#slug").val());
+                            console.log("Content :" + JSON.stringify(savedData));
+                            console.log("State :" + page_state);
+                        }
+                    });
+                }
+            })
+            .catch((error) => {
+                alert("Page capoute");
+            });
     });
-    </script>
+</script>
