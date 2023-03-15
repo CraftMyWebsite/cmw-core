@@ -53,7 +53,10 @@ class RolesController extends CoreController
 
 
         View::createAdminView("users", "roles")
-            ->addScriptBefore("app/package/users/views/assets/js/manageRoles.js")
+            ->addScriptBefore("app/package/users/views/assets/js/manageRoles.js",
+                "admin/resources/vendors/iziToast/iziToast.min.js",
+                "app/package/users/views/assets/js/rolesWeights.js")
+            ->addStyle("admin/resources/vendors/iziToast/iziToast.min.css")
             ->addVariableList(["rolesList" => $rolesList, "permissionController" => $permissionController,
                 "permissionModel" => $permissionModel, "rolesModel" => $rolesModel])
             ->view();
@@ -174,6 +177,41 @@ class RolesController extends CoreController
             "description" => $role?->getDescription(),
             "permissions" => $rolePermissions
         ];
+
+        try {
+            print_r(json_encode($data, JSON_THROW_ON_ERROR));
+        } catch (JsonException) {
+            print("ERROR");
+        }
+    }
+
+    #[Link("/getRoles", Link::GET, [], "/cmw-admin/roles")]
+    public function admingGetRoles(): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
+
+        $roles = $this->roleModel->getRoles();
+
+        $rolePermissions = [];
+        $data = [];
+
+        foreach ($roles as $role):
+
+            foreach ($role?->getPermissions() as $permission) {
+                if ($permission->hasParent()) {
+                    $rolePermissions[$permission->getId()] = $permission->getParent()?->getCode();
+                }
+                $rolePermissions[$permission->getId()] = $permission->getCode();
+            }
+
+            $data[$role?->getId()] = [
+                "name" => $role?->getName(),
+                "weight" => $role?->getWeight(),
+                "description" => $role?->getDescription(),
+                "permissions" => $rolePermissions
+            ];
+
+        endforeach;
 
         try {
             print_r(json_encode($data, JSON_THROW_ON_ERROR));

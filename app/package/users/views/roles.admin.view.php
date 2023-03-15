@@ -94,7 +94,9 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                                    class="fa-sharp fa-solid fa-circle-question"></i>
                             </h6>
                             <div class="form-group position-relative has-icon-left">
-                                <input type="number" name="weight" class="form-control" placeholder="1" required>
+                                <input type="number" name="weight" class="form-control"
+                                       onkeyup="checkIfWeightsIsAlreadyTaken(this.value)"
+                                       placeholder="1" required>
                                 <div class="form-control-icon">
                                     <i class="fa-solid fa-weight-hanging"></i>
                                 </div>
