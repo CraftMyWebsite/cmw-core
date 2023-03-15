@@ -95,6 +95,7 @@ class APIManager
 
         $curlHandle = self::generateHeader($url, $secure);
 
+        curl_setopt($curlHandle, CURLOPT_TIMEOUT, 3); // 3sec timeout
         $response = curl_exec($curlHandle);
         curl_close($curlHandle);
         return $response;
