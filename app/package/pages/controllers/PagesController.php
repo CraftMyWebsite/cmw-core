@@ -68,7 +68,6 @@ class PagesController extends CoreController
                 "admin/resources/vendors/editorjs/plugins/drag-drop.js",
                 "admin/resources/vendors/editorjs/plugins/undo.js",
                 "admin/resources/vendors/editorjs/editor.js")
-            ->addScriptAfter("admin/resources/vendors/jquery/jquery.min.js")
             ->view();
     }
 
@@ -76,9 +75,8 @@ class PagesController extends CoreController
     public function adminPagesAddPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.add");
-
         $user = new UsersModel();
-
+        
         $page = new PagesModel();
         $pageTitle = filter_input(INPUT_POST, "news_title");
         $pageSlug = Utils::normalizeForSlug(filter_input(INPUT_POST, "news_slug"));
@@ -118,7 +116,6 @@ class PagesController extends CoreController
                 "admin/resources/vendors/editorjs/plugins/drag-drop.js",
                 "admin/resources/vendors/editorjs/plugins/undo.js",
                 "admin/resources/vendors/editorjs/editor.js")
-            ->addScriptAfter("admin/resources/vendors/jquery/jquery.min.js")
             ->addVariableList(["page" => $page])
             ->view();
     }

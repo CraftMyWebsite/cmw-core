@@ -15,7 +15,7 @@ $description = LangManager::translate("pages.add.desc");
 <section>
     <div class="card">
         <div class="card-body">
-            <form>
+
                 <div class="row">
                     <div class="col-12 col-lg-6">
                         <h6><?= LangManager::translate("pages.title") ?> :</h6>
@@ -57,7 +57,6 @@ $description = LangManager::translate("pages.add.desc");
                                 class="fa-solid fa-spinner fa-spin-pulse"></i> <?= LangManager::translate("pages.add.create") ?>
                     </button>
                 </div>
-            </form>
         </div>
     </div>
 </section>
@@ -174,52 +173,35 @@ $description = LangManager::translate("pages.add.desc");
      */
     saveButton.addEventListener("click", function () {
         let page_state = 1;
-        if (jQuery("#draft").is(":checked")) {
+        if (document.getElementById("draft").checked) {
             page_state = 2;
         }
         editor.save()
             .then((savedData) => {
-                if (jQuery("#page_id").val()) {
-                    $.ajax({
-                        url: "<?= Utils::getEnv()->getValue("PATH_SUBFOLDER") ?>/cmw-admin/pages/edit",
-                        type: "POST",
-                        data: {
-                            "news_id": jQuery("#page_id").val(),
-                            "news_title": jQuery("#title").val(),
-                            "news_slug": jQuery("#slug").val(),
-                            "news_content": JSON.stringify(savedData),
-                            "page_state": page_state
-                        },
-                        success: function (data) {
-                            console.log("Id :" + jQuery("#page_id").val());
-                            console.log("Titre :" + jQuery("#title").val());
-                            console.log("Slug :" + jQuery("#slug").val());
-                            console.log("Content :" + JSON.stringify(savedData));
-                            console.log("State :" + page_state);
-                        }
-                    });
-                } else {
-                    $.ajax({
-                        url: "<?= Utils::getEnv()->getValue("PATH_SUBFOLDER") ?>/cmw-admin/pages/add",
-                        type: "POST",
-                        data: {
-                            "news_title": jQuery("#title").val(),
-                            "news_slug": jQuery("#slug").val(),
-                            "news_content": JSON.stringify(savedData),
-                            "page_state": page_state
-                        },
-                        success: function (data) {
-                            jQuery("#page_id").val(data);
-                            console.log("Titre :" + jQuery("#title").val());
-                            console.log("Slug :" + jQuery("#slug").val());
-                            console.log("Content :" + JSON.stringify(savedData));
-                            console.log("State :" + page_state);
-                        }
-                    });
-                }
+
+                let formData = new FormData();
+                formData.append('news_title', document.getElementById("title").value);
+                formData.append('news_slug', document.getElementById("slug").value);
+                formData.append('news_content', JSON.stringify(savedData));
+                formData.append('page_state', page_state.toString());
+
+                fetch("<?= Utils::getEnv()->getValue("PATH_URL") ?>cmw-admin/pages/add", {
+                    method: "POST",
+                    body: formData
+                })
+
+                button.disabled = true;
+                button.innerHTML = "<i class='fa-solid fa-spinner fa-spin-pulse'></i> Enregistrement en cours ...";
+                setTimeout(() => {
+                            button.innerHTML = "<i style='color: #16C329;' class='fa-solid fa-check fa-shake'></i> Ok !";
+                        }, 850);
+                setTimeout(() => {
+                            document.location.replace("<?= Utils::getHttpProtocol() . '://' . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . 'cmw-admin/pages/list'?>");
+                        }, 1000);
+                
             })
             .catch((error) => {
-                alert("Page capoute");
+                alert("Error : " + error);
             });
     });
 </script>
