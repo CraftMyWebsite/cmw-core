@@ -4,6 +4,7 @@ namespace CMW\Controller\pages;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Uploads\ImagesManager;
 use CMW\Model\Pages\PagesModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Router\Link;
@@ -11,6 +12,8 @@ use CMW\Router\LinkStorage;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
 use JetBrains\PhpStorm\NoReturn;
+use CMW\Utils\Response;
+use JsonException;
 
 /**
  * Class: @pagesController
@@ -55,7 +58,7 @@ class PagesController extends CoreController
                 "admin/resources/vendors/editorjs/plugins/delimiter.js",
                 "admin/resources/vendors/editorjs/plugins/list.js",
                 "admin/resources/vendors/editorjs/plugins/quote.js",
-                "admin/resources/vendors/editorjs/plugins/code.js",
+                "admin/resources/vendors/editorjs/plugins/editorjs-codeflask.js",
                 "admin/resources/vendors/editorjs/plugins/table.js",
                 "admin/resources/vendors/editorjs/plugins/link.js",
                 "admin/resources/vendors/editorjs/plugins/warning.js",
@@ -66,17 +69,14 @@ class PagesController extends CoreController
                 "admin/resources/vendors/editorjs/plugins/undo.js",
                 "admin/resources/vendors/editorjs/editor.js")
             ->view();
-
-        include_once (Utils::getEnv()->getValue('DIR') . "app/package/pages/views/assets/js/initEditor.php");
     }
 
     #[Link("/add", Link::POST, [], "/cmw-admin/pages", secure: false)]
     public function adminPagesAddPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.add");
-
         $user = new UsersModel();
-
+        
         $page = new PagesModel();
         $pageTitle = filter_input(INPUT_POST, "news_title");
         $pageSlug = Utils::normalizeForSlug(filter_input(INPUT_POST, "news_slug"));
@@ -101,8 +101,21 @@ class PagesController extends CoreController
         $page = $this->pagesModel->getPageBySlug($slug);
 
         View::createAdminView('pages', 'edit')
-            ->addStyle("admin/resources/vendors/summernote/summernote-lite.css","admin/resources/assets/css/pages/summernote.css")
-            ->addScriptAfter("admin/resources/vendors/jquery/jquery.min.js","admin/resources/vendors/summernote/summernote-lite.min.js","admin/resources/assets/js/pages/summernote.js")
+            ->addScriptBefore("admin/resources/vendors/editorjs/plugins/header.js",
+                "admin/resources/vendors/editorjs/plugins/image.js",
+                "admin/resources/vendors/editorjs/plugins/delimiter.js",
+                "admin/resources/vendors/editorjs/plugins/list.js",
+                "admin/resources/vendors/editorjs/plugins/quote.js",
+                "admin/resources/vendors/editorjs/plugins/editorjs-codeflask.js",
+                "admin/resources/vendors/editorjs/plugins/table.js",
+                "admin/resources/vendors/editorjs/plugins/link.js",
+                "admin/resources/vendors/editorjs/plugins/warning.js",
+                "admin/resources/vendors/editorjs/plugins/embed.js",
+                "admin/resources/vendors/editorjs/plugins/marker.js",
+                "admin/resources/vendors/editorjs/plugins/underline.js",
+                "admin/resources/vendors/editorjs/plugins/drag-drop.js",
+                "admin/resources/vendors/editorjs/plugins/undo.js",
+                "admin/resources/vendors/editorjs/editor.js")
             ->addVariableList(["page" => $page])
             ->view();
     }
@@ -123,6 +136,7 @@ class PagesController extends CoreController
         $pageEntity = $page->updatePage($id, $slug, $title, $content, $state);
 
         echo $pageEntity?->getId() ?? -1;
+
     }
 
     #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/pages")]
@@ -138,6 +152,29 @@ class PagesController extends CoreController
         $_SESSION['toaster'][0]['body'] = "CORE_TOASTER_DELETE_SUCCESS";
 
         header("location: ../list");
+    }
+
+    /**
+     * @param string $type => add, edit
+     * @return void
+     */
+    #[Link("/uploadImage/:type", Link::POST, ["type" => ".*?"], "/cmw-admin/pages", secure: false)]
+    public function adminPagesUploadImagePost(string $type): void
+    {
+
+        if ($type === "add") {
+            UsersController::hasPermission("core.dashboard", "pages.add");
+        } else {
+            UsersController::hasPermission("core.dashboard", "pages.edit");
+        }
+
+
+        try {
+            print(json_encode(ImagesManager::upload($_FILES['image'], "editor"), JSON_THROW_ON_ERROR));
+        } catch (JsonException $e) {
+            echo $e;
+        }
+
     }
 
 
@@ -156,8 +193,11 @@ class PagesController extends CoreController
 
         //Include the public view file ("public/themes/$themePath/views/pages/main.view.php")
         $view = new View('pages', 'main');
+        $view->addScriptBefore("admin/resources/vendors/highlight/highlight.min.js","admin/resources/vendors/highlight/highlightAll.js");
+        $view->addStyle("admin/resources/vendors/highlight/rainbow.css");//Can be a choice
         $view->addVariableList( ["pages" => $page, "page" => $pageEntity]);
         $view->view();
+        
     }
 
 
