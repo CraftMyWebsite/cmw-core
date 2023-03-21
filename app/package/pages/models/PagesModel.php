@@ -164,7 +164,7 @@ class PagesModel extends DatabaseManager
                 case "header":
                     $level = $block->data->level;
                     $text = $block->data->text;
-                    $convertedHtml .= "<h$level>$text</h$level>";
+                    $convertedHtml .= "<h$level class='editor_h$level'>$text</h$level>";
                     break;
 
                 case "embed":
@@ -181,14 +181,14 @@ class PagesModel extends DatabaseManager
                     $text = $block->data->text;
                     $convertedHtml .=
                         <<<HTML
-                            <p>$text</p>
+                            <p class='editor_p'>$text</p>
                         HTML;
                     break;
 
                 case "delimiter":
                     $convertedHtml .=
                         <<<HTML
-                            <br>
+                            <hr class='editor_hr'>
                         HTML;
                     break;
 
@@ -197,16 +197,16 @@ class PagesModel extends DatabaseManager
                     $caption = $block->data->caption;
                     $convertedHtml .=
                         <<<HTML
-                            <img class="img-fluid" src="$src" title="$caption" alt="$caption" /><br /><em>$caption</em>
+                            <img class="editor_img" src="$src" title="$caption" alt="$caption" /><br /><em>$caption</em>
                         HTML;
                     break;
 
                 case "list":
-                    $convertedHtml .= ($block->data->style === "unordered") ? "<ul>" : "<ol>";
+                    $convertedHtml .= ($block->data->style === "unordered") ? "<ul class='editor_ul' style='list-style-type: disc'>" : "<ol class='editor_ol' style='list-style-type: decimal'>";
                     foreach ($block->data->items as $item) {
                         $convertedHtml .=
                             <<<HTML
-                                <li>$item</li>
+                                <li class='editor_li'>$item</li>
                             HTML;
                     }
                     $convertedHtml .= ($block->data->style === "unordered") ? "</ul>" : "</ol>";
@@ -217,20 +217,21 @@ class PagesModel extends DatabaseManager
                     $caption = $block->data->caption;
                     $convertedHtml .=
                         <<<HTML
-                            <figure>
-                                <blockquote>
-                                    <p>$text</p> 
+                            <figure class='editor_figure'>
+                                <blockquote class='editor_blockquote'>
+                                    <p class='editor_p'>$text</p> 
                                 </blockquote>
-                                <figcaption>$caption</figcaption>
+                                <figcaption class='editor_figcaption'>$caption</figcaption>
                             </figure>
                         HTML;
                     break;
 
                 case "code":
                     $text = $block->data->code;
+                    $language = $block->data->language;
                     $convertedHtml .=
                         <<<HTML
-                            <pre>
+                            <pre class='language-$language'>
                                 <code>$text</code>
                             </pre>
                         HTML;
@@ -241,12 +242,12 @@ class PagesModel extends DatabaseManager
                     $message = $block->data->message;
                     $convertedHtml .=
                         <<<HTML
-                            <div class="warning">
-                                <div class="warning-title">
-                                    <p>$title</p>
+                            <div class="editor_warning">
+                                <div class="editor_warning-title">
+                                    <p class='editor_p'>$title</p>
                                 </div>
-                                <div class="warning-content">
-                                    <p>$message</p>
+                                <div class="editor_warning-content">
+                                    <p class='editor_p'>$message</p>
                                 </div>
                             </div>
                         HTML;
@@ -256,16 +257,16 @@ class PagesModel extends DatabaseManager
                     $link = $block->data->link;
                     $convertedHtml .=
                         <<<HTML
-                            <a href="$link">$link</a>
+                            <a class='editor_a' href="$link">$link</a>
                         HTML;
                     break;
 
                 case "table":
-                    $convertedHtml .= "<table><tbody>";
+                    $convertedHtml .= "<table class='editor_table'><tbody class='editor_tbody'>";
                     foreach ($block->data->content as $tr) {
-                        $convertedHtml .= "<tr>";
+                        $convertedHtml .= "<tr class='editor_tr'>";
                         foreach ($tr as $td) {
-                            $convertedHtml .= "<td>$td</td>";
+                            $convertedHtml .= "<td class='editor_td'>$td</td>";
                         }
                         $convertedHtml .= "</tr>";
 
