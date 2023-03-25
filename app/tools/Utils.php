@@ -279,4 +279,9 @@ class Utils
 
         return $currentUrl === $targetUrl || $currentUrl === $targetUrl . '/' || $currentUrl === $targetUrl . '#';
     }
+
+    public static function refreshPage(): void
+    {
+        header("Refresh:0");
+    }
 }
