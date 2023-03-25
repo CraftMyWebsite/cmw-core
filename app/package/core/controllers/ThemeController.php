@@ -81,7 +81,7 @@ class ThemeController extends CoreController
         $themesFolder = 'public/themes';
         $contentDirectory = array_diff(scandir("$themesFolder/"), array('..', '.'));
         foreach ($contentDirectory as $theme) {
-            if(file_exists("$themesFolder/$theme/infos.json")) {
+            if(file_exists("$themesFolder/$theme/infos.json") && !empty(file_get_contents("$themesFolder/$theme/infos.json"))) {
                 $toReturn[] = self::getTheme($theme);
             }
         }
