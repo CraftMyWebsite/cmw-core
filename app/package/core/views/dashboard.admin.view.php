@@ -44,7 +44,7 @@ $description = LangManager::translate("core.dashboard.desc");
                                 </div>
                                 <div class="col-sm-8">
                                     <h6 class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.best_views") ?></h6>
-                                    <h6 class="font-extrabold mb-0">---</h6>
+                                    <h6 class="font-extrabold mb-0"><?= (new VisitsMetricsManager())->getMonthlyBestVisits() ?></h6>
                                 </div>
                             </div>
                         </div>
