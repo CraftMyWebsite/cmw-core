@@ -132,4 +132,25 @@ class VisitsMetricsManager extends DatabaseManager
         return $this->getFileLineNumber();
     }
 
+    /**
+     * @return int
+     */
+    public function getMonthlyBestVisits(): int
+    {
+        $sql = "SELECT DATE_FORMAT(`visits_date`, '%M') AS `month`, COUNT(visits_id) count
+                FROM cmw_visits
+                GROUP BY DATE_FORMAT(`visits_date`, '%M') ORDER BY month DESC LIMIT 1";
+
+        $db = self::getInstance();
+
+        $req = $db->query($sql);
+
+        if (!$req){
+            return 0;
+        }
+
+
+        return $req->fetch()['count'];
+    }
+
 }
