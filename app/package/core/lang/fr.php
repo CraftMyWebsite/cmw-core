@@ -32,6 +32,12 @@ return [
         "description" => "Description :",
         "edit" => "Modifier ces informations",
     ],
+    "editor" => [
+        "title" => "Configuration Editor",
+        "desc" => "Personnaliser l'éditeur de pages",
+        "style" => "Style du syntax highlighter",
+        "preview" => 'Vous pouvez prévisualiser le rendu des styles <a href="https://highlightjs.org/static/demo/" target="_blank">ici</a>',
+    ],
     "config" => [
         "title" => "Configuration",
         "desc" => "Configurez votre site CMW !",

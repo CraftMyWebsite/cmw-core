@@ -3,6 +3,7 @@
 namespace CMW\Controller\pages;
 
 use CMW\Controller\Core\CoreController;
+use CMW\Controller\Core\EditorController;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Model\Pages\PagesModel;
@@ -58,7 +59,7 @@ class PagesController extends CoreController
                 "admin/resources/vendors/editorjs/plugins/delimiter.js",
                 "admin/resources/vendors/editorjs/plugins/list.js",
                 "admin/resources/vendors/editorjs/plugins/quote.js",
-                "admin/resources/vendors/editorjs/plugins/editorjs-codeflask.js",
+                "admin/resources/vendors/editorjs/plugins/code.js",
                 "admin/resources/vendors/editorjs/plugins/table.js",
                 "admin/resources/vendors/editorjs/plugins/link.js",
                 "admin/resources/vendors/editorjs/plugins/warning.js",
@@ -106,7 +107,7 @@ class PagesController extends CoreController
                 "admin/resources/vendors/editorjs/plugins/delimiter.js",
                 "admin/resources/vendors/editorjs/plugins/list.js",
                 "admin/resources/vendors/editorjs/plugins/quote.js",
-                "admin/resources/vendors/editorjs/plugins/editorjs-codeflask.js",
+                "admin/resources/vendors/editorjs/plugins/code.js",
                 "admin/resources/vendors/editorjs/plugins/table.js",
                 "admin/resources/vendors/editorjs/plugins/link.js",
                 "admin/resources/vendors/editorjs/plugins/warning.js",
@@ -194,7 +195,7 @@ class PagesController extends CoreController
         //Include the public view file ("public/themes/$themePath/views/pages/main.view.php")
         $view = new View('pages', 'main');
         $view->addScriptBefore("admin/resources/vendors/highlight/highlight.min.js","admin/resources/vendors/highlight/highlightAll.js");
-        $view->addStyle("admin/resources/vendors/highlight/rainbow.css");//Can be a choice
+        $view->addStyle("admin/resources/vendors/highlight/style/" . EditorController::getCurrentStyle());
         $view->addVariableList( ["pages" => $page, "page" => $pageEntity]);
         $view->view();
         
