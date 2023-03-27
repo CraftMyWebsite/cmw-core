@@ -134,7 +134,7 @@ $description = LangManager::translate("pages.edit.desc");
                 },
             },
             warning: Warning,
-            code: editorjsCodeflask,
+            code: CodeTool,
             delimiter: Delimiter,
             table: Table,
             embed: {
