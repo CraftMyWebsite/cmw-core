@@ -19,12 +19,17 @@ class VisitsMetricsManager extends DatabaseManager
 
     public function registerVisit(Route $route): void
     {
-
         $package = explode(".", $route->getName())[0] ?? null;
 
         $isAdmin = str_starts_with($route->getPath(), "cmw-admin/") ?: 0;
 
         $path = $route->getPath() === '' ? '/' : $route->getPath();
+
+        $_SESSION['latestVisitPath'] = $path;
+
+        if ($this->isDuplicateVisit($path) || $this->isAdminVisit($path)){
+            return;
+        }
 
         $data = Utils::getClientIp() . "," . date('Y-m-d H:i:s') . "," . $path . "," . $package . "," . http_response_code() . "," . $isAdmin;
 
@@ -33,6 +38,16 @@ class VisitsMetricsManager extends DatabaseManager
         if ($this->isLogsAreFull()) {
             $this->sendLogToDatabase();
         }
+    }
+
+    private function isDuplicateVisit(string $currentPath): bool
+    {
+        return $_SESSION['latestVisitPath'] === $currentPath;
+    }
+
+    private function isAdminVisit(string $currentPath): bool
+    {
+        return str_contains($currentPath, 'cmw-admin');
     }
 
     private function saveLogFile(string $data): void
