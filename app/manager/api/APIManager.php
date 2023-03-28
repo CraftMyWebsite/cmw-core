@@ -44,18 +44,13 @@ class APIManager
         return self::hashPassword($password);
     }
 
-    private static function getSecureHeader(): string
-    {
-        return self::HEADER_KEY . ": " . self::getPassword();
-    }
-
-    private static function generateHeader(string $url, $secure, bool $isPost = false): CurlHandle|bool
+    private static function generateHeader(string $url, $secure, bool $isPost = false, string $cmwlToken = null): CurlHandle|bool
     {
         $curlHandle = curl_init($url);
         $passwordAccess = self::getPassword();
         $headerAccess = self::HEADER_KEY;
         $headers = $secure
-            ? array(self::getSecureHeader())
+            ? array(self::HEADER_KEY . ": " . $cmwlToken)
             : array();
 
         $isPost === true ? $headers[] .= 'Content-Type: application/x-www-form-urlencoded' : '';
@@ -68,13 +63,13 @@ class APIManager
     }
 
 
-    public static function postRequest(string $url, array $data = [], $secure = true): string|false
+    public static function postRequest(string $url, array $data = [], $secure = true, string $cmwlToken = null): string|false
     {
         //todo verif if url is real URL.
 
         // TODO Add retry function
 
-        $curlHandle = self::generateHeader($url, $secure, true);
+        $curlHandle = self::generateHeader($url, $secure, true, cmwlToken: $cmwlToken);
 
         $parsedData = http_build_query($data);
         curl_setopt($curlHandle, CURLOPT_POST, 1);
@@ -87,13 +82,13 @@ class APIManager
         return $response;
     }
 
-    public static function getRequest(string $url, $secure = true): string|false
+    public static function getRequest(string $url, $secure = true, string $cmwlToken = null): string|false
     {
         //todo verif if url is real URL.
 
         // TODO Add retry function
 
-        $curlHandle = self::generateHeader($url, $secure);
+        $curlHandle = self::generateHeader($url, $secure, cmwlToken: $cmwlToken);
 
         curl_setopt($curlHandle, CURLOPT_TIMEOUT, 3); // 3sec timeout
         $response = curl_exec($curlHandle);
@@ -101,12 +96,12 @@ class APIManager
         return $response;
     }
 
-    public static function createResponse(string $message = "", int $code = 200, array $data = array(), $secure = true): bool|string
+    public static function createResponse(string $message = "", int $code = 200, array $data = array(), $secure = true, string $cmwlToken = null): bool|string
     {
 
         header("Content-Type: application/json; charset=UTF-8");
-        if ($secure) {
-            header(self::getSecureHeader());
+        if ($secure && !is_null($cmwlToken)) {
+            header(self::HEADER_KEY . ": " . $cmwlToken);
         }
         try {
             return json_encode(array(
