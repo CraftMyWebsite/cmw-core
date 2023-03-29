@@ -7,7 +7,7 @@
         <h3 class="card-title"><?= INSTALL_CONFIG_TITLE ?></h3>
     </div>
     <!-- form start -->
-    <form action="" role="form" id="formFourthInstall" name="formFourthInstall">
+    <form action="installer/submit" method="post" role="form" id="formFourthInstall" name="formFourthInstall">
         <div class="card-body">
             <div class="form-group">
                 <label for="config_name"><?= INSTALL_CONFIG_NAME ?></label>
@@ -34,30 +34,3 @@
         </div>
     </form>
 </div>
-<script>
-
-    const formSubmit = document.getElementById("submitFourthInstall"),
-          formRaw    = document.getElementById("formFourthInstall");
-
-    formRaw.onsubmit = e => {
-        e.preventDefault();
-
-        const formData   = new FormData(formRaw);
-
-        fetch(`${window.location.pathname}/submit`, {
-            method: "post",
-            body  : formData,
-        }).then(v => v.text())
-            .then(res => {
-                if (+res > 0) {
-                    console.log("ok")
-                    window.location.reload();
-                } else {
-                    //Todo, Alert system
-                    console.log(`ERROR CODE : ${res}`)
-                }
-
-            })
-    }
-
-</script>

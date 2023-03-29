@@ -98,6 +98,8 @@ class InstallerController
         };
 
         $this->$value();
+
+        header("Location: ../");
     }
 
     public function firstInstallPost(): void
@@ -142,8 +144,6 @@ class InstallerController
         (new LinkStorage())->storeDefaultRoutes();
 
         Utils::getEnv()->editValue("installStep", 1);
-
-        echo '1';
     }
 
     public function secondInstallPost(): void

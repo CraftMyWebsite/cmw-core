@@ -165,7 +165,7 @@ class VisitsMetricsManager extends DatabaseManager
         }
 
 
-        return $req->fetch()['count'];
+        return $req->fetch()['count'] ?? 0;
     }
 
 }
