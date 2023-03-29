@@ -7,7 +7,7 @@
         <h3 class="card-title"><?= INSTALL_ADMIN_TITLE ?></h3>
     </div>
     <!-- form start -->
-    <form action="" role="form" method="post" id="formThirdInstall" name="formThirdInstall">
+    <form action="installer/submit" role="form" method="post" id="formThirdInstall" name="formThirdInstall">
         <div class="card-body">
             <div class="form-group">
                 <label for="email"><?= INSTALL_ADMIN_EMAIL ?></label>
@@ -47,31 +47,3 @@
         </div>
     </form>
 </div>
-
-<script>
-
-    const formSubmit = document.getElementById("submitThirdInstall"),
-          formRaw    = document.getElementById("formThirdInstall");
-
-    formRaw.onsubmit = e => {
-        e.preventDefault();
-
-        const formData   = new FormData(formRaw);
-
-        fetch(`${window.location.pathname}/submit`, {
-            method: "post",
-            body  : formData,
-        }).then(v => v.text())
-            .then(res => {
-                if (+res > 0) {
-                    console.log("ok")
-                    window.location.reload();
-                } else {
-                    //Todo, Alert system
-                    console.log(`ERROR CODE : ${res}`)
-                }
-
-            })
-    }
-
-</script>

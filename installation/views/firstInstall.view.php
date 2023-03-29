@@ -3,7 +3,7 @@
         <h3 class="card-title"><?= INSTALL_BDD_TITLE ?></h3>
     </div>
     <!-- form start -->
-    <form action="" role="form" id="formFirstInstall" name="formFirstInstall">
+    <form action="installer/submit" role="form" method="post" id="formFirstInstall" name="formFirstInstall">
         <div class="card-body">
             <div class="form-group">
                 <label for="bdd_name"><?= INSTALL_BDD_NAME ?></label>
@@ -65,32 +65,3 @@
         </div>
     </form>
 </div>
-
-<script>
-
-    const formSubmit = document.getElementById("submitFirstInstall"),
-          formRaw    = document.getElementById("formFirstInstall");
-
-    formRaw.onsubmit = e => {
-        e.preventDefault();
-
-        const formData   = new FormData(formRaw);
-
-        fetch(`${window.location.pathname}/submit`, {
-            method: "post",
-            body  : formData,
-        }).then(v => v.text())
-            .then(res => {
-                if (+res > 0) {
-                    console.log("ok")
-                    window.location.reload();
-                } else {
-                    //Todo, Alert system
-                    console.log(`ERROR CODE : ${res}`)
-                }
-
-
-            })
-    }
-
-</script>

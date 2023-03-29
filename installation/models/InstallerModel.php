@@ -49,13 +49,10 @@ class InstallerModel
 
     public static function initDatabase($serverName, $database, $username, $password, $devMode): void
     {
-
         $db = self::loadDatabase($serverName, $database, $username, $password);
 
-
         $query = file_get_contents(Utils::getEnv()->getValue("dir") . "installation/init.sql");
-        $req = $db->query($query);
-        $req->closeCursor();
+        $db->query($query);
 
         /* IMPORT PACKAGE SQL */
         self::loadPackages($db, $devMode);
@@ -63,21 +60,49 @@ class InstallerModel
 
     private static function loadPackages(PDO $db, int $devMode): void
     {
+        //Load sql files
+        self::loadPackageSqlFiles($db, $devMode);
+    }
 
+    private static function loadPackageSqlFiles(PDO $db, int $devMode): void
+    {
         $packageFolder = Utils::getEnv()->getValue("dir") . 'app/package/';
         $scannedDirectory = array_diff(scandir($packageFolder), array('..', '.'));
 
-
         foreach ($scannedDirectory as $package) {
-            $packageSqlFile = Utils::getEnv()->getValue("dir") . "/app/package/$package/init.sql";
-            if (file_exists($packageSqlFile) && trim(file_get_contents($packageSqlFile))) {
-                $query_package = file_get_contents($packageSqlFile);
-                $stmt_package = $db->query($query_package);
-                $stmt_package->closeCursor();
-                if ($devMode === 0) {
-                    unlink($packageSqlFile);
-                }
+
+            $sqlFolder = Utils::getEnv()->getValue("dir") . "app/package/$package/init";
+
+            if (!is_dir($sqlFolder)) {
+                continue;
             }
+
+            $initFiles = array_diff(scandir($sqlFolder), array('..', '.'));
+
+            if (empty($initFiles)) {
+                continue;
+            }
+
+            foreach ($initFiles as $sqlFile) {
+
+                $packageSqlFile = "$sqlFolder/$sqlFile";
+
+                if (!is_file($packageSqlFile) || pathinfo($packageSqlFile, PATHINFO_EXTENSION) !== "sql") {
+                    continue;
+                }
+
+                if (file_exists($packageSqlFile)) {
+                    $querySqlFile = file_get_contents($packageSqlFile);
+                    $stmtPackage = $db->query($querySqlFile);
+                    $stmtPackage->closeCursor();
+                    if ($devMode === 0) {
+                        unlink($packageSqlFile);
+                    }
+                }
+
+
+            }
+
         }
     }
 
