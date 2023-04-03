@@ -23,7 +23,7 @@ return [
         "desc" => "Bienvenue sur votre panneau d'administration !",
         "total_member" => "Membres totaux",
         "best_views" => "Record de visites",
-        "numbers_views" => "Nombres de visites",
+        "numbers_views" => "Nombres de visites et d'inscriptions",
         "monthly_visits" => "Visites du mois",
         "total_visits" => "Visistes totales",
         "welcome" => "Bienvenue",

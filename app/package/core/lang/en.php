@@ -23,7 +23,7 @@ return [
         "desc" => "Welcome to your administration panel!",
         "total_member" => "Total Members",
         "best_views" => "Record of visits",
-        "numbers_views" => "Number of visits",
+        "numbers_views" => "Number of visits and inscriptions",
         "monthly_visits" => "Monthly visits",
         "total_visits" => "Total visits",
         "welcome" => "Welcome",

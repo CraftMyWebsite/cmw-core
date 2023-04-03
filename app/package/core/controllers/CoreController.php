@@ -60,7 +60,8 @@ class CoreController
         }
 
         View::createAdminView("core", "dashboard")
-        ->addScriptAfter("admin/resources/vendors/apexcharts/apexcharts.min.js","admin/resources/assets/js/pages/dashboard.js")
+        ->addScriptAfter("admin/resources/vendors/chart/chart.min.js",
+                                "app/package/core/views/resources/js/dashboard.js")
         ->view();
     }
 
