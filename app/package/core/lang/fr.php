@@ -81,8 +81,9 @@ return [
             "config" => [
                 "success" => "Configuration fonctionnelle",
                 "error" => "Configuration invalide"
-            ]
-        ]
+            ],
+             "missing_inputs" => "Merci de remplir tous les champs !",
+        ],
     ],
     "datatables" => [
         "list" => [

@@ -2,9 +2,11 @@
 
 use CMW\Controller\Installer\InstallerController;
 
+/* @var $lang string */
+
 ?>
 <!DOCTYPE html>
-<html lang="<?= $lang ?? 'fr' ?>" class="bg-cmw-gray">
+<html lang="<?= $lang ?>" class="bg-cmw-gray">
 <head>
     <meta charset="utf-8"/>
     <title><?= INSTALL_TITLE ?></title>

@@ -81,8 +81,9 @@ return [
             "config" => [
                 "success" => "Configuration good",
                 "error" => "Configuration error"
-            ]
-        ]
+            ],
+            "missing_inputs" => "Please fill all inputs !",
+        ],
     ],
     "datatables" => [
         "list" => [

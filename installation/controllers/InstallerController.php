@@ -7,6 +7,8 @@ use CMW\Controller\Installer\Games\FabricGames;
 use CMW\Manager\Lang\LangManager;
 use CMW\Router\Link;
 use CMW\Router\LinkStorage;
+use CMW\Utils\Redirect;
+use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
 use InstallerModel;
@@ -36,7 +38,7 @@ class InstallerController
 
     private function loadLang(): void
     {
-        $lang = Utils::getEnv()->getValue("locale") ?? "fr";
+        $lang = Utils::getEnv()->getValue("locale") ?? "en";
         require_once(Utils::getEnv()->getValue("dir") . "/installation/lang/$lang.php");
     }
 
@@ -61,23 +63,6 @@ class InstallerController
             ->addVariableList(['install' => $install, 'lang' => $lang]);
 
         $view->view();
-    }
-
-    public function setActiveOnStep(int $step): string
-    {
-        return self::getInstallationStep() === $step ? "active" : "";
-    }
-
-    public function setCheckOnStep(int $step): string
-    {
-        return ((self::getInstallationStep() > $step) || self::getInstallationStep() === -1) ? "check" : "spinner";
-    }
-
-    public function getGameList(): array
-    {
-        require_once(Utils::getEnv()->getValue("dir") . "installation/tools/FabricGames.php");
-
-        return FabricGames::getGameList();
     }
 
     #[Link(path: "/", method: Link::GET, scope: "/installer")]
@@ -107,12 +92,11 @@ class InstallerController
 
         $this->$value();
 
-        header("Location: ../");
+        Redirect::redirectPreviousRoute();
     }
 
     public function welcomeInstallPost(): void
     {
-        print "aa";
         Utils::getEnv()->editValue("installStep", 1);
     }
 
@@ -128,16 +112,21 @@ class InstallerController
         $port = filter_input(INPUT_POST, "bdd_port");
 
         if(InstallerModel::tryDatabaseConnection($host, $username, $password, $port)) {
-            print (json_encode(["status" => 1, "content" => LangManager::translate("core.toaster.db.config.success")], JSON_THROW_ON_ERROR));
+            print (json_encode(["status" => 1, "content" =>
+                LangManager::translate("core.toaster.db.config.success")],
+                JSON_THROW_ON_ERROR));
         } else {
-            print (json_encode(["status" => 0, "content" => LangManager::translate("core.toaster.db.config.error")], JSON_THROW_ON_ERROR));
+            print (json_encode(["status" => 0,
+                "content" => LangManager::translate("core.toaster.db.config.error")],
+                JSON_THROW_ON_ERROR));
         }
     }
 
     public function firstInstallPost(): void
     {
         if (Utils::isValuesEmpty($_POST, "bdd_name", "bdd_login", "bdd_address", "bdd_port", "install_folder")) {
-            echo "-1";
+            Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.toaster.db.missing_inputs"));
             return;
         }
 
@@ -152,7 +141,8 @@ class InstallerController
         $timezone = date_default_timezone_get(); //TODO GET BROWSER TIMEZONE
 
         if (!InstallerModel::tryDatabaseConnection($host, $username, $password, $port)) {
-            echo '-2';
+            Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.toaster.db.config.error"));
             return;
         }
 

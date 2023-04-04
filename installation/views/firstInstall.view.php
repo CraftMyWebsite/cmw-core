@@ -42,7 +42,7 @@
                 <label class="input-group input-group">
                     <span><i class="fa-solid fa-unlock"></i></span>
                     <input type="password" placeholder="••••" id="bdd_pass" name="bdd_pass"
-                           class="input input-bordered input-sm w-full" required>
+                           class="input input-bordered input-sm w-full">
                 </label>
             </div>
             <div class="text-center">
