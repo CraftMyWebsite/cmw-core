@@ -23,11 +23,6 @@ use JetBrains\PhpStorm\NoReturn;
 class InstallerController
 {
 
-    public function __construct()
-    {
-        $this->loadLang();
-    }
-
     static public array $installSteps = [0 => "welcome", 1 => "config", 2 => "details", 3 => "bundle", 4 => "packages",
                                         5 => "themes", 6 => "admin", 7 => "finish"];
 
@@ -36,11 +31,28 @@ class InstallerController
         return Utils::getEnv()->getValue("installStep");
     }
 
-    private function loadLang(): void
+    public static function loadLang(): ?array
     {
+
         $lang = Utils::getEnv()->getValue("locale") ?? "en";
-        require_once(Utils::getEnv()->getValue("dir") . "/installation/lang/$lang.php");
+        $fileName = Utils::getEnv()->getValue("dir") . "/installation/lang/$lang.php";
+
+        $fileExist = is_file($fileName);
+
+        if (!$fileExist) {
+            return null;
+        }
+
+        $fileContent = include $fileName;
+
+        if (!is_array($fileContent)) {
+            return null;
+        }
+
+        return $fileContent;
     }
+
+
 
     #[Link(path: "/lang/:code", method: Link::GET, variables: ["code" => ".*?"], scope: "/installer")]
     public function changeLang(string $code): void
@@ -51,7 +63,6 @@ class InstallerController
 
     private function loadView(string $filename): void
     {
-        $install = new InstallerController();
         $lang = Utils::getEnv()->getValue("locale") ?? "fr";
 
         $view = new View(basicVars: false);
@@ -60,7 +71,7 @@ class InstallerController
             ->setCustomTemplate(Utils::getEnv()->getValue("DIR") . "installation/views/template.php")
             ->addStyle("admin/resources/vendors/iziToast/iziToast.min.css")
             ->addScriptAfter("admin/resources/vendors/iziToast/iziToast.min.js")
-            ->addVariableList(['install' => $install, 'lang' => $lang]);
+            ->addVariableList(['lang' => $lang]);
 
         $view->view();
     }

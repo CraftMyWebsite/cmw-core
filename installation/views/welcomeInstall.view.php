@@ -1,12 +1,14 @@
-<?php /* @var $lang String */ ?>
+<?php /* @var $lang String */
+
+use CMW\Manager\Lang\LangManager; ?>
 <select class="absolute top-0 right-0 select select-ghost select-sm w-32" id="lang" onchange="changeLang(this.value)">
     <option <?= $lang === 'fr' ? 'selected' : '' ?> value="fr">Français</option>
     <option <?= $lang === 'en' ? 'selected' : '' ?> value="en">English</option>
 </select>
 
-<h2 class="text-2xl font-medium text-center"><?= INSTALL_WELCOME_TITLE ?></h2>
-<p class="text-center"><?= INSTALL_WELCOME_SUBTITLE ?></p>
-<p><?= INSTALL_WELCOME_CONFIG_TITLE ?> :</p>
+<h2 class="text-2xl font-medium text-center"><?= LangManager::translate("installation.welcome.title") ?></h2>
+<p class="text-center"><?= LangManager::translate("installation.welcome.subtitle") ?></p>
+<p><?= LangManager::translate("installation.welcome.config.title") ?> :</p>
 <div class="overflow-x-auto">
     <table class="table w-full">
         <!-- head -->
@@ -32,13 +34,13 @@
     </table>
 </div>
 
-<?= INSTALL_WELCOME_CONTENT ?>
+<?= LangManager::translate("installation.welcome.content") ?>
 
 <small>TODO => établir les pré-requis avant l'installation.</small>
 
 <div class="card-actions justify-end">
     <form action="installer/submit" method="post">
-        <button type="submit" class="btn btn-primary"><?= INSTALL_BTN_NEXT ?></button>
+        <button type="submit" class="btn btn-primary"><?= LangManager::translate("core.btn.next") ?></button>
     </form>
 </div>
 

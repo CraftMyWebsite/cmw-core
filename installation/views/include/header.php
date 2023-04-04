@@ -1,6 +1,7 @@
 <?php
 
 use CMW\Controller\Installer\InstallerController;
+use CMW\Manager\Lang\LangManager;
 
 /* @var $lang string */
 
@@ -9,11 +10,11 @@ use CMW\Controller\Installer\InstallerController;
 <html lang="<?= $lang ?>" class="bg-cmw-gray">
 <head>
     <meta charset="utf-8"/>
-    <title><?= INSTALL_TITLE ?></title>
+    <title><?= LangManager::translate("installation.title") ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta name="robots" content="NOINDEX, NOFOLLOW">
-    <meta name="description" content="<?= INSTALL_DESC ?>">
+    <meta name="description" content="<?= LangManager::translate("installation.desc") ?>">
 
     <link rel="icon" type="image/png"
           href="admin/resources/assets/images/logo/logo_compact.png">
@@ -29,8 +30,9 @@ use CMW\Controller\Installer\InstallerController;
 <body class="bg-cmw-gray">
 <img class="w-48 mx-auto py-8" src="admin/resources/assets/images/logo/logo_compact.png" alt="Image introuvable !">
 
-<div class="lg:hidden text-center p-4 bg-primary text-xl"><span class="font-bold">2</span><span
-            class="text-sm">/8</span></div>
+<div class="lg:hidden text-center p-4 bg-primary text-xl"><span class="font-bold">
+        <?= InstallerController::getInstallationStep() ?></span>
+    <span class="text-sm">/<?= count(InstallerController::$installSteps) ?></span></div>
 
 
 <div class="hidden lg:block w-full mx-auto">
@@ -51,7 +53,7 @@ use CMW\Controller\Installer\InstallerController;
                     $classValue .= ' font-bold';
                 }
                 ?>
-                <li class="step <?= $classValue ?>"><p><?= constant('INSTALL_STEP_' . $i) ?> <?= $finishStatus ?></p>
+                <li class="step <?= $classValue ?>"><p><?= LangManager::translate("installation.steps.$i") ?> <?= $finishStatus ?></p>
                 </li>
             <?php endforeach; ?>
         </ul>
