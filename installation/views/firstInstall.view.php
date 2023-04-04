@@ -1,67 +1,75 @@
-<div class="card">
-    <div class="card-header">
-        <h3 class="card-title"><?= INSTALL_BDD_TITLE ?></h3>
-    </div>
-    <!-- form start -->
-    <form action="installer/submit" role="form" method="post" id="formFirstInstall" name="formFirstInstall">
-        <div class="card-body">
-            <div class="form-group">
-                <label for="bdd_name"><?= INSTALL_BDD_NAME ?></label>
-                <input type="text" name="bdd_name" class="form-control" id="bdd_name"
-                       placeholder="craftmywebsite"
-                       required>
-                <small class="text-muted"><?= INSTALL_BDD_NAME_ABOUT ?></small>
-            </div>
-            <div class="form-group">
-                <label for="bdd_login"><?= INSTALL_BDD_USER ?></label>
-                <input type="text" name="bdd_login" class="form-control" id="bdd_login"
-                       placeholder="root"
-                       required>
-                <small class="text-muted"><?= INSTALL_BDD_USER_ABOUT ?></small>
-            </div>
-            <div class="form-group">
-                <label for="bdd_pass"><?= INSTALL_BDD_PASS ?></label>
-                <div class="input-group" id="showHidePassword">
-                    <input type="password" name="bdd_pass" class="form-control"
-                           placeholder="********"
-                           id="bdd_pass">
-                    <div class="input-group-append">
-                        <a class="input-group-text" href="#"><i class="fa fa-eye-slash"
-                                                                aria-hidden="true"></i></a>
-                    </div>
+<h2 class="text-2xl font-medium text-center"><?= INSTALL_CONFIG_TITLE ?></h2>
+<form action="installer/submit" method="post">
+    <div class="lg:grid grid-cols-2 gap-8">
+        <div>
+            <h2 class="text-lg font-medium text-center"><?= INSTALL_CONFIG_DB ?></h2>
+            <div class="grid grid-cols-6 gap-4 mb-2">
+                <div class="col-span-4">
+                    <p class="font-light"><?= INSTALL_CONFIG_DB_ADDRESS ?> :</p>
+                    <label class="input-group input-group">
+                        <span><i class="fa-solid fa-server"></i></span>
+                        <input type="text" value="localhost" placeholder="localhost" id="bdd_address" name="bdd_address"
+                               class="input input-bordered input-sm w-full" required>
+                    </label>
                 </div>
-                <small class="text-muted"><?= INSTALL_BDD_PASS_ABOUT ?></small>
+                <div class="col-span-2">
+                    <p class="font-light"><?= INSTALL_CONFIG_DB_PORT ?> :</p>
+                    <label class="input-group input-group">
+                        <span><i class="fa-solid fa-server"></i></span>
+                        <input type="text" value="3306" placeholder="3306" id="bdd_port" name="bdd_port"
+                               class="input input-bordered input-sm w-full" required>
+                    </label>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="bdd_address"><?= INSTALL_BDD_ADDRESS ?></label>
-                <input type="text" name="bdd_address" class="form-control" id="bdd_address"
-                       placeholder="localhost"
-                       value="localhost" required>
-                <small class="text-muted"><?= INSTALL_BDD_ADDRESS_ABOUT ?></small>
+            <div class="mb-2">
+                <p class="font-light"><?= INSTALL_CONFIG_DB_NAME ?>:</p>
+                <label class="input-group input-group">
+                    <span><i class="fa-solid fa-database"></i></span>
+                    <input type="text" placeholder="craftmywebsite" id="bdd_name" name="bdd_name"
+                           class="input input-bordered input-sm w-full" required>
+                </label>
             </div>
-            <hr>
-            <h2><?= INSTALL_SITE_TITLE ?></h2>
-            <div class="form-group">
-                <label for="install_folder"><?= INSTALL_SITE_FOLDER ?></label>
-                <input type="text" name="install_folder" class="form-control"
-                       id="install_folder"
-                       placeholder="/"
-                       value="/" required>
-                <small class="text-muted"><?= INSTALL_SITE_FOLDER_ABOUT ?></small>
+            <div class="mb-2">
+                <p class="font-light"><?= INSTALL_CONFIG_DB_USER ?> :</p>
+                <label class="input-group input-group">
+                    <span><i class="fa-solid fa-user"></i></span>
+                    <input type="text" placeholder="webmaster" id="bdd_login" name="bdd_login"
+                           class="input input-bordered input-sm w-full" required>
+                </label>
             </div>
-            <div class="form-check">
-                <input type="checkbox" name="dev_mode" class="form-check-input"
-                       id="dev_mode">
-                <label class="form-check-label"
-                       for="dev_mode"><?= INSTALL_DEVMODE_NAME ?></label>
-                <br>
-                <small class="text-muted"><?= INSTALL_DEVMODE_NAME_ABOUT ?></small>
+            <div class="mb-2">
+                <p class="font-light"><?= INSTALL_CONFIG_DB_PASS ?> :</p>
+                <label class="input-group input-group">
+                    <span><i class="fa-solid fa-unlock"></i></span>
+                    <input type="password" placeholder="••••" id="bdd_pass" name="bdd_pass"
+                           class="input input-bordered input-sm w-full" required>
+                </label>
+            </div>
+            <div class="text-center">
+                <button type="button" onclick="testDb()" class="btn btn-primary"><?= INSTALL_BTN_TEST ?></button>
             </div>
         </div>
-        <!-- /.card-body -->
-        <div class="card-footer">
-            <button type="submit" id="submitFirstInstall" name="submitFirstInstall"
-                    class="btn btn-primary"><?= INSTALL_SAVE ?></button>
+        <div>
+            <h2 class="text-lg font-medium text-center"><?= INSTALL_CONFIG_SETTINGS ?></h2>
+            <div class="mb-2">
+                <p class="font-light"><?= INSTALL_CONFIG_SITE_FOLDER ?>:</p>
+                <label class="input-group input-group">
+                    <span><i class="fa-regular fa-folder-open"></i></span>
+                    <input type="text" placeholder="/" value="/" name="install_folder"
+                           class="input input-bordered input-sm w-full" required>
+                </label>
+                <small><?= INSTALL_CONFIG_SITE_FOLDER_ABOUT ?></small>
+            </div>
+            <div class="mt-4">
+                <p class="font-light"><?= INSTALL_CONFIG_DEVMODE ?> :</p>
+                <input id="devmode" type="checkbox" name="dev_mode" class="checkbox checkbox-info checkbox-sm"/>
+                <label for="devmode"><?= INSTALL_CONFIG_DEVMODE_ABOUT ?></label>
+            </div>
         </div>
-    </form>
-</div>
+    </div>
+    <div class="card-actions justify-end">
+        <button type="submit" class="btn btn-primary"><?= INSTALL_BTN_NEXT ?></button>
+    </div>
+</form>
+
+<script src="installation/views/assets/js/testDb.js"></script>

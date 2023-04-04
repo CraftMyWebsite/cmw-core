@@ -15,9 +15,9 @@ class InstallerModel
     {
     }
 
-    private static function loadDatabase($serverName, $database, $username, $password): PDO
+    private static function loadDatabase(string $serverName, string $database, string $username, $password, int $port): PDO
     {
-        $db = new PDO("mysql:host=$serverName", $username, $password);
+        $db = new PDO("mysql:host=$serverName;port=$port", $username, $password);
         $db->exec("SET CHARACTER SET utf8");
         $db->exec("CREATE DATABASE IF NOT EXISTS " . $database . ";");
         $db->exec("USE " . $database . ";");
@@ -32,24 +32,25 @@ class InstallerModel
         $dbUsername = Utils::getEnv()->getValue("DB_USERNAME");
         $dbPassword = Utils::getEnv()->getValue("DB_PASSWORD");
         $dbName = Utils::getEnv()->getValue("DB_NAME");
+        $dbPort = Utils::getEnv()->getValue("DB_PORT");
 
-        return self::loadDatabase($dbServername, $dbName, $dbUsername, $dbPassword);
+        return self::loadDatabase($dbServername, $dbName, $dbUsername, $dbPassword, $dbPort);
     }
 
-    public static function tryDatabaseConnection(string $servername, string $database, string $username, string $password): bool
+    public static function tryDatabaseConnection(string $servername, string $username, string $password, int $port): bool
     {
         try {
-            new PDO("mysql:host=$servername", $username, $password);
+            new PDO("mysql:host=$servername;port=$port", $username, $password);
 
             return true;
-        } catch (PDOException $_) {
+        } catch (PDOException) {
             return false;
         }
     }
 
-    public static function initDatabase($serverName, $database, $username, $password, $devMode): void
+    public static function initDatabase($serverName, $database, $username, $password, $port, $devMode): void
     {
-        $db = self::loadDatabase($serverName, $database, $username, $password);
+        $db = self::loadDatabase($serverName, $database, $username, $password, $port);
 
         $query = file_get_contents(Utils::getEnv()->getValue("dir") . "installation/init.sql");
         $db->query($query);

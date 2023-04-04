@@ -77,6 +77,12 @@ return [
         "theme" => [
             "regenerate" => "Theme configuration regenerate"
         ],
+        "db" => [
+            "config" => [
+                "success" => "Configuration good",
+                "error" => "Configuration error"
+            ]
+        ]
     ],
     "datatables" => [
         "list" => [

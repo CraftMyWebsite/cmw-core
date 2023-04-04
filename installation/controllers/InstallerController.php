@@ -4,6 +4,7 @@ namespace CMW\Controller\Installer;
 
 use CMW\Controller\Core\ThemeController;
 use CMW\Controller\Installer\Games\FabricGames;
+use CMW\Manager\Lang\LangManager;
 use CMW\Router\Link;
 use CMW\Router\LinkStorage;
 use CMW\Utils\Utils;
@@ -25,6 +26,13 @@ class InstallerController
         $this->loadLang();
     }
 
+    static public array $installSteps = [0 => "welcome", 1 => "config", 2 => "details", 3 => "bundle", 4 => "packages",
+                                        5 => "themes", 6 => "admin", 7 => "finish"];
+
+    public static function getInstallationStep(): int
+    {
+        return Utils::getEnv()->getValue("installStep");
+    }
 
     private function loadLang(): void
     {
@@ -42,29 +50,27 @@ class InstallerController
     private function loadView(string $filename): void
     {
         $install = new InstallerController();
+        $lang = Utils::getEnv()->getValue("locale") ?? "fr";
 
         $view = new View(basicVars: false);
         $view
             ->setCustomPath(Utils::getEnv()->getValue("DIR"). "installation/views/$filename.view.php")
             ->setCustomTemplate(Utils::getEnv()->getValue("DIR") . "installation/views/template.php")
-            ->addVariable("install", $install);
+            ->addStyle("admin/resources/vendors/iziToast/iziToast.min.css")
+            ->addScriptAfter("admin/resources/vendors/iziToast/iziToast.min.js")
+            ->addVariableList(['install' => $install, 'lang' => $lang]);
 
         $view->view();
     }
 
-    public function getInstallationStep(): int
-    {
-        return Utils::getEnv()->getValue("installStep");
-    }
-
     public function setActiveOnStep(int $step): string
     {
-        return $this->getInstallationStep() === $step ? "active" : "";
+        return self::getInstallationStep() === $step ? "active" : "";
     }
 
     public function setCheckOnStep(int $step): string
     {
-        return (($this->getInstallationStep() > $step) || $this->getInstallationStep() === -1) ? "check" : "spinner";
+        return ((self::getInstallationStep() > $step) || self::getInstallationStep() === -1) ? "check" : "spinner";
     }
 
     public function getGameList(): array
@@ -77,12 +83,13 @@ class InstallerController
     #[Link(path: "/", method: Link::GET, scope: "/installer")]
     public function getInstallPage(): void
     {
-        $value = match ($this->getInstallationStep()) {
-            1 => "secondInstall",
-            2 => "thirdInstall",
-            3 => "fourthInstall",
-            4 => "fifthInstall",
-            default => "firstInstall"
+        $value = match (self::getInstallationStep()) {
+            1 => "firstInstall",
+            2 => "secondInstall",
+            3 => "thirdInstall",
+            4 => "fourthInstall",
+            5 => "fifthInstall",
+            default => "welcomeInstall"
         };
 
         $this->loadView($value);
@@ -90,11 +97,12 @@ class InstallerController
 
     #[Link(path: "/submit", method: Link::POST, scope: "/installer", secure: false)]
     public function postInstallPage(): void {
-        $value = match ($this->getInstallationStep()) {
-            1 => "secondInstallPost",
-            2 => "thirdInstallPost",
-            3 => "fourthInstallPost",
-            default => "firstInstallPost"
+        $value = match (self::getInstallationStep()) {
+            1 => "firstInstallPost",
+            2 => "secondInstallPost",
+            3 => "thirdInstallPost",
+            4 => "fourthInstallPost",
+            default => "welcomeInstallPost"
         };
 
         $this->$value();
@@ -102,9 +110,33 @@ class InstallerController
         header("Location: ../");
     }
 
+    public function welcomeInstallPost(): void
+    {
+        print "aa";
+        Utils::getEnv()->editValue("installStep", 1);
+    }
+
+    /**
+     * @throws \JsonException
+     */
+    #[Link(path: "/test/db", method: Link::POST, scope: "/installer", secure: false)]
+    public function testDbConnection(): void
+    {
+        $host = filter_input(INPUT_POST, "bdd_address");
+        $username = filter_input(INPUT_POST, "bdd_login");
+        $password = filter_input(INPUT_POST, "bdd_pass");
+        $port = filter_input(INPUT_POST, "bdd_port");
+
+        if(InstallerModel::tryDatabaseConnection($host, $username, $password, $port)) {
+            print (json_encode(["status" => 1, "content" => LangManager::translate("core.toaster.db.config.success")], JSON_THROW_ON_ERROR));
+        } else {
+            print (json_encode(["status" => 0, "content" => LangManager::translate("core.toaster.db.config.error")], JSON_THROW_ON_ERROR));
+        }
+    }
+
     public function firstInstallPost(): void
     {
-        if (Utils::isValuesEmpty($_POST, "bdd_name", "bdd_login", "bdd_address")) {
+        if (Utils::isValuesEmpty($_POST, "bdd_name", "bdd_login", "bdd_address", "bdd_port", "install_folder")) {
             echo "-1";
             return;
         }
@@ -113,17 +145,18 @@ class InstallerController
         $username = filter_input(INPUT_POST, "bdd_login");
         $password = filter_input(INPUT_POST, "bdd_pass");
         $db = filter_input(INPUT_POST, "bdd_name");
+        $port = filter_input(INPUT_POST, "bdd_port");
 
         $subFolder = filter_input(INPUT_POST, "install_folder");
         $devMode = isset($_POST['dev_mode']);
         $timezone = date_default_timezone_get(); //TODO GET BROWSER TIMEZONE
 
-        if (!InstallerModel::tryDatabaseConnection($host, $db, $username, $password)) {
+        if (!InstallerModel::tryDatabaseConnection($host, $username, $password, $port)) {
             echo '-2';
             return;
         }
 
-        $this->firstInstallSetDatabase($host, $db, $username, $password);
+        $this->firstInstallSetDatabase($host, $db, $username, $password, $port);
         $this->firstInstallSetInfos($subFolder, $timezone, $devMode);
 
         Utils::getEnv()->setOrEditValue("PATH_SUBFOLDER", $subFolder);
@@ -135,7 +168,7 @@ class InstallerController
 
 
         //Todo Throw error
-        InstallerModel::initDatabase($host, $db, $username, $password, $devMode);
+        InstallerModel::initDatabase($host, $db, $username, $password, $port, $devMode);
 
         // Install the default theme settings
         (new ThemeController())->installThemeSettings(ThemeController::getCurrentTheme()->getName());
@@ -143,7 +176,7 @@ class InstallerController
         //Init default routes
         (new LinkStorage())->storeDefaultRoutes();
 
-        Utils::getEnv()->editValue("installStep", 1);
+        Utils::getEnv()->editValue("installStep", 2);
     }
 
     public function secondInstallPost(): void
@@ -161,7 +194,7 @@ class InstallerController
 
         Utils::getEnv()->setOrEditValue("game", $selGame);
 
-        Utils::getEnv()->editValue("installStep", 2);
+        Utils::getEnv()->editValue("installStep", 3);
 
         echo '1';
     }
@@ -179,7 +212,7 @@ class InstallerController
 
         InstallerModel::initAdmin($email, $username, $password);
 
-        Utils::getEnv()->editValue("installStep", 3);
+        Utils::getEnv()->editValue("installStep", 4);
 
         echo '1';
     }
@@ -204,17 +237,18 @@ class InstallerController
             return;
         }
 
-        Utils::getEnv()->editValue("installStep", 4);
+        Utils::getEnv()->editValue("installStep", 5);
 
         echo 1;
     }
 
-    private function firstInstallSetDatabase(string $host, string $db, string $username, string $password): void
+    private function firstInstallSetDatabase(string $host, string $db, string $username, string $password, int $port): void
     {
         Utils::getEnv()->setOrEditValue("DB_HOST", $host);
         Utils::getEnv()->setOrEditValue("DB_NAME", $db);
         Utils::getEnv()->setOrEditValue("DB_USERNAME", $username);
         Utils::getEnv()->setOrEditValue("DB_PASSWORD", $password);
+        Utils::getEnv()->setOrEditValue("DB_PORT", $port);
     }
 
     private function firstInstallSetInfos(string $subFolder, string $timezone, bool $devMode): void
