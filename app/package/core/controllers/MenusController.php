@@ -5,7 +5,7 @@ namespace CMW\Controller\Core;
 use CMW\Controller\Users\UsersController;
 use CMW\Model\Core\MenusModel;
 use CMW\Router\Link;
-use CMW\Utils\View;
+use CMW\Manager\Views\View;
 
 /**
  * Class: @MenusController

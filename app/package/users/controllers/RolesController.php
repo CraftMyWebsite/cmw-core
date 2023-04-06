@@ -10,7 +10,7 @@ use CMW\Model\Users\UsersModel;
 use CMW\Router\Link;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
-use CMW\Utils\View;
+use CMW\Manager\Views\View;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 

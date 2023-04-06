@@ -93,7 +93,7 @@ $description = LangManager::translate("core.dashboard.desc");
                             <h4><?= LangManager::translate("core.dashboard.numbers_views") ?></h4>
                         </div>
                         <div class="card-body">
-                            <div id="chart-profile-visit"></div>
+                            <canvas id="dashboardVisits" width="710" height="200" style="display: block; box-sizing: border-box; height: 355px; width: 710px;"></canvas>
                         </div>
                     </div>
                 </div>
