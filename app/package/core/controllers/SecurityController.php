@@ -9,7 +9,7 @@ use CMW\Model\Core\CoreModel;
 use CMW\Router\Link;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
-use CMW\Utils\View;
+use CMW\Manager\Views\View;
 
 /**
  * Class: @SecurityController

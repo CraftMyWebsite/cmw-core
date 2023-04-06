@@ -1,4 +1,4 @@
-<?php use CMW\Utils\View;
+<?php use CMW\Manager\Views\View;
 
 include_once("includes/head.inc.php");
 include_once("includes/header.inc.php");

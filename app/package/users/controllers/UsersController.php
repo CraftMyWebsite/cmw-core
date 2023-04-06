@@ -12,7 +12,7 @@ use CMW\Model\Users\UserPictureModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Router\Link;
 use CMW\Utils\Utils;
-use CMW\Utils\View;
+use CMW\Manager\Views\View;
 use CMW\Manager\Lang\LangManager;
 use CMW\Utils\Response;
 use JetBrains\PhpStorm\NoReturn;

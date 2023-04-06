@@ -3,7 +3,6 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
-use CMW\Manager\Api\APIManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
@@ -12,9 +11,8 @@ use CMW\Router\Link;
 use CMW\Router\RouterException;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
-use CMW\Utils\View;
+use CMW\Manager\Views\View;
 use JetBrains\PhpStorm\NoReturn;
-use JsonException;
 
 /**
  * Class: @coreController

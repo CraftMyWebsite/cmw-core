@@ -1,5 +1,5 @@
 <?php 
-use CMW\Utils\View;
+use CMW\Manager\Views\View;
 
 include_once("includes/head.inc.php");
 
