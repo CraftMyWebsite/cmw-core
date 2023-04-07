@@ -3,6 +3,7 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Api\PublicAPI;
 use CMW\Router\Link;
 use CMW\Utils\Utils;
 use CMW\Utils\View;
@@ -47,7 +48,7 @@ class UpdatesController extends CoreController
     {
         try {
             //First, we download the zip file and rename it with the name "updater.zip"
-            $apiJson = json_decode(file_get_contents(Utils::getApi() . "/getCmwLatest"), false, 512, JSON_THROW_ON_ERROR);
+            $apiJson = json_decode(file_get_contents(PublicAPI::getUrl() . "/getCmwLatest"), false, 512, JSON_THROW_ON_ERROR);
             file_put_contents(Utils::getEnv()->getValue("DIR") . "updater.zip",
                 fopen($apiJson->file_update, 'rb'));
 

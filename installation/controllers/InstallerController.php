@@ -4,6 +4,7 @@ namespace CMW\Controller\Installer;
 
 use CMW\Controller\Core\ThemeController;
 use CMW\Controller\Installer\Games\FabricGames;
+use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Lang\LangManager;
 use CMW\Router\Link;
 use CMW\Router\LinkStorage;
@@ -13,6 +14,7 @@ use CMW\Utils\Utils;
 use CMW\Utils\View;
 use InstallerModel;
 use JetBrains\PhpStorm\NoReturn;
+use JsonException;
 
 /**
  * Class: @installerController
@@ -108,6 +110,26 @@ class InstallerController
 
     public function welcomeInstallPost(): void
     {
+        $remoteAddress = $_SERVER['REMOTE_ADDR'];
+
+        if(!filter_var($remoteAddress,  FILTER_VALIDATE_IP)){
+            $remoteAddress = "0.0.0.0";
+        }
+
+        $data = [
+            'domain' => $_SERVER['HTTP_HOST'],
+            'cmw_version' => Utils::getEnv()->getValue('VERSION'),
+            'remote_address' => $remoteAddress
+        ];
+
+        $apiReturn = PublicAPI::postData("websites/register", $data, false);
+
+        if (array_key_exists('uuid', $apiReturn)){
+            Utils::getEnv()->setOrEditValue('CMW_KEY', $apiReturn['uuid']);
+        } else {
+            Utils::getEnv()->setOrEditValue('CMW_KEY', 'ERROR');
+        }
+
         Utils::getEnv()->editValue("installStep", 1);
     }
 
@@ -117,10 +139,8 @@ class InstallerController
     #[Link(path: "/test/db", method: Link::POST, scope: "/installer", secure: false)]
     public function testDbConnection(): void
     {
-        $host = filter_input(INPUT_POST, "bdd_address");
-        $username = filter_input(INPUT_POST, "bdd_login");
-        $password = filter_input(INPUT_POST, "bdd_pass");
-        $port = filter_input(INPUT_POST, "bdd_port");
+
+        [$host, $username, $password, $port] = Utils::filterInput("bdd_address", "bdd_login", "bdd_pass", "bdd_port");
 
         if(InstallerModel::tryDatabaseConnection($host, $username, $password, $port)) {
             print (json_encode(["status" => 1, "content" =>
@@ -141,11 +161,7 @@ class InstallerController
             return;
         }
 
-        $host = filter_input(INPUT_POST, "bdd_address");
-        $username = filter_input(INPUT_POST, "bdd_login");
-        $password = filter_input(INPUT_POST, "bdd_pass");
-        $db = filter_input(INPUT_POST, "bdd_name");
-        $port = filter_input(INPUT_POST, "bdd_port");
+        [$host, $username, $password, $db, $port] = Utils::filterInput("bdd_address", "bdd_login", "bdd_pass", "bdd_name", "bdd_port");
 
         $subFolder = filter_input(INPUT_POST, "install_folder");
         $devMode = isset($_POST['dev_mode']);

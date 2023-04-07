@@ -4,6 +4,7 @@ namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Entity\Core\ThemeEntity;
+use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Model\Core\CoreModel;
@@ -152,7 +153,7 @@ class ThemeController extends CoreController
         $installedThemes = self::getInstalledThemes();
 
         try {
-            $themesList = json_decode(file_get_contents(Utils::getApi() . "/getThemeList"), false, 512, JSON_THROW_ON_ERROR);
+            $themesList = json_decode(file_get_contents(PublicAPI::getUrl() . "/getThemeList"), false, 512, JSON_THROW_ON_ERROR);
             View::createAdminView("core", "themeConfiguration")
                 ->addStyle("admin/resources/vendors/simple-datatables/style.css","admin/resources/assets/css/pages/simple-datatables.css")
                 ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes, "themesList" => $themesList])
@@ -200,7 +201,7 @@ class ThemeController extends CoreController
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
 
         try {
-            $theme = json_decode(file_get_contents(Utils::getApi() . "/getThemeById=" . $id), false, 512, JSON_THROW_ON_ERROR);
+            $theme = json_decode(file_get_contents(PublicAPI::getUrl() . "/getThemeById=" . $id), false, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
         }
 

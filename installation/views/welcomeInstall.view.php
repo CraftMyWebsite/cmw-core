@@ -1,6 +1,7 @@
 <?php /* @var $lang String */
 
-use CMW\Manager\Lang\LangManager; ?>
+use CMW\Manager\Lang\LangManager;
+?>
 <select class="absolute top-0 right-0 select select-ghost select-sm w-32" id="lang" onchange="changeLang(this.value)">
     <option <?= $lang === 'fr' ? 'selected' : '' ?> value="fr">Français</option>
     <option <?= $lang === 'en' ? 'selected' : '' ?> value="en">English</option>
