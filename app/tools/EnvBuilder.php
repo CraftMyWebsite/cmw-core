@@ -26,7 +26,7 @@ class EnvBuilder
         $this->envPath = $this->absPath;
         $this->path = $this->envPath . $this->envFileName;
         $this->apiURL = "https://apiv2.craftmywebsite.fr"; //TODO En production mettre la vraie URL de l'API
-        $this->version = "2.0";
+        $this->version = "2.0-EXPERIMENTAL"; //TODO Get version from file ?
 
         if (!$this->checkForFile()) {
             $this->createFile();

@@ -24,15 +24,24 @@
 </IfModule>
 
 # Deny access to .htaccess
-<Files .htaccess>
-Order allow,deny
-Deny from all
+<Files ~ "^\.ht">
+    Order allow,deny
+    Deny from all
+    satisfy all
 </Files>
 
 # Deny access to .env
 <Files .env>
-Order allow,deny
-Deny from all
+    Order allow,deny
+    Deny from all
+    satisfy all
+</Files>
+
+# Deny access to .cmw-version
+<Files .cmw-version>
+    Order allow,deny
+    Deny from all
+    satisfy all
 </Files>
 
 #Cache images / scripts
