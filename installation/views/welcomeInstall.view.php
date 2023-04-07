@@ -40,8 +40,10 @@ use CMW\Manager\Lang\LangManager;
 <small>TODO => établir les pré-requis avant l'installation.</small>
 
 <div class="card-actions justify-end">
-    <form action="installer/submit" method="post">
-        <button type="submit" class="btn btn-primary"><?= LangManager::translate("core.btn.next") ?></button>
+    <form action="installer/submit" method="post" id="mainForm">
+        <button id="formBtn" type="submit" class="btn btn-primary">
+            <?= LangManager::translate("core.btn.next") ?>
+        </button>
     </form>
 </div>
 

@@ -36,6 +36,15 @@ return [
         ]
     ],
 
+    "details" => [
+        "title" => "Details",
+        "website" =>  [
+            "name" => "Website name",
+            "description" => "Description",
+            "description_placeholder" => "Discover my brand new custom website made with CraftMyWebsite"
+        ]
+    ],
+
     "steps" => [
         0 => "Welcome",
         1 => "Configuration",

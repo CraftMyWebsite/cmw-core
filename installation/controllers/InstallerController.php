@@ -3,7 +3,6 @@
 namespace CMW\Controller\Installer;
 
 use CMW\Controller\Core\ThemeController;
-use CMW\Controller\Installer\Games\FabricGames;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Lang\LangManager;
 use CMW\Router\Link;
@@ -14,7 +13,6 @@ use CMW\Utils\Utils;
 use CMW\Utils\View;
 use InstallerModel;
 use JetBrains\PhpStorm\NoReturn;
-use JsonException;
 
 /**
  * Class: @installerController
@@ -198,47 +196,9 @@ class InstallerController
 
     public function secondInstallPost(): void
     {
-        require_once(Utils::getEnv()->getValue("dir") . "installation/tools/FabricGames.php");
-
-        if (Utils::isValuesEmpty($_POST, "game")) {
-            echo "-1";
-            return;
-        }
-
-        $selGame = filter_input(INPUT_POST, "game");
-
-        FabricGames::installGame($selGame);
-
-        Utils::getEnv()->setOrEditValue("game", $selGame);
-
-        Utils::getEnv()->editValue("installStep", 3);
-
-        echo '1';
-    }
-
-    public function thirdInstallPost(): void
-    {
-        if (Utils::isValuesEmpty($_POST, "email", "username", "password") || !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
-            echo "-1";
-            return;
-        }
-
-        $email = filter_input(INPUT_POST, "email");
-        $username = filter_input(INPUT_POST, "username");
-        $password = password_hash(filter_input(INPUT_POST, "password"), PASSWORD_BCRYPT);
-
-        InstallerModel::initAdmin($email, $username, $password);
-
-        Utils::getEnv()->editValue("installStep", 4);
-
-        echo '1';
-    }
-
-    public function fourthInstallPost(): void {
-        require_once(Utils::getEnv()->getValue("dir") . "installation/tools/FabricGames.php");
-
         if (Utils::isValuesEmpty($_POST, "config_name", "config_description")) {
-            echo "-1";
+            Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.toaster.db.missing_inputs"));
             return;
         }
 
@@ -247,16 +207,35 @@ class InstallerController
 
         InstallerModel::initConfig($name, $description);
 
-        $res = FabricGames::initConfig();
+        Utils::getEnv()->editValue("installStep", 3);
+    }
 
-        if($res !== 1) {
-            echo $res;
-            return;
-        }
+    public function thirdInstallPost(): void
+    {
+        die();
+        Utils::getEnv()->editValue("installStep", 4);
+    }
+
+    public function fourthInstallPost(): void {
 
         Utils::getEnv()->editValue("installStep", 5);
 
         echo 1;
+    }
+
+    public function sixInstallPost(): void
+    {
+        if (Utils::isValuesEmpty($_POST, "email", "username", "password") || !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+            Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.toaster.db.missing_inputs"));
+            return;
+        }
+
+        $email = filter_input(INPUT_POST, "email");
+        $username = filter_input(INPUT_POST, "username");
+        $password = password_hash(filter_input(INPUT_POST, "password"), PASSWORD_BCRYPT);
+
+        InstallerModel::initAdmin($email, $username, $password);
     }
 
     private function firstInstallSetDatabase(string $host, string $db, string $username, string $password, int $port): void
@@ -274,15 +253,6 @@ class InstallerController
         Utils::getEnv()->setOrEditValue("TIMEZONE", $timezone);
         Utils::getEnv()->setOrEditValue("DEVMODE", $devMode);
     }
-
-
-    public function loadHTMLGame(): void
-    {
-        require_once(Utils::getEnv()->getValue("dir") . "installation/tools/FabricGames.php");
-
-        FabricGames::getHTML();
-    }
-
 
     #[NoReturn] public static function goToInstall(): void
     {

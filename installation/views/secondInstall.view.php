@@ -1,40 +1,34 @@
 <?php
 /* @var \CMW\Controller\Installer\InstallerController $install */
+
+use CMW\Manager\Lang\LangManager;
+
 ?>
 
-<div class="card">
-    <div class="card-header">
-        <h3 class="card-title"><?= INSTALL_GAME_SELECTION_TITLE ?></h3>
+<h2 class="text-2xl font-medium text-center"><?= LangManager::translate("installation.details.title") ?></h2>
+<form action="installer/submit" method="post" id="mainForm">
+    <div class="lg:grid grid-cols-2 gap-8">
+        <div class="form-control">
+            <p class="font-light"><?= LangManager::translate("installation.details.website.name") ?> :</p>
+            <label class="input-group input-group">
+                <span><i class="fa-solid fa-heading"></i></span>
+                <input type="text" placeholder="CraftMyWebsite" maxlength="255" name="config_name"
+                       class="input input-bordered input-sm w-full" required>
+            </label>
+        </div>
+        <div class="form-control">
+            <p class="font-light"><?= LangManager::translate("installation.details.website.description") ?> :</p>
+            <label class="input-group input-group">
+                <span><i class="fa-solid fa-text-width"></i></i></span>
+                <input type="text" maxlength="255" class="input input-bordered input-sm w-full" name="config_description"
+                       placeholder="<?= LangManager::translate("installation.details.website.description_placeholder") ?>"
+                       required>
+            </label>
+        </div>
     </div>
-    <!-- form start -->
-    <form action="installer/submit" role="form" method="post" id="formSecondInstall" name="formSecondInstall">
-        <div class="card-body">
-
-            <div class="row">
-                <?php foreach ($install->getGameList() as $game): ?>
-                    <div class="game-container">
-
-                        <label class="game-label">
-                            <input type="radio" name="game" value="<?= $game ?>">
-
-                            <img src='installation/views/assets/img/<?= $game ?>-logo.png'
-                                 class="rounded mx-auto"
-                                 style="max-height: 150px; max-width: 150px"
-                                 alt="Logo <?= $game ?>">
-                        </label>
-
-                        <span class="game-name"><?= $game ?></span>
-
-                    </div>
-                <?php endforeach; ?>
-
-            </div>
-        </div>
-        <!-- /.card-body -->
-        <div class="card-footer">
-            <button type="submit" name="submitSecondInstall" id="submitSecondInstall"
-                    class="btn btn-primary"><?= INSTALL_SAVE ?>
-            </button>
-        </div>
-    </form>
-</div>
+    <div class="card-actions justify-end">
+        <button id="formBtn" type="submit" class="btn btn-primary">
+            <?= LangManager::translate("core.btn.next") ?>
+        </button>
+    </div>
+</form>

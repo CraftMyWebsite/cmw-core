@@ -25,7 +25,7 @@ use CMW\Manager\Lang\LangManager;
     <link rel="stylesheet" href="installation/views/assets/css/style.css">
 </head>
 
-<div id="loader" class="loader top-[45%] z-50"></div>
+
 
 <body class="bg-cmw-gray">
 <img class="w-48 mx-auto py-8" src="admin/resources/assets/images/logo/logo_compact.png" alt="Image introuvable !">
@@ -34,8 +34,7 @@ use CMW\Manager\Lang\LangManager;
         <?= InstallerController::getInstallationStep() ?></span>
     <span class="text-sm">/<?= count(InstallerController::$installSteps) ?></span></div>
 
-
-<div class="hidden lg:block w-full mx-auto">
+<div class="lg:block w-full mx-auto">
     <div class=" p-4">
         <ul class=" content-center steps steps-horizontal w-full">
             <?php foreach (InstallerController::$installSteps as $i => $step): ?>
@@ -60,5 +59,7 @@ use CMW\Manager\Lang\LangManager;
     </div>
 </div>
 
+<div id="loader" class="loader top-[45%] z-50 hidden"></div>
+
 <div class="card w-5/6 lg:w-4/6 bg-cmw-gray-sec mx-auto mt-8">
-    <div class="card-body">
+    <div class="card-body" id="body">

@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS `cmw_core_options`
 (
     `option_name`    VARCHAR(255) NOT NULL,
-    `option_value`   VARCHAR(255) NOT NULL,
+    `option_value`   VARCHAR(500) NOT NULL,
     `option_updated` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;

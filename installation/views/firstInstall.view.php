@@ -4,7 +4,7 @@ use CMW\Manager\Lang\LangManager;
 
 ?>
 <h2 class="text-2xl font-medium text-center"><?= LangManager::translate("installation.config.title") ?></h2>
-<form action="installer/submit" method="post">
+<form action="installer/submit" method="post" id="mainForm">
     <div class="lg:grid grid-cols-2 gap-8">
         <div>
             <h2 class="text-lg font-medium text-center"><?= LangManager::translate("installation.config.db.db") ?></h2>
@@ -74,7 +74,9 @@ use CMW\Manager\Lang\LangManager;
         </div>
     </div>
     <div class="card-actions justify-end">
-        <button type="submit" class="btn btn-primary"><?= LangManager::translate("core.btn.next") ?></button>
+        <button id="formBtn" type="submit" class="btn btn-primary">
+            <?= LangManager::translate("core.btn.next") ?>
+        </button>
     </div>
 </form>
 
