@@ -33,7 +33,7 @@ class LinkStorage extends DatabaseManager
                     $slug = $route->getScope() . $route->getPath();
                     $title = $route->getName() === '1' ?: Utils::normalizeForSlug($route->getPath());
                     $method = $route->getMethod();
-                    $isAdmin = str_contains("cmw-admin", (!(is_null($route->getScope()) ?: "/")));
+                    $isAdmin = str_contains(mb_strtolower($route->getScope() ?? "/"), "cmw-admin");
                     $isDynamic = $route->getVariables() !== [];
                     $weight = $route->getWeight();
 
