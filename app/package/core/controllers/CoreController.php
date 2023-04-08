@@ -40,12 +40,6 @@ class CoreController
         return date((new CoreModel())->fetchOption("dateFormat"), strtotime($date));
     }
 
-    #[NoReturn] protected static function redirectToHome(): void
-    {
-        header('Location: ' . getenv('PATH_SUBFOLDER'));
-        exit();
-    }
-
     /* ADMINISTRATION */
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin")]
     #[Link("/dashboard", Link::GET, [], "/cmw-admin")]

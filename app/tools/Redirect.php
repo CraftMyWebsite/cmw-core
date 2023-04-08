@@ -26,7 +26,7 @@ class Redirect
     /**
      * @param string $url Url or Route Name.
      */
-    public static function redirect(string $url): void
+    public static function redirect(string $url, array $params = []): void
     {
         $route = self::getRouteByUrl($url);
 
@@ -34,8 +34,37 @@ class Redirect
             return;
         }
 
+        $params = implode(", ", $params);
+
         http_response_code(302);
-        header("Location: " . getenv("PATH_SUBFOLDER") . $route->getUrl());
+        header("Location: " .  Utils::getEnv()->getValue("PATH_SUBFOLDER") . $route->getUrl() . '/' . $params);
+    }
+
+    /**
+     * @param int $code
+     * @return void
+     * @desc Redirect to errorPage
+     */
+    public static function errorPage(int $code = 403): void
+    {
+        http_response_code($code);
+        header("Location: getError/$code");
+    }
+
+    public static function redirectToPreviousPage(): void
+    {
+        http_response_code(302);
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+    }
+
+    /**
+     * @return void
+     * @desc Redirect to the website home page with 302
+     */
+    public static function redirectToHome(): void
+    {
+        http_response_code(302);
+        header("Location: " . Utils::getEnv()->getValue("PATH_SUBFOLDER"));
     }
 
     public static function emulateRoute(string $url): void

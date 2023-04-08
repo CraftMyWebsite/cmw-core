@@ -3,13 +3,14 @@
 namespace CMW\Entity\Users;
 
 use CMW\Controller\Core\CoreController;
+use CMW\Model\Users\UsersModel;
 
 class UserEntity
 {
 
     private int $userId;
     private string $userMail;
-    private string $userUsername;
+    private string $userPseudo;
     private string $userFirstName;
     private string $userLastName;
     private int $userState;
@@ -26,7 +27,7 @@ class UserEntity
     /**
      * @param int $userId
      * @param string $userMail
-     * @param string $userUsername
+     * @param string $userPseudo
      * @param string $userFirstName
      * @param string $userLastName
      * @param int $userState
@@ -38,11 +39,11 @@ class UserEntity
      * @param string $userUpdated
      * @param \CMW\Entity\Users\UserPictureEntity|null $userPicture
      */
-    public function __construct(int $userId, string $userMail, string $userUsername, string $userFirstName, string $userLastName, int $userState, string $userKey, string $userLastConnection, array $userRoles, ?RoleEntity $userHighestRole, string $userCreated, string $userUpdated, ?UserPictureEntity $userPicture)
+    public function __construct(int $userId, string $userMail, string $userPseudo, string $userFirstName, string $userLastName, int $userState, string $userKey, string $userLastConnection, array $userRoles, ?RoleEntity $userHighestRole, string $userCreated, string $userUpdated, ?UserPictureEntity $userPicture)
     {
         $this->userId = $userId;
         $this->userMail = $userMail;
-        $this->userUsername = $userUsername;
+        $this->userPseudo = $userPseudo;
         $this->userFirstName = $userFirstName;
         $this->userLastName = $userLastName;
         $this->userState = $userState;
@@ -74,9 +75,9 @@ class UserEntity
     /**
      * @return string
      */
-    public function getUsername(): string
+    public function getPseudo(): string
     {
-        return $this->userUsername;
+        return $this->userPseudo;
     }
 
     /**
@@ -160,6 +161,15 @@ class UserEntity
     public function getUserPicture(): ?UserPictureEntity
     {
         return $this->userPicture;
+    }
+
+    /**
+     * @return bool
+     * @desc Return true if the current user is the page owner
+     */
+    public function isViewerIsCurrentUser(): bool
+    {
+        return UsersModel::getCurrentUser()?->userId === $this->userId;
     }
 
 }

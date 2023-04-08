@@ -105,10 +105,10 @@ $description = LangManager::translate("core.dashboard.desc");
                 <div class="card-body py-4 px-4">
                     <div class="d-flex align-items-center">
                         <div class="avatar avatar-xl">
-                            <img src="<?= UsersModel::getCurrentUser()->getUserPicture()->getImageLink() ?>" alt="<?= LangManager::translate("users.users.image.image_alt", ['username' => UsersModel::getCurrentUser()->getUsername()]) ?>">
+                            <img src="<?= UsersModel::getCurrentUser()->getUserPicture()->getImageLink() ?>" alt="<?= LangManager::translate("users.users.image.image_alt", ['username' => UsersModel::getCurrentUser()->getPseudo()]) ?>">
                         </div>
                         <div class="ms-3 name">
-                            <h5 class="font-bold"><?= UsersModel::getCurrentUser()->getUsername() ?></h5>
+                            <h5 class="font-bold"><?= UsersModel::getCurrentUser()->getPseudo() ?></h5>
                             <h6 class="text-muted mb-0"><?= LangManager::translate("core.dashboard.welcome") ?> <span style="text-transform: lowercase;"><?= UsersModel::getCurrentUser()->getHighestRole()->getName() ?></span></h6>
                         </div>
                     </div>

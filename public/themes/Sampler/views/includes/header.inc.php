@@ -10,9 +10,9 @@ use CMW\Utils\Utils;
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto my-2 my-lg-0">
                 <?php if (UsersController::isAdminLogged()) : ?>
-                <li class="nav-item"><a class="nav-link" href="<?= Utils::getEnv()->getValue('PATH-SUBFOLDER') ?>cmw-admin">Accès à l'administration</a></li>
+                <li class="nav-item"><a class="nav-link" href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>cmw-admin">Accès à l'administration</a></li>
                 <?php else: ?>
-                <li class="nav-item"><a class="nav-link" href="<?= Utils::getEnv()->getValue('PATH-SUBFOLDER') ?>login">Connexion</a></li>
+                <li class="nav-item"><a class="nav-link" href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>login">Connexion</a></li>
                 <?php endif; ?>
             </ul>
         </div>

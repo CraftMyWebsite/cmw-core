@@ -38,7 +38,7 @@ $description = LangManager::translate("core.config.desc");
                 <div class="card-body">
                     <h6><?= LangManager::translate("core.condition.content") ?></h6>
                     <textarea name="conditionContent" id="summernote-2"><?= $cgv->getContent() ?></textarea>
-                    <p><?= LangManager::translate("core.condition.updateby") ?> <?= $cgv->getLastEditor()?->getUsername() ?>
+                    <p><?= LangManager::translate("core.condition.updateby") ?> <?= $cgv->getLastEditor()?->getPseudo() ?>
                         <?= LangManager::translate("core.condition.on") ?> <?= CoreController::formatDate($cgv->getUpdate()) ?></p>
                     <div class="text-center mt-2">
                         <button type="submit" class="btn btn-primary float-right">
@@ -68,7 +68,7 @@ $description = LangManager::translate("core.config.desc");
                 <div class="card-body">
                     <h6><?= LangManager::translate("core.condition.content") ?></h6>
                     <textarea name="conditionContent" id="summernote-2"><?= $cgu->getContent() ?></textarea>
-                    <p><?= LangManager::translate("core.condition.updateby") ?> <?= $cgu->getLastEditor()?->getUsername() ?>
+                    <p><?= LangManager::translate("core.condition.updateby") ?> <?= $cgu->getLastEditor()?->getPseudo() ?>
                         <?= LangManager::translate("core.condition.on") ?> <?= CoreController::formatDate($cgu->getUpdate()) ?></p>
                     <div class="text-center mt-2">
                         <button type="submit" class="btn btn-primary float-right">

@@ -120,6 +120,33 @@ class UsersModel extends DatabaseManager
         );
     }
 
+    /**
+     * @param string $pseudo
+     * @return \CMW\Entity\Users\UserEntity|null
+     */
+    public function getUserWithPseudo(string $pseudo): ?UserEntity
+    {
+        $sql = "SELECT user_id FROM cmw_users WHERE user_pseudo = :pseudo";
+
+        $db = self::getInstance();
+
+        $req = $db->prepare($sql);
+
+        if (!$req->execute(['pseudo' => $pseudo])){
+            return null;
+        }
+
+        $res = $req->fetch();
+
+        if (!$res){
+            return null;
+        }
+
+        $userId = (int)$res['user_id'];
+
+        return $this->getUserById($userId);
+    }
+
     public static function getCurrentUser(): ?UserEntity
     {
         return !isset($_SESSION['cmwUserId']) ? null : (new self)->getUserById($_SESSION['cmwUserId']);

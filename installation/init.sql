@@ -259,4 +259,5 @@ VALUES ('1', '5');
 #Insert the default profile picture image
 INSERT INTO `cmw_users_settings` (users_settings_name, users_settings_value)
 VALUES ('defaultImage', 'defaultImage.jpg'),
-       ('resetPasswordMethod', '0')
+       ('resetPasswordMethod', '0'),
+       ('profilePage', '1')

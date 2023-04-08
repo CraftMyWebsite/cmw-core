@@ -33,7 +33,7 @@ $description = LangManager::translate("pages.list.desc"); ?>
                     <tr>
                         <td><?= $page->getTitle() ?></td>
                         <td><a href="<?= Utils::getHttpProtocol() . '://' . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . "p/" . $page->getSlug() ?>" target="_blank"><?= Utils::getHttpProtocol() . '://' . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . "p/" . $page->getSlug() ?></a></td>
-                        <td><?= $page->getUser()->getUsername() ?></td>
+                        <td><?= $page->getUser()->getPseudo() ?></td>
                         <td><?php if ($page->getState() === 2): ?> <?= LangManager::translate("pages.list.yes") ?> <?php else: ?> <?= LangManager::translate("pages.list.no") ?> <?php endif; ?></td>
                         <td><?= $page->getEdited() ?></td>
                         <td><?= $page->getCreated() ?></td>
