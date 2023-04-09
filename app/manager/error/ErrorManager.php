@@ -115,18 +115,45 @@ class ErrorManager
         $trace = preg_replace("/#(\d)/", "<b>#$1</b><br>", $e->getTraceAsString());
         $trace = preg_replace("/<br>/", "</code><code style='margin: .6rem 0; display: block'>", $trace);
         return <<<HTML
-            <div class="cmw--errors">
-                <h2>[Internal Exception] Oops...</h2>
-                <ul>
-                    <li><b>Error Type:</b> <code>$classType</code></li>
-                    <li><b>Error Message:</b> <code>{$e->getMessage()}</code></li>
-                    <li><b>Location:</b> <code class="cmw--errors--location">{$e->getFile()}:{$e->getLine()}</code></li>
-                </ul>
-                <p>
-                    <u>Trace :</u> <code class="cmw--errors--trace">{$trace}</code>
-                </p>
+        <style>
+            .error {
+                background: #343749;
+                font-family: Verdana, sans-serif;
+                color: white;
+                padding: 1rem;
+            }
+            h2 {
+                text-align: center;
+            }
+            h4 {
+                text-align: center;
+            }
+            .error-message {
+                color: red;
+                font-size: 1rem;
+            }
+            .file {
+                color: yellowgreen;
+                font-size: 1rem;
+            }
+            .line {
+                color: #ABB015;
+                font-weight: bold;
+                font-size: 1rem;
+            }
+            a {
+                color: red;
+            }
+        </style>
+            <div class="error">
+                <h2>$classType</h2>
+                    <p>Error : <code class="error-message">{$e->getMessage()}</code></p>
+                    <p>Found in <code><span class="file">{$e->getFile()}</span></code> at the line <span class="line">{$e->getLine()}</span><p>
+                <p>Trace : <code class="trace">{$trace}</code></p>
                 
                 <small>This error has been saved in {$this->dirStorage}/{$this->getFileLogName()}</small>
+                <h4>User, if you encounter this error please report it to the administrator !</h4>
+                <h4>Administrator, if you can't fix this error please refer to the <a href="">documentation</a> or contact CraftMyWebsite on the <a href="">Discord</a></h4>
             </div>
         HTML;
 
