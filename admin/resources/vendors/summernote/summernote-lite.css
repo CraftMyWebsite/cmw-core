@@ -1,10 +1,9 @@
-/*!
-LIGHT VERSION
- */
+@font-face{font-display:auto;font-family:summernotes;font-style:normal;font-weight:400;src:url(font/summernote.eot?#iefix) format("embedded-opentype"),url(font/summernote.woff2) format("woff2"),url(font/summernote.woff) format("woff"),url(font/summernote.ttf) format("truetype")}
+
 [class^=note-icon]:before,
 [class*=" note-icon"]:before {
     display: inline-block;
-    font-family: "summernote";
+    font-family: "summernotes";
     font-style: normal;
     font-size: inherit;
     text-decoration: inherit;
@@ -15,6 +14,11 @@ LIGHT VERSION
     -webkit-font-smoothing: antialiased;
     speak: none;
 }
+
+/*!
+LIGHT VERSION
+ */
+
 
 .note-icon-fw {
     text-align: center;
@@ -1507,20 +1511,6 @@ html .note-fullscreen-body, body .note-fullscreen-body {
 /*!
 DARK
  */
-[class^=note-icon]:before,
-[class*=" note-icon"]:before {
-    display: inline-block;
-    font-family: "summernote";
-    font-style: normal;
-    font-size: inherit;
-    text-decoration: inherit;
-    text-rendering: auto;
-    text-transform: none;
-    vertical-align: middle;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
-    speak: none;
-}
 
 body.theme-dark .note-icon-fw {
     text-align: center;
