@@ -39,7 +39,7 @@ class EditorController extends CoreController
     #[Link("/editor/config", Link::GET, [], "/cmw-admin")]
     public function editorConfiguration(): void
     {
-        //UsersController::redirectIfNotHavePermissions("");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.editor.edit");
 
         $currentStyle = self::getCurrentStyle();
         $installedStyles = self::getInstalledStyles();
@@ -52,6 +52,8 @@ class EditorController extends CoreController
     #[Link("/editor/config", Link::POST, [], "/cmw-admin")]
     public function editorConfigurationPost(): void
     {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.editor.edit");
+
         $style = filter_input(INPUT_POST, "style");
 
         CoreModel::updateOption("editor_style",$style);

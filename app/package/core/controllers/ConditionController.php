@@ -31,7 +31,7 @@ class ConditionController extends CoreController
     #[Link("/condition", Link::GET, [], "/cmw-admin")]
     public function conditionDashboard(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.condition.edit");
 
         $cgv = $this->conditionModel->getCGV();
         $cgu = $this->conditionModel->getCGU();
@@ -49,7 +49,7 @@ class ConditionController extends CoreController
     #[Link("/condition", Link::POST, [], "/cmw-admin")]
     public function conditionDashboardPost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.condition.edit");
 
         [$conditionId, $conditionContent, $conditionState] = Utils::filterInput("conditionId",
             "conditionContent", "conditionState");
