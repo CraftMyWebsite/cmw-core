@@ -238,19 +238,7 @@ VALUES ('Visiteur', 'Rôle pour les visiteurs', 0),
 
 
 INSERT INTO `cmw_permissions` (`permission_id`, `permission_parent_id`, `permission_code`)
-VALUES (1, NULL, 'operator'),
-       (2, NULL, 'pages'),
-       (3, NULL, 'core'),
-       (4, NULL, 'users'),
-       (5, 2, 'show'),
-       (6, 2, 'add'),
-       (7, 2, 'edit'),
-       (8, 3, 'dashboard'),
-       (9, 4, 'show'),
-       (10, 4, 'add'),
-       (11, 4, 'edit'),
-       (12, 4, 'delete'),
-       (13, 4, 'roles');
+VALUES (1, NULL, 'operator');
 
 #Insert operator permission for the admin role
 INSERT INTO `cmw_roles_permissions` (`permission_id`, `role_id`)

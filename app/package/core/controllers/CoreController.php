@@ -7,6 +7,7 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Model\Core\CoreModel;
+use CMW\Model\Users\PermissionsModel;
 use CMW\Router\Link;
 use CMW\Router\RouterException;
 use CMW\Utils\Response;
