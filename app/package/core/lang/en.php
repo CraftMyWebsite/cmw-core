@@ -186,7 +186,8 @@ return [
         "action" => "Action",
         "confirm" => "Confirm",
         "next" => "Next",
-        "try" => "Try"
+        "try" => "Try",
+        "continue" => "Continue"
     ],
     "months" => '["January","February","March","April","May","June","July","August","September","October","November","December"]'
 ];

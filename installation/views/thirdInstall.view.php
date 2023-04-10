@@ -1,7 +1,9 @@
 <?php
 /* @var \CMW\Controller\Installer\InstallerController $install */
 
+use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Lang\LangManager;
+use CMW\Utils\Utils;
 
 ?>
 
@@ -40,50 +42,64 @@ use CMW\Manager\Lang\LangManager;
     <li class="lg:w-1/3 lg:px-2 mb-4 h-fit">
         <div class="font-bold text-lg bg-gray-700 rounded-t-2xl p-1">
             <div class="flex flex-wrap">
-                <img class="w-7 mr-2" src="/public/img/bundle/other.png">
+                <img class="w-7 mr-2" src="installation/views/assets/img/other.png">
                 <span class="font-medium text-lg">Personnalisé</span>
             </div>
         </div>
 
         <div class="bg-gray-800 rounded-b-2xl">
             <div class="p-4">
-                <p>Personnaliser votre installation vous même.</p>
+                <p>Personnaliser votre installation vous-même.</p>
                 <p>Ceci ne veut pas dire qu'il n'est pas possible de le personnaliser avec d'autres bundle.</p>
             </div>
             <form action="installer/submit" method="post" id="mainForm">
-                <button id="formBtn" type="submit" class="btn btn-primary">
-                    <?= LangManager::translate("core.btn.next") ?>
-                </button>
+                <div class="flex justify-end">
+                    <button id="formBtn" type="submit" class="btn btn-primary py-1 px-2 rounded rounded-br-xl">
+                        <?= LangManager::translate("core.btn.continue") ?>
+                    </button>
+                </div>
             </form>
         </div>
     </li>
 
     <!-- Bundle -->
 
-    <li class="lg:w-1/3 lg:px-2 mb-4 h-fit">
-        <div class="font-bold text-lg bg-gray-700 rounded-t-2xl p-1">
-            <div class="flex flex-wrap">
-                <img class="w-7 mr-2" src="/public/img/bundle/community.png">
-                <span class="font-medium text-lg">Communautaire</span>
+    <?php foreach (PublicAPI::getData("resources/getBundles&lang=" . Utils::getEnv()->getValue("locale")) as $bundle): ?>
+        <li class="lg:w-1/3 lg:px-2 mb-4 h-fit">
+            <div class="font-bold text-lg bg-gray-700 rounded-t-2xl p-1">
+                <div class="flex flex-wrap">
+                    <img class="w-7 mr-2" src="<?= $bundle['image'] ?>">
+                    <span class="font-medium text-lg"><?= $bundle['name'] ?></span>
+                </div>
             </div>
-        </div>
 
-        <div class="bg-gray-800 rounded-b-2xl">
-            <div class="p-4">
-                <p>Parfait pour bla bla bla</p>
-                <p class="mt-2">Ce bundle inclus les packages :</p>
-                <ul style="list-style: inside;">
-                    <li>Contact</li>
-                    <li>Forum</li>
-                </ul>
+            <div class="bg-gray-800 rounded-b-2xl">
+                <div class="p-4">
+                    <p><?= $bundle['description'] ?></p>
+                    <p class="mt-2">Ce bundle inclus les packages :</p>
+                    <ul style="list-style: inside;">
+                        <?php foreach ($bundle['content'] as $bundleResource): ?>
+                            <li>
+                                <?= $bundleResource['type'] === 0 ?
+                                    '<i class="fa-solid fa-paintbrush"></i> ' :
+                                    '<i class="fa-solid fa-box"></i> ' ?>
+                                <?= $bundleResource['name'] ?>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <form action="installer/submit" method="post">
+                    <div class="flex justify-end">
+                        <input type="hidden" name="bundleId" value="<?= $bundle['id'] ?>">
+                        <button type="submit" class="btn btn-primary py-1 px-2 rounded rounded-br-xl" onclick="customLaunchLoader()">
+                            <?= LangManager::translate("core.btn.continue") ?>
+                        </button>
+                    </div>
+                </form>
             </div>
-            <form action="installer/submit" method="post">
-                <button type="submit" class="btn btn-primary" onclick="customLaunchLoader()">
-                    <?= LangManager::translate("core.btn.next") ?>
-                </button>
-            </form>
-        </div>
-    </li>
+        </li>
+
+    <?php endforeach; ?>
 
     <!-- /Bundle -->
 

@@ -4,7 +4,10 @@ namespace CMW\Controller\Installer;
 
 use CMW\Controller\Core\ThemeController;
 use CMW\Manager\Api\PublicAPI;
+use CMW\Manager\Download\DownloadManager;
+use CMW\Manager\Error\ErrorManager;
 use CMW\Manager\Lang\LangManager;
+use CMW\Model\Core\CoreModel;
 use CMW\Router\Link;
 use CMW\Router\LinkStorage;
 use CMW\Utils\Redirect;
@@ -85,6 +88,8 @@ class InstallerController
             3 => "thirdInstall",
             4 => "fourthInstall",
             5 => "fifthInstall",
+            6 => "sixInstall",
+            7 => "finishInstall",
             default => "welcomeInstall"
         };
 
@@ -98,6 +103,8 @@ class InstallerController
             2 => "secondInstallPost",
             3 => "thirdInstallPost",
             4 => "fourthInstallPost",
+            5 => "fifthInstallPost",
+            6 => "sixInstallPost",
             default => "welcomeInstallPost"
         };
 
@@ -183,7 +190,7 @@ class InstallerController
 
 
         //Todo Throw error
-        InstallerModel::initDatabase($host, $db, $username, $password, $port, $devMode);
+        InstallerModel::initDatabase($host, $db, $username, $password, $port);
 
         // Install the default theme settings
         (new ThemeController())->installThemeSettings(ThemeController::getCurrentTheme()->getName());
@@ -212,8 +219,39 @@ class InstallerController
 
     public function thirdInstallPost(): void
     {
-        die();
-        Utils::getEnv()->editValue("installStep", 4);
+        $isCustom = false;
+
+        if (!isset($_POST['bundleId'])){
+            $isCustom = true;
+        }
+
+        // If custom bundle is select, we skip this step
+        if ($isCustom){
+            Utils::getEnv()->editValue("installStep", 4);
+            return;
+        }
+
+        $bundleId = $_POST['bundleId'];
+
+        $resources = PublicAPI::getData("resources/installBundle&id=$bundleId");
+
+        foreach ($resources as $resource){
+            $type = $resource['type'] === 1 ? 'package' : 'theme';
+
+            // TODO better errors
+            if (!DownloadManager::installPackageWithLink($resource['file'], $type, $resource['name'])) {
+                Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                    LangManager::translate("core.toaster.internalError"));
+                continue;
+            }
+
+            if ($type === 'theme'){
+                (new ThemeController())->installThemeSettings($resource['name']);
+                CoreModel::updateOption("theme", $resource['name']);
+            }
+        }
+
+        Utils::getEnv()->editValue("installStep", 6);
     }
 
     public function fourthInstallPost(): void {
@@ -225,17 +263,19 @@ class InstallerController
 
     public function sixInstallPost(): void
     {
-        if (Utils::isValuesEmpty($_POST, "email", "username", "password") || !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+        if (Utils::isValuesEmpty($_POST, "email", "pseudo", "password") || !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
             Response::sendAlert("error", LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.toaster.db.missing_inputs"));
             return;
         }
 
         $email = filter_input(INPUT_POST, "email");
-        $username = filter_input(INPUT_POST, "username");
+        $pseudo = filter_input(INPUT_POST, "pseudo");
         $password = password_hash(filter_input(INPUT_POST, "password"), PASSWORD_BCRYPT);
 
-        InstallerModel::initAdmin($email, $username, $password);
+        InstallerModel::initAdmin($email, $pseudo, $password);
+
+        Utils::getEnv()->editValue("installStep", 7);
     }
 
     private function firstInstallSetDatabase(string $host, string $db, string $username, string $password, int $port): void
@@ -268,9 +308,14 @@ class InstallerController
         die();
     }
 
+    #[Link(path: "/finish", method: Link::GET, scope: "/installer")]
     public function endInstallation(): void
     {
+        // Reset to default settings (with dev mode or not)
+        ErrorManager::enableErrorDisplays();
         Utils::getEnv()->editValue("installStep", -1);
+
+       header("location: " . Utils::getEnv()->getValue('PATH_SUBFOLDER'));
     }
 
 

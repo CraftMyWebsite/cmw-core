@@ -45,6 +45,10 @@ return [
         ]
     ],
 
+    "administrator" => [
+        "title" => "Administrator account",
+    ],
+
     "steps" => [
         0 => "Welcome",
         1 => "Configuration",

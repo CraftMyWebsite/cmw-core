@@ -293,6 +293,8 @@ class Loader
         if (is_dir("installation")) {
             if (Utils::getEnv()->getValue("INSTALLSTEP") !== '-1') {
 
+                ErrorManager::enableErrorDisplays(true);
+
                 $this->requireFile("installation", "controllers/InstallerController.php", "models/InstallerModel.php"); //Todo See that
                 self::initRoute(self::getValue("dir") . "installation/controllers/InstallerController.php");
 

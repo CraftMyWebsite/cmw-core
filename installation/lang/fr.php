@@ -37,12 +37,16 @@ return [
     ],
 
     "details" => [
-      "title" => "Détails",
-      "website" =>  [
-          "name" => "Nom du site",
-          "description" => "Description",
-          "description_placeholder" => "Découvrez mon nouveau site grâce à CraftMyWebsite"
-      ]
+        "title" => "Détails",
+        "website" => [
+            "name" => "Nom du site",
+            "description" => "Description",
+            "description_placeholder" => "Découvrez mon nouveau site grâce à CraftMyWebsite"
+        ]
+    ],
+
+    "administrator" => [
+        "title" => "Compte Administrateur",
     ],
 
     "steps" => [
