@@ -12,7 +12,7 @@ $description = "Description de votre page";
 <section class="page-section">
     <div class="container">
         <?= $cgv->getContent() ?><br>
-        <?= $cgv->getLastEditor()->getUsername() ?>
+        <?= $cgv->getLastEditor()->getPseudo() ?>
         <?= $cgv->getUpdate() ?>
     </div>
 </section>

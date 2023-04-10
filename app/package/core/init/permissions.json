@@ -1,0 +1,11 @@
+[
+  "core.dashboard",
+  "core.configuration",
+  "core.condition.edit",
+  "core.editor.edit",
+  "core.mail.configuration",
+  "core.menus.configuration",
+  "core.security.configuration",
+  "core.theme.configuration",
+  "core.update"
+]

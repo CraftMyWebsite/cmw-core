@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Utils;
+namespace CMW\Manager\Views;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\ThemeController;
@@ -8,6 +8,8 @@ use CMW\Controller\Core\MenusController;
 use CMW\Controller\Users\UsersController;
 use CMW\Model\Users\UsersModel;
 use CMW\Router\RouterException;
+use CMW\Utils\Response;
+use CMW\Utils\Utils;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
 
@@ -160,8 +162,8 @@ class View
         }
         $theme = ThemeController::getCurrentTheme()->getName();
         return ($this->isAdminFile)
-            ? "app/package/{$this->package}/views/{$this->viewFile}.admin.view.php"
-            : "public/themes/$theme/views/{$this->package}/{$this->viewFile}.view.php";
+            ? "app/package/$this->package/views/$this->viewFile.admin.view.php"
+            : "public/themes/$theme/views/$this->package/$this->viewFile.view.php";
     }
 
     private function getTemplateFile(): string

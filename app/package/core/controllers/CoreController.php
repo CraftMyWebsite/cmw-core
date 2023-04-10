@@ -3,18 +3,17 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
-use CMW\Manager\Api\APIManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Model\Core\CoreModel;
+use CMW\Model\Users\PermissionsModel;
 use CMW\Router\Link;
 use CMW\Router\RouterException;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
-use CMW\Utils\View;
+use CMW\Manager\Views\View;
 use JetBrains\PhpStorm\NoReturn;
-use JsonException;
 
 /**
  * Class: @coreController
@@ -42,12 +41,6 @@ class CoreController
         return date((new CoreModel())->fetchOption("dateFormat"), strtotime($date));
     }
 
-    #[NoReturn] protected static function redirectToHome(): void
-    {
-        header('Location: ' . getenv('PATH_SUBFOLDER'));
-        exit();
-    }
-
     /* ADMINISTRATION */
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin")]
     #[Link("/dashboard", Link::GET, [], "/cmw-admin")]
@@ -60,7 +53,8 @@ class CoreController
         }
 
         View::createAdminView("core", "dashboard")
-        ->addScriptAfter("admin/resources/vendors/apexcharts/apexcharts.min.js","admin/resources/assets/js/pages/dashboard.js")
+        ->addScriptAfter("admin/resources/vendors/chart/chart.min.js",
+                                "app/package/core/views/resources/js/dashboard.js")
         ->view();
     }
 

@@ -130,8 +130,18 @@ return [
         "resetPasswordMethod" => [
             "label" => "Reinitialisation password method",
             "options" => [
-                "0" => "New password sent by mail",
-                "1" => "Unique link sent by mail"
+                0 => "New password sent by mail",
+                1 => "Unique link sent by mail"
+            ],
+        ],
+        "profileView" => [
+            "title" => "Profile page",
+            "label" => "Manage how to display your profile page",
+            "tips" => "If you don't use the profile page, we suggest you tu disable this feature.",
+            "options" => [
+                0 => "/profile",
+                1 => "/profile/YourPseudo",
+                2 => "Disable the profile page"
             ],
         ],
     ],

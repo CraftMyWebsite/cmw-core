@@ -1,0 +1,10 @@
+[
+  "users.edit",
+  "users.add",
+  "users.delete",
+  "users.settings",
+  "users.roles.manage",
+  "users.roles.add",
+  "users.roles.edit",
+  "users.roles.delete"
+]

@@ -12,7 +12,7 @@ use CMW\Model\Core\ThemeModel;
 use CMW\Router\Link;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
-use CMW\Utils\View;
+use CMW\Manager\Views\View;
 use Error;
 use JsonException;
 use ZipArchive;
@@ -153,7 +153,8 @@ class ThemeController extends CoreController
         $installedThemes = self::getInstalledThemes();
 
         try {
-            $themesList = json_decode(file_get_contents(PublicAPI::getUrl() . "/getThemeList"), false, 512, JSON_THROW_ON_ERROR);
+            //$themesList = json_decode(file_get_contents(Utils::getApi() . "/getThemeList"), false, 512, JSON_THROW_ON_ERROR);
+            $themesList = [];
             View::createAdminView("core", "themeConfiguration")
                 ->addStyle("admin/resources/vendors/simple-datatables/style.css","admin/resources/assets/css/pages/simple-datatables.css")
                 ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes, "themesList" => $themesList])

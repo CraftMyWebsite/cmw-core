@@ -6,7 +6,7 @@ use CMW\Controller\Users\UsersController;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Router\Link;
 use CMW\Utils\Utils;
-use CMW\Utils\View;
+use CMW\Manager\Views\View;
 use ZipArchive;
 
 class UpdatesController extends CoreController

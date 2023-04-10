@@ -7,13 +7,13 @@
       "icon_menu": "fas fa-user",
       "url_menu": "",
       "urls_submenu_fr": {
-        "Gestion": "users/manage",
         "Paramètres": "users/settings",
+        "Gestion": "users/manage",
         "Rôles": "roles/manage"
       },
       "urls_submenu_en": {
-        "Management": "users/manage",
         "Settings": "users/settings",
+        "Management": "users/manage",
         "Roles": "roles/manage"
       }
     }

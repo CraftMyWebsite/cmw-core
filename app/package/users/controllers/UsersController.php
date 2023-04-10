@@ -5,16 +5,18 @@ namespace CMW\Controller\Users;
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\SecurityController;
 use CMW\Entity\Users\UserEntity;
-use CMW\Model\Core\CoreModel;
-use CMW\Model\Users\PermissionsModel;
+use CMW\Entity\Users\UserSettingsEntity;
+use CMW\Manager\Error\ErrorManager;
 use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UserPictureModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Router\Link;
+use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
-use CMW\Utils\View;
+use CMW\Manager\Views\View;
 use CMW\Manager\Lang\LangManager;
 use CMW\Utils\Response;
+use Exception;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
@@ -29,13 +31,15 @@ class UsersController extends CoreController
     private UsersModel $userModel;
     private RolesModel $roleModel;
     private UserPictureModel $userPictureModel;
+    private UserSettingsEntity $userSettingsEntity;
 
-    public function __construct($theme_path = null)
+    public function __construct()
     {
-        parent::__construct($theme_path);
+        parent::__construct();
         $this->userModel = new UsersModel();
         $this->roleModel = new RolesModel();
         $this->userPictureModel = new UserPictureModel();
+        $this->userSettingsEntity = new UserSettingsEntity();
     }
 
     public function adminDashboard(): void
@@ -93,7 +97,7 @@ class UsersController extends CoreController
     public static function redirectIfNotHavePermissions(string ...$permCode): void
     {
         if (!(self::hasPermission(...$permCode))) {
-            self::redirectToHome();
+            Redirect::redirectToHome();
         }
     }
 
@@ -113,7 +117,7 @@ class UsersController extends CoreController
         $data = [
             "id" => $user?->getId(),
             "mail" => $user?->getMail(),
-            "username" => $user?->getUsername(),
+            "username" => $user?->getPseudo(),
             "firstName" => $user?->getFirstName() ?? "",
             "lastName" => $user?->getLastName() ?? "",
             "state" => $user?->getState(),
@@ -281,11 +285,11 @@ class UsersController extends CoreController
 
             } else {
                 Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.mail_pass_matching"));
-                header('Location: ' . $_SERVER['HTTP_REFERER']);
+                Redirect::redirectToPreviousPage();
             }
         } else {
             //TODO Toaster invalid captcha
-            header('Location: ' . $_SERVER['HTTP_REFERER']);
+            Redirect::redirectToPreviousPage();
         }
     }
 
@@ -409,13 +413,26 @@ class UsersController extends CoreController
     #[Link('/profile', Link::GET)]
     public function publicProfile(): void
     {
-
-        if (UsersModel::getLoggedUser() === -1) {
-            header('Location: ' . getenv('PATH_SUBFOLDER'));
-            die();
+        if (!$this->userSettingsEntity->isProfilePageEnabled() && UsersModel::getLoggedUser() === -1){
+            Redirect::redirect('login');
+            return;
         }
 
-        $user = (new usersModel())->getUserById($_SESSION['cmwUserId']);
+        if (!$this->userSettingsEntity->isProfilePageEnabled()){
+            Redirect::redirectToHome();
+            return;
+        }
+
+        if (UsersModel::getLoggedUser() === -1) {
+            Redirect::redirect('login');
+            return;
+        }
+
+        $user = UsersModel::getCurrentUser();
+
+        if ($this->userSettingsEntity->getProfilePageStatus() === 1) {
+            Redirect::redirect("profile/", ['pseudo' => $user?->getPseudo()]);
+        }
 
         $view = new View('users', 'profile');
         $view->addVariableList(["user" => $user]);
@@ -425,11 +442,54 @@ class UsersController extends CoreController
     #[Link('/profile', Link::POST)]
     public function publicProfilePost(): void
     {
+        if (!$this->userSettingsEntity->isProfilePageEnabled()){
+            Redirect::redirectToHome();
+            return;
+        }
+
+        if (UsersModel::getLoggedUser() === -1) {
+            Redirect::redirectToHome();
+            return;
+        }
+
         $image = $_FILES['pictureProfile'];
 
-        $this->userPictureModel->uploadImage($_SESSION['cmwUserId'], $image);
+        try {
+            $this->userPictureModel->uploadImage($_SESSION['cmwUserId'], $image);
+        } catch (Exception $e) {
+            Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.toaster.internalError") . " => $e");
+        }
 
         header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
+    }
+
+    #[Link('/profile/:pseudo', Link::GET, ['pseudo' => '.*?'])]
+    public function publicProfileWithPseudo(string $pseudo): void
+    {
+        if (!$this->userSettingsEntity->isProfilePageEnabled() && UsersModel::getLoggedUser() === -1){
+            Redirect::redirect('login');
+            return;
+        }
+
+        if (!$this->userSettingsEntity->isProfilePageEnabled()){
+            Redirect::redirectToHome();
+            return;
+        }
+
+        if ($this->userSettingsEntity->getProfilePageStatus() === 0) {
+            Redirect::redirect("profile");
+        }
+
+        $user = $this->userModel->getUserWithPseudo($pseudo);
+
+        if (is_null($user)) {
+            Redirect::errorPage(404);
+        }
+
+        $view = new View('users', 'profile');
+        $view->addVariableList(["user" => $user]);
+        $view->view();
     }
 
     #[Link("/profile/delete/:id", Link::GET, ["id" => "[0-9]+"])]

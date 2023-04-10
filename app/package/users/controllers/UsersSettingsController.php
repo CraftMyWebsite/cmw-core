@@ -3,6 +3,7 @@
 namespace CMW\Controller\Users;
 
 use CMW\Controller\Core\CoreController;
+use CMW\Entity\Users\UserSettingsEntity;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Model\Users\UsersModel;
@@ -10,7 +11,8 @@ use CMW\Model\Users\UsersSettingsModel;
 use CMW\Router\Link;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
-use CMW\Utils\View;
+use CMW\Manager\Views\View;
+use JsonException;
 
 /**
  * Class: @UsersSettingsController
@@ -37,9 +39,8 @@ class UsersSettingsController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings");
 
-
         View::createAdminView("users", "settings")
-            ->addVariableList(["settings" => $this->settingsModel])
+            ->addVariableList(["settings" => new UserSettingsEntity()])
             ->view();
     }
 
@@ -51,14 +52,20 @@ class UsersSettingsController extends CoreController
         if($_FILES['defaultPicture']['name'] !== "" ) {
             $defaultPicture = $_FILES['defaultPicture'];
 
-            $newDefaultImage = ImagesManager::upload($defaultPicture, "users/default");
+            try {
+                $newDefaultImage = ImagesManager::upload($defaultPicture, "users/default");
+                UsersSettingsModel::updateSetting("defaultImage", $newDefaultImage);
+            } catch (JsonException $e) {
+                Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                    LangManager::translate("core.toaster.internalError") . " => $e");
+            }
 
-            UsersSettingsModel::updateSetting("defaultImage", $newDefaultImage);
         }
 
-        [$resetPasswordMethod] = Utils::filterInput("resetPasswordMethod");
+        [$resetPasswordMethod, $profilePage] = Utils::filterInput("reset_password_method", "profile_page");
 
         UsersSettingsModel::updateSetting("resetPasswordMethod", $resetPasswordMethod);
+        UsersSettingsModel::updateSetting("profilePage", $profilePage);
 
         Response::sendAlert("success", LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));

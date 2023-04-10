@@ -89,7 +89,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
                     <?php foreach ($userList as $user) : ?>
                         <tr>
                             <td><?= $user->getMail() ?></td>
-                            <td><?= $user->getUsername() ?></td>
+                            <td><?= $user->getPseudo() ?></td>
                             <td><?= $user->getHighestRole()?->getName() ?></td>
                             <td><?= $user->getCreated() ?></td>
                             <td><?= $user->getLastConnection() ?></td>
@@ -108,7 +108,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
                                         <div class="modal-content">
                                             <div class="modal-header bg-danger">
                                                 <h5 class="modal-title white" id="myModalLabel160">
-                                                    Supprimer <?= $user->getUsername() ?> ?</h5>
+                                                    Supprimer <?= $user->getPseudo() ?> ?</h5>
                                             </div>
                                             <div class="modal-body text-left">
                                                 La suppression de cet utilisateur est définitive !<br>

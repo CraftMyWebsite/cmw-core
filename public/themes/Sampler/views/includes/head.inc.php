@@ -1,7 +1,7 @@
 <?php
 
 use CMW\Utils\Utils;
-use CMW\Utils\View;
+use CMW\Manager\Views\View;
 
 /* @var \CMW\Controller\Core\CoreController $core */
 /* @var string $title */

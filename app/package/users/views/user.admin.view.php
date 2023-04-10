@@ -13,7 +13,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
 /** @var \CMW\Entity\Users\UserEntity $user */
 ?>
 <div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fa-solid fa-gears"></i> <span class="m-lg-auto">Édition de : <?= $user->getUsername() ?></span></h3>
+    <h3><i class="fa-solid fa-gears"></i> <span class="m-lg-auto">Édition de : <?= $user->getPseudo() ?></span></h3>
 </div>
 
 <section class="row">
@@ -39,7 +39,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                         <div class="col-md-6">
                             <h6><?= LangManager::translate("users.users.pseudo") ?> :</h6>
                             <div class="form-group position-relative has-icon-left">
-                                <input type="text" name="pseudo" class="form-control" value="<?= $user->getUsername() ?>" placeholder="<?= LangManager::translate("users.users.pseudo") ?>" required>
+                                <input type="text" name="pseudo" class="form-control" value="<?= $user->getPseudo() ?>" placeholder="<?= LangManager::translate("users.users.pseudo") ?>" required>
                                 <div class="form-control-icon">
                                     <i class="fa-solid fa-signature"></i>
                                 </div>
@@ -167,7 +167,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'admin/resources/js/main
                 <div class="row">
                     <div class="col-md-6">
                         <div class="text-center ">
-                            <img class="w-50" src="<?= getenv('PATH_SUBFOLDER') ?>public/uploads/users/<?= $user->getUserPicture()->getImageName() ?>" alt="<?= LangManager::translate("users.users.image.image_alt"). $user->getUsername() ?>">
+                            <img class="w-50" src="<?= getenv('PATH_SUBFOLDER') ?>public/uploads/users/<?= $user->getUserPicture()->getImageName() ?>" alt="<?= LangManager::translate("users.users.image.image_alt"). $user->getPseudo() ?>">
                         </div>
                         <form action="../picture/edit/<?= $user->getId() ?>" method="post" enctype="multipart/form-data">
                             <?php (new SecurityManager())->insertHiddenToken() ?>

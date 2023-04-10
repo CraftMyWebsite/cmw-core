@@ -5,7 +5,7 @@ use CMW\Model\Users\UsersSettingsModel;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Utils\Utils;
 
-/* @var \CMW\Model\Users\UsersSettingsModel $settings */
+/* @var \CMW\Entity\Users\UserSettingsEntity $settings */
 
 $title = LangManager::translate("users.settings.title");
 $description = LangManager::translate("users.settings.desc"); ?>
@@ -19,6 +19,8 @@ $description = LangManager::translate("users.settings.desc"); ?>
         </div>
     </div>
     <section class="row">
+
+        <!-- Default picture -->
         <div class="col-12 col-lg-6">
             <?php (new SecurityManager())->insertHiddenToken() ?>
             <div class="card">
@@ -30,7 +32,7 @@ $description = LangManager::translate("users.settings.desc"); ?>
                         <h6><?= LangManager::translate("users.settings.default_picture") ?> :</h6>
                         <div class="text-center ">
                             <img class="w-25 border"
-                                 src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>public/uploads/users/default/<?= UsersSettingsModel::getSetting("defaultImage") ?>"
+                                 src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>public/uploads/users/default/<?= $settings->getDefaultImage() ?>"
                                  alt="<?= LangManager::translate("users.settings.default_picture") ?>">
                         </div>
                         <input class="mt-2 form-control form-control-lg" type="file" id="formFile"
@@ -40,6 +42,8 @@ $description = LangManager::translate("users.settings.desc"); ?>
                 </div>
             </div>
         </div>
+
+        <!-- Reset password -->
         <div class="col-12 col-lg-6">
             <div class="card">
                 <div class="card-header">
@@ -54,13 +58,47 @@ $description = LangManager::translate("users.settings.desc"); ?>
                     <div class="row">
                         <h6><?= LangManager::translate('users.settings.resetPasswordMethod.label') ?> :</h6>
                         <fieldset class="form-group">
-                            <select class="form-select" id="basicSelect" name="resetPasswordMethod" required>
-                                <option value="0" <?= UsersSettingsModel::getSetting("resetPasswordMethod") === "0" ? 'selected' : '' ?>>
+                            <select class="form-select" id="basicSelect" name="reset_password_method" required>
+                                <option value="0" <?= $settings->getResetPasswordMethod() === 0 ? 'selected' : '' ?>>
                                     <?= LangManager::translate("users.settings.resetPasswordMethod.options.0") ?>
                                 </option>
 
-                                <option value="1" <?= UsersSettingsModel::getSetting("resetPasswordMethod") === "1" ? 'selected' : '' ?>>
+                                <option value="1" <?= $settings->getResetPasswordMethod() === 1 ? 'selected' : '' ?>>
                                     <?= LangManager::translate("users.settings.resetPasswordMethod.options.1") ?>
+                                </option>
+                            </select>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- /profile view -->
+        <div class="col-12 col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4><?= LangManager::translate("users.settings.profile_view.title") ?>
+                        <i data-bs-toggle="tooltip"
+                           title="<?= LangManager::translate('users.settings.profile_view.tips') ?>"
+                           class="fa-sharp fa-solid fa-circle-question">
+                        </i>
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <h6><?= LangManager::translate('users.settings.profile_view.label') ?> :</h6>
+                        <fieldset class="form-group">
+                            <select class="form-select" id="basicSelect" name="profile_page" required>
+                                <option value="0" <?= $settings->getProfilePageStatus() === 0 ? 'selected' : '' ?>>
+                                    <?= LangManager::translate("users.settings.profile_view.options.0") ?>
+                                </option>
+
+                                <option value="1" <?= $settings->getProfilePageStatus() === 1 ? 'selected' : '' ?>>
+                                    <?= LangManager::translate("users.settings.profile_view.options.1") ?>
+                                </option>
+
+                                <option value="2" <?= $settings->getProfilePageStatus() === 2 ? 'selected' : '' ?>>
+                                    <?= LangManager::translate("users.settings.profile_view.options.2") ?>
                                 </option>
                             </select>
                         </fieldset>

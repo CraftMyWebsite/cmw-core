@@ -35,12 +35,12 @@ use CMW\Utils\Utils;
                    <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="user-menu d-flex">
                             <div class="user-name text-end me-3">
-                                <h6 class="mb-0"><?= UsersModel::getCurrentUser()->getUsername() ?></h6>
+                                <h6 class="mb-0"><?= UsersModel::getCurrentUser()->getPseudo() ?></h6>
                                 <p class="mb-0 text-sm text-gray-600"><?= UsersModel::getCurrentUser()->getHighestRole()->getName() ?></p>
                             </div>
                             <div class="user-img d-none d-lg-flex align-items-center">
                                 <div class="avatar avatar-md">
-                                    <img src="<?= UsersModel::getCurrentUser()->getUserPicture()->getImageLink() ?>" alt="<?= LangManager::translate("users.users.image.image_alt", ['username' => UsersModel::getCurrentUser()->getUsername()]) ?>">
+                                    <img src="<?= UsersModel::getCurrentUser()->getUserPicture()->getImageLink() ?>" alt="<?= LangManager::translate("users.users.image.image_alt", ['username' => UsersModel::getCurrentUser()->getPseudo()]) ?>">
                                 </div>
                             </div>
                         </div>

@@ -130,8 +130,18 @@ return [
             "label" => "Méthode de réinitialisations du mot de passe",
             "tips" => "Définissez la méthode de réinitialisation des mots de passes de vos utilisateurs",
             "options" => [
-                "0" => "Mot de passe envoyé par mail",
-                "1" => "Lien unique envoyé par mail"
+                0 => "Mot de passe envoyé par mail",
+                1 => "Lien unique envoyé par mail"
+            ],
+        ],
+        "profile_view" => [
+            "title" => "Page profil",
+            "label" => "Choisissez comment afficher la page profil",
+            "tips" => "Si vous n'utilisez pas la page profile, nous vous conseillons de désactiver la page profil.",
+            "options" => [
+                0 => "/profile",
+                1 => "/profile/VotrePseudo",
+                2 => "Désactiver la page profil"
             ],
         ],
     ],
