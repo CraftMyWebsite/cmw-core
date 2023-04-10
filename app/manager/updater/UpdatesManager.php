@@ -2,6 +2,7 @@
 
 namespace CMW\Manager\Updater;
 
+use CMW\Manager\Api\PublicAPI;
 use CMW\Utils\Utils;
 
 class UpdatesManager
@@ -24,7 +25,7 @@ class UpdatesManager
     public static function getLatestVersion(): ?string
     {
         try {
-            return json_decode(file_get_contents(Utils::getApi() . "/getCmwLatest"), false, 512, JSON_THROW_ON_ERROR)->version;
+            return json_decode(file_get_contents(PublicAPI::getUrl() . "/getCmwLatest"), false, 512, JSON_THROW_ON_ERROR)->version;
         } catch (\JsonException) {
         }
 

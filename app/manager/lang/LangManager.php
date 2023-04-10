@@ -2,6 +2,7 @@
 
 namespace CMW\Manager\Lang;
 
+use CMW\Controller\Installer\InstallerController;
 use CMW\Utils\Loader;
 use CMW\Utils\Utils;
 
@@ -61,7 +62,13 @@ class LangManager
 
 
         if (is_null(self::getTranslationList($package, $lang))) {
-            $translationList = Loader::loadLang($package, $lang);
+
+            if (strtolower($package) === "installation"){
+                $translationList = InstallerController::loadLang();
+            } else {
+                $translationList = Loader::loadLang($package, $lang);
+            }
+
             if (is_null($translationList)) {
                 return null;
             }

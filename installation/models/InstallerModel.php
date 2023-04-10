@@ -1,5 +1,6 @@
 <?php
 
+use CMW\Manager\Download\DownloadManager;
 use CMW\Utils\Utils;
 
 /**
@@ -15,9 +16,9 @@ class InstallerModel
     {
     }
 
-    private static function loadDatabase($serverName, $database, $username, $password): PDO
+    private static function loadDatabase(string $serverName, string $database, string $username, $password, int $port): PDO
     {
-        $db = new PDO("mysql:host=$serverName", $username, $password);
+        $db = new PDO("mysql:host=$serverName;port=$port", $username, $password);
         $db->exec("SET CHARACTER SET utf8");
         $db->exec("CREATE DATABASE IF NOT EXISTS " . $database . ";");
         $db->exec("USE " . $database . ";");
@@ -32,81 +33,40 @@ class InstallerModel
         $dbUsername = Utils::getEnv()->getValue("DB_USERNAME");
         $dbPassword = Utils::getEnv()->getValue("DB_PASSWORD");
         $dbName = Utils::getEnv()->getValue("DB_NAME");
+        $dbPort = Utils::getEnv()->getValue("DB_PORT");
 
-        return self::loadDatabase($dbServername, $dbName, $dbUsername, $dbPassword);
+        return self::loadDatabase($dbServername, $dbName, $dbUsername, $dbPassword, $dbPort);
     }
 
-    public static function tryDatabaseConnection(string $servername, string $database, string $username, string $password): bool
+    public static function tryDatabaseConnection(string $servername, string $username, string $password, int $port): bool
     {
         try {
-            new PDO("mysql:host=$servername", $username, $password);
+            new PDO("mysql:host=$servername;port=$port", $username, $password);
 
             return true;
-        } catch (PDOException $_) {
+        } catch (PDOException) {
             return false;
         }
     }
 
-    public static function initDatabase($serverName, $database, $username, $password, $devMode): void
+    public static function initDatabase($serverName, $database, $username, $password, $port): void
     {
-        $db = self::loadDatabase($serverName, $database, $username, $password);
+        $db = self::loadDatabase($serverName, $database, $username, $password, $port);
 
         $query = file_get_contents(Utils::getEnv()->getValue("dir") . "installation/init.sql");
         $db->query($query);
 
         /* IMPORT PACKAGE SQL */
-        self::loadPackages($db, $devMode);
+        self::loadDefaultPackages();
     }
 
-    private static function loadPackages(PDO $db, int $devMode): void
+    private static function loadDefaultPackages(): void
     {
-        //Load sql files
-        self::loadPackageSqlFiles($db, $devMode);
+        //Load packages files
+        DownloadManager::initPackages('core', 'users', 'menus', 'pages');
     }
 
-    private static function loadPackageSqlFiles(PDO $db, int $devMode): void
-    {
-        $packageFolder = Utils::getEnv()->getValue("dir") . 'app/package/';
-        $scannedDirectory = array_diff(scandir($packageFolder), array('..', '.'));
-
-        foreach ($scannedDirectory as $package) {
-
-            $sqlFolder = Utils::getEnv()->getValue("dir") . "app/package/$package/init";
-
-            if (!is_dir($sqlFolder)) {
-                continue;
-            }
-
-            $initFiles = array_diff(scandir($sqlFolder), array('..', '.'));
-
-            if (empty($initFiles)) {
-                continue;
-            }
-
-            foreach ($initFiles as $sqlFile) {
-
-                $packageSqlFile = "$sqlFolder/$sqlFile";
-
-                if (!is_file($packageSqlFile) || pathinfo($packageSqlFile, PATHINFO_EXTENSION) !== "sql") {
-                    continue;
-                }
-
-                if (file_exists($packageSqlFile)) {
-                    $querySqlFile = file_get_contents($packageSqlFile);
-                    $stmtPackage = $db->query($querySqlFile);
-                    $stmtPackage->closeCursor();
-                    if ($devMode === 0) {
-                        unlink($packageSqlFile);
-                    }
-                }
-
-
-            }
-
-        }
-    }
-
-    public static function initAdmin(string $email, string $username, string $password): void
+    public static function initAdmin(string $email, string $pseudo, string $password): void
     {
 
         $db = self::loadDatabaseWithoutParams();
@@ -114,7 +74,7 @@ class InstallerModel
         $query = $db->prepare('INSERT INTO cmw_users (user_email, user_pseudo, user_password, user_state, user_key, user_created, user_updated) VALUES (:user_email, :user_pseudo, :user_password, :user_state, :user_key, NOW(), NOW())');
         $query->execute(array(
             'user_email' => $email,
-            'user_pseudo' => $username,
+            'user_pseudo' => $pseudo,
             'user_password' => $password,
             'user_state' => 1,
             'user_key' => uniqid('', true)

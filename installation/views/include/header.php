@@ -1,60 +1,65 @@
+<?php
+
+use CMW\Controller\Installer\InstallerController;
+use CMW\Manager\Lang\LangManager;
+
+/* @var $lang string */
+
+?>
 <!DOCTYPE html>
-<html lang="<?= $lang ?? '' ?>">
+<html lang="<?= $lang ?>" class="bg-cmw-gray">
 <head>
     <meta charset="utf-8"/>
-    <title><?= INSTALL_TITLE ?></title>
+    <title><?= LangManager::translate("installation.title") ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta name="robots" content="NOINDEX, NOFOLLOW">
-    <meta name="description" content="<?= INSTALL_DESC ?>">
+    <meta name="description" content="<?= LangManager::translate("installation.desc") ?>">
 
     <link rel="icon" type="image/png"
-          href="admin/resources/images/identity/logo_compact.png">
+          href="admin/resources/assets/images/logo/logo_compact.png">
 
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="admin/resources/vendors/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="admin/resources/vendors/fontawesome-free/css/fa-all.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="admin/resources/css/adminlte.min.css">
-
-    <link rel="stylesheet" href="admin/resources/css/main.css">
-
     <link rel="stylesheet" href="installation/views/assets/css/style.css">
-
-    <script src="admin/resources/vendors/jquery/jquery.min.js"></script>
-
-    <script src="admin/resources/js/main.js"></script>
-
-    <style>
-        code.dark {
-            background: #2b2929;
-            padding: 0 5px;
-            border-radius: 3px;
-        }
-    </style>
-
 </head>
-<body class="hold-transition sidebar-mini">
-<div class="wrapper">
-    <!-- Navbar -->
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light" id="navbarTop">
-        <!-- Left navbar links -->
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-            </li>
+
+
+
+<body class="bg-cmw-gray">
+<img class="w-48 mx-auto py-8" src="admin/resources/assets/images/logo/logo_compact.png" alt="Image introuvable !">
+
+<div class="lg:hidden text-center p-4 bg-primary text-xl"><span class="font-bold">
+        <?= InstallerController::getInstallationStep() ?></span>
+    <span class="text-sm">/<?= count(InstallerController::$installSteps) ?></span></div>
+
+<div class="lg:block w-full mx-auto">
+    <div class=" p-4">
+        <ul class=" content-center steps steps-horizontal w-full">
+            <?php foreach (InstallerController::$installSteps as $i => $step): ?>
+                <?php
+                $classValue = '';
+                $finishStatus = '';
+
+                if (InstallerController::getInstallationStep() >= $i) {
+                    $classValue = 'step-primary';
+                }
+                if (InstallerController::getInstallationStep() > $i) {
+                    $finishStatus = '<i class="text-green-500 fa-solid fa-check"></i>';
+                }
+                if (InstallerController::getInstallationStep() === $i) {
+                    $classValue .= ' font-bold';
+                }
+                ?>
+                <li class="step <?= $classValue ?>"><p><?= LangManager::translate("installation.steps.$i") ?> <?= $finishStatus ?></p>
+                </li>
+            <?php endforeach; ?>
         </ul>
+    </div>
+</div>
 
-        <ul class="navbar-nav ml-auto">
+<div id="loader" class="loader top-[45%] z-50 hidden"></div>
 
-            <!-- DARKMODE -->
-            <li class="nav-item">
-                <a class="nav-link" href="#" id="darkModeToggle">
-                    <i class="far fa-lightbulb" id="darkModeIcon"></i>
-                </a>
-            </li>
-
-        </ul>
-    </nav>
+<div class="card w-5/6 lg:w-4/6 bg-cmw-gray-sec mx-auto mt-8">
+    <div class="card-body" id="body">

@@ -78,4 +78,14 @@ class Redirect
         $route->call();
     }
 
+    /**
+     * @return void
+     * @desc Redirect browser to previous page
+     */
+    public static function redirectPreviousRoute(): void
+    {
+        http_response_code(302);
+        header("Location: " .  $_SERVER['HTTP_REFERER']);
+    }
+
 }

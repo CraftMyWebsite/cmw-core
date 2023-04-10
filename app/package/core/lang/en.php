@@ -77,6 +77,13 @@ return [
         "theme" => [
             "regenerate" => "Theme configuration regenerate"
         ],
+        "db" => [
+            "config" => [
+                "success" => "Configuration good",
+                "error" => "Configuration error"
+            ],
+            "missing_inputs" => "Please fill all inputs !",
+        ],
     ],
     "datatables" => [
         "list" => [
@@ -178,6 +185,9 @@ return [
         "edit" => "Edit",
         "action" => "Action",
         "confirm" => "Confirm",
+        "next" => "Next",
+        "try" => "Try",
+        "continue" => "Continue"
     ],
     "months" => '["January","February","March","April","May","June","July","August","September","October","November","December"]'
 ];

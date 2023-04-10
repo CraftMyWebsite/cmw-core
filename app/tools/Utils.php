@@ -171,15 +171,6 @@ class Utils
 
     /**
      * @return string
-     * @desc Get the API URL
-     */
-    public static function getApi(): string
-    {
-        return self::getEnv()->getValue("APIURL");
-    }
-
-    /**
-     * @return string
      * @Desc Get the website name
      */
     public static function getSiteName(): string

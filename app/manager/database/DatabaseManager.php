@@ -20,9 +20,13 @@ class DatabaseManager
 
             self::$_databaseInstance = new PDO("mysql:host=" . getenv("DB_HOST"), getenv("DB_USERNAME"), getenv("DB_PASSWORD"),
                 array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', PDO::ATTR_PERSISTENT => true));
+
+            /* Faire plus de tests avec ces attributs car ça pose des soucis lors de l'import des .sql
             self::$_databaseInstance->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
             self::$_databaseInstance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             self::$_databaseInstance->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+            */
+
             /** Todo, see before if we have permissions ? */
             self::$_databaseInstance->exec("SET CHARACTER SET utf8");
             self::$_databaseInstance->exec("CREATE DATABASE IF NOT EXISTS " . getenv("DB_NAME") . ";");

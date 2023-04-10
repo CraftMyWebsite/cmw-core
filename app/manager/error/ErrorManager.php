@@ -38,9 +38,19 @@ class ErrorManager
         return PermissionManager::canCreateFile(Utils::getEnv()->getValue("DIR") . $this->dirStorage);
     }
 
-    public static function enableErrorDisplays(): void
+    /**
+     * @param bool $force
+     * @return void
+     * @desc $force is for forced the errorDisplay when you are not in dev mode
+     */
+    public static function enableErrorDisplays(bool $force = false): void
     {
         $devMode = (int)(Utils::getEnv()->getValue("devMode") ?? 0);
+
+        if ($force){
+            $devMode = 1;
+        }
+
         ini_set('display_errors', $devMode);
         ini_set('display_startup_errors', $devMode);
         error_reporting(E_ALL);

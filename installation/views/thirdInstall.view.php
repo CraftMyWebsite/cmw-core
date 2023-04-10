@@ -1,49 +1,108 @@
 <?php
 /* @var \CMW\Controller\Installer\InstallerController $install */
+
+use CMW\Manager\Api\PublicAPI;
+use CMW\Manager\Lang\LangManager;
+use CMW\Utils\Utils;
+
 ?>
 
-<div class="card">
-    <div class="card-header">
-        <h3 class="card-title"><?= INSTALL_ADMIN_TITLE ?></h3>
+<div class="lg:flex flex-wrap mb-2">
+    <div class="lg:w-1/2 lg:pr-2">
+        <label class="label">
+            <span class="label-text">Rechercher :</span>
+        </label>
+        <label class="input-group">
+            <span><i class="fa-solid fa-magnifying-glass"></i></span>
+            <input id="searchInput" onkeyup="searchFunction()" type="text" placeholder="Rechercher"
+                   class="input input-bordered input-sm w-full" required>
+        </label>
     </div>
-    <!-- form start -->
-    <form action="installer/submit" role="form" method="post" id="formThirdInstall" name="formThirdInstall">
-        <div class="card-body">
-            <div class="form-group">
-                <label for="email"><?= INSTALL_ADMIN_EMAIL ?></label>
-                <input type="email" name="email" class="form-control" id="email"
-                       placeholder="example@craftmywebsite.fr"
-                       autocomplete="email"
-                       required>
-            </div>
-            <div class="form-group">
-                <label for="username"><?= INSTALL_ADMIN_USERNAME ?></label>
-                <input type="text" name="username" class="form-control" id="username"
-                       placeholder="Pseudo"
-                       autocomplete="username"
-                       required>
-            </div>
 
-            <div class="form-group">
-                <label for="password"><?= INSTALL_ADMIN_PASS ?></label>
-                <div class="input-group" id="showHidePassword">
-                    <input type="password" name="password" class="form-control" id="password"
-                           placeholder="********"
-                           autocomplete="current-password"
-                           required>
-                    <div class="input-group-append">
-                        <a class="input-group-text" href="#"><i class="fa fa-eye-slash"
-                                                                aria-hidden="true"></i></a>
-                    </div>
+    <div class="lg:pl-2 lg:w-1/2">
+        <div class="form-control  w-full">
+            <label class="label">
+                <span class="label-text">Tags :</span>
+            </label>
+            <select class="select select-sm select-bordered">
+                <option disabled selected>Personnalisé</option>
+                <option>Minecraft</option>
+                <option>Communautaire</option>
+                <option>E-Commerce</option>
+                <option>Blog</option>
+                <option>Portfolio</option>
+            </select>
+        </div>
+
+    </div>
+</div>
+
+<ul id="mySearch" class="lg:flex flex-wrap">
+
+    <li class="lg:w-1/3 lg:px-2 mb-4 h-fit">
+        <div class="font-bold text-lg bg-gray-700 rounded-t-2xl p-1">
+            <div class="flex flex-wrap">
+                <img class="w-7 mr-2" src="installation/views/assets/img/other.png">
+                <span class="font-medium text-lg">Personnalisé</span>
+            </div>
+        </div>
+
+        <div class="bg-gray-800 rounded-b-2xl">
+            <div class="p-4">
+                <p>Personnaliser votre installation vous-même.</p>
+                <p>Ceci ne veut pas dire qu'il n'est pas possible de le personnaliser avec d'autres bundle.</p>
+            </div>
+            <form action="installer/submit" method="post" id="mainForm">
+                <div class="flex justify-end">
+                    <button id="formBtn" type="submit" class="btn btn-primary py-1 px-2 rounded rounded-br-xl">
+                        <?= LangManager::translate("core.btn.continue") ?>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </li>
+
+    <!-- Bundle -->
+
+    <?php foreach (PublicAPI::getData("resources/getBundles&lang=" . Utils::getEnv()->getValue("locale")) as $bundle): ?>
+        <li class="lg:w-1/3 lg:px-2 mb-4 h-fit">
+            <div class="font-bold text-lg bg-gray-700 rounded-t-2xl p-1">
+                <div class="flex flex-wrap">
+                    <img class="w-7 mr-2" src="<?= $bundle['image'] ?>">
+                    <span class="font-medium text-lg"><?= $bundle['name'] ?></span>
                 </div>
             </div>
 
-        </div>
-        <!-- /.card-body -->
-        <div class="card-footer">
-            <button type="submit" name="submitThirdInstall" id="submitThirdInstall"
-                    class="btn btn-primary"><?= INSTALL_SAVE ?>
-            </button>
-        </div>
-    </form>
-</div>
+            <div class="bg-gray-800 rounded-b-2xl">
+                <div class="p-4">
+                    <p><?= $bundle['description'] ?></p>
+                    <p class="mt-2">Ce bundle inclus les packages :</p>
+                    <ul style="list-style: inside;">
+                        <?php foreach ($bundle['content'] as $bundleResource): ?>
+                            <li>
+                                <?= $bundleResource['type'] === 0 ?
+                                    '<i class="fa-solid fa-paintbrush"></i> ' :
+                                    '<i class="fa-solid fa-box"></i> ' ?>
+                                <?= $bundleResource['name'] ?>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <form action="installer/submit" method="post">
+                    <div class="flex justify-end">
+                        <input type="hidden" name="bundleId" value="<?= $bundle['id'] ?>">
+                        <button type="submit" class="btn btn-primary py-1 px-2 rounded rounded-br-xl" onclick="customLaunchLoader()">
+                            <?= LangManager::translate("core.btn.continue") ?>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </li>
+
+    <?php endforeach; ?>
+
+    <!-- /Bundle -->
+
+</ul>
+
+<script src="installation/views/assets/js/search.js"></script>
