@@ -2,12 +2,11 @@
 
 namespace CMW\Controller\Core;
 
-use CMW\Manager\Lang\LangManager;
+use CMW\Controller\Users\UsersController;
 use CMW\Model\Core\CoreModel;
 use CMW\Router\Link;
 use CMW\Utils\Utils;
 use CMW\Manager\Views\View;
-use CMW\Utils\Response;
 
 class EditorController extends CoreController
 {
