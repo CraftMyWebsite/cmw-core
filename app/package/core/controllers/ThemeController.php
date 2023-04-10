@@ -152,7 +152,8 @@ class ThemeController extends CoreController
         $installedThemes = self::getInstalledThemes();
 
         try {
-            $themesList = json_decode(file_get_contents(Utils::getApi() . "/getThemeList"), false, 512, JSON_THROW_ON_ERROR);
+            //$themesList = json_decode(file_get_contents(Utils::getApi() . "/getThemeList"), false, 512, JSON_THROW_ON_ERROR);
+            $themesList = [];
             View::createAdminView("core", "themeConfiguration")
                 ->addStyle("admin/resources/vendors/simple-datatables/style.css","admin/resources/assets/css/pages/simple-datatables.css")
                 ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes, "themesList" => $themesList])
