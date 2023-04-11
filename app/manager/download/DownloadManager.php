@@ -4,6 +4,8 @@ namespace CMW\Manager\Download;
 
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Manager\Permission\PermissionManager;
+use CMW\Model\Users\PermissionsModel;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\ExpectedValues;
 use JsonException;
@@ -75,7 +77,15 @@ class DownloadManager
             $permissionFile = "$initFolder/permissions.json";
 
             if (file_exists($permissionFile)){
-                //TODO install perm with new system
+
+                try {
+                    $permissions = json_decode(file_get_contents($permissionFile), false, 512, JSON_THROW_ON_ERROR);
+
+                    foreach ($permissions as $permission) {
+                        (new PermissionsModel())->addFullCodePermission($permission);
+                    }
+                } catch (JsonException) {
+                }
             }
 
 
@@ -89,7 +99,7 @@ class DownloadManager
                 }
 
                 if (file_exists($packageSqlFile)) {
-                    $db = DatabaseManager::getInstance();
+                    $db = DatabaseManager::getLiteInstance();
                     $devMode = Utils::getEnv()->getValue("DEVMODE");
 
                     $querySqlFile = file_get_contents($packageSqlFile);

@@ -1,4 +1,6 @@
-<?php use CMW\Utils\View;
+<?php
+
+use CMW\Manager\Views\View;
 
 require_once("include/header.php") ?>
 
