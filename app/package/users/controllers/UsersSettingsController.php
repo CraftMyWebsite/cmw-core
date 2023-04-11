@@ -30,6 +30,11 @@ class UsersSettingsController extends CoreController
         $this->settingsModel = new UsersSettingsModel();
     }
 
+    public static function getDefaultImageLink(): string
+    {
+        return Utils::getEnv()->getValue("PATH_SUBFOLDER") . "public/uploads/users/default/defaultImage.jpg";
+    }
+
     /**
      * @throws \CMW\Router\RouterException
      */
