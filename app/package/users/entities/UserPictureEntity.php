@@ -5,6 +5,7 @@ namespace CMW\Entity\Users;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Users\UsersController;
+use CMW\Controller\Users\UsersSettingsController;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Users\UsersSettingsModel;
 use CMW\Utils\Utils;
@@ -67,6 +68,14 @@ class UserPictureEntity
     public function getImageLink(): ?string
     {
         return Utils::getEnv()->getValue("PATH_SUBFOLDER") . "public/uploads/users/" . $this->imageName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultPictureLink(): string
+    {
+        return UsersSettingsController::getDefaultImageLink();
     }
 
 }
