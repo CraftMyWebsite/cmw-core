@@ -166,7 +166,9 @@ class InstallerController
             return;
         }
 
-        [$host, $username, $password, $db, $port] = Utils::filterInput("bdd_address", "bdd_login", "bdd_pass", "bdd_name", "bdd_port");
+        [$host, $username, $password, $port] = Utils::filterInput("bdd_address", "bdd_login", "bdd_pass", "bdd_port");
+
+        $db = filter_input(INPUT_POST, "bdd_name") ?? "cmw";
 
         $subFolder = filter_input(INPUT_POST, "install_folder");
         $devMode = isset($_POST['dev_mode']);

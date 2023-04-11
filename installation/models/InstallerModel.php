@@ -49,7 +49,7 @@ class InstallerModel
         }
     }
 
-    public static function initDatabase($serverName, $database, $username, $password, $port): void
+    public static function initDatabase(string $serverName, string $database, string $username, string $password, int $port): void
     {
         $db = self::loadDatabase($serverName, $database, $username, $password, $port);
 

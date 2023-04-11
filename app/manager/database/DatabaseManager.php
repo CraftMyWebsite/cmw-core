@@ -2,6 +2,7 @@
 
 namespace CMW\Manager\Database;
 
+use CMW\Utils\Utils;
 use Exception;
 use PDO;
 
@@ -10,6 +11,10 @@ class DatabaseManager
 
     protected static ?PDO $_databaseInstance = null;
 
+    /**
+     * @return \PDO
+     * @esc This instance is the main instance, <b>please use this one instead of getLiteInstance()</b> for sql queries
+     */
     public static function getInstance(): PDO
     {
         if (!is_null(self::$_databaseInstance)) {
@@ -20,12 +25,9 @@ class DatabaseManager
 
             self::$_databaseInstance = new PDO("mysql:host=" . getenv("DB_HOST"), getenv("DB_USERNAME"), getenv("DB_PASSWORD"),
                 array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', PDO::ATTR_PERSISTENT => true));
-
-            /* Faire plus de tests avec ces attributs car ça pose des soucis lors de l'import des .sql
             self::$_databaseInstance->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
             self::$_databaseInstance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             self::$_databaseInstance->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-            */
 
             /** Todo, see before if we have permissions ? */
             self::$_databaseInstance->exec("SET CHARACTER SET utf8");
@@ -35,6 +37,31 @@ class DatabaseManager
         } catch (Exception $e) {
             die("DATABASE ERROR" . $e->getMessage());
         }
+    }
+
+    /**
+     * @return \PDO
+     * @desc <b>This instance is only for advanced users.</b>
+     *  Why use this instance ?
+     *
+     *  This is instance is a simple PDO connexion without specific params and attributes.
+     *
+     *  -- UTF-8 SET --
+     */
+    public static function getLiteInstance(): PDO
+    {
+        $dbServername = Utils::getEnv()->getValue("DB_HOST");
+        $dbUsername = Utils::getEnv()->getValue("DB_USERNAME");
+        $dbPassword = Utils::getEnv()->getValue("DB_PASSWORD");
+        $dbName = Utils::getEnv()->getValue("DB_NAME");
+        $dbPort = Utils::getEnv()->getValue("DB_PORT");
+
+        $db = new PDO("mysql:host=$dbServername;port=$dbPort", $dbUsername, $dbPassword);
+        $db->exec("SET CHARACTER SET utf8");
+        $db->exec("CREATE DATABASE IF NOT EXISTS " . $dbName . ";");
+        $db->exec("USE " . $dbName . ";");
+
+        return $db;
     }
 
     public static function isMariadb(): bool
