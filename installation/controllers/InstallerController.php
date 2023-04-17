@@ -26,8 +26,54 @@ use JetBrains\PhpStorm\NoReturn;
 class InstallerController
 {
 
+    static public float $minPhpVersion = 8.1;
+    static public int $minPhpVersionId = 80100;
+    static public array $requiredSettings = ['php', 'zip', 'curl', 'pdo'];
+
     static public array $installSteps = [0 => "welcome", 1 => "config", 2 => "details", 3 => "bundle", 4 => "packages",
                                         5 => "themes", 6 => "admin", 7 => "finish"];
+
+    /**
+     * @return bool
+     * @desc Check if the website has all the required configurations to start the installation
+     */
+    public static function checkAllRequired(): bool
+    {
+        foreach (self::$requiredSettings as $required) {
+            if (!self::hasRequired($required)){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param string $value
+     * @return bool
+     * @desc Return true if the website has the specified required
+     */
+    public static function hasRequired(string $value): bool
+    {
+        return match ($value){
+            "php" => PHP_VERSION_ID >= self::$minPhpVersionId,
+            "https" => Utils::getHttpProtocol() === "https",
+            "zip" => extension_loaded('zip'),
+            "curl" => extension_loaded('curl'),
+            "pdo" => extension_loaded('pdo')
+        };
+    }
+
+    /**
+     * @param string $value
+     * @return string
+     * @desc Return formatted style
+     */
+    public static function hasRequiredFormatted(string $value): string
+    {
+        return self::hasRequired($value) ? "<i class='text-green-500 fa-solid fa-check'></i>" :
+            "<i class='text-red-500 fa-solid fa-xmark'></i>";
+    }
 
     public static function getInstallationStep(): int
     {

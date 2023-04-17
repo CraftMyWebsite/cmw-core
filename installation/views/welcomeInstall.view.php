@@ -1,5 +1,6 @@
 <?php /* @var $lang String */
 
+use CMW\Controller\Installer\InstallerController;
 use CMW\Manager\Lang\LangManager;
 ?>
 <select class="absolute top-0 right-0 select select-ghost select-sm w-32" id="lang" onchange="changeLang(this.value)">
@@ -15,21 +16,32 @@ use CMW\Manager\Lang\LangManager;
         <!-- head -->
         <thead>
         <tr class="text-center">
-            <th>WEB</th>
-            <th>PHP</th>
+            <th>PHP<span class="required">*</span></th>
             <th>HTTPS</th>
-            <th>Configuration</th>
-            <th>Extension</th>
+            <th>PDO<span class="required">*</span></th>
+            <th>ZIP<span class="required">*</span></th>
+            <th>CURL<span class="required">*</span></th>
         </tr>
         </thead>
         <tbody>
         <!-- row 1 -->
         <tr class="text-center">
-            <td><i class="text-green-500 fa-solid fa-check"></i> Apache 2</td>
-            <td><i class="text-red-500 fa-solid fa-xmark"></i> 8.1</td>
-            <td><i class="text-green-500 fa-solid fa-check"></i> Actif</td>
-            <td><i class="text-green-500 fa-solid fa-check"></i> AllowOverride All</td>
-            <td><i class="text-green-500 fa-solid fa-check"></i> zip, pdo, curl</td>
+            <td>
+                <?= InstallerController::hasRequiredFormatted('php')?>
+                <?= InstallerController::$minPhpVersion . " +" ?>
+            </td>
+            <td>
+                <?= InstallerController::hasRequiredFormatted('https')?>
+            </td>
+            <td>
+                <?= InstallerController::hasRequiredFormatted('pdo')?>
+            </td>
+            <td>
+                <?= InstallerController::hasRequiredFormatted('zip')?>
+            </td>
+            <td>
+                <?= InstallerController::hasRequiredFormatted('curl')?>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -37,11 +49,9 @@ use CMW\Manager\Lang\LangManager;
 
 <?= LangManager::translate("installation.welcome.content") ?>
 
-<small>TODO => établir les pré-requis avant l'installation.</small>
-
 <div class="card-actions justify-end">
     <form action="installer/submit" method="post" id="mainForm">
-        <button id="formBtn" type="submit" class="btn btn-primary">
+        <button id="formBtn" type="submit" class="btn btn-primary" <?= InstallerController::checkAllRequired() ? '' : 'disabled' ?>>
             <?= LangManager::translate("core.btn.next") ?>
         </button>
     </form>
