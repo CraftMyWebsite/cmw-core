@@ -45,6 +45,33 @@ return [
         ]
     ],
 
+    "packages" => [
+        "title" => "Choix des packages",
+        "sub_title" => "Cliquez pour sélectionner",
+        "list_title" => "Liste des packages",
+        "free" => "Gratuit",
+        "version" => "Version",
+        "demo" => "Démo",
+        "search" => "Rechercher",
+        "tags" => "Tags",
+        "help" => [
+            "title" => "Personnalisez votre installation",
+            "content" => "<b>Informations :</b> Cette étape vous permet en quelques click d'installer les package dont vous aurez
+                besoin pour bien commencer votre site.<br>
+                Cette configuration n'est pas définitive, il est possible d'en ajouter d'autre plus tard via votre panel
+                d'administration.<br><br>
+                <b>Presets : </b>Les presets vous précoche les package les plus adapté à vos besoin, vous pouvez toutes
+                fois en enlever / rajouter d'autre en fonctione de vos besoin.<br>",
+            "footer" => "**Survolez un package pour en savoir plus"
+        ]
+    ],
+
+    "themes" => [
+        "title" => "Choix d'un thème",
+        "sub_title" => "Cliquez sur l'image pour séléctionner",
+        "compatibility" => "Compatibilité"
+    ],
+
     "administrator" => [
         "title" => "Compte Administrateur",
     ],

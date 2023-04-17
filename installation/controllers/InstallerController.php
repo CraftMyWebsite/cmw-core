@@ -286,10 +286,9 @@ class InstallerController
         foreach ($resources as $resource){
             $type = $resource['type'] === 1 ? 'package' : 'theme';
 
-            // TODO better errors
             if (!DownloadManager::installPackageWithLink($resource['file'], $type, $resource['name'])) {
-                Response::sendAlert("error", LangManager::translate("core.toaster.error"),
-                    LangManager::translate("core.toaster.internalError"));
+                LangManager::translate("core.downloads.errors.internalError",
+                    ['name' => $resource['name'], 'version' => $resource['version_name']]);
                 continue;
             }
 
@@ -304,9 +303,28 @@ class InstallerController
 
     public function fourthInstallPost(): void {
 
-        Utils::getEnv()->editValue("installStep", 5);
+        Utils::debugR($_POST);
 
-        echo 1;
+        if (!isset($_POST['packages'])){
+            Utils::getEnv()->editValue("installStep", 5);
+            return;
+        }
+
+        foreach ($_POST['packages'] as $id) {
+
+            $package = PublicAPI::getData("resources/installResource&id=$id");
+
+            $type = $package['type'] === 1 ? 'package' : 'theme';
+
+            if (!DownloadManager::installPackageWithLink($package['file'], $type, $package['name'])) {
+                Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                    LangManager::translate("core.downloads.errors.internalError",
+                        ['name' => $package['name'], 'version' => $package['version_name']]));
+            }
+
+        }
+
+        Utils::getEnv()->editValue("installStep", 5);
     }
 
     public function sixInstallPost(): void

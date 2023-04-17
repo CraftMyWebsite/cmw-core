@@ -157,6 +157,11 @@ return [
         "title" => "Menus | Edit",
         "desc" => "Edit main site menu",
     ],
+    "downloads" => [
+        "errors" => [
+            "internalError" => "Internal error with resource %name% - %version%"
+        ]
+    ],
     "updates" => [
         "title" => "Update your website",
         "description" => "Update your CraftMyWebsite website"
