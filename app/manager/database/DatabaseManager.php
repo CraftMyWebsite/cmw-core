@@ -64,6 +64,43 @@ class DatabaseManager
         return $db;
     }
 
+    /**
+     * @param string $host
+     * @param string $username
+     * @param string $password
+     * @param string $name
+     * @param int $port
+     * @param array $options => <b>Options are PDO options, like: <e>[PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]</e></b>
+     * @return \PDO
+     * @desc Use a custom mysql PDO instance
+     */
+    public static function getCustomMysqlInstance(string $host, string $username, string $password, string $name, int $port, array $options = []): PDO
+    {
+        $db = new PDO("mysql:host=$host;port=$port", $username, $password, $options);
+        $db->exec("SET CHARACTER SET utf8");
+        $db->exec("CREATE DATABASE IF NOT EXISTS " . $name . ";");
+        $db->exec("USE " . $name . ";");
+
+        return $db;
+    }
+
+    /**
+     * @param string $file
+     * @param array $options
+     * @param bool $createMemoryDb
+     * @return \PDO
+     */
+    public static function getCustomSqLiteInstance(string $file = "db.sqlite3", array $options = [], bool $createMemoryDb = false): PDO
+    {
+        if ($createMemoryDb){
+            $db = new PDO("sqlite::memory:", $options);
+        } else {
+            $db = new PDO("sqlite:$file", $options);
+        }
+
+        return $db;
+    }
+
     public static function isMariadb(): bool
     {
         $pdo = self::getInstance();
