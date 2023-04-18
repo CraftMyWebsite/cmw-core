@@ -5,15 +5,16 @@ namespace CMW\Controller\Core;
 use CMW\Controller\Users\UsersController;
 use CMW\Entity\Core\ThemeEntity;
 use CMW\Manager\Api\PublicAPI;
+use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Uploads\ImagesManager;
+use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\ThemeModel;
 use CMW\Router\Link;
+use CMW\Utils\Redirect;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
-use CMW\Manager\Views\View;
-use Error;
 use JsonException;
 use ZipArchive;
 
@@ -62,7 +63,7 @@ class ThemeController extends CoreController
         try {
             $strJsonFileContents = file_get_contents("public/themes/$themeName/infos.json");
             $themeInfos = json_decode($strJsonFileContents, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
+        } catch (JsonException) {
             return null;
         }
 
@@ -82,7 +83,7 @@ class ThemeController extends CoreController
         $themesFolder = 'public/themes';
         $contentDirectory = array_diff(scandir("$themesFolder/"), array('..', '.'));
         foreach ($contentDirectory as $theme) {
-            if(file_exists("$themesFolder/$theme/infos.json") && !empty(file_get_contents("$themesFolder/$theme/infos.json"))) {
+            if (file_exists("$themesFolder/$theme/infos.json") && !empty(file_get_contents("$themesFolder/$theme/infos.json"))) {
                 $toReturn[] = self::getTheme($theme);
             }
         }
@@ -100,13 +101,13 @@ class ThemeController extends CoreController
     {
         $themeConfigFile = "public/themes/" . self::getCurrentTheme()->getName() . "/config/config.settings.php";
 
-        if(!file_exists($themeConfigFile)) {
+        if (!file_exists($themeConfigFile)) {
             return [];
         }
 
         $content = include $themeConfigFile;
 
-        if(!is_array($content)){
+        if (!is_array($content)) {
             return [];
         }
 
@@ -124,18 +125,33 @@ class ThemeController extends CoreController
         return $this->getCurrentThemeConfigSettings()[$setting] ?? null;
     }
 
-    public function installThemeSettings(String $theme): void
+    /**
+     * @param string $theme
+     * @return bool
+     */
+    public static function isThemeInstalled(string $theme): bool
+    {
+        foreach (self::getInstalledThemes() as $installedTheme) {
+            if ($theme === $installedTheme->getName()){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function installThemeSettings(string $theme): void
     {
         $themeConfigFile = "public/themes/$theme/config/config.settings.php";
 
-        if(!file_exists($themeConfigFile)) {
+        if (!file_exists($themeConfigFile)) {
             return;
         }
 
         $content = include $themeConfigFile;
 
 
-        foreach ($content as $config => $value){
+        foreach ($content as $config => $value) {
             $this->themeModel->storeThemeConfig($config, $value, $theme);
         }
     }
@@ -152,18 +168,12 @@ class ThemeController extends CoreController
         $currentTheme = self::getCurrentTheme();
         $installedThemes = self::getInstalledThemes();
 
-        try {
-            //$themesList = json_decode(file_get_contents(Utils::getApi() . "/getThemeList"), false, 512, JSON_THROW_ON_ERROR);
-            $themesList = [];
-            View::createAdminView("core", "themeConfiguration")
-                ->addStyle("admin/resources/vendors/simple-datatables/style.css","admin/resources/assets/css/pages/simple-datatables.css")
-                ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes, "themesList" => $themesList])
-                ->addScriptAfter("admin/resources/vendors/simple-datatables/umd/simple-datatables.js","admin/resources/assets/js/pages/simple-datatables.js")
-                ->view();
-        } catch (JsonException $e) {
-            throw new Error($e);
-        }
-
+        $themesList = PublicAPI::getData("resources/getResources&resource_type=0");
+        View::createAdminView("core", "themeConfiguration")
+            ->addStyle("admin/resources/vendors/simple-datatables/style.css", "admin/resources/assets/css/pages/simple-datatables.css")
+            ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes, "themesList" => $themesList])
+            ->addScriptAfter("admin/resources/vendors/simple-datatables/umd/simple-datatables.js", "admin/resources/assets/js/pages/simple-datatables.js")
+            ->view();
     }
 
     #[Link("/configuration", Link::POST, [], "/cmw-admin/theme")]
@@ -201,32 +211,23 @@ class ThemeController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
 
-        try {
-            $theme = json_decode(file_get_contents(PublicAPI::getUrl() . "/getThemeById=" . $id), false, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
-        }
+        $theme = PublicAPI::getData("resources/installResource&id=$id");
 
-
-        //VARS
-        $url = "https://devcmw.w3b.websr.fr/public/uploads/market/files/" . $theme->file; // TODO GET REAL LINK
-        $outFileName = "public/uploads/" . $theme->file;
-
-        //Download & store File
-        set_time_limit(0);
-        $file = file_get_contents($url);
-        file_put_contents($outFileName, $file);
-
-        $zip = new ZipArchive();
-        if ($zip->open($outFileName)) {
-            $zip->extractTo('public/themes/');
-            $zip->close();
-            unlink($outFileName);
+        if (!DownloadManager::installPackageWithLink($theme['file'], "theme", $theme['name'])){
+            Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.downloads.errors.internalError",
+                    ['name' => $theme['name'], 'version' => $theme['version_name']]));
+            Redirect::redirectPreviousRoute();
+            return;
         }
 
         //Install theme settings
-        $this->installThemeSettings($theme->name);
+        $this->installThemeSettings($theme['name']);
+        CoreModel::updateOption("theme", $theme['name']);
 
-        header("location: /cmw-admin/theme/configuration");
+        //TODO TOASTER
+
+        Redirect::redirectPreviousRoute();
     }
 
 
@@ -235,9 +236,9 @@ class ThemeController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
         View::createAdminView("core", "themeManage")
-        ->addStyle("admin/resources/vendors/summernote/summernote-lite.css","admin/resources/assets/css/pages/summernote.css")
-        ->addScriptAfter("admin/resources/vendors/jquery/jquery.min.js","admin/resources/vendors/summernote/summernote-lite.min.js","admin/resources/assets/js/pages/summernote.js")
-        ->view();
+            ->addStyle("admin/resources/vendors/summernote/summernote-lite.css", "admin/resources/assets/css/pages/summernote.css")
+            ->addScriptAfter("admin/resources/vendors/jquery/jquery.min.js", "admin/resources/vendors/summernote/summernote-lite.min.js", "admin/resources/assets/js/pages/summernote.js")
+            ->view();
     }
 
     #[Link("/manage", Link::POST, [], "/cmw-admin/theme")]
@@ -248,27 +249,27 @@ class ThemeController extends CoreController
         $aresFiles = [];
 
         // Manage files
-        foreach ($_FILES as $conf => $file){
-             $aresFiles['__images__'][$conf] = true;
+        foreach ($_FILES as $conf => $file) {
+            $aresFiles['__images__'][$conf] = true;
 
-             //If file is empty, we don't update the config.
-             if ($file['name'] !== "" ) {
+            //If file is empty, we don't update the config.
+            if ($file['name'] !== "") {
 
-                 $imageName = ImagesManager::upload($file, self::getCurrentTheme()->getName() . "/img");
-                 if (!str_contains($imageName, "ERROR")) {
-                     $remoteImageValue = ThemeModel::fetchConfigValue($conf);
-                     $localImageValue = (new ThemeController())->getCurrentThemeConfigSetting($conf);
+                $imageName = ImagesManager::upload($file, self::getCurrentTheme()->getName() . "/img");
+                if (!str_contains($imageName, "ERROR")) {
+                    $remoteImageValue = ThemeModel::fetchConfigValue($conf);
+                    $localImageValue = (new ThemeController())->getCurrentThemeConfigSetting($conf);
 
-                     if ($remoteImageValue !== $file && $remoteImageValue !== $localImageValue) {
-                         ImagesManager::deleteImage(self::getCurrentTheme()->getName() . "/img/$remoteImageValue");
-                     }
+                    if ($remoteImageValue !== $file && $remoteImageValue !== $localImageValue) {
+                        ImagesManager::deleteImage(self::getCurrentTheme()->getName() . "/img/$remoteImageValue");
+                    }
 
-                     $this->themeModel->updateThemeConfig($conf, $imageName, self::getCurrentTheme()->getName());
-                 } else {
-                     Response::sendAlert("error", LangManager::translate("core.toaster.error"),
-                          $conf . " => " . $imageName);
-                 }
-             }
+                    $this->themeModel->updateThemeConfig($conf, $imageName, self::getCurrentTheme()->getName());
+                } else {
+                    Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                        $conf . " => " . $imageName);
+                }
+            }
         }
 
 
