@@ -38,11 +38,39 @@ return [
 
     "details" => [
         "title" => "Details",
-        "website" =>  [
+        "website" => [
             "name" => "Website name",
             "description" => "Description",
             "description_placeholder" => "Discover my brand new custom website made with CraftMyWebsite"
         ]
+    ],
+
+    "packages" => [
+        "title" => "Select your packages",
+        "sub_title" => "Click to select",
+        "list_title" => "List of packages",
+        "free" => "Free",
+        "version" => "Version",
+        "demo" => "Demo",
+        "search" => "Search",
+        "tags" => "Tags",
+        "help" => [
+            "title" => "Customize your installation",
+            "content" => "<b>Information:</b> This step allows you in a few clicks to install the package you will have
+                need to get your site off to a good start.<br>
+                This configuration is not final, it is possible to add others later via your panel
+                administration.<br><br>
+                <b>Presets: </b>The presets you pre-check the packages most suited to your needs, you can all
+                times remove / add others according to your needs.<br>",
+            "footer" => "**Hover over a package to learn more"
+        ]
+    ],
+
+    "themes" => [
+        "title" => "Choix d'un thème",
+        "sub_title" => "Cliquez sur l'image pour séléctionner",
+        "compatibility" => "Compatibility",
+        "more" => "More information"
     ],
 
     "administrator" => [

@@ -153,6 +153,11 @@ return [
             ]
         ]
     ],
+    "downloads" => [
+      "errors" => [
+          "internalError" => "Erreur interne avec la resource %name% - %version%"
+      ]
+    ],
     "updates" => [
         "title" => "Mettez à jour votre site",
         "description" => "Mettez à jour votre site CraftMyWebsite"

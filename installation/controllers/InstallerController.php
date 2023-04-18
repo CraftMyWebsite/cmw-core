@@ -26,8 +26,54 @@ use JetBrains\PhpStorm\NoReturn;
 class InstallerController
 {
 
+    static public float $minPhpVersion = 8.1;
+    static public int $minPhpVersionId = 80100;
+    static public array $requiredSettings = ['php', 'zip', 'curl', 'pdo'];
+
     static public array $installSteps = [0 => "welcome", 1 => "config", 2 => "details", 3 => "bundle", 4 => "packages",
                                         5 => "themes", 6 => "admin", 7 => "finish"];
+
+    /**
+     * @return bool
+     * @desc Check if the website has all the required configurations to start the installation
+     */
+    public static function checkAllRequired(): bool
+    {
+        foreach (self::$requiredSettings as $required) {
+            if (!self::hasRequired($required)){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param string $value
+     * @return bool
+     * @desc Return true if the website has the specified required
+     */
+    public static function hasRequired(string $value): bool
+    {
+        return match ($value){
+            "php" => PHP_VERSION_ID >= self::$minPhpVersionId,
+            "https" => Utils::getHttpProtocol() === "https",
+            "zip" => extension_loaded('zip'),
+            "curl" => extension_loaded('curl'),
+            "pdo" => extension_loaded('pdo')
+        };
+    }
+
+    /**
+     * @param string $value
+     * @return string
+     * @desc Return formatted style
+     */
+    public static function hasRequiredFormatted(string $value): string
+    {
+        return self::hasRequired($value) ? "<i class='text-green-500 fa-solid fa-check'></i>" :
+            "<i class='text-red-500 fa-solid fa-xmark'></i>";
+    }
 
     public static function getInstallationStep(): int
     {
@@ -240,10 +286,9 @@ class InstallerController
         foreach ($resources as $resource){
             $type = $resource['type'] === 1 ? 'package' : 'theme';
 
-            // TODO better errors
             if (!DownloadManager::installPackageWithLink($resource['file'], $type, $resource['name'])) {
-                Response::sendAlert("error", LangManager::translate("core.toaster.error"),
-                    LangManager::translate("core.toaster.internalError"));
+                LangManager::translate("core.downloads.errors.internalError",
+                    ['name' => $resource['name'], 'version' => $resource['version_name']]);
                 continue;
             }
 
@@ -258,9 +303,52 @@ class InstallerController
 
     public function fourthInstallPost(): void {
 
-        Utils::getEnv()->editValue("installStep", 5);
+        if (!isset($_POST['packages'])){
+            Utils::getEnv()->editValue("installStep", 5);
+            return;
+        }
 
-        echo 1;
+        foreach ($_POST['packages'] as $id) {
+
+            $package = PublicAPI::getData("resources/installResource&id=$id");
+
+            $type = $package['type'] === 1 ? 'package' : 'theme';
+
+            if (!DownloadManager::installPackageWithLink($package['file'], $type, $package['name'])) {
+                Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                    LangManager::translate("core.downloads.errors.internalError",
+                        ['name' => $package['name'], 'version' => $package['version_name']]));
+            }
+
+        }
+
+        Utils::getEnv()->editValue("installStep", 5);
+    }
+
+    public function fifthInstallPost(): void {
+
+        if (!isset($_POST['theme'])){
+            Utils::getEnv()->editValue("installStep", 6);
+            return;
+        }
+
+        $id = filter_input(INPUT_POST, "theme");
+
+        $theme = PublicAPI::getData("resources/installResource&id=$id");
+
+
+        if (!DownloadManager::installPackageWithLink($theme['file'], 'theme', $theme['name'])) {
+            Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.downloads.errors.internalError",
+                    ['name' => $theme['name'], 'version' => $theme['version_name']]));
+
+            return;
+        }
+
+        (new ThemeController())->installThemeSettings($theme['name']);
+        CoreModel::updateOption("theme", $theme['name']);
+
+        Utils::getEnv()->editValue("installStep", 6);
     }
 
     public function sixInstallPost(): void

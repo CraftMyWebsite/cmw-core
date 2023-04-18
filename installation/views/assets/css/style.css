@@ -2068,3 +2068,8 @@ input[type="radio"] {
         line-height: 1;
     }
 }
+
+.required {
+    color: hsl(var(--p) / var(--tw-bg-opacity));
+    margin-left: 2px;
+}
