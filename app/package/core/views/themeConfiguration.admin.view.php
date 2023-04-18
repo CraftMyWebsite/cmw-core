@@ -1,5 +1,6 @@
 <?php
 
+use CMW\Controller\Core\ThemeController;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 
@@ -64,13 +65,16 @@ $description = LangManager::translate("core.theme.config.description"); ?>
                     <tbody class="text-center">
                     <?php foreach ($themesList as $theme): ?>
                         <tr>
-                            <td class="text-center"><?= $theme->title ?></td>
-                            <td class="text-center"><?= $theme->version ?></td>
-                            <td class="text-center"><?= $theme->version_cmw ?></td>
-                            <td class="text-center"><?= $theme->downloads ?></td>
-                            <td class="text-center"><a href="install/<?= $theme->id ?>"
-                                                       class="btn btn-sm btn-primary"><i
-                                            class="fa-solid fa-download"></i> Installer</a></td>
+                            <td class="text-center"><?= $theme['name'] ?></td>
+                            <td class="text-center"><?= $theme['version_name'] ?></td>
+                            <td class="text-center"><?= $theme['version_cmw'] ?></td>
+                            <td class="text-center"><?= $theme['downloads'] ?></td>
+                            <td class="text-center">
+                                <a href="install/<?= $theme['id'] ?>" class="btn btn-sm btn-primary">
+                                    <i class="fa-solid fa-download"></i>
+                                    <?= ThemeController::isThemeInstalled($theme['name']) ? 'Réinstaller' : 'Installer' ?>
+                                </a>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>

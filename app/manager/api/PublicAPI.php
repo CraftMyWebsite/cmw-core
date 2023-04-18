@@ -55,15 +55,20 @@ class PublicAPI
     /**
      * @param string $url
      * @param bool $useWebsiteKey
+     * @param bool $useLang
      * @return array
      * @desc Use Stream context to get data.
      */
-    public static function getData(string $url, bool $useWebsiteKey = true): array
+    public static function getData(string $url, bool $useWebsiteKey = true, bool $useLang = true): array
     {
         $url = self::getUrl()  . '/' . $url;
 
         if ($useWebsiteKey){
             $url .= '&website_key=' . base64_encode(self::getWebsiteKey());
+        }
+
+        if ($useLang){
+            $url .='&lang=' . Utils::getEnv()->getValue('LOCALE');
         }
 
         $options = array(
