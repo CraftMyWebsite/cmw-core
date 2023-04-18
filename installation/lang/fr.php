@@ -69,7 +69,8 @@ return [
     "themes" => [
         "title" => "Choix d'un thème",
         "sub_title" => "Cliquez sur l'image pour séléctionner",
-        "compatibility" => "Compatibilité"
+        "compatibility" => "Compatibilité",
+        "more" => "Plus d'informations"
     ],
 
     "administrator" => [

@@ -303,8 +303,6 @@ class InstallerController
 
     public function fourthInstallPost(): void {
 
-        Utils::debugR($_POST);
-
         if (!isset($_POST['packages'])){
             Utils::getEnv()->editValue("installStep", 5);
             return;
@@ -325,6 +323,32 @@ class InstallerController
         }
 
         Utils::getEnv()->editValue("installStep", 5);
+    }
+
+    public function fifthInstallPost(): void {
+
+        if (!isset($_POST['theme'])){
+            Utils::getEnv()->editValue("installStep", 6);
+            return;
+        }
+
+        $id = filter_input(INPUT_POST, "theme");
+
+        $theme = PublicAPI::getData("resources/installResource&id=$id");
+
+
+        if (!DownloadManager::installPackageWithLink($theme['file'], 'theme', $theme['name'])) {
+            Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.downloads.errors.internalError",
+                    ['name' => $theme['name'], 'version' => $theme['version_name']]));
+
+            return;
+        }
+
+        (new ThemeController())->installThemeSettings($theme['name']);
+        CoreModel::updateOption("theme", $theme['name']);
+
+        Utils::getEnv()->editValue("installStep", 6);
     }
 
     public function sixInstallPost(): void
