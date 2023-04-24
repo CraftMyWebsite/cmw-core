@@ -36,7 +36,7 @@ class DownloadManager
         if ($archiveUpdate->open(Utils::getEnv()->getValue("DIR") . 'public/resource.zip') === TRUE) {
 
             if ($type === 'package') {
-                $archiveUpdate->extractTo(Utils::getEnv()->getValue("DIR") . 'app/package');
+                $archiveUpdate->extractTo(Utils::getEnv()->getValue("DIR") . 'app/Package');
             } else {
                 $archiveUpdate->extractTo(Utils::getEnv()->getValue("DIR") . 'public/themes');
             }
@@ -61,7 +61,7 @@ class DownloadManager
     public static function initPackages(string... $packages): void
     {
         foreach ($packages as $package):
-            $initFolder = Utils::getEnv()->getValue("dir") . "app/package/$package/init";
+            $initFolder = Utils::getEnv()->getValue("dir") . "app/Package/$package/Init";
 
             if (!is_dir($initFolder)) {
                 continue;

@@ -12,7 +12,7 @@ use Throwable;
 class ErrorManager
 {
 
-    private string $dirStorage = "app/storage/logs/";
+    private string $dirStorage = "app/storage/logs";
 
     public function __invoke(): void
     {
