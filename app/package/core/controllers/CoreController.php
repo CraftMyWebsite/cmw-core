@@ -4,6 +4,8 @@ namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Requests\Requests;
+use CMW\Manager\Requests\Validator;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Model\Core\CoreModel;
@@ -59,18 +61,25 @@ class CoreController
     }
 
     #[Link(path: "/configuration", method: Link::GET, scope: "/cmw-admin")]
-    public function adminConfiguration(): void
+    public function adminConfiguration(array $data): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
+
+
+        Utils::debugR($data);
 
         View::createAdminView("core", "configuration")
         ->view();
     }
 
     #[Link(path: "/configuration", method: Link::POST, scope: "/cmw-admin")]
-    public function adminConfigurationPost(): void
+    public function adminConfigurationPost(array $data): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
+
+       $request = new Requests([
+           'name' => Validator::Validate(type: 'string'),
+       ]);
 
         foreach ($_POST as $option_name => $option_value):
             if ($option_name === "locale") {

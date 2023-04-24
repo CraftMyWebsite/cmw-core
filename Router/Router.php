@@ -163,7 +163,7 @@ class Router
     {
         return $this->get($link->getPath(), function (...$values) use ($method) {
 
-            $this->callRegisteredRoute($method, ...$values);
+            $this->callRegisteredRoute($method, $_GET, ...$values);
 
         }, name: $link->getName(), weight: $link->getWeight());
     }
@@ -182,18 +182,18 @@ class Router
                     throw new RouterException('Wrong token, try again sir.', 403);
                 }
             }
-            $this->callRegisteredRoute($method, ...$values);
+            $this->callRegisteredRoute($method, $_POST, ...$values);
         }, name: $link->getName(), weight: $link->getWeight());
     }
 
     /**
      * @throws \ReflectionException
      */
-    private function callRegisteredRoute(ReflectionMethod $method, string ...$values): void
+    private function callRegisteredRoute(ReflectionMethod $method, array $data, string ...$values): void
     {
         $controller = $method->getDeclaringClass()->newInstance();
         $methodName = $method->getName();
-        $controller->$methodName(...$values);
+        $controller->$methodName($data, ...$values);
     }
 
     private function generateRouteName(ReflectionMethod $method): string
