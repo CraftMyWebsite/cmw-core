@@ -146,16 +146,15 @@ class Validator
 
     /**
      * @param string $key
-     * @return $this|mixed
+     * @return mixed
      */
-    private function getValue(string $key)
+    private function getValue(string $key): mixed
     {
         if (array_key_exists($key, $this->data)) {
             return $this->data[$key];
         }
         $this->addError($key, 'getValue');
-
-        return $this;
+        return null;
     }
 
     /**
