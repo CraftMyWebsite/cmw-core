@@ -43,7 +43,7 @@ use CMW\Utils\Utils;
 
         <?php foreach (PublicAPI::getData("resources/getResources&resource_type=0&lang=" . Utils::getEnv()->getValue("locale")) as $theme): ?>
 
-            <li class="lg:w-1/3 lg:px-2 mb-4">
+            <li class="lg:w-1/2 lg:px-2 mb-4">
                 <input class="hidden" id="theme_<?= $theme['id'] ?>" type="radio" name="theme"
                        value="<?= $theme['id'] ?>">
                 <label class="label" for="theme_<?= $theme['id'] ?>">
@@ -58,28 +58,14 @@ use CMW\Utils\Utils;
                         </div>
                     </div>
                 </label>
-                <div tabindex="0" class="collapse collapse-arrow bg-primary rounded-b-box">
-                    <div class="collapse-title font-medium">
-                        <?= LangManager::translate("installation.themes.more") ?>
-                    </div>
-                    <div class="collapse-content bg-gray-800">
-                        <div class="pt-4">
-                            <p><i class='fa-solid fa-at'></i><i> <?= $theme['author_pseudo'] ?> </i></p>
-                            <p><i class='fa-solid fa-download'></i> <?= $theme['downloads'] ?></p>
-                            <p>
-                                <?= LangManager::translate("installation.packages.version") ?> :
-                                <?= $theme['version_name'] ?>
-                            </p>
-
-                            <?= $theme['code_link'] !== "" ?
-                                "<p><a href='" . $theme['code_link'] . "' target='_blank'><i class='fa-brands fa-github'></i></a></p>" : "" ?>
-                            <?= $theme['demo'] !== "" ?
-                                "<p><a href='" . $theme['demo'] . "' target='_blank'> " . LangManager::translate('installation.packages.demo') . "</a></p>" : "" ?>
-                        </div>
-                    </div>
+                <div class="flex justify-between p-2 bg-gray-700 rounded-b-2xl">
+                    <div><a class="text-gray-400 hover:text-cmw-pink" href="" target="_blank"><i class='fa-solid fa-at'></i><i> <?= $theme['author_pseudo'] ?></i></a></div>
+                    <div><i class='fa-solid fa-download'></i> <?= $theme['downloads'] ?></div>
+                    <div><?= LangManager::translate("installation.packages.version") ?> : <?= $theme['version_name'] ?></div>
+                    <?= $theme['demo'] !== "" ?"<div><a class='text-gray-400 hover:text-cmw-pink' href='" . $theme['demo'] . "' target='_blank'> <i class='fa-solid fa-up-right-from-square'></i>" . " " . LangManager::translate('installation.packages.demo') . "</a></div>" : "" ?>
+                    <?= $theme['code_link'] !== "" ? "<div><a class='text-gray-400 hover:text-cmw-pink' href='" . $theme['code_link'] . "' target='_blank'><i class='fa-brands fa-github'></i></a></div>" : "" ?>
                 </div>
             </li>
-
         <?php endforeach; ?>
 
     </ul>
