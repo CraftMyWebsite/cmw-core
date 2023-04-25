@@ -144,6 +144,10 @@ class Validator
         return $this->errors;
     }
 
+    /**
+     * @param string $key
+     * @return $this|mixed
+     */
     private function getValue(string $key)
     {
         if (array_key_exists($key, $this->data)) {
@@ -152,6 +156,15 @@ class Validator
         $this->addError($key, 'getValue');
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     * @desc Check if the Validator don't have any errors.
+     */
+    private function isValid(): bool
+    {
+        return empty($this->errors);
     }
 
 }
