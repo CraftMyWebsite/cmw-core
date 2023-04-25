@@ -4,7 +4,9 @@ namespace CMW\Router;
 
 use Closure;
 use CMW\Manager\Metrics\VisitsMetricsManager;
+use CMW\Manager\Requests\Request;
 use CMW\Manager\Security\SecurityManager;
+use CMW\Utils\Utils;
 use ReflectionMethod;
 
 /**
@@ -163,7 +165,12 @@ class Router
     {
         return $this->get($link->getPath(), function (...$values) use ($method) {
 
-            $this->callRegisteredRoute($method, $_GET, ...$values);
+            $request = new Request(url: $this->url, methode: 'GET',
+                params: $this->getRouteByUrl('users/edit/:id')?->getParams() ?? [],
+                data: $_GET ?? [],
+                emitUrl: $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+
+            $this->callRegisteredRoute($method, $request, ...$values);
 
         }, name: $link->getName(), weight: $link->getWeight());
     }
@@ -172,7 +179,7 @@ class Router
     {
         return $this->post($link->getPath(), function (...$values) use ($link, $method) {
 
-            if($link->isSecure()) {
+            if ($link->isSecure()) {
                 //Check security before send post request
                 $security = new SecurityManager();
 
@@ -182,18 +189,24 @@ class Router
                     throw new RouterException('Wrong token, try again sir.', 403);
                 }
             }
-            $this->callRegisteredRoute($method, $_POST, ...$values);
+
+            $request = new Request(url: $this->url, methode: 'POST',
+                params: $this->getRouteByUrl($this->url)?->getParams() ?? [],
+                data: $_POST ?? [],
+                emitUrl: $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+
+            $this->callRegisteredRoute($method, $request, ...$values);
         }, name: $link->getName(), weight: $link->getWeight());
     }
 
     /**
      * @throws \ReflectionException
      */
-    private function callRegisteredRoute(ReflectionMethod $method, array $data, string ...$values): void
+    private function callRegisteredRoute(ReflectionMethod $method, Request $request, string ...$values): void
     {
         $controller = $method->getDeclaringClass()->newInstance();
         $methodName = $method->getName();
-        $controller->$methodName($data, ...$values);
+        $controller->$methodName($request, ...$values);
     }
 
     private function generateRouteName(ReflectionMethod $method): string

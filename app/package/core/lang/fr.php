@@ -201,6 +201,8 @@ return [
             'maxLength' => 'Le champs %key% doit contenir moins de %max% caractères',
             'betweenLength' => 'Le champs %key% doit contenir entre %min% et %max% caractères',
             'dateTime' => 'Le champs %key% doit être une date valide (%format%)',
+            'getValue' => 'Valeur introuvable %key%',
+            'type' => 'Type invalide pour %key%'
         ]
     ]
 ];

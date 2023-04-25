@@ -7,6 +7,7 @@ use CMW\Controller\Core\SecurityController;
 use CMW\Entity\Users\UserEntity;
 use CMW\Entity\Users\UserSettingsEntity;
 use CMW\Manager\Error\ErrorManager;
+use CMW\Manager\Requests\Request;
 use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UserPictureModel;
 use CMW\Model\Users\UsersModel;
@@ -139,9 +140,11 @@ class UsersController extends CoreController
 
 
     #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
-    public function adminUsersEdit(int $id): void
+    public function adminUsersEdit(Request $request, int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+
+        Utils::debugR($request);
 
         $userEntity = $this->userModel->getUserById($id);
 

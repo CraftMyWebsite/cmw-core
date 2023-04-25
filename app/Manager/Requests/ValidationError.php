@@ -37,7 +37,8 @@ class ValidationError
                 ['key' => $this->key, 'min' => $this->attributes['min'], 'max' => $this->attributes['max']]),
             'dateTime' => LangManager::translate("core.errors.requests.dateTime",
                 ['key' => $this->key, 'format' => $this->attributes['format']]),
-
+            'getValue' => LangManager::translate("core.errors.requests.getValue", ['key' => $this->key]),
+            'type' => LangManager::translate("core.errors.requests.type", ['key' => $this->key])
         };
     }
 

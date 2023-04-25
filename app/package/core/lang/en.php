@@ -205,6 +205,8 @@ return [
             'maxLength' => 'Input %key% need to have max %max% characters',
             'betweenLength' => 'Input %key% need to have between %min% and %max% characters',
             'dateTime' => 'Input %key% need to be a validate format (%format%)',
+            'getValue' => 'Missing value %key%',
+            'type' => 'Invalide type for %key%',
         ]
     ]
 ];

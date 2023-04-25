@@ -12,7 +12,7 @@ class Validator
     /**
      * @var array
      */
-    private array $params;
+    private array $data;
 
     /**
      * @var string[]
@@ -20,16 +20,11 @@ class Validator
     private array $errors = [];
 
     /**
-     * @param $params
+     * @param array $data
      */
-    public function __construct(array $params)
+    public function __construct(array $data)
     {
-        $this->params = $params;
-    }
-
-    public static function Validate(#[ExpectedValues(['string', 'int', 'bool', 'array', 'mixed'])] $type): array
-    {
-        return [];
+        $this->data = $data;
     }
 
     /**
@@ -48,6 +43,24 @@ class Validator
     }
 
     /**
+     * @param string $type "boolean", "integer", "double", "string", "array", "object", "mixed"]
+     * @param mixed $key
+     * @return $this
+     */
+    public function checkType(#[ExpectedValues(["boolean", "integer", "double", "string", "array", "object", "mixed"])]
+                              string $type,
+                              mixed  $key): self
+    {
+        $value = $this->getValue($key);
+
+        if (gettype($value) !== $type) {
+            $this->addError($key, 'type');
+        }
+
+        return $this;
+    }
+
+    /**
      * @param string ...$keys
      * @return $this
      */
@@ -62,25 +75,24 @@ class Validator
         return $this;
     }
 
-    public function legth(string $key, ?int $min = null, ?int $max = null): self
+    public function length(string $key, ?int $min = null, ?int $max = null): self
     {
         $value = $this->getValue($key);
         $length = mb_strlen($value);
 
-        if (!is_null($min) && !is_null($max) && ($length < $min || $length > $max)){
+        if (!is_null($min) && !is_null($max) && ($length < $min || $length > $max)) {
             $this->addError($key, 'betweenLength', [$min, $max]);
-            return $this;
         }
 
-        if (!is_null($min) && $length < $min){
+        if (!is_null($min) && $length < $min) {
             $this->addError($key, 'minLength', [$min]);
-            return $this;
         }
 
-        if (!is_null($max) && $length > $max){
+        if (!is_null($max) && $length > $max) {
             $this->addError($key, 'maxLength', [$max]);
-            return $this;
         }
+
+        return $this;
     }
 
     /**
@@ -105,7 +117,7 @@ class Validator
 
         $pattern = '/^([a-z0-9]+-?)+$/';
 
-        if (!is_null($value) && !preg_match($pattern, $this->params[$key])) {
+        if (!is_null($value) && !preg_match($pattern, $this->data[$key])) {
             $this->addError($key, 'slug');
         }
 
@@ -134,9 +146,12 @@ class Validator
 
     private function getValue(string $key)
     {
-        if (array_key_exists($key, $this->params)) {
-            return $this->params[$key];
+        if (array_key_exists($key, $this->data)) {
+            return $this->data[$key];
         }
+        $this->addError($key, 'getValue');
+
+        return $this;
     }
 
 }
