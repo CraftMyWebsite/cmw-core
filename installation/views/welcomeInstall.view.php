@@ -48,13 +48,30 @@ use CMW\Manager\Lang\LangManager;
 </div>
 
 <?= LangManager::translate("installation.welcome.content") ?>
-
+<form action="installer/submit" method="post" id="mainForm">    
+    <div class="form-control">
+            <label class="label cursor-pointer">
+                <input id="cgu" name="cgu" type="checkbox" class="checkbox checkbox-primary checkbox-xs" />
+                <span class=""><?= LangManager::translate("installation.welcome.readaccept") ?> <i><a class="text-gray-400 hover:text-primary" target="_blank" href=""><?= LangManager::translate("installation.welcome.cgu") ?></a></i></span>
+            </label>
+        </div>
 <div class="card-actions justify-end">
-    <form action="installer/submit" method="post" id="mainForm">
-        <button id="formBtn" type="submit" class="btn btn-primary" <?= InstallerController::checkAllRequired() ? '' : 'disabled' ?>>
+        <button disabled id="formBtn" type="submit" class="btn btn-primary" <?= InstallerController::checkAllRequired() ? '' : 'disabled' ?>>
             <?= LangManager::translate("core.btn.next") ?>
         </button>
     </form>
 </div>
 
 <script src="installation/views/assets/js/changeLang.js"></script>
+<script>
+    const cguCheckbox = document.getElementById('cgu');
+
+    cguCheckbox.addEventListener('change', e => {
+        if(e.target.checked === true) {
+            document.getElementById("formBtn").disabled = false;
+        }
+        if(e.target.checked === false) {
+            document.getElementById("formBtn").disabled = true;
+        }
+    });
+</script>

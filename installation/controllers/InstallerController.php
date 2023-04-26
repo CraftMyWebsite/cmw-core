@@ -161,6 +161,12 @@ class InstallerController
 
     public function welcomeInstallPost(): void
     {
+        /*if (!isset($_POST['cgu'])) {
+            Response::sendAlert("error", "cgu","pas coché !");
+            Utils::refreshPage();
+            return;
+        }*/
+
         $remoteAddress = $_SERVER['REMOTE_ADDR'];
 
         if(!filter_var($remoteAddress,  FILTER_VALIDATE_IP)){
