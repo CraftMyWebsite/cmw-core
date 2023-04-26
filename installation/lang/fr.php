@@ -13,9 +13,19 @@ return [
                       avant de continuer l'installation.</p>
                       <p>En cas de demande de support auprès de CraftMyWebsite ces informations peuvent nous être utiles pour determiner
                       l'environnement dans lequel vous êtes. Merci de bien vouloir noter les informations que vous ne connaissez pas.</p>
-                      <p>Passons maintenant à l'installation de votre nouveau site ...</p>"
+                      <p>Passons maintenant à l'installation de votre nouveau site ...</p>",
+        "readaccept" => "J'ai lu et j'accepte les",
+        "cgu" => "Condition Générale d'utilisation"
     ],
-
+    "bundle" => [
+        "custom" => "Personnalisé",
+        "customText" => "<p>Personnaliser votre installation vous-même.</p><p>Ceci ne veut pas dire qu'il n'est pas possible de le personnaliser avec d'autres bundle.</p>",
+    ],
+    "password" => [
+        "strenght" => "Force du mot de passe :",
+        "notmatch" => "Les mot de passe ne correspondent pas !"
+    ],
+    "search" => "Rechercher",
     "config" => [
         "title" => "Configuration",
         "db" => [
@@ -75,6 +85,17 @@ return [
 
     "administrator" => [
         "title" => "Compte Administrateur",
+    ],
+
+    "finish" => [
+        "title" => "Félicitations !",
+        "desc" => "Votre site est maintenant prêt !",
+        "review" => "Revoyons ensemble votre configuration :",
+        "version" => "Version CMW :",
+        "theme" => "Thème :",
+        "bundle" => "bundle :",
+        "package" => "Package :",
+        "goToMySite" => "Aller sur mon site",
     ],
 
     "steps" => [

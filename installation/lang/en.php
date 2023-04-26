@@ -13,9 +13,19 @@ return [
                         before continuing with the installation.</p>
                         <p>In the event of a request for support from CraftMyWebsite, this information may be useful to us to determine
                         the environment you are in. Please write down any information that you do not know.</p>
-                        <p>Now let's move on to setting up your new site ...</p>"
+                        <p>Now let's move on to setting up your new site ...</p>",
+        "readaccept" => "I have read and accept the",
+        "cgu" => "General Conditions of Use"
     ],
-
+    "bundle" => [
+        "custom" => "Custom",
+        "customText" => "<p>Customize your installation yourself.</p><p>This does not mean that it is not possible to customize it with other bundles.</p>",
+    ],
+    "password" => [
+        "strenght" => "Password strength :",
+        "notmatch" => "The passwords do not match!"
+    ],
+    "search" => "Search",
     "config" => [
         "title" => "Configuration",
         "db" => [
@@ -67,14 +77,25 @@ return [
     ],
 
     "themes" => [
-        "title" => "Choix d'un thème",
-        "sub_title" => "Cliquez sur l'image pour séléctionner",
+        "title" => "Choosing a theme",
+        "sub_title" => "Click on image to select",
         "compatibility" => "Compatibility",
         "more" => "More information"
     ],
 
     "administrator" => [
         "title" => "Administrator account",
+    ],
+
+    "finish" => [
+        "title" => "Congratulation!",
+        "desc" => "Your site is now ready !",
+        "review" => "Let's review your configuration together :",
+        "version" => "Version CMW :",
+        "theme" => "Theme :",
+        "bundle" => "Bundle :",
+        "package" => "Package :",
+        "goToMySite" => "Go to my site",
     ],
 
     "steps" => [
