@@ -6,15 +6,18 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Utils\Utils;
 
 ?>
-
+<select class="absolute top-0 right-0 select select-ghost select-sm w-32" id="lang" onchange="changeLang(this.value)">
+    <option <?= $lang === 'fr' ? 'selected' : '' ?> value="fr">Français</option>
+    <option <?= $lang === 'en' ? 'selected' : '' ?> value="en">English</option>
+</select>
 <div class="lg:flex flex-wrap mb-2">
     <div class="lg:w-1/2 lg:pr-2">
         <label class="label">
-            <span class="label-text">Rechercher :</span>
+            <span class="label-text"><?= LangManager::translate("installation.search") ?> :</span>
         </label>
         <label class="input-group">
             <span><i class="fa-solid fa-magnifying-glass"></i></span>
-            <input id="searchInput" onkeyup="searchFunction()" type="text" placeholder="Rechercher"
+            <input id="searchInput" onkeyup="searchFunction()" type="text" placeholder="<?= LangManager::translate("installation.search") ?>"
                    class="input input-bordered input-sm w-full" required>
         </label>
     </div>
@@ -43,14 +46,13 @@ use CMW\Utils\Utils;
         <div class="font-bold text-lg bg-gray-700 rounded-t-2xl p-1">
             <div class="flex flex-wrap">
                 <img class="w-7 mr-2" src="installation/views/assets/img/other.png">
-                <span class="font-medium text-lg">Personnalisé</span>
+                <span class="font-medium text-lg"><?= LangManager::translate("installation.bundle.custom") ?></span>
             </div>
         </div>
 
         <div class="bg-gray-800 rounded-b-2xl">
             <div class="p-4">
-                <p>Personnaliser votre installation vous-même.</p>
-                <p>Ceci ne veut pas dire qu'il n'est pas possible de le personnaliser avec d'autres bundle.</p>
+                <?= LangManager::translate("installation.bundle.customText") ?>
             </div>
             <form action="installer/submit" method="post" id="mainForm">
                 <div class="flex justify-end">
@@ -104,5 +106,5 @@ use CMW\Utils\Utils;
     <!-- /Bundle -->
 
 </ul>
-
+<script src="installation/views/assets/js/changeLang.js"></script>
 <script src="installation/views/assets/js/search.js"></script>
