@@ -6,8 +6,15 @@ class ClassManager
 {
 
 
-    public static function getClassFullNameFromFile($filePathName): string
+    public static function getClassFullNameFromFile($filePathName): ?string
     {
+        $namespace = self::getClassNamespaceFromFile($filePathName);
+        $classname = self::getClassNameFromFile($filePathName);
+
+        if(is_null($namespace) || is_null($classname)) {
+            return null;
+        }
+
         return self::getClassNamespaceFromFile($filePathName) . "\\" . self::getClassNameFromFile($filePathName);
     }
 
@@ -66,7 +73,7 @@ class ClassManager
             }
         }
 
-        return $classes[0];
+        return $classes[0] ?? null;
     }
 
 }

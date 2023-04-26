@@ -162,7 +162,7 @@ class Utils
     {
         $clientIp = $_SERVER['HTTP_CLIENT_IP'] ?? ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR']);
 
-        if(!filter_var($clientIp,  FILTER_VALIDATE_IP)){
+        if (!filter_var($clientIp, FILTER_VALIDATE_IP)) {
             return "0.0.0.0";
         }
 
@@ -191,7 +191,7 @@ class Utils
     {
         $logoName = self::getFilesInFolder(self::getEnv()->getValue("DIR") . "public/uploads/logo");
 
-        if($logoName !== []){
+        if ($logoName !== []) {
             return self::getEnv()->getValue("DIR") . "public/uploads/logo/" . $logoName[0];
         }
 
@@ -216,9 +216,9 @@ class Utils
         }
 
         $arrayToReturn = [];
-        $path = (str_ends_with($path, '/')) ? $path : $path.'/';
+        $path = (str_ends_with($path, '/')) ? $path : $path . '/';
         foreach ($folder as $element) {
-            if(is_file($path.$element)) {
+            if (is_file($path . $element)) {
                 $arrayToReturn[] = $element;
             }
         }
@@ -234,9 +234,9 @@ class Utils
         }
 
         $arrayToReturn = [];
-        $path = (str_ends_with($path, '/')) ? $path : $path.'/';
+        $path = (str_ends_with($path, '/')) ? $path : $path . '/';
         foreach ($folder as $element) {
-            if(is_dir($path.$element)) {
+            if (is_dir($path . $element)) {
                 $arrayToReturn[] = $element;
             }
         }
@@ -274,5 +274,35 @@ class Utils
     public static function refreshPage(): void
     {
         header("Refresh:0");
+    }
+
+    public static function getFilesFromDirectory($dir, $extension = null, &$results = array())
+    {
+        $content = scandir($dir);
+
+        foreach ($content as $_ => $value) {
+
+            if ($value === "." || $value === "..") {
+                continue;
+            }
+
+            $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
+
+            if (!is_null($extension) && is_file($path)) {
+                $pathParts = explode(DIRECTORY_SEPARATOR, $path);
+                $fileParts = explode('.', end($pathParts));
+                if (strtolower(end($fileParts)) !== strtolower($extension)) {
+                    continue;
+                }
+            }
+
+            if (!is_dir($path)) {
+                $results[] = $path;
+            } else {
+                self::getFilesFromDirectory($path, $extension, $results);
+            }
+        }
+
+        return $results;
     }
 }

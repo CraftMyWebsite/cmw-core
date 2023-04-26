@@ -5,6 +5,7 @@
  */
 
 use CMW\Manager\Error\ErrorManager;
+use CMW\Router\Router;
 use CMW\Utils\Loader;
 
 require_once("app/tools/Loader.php");
@@ -13,7 +14,9 @@ $loader = new Loader();
 
 Loader::loadProject();
 
-$router = Loader::getRouterInstance();
+$router = Router::getInstance();
+
+$loader->loadAttributes();
 
 $loader->loadRoutes();
 
