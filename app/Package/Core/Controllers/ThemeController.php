@@ -276,7 +276,7 @@ class ThemeController extends CoreController
         // Manage inputs
         foreach ($this->getCurrentThemeConfigSettings() as $conf => $value) {
             if (isset($aresFiles['__images__'][$conf])) {
-                break;
+                continue;
             }
 
             if (!isset($_POST[$conf]) || !empty($_POST[$conf])) {
