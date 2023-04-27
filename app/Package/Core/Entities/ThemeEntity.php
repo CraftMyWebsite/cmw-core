@@ -4,6 +4,8 @@
 
 namespace CMW\Entity\Core;
 
+use CMW\Utils\Utils;
+
 class ThemeEntity
 {
 

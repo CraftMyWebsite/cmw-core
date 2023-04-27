@@ -189,13 +189,13 @@ class Utils
 
     public static function getSiteLogoPath(): string
     {
-        $logoName = self::getFilesInFolder(self::getEnv()->getValue("DIR") . "public/uploads/logo");
+        $logoName = self::getFilesInFolder(self::getEnv()->getValue("PATH_SUBFOLDER") . "public/uploads/logo");
 
         if($logoName !== []){
-            return self::getEnv()->getValue("DIR") . "public/uploads/logo/" . $logoName[0];
+            return self::getEnv()->getValue("PATH_SUBFOLDER") . "public/uploads/logo/" . $logoName[0];
         }
 
-        return self::getEnv()->getValue("DIR") . "admin/resources/assets/images/logo/logo_compact.png";
+        return self::getEnv()->getValue("PATH_SUBFOLDER") . "admin/resources/assets/images/logo/logo_compact.png";
     }
 
     public static function getElementsInFolder(string $path): array
@@ -274,5 +274,10 @@ class Utils
     public static function refreshPage(): void
     {
         header("Refresh:0");
+    }
+
+    public static function getFavicon(): string
+    {
+        return self::getEnv()->getValue("PATH_SUBFOLDER") . 'public/uploads/favicon/favicon.ico';
     }
 }
