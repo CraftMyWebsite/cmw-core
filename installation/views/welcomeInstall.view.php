@@ -53,10 +53,9 @@ use CMW\Manager\Lang\LangManager;
     <div class="form-control">
         <label class="label cursor-pointer">
             <input id="cgu" name="cgu" type="checkbox" class="checkbox checkbox-primary checkbox-xs"/>
-            <!-- TODO Add CGU link -->
             <span class=""><?= LangManager::translate("installation.welcome.readaccept") ?> <i><a
                         class="text-gray-400 hover:text-primary" target="_blank"
-                        href="#"><?= LangManager::translate("installation.welcome.cgu") ?></a></i></span>
+                        href="https://craftmywebsite.fr/cgu"><?= LangManager::translate("installation.welcome.cgu") ?></a></i></span>
         </label>
     </div>
     <div class="card-actions justify-end">
