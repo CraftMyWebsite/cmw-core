@@ -15,7 +15,10 @@ return [
                       l'environnement dans lequel vous êtes. Merci de bien vouloir noter les informations que vous ne connaissez pas.</p>
                       <p>Passons maintenant à l'installation de votre nouveau site ...</p>",
         "readaccept" => "J'ai lu et j'accepte les",
-        "cgu" => "Condition Générale d'utilisation"
+        "cgu" => "Condition Générale d'utilisation",
+        "error" => [
+            "cgu" => "Merci d'accepter les CGU avant de procéder à l'installation de votre site CraftMyWebsite"
+        ]
     ],
     "bundle" => [
         "custom" => "Personnalisé",

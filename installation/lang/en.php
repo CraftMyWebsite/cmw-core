@@ -15,7 +15,10 @@ return [
                         the environment you are in. Please write down any information that you do not know.</p>
                         <p>Now let's move on to setting up your new site ...</p>",
         "readaccept" => "I have read and accept the",
-        "cgu" => "General Conditions of Use"
+        "cgu" => "General Conditions of Use",
+        "error" => [
+            "cgu" => "Please accept the CGU before installing your CraftMyWebsite site"
+        ]
     ],
     "bundle" => [
         "custom" => "Custom",
