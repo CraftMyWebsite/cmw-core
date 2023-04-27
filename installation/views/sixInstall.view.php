@@ -1,5 +1,8 @@
 <?php use CMW\Manager\Lang\LangManager; ?>
-
+<select class="absolute top-0 right-0 select select-ghost select-sm w-32" id="lang" onchange="changeLang(this.value)">
+    <option <?= $lang === 'fr' ? 'selected' : '' ?> value="fr">Français</option>
+    <option <?= $lang === 'en' ? 'selected' : '' ?> value="en">English</option>
+</select>
 <h2 class="text-2xl font-medium text-center"><?= LangManager::translate("installation.administrator.title") ?></h2>
 <form action="installer/submit" method="post" id="mainForm" name="mainForm">
     <div class="lg:grid grid-cols-2 gap-8">
@@ -41,19 +44,24 @@
             </label>
         </div>
     </div>
-    <div class="mt-2">Force du mot de passe :
+    <div class="mt-2"><?= LangManager::translate("installation.password.strenght") ?>
         <div class="">
-            <progress class="w-1/2" max="100" value="0" id="meter"></progress>
+            <progress class="w-64 min-h-6" max="100" value="0" id="meter"></progress>
+                <div class="flex justify-between w-64 mt-1">
+                    <i class="fa-regular fa-thumbs-down"></i>
+                    <i class="fa-regular fa-thumbs-up"></i>
+                </div>
         </div>
     </div>
     <div class="mt-2" id="passwordTextAlert"></div>
     <div class="card-actions justify-end">
-        <button id="formBtn" type="submit" class="btn btn-primary">
+        <button id="formBtn" type="submit" class="btn btn-primary" disabled>
             <?= LangManager::translate("core.btn.next") ?>
         </button>
     </div>
 </form>
 
+<script src="installation/views/assets/js/changeLang.js"></script>
 <script>
 
 function showPassword() {
@@ -84,7 +92,7 @@ function showPassword() {
                 textAlert.style.display = 'none';
                 document.getElementById("formBtn").disabled = false;
             } else {
-                textAlert.innerHTML = "<p class='text-cmw-pink'>Les mot de passe ne corespondent pas !</p>";
+                textAlert.innerHTML = "<p class='text-cmw-pink'><?= LangManager::translate('installation.password.notmatch') ?></p>";
                 document.getElementById("formBtn").disabled = true;
             }
         }
@@ -122,15 +130,15 @@ function showPassword() {
                 break;
 
             case 1:
-                strengthbar.value=25;
+                strengthbar.value=15;
                 break;
 
             case 2:
-                strengthbar.value=50;
+                strengthbar.value=35;
                 break;
 
             case 3:
-                strengthbar.value=75;
+                strengthbar.value=70;
                 break;
 
             case 4:

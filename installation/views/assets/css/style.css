@@ -4,7 +4,6 @@
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
 2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
 */
-
 @font-face {
     font-family: Poppins;
     src: url("../webfonts/Poppins-ExtraLight.ttf");
@@ -1063,6 +1062,29 @@ html {
   animation: checkmark var(--animation-input, 0.2s) ease-in-out;
   background-image: linear-gradient(90deg, transparent 80%, hsl(var(--chkbg)) 80%), linear-gradient(-90deg, transparent 80%, hsl(var(--chkbg)) 80%), linear-gradient(0deg, hsl(var(--chkbg)) 43%, hsl(var(--chkfg)) 43%, hsl(var(--chkfg)) 57%, hsl(var(--chkbg)) 57%);
 }
+.checkbox-primary {
+  --chkbg: var(--p);
+  --chkfg: var(--pc);
+  --tw-border-opacity: 1;
+  border-color: hsl(var(--p) / var(--tw-border-opacity));
+}
+.checkbox-primary:hover {
+  --tw-border-opacity: 1;
+  border-color: hsl(var(--p) / var(--tw-border-opacity));
+}
+.checkbox-primary:focus-visible {
+  outline: 2px solid hsl(var(--p));
+}
+.checkbox-primary:checked,
+    .checkbox-primary[checked="true"],
+    .checkbox-primary[aria-checked="true"] {
+  --tw-border-opacity: 1;
+  border-color: hsl(var(--p) / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--p) / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: hsl(var(--pc) / var(--tw-text-opacity));
+}
 .checkbox-info {
   --chkbg: var(--in);
   --chkfg: var(--inc);
@@ -1448,6 +1470,13 @@ html {
     opacity: 1;
   }
 }
+.min-h-6 {
+  min-height: 1.5rem;
+}
+.checkbox-xs {
+  height: 1rem;
+  width: 1rem;
+}
 .checkbox-sm {
   height: 1.25rem;
   width: 1.25rem;
@@ -1689,8 +1718,12 @@ progress::-webkit-progress-bar {
         border-radius: 7px;
     }
 progress::-webkit-progress-value {
-        background: #A90A59;
         border-radius: 7px;
+        background-image: linear-gradient(to right, #d20707, #007aff);
+        background-size: 16rem 0.25em;
+        height: 100%;
+        width: 100%;
+        position: relative;
     }
 progress::-moz-progress-bar {
         /* style rules */
@@ -1799,11 +1832,23 @@ progress::-moz-progress-bar {
 .w-7 {
   width: 1.75rem;
 }
-.w-1\/2 {
-  width: 50%;
+.w-64 {
+  width: 16rem;
 }
 .w-32 {
   width: 8rem;
+}
+.w-1\/2 {
+  width: 50%;
+}
+.w-2\/3 {
+  width: 66.666667%;
+}
+.w-2\/4 {
+  width: 50%;
+}
+.w-3\/5 {
+  width: 60%;
 }
 .cursor-pointer {
   cursor: pointer;
@@ -2018,6 +2063,10 @@ progress::-moz-progress-bar {
 .hover\:text-blue-600:hover {
   --tw-text-opacity: 1;
   color: rgb(37 99 235 / var(--tw-text-opacity));
+}
+.hover\:text-primary:hover {
+  --tw-text-opacity: 1;
+  color: hsl(var(--p) / var(--tw-text-opacity));
 }
 @media (min-width: 640px) {
 

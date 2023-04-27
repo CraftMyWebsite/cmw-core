@@ -2,6 +2,7 @@
 
 use CMW\Controller\Installer\InstallerController;
 use CMW\Manager\Lang\LangManager;
+
 ?>
 <select class="absolute top-0 right-0 select select-ghost select-sm w-32" id="lang" onchange="changeLang(this.value)">
     <option <?= $lang === 'fr' ? 'selected' : '' ?> value="fr">Français</option>
@@ -27,20 +28,20 @@ use CMW\Manager\Lang\LangManager;
         <!-- row 1 -->
         <tr class="text-center">
             <td>
-                <?= InstallerController::hasRequiredFormatted('php')?>
+                <?= InstallerController::hasRequiredFormatted('php') ?>
                 <?= InstallerController::$minPhpVersion . " +" ?>
             </td>
             <td>
-                <?= InstallerController::hasRequiredFormatted('https')?>
+                <?= InstallerController::hasRequiredFormatted('https') ?>
             </td>
             <td>
-                <?= InstallerController::hasRequiredFormatted('pdo')?>
+                <?= InstallerController::hasRequiredFormatted('pdo') ?>
             </td>
             <td>
-                <?= InstallerController::hasRequiredFormatted('zip')?>
+                <?= InstallerController::hasRequiredFormatted('zip') ?>
             </td>
             <td>
-                <?= InstallerController::hasRequiredFormatted('curl')?>
+                <?= InstallerController::hasRequiredFormatted('curl') ?>
             </td>
         </tr>
         </tbody>
@@ -48,13 +49,33 @@ use CMW\Manager\Lang\LangManager;
 </div>
 
 <?= LangManager::translate("installation.welcome.content") ?>
-
-<div class="card-actions justify-end">
-    <form action="installer/submit" method="post" id="mainForm">
-        <button id="formBtn" type="submit" class="btn btn-primary" <?= InstallerController::checkAllRequired() ? '' : 'disabled' ?>>
+<form action="installer/submit" method="post" id="mainForm">
+    <div class="form-control">
+        <label class="label cursor-pointer">
+            <input id="cgu" name="cgu" type="checkbox" class="checkbox checkbox-primary checkbox-xs"/>
+            <span class=""><?= LangManager::translate("installation.welcome.readaccept") ?> <i><a
+                        class="text-gray-400 hover:text-primary" target="_blank"
+                        href="https://craftmywebsite.fr/cgu"><?= LangManager::translate("installation.welcome.cgu") ?></a></i></span>
+        </label>
+    </div>
+    <div class="card-actions justify-end">
+        <button disabled id="formBtn" type="submit"
+                class="btn btn-primary" <?= InstallerController::checkAllRequired() ? '' : 'disabled' ?>>
             <?= LangManager::translate("core.btn.next") ?>
         </button>
-    </form>
+</form>
 </div>
 
 <script src="installation/views/assets/js/changeLang.js"></script>
+<script>
+    const cguCheckbox = document.getElementById('cgu');
+
+    cguCheckbox.addEventListener('change', e => {
+        if (e.target.checked === true) {
+            document.getElementById("formBtn").disabled = false;
+        }
+        if (e.target.checked === false) {
+            document.getElementById("formBtn").disabled = true;
+        }
+    });
+</script>

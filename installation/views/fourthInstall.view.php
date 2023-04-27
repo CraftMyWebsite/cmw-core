@@ -6,7 +6,10 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Utils\Utils;
 
 ?>
-
+<select class="absolute top-0 right-0 select select-ghost select-sm w-32" id="lang" onchange="changeLang(this.value)">
+    <option <?= $lang === 'fr' ? 'selected' : '' ?> value="fr">Français</option>
+    <option <?= $lang === 'en' ? 'selected' : '' ?> value="en">English</option>
+</select>
 
 <h2 class="text-2xl font-medium text-center"><?= LangManager::translate('installation.packages.title') ?>.</h2>
 <p class="text-center"><?= LangManager::translate('installation.packages.sub_title') ?>.</p>
@@ -105,7 +108,7 @@ use CMW\Utils\Utils;
         </button>
     </div>
 </form>
-
+<script src="installation/views/assets/js/changeLang.js"></script>
 <script>
     /*
     * Info package
