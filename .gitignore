@@ -3,8 +3,8 @@
 .idea
 __MACOSX/
 
-/app/package/*/.idea/
-/public/themes/*/.idea/
+**/.idea/
+**/.vscode/
 
 #Exclude log files except the .gitignore
 /app/storage/logs/*
@@ -22,19 +22,11 @@ __MACOSX/
 
 # Exclude all other views, only if view refer to a core package (Core, Users, Menus...)
 /public/themes/*
-!/public/themes/Sampler/views
-!/public/themes/Sampler/resources
-/public/themes/Sampler/views/*
+!/public/themes/Sampler
 
-!/public/themes/Sampler/views/includes
-!/public/themes/Sampler/views/core/*.php
-!/public/themes/Sampler/views/users
-!/public/themes/Sampler/views/errors
-!/public/themes/Sampler/views/alerts
-!/public/themes/Sampler/views/template.php
-!/public/themes/Sampler/config
 
 # Exclude all uploads folders and files except the default profile image
 !/public/uploads/users/default/defaultImage.jpg
 !/public/uploads/favicon/favicon.ico
+!/public/uploads/.htaccess
 /public/uploads/*
