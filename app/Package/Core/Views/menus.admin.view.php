@@ -81,11 +81,13 @@ $description = LangManager::translate("core.menus.desc");
                                         <h6><?= LangManager::translate("core.menus.add.package_select") ?> :</h6>
                                         <div class="form-group">
                                             <select class="choices form-select" name="slugPackage">
-                                                <?php foreach ($packagesLinks as $package => $routes): ?>
-                                                    <option disabled>────────── <?= $package ?> ──────────</option>
+                                                <?php foreach ($packagesLinks as $package => $routes):
+                                                    if ($routes !== []):?>
+                                                        <option disabled>────────── <?= $package ?> ──────────</option>
+                                                    <?php endif; ?>
                                                     <?php foreach ($routes as $route): ?>
-                                                        <option value="<?= $route ?>"><?= $route ?></option>
-                                                    <?php endforeach; ?>
+                                                    <option value="<?= $route ?>"><?= $route ?></option>
+                                                <?php endforeach; ?>
                                                 <?php endforeach; ?>
                                             </select>
                                         </div>
