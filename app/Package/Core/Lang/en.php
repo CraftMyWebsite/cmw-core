@@ -32,6 +32,25 @@ return [
         "description" => "Description :",
         "edit" => "Modify this information",
     ],
+    "menus" => [
+        "title" => "Menus",
+        "desc" => "Edit main site menu",
+        "add" => [
+            "name" => "Nom of the menu",
+            "name_hint" => "Votes",
+            "targetBlank" => "Open link in new tab",
+            "choice" => "Type of link",
+            "package" => "Package",
+            "package_select" => "Select the package",
+            "custom" => "Custom",
+            "custom_hint" => "https://store.monsite.fr",
+            "allowedGroups" => "Allow some groups to access this menu",
+            "group_select" => "Select roles",
+            "toaster" => [
+                "success" => "Menu added with success",
+            ],
+        ],
+    ],
     "editor" => [
         "title" => "Configuration Editor",
         "desc" => "Personnaliser l'éditeur de pages",
@@ -152,10 +171,6 @@ return [
                 "receiverMailPlaceholder" => "Enter your mail",
             ]
         ]
-    ],
-    "menus" => [
-        "title" => "Menus | Edit",
-        "desc" => "Edit main site menu",
     ],
     "downloads" => [
         "errors" => [
