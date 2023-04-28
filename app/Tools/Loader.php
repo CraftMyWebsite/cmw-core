@@ -3,6 +3,7 @@
 namespace CMW\Utils;
 
 use CMW\Controller\Core\CoreController;
+use CMW\Controller\Core\PackageController;
 use CMW\Manager\Class\ClassManager;
 
 use CMW\Controller\Installer\InstallerController;
@@ -63,6 +64,37 @@ class Loader
         return false;
     }
 
+    public static function loadImplementations(string $interface): array
+    {
+        $toReturn = [];
+
+        $packages = PackageController::getInstalledPackages();
+
+        foreach ($packages as $package) {
+            $implementationsFolder = Utils::getEnv()->getValue("dir") . "app/Package/{$package->getName()}/Implementations";
+
+            if (!is_dir($implementationsFolder)) {
+                continue;
+            }
+
+            $implementationsFiles = array_diff(scandir($implementationsFolder), array('..', '.'));
+
+            foreach ($implementationsFiles as $implementationsFile) {
+
+                $implementationsFilePath = Utils::getEnv()->getValue("dir") . "app/Package/" .
+                    ucfirst($package->getName()) . "/Implementations/" .$implementationsFile;
+
+                $className = pathinfo($implementationsFilePath, PATHINFO_FILENAME);
+
+                $namespace = 'CMW\\Implementation\\' . ucfirst($package->getName()) . '\\' . $className;
+
+                $toReturn[] = new $namespace();
+            }
+        }
+
+        return $toReturn;
+    }
+
     private static function callCoreClass(array $classPart, string $startDir): bool
     {
 
@@ -119,6 +151,8 @@ class Loader
                 "Controller" => Loader::callPackage($classPart, "app/package/", "/controllers/", true),
                 "Model" => Loader::callPackage($classPart, "app/package/", "/models/"),
                 "Entity" => Loader::callPackage($classPart, "app/package/", "/entities/"),
+                "Interface" => Loader::callPackage($classPart, "app/Package/", "/Interfaces/"),
+                "Implementation" => Loader::callPackage($classPart, "app/Package/", "/Implementations/"),
                 "PackageInfo" => Loader::callPackage($classPart, "app/package", "/"),
                 "Manager" => Loader::callPackage($classPart, "app/manager/", "/"),
                 "Utils" => Loader::callCoreClass($classPart, "app/tools/"),
