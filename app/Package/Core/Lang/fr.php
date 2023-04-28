@@ -32,6 +32,25 @@ return [
         "description" => "Description :",
         "edit" => "Modifier ces informations",
     ],
+    "menus" => [
+        "title" => "Menus",
+        "desc" => "Gérez les menus de votre site",
+        "add" => [
+            "name" => "Nom du menu",
+            "name_hint" => "Votes",
+            "targetBlank" => "Ouvrir la page dans un nouvel onglet",
+            "choice" => "Type de lien",
+            "package" => "Package",
+            "package_select" => "Sélection du package",
+            "custom" => "Personnalisé",
+            "custom_hint" => "https://store.monsite.fr",
+            "allowedGroups" => "Autorisez certains rôles à voir ce menu",
+            "group_select" => "Sélection des rôles",
+            "toaster" => [
+                "success" => "Menu ajouté avec succès !",
+            ],
+        ],
+    ],
     "editor" => [
         "title" => "Configuration Editor",
         "desc" => "Personnaliser l'éditeur de pages",

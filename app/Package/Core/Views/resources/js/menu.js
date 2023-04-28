@@ -1,4 +1,36 @@
 
+/*
+    Get choice input select
+ */
+
+const choice = document.getElementById('choice')
+const packageParent = document.getElementById('addPackage')
+const customParent = document.getElementById('addCustom')
+
+choice.addEventListener("change", () => {
+    packageParent.classList.toggle('d-none')
+    customParent.classList.toggle('d-none')
+})
+
+
+/*
+    Display Allowed Groups list input
+ */
+
+const toggleBtn = document.getElementById('allowedGroups')
+const allowedGroupsParent = document.getElementById('listAllowedGroups')
+
+toggleBtn.addEventListener("change", () => {
+    allowedGroupsParent.classList.toggle('d-none')
+})
+
+
+/*
+    Drag menus
+ */
+
+
+
 const nestedQuery = '.nested-sortable';
 const identifier = 'sortableId';
 const root = document.getElementById('menus');
