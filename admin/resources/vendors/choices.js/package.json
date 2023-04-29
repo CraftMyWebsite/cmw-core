@@ -2,13 +2,13 @@
   "name": "choices.js",
   "version": "9.1.0",
   "description": "A vanilla JS customisable text input/select box plugin",
-  "main": "public/assets/scripts/choices.js",
+  "main": "public/Assets/Scripts/choices.js",
   "types": "./types/index.d.ts",
   "scripts": {
     "start": "run-p js:watch css:watch",
     "build": "run-p js:build css:build",
     "lint": "run-p lint:js lint:scss",
-    "lint:js": "eslint src/scripts/**/*.ts",
+    "lint:js": "eslint src/Scripts/**/*.ts",
     "lint:scss": "stylelint src/**/*.scss",
     "bundlesize": "bundlesize",
     "cypress:run": "cypress run --browser chrome",
@@ -23,9 +23,9 @@
     "js:build": "webpack --config webpack.config.prod.js",
     "css:watch": "nodemon -e scss -x \"npm run css:build\"",
     "css:build": "run-s css:sass css:prefix css:min",
-    "css:sass": "sass -I scss src/styles/base.scss public/assets/styles/base.css && sass -I scss src/styles/choices.scss public/assets/styles/choices.css",
-    "css:prefix": "postcss public/assets/styles/*.css --use autoprefixer --no-map --env prod --dir public/assets/styles",
-    "css:min": "csso public/assets/styles/base.css --output public/assets/styles/base.min.css && csso public/assets/styles/choices.css --output public/assets/styles/choices.min.css",
+    "css:sass": "sass -I scss src/styles/base.scss public/Assets/styles/base.css && sass -I scss src/styles/choices.scss public/Assets/styles/choices.css",
+    "css:prefix": "postcss public/Assets/styles/*.css --use autoprefixer --no-map --env prod --dir public/Assets/styles",
+    "css:min": "csso public/Assets/styles/base.css --output public/Assets/styles/base.min.css && csso public/Assets/styles/choices.css --output public/Assets/styles/choices.min.css",
     "deploy": "git subtree push --prefix public origin gh-pages",
     "prepublishOnly": "npm run build"
   },
@@ -36,8 +36,8 @@
   "author": "Josh Johnson",
   "license": "MIT",
   "files": [
-    "public/assets/scripts",
-    "public/assets/styles",
+    "public/Assets/scripts",
+    "public/Assets/styles",
     "src",
     "!src/**/*.test.js",
     "types"
@@ -115,27 +115,27 @@
   "npmFileMap": [
     {
       "files": [
-        "public/assets/scripts/*",
-        "public/assets/styles/*",
+        "public/Assets/Scripts/*",
+        "public/Assets/styles/*",
         "src/icons/*"
       ]
     }
   ],
   "nyc": {
     "include": [
-      "src/scripts/**/**/*.js"
+      "src/Scripts/**/**/*.js"
     ],
     "exclude": [
-      "src/scripts/**/**/*.test.js"
+      "src/Scripts/**/**/*.test.js"
     ]
   },
   "bundlesize": [
     {
-      "path": "public/assets/scripts/choices.min.js",
+      "path": "public/Assets/Scripts/choices.min.js",
       "maxSize": "25 kB"
     },
     {
-      "path": "public/assets/styles/choices.min.css",
+      "path": "public/Assets/styles/choices.min.css",
       "maxSize": "1.8 kB"
     }
   ]
