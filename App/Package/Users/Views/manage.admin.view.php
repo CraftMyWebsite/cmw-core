@@ -95,7 +95,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
                             <td><?= $user->getLastConnection() ?></td>
                             <td>
                                 <a class="me-3 "
-                                   href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>cmw-Admin/users/edit/<?= $user->getId() ?>">
+                                   href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>cmw-admin/users/edit/<?= $user->getId() ?>">
                                     <i class="text-primary fa-solid fa-gears"></i>
                                 </a>
                                 <a type="button" data-bs-toggle="modal" data-bs-target="#delete-<?= $user->getId() ?>">
@@ -119,7 +119,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
                                                         data-bs-dismiss="modal">
                                                     <span class=""><?= LangManager::translate("core.btn.close") ?></span>
                                                 </button>
-                                                <a href="/cmw-Admin/users/delete/<?= $user->getId() ?>"
+                                                <a href="/cmw-admin/users/delete/<?= $user->getId() ?>"
                                                    class="btn btn-danger">
                                                     <span class=""><?= LangManager::translate("contact.message.delete") ?></span>
                                                 </a>
