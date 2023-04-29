@@ -3,38 +3,29 @@
 .idea
 __MACOSX/
 
-/app/package/*/.idea/
-/public/themes/*/.idea/
+**/.idea/
+**/.vscode/
 
 #Exclude log files except the .gitignore
-/app/storage/logs/*
-!/app/storage/logs/.gitkeep
-/app/storage/visits/history.log
+/App/Storage/Logs/*
+!/App/Storage/Logs/.gitkeep
+/App/Storage/Visits/history.log
 
 # Exclude all other packages, only if package is "core" (Core, Users, Menus...)
-!/app/package
-/app/package/*
+!/App/Package
+/App/Package/*
 
-!/app/package/core
-!/app/package/users
-!/app/package/menus
-!/app/package/pages
+!/App/Package/Core
+!/App/Package/Users
+!/App/Package/Pages
 
 # Exclude all other views, only if view refer to a core package (Core, Users, Menus...)
-/public/themes/*
-!/public/themes/Sampler/views
-!/public/themes/Sampler/resources
-/public/themes/Sampler/views/*
+/Public/Themes/*
+!/Public/Themes/Sampler
 
-!/public/themes/Sampler/views/includes
-!/public/themes/Sampler/views/core/*.php
-!/public/themes/Sampler/views/users
-!/public/themes/Sampler/views/errors
-!/public/themes/Sampler/views/alerts
-!/public/themes/Sampler/views/template.php
-!/public/themes/Sampler/config
 
-# Exclude all uploads folders and files except the default profile image
-!/public/uploads/users/default/defaultImage.jpg
-!/public/uploads/favicon/favicon.ico
-/public/uploads/*
+# Exclude all uploads folders and files except the Default profile image
+!/Public/Uploads/Users/Default/defaultImage.jpg
+!/Public/Uploads/Favicon/favicon.ico
+!/Public/Uploads/.htaccess
+/Public/Uploads/*
