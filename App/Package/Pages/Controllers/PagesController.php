@@ -33,8 +33,8 @@ class PagesController extends CoreController
         $this->pagesModel = new PagesModel();
     }
 
-    #[Link(path: "/", method: Link::GET, scope: "/cmw-Admin/pages")]
-    #[Link("/list", Link::GET, [], "/cmw-Admin/pages")]
+    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/pages")]
+    #[Link("/list", Link::GET, [], "/cmw-admin/pages")]
     public function adminPagesList(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.show");
@@ -48,7 +48,7 @@ class PagesController extends CoreController
             ->view();
     }
 
-    #[Link("/add", Link::GET, [], "/cmw-Admin/pages")]
+    #[Link("/add", Link::GET, [], "/cmw-admin/pages")]
     public function adminPagesAdd(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.add");
@@ -72,7 +72,7 @@ class PagesController extends CoreController
             ->view();
     }
 
-    #[Link("/add", Link::POST, [], "/cmw-Admin/pages", secure: false)]
+    #[Link("/add", Link::POST, [], "/cmw-admin/pages", secure: false)]
     public function adminPagesAddPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.add");
@@ -94,7 +94,7 @@ class PagesController extends CoreController
         echo $pageEntity?->getId() ?? -1;
     }
 
-    #[Link("/edit/:slug", Link::GET, ["slug" => ".*?"], "/cmw-Admin/pages")]
+    #[Link("/edit/:slug", Link::GET, ["slug" => ".*?"], "/cmw-admin/pages")]
     public function adminPagesEdit(string $slug): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.edit");
@@ -121,7 +121,7 @@ class PagesController extends CoreController
             ->view();
     }
 
-    #[Link("/edit", Link::POST, [], "/cmw-Admin/pages", secure: false)]
+    #[Link("/edit", Link::POST, [], "/cmw-admin/pages", secure: false)]
     public function adminPagesEditPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.edit");
@@ -140,7 +140,7 @@ class PagesController extends CoreController
 
     }
 
-    #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-Admin/pages")]
+    #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/pages")]
     #[NoReturn] public function adminPagesDelete(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.delete");
@@ -159,7 +159,7 @@ class PagesController extends CoreController
      * @param string $type => add, edit
      * @return void
      */
-    #[Link("/uploadImage/:type", Link::POST, ["type" => ".*?"], "/cmw-Admin/pages", secure: false)]
+    #[Link("/uploadImage/:type", Link::POST, ["type" => ".*?"], "/cmw-admin/pages", secure: false)]
     public function adminPagesUploadImagePost(string $type): void
     {
 
