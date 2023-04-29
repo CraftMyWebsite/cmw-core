@@ -6,10 +6,6 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Utils\Utils;
 
 ?>
-<select class="absolute top-0 right-0 select select-ghost select-sm w-32" id="lang" onchange="changeLang(this.value)">
-    <option <?= $lang === 'fr' ? 'selected' : '' ?> value="fr">Français</option>
-    <option <?= $lang === 'en' ? 'selected' : '' ?> value="en">English</option>
-</select>
 <div class="lg:flex flex-wrap mb-2">
     <div class="lg:w-1/2 lg:pr-2">
         <label class="label">
@@ -45,7 +41,7 @@ use CMW\Utils\Utils;
     <li class="lg:w-1/3 lg:px-2 mb-4 h-fit">
         <div class="font-bold text-lg bg-gray-700 rounded-t-2xl p-1">
             <div class="flex flex-wrap">
-                <img class="w-7 mr-2" src="installation/Views/Assets/img/other.png">
+                <img class="w-7 mr-2" src="Installation/Views/Assets/Img/other.png">
                 <span class="font-medium text-lg"><?= LangManager::translate("Installation.bundle.custom") ?></span>
             </div>
         </div>
@@ -66,7 +62,7 @@ use CMW\Utils\Utils;
 
     <!-- Bundle -->
 
-    <?php foreach (PublicAPI::getData("resources/getBundles&Lang=" . Utils::getEnv()->getValue("locale")) as $bundle): ?>
+    <?php foreach (PublicAPI::getData("resources/getBundles&lang=" . Utils::getEnv()->getValue("locale")) as $bundle): ?>
         <li class="lg:w-1/3 lg:px-2 mb-4 h-fit">
             <div class="font-bold text-lg bg-gray-700 rounded-t-2xl p-1">
                 <div class="flex flex-wrap">
@@ -106,5 +102,4 @@ use CMW\Utils\Utils;
     <!-- /Bundle -->
 
 </ul>
-<script src="installation/Views/Assets/Js/changeLang.js"></script>
-<script src="installation/Views/Assets/Js/search.js"></script>
+<script src="Installation/Views/Assets/Js/search.js"></script>

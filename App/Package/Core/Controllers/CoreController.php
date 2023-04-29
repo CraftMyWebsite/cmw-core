@@ -106,7 +106,7 @@ class CoreController
     #[Link('/', Link::GET)]
     public function frontHome(): void
     {
-        $view = new View("core", "home");
+        $view = new View("Core", "home");
         $view->view();
     }
 
@@ -119,7 +119,7 @@ class CoreController
         $theme = ThemeController::getCurrentTheme()->getName();
 
         $errorToCall = (string)$errorCode;
-        $errorFolder = "Public/Themes/$theme/Views/errors";
+        $errorFolder = "Public/Themes/$theme/Views/Errors";
         $errorFile = "$errorFolder/$errorCode.view.php";
 
         if (!is_file($errorFile) && is_file("$errorFolder/Default.view.php")) {
@@ -128,7 +128,7 @@ class CoreController
 
         $view = new View();
         $view
-            ->setPackage("errors")
+            ->setPackage("Errors")
             ->setViewFile($errorToCall)
             ->view();
     }

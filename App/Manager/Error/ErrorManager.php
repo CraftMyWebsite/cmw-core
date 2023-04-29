@@ -194,6 +194,7 @@ class ErrorManager
             return;
         }
 
+        // TODO Timeout OR try to make a real function to get data...
         $data = file_get_contents($pathUrl . "geterror/$errorCode");
 
         if (!$data) {

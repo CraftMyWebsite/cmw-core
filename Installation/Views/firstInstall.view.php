@@ -3,10 +3,6 @@
 use CMW\Manager\Lang\LangManager;
 
 ?>
-<select class="absolute top-0 right-0 select select-ghost select-sm w-32" id="lang" onchange="changeLang(this.value)">
-    <option <?= $lang === 'fr' ? 'selected' : '' ?> value="fr">Français</option>
-    <option <?= $lang === 'en' ? 'selected' : '' ?> value="en">English</option>
-</select>
 <h2 class="text-2xl font-medium text-center"><?= LangManager::translate("Installation.config.title") ?></h2>
 <form action="installer/submit" method="post" id="mainForm">
     <div class="lg:grid grid-cols-2 gap-8">
@@ -83,5 +79,4 @@ use CMW\Manager\Lang\LangManager;
         </button>
     </div>
 </form>
-<script src="Installation/Views/Assets/Js/changeLang.js"></script>
 <script src="Installation/Views/Assets/Js/testDb.js"></script>

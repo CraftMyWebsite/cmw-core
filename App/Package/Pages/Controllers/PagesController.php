@@ -194,7 +194,7 @@ class PagesController extends CoreController
         $pageEntity = $page->getPageBySlug($slug);
 
         //Include the Public view file ("Public/Themes/$themePath/Views/Pages/main.view.php")
-        $view = new View('pages', 'main');
+        $view = new View('Pages', 'main');
         $view->addScriptBefore("Admin/Resources/Vendors/Highlight/highlight.min.js","Admin/Resources/Vendors/Highlight/highlightAll.js");
         $view->addStyle("Admin/Resources/Vendors/Highlight/Style/" . EditorController::getCurrentStyle());
         $view->addVariableList( ["pages" => $page, "page" => $pageEntity]);

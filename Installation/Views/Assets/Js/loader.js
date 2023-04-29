@@ -10,7 +10,6 @@
 
 
 const launchLoader = () => {
-    console.log('click')
     let loader = document.getElementById('loader')
     let body = document.getElementById('body')
 
@@ -23,7 +22,6 @@ const btn = document.getElementById('formBtn')
 btn.addEventListener('click', launchLoader)
 
 const customLaunchLoader = () => {
-    console.log('click')
     let loader = document.getElementById('loader')
     let body = document.getElementById('body')
 

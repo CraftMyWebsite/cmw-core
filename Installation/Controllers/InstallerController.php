@@ -10,12 +10,12 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
+use CMW\Model\Installer\InstallerModel;
 use CMW\Router\Link;
 use CMW\Router\LinkStorage;
 use CMW\Utils\Redirect;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
-use InstallerModel;
 use JetBrains\PhpStorm\NoReturn;
 
 /**
@@ -149,7 +149,8 @@ class InstallerController
             ->setCustomPath(Utils::getEnv()->getValue("DIR") . "Installation/Views/$filename.view.php")
             ->setCustomTemplate(Utils::getEnv()->getValue("DIR") . "Installation/Views/template.php")
             ->addStyle("Admin/Resources/Vendors/Izitoast/iziToast.min.css")
-            ->addScriptAfter("Admin/Resources/Vendors/Izitoast/iziToast.min.js")
+            ->addScriptAfter("Admin/Resources/Vendors/Izitoast/iziToast.min.js",
+                                    "Installation/Views/Assets/Js/changeLang.js")
             ->addVariableList(['lang' => $lang]);
 
         $view->view();

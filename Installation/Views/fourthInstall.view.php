@@ -6,11 +6,6 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Utils\Utils;
 
 ?>
-<select class="absolute top-0 right-0 select select-ghost select-sm w-32" id="lang" onchange="changeLang(this.value)">
-    <option <?= $lang === 'fr' ? 'selected' : '' ?> value="fr">Français</option>
-    <option <?= $lang === 'en' ? 'selected' : '' ?> value="en">English</option>
-</select>
-
 <h2 class="text-2xl font-medium text-center"><?= LangManager::translate('Installation.packages.title') ?>.</h2>
 <p class="text-center"><?= LangManager::translate('Installation.packages.sub_title') ?>.</p>
 <form action="installer/submit" method="post" id="mainForm">
@@ -60,8 +55,8 @@ use CMW\Utils\Utils;
                         $tags = implode(",", $tags);
                         ?>
                         <li onmouseenter="showInfoPackage('<?= $package['name'] ?>','<?= $package['description'] ?>', '<?= $tags ?>',
-                                '<?= $package['author_pseudo'] ?>', '<?= $package['price'] ?>', '<?= $package['downloads'] ?>',
-                                '<?= $package['version_name'] ?>', '<?= $package['code_link'] ?>', '<?= $package['demo'] ?>')"
+                            '<?= $package['author_pseudo'] ?>', '<?= $package['price'] ?>', '<?= $package['downloads'] ?>',
+                            '<?= $package['version_name'] ?>', '<?= $package['code_link'] ?>', '<?= $package['demo'] ?>')"
                             class="p-1 bg-cmw-gray-sec hover:bg-gray-800 mb-px">
                             <input class="hidden" id="package_<?= $package['id'] ?>" type="checkbox" name="packages[]"
                                    value="<?= $package['id'] ?>">
@@ -108,7 +103,6 @@ use CMW\Utils\Utils;
         </button>
     </div>
 </form>
-<script src="installation/Views/Assets/Js/changeLang.js"></script>
 <script>
     /*
     * Info package

@@ -1,7 +1,10 @@
 <?php
 
+namespace CMW\Model\Installer;
+
 use CMW\Manager\Download\DownloadManager;
 use CMW\Utils\Utils;
+use PDO;
 
 /**
  * Class: @installerModel
@@ -11,10 +14,6 @@ use CMW\Utils\Utils;
  */
 class InstallerModel
 {
-
-    public function __construct()
-    {
-    }
 
     private static function loadDatabase(string $serverName, string $database, string $username, $password, int $port): PDO
     {

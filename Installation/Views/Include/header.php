@@ -63,3 +63,8 @@ use CMW\Manager\Lang\LangManager;
 
 <div class="card w-5/6 lg:w-4/6 bg-cmw-gray-sec mx-auto mt-8">
     <div class="card-body" id="body">
+        <select class="absolute top-0 right-0 select select-ghost select-sm w-32" id="lang" onchange="changeLang(this.value)">
+            <option <?= $lang === 'fr' ? 'selected' : '' ?> value="fr">Français</option>
+            <option <?= $lang === 'en' ? 'selected' : '' ?> value="en">English</option>
+        </select>
+

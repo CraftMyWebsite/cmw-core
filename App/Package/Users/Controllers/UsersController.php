@@ -308,7 +308,7 @@ class UsersController extends CoreController
         }
 
 
-        $view = new View("users", "login");
+        $view = new View("Users", "login");
         $view->view();
     }
 
@@ -323,7 +323,7 @@ class UsersController extends CoreController
             die();
         }
 
-        $view = new View("users", "forgot_password");
+        $view = new View("Users", "forgot_password");
         $view->view();
     }
 
@@ -355,7 +355,7 @@ class UsersController extends CoreController
             die();
         }
 
-        $view = new View("users", "register");
+        $view = new View("Users", "register");
         $view->view();
     }
 
@@ -437,7 +437,7 @@ class UsersController extends CoreController
             Redirect::redirect("profile/", ['pseudo' => $user?->getPseudo()]);
         }
 
-        $view = new View('users', 'profile');
+        $view = new View('Users', 'profile');
         $view->addVariableList(["user" => $user]);
         $view->view();
     }
@@ -490,7 +490,7 @@ class UsersController extends CoreController
             Redirect::errorPage(404);
         }
 
-        $view = new View('users', 'profile');
+        $view = new View('Users', 'profile');
         $view->addVariableList(["user" => $user]);
         $view->view();
     }
