@@ -146,7 +146,10 @@ class Loader
             }
 
             if ((count($classPart) >= 4) && $classPart[2] === "Installer") {
-                return Loader::callPackage($classPart, "Installation/", "/Controllers/");
+                return match(ucfirst($classPart[1])) {
+                    "Controller" => Loader::callPackage($classPart, "Installation/", "/Controllers/"),
+                    "Model" => Loader::callPackage($classPart, "Installation/", "/Models/"),
+                };
             }
 
             return match (ucfirst($classPart[1])) {
