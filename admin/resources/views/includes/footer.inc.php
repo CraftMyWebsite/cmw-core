@@ -14,7 +14,7 @@ use CMW\Utils\Utils;
         <?php if (UpdatesManager::checkNewUpdateAvailable()): ?>
             <div class="float-end">
                 <p class="text-center">
-                    <a href="/cmw-Admin/updates/cms">
+                    <a href="/cmw-admin/updates/cms">
                         <span><?= LangManager::translate("core.footer.used") . "<span class='text-danger font-bold'>" . UpdatesManager::getVersion() ?></span>!
                         <br>
                         <span><?= LangManager::translate("core.footer.upgrade") . "<span class='text-success font-bold'>" . UpdatesManager::getLatestVersion() ?></span>!

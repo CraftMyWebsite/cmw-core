@@ -47,7 +47,7 @@ use CMW\Utils\Utils;
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="min-width: 11rem">
                         <li>
-                            <a class="dropdown-item" href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'cmw-Admin/users/edit/' . UsersModel::getCurrentUser()->getId() ?>">
+                            <a class="dropdown-item" href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'cmw-admin/users/edit/' . UsersModel::getCurrentUser()->getId() ?>">
                                 <i class="fa-solid fa-user"></i>
                                 <?= LangManager::translate("users.users.link_profile") ?>
                             </a>
