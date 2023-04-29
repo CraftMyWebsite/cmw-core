@@ -51,7 +51,7 @@ class CoreController
         UsersController::redirectIfNotHavePermissions("core.dashboard");
         //Redirect to the dashboard
         if ($_GET['url'] === "cmw-admin") {
-            header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
+            header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-Admin/dashboard');
         }
 
         View::createAdminView("core", "dashboard")

@@ -13,8 +13,8 @@ class UpdatesController extends CoreController
 {
     /* ADMINISTRATION */
 
-    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/updates")]
-    #[Link("/cms", Link::GET, [], "/cmw-admin/updates")]
+    #[Link(path: "/", method: Link::GET, scope: "/cmw-Admin/updates")]
+    #[Link("/cms", Link::GET, [], "/cmw-Admin/updates")]
     public function adminUpdates(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.update");
@@ -23,7 +23,7 @@ class UpdatesController extends CoreController
             ->view();
     }
 
-    #[Link("/cms/install", Link::GET, [], "/cmw-admin/updates")]
+    #[Link("/cms/install", Link::GET, [], "/cmw-Admin/updates")]
     public function adminUpdatesInstall(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.update");
