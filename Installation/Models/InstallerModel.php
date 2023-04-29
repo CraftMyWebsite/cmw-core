@@ -5,6 +5,7 @@ namespace CMW\Model\Installer;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Utils\Utils;
 use PDO;
+use PDOException;
 
 /**
  * Class: @installerModel

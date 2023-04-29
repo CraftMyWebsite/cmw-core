@@ -367,12 +367,12 @@ class InstallerController
     public function fifthInstallPost(): void
     {
 
-        if (!isset($_POST['Theme'])) {
+        if (!isset($_POST['theme'])) {
             Utils::getEnv()->editValue("installStep", 6);
             return;
         }
 
-        $id = filter_input(INPUT_POST, "Theme");
+        $id = filter_input(INPUT_POST, "theme");
 
         $theme = PublicAPI::getData("resources/installResource&id=$id");
 
