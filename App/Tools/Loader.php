@@ -40,13 +40,14 @@ class Loader
 
         $classPart = array_slice($classPart, 2);
         $packageName = ucfirst($classPart[0]);
+
         $classPart = array_slice($classPart, 1);
 
         $fileName = array_pop($classPart) . ".php";
 
         $subFolderFile = count($classPart) ? implode("/", $classPart) . "/" : "";
 
-        $file = self::getValue("DIR") . $startDir . $packageName . $folderPackage . $subFolderFile . $fileName;
+        $file = self::getValue("dir") . $startDir . ($packageName === "installer" ? "" : $packageName) . $folderPackage . $subFolderFile . $fileName;
 
         if (is_file($file)) {
             require_once($file);
@@ -54,6 +55,11 @@ class Loader
         }
 
         return false;
+    }
+
+    public static function getAttributeList(): array
+    {
+        return self::$attributeList;
     }
 
     public static function loadImplementations(string $interface): array
@@ -139,6 +145,10 @@ class Loader
                 return false;
             }
 
+            if ((count($classPart) >= 4) && $classPart[2] === "Installer") {
+                return Loader::callPackage($classPart, "Installation", "/Controllers/");
+            }
+
             return match (ucfirst($classPart[1])) {
                 "Controller" => Loader::callPackage($classPart, "App/Package/", "/Controllers/"),
                 "Model" => Loader::callPackage($classPart, "App/Package/", "/Models/"),
@@ -149,7 +159,7 @@ class Loader
                 "Manager" => Loader::callPackage($classPart, "App/Manager/", "/"),
                 "Utils" => Loader::callCoreClass($classPart, "App/Tools/"),
                 "Router" => Loader::callCoreClass($classPart, "Router/"),
-                "Installer" => Loader::callCoreClass($classPart, "installer"),
+                "Installer" => Loader::callCoreClass($classPart, "Installation/"),
                 default => false,
             };
         });
@@ -251,7 +261,6 @@ class Loader
             Utils::getFilesFromDirectory("App/Package", "php"),
             Utils::getFilesFromDirectory("Installation", "php")
         );
-
         foreach ($files as $file) {
             self::listAttributes($file);
         }
@@ -281,18 +290,13 @@ class Loader
 
         $classRef = new ReflectionClass($className);
         foreach ($classRef->getMethods() as $method) {
-
             $isMethodClass = $method->getDeclaringClass()->getName() === $className;
-
             if (!$isMethodClass) {
                 continue;
             }
 
             $attrList = $method->getAttributes();
             foreach ($attrList as $attribute) {
-
-                /** @var Link $linkInstance */
-                $linkInstance = $attribute->newInstance();
 
                 if (!isset(self::$attributeList[$attribute->getName()])) {
                     self::$attributeList[$attribute->getName()] = array();
