@@ -90,13 +90,33 @@ CREATE TABLE IF NOT EXISTS `cmw_users_settings`
 
 CREATE TABLE IF NOT EXISTS `cmw_menus`
 (
-    `menu_id`        INT(11)      NOT NULL,
-    `menu_name`      VARCHAR(255) NOT NULL,
-    `menu_url`       VARCHAR(255) NOT NULL,
-    `menu_level`     INT(1)       NOT NULL,
-    `menu_parent_id` INT(11)
+    `menu_id`        INT(11)          NOT NULL AUTO_INCREMENT,
+    `menu_name`      VARCHAR(255)     NOT NULL,
+    `menu_url`       VARCHAR(255)     NOT NULL,
+    `menu_parent_id` INT(11) DEFAULT NULL,
+    `menu_is_restricted` INT(1) DEFAULT 0,
+    `menu_order`     INT(10) UNSIGNED NOT NULL,
+    `menu_target_blank`     TINYINT(1) UNSIGNED NOT NULL,
+    PRIMARY KEY (`menu_id`),
+    KEY `menu_parent_id` (`menu_parent_id`),
+    CONSTRAINT `cmw_menus_ibfk_1` FOREIGN KEY (`menu_parent_id`)
+        REFERENCES `cmw_menus` (`menu_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+
+CREATE TABLE IF NOT EXISTS  `cmw_menus_groups_allowed`
+(
+    `menus_groups_id` int(11) NOT NULL AUTO_INCREMENT,
+    `menus_groups_group_id` int(11) NOT NULL,
+    `menus_groups_menu_id` int(11) NOT NULL,
+    PRIMARY KEY (`menus_groups_id`),
+    KEY `menus_groups_group_id` (`menus_groups_group_id`),
+    KEY `menus_groups_menu_id` (`menus_groups_menu_id`),
+    FOREIGN KEY (`menus_groups_group_id`) REFERENCES `cmw_roles`(`role_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`menus_groups_menu_id`) REFERENCES `cmw_menus`(`menu_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB
+    DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `cmw_core_condition`
 (
@@ -107,12 +127,6 @@ CREATE TABLE IF NOT EXISTS `cmw_core_condition`
     `condition_last_editor` INT(11)             DEFAULT NULL
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-
-ALTER TABLE `cmw_menus`
-    ADD PRIMARY KEY (`menu_id`);
-
-ALTER TABLE `cmw_menus`
-    MODIFY `menu_id` INT(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `cmw_core_options`
     ADD UNIQUE KEY `option_name` (`option_name`);
@@ -156,7 +170,7 @@ ALTER TABLE `cmw_core_condition`
     ADD PRIMARY KEY (`condition_id`),
     ADD KEY `condition_author` (`condition_last_editor`),
     ADD KEY `condition_last_editor` (`condition_last_editor`);
-	
+
 ALTER TABLE `cmw_core_condition`
     MODIFY `condition_id` INT(11) NOT NULL AUTO_INCREMENT;
 

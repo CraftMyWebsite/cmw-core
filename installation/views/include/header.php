@@ -27,7 +27,7 @@ use CMW\Manager\Lang\LangManager;
 
 
 
-<body class="bg-cmw-gray">
+<body class="bg-cmw-gray flex flex-col min-h-screen">
 <img class="w-48 mx-auto py-8" src="admin/resources/assets/images/logo/logo_compact.png" alt="Image introuvable !">
 
 <div class="lg:hidden text-center p-4 bg-primary text-xl"><span class="font-bold">
