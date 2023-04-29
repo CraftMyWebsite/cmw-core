@@ -39,7 +39,7 @@ class Loader
         }
 
         $classPart = array_slice($classPart, 2);
-        $packageName = ucfirst($classPart[0]);
+        $packageName = strtolower($classPart[0]);
 
         $classPart = array_slice($classPart, 1);
 
@@ -47,7 +47,7 @@ class Loader
 
         $subFolderFile = count($classPart) ? implode("/", $classPart) . "/" : "";
 
-        $file = self::getValue("dir") . $startDir . ($packageName === "installer" ? "" : $packageName) . $folderPackage . $subFolderFile . $fileName;
+        $file = self::getValue("dir") . $startDir . ($packageName === "installer" ? "" : ucfirst($packageName)) . $folderPackage . $subFolderFile . $fileName;
 
         if (is_file($file)) {
             require_once($file);
@@ -146,7 +146,7 @@ class Loader
             }
 
             if ((count($classPart) >= 4) && $classPart[2] === "Installer") {
-                return Loader::callPackage($classPart, "Installation", "/Controllers/");
+                return Loader::callPackage($classPart, "Installation/", "/Controllers/");
             }
 
             return match (ucfirst($classPart[1])) {
@@ -159,7 +159,6 @@ class Loader
                 "Manager" => Loader::callPackage($classPart, "App/Manager/", "/"),
                 "Utils" => Loader::callCoreClass($classPart, "App/Tools/"),
                 "Router" => Loader::callCoreClass($classPart, "Router/"),
-                "Installer" => Loader::callCoreClass($classPart, "Installation/"),
                 default => false,
             };
         });
