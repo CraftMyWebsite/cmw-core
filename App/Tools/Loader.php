@@ -150,6 +150,7 @@ class Loader
                 "Utils" => Loader::callCoreClass($classPart, "App/Tools/"),
                 "Router" => Loader::callCoreClass($classPart, "Router/"),
                 "Installer" => Loader::callCoreClass($classPart, "installer"),
+                default => false,
             };
         });
 
