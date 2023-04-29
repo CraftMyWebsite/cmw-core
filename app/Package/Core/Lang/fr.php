@@ -211,4 +211,17 @@ return [
         "continue" => "Continuer"
     ],
     "months" => '["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Decembre"]',
+    "errors" => [
+        "requests" => [
+            'required' => 'Champs %key% manquant',
+            'empty' => 'Champs %key% vide',
+            'slug' => 'Slug %key% invalide',
+            'minLength' => 'Le champs %key% doit contenir plus de %min% caractères',
+            'maxLength' => 'Le champs %key% doit contenir moins de %max% caractères',
+            'betweenLength' => 'Le champs %key% doit contenir entre %min% et %max% caractères',
+            'dateTime' => 'Le champs %key% doit être une date valide (%format%)',
+            'getValue' => 'Valeur introuvable %key%',
+            'type' => 'Type invalide pour %key%'
+        ]
+    ]
 ];

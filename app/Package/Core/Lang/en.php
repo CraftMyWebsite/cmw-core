@@ -209,5 +209,19 @@ return [
         "try" => "Try",
         "continue" => "Continue"
     ],
-    "months" => '["January","February","March","April","May","June","July","August","September","October","November","December"]'
+    "months" => '["January","February","March","April","May","June","July","August","September","October","November","December"]',
+
+    "errors" => [
+        "requests" => [
+            'required' => 'Missing input %key%',
+            'empty' => 'Input %key% empty',
+            'slug' => 'Invalide slug %key%',
+            'minLength' => 'Input %key% need to have more than %min% characters',
+            'maxLength' => 'Input %key% need to have max %max% characters',
+            'betweenLength' => 'Input %key% need to have between %min% and %max% characters',
+            'dateTime' => 'Input %key% need to be a validate format (%format%)',
+            'getValue' => 'Missing value %key%',
+            'type' => 'Invalide type for %key%',
+        ]
+    ]
 ];
