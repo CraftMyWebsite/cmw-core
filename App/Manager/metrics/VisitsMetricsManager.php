@@ -21,7 +21,7 @@ class VisitsMetricsManager extends DatabaseManager
     {
         $package = explode(".", $route->getName())[0] ?? null;
 
-        $isAdmin = str_starts_with($route->getPath(), "cmw-admin/") ?: 0;
+        $isAdmin = str_starts_with($route->getPath(), "cmw-Admin/") ?: 0;
 
         $path = $route->getPath() === '' ? '/' : $route->getPath();
 

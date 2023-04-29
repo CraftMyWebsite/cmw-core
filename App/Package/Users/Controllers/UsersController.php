@@ -45,7 +45,7 @@ class UsersController extends CoreController
 
     public function adminDashboard(): void
     {
-        header("Location" . getenv("PATH_SUBFOLDER") . ((self::isAdminLogged()) ? "cmw-admin/dashboard" : "login"));
+        header("Location" . getenv("PATH_SUBFOLDER") . ((self::isAdminLogged()) ? "cmw-Admin/dashboard" : "login"));
     }
 
     public static function isAdminLogged(): bool
@@ -76,8 +76,8 @@ class UsersController extends CoreController
         return (new UsersModel())->getUserById($_SESSION['cmwUserId']);
     }
 
-    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/users")]
-    #[Link("/manage", Link::GET, [], "/cmw-admin/users")]
+    #[Link(path: "/", method: Link::GET, scope: "/cmw-Admin/users")]
+    #[Link("/manage", Link::GET, [], "/cmw-Admin/users")]
     public function adminUsersList(): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
@@ -102,7 +102,7 @@ class UsersController extends CoreController
         }
     }
 
-    #[Link("/getUser/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
+    #[Link("/getUser/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-Admin/users")]
     public function admingetUser(int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
@@ -139,7 +139,7 @@ class UsersController extends CoreController
     }
 
 
-    #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
+    #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-Admin/users")]
     public function adminUsersEdit(Request $request, int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
@@ -157,7 +157,7 @@ class UsersController extends CoreController
             ->view();
     }
 
-    #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users")]
+    #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-Admin/users")]
     #[NoReturn] public function adminUsersEditPost(int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
@@ -184,7 +184,7 @@ class UsersController extends CoreController
     }
 
 
-    #[Link("/add", Link::POST, [], "/cmw-admin/users")]
+    #[Link("/add", Link::POST, [], "/cmw-Admin/users")]
     public function adminUsersAddPost(): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.add");
@@ -198,7 +198,7 @@ class UsersController extends CoreController
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
-    #[Link("/state/:id/:state", Link::GET, ["id" => "[0-9]+", "state" => "[0-9]+"], "/cmw-admin/users")]
+    #[Link("/state/:id/:state", Link::GET, ["id" => "[0-9]+", "state" => "[0-9]+"], "/cmw-Admin/users")]
     #[NoReturn] public function adminUserState(int $id, int $state): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
@@ -218,7 +218,7 @@ class UsersController extends CoreController
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
-    #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
+    #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-Admin/users")]
     #[NoReturn] public function adminUsersDelete(int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.delete");
@@ -239,7 +239,7 @@ class UsersController extends CoreController
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
-    #[Link("/picture/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users")]
+    #[Link("/picture/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-Admin/users")]
     #[NoReturn] public function adminUsersEditPicturePost(int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
@@ -252,7 +252,7 @@ class UsersController extends CoreController
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
-    #[Link("/picture/reset/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
+    #[Link("/picture/reset/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-Admin/users")]
     #[NoReturn] public function adminUsersResetPicture(int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");

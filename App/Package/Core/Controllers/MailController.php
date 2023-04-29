@@ -111,7 +111,7 @@ class MailController extends CoreController
     /////////// ADMIN DASHBOARD AREA \\\\\\\\\\\
 
     #[Link(path: "/mail", method: Link::GET, scope: "/cmw-admin")]
-    #[Link("/configuration", Link::GET, [], "/cmw-admin/mail")]
+    #[Link("/configuration", Link::GET, [], "/cmw-Admin/mail")]
     public function mailConfiguration(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.mail.configuration");
@@ -126,7 +126,7 @@ class MailController extends CoreController
             ->view();
     }
 
-    #[Link("/configuration", Link::POST, [], "/cmw-admin/mail")]
+    #[Link("/configuration", Link::POST, [], "/cmw-Admin/mail")]
     public function mailConfigurationPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.mail.configuration");
@@ -144,7 +144,7 @@ class MailController extends CoreController
     }
 
 
-    #[Link("/test", Link::POST, [], "/cmw-admin/mail", secure: true)]
+    #[Link("/test", Link::POST, [], "/cmw-Admin/mail", secure: true)]
     public function testMailConfigurationPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.mail.configuration");
