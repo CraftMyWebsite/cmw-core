@@ -26,9 +26,19 @@ class Router
     private static ?Route $actualRoute = null;
     private string $groupPattern;
 
+    private static Router $_instance;
+
     public function __construct($url)
     {
         $this->url = $url;
+    }
+
+    public static function getInstance(): Router {
+        if (!isset(self::$_instance)) {
+            self::$_instance = new Router($_GET['url'] ?? "");
+        }
+
+        return self::$_instance;
     }
 
     public static function getActualRoute(): ?Route

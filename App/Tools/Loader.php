@@ -18,9 +18,8 @@ use ReflectionClass;
 
 class Loader
 {
-
-    private static Router $_routerInstance;
-    private static array $fileLoaded = array();
+    private static array $fileLoadedAttr = array();
+    private static array $attributeList = array();
 
     public function __construct()
     {
@@ -31,13 +30,6 @@ class Loader
     private static function getValue(string $value): string
     {
         return Utils::getEnv()->getValue($value);
-    }
-
-    private function requireFile($directory, ...$files): void
-    {
-        foreach ($files as $file) {
-            require_once(self::getValue("dir") . "$directory/$file");
-        }
     }
 
     private static function callPackage(array $classPart, string $startDir, string $folderPackage = ""): bool
@@ -157,11 +149,14 @@ class Loader
                 "Manager" => Loader::callPackage($classPart, "App/Manager/", "/"),
                 "Utils" => Loader::callCoreClass($classPart, "App/Tools/"),
                 "Router" => Loader::callCoreClass($classPart, "Router/"),
-                default => false,
+                "Installer" => Loader::callCoreClass($classPart, "installer"),
             };
         });
 
         //Load router files in front-end
+
+        //Load attributes
+
 
         if (Utils::getEnv()->getValue("INSTALLSTEP") === '-1') {
             new CoreController();
@@ -220,50 +215,50 @@ class Loader
         return $fileContent;
     }
 
-
-    public static function getRouterInstance($url = ""): Router
-    {
-        if (!isset(self::$_routerInstance)) {
-            self::$_routerInstance = new Router($_GET['url'] ?? $url);
-        }
-
-        return self::$_routerInstance;
-    }
-
     public function listenRouter(): void
     {
-        $router = self::$_routerInstance;
 
         try {
-            $router->listen();
+            Router::getInstance()->listen();
         } catch (RouterException $e) {
             ErrorManager::showError($e->getCode());
             return;
         }
     }
 
-    public function loadRoutes(): void
+    public function loadRoutes($linkClass = Link::class): void
     {
-        $packageFolder = 'App/Package';
-        $contentDirectory = array_diff(scandir("$packageFolder/"), array('..', '.'));
-        $dir = Utils::getEnv()->getValue("DIR");
-        foreach ($contentDirectory as $package) {
-            $packageSubFolder = "$packageFolder/$package/Controllers";
-            if (is_dir($packageSubFolder)) {
-                $contentSubDirectory = array_diff(scandir("$packageSubFolder/"), array('..', '.'));
-                foreach ($contentSubDirectory as $packageFile) {
-                    $file = "$dir$packageSubFolder/$packageFile";
-                    if (is_file($file)) {
-                        self::initRoute($file);
-                    }
-                }
-            }
+        $attrList = self::$attributeList[$linkClass];
+
+        if (!isset($attrList)) {
+            return;
+        }
+
+        foreach ($attrList as [$attr, $method]) {
+            $linkInstance = $attr->newInstance();
+            Router::getInstance()->registerRoute($linkInstance, $method);
+        }
+
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function loadAttributes(): void
+    {
+        $files = array_merge(
+            Utils::getFilesFromDirectory("App/Package", "php"),
+            Utils::getFilesFromDirectory("Installation", "php")
+        );
+
+        foreach ($files as $file) {
+            self::listAttributes($file);
         }
     }
 
     public static function createSimpleRoute(string $path, string $fileName, string $package, ?string $name = null, int $weight = 2): void
     {
-        self::getRouterInstance()->get($path, function () use ($package, $fileName) {
+        Router::getInstance()->get($path, function () use ($package, $fileName) {
             View::basicPublicView($package, $fileName);
         }, $name, $weight);
     }
@@ -271,13 +266,17 @@ class Loader
     /**
      * @throws \ReflectionException
      */
-    private static function initRoute(string $file): void
+    public static function listAttributes($file): void
     {
-        if (in_array($file, self::$fileLoaded, true)) {
+        if (in_array($file, self::$fileLoadedAttr, true)) {
             return;
         }
 
         $className = ClassManager::getClassFullNameFromFile($file);
+
+        if (is_null($className)) {
+            return;
+        }
 
         $classRef = new ReflectionClass($className);
         foreach ($classRef->getMethods() as $method) {
@@ -288,19 +287,21 @@ class Loader
                 continue;
             }
 
-            $linkAttributes = $method->getAttributes(Link::class);
-            foreach ($linkAttributes as $attribute) {
+            $attrList = $method->getAttributes();
+            foreach ($attrList as $attribute) {
 
                 /** @var Link $linkInstance */
                 $linkInstance = $attribute->newInstance();
 
-                self::$_routerInstance->registerRoute($linkInstance, $method);
-            }
+                if (!isset(self::$attributeList[$attribute->getName()])) {
+                    self::$attributeList[$attribute->getName()] = array();
+                }
 
+                self::$attributeList[$attribute->getName()][] = [$attribute, $method];
+            }
         }
 
-        self::$fileLoaded[] = $file;
-
+        self::$fileLoadedAttr[] = $file;
     }
 
     /**
@@ -328,9 +329,6 @@ class Loader
             if (Utils::getEnv()->getValue("INSTALLSTEP") !== '-1') {
 
                 ErrorManager::enableErrorDisplays(true);
-
-                $this->requireFile("Installation", "Controllers/InstallerController.php", "Models/InstallerModel.php"); //Todo See that
-                self::initRoute(self::getValue("dir") . "Installation/Controllers/InstallerController.php");
 
                 InstallerController::goToInstall();
             }

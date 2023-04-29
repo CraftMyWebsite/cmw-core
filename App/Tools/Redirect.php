@@ -4,6 +4,7 @@ namespace CMW\Utils;
 
 
 use CMW\Router\Route;
+use CMW\Router\Router;
 
 class Redirect
 {
@@ -11,7 +12,7 @@ class Redirect
 
     private static function getRouteByUrl(string $url): ?Route
     {
-        $router = Loader::getRouterInstance();
+        $router = Router::getInstance();
         $route = $router->getRouteByUrl($url);
         if (is_null($route)) {
             $route = $router->getRouteByName($url);
