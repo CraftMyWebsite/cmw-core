@@ -16,7 +16,7 @@ import {
   diff,
 } from './utils';
 
-describe('utils', () => {
+describe('Utils', () => {
   describe('getRandomNumber', () => {
     it('returns random number between range', () => {
       for (let index = 0; index < 10; index++) {

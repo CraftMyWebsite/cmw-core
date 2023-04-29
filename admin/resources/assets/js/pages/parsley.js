@@ -28,7 +28,7 @@ Parsley.on("field:validated", function (el) {
       var formGroupNode = fieldNode.closest(".form-group")
       var lblNode = formGroupNode.find(".form-label:first")
       if (lblNode.length > 0) {
-        // change default error message to include field label
+        // change Default error message to include field label
         var errorNode = formGroupNode.find(
           "div.parsley-error span[class*=parsley-]"
         )

@@ -37,7 +37,7 @@ describe('choices', () => {
   describe('constructor', () => {
     describe('config', () => {
       describe('not passing config options', () => {
-        it('uses the default config', () => {
+        it('uses the Default config', () => {
           document.body.innerHTML = `
           <input data-choice type="text" id="input-1" />
           `;
@@ -49,7 +49,7 @@ describe('choices', () => {
       });
 
       describe('passing config options', () => {
-        it('merges the passed config with the default config', () => {
+        it('merges the passed config with the Default config', () => {
           document.body.innerHTML = `
           <input data-choice type="text" id="input-1" />
           `;
@@ -244,7 +244,7 @@ describe('choices', () => {
     });
   });
 
-  describe('public methods', () => {
+  describe('Public methods', () => {
     describe('init', () => {
       const callbackOnInitSpy = spy();
 
@@ -2231,7 +2231,7 @@ describe('choices', () => {
             instance._store.getGroupById.reset();
           });
 
-          it("includes the group's value in the triggered event", (done) => {
+          it("Includes the group's value in the triggered event", (done) => {
             passedElement.addEventListener(
               'removeItem',
               (event) => {

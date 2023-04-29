@@ -58,7 +58,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__1145__;
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	/* webpack/runtime/compat get Default export */
 /******/ 	(() => {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
 /******/ 		__webpack_require__.n = (module) => {
@@ -162,7 +162,7 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default().extend((jquery__WEBPACK_IMPORTED_M
       textToDisplay: 'Text to display',
       url: 'To what URL should this link go?',
       openInNewWindow: 'Open in new window',
-      useProtocol: 'Use default protocol'
+      useProtocol: 'Use Default protocol'
     },
     table: {
       table: 'Table',
@@ -215,7 +215,7 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default().extend((jquery__WEBPACK_IMPORTED_M
       transparent: 'Transparent',
       setTransparent: 'Set transparent',
       reset: 'Reset',
-      resetToDefault: 'Reset to default',
+      resetToDefault: 'Reset to Default',
       cpSelect: 'Select'
     },
     shortcut: {

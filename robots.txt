@@ -1,6 +1,6 @@
 User-Agent: *
-Disallow: /cmw-admin/
-Disallow: /admin/
+Disallow: /cmw-Admin/
+Disallow: /Admin/
 Disallow: /installation/
 Disallow: /installer/
 Disallow: /Router/

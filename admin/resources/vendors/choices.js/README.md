@@ -1,4 +1,4 @@
-# Choices.js [![Actions Status](https://github.com/jshjohnson/Choices/workflows/Build%20and%20test/badge.svg)](https://github.com/jshjohnson/Choices/actions) [![Actions Status](https://github.com/jshjohnson/Choices/workflows/Bundle%20size%20checks/badge.svg)](https://github.com/jshjohnson/Choices/actions) [![npm](https://img.shields.io/npm/v/choices.js.svg)](https://www.npmjs.com/package/choices.js)
+# Choices.js [![Actions Status](https://github.com/jshjohnson/Choices/workflows/Build%20and%20test/badge.svg)](https://github.com/jshjohnson/Choices/actions) [![Actions Status](https://github.com/jshjohnson/Choices/workflows/Bundle%20size%20checks/badge.svg)](https://github.com/jshjohnson/Choices/actions) [![npm](https://img.shields.io/npm/v/choices.js.svg)](https://www.npmjs.com/Package/choices.js)
 
 ---
 
@@ -25,7 +25,7 @@ A vanilla, lightweight (~19kb gzipped 🎉), configurable select box/text input 
 
 ## Installation
 
-With [NPM](https://www.npmjs.com/package/choices.js):
+With [NPM](https://www.npmjs.com/Package/choices.js):
 
 ```zsh
 npm install choices.js
@@ -37,7 +37,7 @@ With [Yarn](https://yarnpkg.com/):
 yarn add choices.js
 ```
 
-From a [CDN](https://www.jsdelivr.com/package/npm/choices.js):
+From a [CDN](https://www.jsdelivr.com/Package/npm/choices.js):
 
 **Note:** There is sometimes a delay before the latest version of Choices is reflected on the CDN.
 
@@ -45,40 +45,40 @@ From a [CDN](https://www.jsdelivr.com/package/npm/choices.js):
 <!-- Include base CSS (optional) -->
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/base.min.css"
+  href="https://cdn.jsdelivr.net/npm/choices.js/Public/Assets/styles/base.min.css"
 />
 <!-- Or versioned -->
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/styles/base.min.css"
+  href="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/Public/Assets/styles/base.min.css"
 />
 
 <!-- Include Choices CSS -->
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"
+  href="https://cdn.jsdelivr.net/npm/choices.js/Public/Assets/styles/choices.min.css"
 />
 <!-- Or versioned -->
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/styles/choices.min.css"
+  href="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/Public/Assets/styles/choices.min.css"
 />
 
 <!-- Include Choices JavaScript (latest) -->
-<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/choices.js/Public/Assets/Scripts/choices.min.js"></script>
 <!-- Or versioned -->
-<script src="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/scripts/choices.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/Public/Assets/Scripts/choices.min.js"></script>
 ```
 
 Or include Choices directly:
 
 ```html
 <!-- Include base CSS (optional) -->
-<link rel="stylesheet" href="public/assets/styles/base.min.css"/>
+<link rel="stylesheet" href="public/Assets/styles/base.min.css"/>
 <!-- Include Choices CSS -->
-<link rel="stylesheet" href="public/assets/styles/choices.min.css"/>
+<link rel="stylesheet" href="public/Assets/styles/choices.min.css"/>
 <!-- Include Choices JavaScript -->
-<script src="/public/assets/scripts/choices.min.js"></script>
+<script src="/Public/Assets/Scripts/choices.min.js"></script>
 ```
 
 ## Setup
@@ -97,7 +97,7 @@ Or include Choices directly:
   // Pass jQuery element
   const choices = new Choices($('.js-choice')[0]);
 
-  // Passing options (with default options)
+  // Passing options (with Default options)
   const choices = new Choices(element, {
     silent: false,
     items: [],

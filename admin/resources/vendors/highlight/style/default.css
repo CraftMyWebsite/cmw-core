@@ -9,7 +9,7 @@
 */
 
 /*
-This is left on purpose making default.css the single file that can be lifted
+This is left on purpose making Default.css the single file that can be lifted
 as-is from the repository directly without the need for a build step
 
 Typically this "required" baseline CSS is added by `makestuff.js` during build.
@@ -33,7 +33,7 @@ code.hljs {
 /* Base color: saturation 0; */
 
 .hljs-subst {
-  /* default */
+  /* Default */
 }
 
 /* purposely ignored */

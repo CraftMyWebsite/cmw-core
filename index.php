@@ -7,7 +7,7 @@
 use CMW\Manager\Error\ErrorManager;
 use CMW\Utils\Loader;
 
-require_once("app/tools/Loader.php");
+require_once("App/Tools/Loader.php");
 
 $loader = new Loader();
 

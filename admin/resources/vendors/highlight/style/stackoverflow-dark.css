@@ -1,6 +1,6 @@
 /*!
   Theme: StackOverflow Dark
-  Description: Dark theme as used on stackoverflow.com
+  Description: Dark Theme as used on stackoverflow.com
   Author: stackoverflow.com
   Maintainer: @Hirse
   Website: https://github.com/StackExchange/Stacks
@@ -8,8 +8,8 @@
   Updated: 2021-05-15
 
   Updated for @stackoverflow/stacks v0.64.0
-  Code Blocks: /blob/v0.64.0/lib/css/components/_stacks-code-blocks.less
-  Colors: /blob/v0.64.0/lib/css/exports/_stacks-constants-colors.less
+  Code Blocks: /blob/v0.64.0/lib/Css/components/_stacks-code-blocks.less
+  Colors: /blob/v0.64.0/lib/Css/exports/_stacks-constants-colors.less
 */
 code.hljs{display:block;overflow-x:auto;padding:1em}
 

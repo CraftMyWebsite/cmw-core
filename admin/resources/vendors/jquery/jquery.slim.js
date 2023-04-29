@@ -168,7 +168,7 @@ jQuery.fn = jQuery.prototype = {
 
 	constructor: jQuery,
 
-	// The default length of a jQuery object is 0
+	// The Default length of a jQuery object is 0
 	length: 0,
 
 	toArray: function() {
@@ -942,7 +942,7 @@ function assert( fn ) {
 		return false;
 	} finally {
 
-		// Remove from its parent by default
+		// Remove from its parent by Default
 		if ( el.parentNode ) {
 			el.parentNode.removeChild( el );
 		}
@@ -2134,7 +2134,7 @@ Expr = Sizzle.selectors = {
 			};
 		} ),
 
-		// "Whether an element is represented by a :lang() selector
+		// "Whether an element is represented by a :Lang() selector
 		// is based solely on the element's language value
 		// being equal to the identifier C,
 		// or beginning with the identifier C immediately followed by "-".
@@ -2143,9 +2143,9 @@ Expr = Sizzle.selectors = {
 		// http://www.w3.org/TR/selectors/#lang-pseudo
 		"lang": markFunction( function( lang ) {
 
-			// lang value must be a valid identifier
+			// Lang value must be a valid identifier
 			if ( !ridentifier.test( lang || "" ) ) {
-				Sizzle.error( "unsupported lang: " + lang );
+				Sizzle.error( "unsupported Lang: " + lang );
 			}
 			lang = lang.replace( runescape, funescape ).toLowerCase();
 			return function( elem ) {
@@ -2153,7 +2153,7 @@ Expr = Sizzle.selectors = {
 				do {
 					if ( ( elemLang = documentIsHTML ?
 						elem.lang :
-						elem.getAttribute( "xml:lang" ) || elem.getAttribute( "lang" ) ) ) {
+						elem.getAttribute( "xml:Lang" ) || elem.getAttribute( "lang" ) ) ) {
 
 						elemLang = elemLang.toLowerCase();
 						return elemLang === lang || elemLang.indexOf( lang + "-" ) === 0;
@@ -2194,7 +2194,7 @@ Expr = Sizzle.selectors = {
 
 		"selected": function( elem ) {
 
-			// Accessing this property makes selected-by-default
+			// Accessing this property makes selected-by-Default
 			// options in Safari work properly
 			if ( elem.parentNode ) {
 				// eslint-disable-next-line no-unused-expressions
@@ -2918,7 +2918,7 @@ support.sortStable = expando.split( "" ).sort( sortOrder ).join( "" ) === expand
 // Always assume duplicates if they aren't passed to the comparison function
 support.detectDuplicates = !!hasDuplicate;
 
-// Initialize against the default document
+// Initialize against the Default document
 setDocument();
 
 // Support: Webkit<537.32 - Safari 6.0.3/Chrome 25 (fixed in Chrome 27)
@@ -3438,7 +3438,7 @@ function createOptions( options ) {
  *	options: an optional list of space-separated options that will change how
  *			the callback list behaves or a more traditional option object
  *
- * By default a callback list will act like an event callback list and can be
+ * By Default a callback list will act like an event callback list and can be
  * "fired" multiple times.
  *
  * Possible options:
@@ -4039,7 +4039,7 @@ jQuery.extend( {
 
 
 // These usually indicate a programmer mistake during development,
-// warn about them ASAP rather than swallowing them by default.
+// warn about them ASAP rather than swallowing them by Default.
 var rerrorNames = /^(Eval|Internal|Range|Reference|Syntax|Type|URI)Error$/;
 
 jQuery.Deferred.exceptionHook = function( error, stack ) {
@@ -4392,7 +4392,7 @@ var dataUser = new Data();
 //	Implementation Summary
 //
 //	1. Enforce API surface and semantic compatibility with 1.9.x branch
-//	2. Improve the module's maintainability by reducing the storage
+//	2. Improve the module's maintainability by reducing the Storage
 //		paths to a single mechanism.
 //	3. Use the same single mechanism to support "private" and "user" data.
 //	4. _Never_ expose "private" data to user code (TODO: Drop _data, _removeData)
@@ -4613,7 +4613,7 @@ jQuery.extend( {
 		}
 	},
 
-	// Not public - generate a queueHooks object, or return the current one
+	// Not Public - generate a queueHooks object, or return the current one
 	_queueHooks: function( elem, type ) {
 		var key = type + "queueHooks";
 		return dataPriv.get( elem, key ) || dataPriv.access( elem, key, {
@@ -4661,7 +4661,7 @@ jQuery.fn.extend( {
 	},
 
 	// Get a promise resolved when queues of a certain type
-	// are emptied (fx is the type by default)
+	// are emptied (fx is the type by Default)
 	promise: function( type, obj ) {
 		var tmp,
 			count = 1,
@@ -5184,7 +5184,7 @@ function on( elem, types, selector, data, fn, one ) {
 }
 
 /*
- * Helper functions for managing events -- not part of the public interface.
+ * Helper functions for managing events -- not part of the Public interface.
  * Props to Dean Edwards' addEvent library for many of the ideas.
  */
 jQuery.event = {
@@ -6025,7 +6025,7 @@ function fixInput( src, dest ) {
 	if ( nodeName === "input" && rcheckableType.test( src.type ) ) {
 		dest.checked = src.checked;
 
-	// Fails to return the selected option to the default selected state when cloning options
+	// Fails to return the selected option to the Default selected state when cloning options
 	} else if ( nodeName === "input" || nodeName === "textarea" ) {
 		dest.defaultValue = src.defaultValue;
 	}
@@ -6548,7 +6548,7 @@ var rtrimCSS = new RegExp(
 		// some versions of this test; make sure not to make it pass there!
 		//
 		// Support: Firefox 70+
-		// Only Firefox includes border widths
+		// Only Firefox Includes border widths
 		// in computed dimensions. (gh-4529)
 		reliableTrDimensions: function() {
 			var table, tr, trChild, trStyle;
@@ -6714,7 +6714,7 @@ var
 
 	// Swappable if display is none or starts with table
 	// except "table", "table-cell", or "table-caption"
-	// See here for display values: https://developer.mozilla.org/en-US/docs/CSS/display
+	// See here for display values: https://developer.mozilla.org/en-US/docs/Css/display
 	rdisplayswap = /^(none|table(?!-c[ea]).+)/,
 	cssShow = { position: "absolute", visibility: "hidden", display: "block" },
 	cssNormalTransform = {
@@ -6880,7 +6880,7 @@ function getWidthOrHeight( elem, dimension, extra ) {
 
 jQuery.extend( {
 
-	// Add in style property hooks for overriding the default
+	// Add in style property hooks for overriding the Default
 	// behavior of getting and setting a style property
 	cssHooks: {
 		opacity: {
@@ -7204,7 +7204,7 @@ jQuery.fn.delay = function( time, type ) {
 	support.checkOn = input.value !== "";
 
 	// Support: IE <=11 only
-	// Must access selectedIndex to make default options select
+	// Must access selectedIndex to make Default options select
 	support.optSelected = opt.selected;
 
 	// Support: IE <=11 only
@@ -7433,7 +7433,7 @@ jQuery.extend( {
 // Accessing the selectedIndex property
 // forces the browser to respect setting selected
 // on the option
-// The getter ensures a default option is selected
+// The getter ensures a Default option is selected
 // when in an optgroup
 // eslint rule "no-unused-expressions" is disabled for this code
 // since it considers such accessions noop
@@ -7962,7 +7962,7 @@ jQuery.extend( jQuery.event, {
 		}
 		event.type = type;
 
-		// If nobody prevented the default action, do it now
+		// If nobody prevented the Default action, do it now
 		if ( !onlyHandlers && !event.isDefaultPrevented() ) {
 
 			if ( ( !special._default ||
@@ -7970,7 +7970,7 @@ jQuery.extend( jQuery.event, {
 				acceptData( elem ) ) {
 
 				// Call a native DOM method on the target with the same name as the event.
-				// Don't do default actions on window, that's where global variables be (trac-6170)
+				// Don't do Default actions on window, that's where global variables be (trac-6170)
 				if ( ontype && isFunction( elem[ type ] ) && !isWindow( elem ) ) {
 
 					// Don't re-trigger an onFOO event when we call its FOO() method
