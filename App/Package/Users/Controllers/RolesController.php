@@ -37,8 +37,8 @@ class RolesController extends CoreController
         $this->permissionsModel = new PermissionsModel();
     }
 
-    #[Link(path: "/", method: Link::GET, scope: "/cmw-Admin/roles")]
-    #[Link("/manage", Link::GET, [], "/cmw-Admin/roles")]
+    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/roles")]
+    #[Link("/manage", Link::GET, [], "/cmw-admin/roles")]
     public function adminRolesManage(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.manage");
@@ -62,7 +62,7 @@ class RolesController extends CoreController
             ->view();
     }
 
-    #[Link("/add", Link::GET, [], "/cmw-Admin/roles")]
+    #[Link("/add", Link::GET, [], "/cmw-admin/roles")]
     public function adminRolesAdd(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.add");
@@ -81,7 +81,7 @@ class RolesController extends CoreController
             ->view();
     }
 
-    #[Link("/add", Link::POST, [], "/cmw-Admin/roles")]
+    #[Link("/add", Link::POST, [], "/cmw-admin/roles")]
     #[NoReturn] public function adminRolesAddPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.add");
@@ -99,7 +99,7 @@ class RolesController extends CoreController
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
-    #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-Admin/roles")]
+    #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
     public function adminRolesEdit(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.edit");
@@ -121,7 +121,7 @@ class RolesController extends CoreController
             ->view();
     }
 
-    #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-Admin/roles")]
+    #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/roles")]
     #[NoReturn] public function adminRolesEditPost(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.edit");
@@ -140,7 +140,7 @@ class RolesController extends CoreController
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
-    #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-Admin/roles")]
+    #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
     #[NoReturn] public function adminRolesDelete(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.delete");
@@ -154,7 +154,7 @@ class RolesController extends CoreController
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
-    #[Link("/getRole/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-Admin/roles")]
+    #[Link("/getRole/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
     public function admingetRole(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.manage");
@@ -187,7 +187,7 @@ class RolesController extends CoreController
         }
     }
 
-    #[Link("/getRoles", Link::GET, [], "/cmw-Admin/roles")]
+    #[Link("/getRoles", Link::GET, [], "/cmw-admin/roles")]
     public function admingGetRoles(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.manage");

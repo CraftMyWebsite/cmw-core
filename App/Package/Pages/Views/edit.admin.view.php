@@ -109,7 +109,7 @@ $description = LangManager::translate("pages.edit.desc");
                         uploadByFile(file) {
                             let formData = new FormData();
                             formData.append("image", file);
-                            return fetch("<?= Utils::getEnv()->getValue("PATH_SUBFOLDER")?>cmw-Admin/Pages/uploadImage/edit", {
+                            return fetch("<?= Utils::getEnv()->getValue("PATH_SUBFOLDER")?>cmw-admin/Pages/uploadImage/edit", {
                                 method: "POST",
                                 body: formData
                             }).then(res => res.json())
@@ -184,7 +184,7 @@ $description = LangManager::translate("pages.edit.desc");
                 formData.append('news_content', JSON.stringify(savedData));
                 formData.append('page_state', page_state.toString());
 
-                fetch("<?= Utils::getEnv()->getValue("PATH_URL") ?>cmw-Admin/Pages/edit", {
+                fetch("<?= Utils::getEnv()->getValue("PATH_URL") ?>cmw-admin/Pages/edit", {
                     method: "POST",
                     body: formData
                 })
@@ -195,7 +195,7 @@ $description = LangManager::translate("pages.edit.desc");
                             button.innerHTML = "<i style='color: #16C329;' class='fa-solid fa-check fa-shake'></i> Ok !";
                         }, 850);
                 setTimeout(() => {
-                            document.location.replace("<?= Utils::getHttpProtocol() . '://' . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . 'cmw-Admin/Pages/list'?>");
+                            document.location.replace("<?= Utils::getHttpProtocol() . '://' . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . 'cmw-admin/Pages/list'?>");
                         }, 1000);
                 
             })

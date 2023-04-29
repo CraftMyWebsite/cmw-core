@@ -36,8 +36,8 @@ class MenusController extends CoreController
         return []; //TODO
     }
 
-    #[Link(path: "/", method: Link::GET, scope: "/cmw-Admin/menus")]
-    #[Link("/", Link::GET, [], "/cmw-Admin/menus")]
+    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/menus")]
+    #[Link("/", Link::GET, [], "/cmw-admin/menus")]
     public function adminMenus(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menus.configuration");
@@ -62,7 +62,7 @@ class MenusController extends CoreController
         return $toReturn;
     }
 
-    #[Link("/", Link::POST, [], "/cmw-Admin/menus")]
+    #[Link("/", Link::POST, [], "/cmw-admin/menus")]
     public function adminMenusAddPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menus.configuration");

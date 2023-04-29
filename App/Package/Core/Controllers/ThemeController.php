@@ -159,8 +159,8 @@ class ThemeController extends CoreController
 
     /* ADMINISTRATION */
 
-    #[Link(path: "/", method: Link::GET, scope: "/cmw-Admin/Theme")]
-    #[Link("/configuration", Link::GET, [], "/cmw-Admin/Theme")]
+    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/Theme")]
+    #[Link("/configuration", Link::GET, [], "/cmw-admin/Theme")]
     public function adminThemeConfiguration(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
@@ -176,7 +176,7 @@ class ThemeController extends CoreController
             ->view();
     }
 
-    #[Link("/configuration", Link::POST, [], "/cmw-Admin/Theme")]
+    #[Link("/configuration", Link::POST, [], "/cmw-admin/Theme")]
     public function adminThemeConfigurationPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
@@ -191,7 +191,7 @@ class ThemeController extends CoreController
         header("Location: configuration");
     }
 
-    #[Link("/configuration/regenerate", Link::POST, [], "/cmw-Admin/Theme")]
+    #[Link("/configuration/regenerate", Link::POST, [], "/cmw-admin/Theme")]
     public function adminThemeConfigurationRegeneratePost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
@@ -206,7 +206,7 @@ class ThemeController extends CoreController
         header("Location: ../configuration");
     }
 
-    #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-Admin/Theme")]
+    #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/Theme")]
     public function adminThemeInstallation(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
@@ -231,7 +231,7 @@ class ThemeController extends CoreController
     }
 
 
-    #[Link("/manage", Link::GET, [], "/cmw-Admin/Theme")]
+    #[Link("/manage", Link::GET, [], "/cmw-admin/Theme")]
     public function adminThemeManage(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
@@ -241,7 +241,7 @@ class ThemeController extends CoreController
             ->view();
     }
 
-    #[Link("/manage", Link::POST, [], "/cmw-Admin/Theme")]
+    #[Link("/manage", Link::POST, [], "/cmw-admin/Theme")]
     public function adminThemeManagePost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");

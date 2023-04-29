@@ -38,8 +38,8 @@ class UsersSettingsController extends CoreController
     /**
      * @throws \CMW\Router\RouterException
      */
-    #[Link(path: "/", method: Link::GET, scope: "/cmw-Admin/users")]
-    #[Link("/settings", Link::GET, [], "/cmw-Admin/users")]
+    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/users")]
+    #[Link("/settings", Link::GET, [], "/cmw-admin/users")]
     public function settings(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings");
@@ -49,7 +49,7 @@ class UsersSettingsController extends CoreController
             ->view();
     }
 
-    #[Link("/settings", Link::POST, [], "/cmw-Admin/users")]
+    #[Link("/settings", Link::POST, [], "/cmw-admin/users")]
     public function settingsPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings");

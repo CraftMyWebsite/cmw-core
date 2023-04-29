@@ -1,5 +1,5 @@
 User-Agent: *
-Disallow: /cmw-Admin/
+Disallow: /cmw-admin/
 Disallow: /Admin/
 Disallow: /installation/
 Disallow: /installer/
