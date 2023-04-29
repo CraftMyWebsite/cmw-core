@@ -154,7 +154,7 @@ class Choices implements Choices {
     this.config = merge.all<Options>(
       [DEFAULT_CONFIG, Choices.defaults.options, userConfig],
       // When merging array configs, replace with a copy of the userConfig array,
-      // instead of concatenating with the default array
+      // instead of concatenating with the Default array
       { arrayMerge: (_, sourceArray) => [...sourceArray] },
     );
 
@@ -1635,7 +1635,7 @@ class Choices implements Choices {
       }
 
       if (nextEl) {
-        // We prevent default to stop the cursor moving
+        // We prevent Default to stop the cursor moving
         // when pressing the arrow
         if (
           !isScrolledIntoView(nextEl, this.choiceList.element, directionInt)
@@ -1645,7 +1645,7 @@ class Choices implements Choices {
         this._highlightChoice(nextEl);
       }
 
-      // Prevent default to maintain cursor position whilst
+      // Prevent Default to maintain cursor position whilst
       // traversing dropdown options
       event.preventDefault();
     }

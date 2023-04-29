@@ -22,7 +22,7 @@ class LinkStorage extends DatabaseManager
 
     /**
      * @return void
-     * @desc Store all default routes to the DB
+     * @desc Store all Default routes to the DB
      */
     public function storeDefaultRoutes(): void
     {
@@ -52,7 +52,7 @@ class LinkStorage extends DatabaseManager
     {
         $toReturn = [];
 
-        $packageFolder = 'app/package';
+        $packageFolder = 'App/Package';
         $contentDirectory = array_diff(scandir("$packageFolder/"), array('..', '.'));
         $dir = Utils::getEnv()->getValue("dir");
         foreach ($contentDirectory as $package) {

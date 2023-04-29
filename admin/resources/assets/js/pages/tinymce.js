@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("initing", document.body.classList.contains("theme-dark"))
+  console.log("initing", document.body.classList.contains("Theme-dark"))
 
-  const themeOptions = document.body.classList.contains("theme-dark")
+  const themeOptions = document.body.classList.contains("Theme-dark")
     ? {
         skin: "oxide-dark",
         content_css: "dark",
@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
         content_css: "default",
       }
 
-  tinymce.init({ selector: "#default", ...themeOptions })
+  tinymce.init({ selector: "#Default", ...themeOptions })
   tinymce.init({
     selector: "#dark",
     toolbar:

@@ -292,7 +292,7 @@ function () {
     }
 
     this.config = deepmerge_1.default.all([defaults_1.DEFAULT_CONFIG, Choices.defaults.options, userConfig], // When merging array configs, replace with a copy of the userConfig array,
-    // instead of concatenating with the default array
+    // instead of concatenating with the Default array
     {
       arrayMerge: function (_, sourceArray) {
         return __spreadArray([], sourceArray, true);
@@ -1746,14 +1746,14 @@ function () {
       }
 
       if (nextEl) {
-        // We prevent default to stop the cursor moving
+        // We prevent Default to stop the cursor moving
         // when pressing the arrow
         if (!(0, utils_1.isScrolledIntoView)(nextEl, this.choiceList.element, directionInt)) {
           this.choiceList.scrollToChildElement(nextEl, directionInt);
         }
 
         this._highlightChoice(nextEl);
-      } // Prevent default to maintain cursor position whilst
+      } // Prevent Default to maintain cursor position whilst
       // traversing dropdown options
 
 
@@ -4966,7 +4966,7 @@ function kindOf(val) {
  * Creates a Redux store that holds the state tree.
  * The only way to change the data in the store is to call `dispatch()` on it.
  *
- * There should only be a single store in your app. To specify how different
+ * There should only be a single store in your App. To specify how different
  * parts of the state tree respond to actions, you may combine several reducers
  * into a single reducer function by using `combineReducers`.
  *
@@ -5156,7 +5156,7 @@ function createStore(reducer, preloadedState, enhancer) {
   /**
    * Replaces the reducer currently used by the store to calculate the state.
    *
-   * You might need this if your app implements code splitting and you want to
+   * You might need this if your App implements code splitting and you want to
    * load some of the reducers dynamically. You might also need this if you
    * implement a hot reloading mechanism for Redux.
    *

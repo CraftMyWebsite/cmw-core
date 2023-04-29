@@ -14,7 +14,7 @@ use CMW\Utils\Utils;
         <div class="sidebar-header text-center">
             <div class="logo">
                 <a href="<?= Utils::getEnv()->getValue("PATH_SUBFOLDER") ?>cmw-admin/"><img
-                            src="<?= Utils::getEnv()->getValue("PATH_SUBFOLDER") ?>admin/resources/assets/images/logo/logo_compact.png"
+                            src="<?= Utils::getEnv()->getValue("PATH_SUBFOLDER") ?>Admin/Resources/Assets/Images/Logo/logo_compact.png"
                             alt="<?= LangManager::translate('core.alt.logo') ?>" srcset=""/></a>
             </div>
         </div>

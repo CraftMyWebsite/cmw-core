@@ -1,6 +1,6 @@
 /*
 
-Colorbrewer theme
+Colorbrewer Theme
 Original: https://github.com/mbostock/colorbrewer-theme (c) Mike Bostock <mike@ocks.org>
 Ported by Fabrício Tavares de Oliveira
 
@@ -13,7 +13,7 @@ code.hljs{display:block;overflow-x:auto;padding:1em}
 }
 
 .hljs-subst {
-  /* default */
+  /* Default */
 }
 
 .hljs-string,

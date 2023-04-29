@@ -4,11 +4,11 @@
 $command = (isset($argv[1]))?$argv[1]:null ;
 
 //Include the EnvBuilder
-include_once("app/tools/EnvBuilder.php");
+include_once("app/Tools/EnvBuilder.php");
 
 //If we don't have selected any option...
 if($command == null){
-	require_once(getenv("PATH_SUBFOLDER") . "app/cli/CliBuilder.php");
+	require_once(getenv("PATH_SUBFOLDER") . "App/Cli/CliBuilder.php");
 	$builder = new CliBuilder();
 	$builder->emptyArgs();
 }
@@ -16,7 +16,7 @@ if($command == null){
 
 //Theme Builder
 if($command == "theme-init"){
-	require_once(getenv("PATH_SUBFOLDER") . "app/cli/builder/theme/ThemeBuilder.php");
+	require_once(getenv("PATH_SUBFOLDER") . "App/Cli/Builder/Theme/ThemeBuilder.php");
 	new ThemeBuilder();
 }
 

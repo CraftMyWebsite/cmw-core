@@ -20,7 +20,7 @@ export interface Options {
    *
    * **Input types affected:** text, select-single, select-multiple
    *
-   * @default false
+   * @Default false
    */
   silent: boolean;
 
@@ -51,7 +51,7 @@ export interface Options {
    * }]
    * ```
    *
-   * @default []
+   * @Default []
    */
   items: string[] | Choice[];
 
@@ -80,7 +80,7 @@ export interface Options {
    * }]
    * ```
    *
-   * @default []
+   * @Default []
    */
   choices: Choice[];
 
@@ -89,7 +89,7 @@ export interface Options {
    *
    * **Input types affected:** select-one, select-multiple
    *
-   * @default -1
+   * @Default -1
    */
   renderChoiceLimit: number;
 
@@ -98,7 +98,7 @@ export interface Options {
    *
    * **Input types affected:** text, select-multiple
    *
-   * @default -1
+   * @Default -1
    */
   maxItemCount: number;
 
@@ -107,7 +107,7 @@ export interface Options {
    *
    * **Input types affected:** text
    *
-   * @default true
+   * @Default true
    */
   addItems: boolean;
 
@@ -116,16 +116,16 @@ export interface Options {
    *
    * **Input types affected:** text
    *
-   * @default null
+   * @Default null
    */
   addItemFilter: string | RegExp | Types.FilterFunction | null;
 
   /**
-   * The text that is shown when a user has inputted a new item but has not pressed the enter key. To access the current input value, pass a function with a `value` argument (see the **default config** [https://github.com/jshjohnson/Choices#setup] for an example), otherwise pass a string.
+   * The text that is shown when a user has inputted a new item but has not pressed the enter key. To access the current input value, pass a function with a `value` argument (see the **Default config** [https://github.com/jshjohnson/Choices#setup] for an example), otherwise pass a string.
    *
    * **Input types affected:** text
    *
-   * @default
+   * @Default
    * ```
    * (value) => `Press Enter to add <b>"${value}"</b>`;
    * ```
@@ -137,7 +137,7 @@ export interface Options {
    *
    * **Input types affected:** text, select-multiple
    *
-   * @default true
+   * @Default true
    */
   removeItems: boolean;
 
@@ -146,7 +146,7 @@ export interface Options {
    *
    * **Input types affected:** text, select-one, select-multiple
    *
-   * @default false
+   * @Default false
    */
   removeItemButton: boolean;
 
@@ -155,7 +155,7 @@ export interface Options {
    *
    * **Input types affected:** text
    *
-   * @default false
+   * @Default false
    */
   editItems: boolean;
 
@@ -164,16 +164,16 @@ export interface Options {
    *
    * **Input types affected:** text, select-multiple
    *
-   * @default true
+   * @Default true
    */
   duplicateItemsAllowed: boolean;
 
   /**
-   * What divides each value. The default delimiter separates each value with a comma: `"Value 1, Value 2, Value 3"`.
+   * What divides each value. The Default delimiter separates each value with a comma: `"Value 1, Value 2, Value 3"`.
    *
    * **Input types affected:** text
    *
-   * @default ','
+   * @Default ','
    */
   delimiter: string;
 
@@ -182,7 +182,7 @@ export interface Options {
    *
    * **Input types affected:** text, select-multiple
    *
-   * @default true
+   * @Default true
    */
   paste: boolean;
 
@@ -193,7 +193,7 @@ export interface Options {
    *
    * **Input types affected:** select-one
    *
-   * @default true
+   * @Default true
    */
   searchEnabled: boolean;
 
@@ -202,7 +202,7 @@ export interface Options {
    *
    * **Input types affected:** select-one
    *
-   * @default true
+   * @Default true
    */
   searchChoices: boolean;
 
@@ -211,7 +211,7 @@ export interface Options {
    *
    * **Input types affected:** select-one, select-multiple
    *
-   * @default 1
+   * @Default 1
    */
   searchFloor: number;
 
@@ -220,7 +220,7 @@ export interface Options {
    *
    * **Input types affected:** select-one, select-multiple
    *
-   * @default 4
+   * @Default 4
    */
   searchResultLimit: number;
 
@@ -229,16 +229,16 @@ export interface Options {
    *
    * Input types affected:select-one, select-multiple
    *
-   * @default ['label', 'value']
+   * @Default ['label', 'value']
    */
   searchFields: string[];
 
   /**
-   * Whether the dropdown should appear above `(top)` or below `(bottom)` the input. By default, if there is not enough space within the window the dropdown will appear above the input, otherwise below it.
+   * Whether the dropdown should appear above `(top)` or below `(bottom)` the input. By Default, if there is not enough space within the window the dropdown will appear above the input, otherwise below it.
    *
    * **Input types affected:** select-one, select-multiple
    *
-   * @default 'auto'
+   * @Default 'auto'
    */
   position: PositionOptionsType;
 
@@ -247,7 +247,7 @@ export interface Options {
    *
    * **Input types affected:** select-multiple
    *
-   * @default true
+   * @Default true
    */
   resetScrollPosition: boolean;
 
@@ -256,7 +256,7 @@ export interface Options {
    *
    * **Input types affected:** select-one, select-multiple
    *
-   * @default true
+   * @Default true
    */
   shouldSort: boolean;
 
@@ -265,12 +265,12 @@ export interface Options {
    *
    * **Input types affected:** text, select-multiple
    *
-   * @default false
+   * @Default false
    */
   shouldSortItems: boolean;
 
   /**
-   * The function that will sort choices and items before they are displayed (unless a user is searching). By default choices and items are sorted by alphabetical order.
+   * The function that will sort choices and items before they are displayed (unless a user is searching). By Default choices and items are sorted by alphabetical order.
    *
    * **Input types affected:** select-one, select-multiple
    *
@@ -284,7 +284,7 @@ export interface Options {
    * };
    * ```
    *
-   * @default sortByAlpha
+   * @Default sortByAlpha
    */
   sorter: (current: Choice, next: Choice) => number;
 
@@ -303,7 +303,7 @@ export interface Options {
    * </select>
    * ```
    *
-   * @default true
+   * @Default true
    */
   placeholder: boolean;
 
@@ -312,7 +312,7 @@ export interface Options {
    *
    * **Input types affected:** text, select-multiple
    *
-   * @default null
+   * @Default null
    */
   placeholderValue: string | null;
 
@@ -321,7 +321,7 @@ export interface Options {
    *
    * **Input types affected:** select-one
    *
-   * @default null
+   * @Default null
    */
   searchPlaceholderValue: string | null;
 
@@ -330,7 +330,7 @@ export interface Options {
    *
    * **Input types affected:** text, select-one, select-multiple
    *
-   * @default null
+   * @Default null
    */
   prependValue: string | null;
 
@@ -339,16 +339,16 @@ export interface Options {
    *
    * **Input types affected:** text, select-one, select-multiple
    *
-   * @default null
+   * @Default null
    */
   appendValue: string | null;
 
   /**
-   * Whether selected choices should be removed from the list. By default choices are removed when they are selected in multiple select box. To always render choices pass `always`.
+   * Whether selected choices should be removed from the list. By Default choices are removed when they are selected in multiple select box. To always render choices pass `always`.
    *
    * **Input types affected:** select-one, select-multiple
    *
-   * @default 'auto';
+   * @Default 'auto';
    */
   renderSelectedChoices: 'auto' | 'always';
 
@@ -357,7 +357,7 @@ export interface Options {
    *
    * **Input types affected:** select-one, select-multiple
    *
-   * @default 'Loading...'
+   * @Default 'Loading...'
    */
   loadingText: string;
 
@@ -366,7 +366,7 @@ export interface Options {
    *
    * **Input types affected:** select-one, select-multiple
    *
-   * @default 'No results found'
+   * @Default 'No results found'
    */
   noResultsText: string | Types.StringFunction;
 
@@ -375,7 +375,7 @@ export interface Options {
    *
    * **Input types affected:** select-multiple
    *
-   * @default 'No choices to choose from'
+   * @Default 'No choices to choose from'
    */
   noChoicesText: string | Types.StringFunction;
 
@@ -384,16 +384,16 @@ export interface Options {
    *
    * **Input types affected:** select-multiple, select-one
    *
-   * @default 'Press to select'
+   * @Default 'Press to select'
    */
   itemSelectText: string;
 
   /**
-   * The text that is shown when a user has focus on the input but has already reached the **max item count** [https://github.com/jshjohnson/Choices#maxitemcount]. To access the max item count, pass a function with a `maxItemCount` argument (see the **default config** [https://github.com/jshjohnson/Choices#setup] for an example), otherwise pass a string.
+   * The text that is shown when a user has focus on the input but has already reached the **max item count** [https://github.com/jshjohnson/Choices#maxitemcount]. To access the max item count, pass a function with a `maxItemCount` argument (see the **Default config** [https://github.com/jshjohnson/Choices#setup] for an example), otherwise pass a string.
    *
    * **Input types affected:** text
    *
-   * @default
+   * @Default
    * ```
    * (maxItemCount) => `Only ${maxItemCount} values can be added.`;
    * ```
@@ -403,7 +403,7 @@ export interface Options {
   /**
    * If no duplicates are allowed, and the value already exists in the array.
    *
-   * @default 'Only unique values can be added'
+   * @Default 'Only unique values can be added'
    */
   uniqueItemText: string | Types.NoticeStringFunction;
 
@@ -412,16 +412,16 @@ export interface Options {
    *
    * **Input types affected:** text
    *
-   * @default 'Only values matching specific conditions can be added'
+   * @Default 'Only values matching specific conditions can be added'
    */
   customAddItemText: string | Types.NoticeStringFunction;
 
   /**
-   * Compare choice and value in appropriate way (e.g. deep equality for objects). To compare choice and value, pass a function with a `valueComparer` argument (see the [default config](https://github.com/jshjohnson/Choices#setup) for an example).
+   * Compare choice and value in appropriate way (e.g. deep equality for objects). To compare choice and value, pass a function with a `valueComparer` argument (see the [Default config](https://github.com/jshjohnson/Choices#setup) for an example).
    *
    * **Input types affected:** select-one, select-multiple
    *
-   * @default
+   * @Default
    * ```
    * (choice, item) => choice === item;
    * ```
@@ -429,7 +429,7 @@ export interface Options {
   valueComparer: Types.ValueCompareFunction;
 
   /**
-   * Classes added to HTML generated by  By default classnames follow the BEM notation.
+   * Classes added to HTML generated by  By Default classnames follow the BEM notation.
    *
    * **Input types affected:** text, select-one, select-multiple
    */
@@ -447,12 +447,12 @@ export interface Options {
    *
    * @note For each callback, this refers to the current instance of  This can be useful if you need access to methods `(this.disable())` or the config object `(this.config)`.
    *
-   * @default null
+   * @Default null
    */
   callbackOnInit: ((this: Choices) => void) | null;
 
   /**
-   * Function to run on template creation. Through this callback it is possible to provide custom templates for the various components of Choices (see terminology). For Choices to work with custom templates, it is important you maintain the various data attributes defined here [https://github.com/jshjohnson/Choices/blob/67f29c286aa21d88847adfcd6304dc7d068dc01f/assets/scripts/src/choices.js#L1993-L2067].
+   * Function to run on template creation. Through this callback it is possible to provide custom templates for the various components of Choices (see terminology). For Choices to work with custom templates, it is important you maintain the various data attributes defined here [https://github.com/jshjohnson/Choices/blob/67f29c286aa21d88847adfcd6304dc7d068dc01f/Assets/Scripts/src/choices.js#L1993-L2067].
    *
    * **Input types affected:** text, select-one, select-multiple
    *
@@ -483,7 +483,7 @@ export interface Options {
    * });
    * ```
    *
-   * @default null
+   * @Default null
    */
   callbackOnCreateTemplates: ((template: Types.StrToEl) => void) | null;
 }

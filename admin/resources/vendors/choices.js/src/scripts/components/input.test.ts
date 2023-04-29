@@ -114,7 +114,7 @@ describe('components/input', () => {
     });
 
     describe('when pasting is disabled and target is the element', () => {
-      it('prevents default pasting behaviour', () => {
+      it('prevents Default pasting behaviour', () => {
         instance.preventPaste = true;
         instance._onPaste(eventMock);
         expect(eventMock.preventDefault.callCount).to.equal(1);
@@ -122,7 +122,7 @@ describe('components/input', () => {
     });
 
     describe('when pasting is enabled', () => {
-      it('does not prevent default pasting behaviour', () => {
+      it('does not prevent Default pasting behaviour', () => {
         instance.preventPaste = false;
         instance._onPaste(eventMock);
         expect(eventMock.preventDefault.callCount).to.equal(0);

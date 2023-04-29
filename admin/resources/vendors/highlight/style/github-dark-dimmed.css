@@ -1,6 +1,6 @@
 /*!
   Theme: GitHub Dark Dimmed
-  Description: Dark dimmed theme as seen on github.com
+  Description: Dark dimmed Theme as seen on github.com
   Author: github.com
   Maintainer: @Hirse
   Updated: 2021-05-15
@@ -76,7 +76,7 @@ code.hljs{display:block;overflow-x:auto;padding:1em}
 }
 
 .hljs-subst {
-  /* prettylights-syntax-storage-modifier-import */
+  /* prettylights-syntax-Storage-modifier-import */
   color: #adbac7;
 }
 

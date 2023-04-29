@@ -7,26 +7,25 @@ __MACOSX/
 **/.vscode/
 
 #Exclude log files except the .gitignore
-/app/storage/logs/*
-!/app/storage/logs/.gitkeep
-/app/storage/visits/history.log
+/App/Storage/Logs/*
+!/App/Storage/Logs/.gitkeep
+/App/Storage/Visits/history.log
 
 # Exclude all other packages, only if package is "core" (Core, Users, Menus...)
-!/app/package
-/app/package/*
+!/App/Package
+/App/Package/*
 
-!/app/package/core
-!/app/package/users
-!/app/package/menus
-!/app/package/pages
+!/App/Package/Core
+!/App/Package/Users
+!/App/Package/Pages
 
 # Exclude all other views, only if view refer to a core package (Core, Users, Menus...)
-/public/themes/*
-!/public/themes/Sampler
+/Public/Themes/*
+!/Public/Themes/Sampler
 
 
-# Exclude all uploads folders and files except the default profile image
-!/public/uploads/users/default/defaultImage.jpg
-!/public/uploads/favicon/favicon.ico
-!/public/uploads/.htaccess
-/public/uploads/*
+# Exclude all uploads folders and files except the Default profile image
+!/Public/Uploads/Users/Default/defaultImage.jpg
+!/Public/Uploads/Favicon/favicon.ico
+!/Public/Uploads/.htaccess
+/Public/Uploads/*
