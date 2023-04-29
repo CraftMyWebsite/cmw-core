@@ -4,6 +4,7 @@ namespace CMW\Controller\Users;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Requests\Request;
 use CMW\Model\Users\PermissionsModel;
 use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UsersModel;
@@ -100,7 +101,7 @@ class RolesController extends CoreController
     }
 
     #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
-    public function adminRolesEdit(int $id): void
+    public function adminRolesEdit(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.edit");
 
@@ -122,7 +123,7 @@ class RolesController extends CoreController
     }
 
     #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/roles")]
-    #[NoReturn] public function adminRolesEditPost(int $id): void
+    #[NoReturn] public function adminRolesEditPost(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.edit");
 
@@ -141,7 +142,7 @@ class RolesController extends CoreController
     }
 
     #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
-    #[NoReturn] public function adminRolesDelete(int $id): void
+    #[NoReturn] public function adminRolesDelete(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.delete");
 
@@ -155,7 +156,7 @@ class RolesController extends CoreController
     }
 
     #[Link("/getRole/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
-    public function admingetRole(int $id): void
+    public function admingetRole(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.manage");
 

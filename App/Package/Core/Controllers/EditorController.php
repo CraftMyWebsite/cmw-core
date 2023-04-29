@@ -19,7 +19,7 @@ class EditorController extends CoreController
     public static function getInstalledStyles(): array
     {
         $toReturn = array();
-        $stylesFolder = 'Admin/Resources/Vendors/highlight/style';
+        $stylesFolder = 'Admin/Resources/Vendors/Highlight/Style';
         $contentDirectory = array_diff(scandir("$stylesFolder/"), array('..', '.'));
         foreach ($contentDirectory as $style) {
             if(!empty(file_get_contents("$stylesFolder/$style"))) {

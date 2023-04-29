@@ -25,4 +25,4 @@ View::loadInclude($includes, "afterScript");
 
 <?php require_once("Include/footer.php") ?>
 
-<script src="installation/Views/Assets/Js/loader.js"></script>
+<script src="Installation/Views/Assets/Js/loader.js"></script>

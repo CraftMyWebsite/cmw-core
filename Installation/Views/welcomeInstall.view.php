@@ -66,7 +66,7 @@ use CMW\Manager\Lang\LangManager;
 </form>
 </div>
 
-<script src="installation/Views/Assets/Js/changeLang.js"></script>
+<script src="Installation/Views/Assets/Js/changeLang.js"></script>
 <script>
     const cguCheckbox = document.getElementById('cgu');
 

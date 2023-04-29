@@ -9,13 +9,11 @@ use CMW\Manager\Requests\Validator;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Model\Core\CoreModel;
-use CMW\Model\Users\PermissionsModel;
 use CMW\Router\Link;
 use CMW\Router\RouterException;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use CMW\Manager\Views\View;
-use JetBrains\PhpStorm\NoReturn;
 
 /**
  * Class: @coreController
@@ -61,11 +59,9 @@ class CoreController
     }
 
     #[Link(path: "/configuration", method: Link::GET, scope: "/cmw-admin")]
-    public function adminConfiguration(Request $request): void
+    public function adminConfiguration(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
-
-        Utils::debugR($request);
 
         View::createAdminView("core", "configuration")
         ->view();
@@ -76,8 +72,7 @@ class CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
 
-        // Test
-
+        // TODO Test
         $validator = new Validator($request->getData());
         $validator->checkType('string', 'name')
             ->checkType('integer', 'age')
@@ -119,7 +114,7 @@ class CoreController
      * @throws \CMW\Router\RouterException
      */
     #[Link("/:errorCode", Link::GET, ["errorCode" => ".*?"], "geterror")]
-    public function errorView(int $errorCode = 403): void
+    public function errorView(Request $request, int $errorCode = 403): void
     {
         $theme = ThemeController::getCurrentTheme()->getName();
 
@@ -142,7 +137,7 @@ class CoreController
      * @throws \CMW\Router\RouterException
      */
     #[Link("/:errorCode", Link::GET, ["errorCode" => ".*?"], "error")]
-    public function threwRouterError($errorCode): void
+    public function threwRouterError(Request $request, $errorCode): void
     {
         throw new RouterException('Trowed Error', $errorCode);
     }

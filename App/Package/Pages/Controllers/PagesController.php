@@ -5,6 +5,7 @@ namespace CMW\Controller\pages;
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\EditorController;
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Requests\Request;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Model\Pages\PagesModel;
 use CMW\Model\Users\UsersModel;
@@ -54,21 +55,21 @@ class PagesController extends CoreController
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.add");
 
         View::createAdminView('pages', 'add')
-            ->addScriptBefore("Admin/Resources/Vendors/editorjs/plugins/header.js",
-                "Admin/Resources/Vendors/editorjs/plugins/image.js",
-                "Admin/Resources/Vendors/editorjs/plugins/delimiter.js",
-                "Admin/Resources/Vendors/editorjs/plugins/list.js",
-                "Admin/Resources/Vendors/editorjs/plugins/quote.js",
-                "Admin/Resources/Vendors/editorjs/plugins/code.js",
-                "Admin/Resources/Vendors/editorjs/plugins/table.js",
-                "Admin/Resources/Vendors/editorjs/plugins/link.js",
-                "Admin/Resources/Vendors/editorjs/plugins/warning.js",
-                "Admin/Resources/Vendors/editorjs/plugins/embed.js",
-                "Admin/Resources/Vendors/editorjs/plugins/marker.js",
-                "Admin/Resources/Vendors/editorjs/plugins/underline.js",
-                "Admin/Resources/Vendors/editorjs/plugins/drag-drop.js",
-                "Admin/Resources/Vendors/editorjs/plugins/undo.js",
-                "Admin/Resources/Vendors/editorjs/editor.js")
+            ->addScriptBefore("Admin/Resources/Vendors/Editorjs/Plugins/header.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/image.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/delimiter.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/list.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/quote.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/code.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/table.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/link.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/warning.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/embed.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/marker.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/underline.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/drag-drop.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/undo.js",
+                "Admin/Resources/Vendors/Editorjs/editor.js")
             ->view();
     }
 
@@ -95,28 +96,28 @@ class PagesController extends CoreController
     }
 
     #[Link("/edit/:slug", Link::GET, ["slug" => ".*?"], "/cmw-admin/pages")]
-    public function adminPagesEdit(string $slug): void
+    public function adminPagesEdit(Request $request, string $slug): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.edit");
 
         $page = $this->pagesModel->getPageBySlug($slug);
 
         View::createAdminView('pages', 'edit')
-            ->addScriptBefore("Admin/Resources/Vendors/editorjs/plugins/header.js",
-                "Admin/Resources/Vendors/editorjs/plugins/image.js",
-                "Admin/Resources/Vendors/editorjs/plugins/delimiter.js",
-                "Admin/Resources/Vendors/editorjs/plugins/list.js",
-                "Admin/Resources/Vendors/editorjs/plugins/quote.js",
-                "Admin/Resources/Vendors/editorjs/plugins/code.js",
-                "Admin/Resources/Vendors/editorjs/plugins/table.js",
-                "Admin/Resources/Vendors/editorjs/plugins/link.js",
-                "Admin/Resources/Vendors/editorjs/plugins/warning.js",
-                "Admin/Resources/Vendors/editorjs/plugins/embed.js",
-                "Admin/Resources/Vendors/editorjs/plugins/marker.js",
-                "Admin/Resources/Vendors/editorjs/plugins/underline.js",
-                "Admin/Resources/Vendors/editorjs/plugins/drag-drop.js",
-                "Admin/Resources/Vendors/editorjs/plugins/undo.js",
-                "Admin/Resources/Vendors/editorjs/editor.js")
+            ->addScriptBefore("Admin/Resources/Vendors/Editorjs/Plugins/header.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/image.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/delimiter.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/list.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/quote.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/code.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/table.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/link.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/warning.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/embed.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/marker.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/underline.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/drag-drop.js",
+                "Admin/Resources/Vendors/Editorjs/Plugins/undo.js",
+                "Admin/Resources/Vendors/Editorjs/editor.js")
             ->addVariableList(["page" => $page])
             ->view();
     }
@@ -141,7 +142,7 @@ class PagesController extends CoreController
     }
 
     #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/pages")]
-    #[NoReturn] public function adminPagesDelete(int $id): void
+    #[NoReturn] public function adminPagesDelete(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.delete");
 
@@ -160,7 +161,7 @@ class PagesController extends CoreController
      * @return void
      */
     #[Link("/uploadImage/:type", Link::POST, ["type" => ".*?"], "/cmw-admin/pages", secure: false)]
-    public function adminPagesUploadImagePost(string $type): void
+    public function adminPagesUploadImagePost(Request $request, string $type): void
     {
 
         if ($type === "add") {
@@ -184,7 +185,7 @@ class PagesController extends CoreController
      * @throws \CMW\Router\RouterException
      */
     #[Link('/p/:slug', Link::GET, ["slug" => ".*?"])]
-    public function publicShowPage(string $slug): void
+    public function publicShowPage(Request $request, string $slug): void
     {
 
         //Default controllers (important)
@@ -194,8 +195,8 @@ class PagesController extends CoreController
 
         //Include the Public view file ("Public/Themes/$themePath/Views/Pages/main.view.php")
         $view = new View('pages', 'main');
-        $view->addScriptBefore("Admin/Resources/Vendors/highlight/highlight.min.js","Admin/Resources/Vendors/highlight/highlightAll.js");
-        $view->addStyle("Admin/Resources/Vendors/highlight/style/" . EditorController::getCurrentStyle());
+        $view->addScriptBefore("Admin/Resources/Vendors/Highlight/highlight.min.js","Admin/Resources/Vendors/Highlight/highlightAll.js");
+        $view->addStyle("Admin/Resources/Vendors/Highlight/Style/" . EditorController::getCurrentStyle());
         $view->addVariableList( ["pages" => $page, "page" => $pageEntity]);
         $view->view();
         

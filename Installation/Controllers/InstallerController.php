@@ -7,6 +7,7 @@ use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Error\ErrorManager;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Requests\Request;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Router\Link;
@@ -111,7 +112,7 @@ class InstallerController
     }
 
     #[Link(path: "/Lang/:code", method: Link::GET, variables: ["code" => ".*?"], scope: "/installer")]
-    public function changeLang(string $code): void
+    public function changeLang(Request $request, string $code): void
     {
         Utils::getEnv()->setOrEditValue("LOCALE", $code);
         header("location: ../../installer");
@@ -147,8 +148,8 @@ class InstallerController
         $view
             ->setCustomPath(Utils::getEnv()->getValue("DIR") . "Installation/Views/$filename.view.php")
             ->setCustomTemplate(Utils::getEnv()->getValue("DIR") . "Installation/Views/template.php")
-            ->addStyle("Admin/Resources/Vendors/IziToast/iziToast.min.css")
-            ->addScriptAfter("Admin/Resources/Vendors/IziToast/iziToast.min.js")
+            ->addStyle("Admin/Resources/Vendors/Izitoast/iziToast.min.css")
+            ->addScriptAfter("Admin/Resources/Vendors/Izitoast/iziToast.min.js")
             ->addVariableList(['lang' => $lang]);
 
         $view->view();
