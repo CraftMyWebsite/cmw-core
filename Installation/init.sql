@@ -22,28 +22,6 @@ CREATE TABLE IF NOT EXISTS `cmw_mail_config_smtp`
 ) ENGINE = InnoDB
   CHARSET = utf8mb4;
 
-CREATE TABLE IF NOT EXISTS cmw_permissions
-(
-    permission_id        INT AUTO_INCREMENT
-        PRIMARY KEY,
-    permission_parent_id INT                         NULL,
-    permission_code      VARCHAR(50) CHARSET utf8mb4 NOT NULL,
-    CONSTRAINT FK_PERMISSION_PARENT_ID
-        FOREIGN KEY (permission_parent_id) REFERENCES cmw_permissions (permission_id)
-            ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE = InnoDB
-  CHARSET = utf8mb4;
-
-CREATE TABLE IF NOT EXISTS `cmw_roles`
-(
-    `role_id`          INT(11) DEFAULT NULL AUTO_INCREMENT,
-    `role_name`        TINYTEXT NOT NULL,
-    `role_description` TEXT,
-    `role_weight`      INT     DEFAULT 0,
-    PRIMARY KEY (`role_id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
-
 CREATE TABLE IF NOT EXISTS `cmw_users`
 (
     `user_id`        INT(11)      NOT NULL AUTO_INCREMENT,
@@ -62,22 +40,6 @@ CREATE TABLE IF NOT EXISTS `cmw_users`
     UNIQUE KEY `user_pseudo` (`user_pseudo`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-
-CREATE TABLE IF NOT EXISTS `cmw_users_roles`
-(
-    `id`      INT(11) NOT NULL AUTO_INCREMENT,
-    `user_id` INT(11) NOT NULL,
-    `role_id` INT(11) NOT NULL,
-    PRIMARY KEY (`id`),
-    KEY `user_id` (`user_id`),
-    KEY `role_id` (`role_id`),
-    CONSTRAINT `cmw_users_roles_ibfk_1` FOREIGN KEY (`user_id`)
-        REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `cmw_users_roles_ibfk_2` FOREIGN KEY (`role_id`)
-        REFERENCES `cmw_roles` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
-
 
 CREATE TABLE IF NOT EXISTS `cmw_users_pictures`
 (
@@ -98,6 +60,58 @@ CREATE TABLE IF NOT EXISTS `cmw_users_settings`
     UNIQUE KEY (`users_settings_name`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `cmw_roles`
+(
+    `role_id`          INT(11) NOT NULL AUTO_INCREMENT,
+    `role_name`        TINYTEXT NOT NULL,
+    `role_description` TEXT,
+    `role_weight`      INT     DEFAULT 0,
+    PRIMARY KEY (`role_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
+
+
+CREATE TABLE IF NOT EXISTS `cmw_users_roles`
+(
+    `id`      INT(11) NOT NULL AUTO_INCREMENT,
+    `user_id` INT(11) NOT NULL,
+    `role_id` INT(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `user_id` (`user_id`),
+    KEY `role_id` (`role_id`),
+    CONSTRAINT `cmw_users_roles_ibfk_1` FOREIGN KEY (`user_id`)
+        REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `cmw_users_roles_ibfk_2` FOREIGN KEY (`role_id`)
+        REFERENCES `cmw_roles` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE IF NOT EXISTS cmw_permissions
+(
+    permission_id        INT AUTO_INCREMENT
+        PRIMARY KEY,
+    permission_parent_id INT                         NULL,
+    permission_code      VARCHAR(50) CHARSET utf8mb4 NOT NULL,
+    CONSTRAINT FK_PERMISSION_PARENT_ID
+        FOREIGN KEY (permission_parent_id) REFERENCES cmw_permissions (permission_id)
+            ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE = InnoDB
+  CHARSET = utf8mb4;
+
+
+CREATE TABLE IF NOT EXISTS cmw_roles_permissions
+(
+    permission_id INT NOT NULL,
+    role_id       INT NOT NULL,
+    PRIMARY KEY (role_id, permission_id),
+    INDEX (role_id),
+    CONSTRAINT FK_ROLE_PERMISSION_PERMISSION_ID
+        FOREIGN KEY (permission_id) REFERENCES cmw_permissions (permission_id),
+    CONSTRAINT FK_ROLE_PERMISSION_ROLE_ID
+        FOREIGN KEY (role_id) REFERENCES cmw_roles (role_id)
+) ENGINE = InnoDB
+  CHARSET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `cmw_menus`
 (
@@ -144,20 +158,6 @@ CREATE TABLE IF NOT EXISTS `cmw_core_condition`
         REFERENCES `cmw_users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-
-
-CREATE TABLE IF NOT EXISTS cmw_roles_permissions
-(
-    permission_id INT NOT NULL,
-    role_id       INT NOT NULL,
-    PRIMARY KEY (role_id, permission_id),
-    INDEX (role_id),
-    CONSTRAINT FK_ROLE_PERMISSION_PERMISSION_ID
-        FOREIGN KEY (permission_id) REFERENCES cmw_permissions (permission_id),
-    CONSTRAINT FK_ROLE_PERMISSION_ROLE_ID
-        FOREIGN KEY (role_id) REFERENCES cmw_roles (role_id)
-) ENGINE = InnoDB
-  CHARSET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `cmw_theme_config`
 (

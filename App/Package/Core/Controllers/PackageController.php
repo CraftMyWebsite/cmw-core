@@ -10,10 +10,11 @@ use JsonException;
 class PackageController extends CoreController
 {
 
-    static array $corePackages = ['core', 'menus', 'pages', 'users'];
+    public static array $corePackages = ['Core', 'Pages', 'Users'];
 
     /**
      * @return PackageEntity[]
+     * @desc Return packages they are not natives, like Core, Pages and Users
      */
     public static function getInstalledPackages(): array
     {
@@ -21,6 +22,11 @@ class PackageController extends CoreController
         $packagesFolder = 'App/Package/';
         $contentDirectory = array_diff(scandir("$packagesFolder/"), array('..', '.'));
         foreach ($contentDirectory as $package) {
+
+            if (in_array($package, self::$corePackages, true)){
+                continue;
+            }
+
             if (file_exists("$packagesFolder/$package/infos.json") && !in_array($package, self::$corePackages, true)) {
                 $toReturn[] = self::getPackage($package);
             }
@@ -31,6 +37,7 @@ class PackageController extends CoreController
 
     /**
      * @return PackageEntity[]
+     * @desc Return natives packages (core, users, pages) => self::$corePackages
      */
     public static function getCorePackages(): array
     {

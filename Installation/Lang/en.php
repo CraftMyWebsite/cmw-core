@@ -97,7 +97,7 @@ return [
         "version" => "Version CMW :",
         "Theme" => "Theme :",
         "bundle" => "Bundle :",
-        "package" => "Package :",
+        "package" => "Packages :",
         "goToMySite" => "Go to my site",
     ],
 
