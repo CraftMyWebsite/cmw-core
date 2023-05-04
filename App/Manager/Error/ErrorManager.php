@@ -213,7 +213,7 @@ class ErrorManager
         echo <<<HTML
                     <h1>Error, missing file !</h1>
                     <div class="container">
-                        File missing : <pre>Public/Themes/$currentTheme/Views/errors/Default.view.php</pre>
+                        File missing : <pre>Public/Themes/$currentTheme/Views/Errors/default.view.php</pre>
                     </div>
                     HTML;
     }
