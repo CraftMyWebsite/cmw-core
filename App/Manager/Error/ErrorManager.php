@@ -187,7 +187,7 @@ class ErrorManager
         //Route /error get error file : $errorCode.view.php, if that file don't exist, we call Default.view.php (from errors package)
 
         $currentTheme = ThemeController::getCurrentTheme()->getName();
-        $defaultErrorFile = Utils::getEnv()->getValue("DIR") . "Public/Themes/$currentTheme/Views/Errors/Default.view.php";
+        $defaultErrorFile = Utils::getEnv()->getValue("DIR") . "Public/Themes/$currentTheme/Views/Errors/default.view.php";
 
         if(!file_exists($defaultErrorFile)){
             self::getFallBackErrorPage($currentTheme);
