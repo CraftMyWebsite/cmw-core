@@ -13,6 +13,8 @@ use Closure;
 class EnvBuilder
 {
 
+    private static EnvBuilder $_instance;
+
     private string $envFileName = ".env";
     private string $envPath;
     private string $path;
@@ -35,7 +37,6 @@ class EnvBuilder
         $this->setDefaultValues();
 
         $this->load();
-
     }
 
     public function __get(string $key)
@@ -43,7 +44,8 @@ class EnvBuilder
         return $this->getValue($key);
     }
 
-    public function __set(string $key, string $value) {
+    public function __set(string $key, string $value)
+    {
         $this->setOrEditValue($key, $value);
     }
 
@@ -74,6 +76,15 @@ class EnvBuilder
             $fn($name, $value);
         }
 
+    }
+
+    public static function getInstance(): EnvBuilder
+    {
+        if (!isset(self::$_instance)) {
+            self::$_instance = new self();
+        }
+
+        return self::$_instance;
     }
 
     public function valueExist($key): bool

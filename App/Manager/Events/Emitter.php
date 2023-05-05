@@ -34,8 +34,8 @@ class Emitter
         $eventInstance->init();
 
         echo $eventInstance->getName() . "<br>";
-        $eventInstance::increment();
-        echo $eventInstance::getCounter();
+        $eventInstance->increment();
+        echo $eventInstance->getCounter();
     }
 
     public static function send(#[ExpectedValues(AbstractEvent::class)] string $eventName, mixed $data): void

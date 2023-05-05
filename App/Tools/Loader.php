@@ -132,11 +132,13 @@ class Loader
     public static function loadProject(): void
     {
 
-        if (!(new Loader)->isEnvValid()) {
-            (new Loader)->updateEnv();
+        //Todo create SubMethods.
+
+        if (!self::isEnvValid()) {
+            self::updateEnv();
         }
 
-        spl_autoload_register(static function ($class) {
+        spl_autoload_register(static function (string $class) {
 
 
             $classPart = explode("\\", $class);
@@ -160,19 +162,14 @@ class Loader
                 "Implementation" => Loader::callPackage($classPart, "App/Package/", "/Implementations/"),
                 "PackageInfo" => Loader::callPackage($classPart, "App/Package", "/"),
                 "Manager" => Loader::callPackage($classPart, "App/Manager/", "/"),
-                "Utils" => Loader::callCoreClass($classPart, "App/Tools/"),
+                "Utils" => Loader::callCoreClass($classPart, "App/Tools/"), //Todo, set Utils in Utils folder ???
                 "Router" => Loader::callCoreClass($classPart, "Router/"),
                 default => false,
             };
         });
 
-        //Load router files in front-end
-
-        //Load attributes
-
-
         if (Utils::getEnv()->getValue("INSTALLSTEP") === '-1') {
-            new CoreController();
+            new CoreController(); //Todo remove that
             $theme = CoreController::getThemePath();
             if ($theme) {
 
@@ -213,9 +210,8 @@ class Loader
         $package = ucfirst($package);
 
         $fileName = "App/Package/$package/Lang/$lang.php";
-        $fileExist = is_file($fileName);
 
-        if (!$fileExist) {
+        if (!is_file($fileName)) {
             return null;
         }
 
@@ -230,7 +226,6 @@ class Loader
 
     public function listenRouter(): void
     {
-
         try {
             Router::getInstance()->listen();
         } catch (RouterException $e) {
@@ -315,7 +310,7 @@ class Loader
      * @return bool
      * @desc Check if the current env config is valid
      */
-    private function isEnvValid(): bool
+    private static function isEnvValid(): bool
     {
         return is_file(Utils::getEnv()->getValue("DIR") . "index.php");
     }
@@ -324,7 +319,7 @@ class Loader
      * @return void
      * @desc Update DIR & PATH_URL ENV values
      */
-    private function updateEnv(): void
+    private static function updateEnv(): void
     {
         Utils::getEnv()->setOrEditValue("DIR", dirname(__DIR__, 2) . "/");
         Utils::getEnv()->setOrEditValue("PATH_URL", Utils::getCompleteUrl());

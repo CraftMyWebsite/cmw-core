@@ -15,11 +15,9 @@ require("EnvBuilder.php");
  */
 class Utils
 {
-    private static EnvBuilder $env;
 
     public function __construct()
     {
-        self::$env ??= new EnvBuilder();
         $_SESSION["alerts"] ??= array();
     }
 
@@ -34,7 +32,7 @@ class Utils
         return false;
     }
 
-    public static function hasOneNullValue(?string ...$values): bool
+    public static function containsNullValue(?string ...$values): bool
     {
         foreach ($values as $value) {
             if (is_null($value)) {
@@ -80,170 +78,6 @@ class Utils
         return $toReturn;
     }
 
-    public static function deleteDirectory($dir): bool
-    {
-        if (!file_exists($dir)) {
-            return true;
-        }
-
-        if (!is_dir($dir)) {
-            return unlink($dir);
-        }
-
-        foreach (scandir($dir) as $item) {
-            if ($item === '.' || $item === '..') {
-                continue;
-            }
-
-            if (!self::deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
-                return false;
-            }
-
-        }
-
-        return rmdir($dir);
-    }
-
-    public static function getEnv(): EnvBuilder
-    {
-        return self::$env;
-    }
-
-    /**
-     * @param int $l
-     * @return string
-     * @desc Return a string ID
-     */
-    public static function genId(int $l = 5): string
-    {
-        return substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"), 10, $l);
-    }
-
-    /**
-     * @param string $data
-     * @throws \JsonException
-     * @desc Echo the data in the navigator console
-     */
-    public static function debugConsole(string $data): void
-    {
-        echo '<script>';
-        echo 'console.log(' . json_encode($data, JSON_THROW_ON_ERROR) . ')';
-        echo '</script>';
-    }
-
-    /***
-     * @param mixed $arr
-     * @desc Return a pretty array
-     */
-    public static function debugR(mixed $arr): void
-    {
-        echo "<pre>";
-        echo print_r($arr);
-        echo "</pre>";
-    }
-
-    public static function getHttpProtocol(): string
-    {
-        return in_array($_SERVER['HTTPS'] ?? '', ['on', 1], true) ||
-        ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https' ? 'https' : 'http';
-    }
-
-
-    public static function getCompleteUrl(): string
-    {
-        return self::getHttpProtocol() . "://$_SERVER[HTTP_HOST]" . self::getEnv()->getValue("PATH_SUBFOLDER");
-    }
-
-    /**
-     * @return string
-     * @desc Return the client ip, for local users -> 127.0.0.1, if IP not vlaid -> 0.0.0.0
-     */
-    public static function getClientIp(): string
-    {
-        $clientIp = $_SERVER['HTTP_CLIENT_IP'] ?? ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR']);
-
-        if (!filter_var($clientIp, FILTER_VALIDATE_IP)) {
-            return "0.0.0.0";
-        }
-
-        return $clientIp;
-    }
-
-    /**
-     * @return string
-     * @Desc Get the website name
-     */
-    public static function getSiteName(): string
-    {
-        return (new CoreModel())->fetchOption("name");
-    }
-
-    /**
-     * @return string
-     * @Desc Get the website description
-     */
-    public static function getSiteDescription(): string
-    {
-        return (new CoreModel())->fetchOption("description");
-    }
-
-    public static function getSiteLogoPath(): string
-    {
-        $logoName = self::getFilesInFolder(self::getEnv()->getValue("PATH_SUBFOLDER") . "Public/Uploads/logo");
-
-        if($logoName !== []){
-            return self::getEnv()->getValue("PATH_SUBFOLDER") . "Public/Uploads/Logo/" . $logoName[0];
-        }
-
-        return self::getEnv()->getValue("PATH_SUBFOLDER") . "Admin/Resources/Assets/Images/Logo/Logo_compact.png";
-    }
-
-    public static function getElementsInFolder(string $path): array
-    {
-        $src = is_dir($path);
-        if ($src) {
-            return array_diff(scandir($path), array('.', '..'));
-        }
-
-        return [];
-    }
-
-    public static function getFilesInFolder(string $path): array
-    {
-        $folder = self::getElementsInFolder($path);
-        if (empty($folder)) {
-            return [];
-        }
-
-        $arrayToReturn = [];
-        $path = (str_ends_with($path, '/')) ? $path : $path . '/';
-        foreach ($folder as $element) {
-            if (is_file($path . $element)) {
-                $arrayToReturn[] = $element;
-            }
-        }
-
-        return $arrayToReturn;
-    }
-
-    public static function getFoldersInFolder(string $path): array
-    {
-        $folder = self::getElementsInFolder($path);
-        if (empty($folder)) {
-            return [];
-        }
-
-        $arrayToReturn = [];
-        $path = (str_ends_with($path, '/')) ? $path : $path . '/';
-        foreach ($folder as $element) {
-            if (is_dir($path . $element)) {
-                $arrayToReturn[] = $element;
-            }
-        }
-
-        return $arrayToReturn;
-    }
-
     /**
      * @param $object
      * @return array
@@ -259,55 +93,179 @@ class Utils
     }
 
     /**
+     * @param int $l
+     * @return string
+     * @desc Return a string ID
+     */
+    public static function genId(int $l = 5): string
+    {
+        return substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"), 10, $l);
+    }
+
+    /**
+     * @param string|null ...$values
+     * @return bool
+     * @deprecated please prefer {@see \CMW\Utils\Utils::containsNullValue()}
+     */
+    public static function hasOneNullValue(?string ...$values): bool
+    {
+        return self::containsNullValue(...$values);
+    }
+
+    /**
+     * @return \CMW\Utils\EnvBuilder
+     * @deprecated please prefer {@see \CMW\Utils\EnvBuilder::getInstance()}
+     */
+    public static function getEnv(): EnvBuilder
+    {
+        return EnvBuilder::getInstance();
+    }
+
+    /**
+     * @param string $data
+     * @throws \JsonException
+     * @desc Echo the data in the navigator console
+     * @deprecated please prefer {@see \CMW\Utils\Log::console()}
+     */
+    public static function debugConsole(string $data): void
+    {
+        Log::console($data);
+    }
+
+    /**
+     * @param mixed $arr
+     * @desc Return a pretty array
+     * @deprecated please prefer {@see \CMW\Utils\Log::debug()}
+     */
+    public static function debugR(mixed $arr): void
+    {
+        Log::debug($arr);
+    }
+
+    /**
+     * @deprecated please prefer {@see Directory::getFilesRecursively()}
+     */
+    public static function getFilesFromDirectory($dir, $extension = null, &$results = array())
+    {
+        return Directory::getFilesRecursively($dir, $extension, $results);
+    }
+
+    /**
+     * @deprecated please prefer {@see Directory::getElements()}
+     */
+    public static function getElementsInFolder(string $path): array
+    {
+        return Directory::getElements($path);
+    }
+
+    /**
+     * @deprecated please prefer {@see Directory::getFiles()}
+     */
+    public static function getFilesInFolder(string $path): array
+    {
+        return Directory::getFiles($path);
+    }
+
+    /**
+     * @deprecated please prefer {@see Directory::getFolders()}
+     */
+    public static function getFoldersInFolder(string $path): array
+    {
+        return Directory::getFolders($path);
+    }
+
+    /**
+     * @deprecated please prefer {@see Directory::delete()}
+     */
+    public static function deleteDirectory($dir): bool
+    {
+        return Directory::delete($dir);
+    }
+
+    /**
+     * @return string
+     * @deprecated please prefer {@see \CMW\Utils\Website::getProtocol()}
+     */
+    public static function getHttpProtocol(): string
+    {
+        return Website::getProtocol();
+    }
+
+
+    /**
+     * @return string
+     * @deprecated please prefer {@see \CMW\Utils\Website::getUrl()}
+     */
+    public static function getCompleteUrl(): string
+    {
+        return Website::getUrl();
+    }
+
+    /**
+     * @return string
+     * @desc Return the client ip, for local users -> 127.0.0.1, if IP not vlaid -> 0.0.0.0
+     * @deprecated please prefer {@see \CMW\Utils\Website::getClientIp()}
+     */
+    public static function getClientIp(): string
+    {
+        return Website::getClientIp();
+    }
+
+    /**
+     * @return string
+     * @Desc Get the website name
+     * @deprecated please prefer {@see \CMW\Utils\Website::getName()}
+     */
+    public static function getSiteName(): string
+    {
+        return Website::getName();
+    }
+
+    /**
+     * @return string
+     * @Desc Get the website description
+     * @deprecated please prefer {@see \CMW\Utils\Website::getDescription()}
+     */
+    public static function getSiteDescription(): string
+    {
+        return Website::getDescription();
+    }
+
+    /**
+     * @return string
+     * @deprecated please prefer {@see \CMW\Utils\Website::getLogoPath()}
+     */
+    public static function getSiteLogoPath(): string
+    {
+        return Website::getLogoPath();
+    }
+
+    /**
      * @param string $targetUrl
      * @return bool
      * @desc Useful function for active navbar page
+     * @deprecated please prefer {@see \CMW\Utils\Website::isCurrentPage()}
      */
     public static function isCurrentPageActive(string $targetUrl): bool
     {
-
-        $currentUrl = $_SERVER['REQUEST_URI'];
-
-        return $currentUrl === $targetUrl || $currentUrl === $targetUrl . '/' || $currentUrl === $targetUrl . '#';
+        return Website::isCurrentPage($targetUrl);
     }
 
+    /**
+     * @return void
+     * @deprecated please prefer {@see \CMW\Utils\Website::refresh()}
+     */
     public static function refreshPage(): void
     {
-        header("Refresh:0");
+        Website::refresh();
     }
 
-    public static function getFilesFromDirectory($dir, $extension = null, &$results = array())
-    {
-        $content = scandir($dir);
-
-        foreach ($content as $_ => $value) {
-
-            if ($value === "." || $value === "..") {
-                continue;
-            }
-
-            $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
-
-            if (!is_null($extension) && is_file($path)) {
-                $pathParts = explode(DIRECTORY_SEPARATOR, $path);
-                $fileParts = explode('.', end($pathParts));
-                if (strtolower(end($fileParts)) !== strtolower($extension)) {
-                    continue;
-                }
-            }
-
-            if (!is_dir($path)) {
-                $results[] = $path;
-            } else {
-                self::getFilesFromDirectory($path, $extension, $results);
-            }
-        }
-
-        return $results;
-    }
-
+    /**
+     * @return string
+     * @deprecated please prefer {@see \CMW\Utils\Website::getFavicon()}
+     */
     public static function getFavicon(): string
     {
-        return self::getEnv()->getValue("PATH_SUBFOLDER") . 'Public/Uploads/Favicon/favicon.ico';
+        return Website::getFavicon();
     }
 }
