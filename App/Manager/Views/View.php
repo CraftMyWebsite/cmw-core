@@ -278,7 +278,7 @@ class View
         $alertContent = "";
         foreach ($alerts as $alert) {
             if(!$alert->isAdmin()) {
-                $view = new View("alerts", $alert->getType());
+                $view = new View("Alerts", $alert->getType());
             } else {
                 $view = new View("core", "Alerts/{$alert->getType()}", true);
             }
