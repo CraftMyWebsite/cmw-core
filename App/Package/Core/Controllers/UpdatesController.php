@@ -4,9 +4,9 @@ namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Api\PublicAPI;
-use CMW\Router\Link;
-use CMW\Utils\Utils;
+use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
+use CMW\Utils\Utils;
 use ZipArchive;
 
 class UpdatesController extends CoreController

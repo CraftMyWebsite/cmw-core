@@ -7,14 +7,14 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Requests\Validator;
+use CMW\Manager\Router\Link;
+use CMW\Manager\Router\RouterException;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
+use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
-use CMW\Router\Link;
-use CMW\Router\RouterException;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
-use CMW\Manager\Views\View;
 
 /**
  * Class: @coreController
@@ -102,7 +102,7 @@ class CoreController extends AbstractController
 
     /* PUBLIC FRONT */
     /**
-     * @throws \CMW\Router\RouterException
+     * @throws \CMW\Manager\Router\RouterException
      */
     #[Link('/', Link::GET)]
     public function frontHome(): void
@@ -112,7 +112,7 @@ class CoreController extends AbstractController
     }
 
     /**
-     * @throws \CMW\Router\RouterException
+     * @throws \CMW\Manager\Router\RouterException
      */
     #[Link("/:errorCode", Link::GET, ["errorCode" => ".*?"], "geterror")]
     public function errorView(Request $request, int $errorCode = 403): void
@@ -135,7 +135,7 @@ class CoreController extends AbstractController
     }
 
     /**
-     * @throws \CMW\Router\RouterException
+     * @throws \CMW\Manager\Router\RouterException
      */
     #[Link("/:errorCode", Link::GET, ["errorCode" => ".*?"], "error")]
     public function threwRouterError(Request $request, $errorCode): void

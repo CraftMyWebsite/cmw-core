@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Router;
+namespace CMW\Manager\Router;
 
 use Exception;
 

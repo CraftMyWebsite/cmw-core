@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Router;
+namespace CMW\Manager\Router;
 
 
 use CMW\Manager\Class\ClassManager;
@@ -45,7 +45,7 @@ class LinkStorage extends DatabaseManager
 
 
     /**
-     * @return \CMW\Router\Link[]
+     * @return \CMW\Manager\Router\Link[]
      * @desc Get all packages routes, and return Link[] entity.
      */
     public function getAllRoutes(): array

@@ -5,13 +5,13 @@ namespace CMW\Controller\Users;
 use CMW\Controller\Core\CoreController;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Requests\Request;
+use CMW\Manager\Router\Link;
+use CMW\Manager\Views\View;
 use CMW\Model\Users\PermissionsModel;
 use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UsersModel;
-use CMW\Router\Link;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
-use CMW\Manager\Views\View;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 

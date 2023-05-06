@@ -6,15 +6,14 @@ use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\EditorController;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Requests\Request;
+use CMW\Manager\Router\Link;
+use CMW\Manager\Router\LinkStorage;
 use CMW\Manager\Uploads\ImagesManager;
+use CMW\Manager\Views\View;
 use CMW\Model\Pages\PagesModel;
 use CMW\Model\Users\UsersModel;
-use CMW\Router\Link;
-use CMW\Router\LinkStorage;
 use CMW\Utils\Utils;
-use CMW\Manager\Views\View;
 use JetBrains\PhpStorm\NoReturn;
-use CMW\Utils\Response;
 use JsonException;
 
 /**
@@ -182,7 +181,7 @@ class PagesController extends CoreController
 
     /* Public section */
     /**
-     * @throws \CMW\Router\RouterException
+     * @throws \CMW\Manager\Router\RouterException
      */
     #[Link('/p/:slug', Link::GET, ["slug" => ".*?"])]
     public function publicShowPage(Request $request, string $slug): void

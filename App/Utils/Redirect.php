@@ -3,8 +3,8 @@
 namespace CMW\Utils;
 
 
-use CMW\Router\Route;
-use CMW\Router\Router;
+use CMW\Manager\Router\Route;
+use CMW\Manager\Router\Router;
 
 class Redirect
 {

@@ -2,18 +2,14 @@
 
 namespace CMW\Utils;
 
-use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\PackageController;
-use CMW\Manager\Class\ClassManager;
-
 use CMW\Controller\Installer\InstallerController;
-
+use CMW\Manager\Class\ClassManager;
 use CMW\Manager\Error\ErrorManager;
+use CMW\Manager\Router\Link;
+use CMW\Manager\Router\Router;
+use CMW\Manager\Router\RouterException;
 use CMW\Manager\Views\View;
-use CMW\Router\Link;
-use CMW\Router\Router;
-use CMW\Router\RouterException;
-
 use ReflectionClass;
 
 class Loader

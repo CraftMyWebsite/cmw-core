@@ -1,8 +1,6 @@
 <?php
 
-namespace CMW\Router;
-
-use JetBrains\PhpStorm\ArrayShape;
+namespace CMW\Manager\Router;
 
 /**
  * Class: @route

@@ -3,10 +3,10 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
-use CMW\Model\Core\CoreModel;
-use CMW\Router\Link;
-use CMW\Utils\Utils;
+use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
+use CMW\Model\Core\CoreModel;
+use CMW\Utils\Utils;
 
 class EditorController extends CoreController
 {

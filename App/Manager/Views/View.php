@@ -3,11 +3,11 @@
 namespace CMW\Manager\Views;
 
 use CMW\Controller\Core\CoreController;
-use CMW\Controller\Core\ThemeController;
 use CMW\Controller\Core\MenusController;
+use CMW\Controller\Core\ThemeController;
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Router\RouterException;
 use CMW\Model\Users\UsersModel;
-use CMW\Router\RouterException;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\ArrayShape;

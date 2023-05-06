@@ -7,16 +7,14 @@ use CMW\Entity\Core\ThemeEntity;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Router\Link;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\ThemeModel;
-use CMW\Router\Link;
 use CMW\Utils\Redirect;
 use CMW\Utils\Response;
-use CMW\Utils\Utils;
 use JsonException;
-use ZipArchive;
 
 class ThemeController extends CoreController
 {

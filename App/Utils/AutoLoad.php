@@ -48,7 +48,6 @@ class AutoLoad
                 "PackageInfo" => self::callPackage($classPart, "App/Package", "/"),
                 "Manager" => self::callPackage($classPart, "App/Manager/", "/"),
                 "Utils" => self::callCoreClass($classPart, "App/Utils/"),
-                "Router" => self::callCoreClass($classPart, "Router/"),
                 default => false,
             };
         });

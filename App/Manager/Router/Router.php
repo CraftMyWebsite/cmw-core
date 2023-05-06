@@ -1,12 +1,11 @@
 <?php
 
-namespace CMW\Router;
+namespace CMW\Manager\Router;
 
 use Closure;
 use CMW\Manager\Metrics\VisitsMetricsManager;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Security\SecurityManager;
-use CMW\Utils\Utils;
 use ReflectionMethod;
 
 /**
