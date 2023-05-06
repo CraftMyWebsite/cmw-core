@@ -3,8 +3,8 @@
 //Get the command choice
 $command = (isset($argv[1]))?$argv[1]:null ;
 
-//Include the EnvBuilder
-include_once("app/Tools/EnvBuilder.php");
+//Include the EnvManager
+include_once("app/Utils/EnvManager.php");
 
 //If we don't have selected any option...
 if($command == null){

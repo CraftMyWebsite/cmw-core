@@ -5,15 +5,15 @@ namespace CMW\Utils;
 use Closure;
 
 /**
- * Class: @EnvBuilder
+ * Class: @EnvManager
  * @package Utils
  * @author CraftMywebsite <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class EnvBuilder
+class EnvManager
 {
 
-    private static EnvBuilder $_instance;
+    private static EnvManager $_instance;
 
     private string $envFileName = ".env";
     private string $envPath;
@@ -78,7 +78,7 @@ class EnvBuilder
 
     }
 
-    public static function getInstance(): EnvBuilder
+    public static function getInstance(): EnvManager
     {
         if (!isset(self::$_instance)) {
             self::$_instance = new self();

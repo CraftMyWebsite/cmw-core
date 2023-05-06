@@ -4,27 +4,20 @@
  * Warning : This file must NOT be modified !
  */
 
-use CMW\Manager\Error\ErrorManager;
-use CMW\Router\Router;
 use CMW\Utils\Loader;
 
-require_once("App/Tools/Loader.php");
-
-$loader = new Loader();
+require_once("App/Utils/Loader.php");
 
 Loader::loadProject();
 
-$router = Router::getInstance();
+Loader::loadAttributes();
 
-$loader->loadAttributes();
+Loader::loadRoutes();
 
-$loader->loadRoutes();
+Loader::setLocale();
 
-$loader->setLocale();
+Loader::manageErrors();
 
-$loader->manageErrors(ErrorManager::class);
+Loader::loadInstall();
 
-$loader->installManager();
-
-$loader->listenRouter();
-
+Loader::listenRouter();

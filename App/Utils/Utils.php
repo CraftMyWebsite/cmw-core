@@ -2,10 +2,7 @@
 
 namespace CMW\Utils;
 
-use CMW\Model\Core\CoreModel;
 use ReflectionClass;
-
-require("EnvBuilder.php");
 
 /**
  * Class: @Utils
@@ -15,11 +12,6 @@ require("EnvBuilder.php");
  */
 class Utils
 {
-
-    public function __construct()
-    {
-        $_SESSION["alerts"] ??= array();
-    }
 
     public static function isValuesEmpty(array $array, string ...$values): bool
     {
@@ -113,12 +105,12 @@ class Utils
     }
 
     /**
-     * @return \CMW\Utils\EnvBuilder
-     * @deprecated please prefer {@see \CMW\Utils\EnvBuilder::getInstance()}
+     * @return \CMW\Utils\EnvManager
+     * @deprecated please prefer {@see \CMW\Utils\EnvManager::getInstance()}
      */
-    public static function getEnv(): EnvBuilder
+    public static function getEnv(): EnvManager
     {
-        return EnvBuilder::getInstance();
+        return EnvManager::getInstance();
     }
 
     /**

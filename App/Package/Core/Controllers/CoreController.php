@@ -4,6 +4,7 @@ namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Requests\Validator;
 use CMW\Manager\Updater\UpdatesManager;
@@ -21,18 +22,18 @@ use CMW\Manager\Views\View;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class CoreController
+class CoreController extends AbstractController
 {
     public static string $themeName;
-    public static array $availableLocales = ['fr' => 'Français', 'en' => 'English'];
+    public static array $availableLocales = ['fr' => 'Français', 'en' => 'English']; //todo remove that
     public static array $exampleDateFormat = ["d-m-Y H:i:s", "d-m-Y Hh im ss", "d/m/Y H:i:s", "d/m/Y à H\h i\m s\s", "d/m/Y à H\h i\m", "d/m/Y at H\h i\m s\s"];
 
     public function __construct()
     {
-        self::$themeName = (new CoreModel())->fetchOption("Theme"); //Get the current active Theme
     }
 
     public static function getThemePath(): string {
+        self::$themeName = (new CoreModel())->fetchOption("Theme");
         return (empty($themeName = self::$themeName)) ? "" : "./Public/Themes/$themeName/";
     }
 

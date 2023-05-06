@@ -6,10 +6,20 @@ use CMW\Utils\Utils;
 use Exception;
 use PDO;
 
+
+/**
+ * TODO : Revoir complètement le Database Manager
+ *  - Créer des sous classes qui sont interfacés par CMW\SGBD
+ *      - getInstance()
+ *  - Faire en sorte qu'on puisse choisir via Reflection l'SGBD qu'on veut (récupérable via ENV ?)
+ *  - Possibilité de créer plusieurs instances, quand le SGBD est différent ? (Pour le SQLITE plus tard par exemple)
+ *  - IL NE DOIT PLUS ÊTRE EXTENDS PAR LES MODELS !!!!!! (seulement l'ORM)
+ */
 class DatabaseManager
 {
 
-    protected static ?PDO $_databaseInstance = null;
+    protected static ?PDO $_instance = null;
+
 
     /**
      * @return \PDO
@@ -17,23 +27,23 @@ class DatabaseManager
      */
     public static function getInstance(): PDO
     {
-        if (!is_null(self::$_databaseInstance)) {
-            return self::$_databaseInstance;
+        if (!is_null(self::$_instance)) {
+            return self::$_instance;
         }
 
         try {
 
-            self::$_databaseInstance = new PDO("mysql:host=" . getenv("DB_HOST"), getenv("DB_USERNAME"), getenv("DB_PASSWORD"),
+            self::$_instance = new PDO("mysql:host=" . getenv("DB_HOST"), getenv("DB_USERNAME"), getenv("DB_PASSWORD"),
                 array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', PDO::ATTR_PERSISTENT => true));
-            self::$_databaseInstance->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-            self::$_databaseInstance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            self::$_databaseInstance->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+            self::$_instance->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+            self::$_instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            self::$_instance->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
             /** Todo, see before if we have permissions ? */
-            self::$_databaseInstance->exec("SET CHARACTER SET utf8");
-            self::$_databaseInstance->exec("CREATE DATABASE IF NOT EXISTS " . getenv("DB_NAME") . ";");
-            self::$_databaseInstance->exec("USE " . getenv("DB_NAME") . ";");
-            return self::$_databaseInstance;
+            self::$_instance->exec("SET CHARACTER SET utf8");
+            self::$_instance->exec("CREATE DATABASE IF NOT EXISTS " . getenv("DB_NAME") . ";");
+            self::$_instance->exec("USE " . getenv("DB_NAME") . ";");
+            return self::$_instance;
         } catch (Exception $e) {
             die("DATABASE ERROR" . $e->getMessage());
         }

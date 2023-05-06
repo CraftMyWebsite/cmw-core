@@ -16,7 +16,7 @@ class Website
 
     public static function getUrl(): string
     {
-        return self::getProtocol() . "://$_SERVER[HTTP_HOST]" . EnvBuilder::getInstance()->getValue("PATH_SUBFOLDER");
+        return self::getProtocol() . "://$_SERVER[HTTP_HOST]" . EnvManager::getInstance()->getValue("PATH_SUBFOLDER");
     }
 
     /**
@@ -74,18 +74,18 @@ class Website
 
     public static function getLogoPath(): string
     {
-        $logoName = Utils::getFilesInFolder(EnvBuilder::getInstance()->getValue("PATH_SUBFOLDER") . "Public/Uploads/logo");
+        $logoName = Directory::getFiles(EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "Public/Uploads/logo");
 
         if (!empty($logoName)) {
-            return EnvBuilder::getInstance()->getValue("PATH_SUBFOLDER") . "Public/Uploads/Logo/" . $logoName[0];
+            return EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "Public/Uploads/Logo/" . $logoName[0];
         }
 
-        return EnvBuilder::getInstance()->getValue("PATH_SUBFOLDER") . "Admin/Resources/Assets/Images/Logo/Logo_compact.png"; //unstable...
+        return EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "Admin/Resources/Assets/Images/Logo/Logo_compact.png"; //unstable...
     }
 
     public static function getFavicon(): string
     {
-        return EnvBuilder::getInstance()->getValue("PATH_SUBFOLDER") . 'Public/Uploads/Favicon/favicon.ico';
+        return EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . 'Public/Uploads/Favicon/favicon.ico';
     }
 
 }
