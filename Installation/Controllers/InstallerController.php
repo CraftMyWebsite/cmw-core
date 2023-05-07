@@ -7,6 +7,7 @@ use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Error\ErrorManager;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Router\LinkStorage;
@@ -26,7 +27,7 @@ use JetBrains\PhpStorm\NoReturn;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class InstallerController
+class InstallerController extends AbstractController
 {
 
     static public float $minPhpVersion = 8.1;
