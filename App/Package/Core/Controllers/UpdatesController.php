@@ -19,7 +19,7 @@ class UpdatesController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.update");
 
-        View::createAdminView("core", "updates")
+        View::createAdminView("Core", "updates")
             ->view();
     }
 

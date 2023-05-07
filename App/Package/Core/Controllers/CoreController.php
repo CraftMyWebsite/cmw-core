@@ -52,8 +52,8 @@ class CoreController
             header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
         }
 
-        View::createAdminView("core", "dashboard")
-        ->addScriptAfter("Admin/Resources/Vendors/chart/chart.min.js",
+        View::createAdminView("Core", "dashboard")
+        ->addScriptAfter("Admin/Resources/Vendors/Chart/chart.min.js",
                                 "App/Package/Core/Views/Resources/Js/dashboard.js")
         ->view();
     }
@@ -63,7 +63,7 @@ class CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
 
-        View::createAdminView("core", "configuration")
+        View::createAdminView("Core", "configuration")
         ->view();
     }
 

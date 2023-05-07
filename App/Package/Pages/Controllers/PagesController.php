@@ -42,7 +42,7 @@ class PagesController extends CoreController
 
         $pagesList = $this->pagesModel->getPages();
 
-        View::createAdminView('pages', 'list')
+        View::createAdminView('Pages', 'list')
             ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
             ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js","Admin/Resources/Assets/Js/Pages/simple-datatables.js")
             ->addVariableList(["pagesList" => $pagesList])
@@ -54,7 +54,7 @@ class PagesController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.add");
 
-        View::createAdminView('pages', 'add')
+        View::createAdminView('Pages', 'add')
             ->addScriptBefore("Admin/Resources/Vendors/Editorjs/Plugins/header.js",
                 "Admin/Resources/Vendors/Editorjs/Plugins/image.js",
                 "Admin/Resources/Vendors/Editorjs/Plugins/delimiter.js",
@@ -102,7 +102,7 @@ class PagesController extends CoreController
 
         $page = $this->pagesModel->getPageBySlug($slug);
 
-        View::createAdminView('pages', 'edit')
+        View::createAdminView('Pages', 'edit')
             ->addScriptBefore("Admin/Resources/Vendors/Editorjs/Plugins/header.js",
                 "Admin/Resources/Vendors/Editorjs/Plugins/image.js",
                 "Admin/Resources/Vendors/Editorjs/Plugins/delimiter.js",

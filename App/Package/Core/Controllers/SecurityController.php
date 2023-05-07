@@ -26,7 +26,7 @@ class SecurityController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.security.configuration");
 
-        View::createAdminView("core", "security")
+        View::createAdminView("Core", "security")
             ->addScriptAfter("App/Package/Core/Views/Resources/Js/security.js")
             ->addVariableList(["captcha" => self::getCaptchaType()])
             ->view();

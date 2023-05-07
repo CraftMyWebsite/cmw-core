@@ -65,10 +65,10 @@ class View
         return $array;
     }
 
-    #[ArrayShape(["core" => CoreController::class, "menu" => MenusController::class])]
+    #[ArrayShape(["Core" => CoreController::class, "menu" => MenusController::class])]
     private function generateVariables(): array
     {
-        return array("core" => new CoreController(), "menu" => new MenusController());
+        return array("Core" => new CoreController(), "menu" => new MenusController());
     }
 
     private function addScript(#[ExpectedValues(["after", "before"])] string $position, string $fileName): void
@@ -280,7 +280,7 @@ class View
             if(!$alert->isAdmin()) {
                 $view = new View("Alerts", $alert->getType());
             } else {
-                $view = new View("core", "Alerts/{$alert->getType()}", true);
+                $view = new View("Core", "Alerts/{$alert->getType()}", true);
             }
             $view->addVariable("alert", $alert);
             $alertContent .= $view->loadFile();

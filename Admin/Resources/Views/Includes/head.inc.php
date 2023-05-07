@@ -20,15 +20,15 @@ use CMW\Utils\Utils;
 
     <!--IMPORT BASIQUE-->
     <link rel="stylesheet"
-          href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Css/main/app.css"/>
+          href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Css/Main/app.css"/>
     <link rel="stylesheet"
-          href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Css/main/app-dark.css"/>
+          href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Css/Main/app-dark.css"/>
     <link rel="icon" type="image/x-icon"
           href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Images/Logo/favicon.ico"/>
     <link rel="stylesheet"
           href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Vendors/Fontawesome-free/Css/fa-all.min.css"/>
     <link rel="stylesheet"
-          href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Vendors/Choices.js/Public/Assets/styles/choices.css"/>
+          href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Vendors/Choices.js/Public/Assets/Styles/choices.css"/>
 
 </head>
 

@@ -169,7 +169,7 @@ class ThemeController extends CoreController
         $installedThemes = self::getInstalledThemes();
 
         $themesList = PublicAPI::getData("resources/getResources&resource_type=0");
-        View::createAdminView("core", "themeConfiguration")
+        View::createAdminView("Core", "themeConfiguration")
             ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css", "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
             ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes, "themesList" => $themesList])
             ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js", "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
@@ -235,7 +235,7 @@ class ThemeController extends CoreController
     public function adminThemeManage(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
-        View::createAdminView("core", "themeManage")
+        View::createAdminView("Core", "themeManage")
             ->addStyle("Admin/Resources/Vendors/Summernote/summernote-lite.css", "Admin/Resources/Assets/Css/Pages/summernote.css")
             ->addScriptAfter("Admin/Resources/Vendors/jquery/jquery.min.js", "Admin/Resources/Vendors/Summernote/summernote-lite.min.js", "Admin/Resources/Assets/Js/Pages/summernote.js")
             ->view();

@@ -44,7 +44,7 @@ class UsersSettingsController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings");
 
-        View::createAdminView("users", "settings")
+        View::createAdminView("Users", "settings")
             ->addVariableList(["settings" => new UserSettingsEntity()])
             ->view();
     }

@@ -12,7 +12,7 @@ __MACOSX/
 !/App/Storage/Logs/.gitkeep
 /App/Storage/Visits/history.log
 
-# Exclude all other packages, only if package is "core" (Core, Users, Menus...)
+# Exclude all other packages, only if package is "Core" (Core, Users, Menus...)
 !/App/Package
 /App/Package/*
 

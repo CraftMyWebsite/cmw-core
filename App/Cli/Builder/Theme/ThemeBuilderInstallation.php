@@ -59,7 +59,7 @@ class ThemeBuilderInstallation
         $this->createDirectory($path . "/views");
 
         //Create defaults directories
-        $defaultViewsDir = array("alerts", "core", "errors", "Includes", "pages", "users");
+        $defaultViewsDir = array("alerts", "Core", "errors", "Includes", "pages", "users");
 
         foreach ($defaultViewsDir as $item) {
             $this->createDirectory($path . "/Views/" . $item);
