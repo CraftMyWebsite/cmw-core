@@ -78,7 +78,7 @@ class ThemeController extends CoreController
     public static function getInstalledThemes(): array
     {
         $toReturn = array();
-        $themesFolder = 'Public/themes';
+        $themesFolder = 'Public/Themes';
         $contentDirectory = array_diff(scandir("$themesFolder/"), array('..', '.'));
         foreach ($contentDirectory as $theme) {
             if (file_exists("$themesFolder/$theme/infos.json") && !empty(file_get_contents("$themesFolder/$theme/infos.json"))) {
@@ -157,8 +157,8 @@ class ThemeController extends CoreController
 
     /* ADMINISTRATION */
 
-    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/Theme")]
-    #[Link("/configuration", Link::GET, [], "/cmw-admin/Theme")]
+    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/theme")]
+    #[Link("/configuration", Link::GET, [], "/cmw-admin/theme")]
     public function adminThemeConfiguration(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
@@ -167,21 +167,21 @@ class ThemeController extends CoreController
         $installedThemes = self::getInstalledThemes();
 
         $themesList = PublicAPI::getData("resources/getResources&resource_type=0");
-        View::createAdminView("core", "themeConfiguration")
+        View::createAdminView("Core", "themeConfiguration")
             ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css", "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
             ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes, "themesList" => $themesList])
             ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js", "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
             ->view();
     }
 
-    #[Link("/configuration", Link::POST, [], "/cmw-admin/Theme")]
+    #[Link("/configuration", Link::POST, [], "/cmw-admin/theme")]
     public function adminThemeConfigurationPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
 
-        $theme = filter_input(INPUT_POST, "Theme");
+        $theme = filter_input(INPUT_POST, "theme");
 
-        CoreModel::updateOption("Theme", $theme);
+        CoreModel::updateOption("theme", $theme);
 
         Response::sendAlert("success", LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
@@ -189,7 +189,7 @@ class ThemeController extends CoreController
         header("Location: configuration");
     }
 
-    #[Link("/configuration/regenerate", Link::POST, [], "/cmw-admin/Theme")]
+    #[Link("/configuration/regenerate", Link::POST, [], "/cmw-admin/theme")]
     public function adminThemeConfigurationRegeneratePost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
@@ -204,7 +204,7 @@ class ThemeController extends CoreController
         header("Location: ../configuration");
     }
 
-    #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/Theme")]
+    #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/theme")]
     public function adminThemeInstallation(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
@@ -221,7 +221,7 @@ class ThemeController extends CoreController
 
         //Install Theme settings
         $this->installThemeSettings($theme['name']);
-        CoreModel::updateOption("Theme", $theme['name']);
+        CoreModel::updateOption("theme", $theme['name']);
 
         //TODO TOASTER
 
@@ -229,17 +229,17 @@ class ThemeController extends CoreController
     }
 
 
-    #[Link("/manage", Link::GET, [], "/cmw-admin/Theme")]
+    #[Link("/manage", Link::GET, [], "/cmw-admin/theme")]
     public function adminThemeManage(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
-        View::createAdminView("core", "themeManage")
+        View::createAdminView("Core", "themeManage")
             ->addStyle("Admin/Resources/Vendors/Summernote/summernote-lite.css", "Admin/Resources/Assets/Css/Pages/summernote.css")
-            ->addScriptAfter("Admin/Resources/Vendors/jquery/jquery.min.js", "Admin/Resources/Vendors/Summernote/summernote-lite.min.js", "Admin/Resources/Assets/Js/Pages/summernote.js")
+            ->addScriptAfter("Admin/Resources/Vendors/Jquery/jquery.min.js", "Admin/Resources/Vendors/Summernote/summernote-lite.min.js", "Admin/Resources/Assets/Js/Pages/summernote.js")
             ->view();
     }
 
-    #[Link("/manage", Link::POST, [], "/cmw-admin/Theme")]
+    #[Link("/manage", Link::POST, [], "/cmw-admin/theme")]
     public function adminThemeManagePost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
@@ -253,13 +253,13 @@ class ThemeController extends CoreController
             //If file is empty, we don't update the config.
             if ($file['name'] !== "") {
 
-                $imageName = ImagesManager::upload($file, self::getCurrentTheme()->getName() . "/img");
+                $imageName = ImagesManager::upload($file, self::getCurrentTheme()->getName() . "/Img");
                 if (!str_contains($imageName, "ERROR")) {
                     $remoteImageValue = ThemeModel::fetchConfigValue($conf);
                     $localImageValue = (new ThemeController())->getCurrentThemeConfigSetting($conf);
 
                     if ($remoteImageValue !== $file && $remoteImageValue !== $localImageValue) {
-                        ImagesManager::deleteImage(self::getCurrentTheme()->getName() . "/img/$remoteImageValue");
+                        ImagesManager::deleteImage(self::getCurrentTheme()->getName() . "/Img/$remoteImageValue");
                     }
 
                     $this->themeModel->updateThemeConfig($conf, $imageName, self::getCurrentTheme()->getName());

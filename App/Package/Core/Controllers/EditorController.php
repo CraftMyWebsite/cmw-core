@@ -38,7 +38,7 @@ class EditorController extends CoreController
         $currentStyle = self::getCurrentStyle();
         $installedStyles = self::getInstalledStyles();
 
-        View::createAdminView("core", "editorConfig")
+        View::createAdminView("Core", "editorConfig")
             ->addVariableList(["currentStyle" => $currentStyle, "installedStyles" => $installedStyles])
             ->view();
     }

@@ -4,5 +4,5 @@
   "name": "Sampler",
   "version": "0.0.1",
   "cmwVersion": "2.0",
-  "packages": ["core", "menus", "pages", "users"]
+  "packages": ["Core", "Menus", "Pages", "Users"]
 }

@@ -280,7 +280,7 @@ class View
             if(!$alert->isAdmin()) {
                 $view = new View("Alerts", $alert->getType());
             } else {
-                $view = new View("core", "Alerts/{$alert->getType()}", true);
+                $view = new View("Core", "Alerts/{$alert->getType()}", true);
             }
             $view->addVariable("alert", $alert);
             $alertContent .= $view->loadFile();

@@ -85,7 +85,7 @@ class UsersController extends CoreController
         $roles = $this->roleModel->getRoles();
 
 
-        View::createAdminView("users", "manage")
+        View::createAdminView("Users", "manage")
             ->addVariableList(["userList" => $userList, "roles" => $roles])
             ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
             ->addScriptBefore("App/Package/users/Views/Assets/Js/edit.js")
@@ -147,7 +147,7 @@ class UsersController extends CoreController
 
         $roles = $this->roleModel->getRoles();
 
-        View::createAdminView("users", "user")->addVariableList(array(
+        View::createAdminView("Users", "user")->addVariableList(array(
             "user" => $userEntity,
             "roles" => $roles
         ))

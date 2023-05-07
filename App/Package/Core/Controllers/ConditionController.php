@@ -35,7 +35,7 @@ class ConditionController extends CoreController
         $cgv = $this->conditionModel->getCGV();
         $cgu = $this->conditionModel->getCGU();
 
-        View::createAdminView("core", "condition")
+        View::createAdminView("Core", "condition")
             ->addStyle("Admin/Resources/Vendors/Summernote/summernote-lite.css",
                 "Admin/Resources/Assets/Css/Pages/summernote.css")
             ->addScriptAfter("Admin/Resources/Vendors/jquery/jquery.min.js",

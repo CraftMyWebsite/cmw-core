@@ -206,7 +206,7 @@ VALUES ('Veuillez écrire votre CGV !'),
        ('Veuillez écrire votre CGU !');
 
 INSERT INTO `cmw_core_options` (`option_name`, `option_value`, `option_updated`)
-VALUES ('Theme', 'Sampler', NOW()),
+VALUES ('theme', 'Sampler', NOW()),
        ('captcha', 'none', NOW()),
        ('dateFormat', 'd-m-Y H:i:s', NOW()),
        ('editor_style', 'Default.css', NOW());

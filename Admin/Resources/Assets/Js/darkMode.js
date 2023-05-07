@@ -5,20 +5,20 @@ const toggler = document.getElementById("toggle-dark")
 
 function toggleDarkTheme() {
     setTheme(
-        document.body.classList.contains("Theme-dark")
-            ? "Theme-light"
-            : "Theme-dark"
+        document.body.classList.contains("theme-dark")
+            ? "theme-light"
+            : "theme-dark"
     )
 }
 
 /**
- * @param {"Theme-dark"|"Theme-light"} theme
+ * @param {"theme-dark"|"theme-light"} theme
  * @param {boolean} dontPersist
  */
 function setTheme(theme, dontPersist = false) {
     document.body.className = document.body.className.replace(THEME_REGEX, "")
     document.body.classList.add(theme)
-    if (toggler) toggler.checked = theme === "Theme-dark"
+    if (toggler) toggler.checked = theme === "theme-dark"
 
     if (!dontPersist) {
         localStorage.setItem(THEME_KEY, theme)
@@ -27,7 +27,7 @@ function setTheme(theme, dontPersist = false) {
 
 if (toggler) {
     toggler.addEventListener("input", (e) => {
-        setTheme(e.target.checked ? "Theme-dark" : "Theme-light")
+        setTheme(e.target.checked ? "theme-dark" : "theme-light")
     })
 }
 
@@ -51,10 +51,10 @@ function initTheme() {
 
     //Register change listener
     mediaQuery.addEventListener("change", (e) =>
-        setTheme(e.matches ? "Theme-dark" : "Theme-light", true)
+        setTheme(e.matches ? "theme-dark" : "theme-light", true)
     )
 
-    return setTheme(mediaQuery.matches ? "Theme-dark" : "Theme-light", true)
+    return setTheme(mediaQuery.matches ? "theme-dark" : "theme-light", true)
 }
 
 if (document.readyState === 'loading') {

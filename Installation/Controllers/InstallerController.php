@@ -334,7 +334,7 @@ class InstallerController
 
             if ($type === 'Theme') {
                 (new ThemeController())->installThemeSettings($resource['name']);
-                CoreModel::updateOption("Theme", $resource['name']);
+                CoreModel::updateOption("theme", $resource['name']);
             }
         }
 
@@ -388,7 +388,7 @@ class InstallerController
         }
 
         (new ThemeController())->installThemeSettings($theme['name']);
-        CoreModel::updateOption("Theme", $theme['name']);
+        CoreModel::updateOption("theme", $theme['name']);
 
         EnvManager::getInstance()->editValue("installStep", 6);
     }

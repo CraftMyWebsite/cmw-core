@@ -42,7 +42,7 @@ class MenusController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menus.configuration");
 
-        $view = View::createAdminView('core', 'menus')
+        $view = View::createAdminView('Core', 'menus')
             ->addVariableList(['packagesLinks' => $this->getPackagesLinks(), 'roles' => (new RolesModel())->getRoles(),
                 'menus' => $this->menusModel->getMenus()])
             ->addScriptBefore("App/Package/Core/Views/Resources/Js/sortable.min.js")

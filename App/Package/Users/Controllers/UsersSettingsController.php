@@ -25,7 +25,7 @@ class UsersSettingsController extends CoreController
 
     public static function getDefaultImageLink(): string
     {
-        return EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "Public/uploads/users/default/defaultImage.jpg";
+        return EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "Public/Uploads/Users/Default/defaultImage.jpg";
     }
 
     /**
@@ -37,7 +37,7 @@ class UsersSettingsController extends CoreController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings");
 
-        View::createAdminView("users", "settings")
+        View::createAdminView("Users", "settings")
             ->addVariableList(["settings" => new UserSettingsEntity()])
             ->view();
     }

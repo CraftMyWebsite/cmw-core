@@ -63,7 +63,7 @@ class InstallerModel
     private static function loadDefaultPackages(): void
     {
         //Load packages files
-        DownloadManager::initPackages('core', 'users', 'menus', 'pages');
+        DownloadManager::initPackages('Core', 'Users', 'Pages');
     }
 
     public static function initAdmin(string $email, string $pseudo, string $password): void

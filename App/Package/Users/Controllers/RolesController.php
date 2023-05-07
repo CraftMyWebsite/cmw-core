@@ -54,7 +54,7 @@ class RolesController extends CoreController
         require_once(EnvManager::getInstance()->getValue("DIR") . "App/Package/Users/Functions/loadPermissions.php");
 
 
-        View::createAdminView("users", "roles")
+        View::createAdminView("Users", "roles")
             ->addScriptBefore("App/Package/users/Views/Assets/Js/manageRoles.js",
                 "Admin/Resources/Vendors/IziToast/iziToast.min.js",
                 "App/Package/users/Views/Assets/Js/rolesWeights.js")
@@ -76,7 +76,7 @@ class RolesController extends CoreController
         require_once(getenv("DIR") . "App/Package/users/functions/loadPermissions.php");
 
 
-        View::createAdminView("users", "roles.add")->addVariableList(array(
+        View::createAdminView("Users", "roles.add")->addVariableList(array(
             "permissionController" => $permissionController,
             "permissionModel" => $permissionModel
         ))
@@ -114,7 +114,7 @@ class RolesController extends CoreController
         //Try to improve that ?
         require_once(EnvManager::getInstance()->getValue("DIR") . "App/Package/Users/Functions/loadPermissions.php");
 
-        View::createAdminView("users", "roles.edit")->addVariableList(array(
+        View::createAdminView("Users", "roles.edit")->addVariableList(array(
             "permissionController" => $permissionController,
             "permissionModel" => $permissionModel,
             "roleModel" => $roleModel,
