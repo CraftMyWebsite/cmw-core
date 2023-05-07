@@ -41,7 +41,7 @@ class UserPictureEntity
      */
     public function getImageName(): ?string
     {
-        if(!is_file(Utils::getEnv()->getValue("DIR") . "Public/uploads/users/" . $this->imageName))
+        if(!is_file(Utils::getEnv()->getValue("DIR") . "Public/Uploads/Users/" . $this->imageName))
         {
             return "Default/" . UsersSettingsModel::getSetting("defaultImage");
         }
@@ -67,7 +67,7 @@ class UserPictureEntity
      */
     public function getImageLink(): ?string
     {
-        return Utils::getEnv()->getValue("PATH_SUBFOLDER") . "Public/uploads/users/" . $this->imageName;
+        return Utils::getEnv()->getValue("PATH_SUBFOLDER") . "Public/Uploads/Users/" . $this->imageName;
     }
 
     /**

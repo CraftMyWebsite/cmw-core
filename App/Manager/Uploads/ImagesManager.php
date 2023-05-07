@@ -169,7 +169,6 @@ class ImagesManager
      * @param string $imageFormat
      * @return void
      * @Desc Clear all the image metadata
-     * @throws \JsonException
      */
     private static function clearMetadata(string $oldFilePath, string $filePath, string $imageFormat): void
     {

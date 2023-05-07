@@ -65,10 +65,10 @@ class View
         return $array;
     }
 
-    #[ArrayShape(["Core" => CoreController::class, "menu" => MenusController::class])]
+    #[ArrayShape(["core" => CoreController::class, "menu" => MenusController::class])]
     private function generateVariables(): array
     {
-        return array("Core" => new CoreController(), "menu" => new MenusController());
+        return array("core" => new CoreController(), "menu" => new MenusController());
     }
 
     private function addScript(#[ExpectedValues(["after", "before"])] string $position, string $fileName): void

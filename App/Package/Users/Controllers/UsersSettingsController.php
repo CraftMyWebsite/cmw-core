@@ -32,7 +32,7 @@ class UsersSettingsController extends CoreController
 
     public static function getDefaultImageLink(): string
     {
-        return Utils::getEnv()->getValue("PATH_SUBFOLDER") . "Public/uploads/users/default/defaultImage.jpg";
+        return Utils::getEnv()->getValue("PATH_SUBFOLDER") . "Public/Uploads/Users/Default/defaultImage.jpg";
     }
 
     /**

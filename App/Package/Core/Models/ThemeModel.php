@@ -31,9 +31,9 @@ class ThemeModel extends DatabaseManager
 
         $db = self::getInstance();
         $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config 
-                                    WHERE theme_config_name = :config AND theme_config_theme = :Theme');
+                                    WHERE theme_config_name = :config AND theme_config_theme = :theme');
 
-        $req->execute(array("config" => $config, "Theme" => $theme));
+        $req->execute(array("config" => $config, "theme" => $theme));
 
         return $req->fetch()["theme_config_value"] ?? "";
     }
@@ -55,9 +55,9 @@ class ThemeModel extends DatabaseManager
 
         $db = self::getInstance();
         $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config 
-                                    WHERE theme_config_name = :config AND theme_config_theme = :Theme');
+                                    WHERE theme_config_name = :config AND theme_config_theme = :theme');
 
-        $req->execute(array("config" => $configName, "Theme" => $theme));
+        $req->execute(array("config" => $configName, "theme" => $theme));
 
         $value = $req->fetch()["theme_config_value"] ?? "";
         $localValue = (new ThemeController())->getCurrentThemeConfigSetting($configName);
@@ -66,15 +66,15 @@ class ThemeModel extends DatabaseManager
             return Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'Public/Themes/' . $theme . '/' . $localValue;
         }
 
-        return Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'Public/uploads/' . $theme . '/img/' . $value;
+        return Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'Public/Uploads/' . $theme . '/Img/' . $value;
     }
 
     public function fetchThemeConfigs(string $theme): array
     {
         $db = self::getInstance();
-        $req = $db->prepare('SELECT * FROM cmw_theme_config WHERE theme_config_theme = :Theme');
+        $req = $db->prepare('SELECT * FROM cmw_theme_config WHERE theme_config_theme = :theme');
 
-        if ($req->execute(array("Theme" => $theme))) {
+        if ($req->execute(array("theme" => $theme))) {
             return $req->fetchAll();
         }
 
@@ -95,9 +95,9 @@ class ThemeModel extends DatabaseManager
     {
         $db = self::getInstance();
         $req = $db->prepare('UPDATE cmw_theme_config SET theme_config_value = :theme_config_value 
-                        WHERE theme_config_name = :theme_config_name AND theme_config_theme = :Theme');
+                        WHERE theme_config_name = :theme_config_name AND theme_config_theme = :theme');
 
-        $req->execute(array("theme_config_name" => $configName, "theme_config_value" => $configValue, "Theme" => $theme));
+        $req->execute(array("theme_config_name" => $configName, "theme_config_value" => $configValue, "theme" => $theme));
     }
 
     public function deleteThemeConfig(string $themeName): void
