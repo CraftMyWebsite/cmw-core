@@ -1,6 +1,7 @@
 # Exclude environment variables
 .env
 .idea
+.vscode
 __MACOSX/
 
 **/.idea/
