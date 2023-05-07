@@ -3,7 +3,7 @@
 use CMW\Manager\Lang\LangManager;
 use CMW\Entity\Users\UserEntity;
 use CMW\Model\Users\UsersModel;
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 
 /* @var UserEntity $userAdmin */
 ?>
@@ -17,7 +17,7 @@ use CMW\Utils\Utils;
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a href="<?= Utils::getEnv()->getValue('PATH_URL') ?>" target="_blank" class="ms-4">
+            <a href="<?= EnvManager::getInstance()->getValue('PATH_URL') ?>" target="_blank" class="ms-4">
                 <i style="font-size: 1.5rem" class="fa-solid fa-up-right-from-square"></i>
             </a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -47,7 +47,7 @@ use CMW\Utils\Utils;
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="min-width: 11rem">
                         <li>
-                            <a class="dropdown-item" href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'cmw-admin/users/edit/' . UsersModel::getCurrentUser()->getId() ?>">
+                            <a class="dropdown-item" href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/users/edit/' . UsersModel::getCurrentUser()->getId() ?>">
                                 <i class="fa-solid fa-user"></i>
                                 <?= LangManager::translate("users.users.link_profile") ?>
                             </a>

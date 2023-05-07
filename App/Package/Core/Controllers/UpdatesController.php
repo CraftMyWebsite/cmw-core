@@ -4,9 +4,10 @@ namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Api\PublicAPI;
-use CMW\Router\Link;
-use CMW\Utils\Utils;
+use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
+use CMW\Utils\EnvManager;
+use JsonException;
 use ZipArchive;
 
 class UpdatesController extends CoreController
@@ -49,19 +50,19 @@ class UpdatesController extends CoreController
         try {
             //First, we download the zip file and rename it with the name "updater.zip"
             $apiJson = json_decode(file_get_contents(PublicAPI::getUrl() . "/getCmwLatest"), false, 512, JSON_THROW_ON_ERROR);
-            file_put_contents(Utils::getEnv()->getValue("DIR") . "updater.zip",
+            file_put_contents(EnvManager::getInstance()->getValue("DIR") . "updater.zip",
                 fopen($apiJson->file_update, 'rb'));
 
             $archiveUpdate = new ZipArchive;
-            if ($archiveUpdate->open(Utils::getEnv()->getValue("DIR") .'updater.zip') === TRUE) {
+            if ($archiveUpdate->open(EnvManager::getInstance()->getValue("DIR") .'updater.zip') === TRUE) {
 
-                $archiveUpdate->extractTo(Utils::getEnv()->getValue("DIR"));
+                $archiveUpdate->extractTo(EnvManager::getInstance()->getValue("DIR"));
                 $archiveUpdate->close();
 
                 $this->cleanInstall($apiJson->version);
             }
 
-        } catch (\JsonException $e) {
+        } catch (JsonException) {
         }
 
     }
@@ -74,10 +75,10 @@ class UpdatesController extends CoreController
     protected function cleanInstall(string $newVersion): void
     {
         //Delete updater archive
-        unlink(Utils::getEnv()->getValue("DIR") . 'updater.zip');
+        unlink(EnvManager::getInstance()->getValue("DIR") . 'updater.zip');
 
         //Set new version
-        Utils::getEnv()->editValue("VERSION", $newVersion);
+        EnvManager::getInstance()->editValue("VERSION", $newVersion);
     }
 
 }

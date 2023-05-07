@@ -3,7 +3,7 @@
 namespace CMW\Model\Installer;
 
 use CMW\Manager\Download\DownloadManager;
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 use PDO;
 use PDOException;
 
@@ -29,11 +29,11 @@ class InstallerModel
     private static function loadDatabaseWithoutParams(): PDO
     {
 
-        $dbServername = Utils::getEnv()->getValue("DB_HOST");
-        $dbUsername = Utils::getEnv()->getValue("DB_USERNAME");
-        $dbPassword = Utils::getEnv()->getValue("DB_PASSWORD");
-        $dbName = Utils::getEnv()->getValue("DB_NAME");
-        $dbPort = Utils::getEnv()->getValue("DB_PORT");
+        $dbServername = EnvManager::getInstance()->getValue("DB_HOST");
+        $dbUsername = EnvManager::getInstance()->getValue("DB_USERNAME");
+        $dbPassword = EnvManager::getInstance()->getValue("DB_PASSWORD");
+        $dbName = EnvManager::getInstance()->getValue("DB_NAME");
+        $dbPort = EnvManager::getInstance()->getValue("DB_PORT");
 
         return self::loadDatabase($dbServername, $dbName, $dbUsername, $dbPassword, $dbPort);
     }
@@ -53,7 +53,7 @@ class InstallerModel
     {
         $db = self::loadDatabase($serverName, $database, $username, $password, $port);
 
-        $query = file_get_contents(Utils::getEnv()->getValue("dir") . "Installation/init.sql");
+        $query = file_get_contents(EnvManager::getInstance()->getValue("dir") . "Installation/init.sql");
         $db->query($query);
 
         /* IMPORT PACKAGE SQL */

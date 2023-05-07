@@ -4,13 +4,13 @@ namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Router\Link;
+use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\MailModel;
-use CMW\Router\Link;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
-use CMW\Manager\Views\View;
-use Exception;
+use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
@@ -67,14 +67,14 @@ class MailController extends CoreController
             $mail->addReplyTo($config?->getMailReply());
 
             //Content
-            $mail->isHTML(true);
+            $mail->isHTML();
             $mail->Subject = $subject;
             $mail->Body = $body . "<br>" . $config?->getFooter();
 
             //Send mail
             $mail->send();
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: $mail->ErrorInfo";
+            echo "Message could not be sent. Mailer Error: $e";
         }
     }
 

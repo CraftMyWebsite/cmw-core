@@ -15,6 +15,7 @@ class Alert
         private readonly bool   $isAdmin
     )
     {
+        $_SESSION["alerts"] ??= array();
     }
 
     /**

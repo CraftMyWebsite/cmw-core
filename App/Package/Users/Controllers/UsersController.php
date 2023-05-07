@@ -6,17 +6,16 @@ use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\SecurityController;
 use CMW\Entity\Users\UserEntity;
 use CMW\Entity\Users\UserSettingsEntity;
-use CMW\Manager\Error\ErrorManager;
+use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Requests\Request;
+use CMW\Manager\Router\Link;
+use CMW\Manager\Views\View;
 use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UserPictureModel;
 use CMW\Model\Users\UsersModel;
-use CMW\Router\Link;
 use CMW\Utils\Redirect;
-use CMW\Utils\Utils;
-use CMW\Manager\Views\View;
-use CMW\Manager\Lang\LangManager;
 use CMW\Utils\Response;
+use CMW\Utils\Utils;
 use Exception;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
@@ -143,8 +142,6 @@ class UsersController extends CoreController
     public function adminUsersEdit(Request $request, int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
-
-        Utils::debugR($request);
 
         $userEntity = $this->userModel->getUserById($id);
 
@@ -297,7 +294,7 @@ class UsersController extends CoreController
     }
 
     /**
-     * @throws \CMW\Router\RouterException
+     * @throws \CMW\Manager\Router\RouterException
      */
     #[Link('/login', Link::GET)]
     public function login(): void
@@ -313,7 +310,7 @@ class UsersController extends CoreController
     }
 
     /**
-     * @throws \CMW\Router\RouterException
+     * @throws \CMW\Manager\Router\RouterException
      */
     #[Link('/login/forgot', Link::GET)]
     public function forgotPassword(): void
@@ -345,7 +342,7 @@ class UsersController extends CoreController
     }
 
     /**
-     * @throws \CMW\Router\RouterException
+     * @throws \CMW\Manager\Router\RouterException
      */
     #[Link('/register', Link::GET)]
     public function register(): void
@@ -411,7 +408,7 @@ class UsersController extends CoreController
     }
 
     /**
-     * @throws \CMW\Router\RouterException
+     * @throws \CMW\Manager\Router\RouterException
      */
     #[Link('/profile', Link::GET)]
     public function publicProfile(): void

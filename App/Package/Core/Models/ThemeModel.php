@@ -4,7 +4,7 @@ namespace CMW\Model\Core;
 
 use CMW\Controller\Core\ThemeController;
 use CMW\Manager\Database\DatabaseManager;
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 
 /**
  * Class: @ThemeModel
@@ -63,10 +63,10 @@ class ThemeModel extends DatabaseManager
         $localValue = (new ThemeController())->getCurrentThemeConfigSetting($configName);
 
         if($value === $localValue){
-            return Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'Public/Themes/' . $theme . '/' . $localValue;
+            return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Public/Themes/' . $theme . '/' . $localValue;
         }
 
-        return Utils::getEnv()->getValue('PATH_SUBFOLDER') . 'Public/Uploads/' . $theme . '/Img/' . $value;
+        return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Public/Uploads/' . $theme . '/Img/' . $value;
     }
 
     public function fetchThemeConfigs(string $theme): array

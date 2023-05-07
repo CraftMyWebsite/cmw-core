@@ -3,12 +3,11 @@
 namespace CMW\Utils;
 
 
-use CMW\Router\Route;
-use CMW\Router\Router;
+use CMW\Manager\Router\Route;
+use CMW\Manager\Router\Router;
 
 class Redirect
 {
-
 
     private static function getRouteByUrl(string $url): ?Route
     {
@@ -35,10 +34,10 @@ class Redirect
             return;
         }
 
-        $params = implode(", ", $params);
+        $strParams = implode(", ", $params);
 
         http_response_code(302);
-        header("Location: " .  Utils::getEnv()->getValue("PATH_SUBFOLDER") . $route->getUrl() . '/' . $params);
+        header("Location: " .  EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $route->getUrl() . '/' . $strParams);
     }
 
     /**
@@ -49,12 +48,14 @@ class Redirect
     public static function errorPage(int $code = 403): void
     {
         http_response_code($code);
+        // self::redirect("getError/$code"); ??
         header("Location: getError/$code");
     }
 
     public static function redirectToPreviousPage(): void
     {
         http_response_code(302);
+        // use self::redirect ??
         header('Location: ' . $_SERVER['HTTP_REFERER']);
     }
 
@@ -65,7 +66,8 @@ class Redirect
     public static function redirectToHome(): void
     {
         http_response_code(302);
-        header("Location: " . Utils::getEnv()->getValue("PATH_SUBFOLDER"));
+        // use self::redirect ??
+        header("Location: " . EnvManager::getInstance()->getValue("PATH_SUBFOLDER"));
     }
 
     public static function emulateRoute(string $url): void
@@ -86,6 +88,7 @@ class Redirect
     public static function redirectPreviousRoute(): void
     {
         http_response_code(302);
+        // use self::redirect ??
         header("Location: " .  $_SERVER['HTTP_REFERER']);
     }
 

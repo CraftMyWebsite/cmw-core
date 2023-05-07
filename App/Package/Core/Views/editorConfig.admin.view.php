@@ -1,7 +1,5 @@
 <?php
 
-use CMW\Controller\Core\CoreController;
-use CMW\Controller\Core\EditorController;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 

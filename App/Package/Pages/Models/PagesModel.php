@@ -5,6 +5,7 @@ namespace CMW\Model\Pages;
 use CMW\Entity\Pages\PageEntity;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Model\Users\UsersModel;
+use JsonException;
 use PDOStatement;
 
 /**
@@ -153,9 +154,14 @@ class PagesModel extends DatabaseManager
 
     /* => PRIVATE */
 
-    private function translatePage($content): string
+
+    private function translatePage(string $content): string
     {
-        $content = json_decode($content, false);
+        try {
+            $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            $content = "JsonException: $e";
+        }
 
         $blocks = $content->blocks;
         $convertedHtml = "";
@@ -299,7 +305,7 @@ class PagesModel extends DatabaseManager
             $res["page_title"],
             $res["page_content"],
             $user,
-            $this->translatePage($res["page_content"]),
+            $this->translatePage($res["page_content"] ?? ""),
             $res["page_state"],
             $res["page_created"],
             $res["page_updated"],
@@ -307,4 +313,3 @@ class PagesModel extends DatabaseManager
 
     }
 }
-?>

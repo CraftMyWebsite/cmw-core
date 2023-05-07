@@ -4,7 +4,7 @@
 
 namespace CMW\Entity\Core;
 
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 
 class ThemeEntity
 {
@@ -88,7 +88,7 @@ class ThemeEntity
      */
     public function getPath(): string
     {
-        return Utils::getEnv()->getValue("PATH_SUBFOLDER") . 'Public/Themes/' . $this->name . '/';
+        return EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . 'Public/Themes/' . $this->name . '/';
     }
 
 }

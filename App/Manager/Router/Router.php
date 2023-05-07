@@ -1,12 +1,11 @@
 <?php
 
-namespace CMW\Router;
+namespace CMW\Manager\Router;
 
 use Closure;
 use CMW\Manager\Metrics\VisitsMetricsManager;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Security\SecurityManager;
-use CMW\Utils\Utils;
 use ReflectionMethod;
 
 /**
@@ -19,11 +18,15 @@ class Router
 {
 
     private string $url;
+
     /** @var Route[] $routes */
     private array $routes = [];
+
     /** @var Route[] $namedRoutes */
     private array $namedRoutes = [];
+
     private static ?Route $actualRoute = null;
+
     private string $groupPattern;
 
     private static Router $_instance;
@@ -33,7 +36,61 @@ class Router
         $this->url = $url;
     }
 
-    public static function getInstance(): Router {
+    private function registerGetRoute(Link $link, ReflectionMethod $method): Route
+    {
+        return $this->get($link->getPath(), function (...$values) use ($method) {
+
+            $request = new Request(url: $this->url, method: 'GET',
+                params: $this->getRouteByUrl('users/edit/:id')?->getParams() ?? [],
+                data: $_GET ?? [],
+                emitUrl: $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+
+            $this->callRegisteredRoute($method, $request, ...$values);
+
+        }, name: $link->getName(), weight: $link->getWeight());
+    }
+
+    private function registerPostRoute(Link $link, ReflectionMethod $method): Route
+    {
+        return $this->post($link->getPath(), function (...$values) use ($link, $method) {
+
+            if ($link->isSecure()) {
+                //Check security before send post request
+                $security = new SecurityManager();
+
+                if (!empty($security->validate())) {
+                    $security->unsetToken();  //Remove the token from the session...
+                } else {
+                    throw new RouterException('Wrong token, try again sir.', 403);
+                }
+            }
+
+            $request = new Request(url: $this->url, method: 'POST',
+                params: $this->getRouteByUrl($this->url)?->getParams() ?? [],
+                data: $_POST ?? [],
+                emitUrl: $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+
+            $this->callRegisteredRoute($method, $request, ...$values);
+        }, name: $link->getName(), weight: $link->getWeight());
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    private function callRegisteredRoute(ReflectionMethod $method, Request $request, string ...$values): void
+    {
+        $classInstance = $method->getDeclaringClass()->getMethod("getInstance")->invoke(null);
+        $method->invoke($classInstance, $request, ...$values);
+    }
+
+    private function generateRouteName(ReflectionMethod $method): string
+    {
+        $class = strtolower(str_replace("Controller", "", $method->getDeclaringClass()->getShortName()));
+        return "$class.{$method->getName()}";
+    }
+
+    public static function getInstance(): Router
+    {
         if (!isset(self::$_instance)) {
             self::$_instance = new Router($_GET['url'] ?? "");
         }
@@ -169,60 +226,6 @@ class Router
             $router->with($value, $regex);
         }
 
-    }
-
-    private function registerGetRoute(Link $link, ReflectionMethod $method): Route
-    {
-        return $this->get($link->getPath(), function (...$values) use ($method) {
-
-            $request = new Request(url: $this->url, methode: 'GET',
-                params: $this->getRouteByUrl('users/edit/:id')?->getParams() ?? [],
-                data: $_GET ?? [],
-                emitUrl: $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-
-            $this->callRegisteredRoute($method, $request, ...$values);
-
-        }, name: $link->getName(), weight: $link->getWeight());
-    }
-
-    private function registerPostRoute(Link $link, ReflectionMethod $method): Route
-    {
-        return $this->post($link->getPath(), function (...$values) use ($link, $method) {
-
-            if ($link->isSecure()) {
-                //Check security before send post request
-                $security = new SecurityManager();
-
-                if (!empty($security->validate())) {
-                    $security->unsetToken();  //Remove the token from the session...
-                } else {
-                    throw new RouterException('Wrong token, try again sir.', 403);
-                }
-            }
-
-            $request = new Request(url: $this->url, methode: 'POST',
-                params: $this->getRouteByUrl($this->url)?->getParams() ?? [],
-                data: $_POST ?? [],
-                emitUrl: $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-
-            $this->callRegisteredRoute($method, $request, ...$values);
-        }, name: $link->getName(), weight: $link->getWeight());
-    }
-
-    /**
-     * @throws \ReflectionException
-     */
-    private function callRegisteredRoute(ReflectionMethod $method, Request $request, string ...$values): void
-    {
-        $controller = $method->getDeclaringClass()->newInstance();
-        $methodName = $method->getName();
-        $controller->$methodName($request, ...$values);
-    }
-
-    private function generateRouteName(ReflectionMethod $method): string
-    {
-        $class = strtolower(str_replace("Controller", "", $method->getDeclaringClass()->getShortName()));
-        return "$class.{$method->getName()}";
     }
 
 }

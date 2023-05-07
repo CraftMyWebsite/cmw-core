@@ -5,7 +5,7 @@
 
 /** @var \CMW\Model\Forum\ForumModel $forumModel */
 
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 
 $title = "Titre de la page";
 $description = "Description de votre page";
@@ -39,7 +39,7 @@ $description = "Description de votre page";
         </h3>
         <a href="/<?= $topic->getLink() ?>">Aller vers ce Topic</a>
         =>
-        <a href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?><?= $topic->getPinnedLink() ?>">
+        <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?><?= $topic->getPinnedLink() ?>">
             <?= $topic->isPinned() ? " Désépingler ce topic" : " Épingler ce topic" ?>
         </a>
     <?php endforeach; ?>

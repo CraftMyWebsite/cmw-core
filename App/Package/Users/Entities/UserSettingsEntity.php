@@ -3,7 +3,6 @@
 namespace CMW\Entity\Users;
 
 
-use CMW\Model\Users\UsersModel;
 use CMW\Model\Users\UsersSettingsModel;
 use CMW\Utils\Redirect;
 

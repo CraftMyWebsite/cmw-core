@@ -1,15 +1,15 @@
 <?php
 
-use CMW\Utils\EnvBuilder;
+use CMW\Utils\EnvManager;
 
 
 class CliBuilder{
-    protected EnvBuilder $envBuilder;
+    protected EnvManager $envBuilder;
 
 
     public function __construct()
     {
-        $this->envBuilder = new EnvBuilder();
+        $this->envBuilder = new EnvManager();
 
 
         $this->loadLang();

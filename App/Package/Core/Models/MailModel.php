@@ -4,7 +4,7 @@ namespace CMW\Model\Core;
 
 use CMW\Entity\Core\MailConfigEntity;
 use CMW\Manager\Database\DatabaseManager;
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 
 class MailModel extends DatabaseManager
 {
@@ -25,8 +25,8 @@ class MailModel extends DatabaseManager
      */
     public function create(string $mail, string $mailReply, string $addressSMTP, string $user, string $password, int $port, string $protocol, string $footer, int $enable): ?MailConfigEntity
     {
-        if ($this->configExist()) {
-            $id = $this->getConfig()->getId();
+        if ($this->configExist() && !is_null($this->getConfig())) {
+            $id = $this->getConfig()?->getId();
 
             return $this->update($id, $mail, $mailReply, $addressSMTP, $user, $password, $port, $protocol, $footer, $enable);
         }
@@ -51,7 +51,7 @@ class MailModel extends DatabaseManager
 
         if ($req->execute($var)) {
             //We store the password in the .env file
-            Utils::getEnv()->setOrEditValue("SMTP_PASSWORD", $password);
+            EnvManager::getInstance()->setOrEditValue("SMTP_PASSWORD", $password);
             //We return the current config
             return $this->getConfig();
         }
@@ -101,11 +101,11 @@ class MailModel extends DatabaseManager
             $res['mail_config_mail_reply'] ?? "",
             $res['mail_config_address_smtp'] ?? "",
             $res['mail_config_user'] ?? "",
-            Utils::getEnv()->getValue("SMTP_PASSWORD") ?? "",
+            EnvManager::getInstance()->getValue("SMTP_PASSWORD") ?? "",
             $res['mail_config_port'] ?? "",
             $res['mail_config_protocol'] ?? "",
             $res['mail_config_footer'] ?? "",
-                $res['mail_config_enable'] ?? ""
+            $res['mail_config_enable'] ?? ""
         );
     }
 
@@ -147,7 +147,7 @@ class MailModel extends DatabaseManager
 
         if ($req->execute($var)) {
             //We store the password in the .env file
-            Utils::getEnv()->setOrEditValue("SMTP_PASSWORD", $password);
+            EnvManager::getInstance()->setOrEditValue("SMTP_PASSWORD", $password);
             //We return the current config
             $this->getConfig();
         }
@@ -157,7 +157,7 @@ class MailModel extends DatabaseManager
 
     private function deleteConfig(int $id): void
     {
-        $sql = "DELETE FROM `cmw_mail_config_smtp` where mail_config_id = :id;";
+        $sql = "DELETE FROM `cmw_mail_config_smtp` WHERE mail_config_id = :id;";
 
         $db = self::getInstance();
         $res = $db->prepare($sql);

@@ -4,16 +4,17 @@ namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Requests\Validator;
+use CMW\Manager\Router\Link;
+use CMW\Manager\Router\RouterException;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
-use CMW\Model\Core\CoreModel;
-use CMW\Router\Link;
-use CMW\Router\RouterException;
-use CMW\Utils\Response;
-use CMW\Utils\Utils;
 use CMW\Manager\Views\View;
+use CMW\Model\Core\CoreModel;
+use CMW\Utils\EnvManager;
+use CMW\Utils\Response;
 
 /**
  * Class: @coreController
@@ -21,18 +22,18 @@ use CMW\Manager\Views\View;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class CoreController
+class CoreController extends AbstractController
 {
     public static string $themeName;
-    public static array $availableLocales = ['fr' => 'Français', 'en' => 'English'];
+    public static array $availableLocales = ['fr' => 'Français', 'en' => 'English']; //todo remove that
     public static array $exampleDateFormat = ["d-m-Y H:i:s", "d-m-Y Hh im ss", "d/m/Y H:i:s", "d/m/Y à H\h i\m s\s", "d/m/Y à H\h i\m", "d/m/Y at H\h i\m s\s"];
 
     public function __construct()
     {
-        self::$themeName = (new CoreModel())->fetchOption("Theme"); //Get the current active Theme
     }
 
     public static function getThemePath(): string {
+        self::$themeName = (new CoreModel())->fetchOption("Theme");
         return (empty($themeName = self::$themeName)) ? "" : "./Public/Themes/$themeName/";
     }
 
@@ -83,7 +84,7 @@ class CoreController
 
         foreach ($_POST as $option_name => $option_value):
             if ($option_name === "locale") {
-                Utils::getEnv()->editValue("LOCALE", $option_value);
+                EnvManager::getInstance()->editValue("LOCALE", $option_value);
             }
 
             CoreModel::updateOption($option_name, $option_value);
@@ -101,7 +102,7 @@ class CoreController
 
     /* PUBLIC FRONT */
     /**
-     * @throws \CMW\Router\RouterException
+     * @throws \CMW\Manager\Router\RouterException
      */
     #[Link('/', Link::GET)]
     public function frontHome(): void
@@ -111,7 +112,7 @@ class CoreController
     }
 
     /**
-     * @throws \CMW\Router\RouterException
+     * @throws \CMW\Manager\Router\RouterException
      */
     #[Link("/:errorCode", Link::GET, ["errorCode" => ".*?"], "geterror")]
     public function errorView(Request $request, int $errorCode = 403): void
@@ -134,7 +135,7 @@ class CoreController
     }
 
     /**
-     * @throws \CMW\Router\RouterException
+     * @throws \CMW\Manager\Router\RouterException
      */
     #[Link("/:errorCode", Link::GET, ["errorCode" => ".*?"], "error")]
     public function threwRouterError(Request $request, $errorCode): void
@@ -148,7 +149,7 @@ class CoreController
     /* Security Warning */
     public function cmwWarn(): ?string
     {
-        if (is_dir("Installation") && getenv("DEVMODE") != 1) {
+        if (is_dir("Installation") && EnvManager::getInstance()->getValue("DEVMODE") !== '1') {
             //Todo Set that in Lang file
             return <<<HTML
             <p class='security-warning'>ATTENTION - Votre dossier d'Installation n'a pas encore été supprimé. Pour des questions de sécurité, vous devez supprimer le dossier Installation situé à la racine de votre site.</p>
@@ -160,7 +161,7 @@ class CoreController
     /*
      * Head constructor
      */
-    public function cmwHead($title, $description): string
+    public function cmwHead(string $title, string $description): string
     {
         $toReturn = <<<HTML
             <meta charset='utf-8'>

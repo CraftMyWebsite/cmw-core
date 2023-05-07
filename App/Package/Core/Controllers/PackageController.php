@@ -4,7 +4,7 @@ namespace CMW\Controller\Core;
 
 use CMW\Entity\Core\PackageEntity;
 use CMW\Entity\Core\PackageMenusEntity;
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 use JsonException;
 
 class PackageController extends CoreController
@@ -95,14 +95,14 @@ class PackageController extends CoreController
         foreach ($packageInfos as $packageInfo):
             if (empty($packageInfo['url_menu'])) {
                 $toReturn[] = new PackageMenusEntity(
-                    $packageInfo['name_menu_' . Utils::getEnv()->getValue("LOCALE")],
+                    $packageInfo['name_menu_' . EnvManager::getInstance()->getValue("LOCALE")],
                     $packageInfo['icon_menu'],
                     $packageInfo['url_menu'],
-                    $packageInfo['urls_submenu_' . Utils::getEnv()->getValue("LOCALE")]
+                    $packageInfo['urls_submenu_' . EnvManager::getInstance()->getValue("LOCALE")]
                 );
             } else {
                 $toReturn[] = new PackageMenusEntity(
-                    $packageInfo['name_menu_' . Utils::getEnv()->getValue("LOCALE")],
+                    $packageInfo['name_menu_' . EnvManager::getInstance()->getValue("LOCALE")],
                     $packageInfo['icon_menu'],
                     $packageInfo['url_menu'],
                     []

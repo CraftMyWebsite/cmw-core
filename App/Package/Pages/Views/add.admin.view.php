@@ -1,7 +1,8 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
+use CMW\Utils\Website;
 
 $title = LangManager::translate("pages.add.title");
 $description = LangManager::translate("pages.add.desc");
@@ -32,7 +33,7 @@ $description = LangManager::translate("pages.add.desc");
                         <h6>URL :</h6>
                         <div class="input-group mb-3">
                         <span class="input-group-text"
-                              id="inputGroup-sizing-default"><?= Utils::getHttpProtocol() . '://' . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . "p/" ?></span>
+                              id="inputGroup-sizing-default"><?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "p/" ?></span>
                             <input type="text" id="slug" class="form-control"
                                    placeholder="<?= LangManager::translate("pages.link") ?>"
                                    aria-label="Slug" aria-describedby="inputGroup-sizing-default" name="news_slug"
@@ -111,7 +112,7 @@ $description = LangManager::translate("pages.add.desc");
                         uploadByFile(file) {
                             let formData = new FormData();
                             formData.append('image', file);
-                            return fetch("<?= Utils::getEnv()->getValue("PATH_SUBFOLDER")?>cmw-admin/pages/uploadImage/add", {
+                            return fetch("<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER")?>cmw-admin/pages/uploadImage/add", {
                                 method: "POST",
                                 body: formData
                             }).then(res => res.json())
@@ -119,7 +120,7 @@ $description = LangManager::translate("pages.add.desc");
                                     return {
                                         success: 1,
                                         file: {
-                                            url: "<?= Utils::getEnv()->getValue("PATH_URL")?>public/uploads/editor/" + response
+                                            url: "<?= EnvManager::getInstance()->getValue("PATH_URL")?>public/uploads/editor/" + response
                                         }
                                     }
                                 })
@@ -185,7 +186,7 @@ $description = LangManager::translate("pages.add.desc");
                 formData.append('news_content', JSON.stringify(savedData));
                 formData.append('page_state', page_state.toString());
 
-                fetch("<?= Utils::getEnv()->getValue("PATH_URL") ?>cmw-admin/pages/add", {
+                fetch("<?= EnvManager::getInstance()->getValue("PATH_URL") ?>cmw-admin/pages/add", {
                     method: "POST",
                     body: formData
                 })
@@ -196,7 +197,7 @@ $description = LangManager::translate("pages.add.desc");
                             button.innerHTML = "<i style='color: #16C329;' class='fa-solid fa-check fa-shake'></i> Ok !";
                         }, 850);
                 setTimeout(() => {
-                            document.location.replace("<?= Utils::getHttpProtocol() . '://' . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . 'cmw-admin/pages/list'?>");
+                            document.location.replace("<?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . 'cmw-admin/pages/list'?>");
                         }, 1000);
                 
             })

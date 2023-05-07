@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Manager\Pacakge;
+namespace CMW\Manager\Package;
 
 abstract class GlobalObject
 {
@@ -12,7 +12,7 @@ abstract class GlobalObject
      */
     final public static function getInstance(): static
     {
-        if (null === static::$_instance) {
+        if (!isset(static::$_instance)) {
             static::$_instance = new static();
         }
 

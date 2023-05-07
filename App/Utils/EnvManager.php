@@ -5,13 +5,15 @@ namespace CMW\Utils;
 use Closure;
 
 /**
- * Class: @EnvBuilder
+ * Class: @EnvManager
  * @package Utils
  * @author CraftMywebsite <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class EnvBuilder
+class EnvManager
 {
+
+    private static EnvManager $_instance;
 
     private string $envFileName = ".env";
     private string $envPath;
@@ -35,7 +37,6 @@ class EnvBuilder
         $this->setDefaultValues();
 
         $this->load();
-
     }
 
     public function __get(string $key)
@@ -43,7 +44,8 @@ class EnvBuilder
         return $this->getValue($key);
     }
 
-    public function __set(string $key, string $value) {
+    public function __set(string $key, string $value)
+    {
         $this->setOrEditValue($key, $value);
     }
 
@@ -74,6 +76,15 @@ class EnvBuilder
             $fn($name, $value);
         }
 
+    }
+
+    public static function getInstance(): EnvManager
+    {
+        if (!isset(self::$_instance)) {
+            self::$_instance = new self();
+        }
+
+        return self::$_instance;
     }
 
     public function valueExist($key): bool

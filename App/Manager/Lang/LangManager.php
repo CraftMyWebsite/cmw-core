@@ -3,8 +3,8 @@
 namespace CMW\Manager\Lang;
 
 use CMW\Controller\Installer\InstallerController;
+use CMW\Utils\EnvManager;
 use CMW\Utils\Loader;
-use CMW\Utils\Utils;
 
 class LangManager
 {
@@ -57,7 +57,7 @@ class LangManager
     public static function loadTranslation(string $package, ?string $lang = null): ?array
     {
         if (is_null($lang)) {
-            $lang = strtolower(Utils::getEnv()->getValue("LOCALE"));
+            $lang = strtolower(EnvManager::getInstance()->getValue("LOCALE"));
         }
 
 

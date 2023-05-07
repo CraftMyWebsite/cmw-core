@@ -2,7 +2,7 @@
 
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 
 /** @var \CMW\Entity\Users\UserEntity $user */
 /** @var \CMW\Entity\Users\RoleEntity[] $roles */
@@ -95,7 +95,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
                             <td><?= $user->getLastConnection() ?></td>
                             <td>
                                 <a class="me-3 "
-                                   href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>cmw-admin/users/edit/<?= $user->getId() ?>">
+                                   href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/users/edit/<?= $user->getId() ?>">
                                     <i class="text-primary fa-solid fa-gears"></i>
                                 </a>
                                 <a type="button" data-bs-toggle="modal" data-bs-target="#delete-<?= $user->getId() ?>">

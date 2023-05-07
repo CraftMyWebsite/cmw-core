@@ -5,13 +5,13 @@ namespace CMW\Controller\Users;
 use CMW\Controller\Core\CoreController;
 use CMW\Entity\Users\UserSettingsEntity;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Router\Link;
 use CMW\Manager\Uploads\ImagesManager;
-use CMW\Model\Users\UsersModel;
+use CMW\Manager\Views\View;
 use CMW\Model\Users\UsersSettingsModel;
-use CMW\Router\Link;
+use CMW\Utils\EnvManager;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
-use CMW\Manager\Views\View;
 use JsonException;
 
 /**
@@ -22,21 +22,14 @@ use JsonException;
  */
 class UsersSettingsController extends CoreController
 {
-    private UsersSettingsModel $settingsModel;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->settingsModel = new UsersSettingsModel();
-    }
 
     public static function getDefaultImageLink(): string
     {
-        return Utils::getEnv()->getValue("PATH_SUBFOLDER") . "Public/Uploads/Users/Default/defaultImage.jpg";
+        return EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "Public/Uploads/Users/Default/defaultImage.jpg";
     }
 
     /**
-     * @throws \CMW\Router\RouterException
+     * @throws \CMW\Manager\Router\RouterException
      */
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/users")]
     #[Link("/settings", Link::GET, [], "/cmw-admin/users")]

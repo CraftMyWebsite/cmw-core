@@ -59,7 +59,6 @@ use CMW\Manager\Lang\LangManager;
             <?= LangManager::translate("core.btn.next") ?>
         </button>
 </form>
-</div>
 
 <script>
     const cguCheckbox = document.getElementById('cgu');

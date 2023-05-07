@@ -4,7 +4,7 @@ use CMW\Controller\Core\PackageController;
 use CMW\Controller\Core\ThemeController;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Updater\UpdatesManager;
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 
 ?>
 <div class="card-body">
@@ -36,7 +36,7 @@ use CMW\Utils\Utils;
     </div>
 
     <div class="card-actions justify-end">
-        <a href="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>installer/finish" class="btn btn-primary">
+        <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>installer/finish" class="btn btn-primary">
             <?= LangManager::translate("Installation.finish.goToMySite") ?>
         </a>
     </div>

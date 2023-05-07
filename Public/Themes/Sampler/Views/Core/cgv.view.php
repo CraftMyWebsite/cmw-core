@@ -1,11 +1,12 @@
 <?php
 
 use CMW\Utils\Utils;
+use CMW\Utils\Website;
 
 /* @var CMW\Entity\Core\ConditionEntity $cgv */
 
 /*TITRE ET DESCRIPTION*/
-$title = Utils::getSiteName() . ' - CGV';
+$title = Website::getName() . ' - CGV';
 $description = "Description de votre page";
 ?>
 

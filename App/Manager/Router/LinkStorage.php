@@ -1,10 +1,11 @@
 <?php
 
-namespace CMW\Router;
+namespace CMW\Manager\Router;
 
 
 use CMW\Manager\Class\ClassManager;
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Utils\EnvManager;
 use CMW\Utils\Utils;
 use ReflectionClass;
 use ReflectionException;
@@ -45,7 +46,7 @@ class LinkStorage extends DatabaseManager
 
 
     /**
-     * @return \CMW\Router\Link[]
+     * @return \CMW\Manager\Router\Link[]
      * @desc Get all packages routes, and return Link[] entity.
      */
     public function getAllRoutes(): array
@@ -54,9 +55,9 @@ class LinkStorage extends DatabaseManager
 
         $packageFolder = 'App/Package';
         $contentDirectory = array_diff(scandir("$packageFolder/"), array('..', '.'));
-        $dir = Utils::getEnv()->getValue("dir");
+        $dir = EnvManager::getInstance()->getValue("dir");
         foreach ($contentDirectory as $package) {
-            $packageSubFolder = "$packageFolder/$package/controllers";
+            $packageSubFolder = "$packageFolder/$package/Controllers";
             if (is_dir($packageSubFolder)) {
                 $contentSubDirectory = array_diff(scandir("$packageSubFolder/"), array('..', '.'));
                 foreach ($contentSubDirectory as $packageFile) {

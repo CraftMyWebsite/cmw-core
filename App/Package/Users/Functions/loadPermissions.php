@@ -4,7 +4,6 @@ use CMW\Entity\USers\PermissionEntity;
 use CMW\Entity\Users\RoleEntity;
 use CMW\Model\USers\PermissionsModel;
 use CMW\Model\Users\RolesModel;
-use CMW\Utils\Utils;
 
 function generateCheckBox(PermissionEntity $permission, string $codeValue, bool $checked = false): string
 {

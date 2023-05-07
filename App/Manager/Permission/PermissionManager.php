@@ -9,7 +9,7 @@ class PermissionManager
 
     public static function canCreateFile(string $path): bool
     {
-        (new PermissionManager)->createDirectory($path); //Create the log directory
+        self::createDirectory($path); //Create the log directory
         return is_writable($path); //todo test-it
     }
 
@@ -18,7 +18,7 @@ class PermissionManager
      * @return void
      * @desc Create the directory to store the Logs files
      */
-    private  function createDirectory(string $path): void
+    private static function createDirectory(string $path): void
     {
         if (!file_exists($path) && !mkdir($concurrentDirectory = $path) && !is_dir($concurrentDirectory)) {
             throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));

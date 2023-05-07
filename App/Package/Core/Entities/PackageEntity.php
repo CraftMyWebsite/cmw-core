@@ -4,7 +4,7 @@
 
 namespace CMW\Entity\Core;
 
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 
 class PackageEntity
 {
@@ -50,7 +50,7 @@ class PackageEntity
      */
     public function getDescription(): string
     {
-        return $this->descriptions[Utils::getEnv()->getValue('LOCALE')];
+        return $this->descriptions[EnvManager::getInstance()->getValue('LOCALE')];
     }
 
     /**

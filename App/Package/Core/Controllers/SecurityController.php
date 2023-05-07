@@ -2,14 +2,14 @@
 
 namespace CMW\Controller\Core;
 
-use CMW\Controller\Core\CoreController;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Router\Link;
+use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
-use CMW\Router\Link;
+use CMW\Utils\EnvManager;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
-use CMW\Manager\Views\View;
 
 /**
  * Class: @SecurityController
@@ -42,13 +42,13 @@ class SecurityController extends CoreController
         switch ($captcha){
             case "captcha-hcaptcha":
                 CoreModel::updateOption("captcha", "hcaptcha");
-                Utils::getEnv()->setOrEditValue("HCAPTCHA_SITE_KEY", filter_input(INPUT_POST, "captcha_hcaptcha_site_key"));
-                Utils::getEnv()->setOrEditValue("HCAPTCHA_SECRET_KEY", filter_input(INPUT_POST, "captcha_hcaptcha_secret_key"));
+                EnvManager::getInstance()->setOrEditValue("HCAPTCHA_SITE_KEY", filter_input(INPUT_POST, "captcha_hcaptcha_site_key"));
+                EnvManager::getInstance()->setOrEditValue("HCAPTCHA_SECRET_KEY", filter_input(INPUT_POST, "captcha_hcaptcha_secret_key"));
                 break;
             case "captcha-recaptcha":
                 CoreModel::updateOption("captcha", "recaptcha");
-                Utils::getEnv()->setOrEditValue("RECAPTCHA_SITE_KEY", filter_input(INPUT_POST, "captcha_recaptcha_site_key"));
-                Utils::getEnv()->setOrEditValue("RECAPTCHA_SECRET_KEY", filter_input(INPUT_POST, "captcha_recaptcha_secret_key"));
+                EnvManager::getInstance()->setOrEditValue("RECAPTCHA_SITE_KEY", filter_input(INPUT_POST, "captcha_recaptcha_site_key"));
+                EnvManager::getInstance()->setOrEditValue("RECAPTCHA_SECRET_KEY", filter_input(INPUT_POST, "captcha_recaptcha_secret_key"));
                 break;
             default:
                 CoreModel::updateOption("captcha", "none");
@@ -93,14 +93,14 @@ class SecurityController extends CoreController
     private static function getPublicHCaptchaData(): void
     {
         echo "<script src='https://js.hcaptcha.com/1/api.js' async defer></script>";
-        echo '<div class="h-captcha" data-sitekey="' . Utils::getEnv()->getValue("HCAPTCHA_SITE_KEY") .'" 
+        echo '<div class="h-captcha" data-sitekey="' . EnvManager::getInstance()->getValue("HCAPTCHA_SITE_KEY") .'" 
                     data-Theme="light" data-error-callback="onError"></div>';
     }
 
     private static function getPublicReCaptchaData(): void
     {
         echo '<script src="https://www.google.com/recaptcha/api.js" async defer></script>';
-        echo '<div class="g-recaptcha" data-sitekey="'. Utils::getEnv()->getValue("RECAPTCHA_SITE_KEY") .'"></div>';
+        echo '<div class="g-recaptcha" data-sitekey="'. EnvManager::getInstance()->getValue("RECAPTCHA_SITE_KEY") .'"></div>';
 
     }
 
@@ -117,7 +117,7 @@ class SecurityController extends CoreController
     private static function validateHCaptha(): bool
     {
         $data = array(
-            'secret' => Utils::getEnv()->getValue("HCAPTCHA_SECRET_KEY"),
+            'secret' => EnvManager::getInstance()->getValue("HCAPTCHA_SECRET_KEY"),
             'response' => $_POST['h-captcha-response']
         );
         $verify = curl_init();
@@ -135,7 +135,7 @@ class SecurityController extends CoreController
         $recaptcha = $_POST['g-recaptcha-response'];
 
         $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' .
-            Utils::getEnv()->getValue("RECAPTCHA_SECRET_KEY") . '&response=' . $recaptcha;
+            EnvManager::getInstance()->getValue("RECAPTCHA_SECRET_KEY") . '&response=' . $recaptcha;
 
         $response = file_get_contents($url);
 

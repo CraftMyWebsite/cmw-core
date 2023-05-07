@@ -7,6 +7,7 @@ use CMW\Manager\Collections\Collection;
 use CMW\Manager\Collections\CollectionEntity;
 use CMW\Utils\Loader;
 use JetBrains\PhpStorm\ExpectedValues;
+use ReflectionClass;
 use ReflectionMethod;
 
 class Emitter
@@ -27,15 +28,15 @@ class Emitter
     public static function listen(#[ExpectedValues(AbstractEvent::class)] string $eventName, Closure $closure): void
     {
 
-        $event = new \ReflectionClass($eventName);
+        $event = new ReflectionClass($eventName);
         /* @var \CMW\Manager\Events\AbstractEvent $eventInstance*/
         $eventInstance = $event->newInstance();
 
         $eventInstance->init();
 
         echo $eventInstance->getName() . "<br>";
-        $eventInstance::increment();
-        echo $eventInstance::getCounter();
+        $eventInstance->increment();
+        echo $eventInstance->getCounter();
     }
 
     public static function send(#[ExpectedValues(AbstractEvent::class)] string $eventName, mixed $data): void

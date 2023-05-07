@@ -3,8 +3,9 @@
 namespace CMW\Manager\Metrics;
 
 use CMW\Manager\Database\DatabaseManager;
-use CMW\Router\Route;
-use CMW\Utils\Utils;
+use CMW\Manager\Router\Route;
+use CMW\Utils\EnvManager;
+use CMW\Utils\Website;
 use JetBrains\PhpStorm\ExpectedValues;
 
 class VisitsMetricsManager extends DatabaseManager
@@ -14,7 +15,7 @@ class VisitsMetricsManager extends DatabaseManager
 
     public function __construct()
     {
-        $this->fileName = Utils::getEnv()->getValue("DIR") . "App/Storage/Visits/history.log";
+        $this->fileName = EnvManager::getInstance()->getValue("DIR") . "App/Storage/Visits/history.log";
     }
 
     public function registerVisit(Route $route): void
@@ -31,7 +32,7 @@ class VisitsMetricsManager extends DatabaseManager
             return;
         }
 
-        $data = Utils::getClientIp() . "," . date('Y-m-d H:i:s') . "," . $path . "," . $package . "," . http_response_code() . "," . $isAdmin;
+        $data = Website::getClientIp() . "," . date('Y-m-d H:i:s') . "," . $path . "," . $package . "," . http_response_code() . "," . $isAdmin;
 
         $this->saveLogFile($data);
 

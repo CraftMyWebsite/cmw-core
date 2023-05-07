@@ -3,7 +3,7 @@
 
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 
 ?>
 <div class="lg:flex flex-wrap mb-2">
@@ -41,7 +41,7 @@ use CMW\Utils\Utils;
     <li class="lg:w-1/3 lg:px-2 mb-4 h-fit">
         <div class="font-bold text-lg bg-gray-700 rounded-t-2xl p-1">
             <div class="flex flex-wrap">
-                <img class="w-7 mr-2" src="Installation/Views/Assets/Img/other.png">
+                <img class="w-7 mr-2" src="Installation/Views/Assets/Img/other.png" alt="Other picture">
                 <span class="font-medium text-lg"><?= LangManager::translate("Installation.bundle.custom") ?></span>
             </div>
         </div>
@@ -62,11 +62,11 @@ use CMW\Utils\Utils;
 
     <!-- Bundle -->
 
-    <?php foreach (PublicAPI::getData("resources/getBundles&lang=" . Utils::getEnv()->getValue("locale")) as $bundle): ?>
+    <?php foreach (PublicAPI::getData("resources/getBundles&lang=" . EnvManager::getInstance()->getValue("locale")) as $bundle): ?>
         <li class="lg:w-1/3 lg:px-2 mb-4 h-fit">
             <div class="font-bold text-lg bg-gray-700 rounded-t-2xl p-1">
                 <div class="flex flex-wrap">
-                    <img class="w-7 mr-2" src="<?= $bundle['image'] ?>">
+                    <img class="w-7 mr-2" src="<?= $bundle['image'] ?>" alt="Image <?= $bundle['image'] ?>">
                     <span class="font-medium text-lg"><?= $bundle['name'] ?></span>
                 </div>
             </div>

@@ -5,10 +5,10 @@ namespace CMW\Controller\Core;
 use CMW\Controller\Users\UsersController;
 use CMW\Interface\Core\IMenus;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\MenusModel;
 use CMW\Model\Users\RolesModel;
-use CMW\Router\Link;
 use CMW\Utils\Loader;
 use CMW\Utils\Redirect;
 use CMW\Utils\Response;
@@ -25,9 +25,9 @@ class MenusController extends CoreController
 
     private MenusModel $menusModel;
 
-    public function __construct($theme_path = null)
+    public function __construct()
     {
-        parent::__construct($theme_path);
+        parent::__construct();
         $this->menusModel = new MenusModel();
     }
 

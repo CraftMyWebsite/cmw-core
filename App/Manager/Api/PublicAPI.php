@@ -2,7 +2,7 @@
 
 namespace CMW\Manager\Api;
 
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 use JsonException;
 
 class PublicAPI
@@ -13,12 +13,12 @@ class PublicAPI
      */
     public static function getUrl(): string
     {
-        return Utils::getEnv()->getValue("APIURL");
+        return EnvManager::getInstance()->getValue("APIURL");
     }
 
     private static function getWebsiteKey(): string
     {
-        return Utils::getEnv()->getValue("CMW_KEY");
+        return EnvManager::getInstance()->getValue("CMW_KEY");
     }
 
     /**
@@ -68,7 +68,7 @@ class PublicAPI
         }
 
         if ($useLang){
-            $url .='&Lang=' . Utils::getEnv()->getValue('LOCALE');
+            $url .='&Lang=' . EnvManager::getInstance()->getValue('LOCALE');
         }
 
         $options = array(

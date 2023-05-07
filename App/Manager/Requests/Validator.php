@@ -2,8 +2,8 @@
 
 namespace CMW\Manager\Requests;
 
-use CMW\Controller\Core\CoreController;
 use CMW\Model\Core\CoreModel;
+use DateTime;
 use JetBrains\PhpStorm\ExpectedValues;
 
 class Validator
@@ -129,8 +129,8 @@ class Validator
         $value = $this->getValue($key);
         $format = (new CoreModel())->fetchOption("dateFormat");
 
-        $date = \DateTime::createFromFormat($format, $value);
-        $errors = \DateTime::getLastErrors();
+        $date = DateTime::createFromFormat($format, $value);
+        $errors = DateTime::getLastErrors();
 
 
         if ($errors['error_count'] > 0 || $errors['warning_count']) {

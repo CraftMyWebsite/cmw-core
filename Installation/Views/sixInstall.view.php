@@ -67,7 +67,7 @@
 <script>
 
     function showPassword() {
-        var x = document.getElementById("password");
+        const x = document.getElementById("password");
         if (x.type === "password") {
             x.type = "text";
         } else {
@@ -76,7 +76,7 @@
     }
 
     function showPasswordV() {
-        var x = document.getElementById("passwordCheck");
+        const x = document.getElementById("passwordCheck");
         if (x.type === "password") {
             x.type = "text";
         } else {
@@ -86,12 +86,12 @@
 
     function checkPasswordIsSame() {
         let textAlert = document.getElementById("passwordTextAlert");
-        var pass1 = document.forms["mainForm"]["password"].value;
-        var pass2 = document.forms["mainForm"]["passwordCheck"].value;
+        let pass1 = document.forms["mainForm"]["password"].value;
+        let pass2 = document.forms["mainForm"]["passwordCheck"].value;
         textAlert.style.display = 'none';
         if (pass2) {
             textAlert.style.display = 'inline-block';
-            if (pass1 == pass2) {
+            if (pass1 === pass2) {
                 textAlert.style.display = 'none';
                 document.getElementById("formBtn").disabled = false;
             } else {

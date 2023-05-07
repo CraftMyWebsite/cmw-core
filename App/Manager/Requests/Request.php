@@ -8,23 +8,23 @@ class Request
 {
 
     private string $url;
-    private string $methode;
+    private string $method;
     private array $params;
     private array $data;
     private string $emitUrl;
 
     /**
      * @param string $url
-     * @param string $methode
+     * @param string $method
      * @param array $params
      * @param array $data
      * @param string $emitUrl
      */
-    public function __construct(string $url, #[ExpectedValues(['GET', 'POST'])] string $methode, array $params,
+    public function __construct(string $url, #[ExpectedValues(['GET', 'POST'])] string $method, array $params,
                                 array  $data, string $emitUrl)
     {
         $this->url = $url;
-        $this->methode = $methode;
+        $this->method = $method;
         $this->params = $params;
         $this->data = $data;
         $this->emitUrl = $emitUrl;
@@ -41,9 +41,9 @@ class Request
     /**
      * @return string
      */
-    public function getMethode(): string
+    public function getMethod(): string
     {
-        return $this->methode;
+        return $this->method;
     }
 
     /**
