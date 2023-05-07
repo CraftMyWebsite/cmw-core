@@ -83,6 +83,5 @@ use CMW\Utils\Utils;
 <script>
     const theme = localStorage.getItem('theme') || 'light';
     document.body.className = theme;
-    console.log(theme)
   </script>
 <div id="app">
