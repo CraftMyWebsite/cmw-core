@@ -143,8 +143,6 @@ class UsersController extends CoreController
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
-        Utils::debugR($request);
-
         $userEntity = $this->userModel->getUserById($id);
 
         $roles = $this->roleModel->getRoles();

@@ -1,7 +1,8 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
+use CMW\Utils\Website;
 
 $title = LangManager::translate("pages.list.title");
 $description = LangManager::translate("pages.list.desc"); ?>
@@ -29,16 +30,16 @@ $description = LangManager::translate("pages.list.desc"); ?>
                 </tr>
                 </thead>
                 <tbody class="text-center">
-                    <?php /** @var \CMW\Entity\News\NewsEntity[] $newsList */ foreach ($pagesList as $page) : ?>
+                    <?php /** @var \CMW\Entity\Pages\PageEntity[] $pagesList */ foreach ($pagesList as $page) : ?>
                     <tr>
                         <td><?= $page->getTitle() ?></td>
-                        <td><a href="<?= Utils::getHttpProtocol() . '://' . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . "p/" . $page->getSlug() ?>" target="_blank"><?= Utils::getHttpProtocol() . '://' . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . "p/" . $page->getSlug() ?></a></td>
+                        <td><a href="<?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "p/" . $page->getSlug() ?>" target="_blank"><?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . "p/" . $page->getSlug() ?></a></td>
                         <td><?= $page->getUser()->getPseudo() ?></td>
                         <td><?php if ($page->getState() === 2): ?> <?= LangManager::translate("pages.list.yes") ?> <?php else: ?> <?= LangManager::translate("pages.list.no") ?> <?php endif; ?></td>
                         <td><?= $page->getEdited() ?></td>
                         <td><?= $page->getCreated() ?></td>
                         <td>
-                            <a class="me-3" href="../Pages/edit/<?= $page->getSlug() ?>">
+                            <a class="me-3" href="../pages/edit/<?= $page->getSlug() ?>">
                                 <i class="text-primary fa-solid fa-gears"></i>
                             </a>
                             <a type="button" data-bs-toggle="modal" data-bs-target="#delete-<?= $page->getId() ?>">

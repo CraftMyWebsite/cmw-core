@@ -5,7 +5,7 @@ namespace CMW\Model\Users;
 use CMW\Entity\Users\UserPictureEntity;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Uploads\ImagesManager;
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 use Exception;
 
 
@@ -65,7 +65,7 @@ class UserPictureModel extends DatabaseManager
 
     public function userHasDefaultImage(int $userId): bool
     {
-        return  is_file(Utils::getEnv()->getValue("DIR") . "Public/uploads/users/default/" . UsersSettingsModel::getSetting("defaultImage")) && !$this->userHasImage($userId);
+        return  is_file(EnvManager::getInstance()->getValue("DIR") . "Public/Uploads/Users/Default/" . UsersSettingsModel::getSetting("defaultImage")) && !$this->userHasImage($userId);
     }
 
     /**
@@ -132,7 +132,11 @@ class UserPictureModel extends DatabaseManager
            return;
         }
 
-        $imageName = $this->getImageByUserId($userId)->getImageName();
+        $imageName = $this->getImageByUserId($userId)?->getImageName();
+
+        if (is_null($imageName)){
+            return;
+        }
 
         ImagesManager::deleteImage($imageName, "users");
 
@@ -142,8 +146,6 @@ class UserPictureModel extends DatabaseManager
         $req = $db->prepare($sql);
 
         $req->execute(array("userId" => $userId));
-
-
     }
 
 }

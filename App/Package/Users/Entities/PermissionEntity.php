@@ -31,7 +31,7 @@ class PermissionEntity
         <div>
             <h4>Permission #{$this->getId()}</h4>
             <ul>
-                <li><b>Parent: </b> {$parent}</li>
+                <li><b>Parent: </b> $parent</li>
                 <br>
                 <li><b>Name (Code): </b> {$this->getCode()}</li>
             </ul>

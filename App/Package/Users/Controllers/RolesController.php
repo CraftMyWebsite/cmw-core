@@ -10,6 +10,7 @@ use CMW\Manager\Views\View;
 use CMW\Model\Users\PermissionsModel;
 use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UsersModel;
+use CMW\Utils\EnvManager;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\NoReturn;
@@ -50,7 +51,7 @@ class RolesController extends CoreController
         $rolesModel = new RolesModel();
 
         //Try to improve that ?
-        require_once(Utils::getEnv()->getValue("DIR") . "App/Package/users/functions/loadPermissions.php");
+        require_once(EnvManager::getInstance()->getValue("DIR") . "App/Package/Users/Functions/loadPermissions.php");
 
 
         View::createAdminView("users", "roles")
@@ -111,7 +112,7 @@ class RolesController extends CoreController
         $permissionModel = new PermissionsModel();
 
         //Try to improve that ?
-        require_once(Utils::getEnv()->getValue("DIR") . "App/Package/users/functions/loadPermissions.php");
+        require_once(EnvManager::getInstance()->getValue("DIR") . "App/Package/Users/Functions/loadPermissions.php");
 
         View::createAdminView("users", "roles.edit")->addVariableList(array(
             "permissionController" => $permissionController,

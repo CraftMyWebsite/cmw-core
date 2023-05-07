@@ -15,7 +15,7 @@ class Request
 
     /**
      * @param string $url
-     * @param string $methode
+     * @param string $method
      * @param array $params
      * @param array $data
      * @param string $emitUrl

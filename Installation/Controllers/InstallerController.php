@@ -13,9 +13,11 @@ use CMW\Manager\Router\LinkStorage;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Installer\InstallerModel;
+use CMW\Utils\EnvManager;
 use CMW\Utils\Redirect;
 use CMW\Utils\Response;
 use CMW\Utils\Utils;
+use CMW\Utils\Website;
 use JetBrains\PhpStorm\NoReturn;
 
 /**
@@ -58,7 +60,7 @@ class InstallerController
     {
         return match ($value) {
             "php" => PHP_VERSION_ID >= self::$minPhpVersionId,
-            "https" => Utils::getHttpProtocol() === "https",
+            "https" => Website::getProtocol() === "https",
             "zip" => extension_loaded('zip'),
             "curl" => extension_loaded('curl'),
             "pdo" => extension_loaded('pdo')
@@ -79,8 +81,8 @@ class InstallerController
     public static function loadLang(): ?array
     {
 
-        $lang = Utils::getEnv()->getValue("locale") ?? "en";
-        $fileName = Utils::getEnv()->getValue("dir") . "/Installation/Lang/$lang.php";
+        $lang = EnvManager::getInstance()->getValue("locale") ?? "en";
+        $fileName = EnvManager::getInstance()->getValue("dir") . "/Installation/Lang/$lang.php";
 
         $fileExist = is_file($fileName);
 
@@ -114,7 +116,7 @@ class InstallerController
     #[Link(path: "/Lang/:code", method: Link::GET, variables: ["code" => ".*?"], scope: "/installer")]
     public function changeLang(Request $request, string $code): void
     {
-        Utils::getEnv()->setOrEditValue("LOCALE", $code);
+        EnvManager::getInstance()->setOrEditValue("LOCALE", $code);
         header("location: ../../installer");
     }
 
@@ -137,17 +139,17 @@ class InstallerController
 
     public static function getInstallationStep(): int
     {
-        return Utils::getEnv()->getValue("installStep");
+        return EnvManager::getInstance()->getValue("installStep");
     }
 
     private function loadView(string $filename): void
     {
-        $lang = Utils::getEnv()->getValue("locale") ?? "fr";
+        $lang = EnvManager::getInstance()->getValue("locale") ?? "fr";
 
         $view = new View(basicVars: false);
         $view
-            ->setCustomPath(Utils::getEnv()->getValue("DIR") . "Installation/Views/$filename.view.php")
-            ->setCustomTemplate(Utils::getEnv()->getValue("DIR") . "Installation/Views/template.php")
+            ->setCustomPath(EnvManager::getInstance()->getValue("DIR") . "Installation/Views/$filename.view.php")
+            ->setCustomTemplate(EnvManager::getInstance()->getValue("DIR") . "Installation/Views/template.php")
             ->addStyle("Admin/Resources/Vendors/Izitoast/iziToast.min.css")
             ->addScriptAfter("Admin/Resources/Vendors/Izitoast/iziToast.min.js",
                                     "Installation/Views/Assets/Js/changeLang.js")
@@ -179,7 +181,7 @@ class InstallerController
         if (!isset($_POST['cgu'])) {
             Response::sendAlert("error", LangManager::translate("core.toaster.error"),
                 LangManager::translate('Installation.welcome.error.cgu'));
-            Utils::refreshPage();
+            Website::refresh();
             return;
         }
 
@@ -191,19 +193,19 @@ class InstallerController
 
         $data = [
             'domain' => $_SERVER['HTTP_HOST'],
-            'cmw_version' => Utils::getEnv()->getValue('VERSION'),
+            'cmw_version' => EnvManager::getInstance()->getValue('VERSION'),
             'remote_address' => $remoteAddress
         ];
 
         $apiReturn = PublicAPI::postData("websites/register", $data, false);
 
         if (array_key_exists('uuid', $apiReturn)) {
-            Utils::getEnv()->setOrEditValue('CMW_KEY', $apiReturn['uuid']);
+            EnvManager::getInstance()->setOrEditValue('CMW_KEY', $apiReturn['uuid']);
         } else {
-            Utils::getEnv()->setOrEditValue('CMW_KEY', 'ERROR');
+            EnvManager::getInstance()->setOrEditValue('CMW_KEY', 'ERROR');
         }
 
-        Utils::getEnv()->editValue("installStep", 1);
+        EnvManager::getInstance()->editValue("installStep", 1);
     }
 
     /**
@@ -251,12 +253,12 @@ class InstallerController
         $this->firstInstallSetDatabase($host, $db, $username, $password, $port);
         $this->firstInstallSetInfos($subFolder, $timezone, $devMode);
 
-        Utils::getEnv()->setOrEditValue("PATH_SUBFOLDER", $subFolder);
-        Utils::getEnv()->setOrEditValue("PATH_URL", Utils::getCompleteUrl());
-        Utils::getEnv()->setOrEditValue("PATH_ADMIN_VIEW", "Admin/Resources/Views/");
-        Utils::getEnv()->setOrEditValue("TIMEZONE", $timezone);
-        Utils::getEnv()->setOrEditValue("DEVMODE", $devMode);
-        Utils::getEnv()->setOrEditValue("UPDATE_CHECKER", "1");
+        EnvManager::getInstance()->setOrEditValue("PATH_SUBFOLDER", $subFolder);
+        EnvManager::getInstance()->setOrEditValue("PATH_URL", Website::getUrl());
+        EnvManager::getInstance()->setOrEditValue("PATH_ADMIN_VIEW", "Admin/Resources/Views/");
+        EnvManager::getInstance()->setOrEditValue("TIMEZONE", $timezone);
+        EnvManager::getInstance()->setOrEditValue("DEVMODE", $devMode);
+        EnvManager::getInstance()->setOrEditValue("UPDATE_CHECKER", "1");
 
 
         //Todo Throw error
@@ -268,23 +270,23 @@ class InstallerController
         //Init Default routes
         (new LinkStorage())->storeDefaultRoutes();
 
-        Utils::getEnv()->editValue("installStep", 2);
+        EnvManager::getInstance()->editValue("installStep", 2);
     }
 
     private function firstInstallSetDatabase(string $host, string $db, string $username, string $password, int $port): void
     {
-        Utils::getEnv()->setOrEditValue("DB_HOST", $host);
-        Utils::getEnv()->setOrEditValue("DB_NAME", $db);
-        Utils::getEnv()->setOrEditValue("DB_USERNAME", $username);
-        Utils::getEnv()->setOrEditValue("DB_PASSWORD", $password);
-        Utils::getEnv()->setOrEditValue("DB_PORT", $port);
+        EnvManager::getInstance()->setOrEditValue("DB_HOST", $host);
+        EnvManager::getInstance()->setOrEditValue("DB_NAME", $db);
+        EnvManager::getInstance()->setOrEditValue("DB_USERNAME", $username);
+        EnvManager::getInstance()->setOrEditValue("DB_PASSWORD", $password);
+        EnvManager::getInstance()->setOrEditValue("DB_PORT", $port);
     }
 
     private function firstInstallSetInfos(string $subFolder, string $timezone, bool $devMode): void
     {
-        Utils::getEnv()->setOrEditValue("PATH_SUBFOLDER", $subFolder);
-        Utils::getEnv()->setOrEditValue("TIMEZONE", $timezone);
-        Utils::getEnv()->setOrEditValue("DEVMODE", $devMode);
+        EnvManager::getInstance()->setOrEditValue("PATH_SUBFOLDER", $subFolder);
+        EnvManager::getInstance()->setOrEditValue("TIMEZONE", $timezone);
+        EnvManager::getInstance()->setOrEditValue("DEVMODE", $devMode);
     }
 
     public function secondInstallPost(): void
@@ -300,7 +302,7 @@ class InstallerController
 
         InstallerModel::initConfig($name, $description);
 
-        Utils::getEnv()->editValue("installStep", 3);
+        EnvManager::getInstance()->editValue("installStep", 3);
     }
 
     public function thirdInstallPost(): void
@@ -313,7 +315,7 @@ class InstallerController
 
         // If custom bundle is select, we skip this step
         if ($isCustom) {
-            Utils::getEnv()->editValue("installStep", 4);
+            EnvManager::getInstance()->editValue("installStep", 4);
             return;
         }
 
@@ -336,14 +338,14 @@ class InstallerController
             }
         }
 
-        Utils::getEnv()->editValue("installStep", 6);
+        EnvManager::getInstance()->editValue("installStep", 6);
     }
 
     public function fourthInstallPost(): void
     {
 
         if (!isset($_POST['packages'])) {
-            Utils::getEnv()->editValue("installStep", 5);
+            EnvManager::getInstance()->editValue("installStep", 5);
             return;
         }
 
@@ -361,14 +363,14 @@ class InstallerController
 
         }
 
-        Utils::getEnv()->editValue("installStep", 5);
+        EnvManager::getInstance()->editValue("installStep", 5);
     }
 
     public function fifthInstallPost(): void
     {
 
         if (!isset($_POST['theme'])) {
-            Utils::getEnv()->editValue("installStep", 6);
+            EnvManager::getInstance()->editValue("installStep", 6);
             return;
         }
 
@@ -388,7 +390,7 @@ class InstallerController
         (new ThemeController())->installThemeSettings($theme['name']);
         CoreModel::updateOption("Theme", $theme['name']);
 
-        Utils::getEnv()->editValue("installStep", 6);
+        EnvManager::getInstance()->editValue("installStep", 6);
     }
 
     public function sixInstallPost(): void
@@ -405,7 +407,7 @@ class InstallerController
 
         InstallerModel::initAdmin($email, $pseudo, $password);
 
-        Utils::getEnv()->editValue("installStep", 7);
+        EnvManager::getInstance()->editValue("installStep", 7);
     }
 
     #[Link(path: "/finish", method: Link::GET, scope: "/installer")]
@@ -413,9 +415,9 @@ class InstallerController
     {
         // Reset to Default settings (with dev mode or not)
         ErrorManager::enableErrorDisplays();
-        Utils::getEnv()->editValue("installStep", -1);
+        EnvManager::getInstance()->editValue("installStep", -1);
 
-        header("location: " . Utils::getEnv()->getValue('PATH_SUBFOLDER'));
+        header("location: " . EnvManager::getInstance()->getValue('PATH_SUBFOLDER'));
     }
 
 

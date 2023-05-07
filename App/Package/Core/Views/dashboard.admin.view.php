@@ -1,9 +1,10 @@
 <?php 
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Metrics\VisitsMetricsManager;
-use CMW\Utils\Utils;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Core\CoreModel;
+use CMW\Utils\Website;
+
 $title = LangManager::translate("core.dashboard.title");
 $description = LangManager::translate("core.dashboard.desc"); 
 ?>
@@ -122,7 +123,7 @@ $description = LangManager::translate("core.dashboard.desc");
                     <p><?= LangManager::translate("core.dashboard.name") ?> <b><?= CoreModel::getOptionValue("name") ?></b></p>
                     <p><?= LangManager::translate("core.dashboard.description") ?> <span class="text-muted"><?= CoreModel::getOptionValue("description") ?></span></p>
                         <div class="px-4 text-center">
-                            <a href="<?= Utils::getHttpProtocol() . '://' . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . "cmw-admin/configuration" ?>" class="btn btn-primary float-right"><?= LangManager::translate("core.dashboard.edit") ?><br></a>
+                            <a href="<?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . getenv("PATH_SUBFOLDER") . "cmw-admin/configuration" ?>" class="btn btn-primary float-right"><?= LangManager::translate("core.dashboard.edit") ?><br></a>
                         </div>
                 </div>
             </div>

@@ -3,7 +3,6 @@
 use CMW\Controller\Core\CoreController;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
-use CMW\Utils\Utils;
 
 $title = LangManager::translate("core.config.title");
 $description = LangManager::translate("core.config.desc");

@@ -1,9 +1,8 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
-use CMW\Model\Users\UsersSettingsModel;
 use CMW\Manager\Security\SecurityManager;
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 
 /* @var \CMW\Entity\Users\UserSettingsEntity $settings */
 
@@ -32,7 +31,7 @@ $description = LangManager::translate("users.settings.desc"); ?>
                         <h6><?= LangManager::translate("users.settings.default_picture") ?> :</h6>
                         <div class="text-center ">
                             <img class="w-25 border"
-                                 src="<?= Utils::getEnv()->getValue('PATH_SUBFOLDER') ?>public/uploads/users/default/<?= $settings->getDefaultImage() ?>"
+                                 src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>public/uploads/users/default/<?= $settings->getDefaultImage() ?>"
                                  alt="<?= LangManager::translate("users.settings.default_picture") ?>">
                         </div>
                         <input class="mt-2 form-control form-control-lg" type="file" id="formFile"

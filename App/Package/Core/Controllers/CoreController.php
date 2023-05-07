@@ -13,8 +13,8 @@ use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
+use CMW\Utils\EnvManager;
 use CMW\Utils\Response;
-use CMW\Utils\Utils;
 
 /**
  * Class: @coreController
@@ -84,7 +84,7 @@ class CoreController extends AbstractController
 
         foreach ($_POST as $option_name => $option_value):
             if ($option_name === "locale") {
-                Utils::getEnv()->editValue("LOCALE", $option_value);
+                EnvManager::getInstance()->editValue("LOCALE", $option_value);
             }
 
             CoreModel::updateOption($option_name, $option_value);
@@ -149,7 +149,7 @@ class CoreController extends AbstractController
     /* Security Warning */
     public function cmwWarn(): ?string
     {
-        if (is_dir("Installation") && getenv("DEVMODE") != 1) {
+        if (is_dir("Installation") && EnvManager::getInstance()->getValue("DEVMODE") !== '1') {
             //Todo Set that in Lang file
             return <<<HTML
             <p class='security-warning'>ATTENTION - Votre dossier d'Installation n'a pas encore été supprimé. Pour des questions de sécurité, vous devez supprimer le dossier Installation situé à la racine de votre site.</p>
@@ -161,7 +161,7 @@ class CoreController extends AbstractController
     /*
      * Head constructor
      */
-    public function cmwHead($title, $description): string
+    public function cmwHead(string $title, string $description): string
     {
         $toReturn = <<<HTML
             <meta charset='utf-8'>

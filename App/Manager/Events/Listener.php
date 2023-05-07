@@ -3,10 +3,8 @@
 namespace CMW\Manager\Events;
 
 use Attribute;
-use JetBrains\PhpStorm\ExpectedValues;
 
-#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
-class Listener
+#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)] class Listener
 {
 
     public function __construct(

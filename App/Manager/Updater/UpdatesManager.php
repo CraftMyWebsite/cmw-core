@@ -2,8 +2,8 @@
 
 namespace CMW\Manager\Updater;
 
-use CMW\Manager\Api\PublicAPI;
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
+use JsonException;
 
 class UpdatesManager
 {
@@ -14,7 +14,7 @@ class UpdatesManager
      */
     public static function getVersion(): string
     {
-        return Utils::getEnv()->getValue("VERSION");
+        return EnvManager::getInstance()->getValue("VERSION");
     }
 
 
@@ -27,7 +27,7 @@ class UpdatesManager
         try {
             //return json_decode(file_get_contents(PublicAPI::getUrl() . "/getCmwLatest"), false, 512, JSON_THROW_ON_ERROR)->version;
             return "<3";
-        } catch (\JsonException) {
+        } catch (JsonException) {
         }
 
         return null;
@@ -51,7 +51,7 @@ class UpdatesManager
      */
     public static function ignoreUpdates(): bool
     {
-        return Utils::getEnv()->getValue("UPDATE_CHECKER") === "0" &&
-            Utils::getEnv()->getValue("DEVMODE") === "1";
+        return EnvManager::getInstance()->getValue("UPDATE_CHECKER") === "0" &&
+            EnvManager::getInstance()->getValue("DEVMODE") === "1";
     }
 }

@@ -85,7 +85,7 @@ class AutoLoad
         if (session_status() !== PHP_SESSION_ACTIVE) {
             ini_set('session.gc_maxlifetime', 600480); // 7 days
             ini_set('session.cookie_lifetime', 600480); // 7 days
-            session_set_cookie_params(600480, Utils::getEnv()->getValue("PATH_SUBFOLDER"), null, false, true);
+            session_set_cookie_params(600480, EnvManager::getInstance()->getValue("PATH_SUBFOLDER"), null, false, true);
             session_start();
         }
     }

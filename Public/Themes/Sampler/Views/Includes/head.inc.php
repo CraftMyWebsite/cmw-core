@@ -1,6 +1,6 @@
 <?php
 
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 use CMW\Manager\Views\View;
 
 /* @var \CMW\Controller\Core\CoreController $core */
@@ -10,16 +10,16 @@ use CMW\Manager\Views\View;
 
 ?>
     <!DOCTYPE html>
-    <html lang="<?= Utils::getEnv()->getValue('LOCALE') ?>>">
+    <html lang="<?= EnvManager::getInstance()->getValue('LOCALE') ?>>">
     <head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
         <?= $core->cmwHead($title, $description) ?>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon"
-              href="<?= getenv("PATH_SUBFOLDER") ?>Public/Themes/Sampler/Assets/favicon.ico"/>
+              href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>Public/Themes/Sampler/Assets/favicon.ico"/>
         <!-- Core theme CSS (Includes Bootstrap)-->
-        <link href="<?= getenv("PATH_SUBFOLDER") ?>Public/Themes/Sampler/Resources/Assets/Css/main.css"
+        <link href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>Public/Themes/Sampler/Resources/Assets/Css/main.css"
               rel="stylesheet"/>
         <?php
         View::loadInclude($includes, "beforeScript", "styles");

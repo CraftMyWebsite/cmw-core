@@ -2,7 +2,7 @@
 
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 
 $title = LangManager::translate("core.security.title");
 $description = LangManager::translate("core.security.description");
@@ -100,7 +100,7 @@ $description = LangManager::translate("core.security.description");
         labelSecreteKey.innerHTML += "<h6>Secret Key :</h6>";
 
         let inputSiteKey = document.createElement("input");
-        inputSiteKey.setAttribute("value", '<?= Utils::getEnv()->getValue("HCAPTCHA_SITE_KEY") ?>');
+        inputSiteKey.setAttribute("value", '<?= EnvManager::getInstance()->getValue("HCAPTCHA_SITE_KEY") ?>');
         inputSiteKey.setAttribute("placeholder", "Site-Key")
         inputSiteKey.setAttribute("type", "text")
         inputSiteKey.setAttribute("name", "captcha_hcaptcha_site_key");
@@ -108,7 +108,7 @@ $description = LangManager::translate("core.security.description");
         inputSiteKey.setAttribute("required", "true");
 
         let inputSecretKey = document.createElement("input");
-        inputSecretKey.setAttribute("value", '<?= Utils::getEnv()->getValue("HCAPTCHA_SECRET_KEY") ?>');
+        inputSecretKey.setAttribute("value", '<?= EnvManager::getInstance()->getValue("HCAPTCHA_SECRET_KEY") ?>');
         inputSecretKey.setAttribute("placeholder", "Secret-Key")
         inputSecretKey.setAttribute("type", "text")
         inputSecretKey.setAttribute("name", "captcha_hcaptcha_secret_key");
@@ -164,7 +164,7 @@ $description = LangManager::translate("core.security.description");
         labelSecreteKey.innerHTML += "<h6>Secret Key :</h6>";
 
         let inputSiteKey = document.createElement("input");
-        inputSiteKey.setAttribute("value", '<?= Utils::getEnv()->getValue("RECAPTCHA_SITE_KEY") ?>');
+        inputSiteKey.setAttribute("value", '<?= EnvManager::getInstance()->getValue("RECAPTCHA_SITE_KEY") ?>');
         inputSiteKey.setAttribute("placeholder", "Site-Key")
         inputSiteKey.setAttribute("type", "text")
         inputSiteKey.setAttribute("name", "captcha_recaptcha_site_key");
@@ -172,7 +172,7 @@ $description = LangManager::translate("core.security.description");
         inputSiteKey.setAttribute("required", "true");
 
         let inputSecretKey = document.createElement("input");
-        inputSecretKey.setAttribute("value", '<?= Utils::getEnv()->getValue("RECAPTCHA_SECRET_KEY") ?>');
+        inputSecretKey.setAttribute("value", '<?= EnvManager::getInstance()->getValue("RECAPTCHA_SECRET_KEY") ?>');
         inputSecretKey.setAttribute("placeholder", "Secret-Key")
         inputSecretKey.setAttribute("type", "text")
         inputSecretKey.setAttribute("name", "captcha_recaptcha_secret_key");

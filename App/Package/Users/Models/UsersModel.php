@@ -2,9 +2,7 @@
 
 namespace CMW\Model\Users;
 
-use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\MailController;
-use CMW\Controller\Users\UsersController;
 use CMW\Entity\Users\RoleEntity;
 use CMW\Entity\Users\UserPictureEntity;
 use CMW\Entity\Users\UserEntity;
@@ -13,7 +11,6 @@ use CMW\Manager\Database\DatabaseManager;
 
 use CMW\Manager\Lang\LangManager;
 use CMW\Model\Core\CoreModel;
-use CMW\Model\Core\MailModel;
 use CMW\Utils\Utils;
 use Exception;
 
@@ -613,7 +610,7 @@ class UsersModel extends DatabaseManager
     {
         try {
             return bin2hex(Utils::genId(random_int(7, 12)));
-        } catch (Exception $e) {
+        } catch (Exception) {
             return bin2hex(Utils::genId(10));
         }
 

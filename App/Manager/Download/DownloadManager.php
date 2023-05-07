@@ -4,9 +4,8 @@ namespace CMW\Manager\Download;
 
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Database\DatabaseManager;
-use CMW\Manager\Permission\PermissionManager;
 use CMW\Model\Users\PermissionsModel;
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 use JetBrains\PhpStorm\ExpectedValues;
 use JsonException;
 use ZipArchive;
@@ -29,22 +28,22 @@ class DownloadManager
         }
 
         $data = PublicAPI::getUrl() . $url;
-        file_put_contents(Utils::getEnv()->getValue("DIR") . "Public/resource.zip",
+        file_put_contents(EnvManager::getInstance()->getValue("DIR") . "Public/resource.zip",
             fopen($data, 'rb'));
 
         $archiveUpdate = new ZipArchive;
-        if ($archiveUpdate->open(Utils::getEnv()->getValue("DIR") . 'Public/resource.zip') === TRUE) {
+        if ($archiveUpdate->open(EnvManager::getInstance()->getValue("DIR") . 'Public/resource.zip') === TRUE) {
 
             if ($type === 'package') {
-                $archiveUpdate->extractTo(Utils::getEnv()->getValue("DIR") . 'App/Package');
+                $archiveUpdate->extractTo(EnvManager::getInstance()->getValue("DIR") . 'App/Package');
             } else {
-                $archiveUpdate->extractTo(Utils::getEnv()->getValue("DIR") . 'Public/Themes');
+                $archiveUpdate->extractTo(EnvManager::getInstance()->getValue("DIR") . 'Public/Themes');
             }
 
             $archiveUpdate->close();
 
             //Delete download archive
-            unlink(Utils::getEnv()->getValue("DIR") . 'Public/resource.zip');
+            unlink(EnvManager::getInstance()->getValue("DIR") . 'Public/resource.zip');
 
 
             //INSTALL INIT FOLDER
@@ -61,7 +60,7 @@ class DownloadManager
     public static function initPackages(string... $packages): void
     {
         foreach ($packages as $package):
-            $initFolder = Utils::getEnv()->getValue("dir") . "App/Package/$package/Init";
+            $initFolder = EnvManager::getInstance()->getValue("dir") . "App/Package/$package/Init";
 
             if (!is_dir($initFolder)) {
                 continue;
@@ -100,7 +99,7 @@ class DownloadManager
 
                 if (file_exists($packageSqlFile)) {
                     $db = DatabaseManager::getLiteInstance();
-                    $devMode = Utils::getEnv()->getValue("DEVMODE");
+                    $devMode = EnvManager::getInstance()->getValue("DEVMODE");
 
                     $querySqlFile = file_get_contents($packageSqlFile);
                     $req = $db->query($querySqlFile);

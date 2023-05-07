@@ -4,11 +4,10 @@ namespace CMW\Entity\Users;
 
 
 use CMW\Controller\Core\CoreController;
-use CMW\Controller\Users\UsersController;
 use CMW\Controller\Users\UsersSettingsController;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Users\UsersSettingsModel;
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 
 class UserPictureEntity
 {
@@ -41,7 +40,7 @@ class UserPictureEntity
      */
     public function getImageName(): ?string
     {
-        if(!is_file(Utils::getEnv()->getValue("DIR") . "Public/uploads/users/" . $this->imageName))
+        if(!is_file(EnvManager::getInstance()->getValue("DIR") . "Public/Uploads/Users/" . $this->imageName))
         {
             return "Default/" . UsersSettingsModel::getSetting("defaultImage");
         }
@@ -67,7 +66,7 @@ class UserPictureEntity
      */
     public function getImageLink(): ?string
     {
-        return Utils::getEnv()->getValue("PATH_SUBFOLDER") . "Public/uploads/users/" . $this->imageName;
+        return EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "Public/Uploads/Users/" . $this->imageName;
     }
 
     /**

@@ -6,15 +6,10 @@ use CMW\Controller\Users\UsersController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
-use CMW\Utils\Utils;
+use CMW\Utils\Website;
 
 class EditorController extends CoreController
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     public static function getInstalledStyles(): array
     {
@@ -57,8 +52,7 @@ class EditorController extends CoreController
 
         CoreModel::updateOption("editor_style",$style);
 
-        Utils::refreshPage();
-        
+        Website::refresh();
     }
 
 }

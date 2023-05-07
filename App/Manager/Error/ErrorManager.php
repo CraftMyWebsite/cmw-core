@@ -4,7 +4,7 @@ namespace CMW\Manager\Error;
 
 use CMW\Controller\Core\ThemeController;
 use CMW\Manager\Permission\PermissionManager;
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 use DateTime;
 use ErrorException;
 use Throwable;
@@ -35,7 +35,7 @@ class ErrorManager
 
     private function checkPermissions(): bool
     {
-        return PermissionManager::canCreateFile(Utils::getEnv()->getValue("DIR") . $this->dirStorage);
+        return PermissionManager::canCreateFile(EnvManager::getInstance()->getValue("DIR") . $this->dirStorage);
     }
 
     /**
@@ -45,7 +45,7 @@ class ErrorManager
      */
     public static function enableErrorDisplays(bool $force = false): void
     {
-        $devMode = (int)(Utils::getEnv()->getValue("devMode") ?? 0);
+        $devMode = (int)(EnvManager::getInstance()->getValue("devMode") ?? 0);
 
         if ($force){
             $devMode = 1;
@@ -159,9 +159,9 @@ class ErrorManager
                 <h2>$classType</h2>
                     <p>Error : <code class="error-message">{$e->getMessage()}</code></p>
                     <p>Found in <code><span class="file">{$e->getFile()}</span></code> at the line <span class="line">{$e->getLine()}</span><p>
-                <p>Trace : <code class="trace">{$trace}</code></p>
+                <p>Trace : <code class="trace">$trace</code></p>
                 
-                <small>This error has been saved in {$this->dirStorage}/{$this->getFileLogName()}</small>
+                <small>This error has been saved in $this->dirStorage/{$this->getFileLogName()}</small>
                 <h4>User, if you encounter this error please report it to the administrator !</h4>
                 <h4>Administrator, if you can't fix this error please refer to the <a href="">documentation</a> or contact CraftMyWebsite on the <a href="">Discord</a></h4>
             </div>
@@ -181,13 +181,13 @@ class ErrorManager
     {
         http_response_code($errorCode);
 
-        $pathUrl = Utils::getEnv()->getValue("PATH_URL");
+        $pathUrl = EnvManager::getInstance()->getValue("PATH_URL");
 
         //Here, we get data page we don't want to redirect user, just show him an error.
         //Route /error get error file : $errorCode.view.php, if that file don't exist, we call Default.view.php (from errors package)
 
         $currentTheme = ThemeController::getCurrentTheme()->getName();
-        $defaultErrorFile = Utils::getEnv()->getValue("DIR") . "Public/Themes/$currentTheme/Views/Errors/default.view.php";
+        $defaultErrorFile = EnvManager::getInstance()->getValue("DIR") . "Public/Themes/$currentTheme/Views/Errors/default.view.php";
 
         if(!file_exists($defaultErrorFile)){
             self::getFallBackErrorPage($currentTheme);

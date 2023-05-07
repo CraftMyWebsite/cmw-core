@@ -2,7 +2,7 @@
 
 namespace CMW\Manager\Api;
 
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 use CurlHandle;
 use JsonException;
 
@@ -35,11 +35,11 @@ class APIManager
 
     private static function getPassword(): string
     {
-        if (!Utils::getEnv()->valueExist(self::ENV_KEY)) {
-            Utils::getEnv()->addValue(self::ENV_KEY, self::generatePassword());
+        if (!EnvManager::getInstance()->valueExist(self::ENV_KEY)) {
+            EnvManager::getInstance()->addValue(self::ENV_KEY, self::generatePassword());
         }
 
-        $password = Utils::getEnv()->getValue(self::ENV_KEY);
+        $password = EnvManager::getInstance()->getValue(self::ENV_KEY);
 
         return self::hashPassword($password);
     }
@@ -126,7 +126,7 @@ class APIManager
 
     private static function verifyPassword($hashedPass, $key): bool
     {
-        return password_verify(Utils::getEnv()->getValue($key), $hashedPass);
+        return password_verify(EnvManager::getInstance()->getValue($key), $hashedPass);
     }
 
 

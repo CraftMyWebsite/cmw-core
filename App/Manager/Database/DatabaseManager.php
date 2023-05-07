@@ -2,7 +2,7 @@
 
 namespace CMW\Manager\Database;
 
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 use Exception;
 use PDO;
 
@@ -60,11 +60,11 @@ class DatabaseManager
      */
     public static function getLiteInstance(): PDO
     {
-        $dbServername = Utils::getEnv()->getValue("DB_HOST");
-        $dbUsername = Utils::getEnv()->getValue("DB_USERNAME");
-        $dbPassword = Utils::getEnv()->getValue("DB_PASSWORD");
-        $dbName = Utils::getEnv()->getValue("DB_NAME");
-        $dbPort = Utils::getEnv()->getValue("DB_PORT");
+        $dbServername = EnvManager::getInstance()->getValue("DB_HOST");
+        $dbUsername = EnvManager::getInstance()->getValue("DB_USERNAME");
+        $dbPassword = EnvManager::getInstance()->getValue("DB_PASSWORD");
+        $dbName = EnvManager::getInstance()->getValue("DB_NAME");
+        $dbPort = EnvManager::getInstance()->getValue("DB_PORT");
 
         $db = new PDO("mysql:host=$dbServername;port=$dbPort", $dbUsername, $dbPassword);
         $db->exec("SET CHARACTER SET utf8");

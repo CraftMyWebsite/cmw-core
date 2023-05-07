@@ -3,7 +3,7 @@
 use CMW\Model\Users\UsersModel;
 use cmw\Model\Votes\VotesConfigModel;
 use CMW\Model\Votes\VotesModel;
-use CMW\Utils\Utils;
+use CMW\Utils\EnvManager;
 
 $title = "One-Dream | Voter";
 $description = "Votez pour le serveur One-Dream et gagnez des récompenses uniques!";
@@ -37,7 +37,7 @@ $description = "Votez pour le serveur One-Dream et gagnez des récompenses uniqu
                                 <br>
 
                                 <strong>Connectez-vous</strong> dès maintenant en cliquant <a
-                                    href="<?= getenv('PATH_SUBFOLDER') ?>login">ici</a>
+                                    href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>login">ici</a>
                             </p>
 
 

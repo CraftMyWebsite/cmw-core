@@ -25,9 +25,9 @@ class MenusController extends CoreController
 
     private MenusModel $menusModel;
 
-    public function __construct($theme_path = null)
+    public function __construct()
     {
-        parent::__construct($theme_path);
+        parent::__construct();
         $this->menusModel = new MenusModel();
     }
 

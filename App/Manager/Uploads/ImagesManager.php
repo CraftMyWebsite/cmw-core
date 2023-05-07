@@ -2,6 +2,7 @@
 
 namespace CMW\Manager\Uploads;
 
+use CMW\Utils\EnvManager;
 use CMW\Utils\Utils;
 use Exception;
 use RuntimeException;
@@ -67,7 +68,7 @@ class ImagesManager
         self::createDirectory($dirName); //Create the directory if this is necessary
 
 
-        $path = Utils::getEnv()->getValue('DIR') . "Public/Uploads/" . $dirName;
+        $path = EnvManager::getInstance()->getValue('DIR') . "Public/Uploads/" . $dirName;
 
 
         if (!empty($dirName) && $dirName !== "/" && !is_dir($path)) {
@@ -135,7 +136,7 @@ class ImagesManager
      */
     private static function createDirectory(string $dirName): void
     {
-        if (!file_exists( Utils::getEnv()->getValue('DIR') . "Public/Uploads/" . $dirName) && !mkdir($concurrentDirectory = Utils::getEnv()->getValue('DIR') . "Public/Uploads/" . $dirName, 0777, true) && !is_dir($concurrentDirectory)) {
+        if (!file_exists( EnvManager::getInstance()->getValue('DIR') . "Public/Uploads/" . $dirName) && !mkdir($concurrentDirectory = EnvManager::getInstance()->getValue('DIR') . "Public/Uploads/" . $dirName, 0777, true) && !is_dir($concurrentDirectory)) {
             throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
     }
@@ -231,7 +232,7 @@ class ImagesManager
      */
     public static function getFaviconInclude(): string
     {
-        $path = Utils::getEnv()->getValue("PATH_SUBFOLDER") . 'Public/Uploads/Favicon/favicon.ico';
+        $path = EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . 'Public/Uploads/Favicon/favicon.ico';
 
         return '<link rel="icon" type="image/x-icon" href="' . $path . '">';
     }
