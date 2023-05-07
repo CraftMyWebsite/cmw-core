@@ -158,7 +158,7 @@ class ThemeController extends CoreController
     /* ADMINISTRATION */
 
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/theme")]
-    #[Link("/configuration", Link::GET, [], "/cmw-admin/theme")]
+    #[Link("/market", Link::GET, [], "/cmw-admin/theme")]
     public function adminThemeConfiguration(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
@@ -174,7 +174,7 @@ class ThemeController extends CoreController
             ->view();
     }
 
-    #[Link("/configuration", Link::POST, [], "/cmw-admin/theme")]
+    #[Link("/market", Link::POST, [], "/cmw-admin/theme")]
     public function adminThemeConfigurationPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
@@ -186,10 +186,10 @@ class ThemeController extends CoreController
         Response::sendAlert("success", LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
-        header("Location: configuration");
+        header("Location: market");
     }
 
-    #[Link("/configuration/regenerate", Link::POST, [], "/cmw-admin/theme")]
+    #[Link("/market/regenerate", Link::POST, [], "/cmw-admin/theme")]
     public function adminThemeConfigurationRegeneratePost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
@@ -201,7 +201,7 @@ class ThemeController extends CoreController
         Response::sendAlert("success", LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.Theme.regenerate"));
 
-        header("Location: ../configuration");
+        header("Location: ../market");
     }
 
     #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/theme")]
