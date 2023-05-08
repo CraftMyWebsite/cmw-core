@@ -93,7 +93,7 @@ class ThemeEntity
     {
         return $this->packages;
     }
-
+    
     /**
      * @return string
      */
