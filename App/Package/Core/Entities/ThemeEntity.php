@@ -59,6 +59,17 @@ class ThemeEntity
         return $this->authors;
     }
 
+    public function getAuthorsFormatted(): ?string
+    {
+        $authors = $this->authors;
+
+        if ($authors === null) {
+            return null;
+        }
+
+        return str_replace(',', ', ', trim(implode(',', $authors)));
+    }
+
     /**
      * @return string
      */
@@ -82,7 +93,7 @@ class ThemeEntity
     {
         return $this->packages;
     }
-    
+
     /**
      * @return string
      */
