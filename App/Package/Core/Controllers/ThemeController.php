@@ -7,6 +7,7 @@ use CMW\Entity\Core\ThemeEntity;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
@@ -75,6 +76,9 @@ class ThemeController extends CoreController
         );
     }
 
+    /**
+     * @return ThemeEntity[]
+     */
     public static function getInstalledThemes(): array
     {
         $toReturn = array();
@@ -85,6 +89,30 @@ class ThemeController extends CoreController
                 $toReturn[] = self::getTheme($theme);
             }
         }
+
+        return $toReturn;
+    }
+
+    /**
+     * @return ThemeEntity[]
+     * @desc Return all themes local (remove thème get from the public market)
+     */
+    public static function getLocalThemes(): array
+    {
+        $toReturn = array();
+        $installedThemes = self::getInstalledThemes();
+
+        $marketThemesName = array();
+
+        foreach (self::getMarketThemes() as $marketTheme):
+            $marketThemesName[] = $marketTheme['name'];
+        endforeach;
+
+        foreach ($installedThemes as $installedTheme):
+            if (!in_array($installedTheme->getName(), $marketThemesName, true)):
+                $toReturn[] = $installedTheme;
+            endif;
+        endforeach;
 
         return $toReturn;
     }
@@ -154,6 +182,14 @@ class ThemeController extends CoreController
         }
     }
 
+    /**
+     * @return array
+     * @desc Return the list of public thèmes from our market
+     */
+    public static function getMarketThemes(): array {
+        return PublicAPI::getData("resources/getResources&resource_type=0");
+    }
+
 
     /* ADMINISTRATION */
 
@@ -165,8 +201,8 @@ class ThemeController extends CoreController
 
         $currentTheme = self::getCurrentTheme();
         $installedThemes = self::getInstalledThemes();
+        $themesList = self::getMarketThemes();
 
-        $themesList = PublicAPI::getData("resources/getResources&resource_type=0");
         View::createAdminView("Core", "themeConfiguration")
             ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css", "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
             ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes, "themesList" => $themesList])
@@ -205,7 +241,7 @@ class ThemeController extends CoreController
     }
 
     #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/theme")]
-    public function adminThemeInstallation(int $id): void
+    public function adminThemeInstallation(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
 
