@@ -7,6 +7,7 @@ use CMW\Entity\Users\RoleEntity;
 
 use CMW\Manager\Database\DatabaseManager;
 
+use CMW\Manager\Package\AbstractModel;
 use CMW\Utils\Utils;
 
 /**
@@ -15,7 +16,7 @@ use CMW\Utils\Utils;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class RolesModel extends DatabaseManager
+class RolesModel extends AbstractModel
 {
 
     private PermissionsModel $permissionsModel;
@@ -32,7 +33,7 @@ class RolesModel extends DatabaseManager
 
         $sql = "SELECT * FROM cmw_roles WHERE role_id = :role_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if (!$req->execute(array("role_id" => $id))) {
@@ -61,7 +62,7 @@ class RolesModel extends DatabaseManager
     public function getRoles(): array
     {
         $sql = "SELECT role_id FROM cmw_roles";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 
         if (!$res->execute()) {
@@ -88,7 +89,7 @@ class RolesModel extends DatabaseManager
 
         $sql = "INSERT INTO cmw_roles (role_name, role_description, role_weight) VALUES (:role_name, :role_description, :role_weight)";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -110,7 +111,7 @@ class RolesModel extends DatabaseManager
     public function addPermission(int $roleId, int $permId): bool
     {
         $sql = "INSERT INTO cmw_roles_permissions VALUES (:permission_id, :role_id)";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         return $db->prepare($sql)->execute(array("permission_id" => $permId, "role_id" => $roleId));
     }
 
@@ -121,7 +122,7 @@ class RolesModel extends DatabaseManager
     public function getPermissions(int $roleId): array
     {
         $sql = "SELECT permission_id FROM cmw_roles_permissions WHERE role_id = :role_id";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 
         if (!$res->execute(array("role_id" => $roleId))) {
@@ -168,7 +169,7 @@ class RolesModel extends DatabaseManager
 
         $sql = "UPDATE cmw_roles SET role_name = :role_name, role_description = :role_description, role_weight = :role_weight WHERE role_id = :role_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
 
@@ -187,7 +188,7 @@ class RolesModel extends DatabaseManager
     public function deleteAllPermissions(int $roleId): void
     {
         $sql = "DELETE FROM cmw_roles_permissions WHERE role_id = :role_id";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $db->prepare($sql)->execute(array("role_id" => $roleId));
     }
 
@@ -201,7 +202,7 @@ class RolesModel extends DatabaseManager
 
         $sql = "DELETE FROM cmw_roles WHERE role_id = :role_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
     }

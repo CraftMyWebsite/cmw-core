@@ -4,9 +4,10 @@ namespace CMW\Model\Core;
 
 use CMW\Entity\Core\ConditionEntity;
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Manager\Package\AbstractModel;
 use CMW\Model\Users\UsersModel;
 
-class ConditionModel extends DatabaseManager
+class ConditionModel extends AbstractModel
 {
     /**
      * @return \CMW\Entity\Core\ConditionEntity|null
@@ -15,7 +16,7 @@ class ConditionModel extends DatabaseManager
     {
         $sql = "SELECT * FROM cmw_core_condition WHERE condition_id = 2";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 
         if (!$res->execute()) {
@@ -54,7 +55,7 @@ class ConditionModel extends DatabaseManager
         $sql = "UPDATE cmw_core_condition SET condition_content = :conditionContent, condition_state = :conditionState, 
                          condition_last_editor = :conditionAuthor WHERE condition_id = :conditionId";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         if ($req->execute($info)) {
             return $this->getCGV();
@@ -70,7 +71,7 @@ class ConditionModel extends DatabaseManager
     {
         $sql = "SELECT * FROM cmw_core_condition WHERE condition_id = 1";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 
 

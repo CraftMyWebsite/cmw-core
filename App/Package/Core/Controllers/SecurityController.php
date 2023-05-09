@@ -6,6 +6,7 @@ use CMW\Controller\Users\UsersController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Flash\Flash;
+use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
@@ -16,12 +17,12 @@ use CMW\Model\Core\CoreModel;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class SecurityController extends CoreController
+class SecurityController extends AbstractController
 {
 
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin")]
     #[Link("/security", Link::GET, [], "/cmw-admin")]
-    public function adminSecurity(): void
+    private function adminSecurity(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.security.configuration");
 
@@ -32,7 +33,7 @@ class SecurityController extends CoreController
     }
 
     #[Link("/security/edit/captcha", Link::POST, [], "/cmw-admin")]
-    public function adminSecurityEditCaptchaPost(): void
+    private function adminSecurityEditCaptchaPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.security.configuration");
 
@@ -60,6 +61,14 @@ class SecurityController extends CoreController
         header("Location: ../../security");
     }
 
+
+    /**
+     * TODO [CAPTCHA]:
+     *  - Create Captcha Implementation with those methods:
+     *      - show
+     *      - check
+     */
+
     /**
      * @return string
      * @Desc Get captcha name (none / hcaptcha / recaptcha)
@@ -75,7 +84,6 @@ class SecurityController extends CoreController
      */
     public static function getPublicData(): void
     {
-
         switch (self::getCaptchaType()){
             case "hcaptcha":
                 self::getPublicHCaptchaData();

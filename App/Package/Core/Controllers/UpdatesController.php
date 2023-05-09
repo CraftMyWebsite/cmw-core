@@ -5,18 +5,19 @@ namespace CMW\Controller\Core;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use JsonException;
 use ZipArchive;
 
-class UpdatesController extends CoreController
+class UpdatesController extends AbstractController
 {
     /* ADMINISTRATION */
 
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/updates")]
     #[Link("/cms", Link::GET, [], "/cmw-admin/updates")]
-    public function adminUpdates(): void
+    private function adminUpdates(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.update");
 
@@ -25,11 +26,11 @@ class UpdatesController extends CoreController
     }
 
     #[Link("/cms/install", Link::GET, [], "/cmw-admin/updates")]
-    public function adminUpdatesInstall(): void
+    private function adminUpdatesInstall(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.update");
 
-        /*
+        /* todo: remove this comment ?
          * Download zip. (skip for the moment)
          * Extract zip and override files.
          * Execute updater.php file inside archive.

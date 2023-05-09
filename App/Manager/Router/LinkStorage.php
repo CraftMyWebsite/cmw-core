@@ -6,6 +6,7 @@ namespace CMW\Manager\Router;
 use CMW\Manager\Class\ClassManager;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Package\AbstractModel;
 use CMW\Utils\Utils;
 use ReflectionClass;
 use ReflectionException;
@@ -16,9 +17,20 @@ use ReflectionException;
  * @author CraftMywebsite <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class LinkStorage extends DatabaseManager
+class LinkStorage
 {
     private array $fileLoaded = [];
+
+    private static LinkStorage $_instance;
+
+    public static function getInstance(): self
+    {
+        if (!isset(self::$_instance)) {
+            self::$_instance = new self();
+        }
+
+        return self::$_instance;
+    }
 
 
     /**
@@ -146,7 +158,7 @@ class LinkStorage extends DatabaseManager
                              core_routes_method, core_routes_is_admin, core_routes_is_dynamic, core_routes_weight)
                 VALUES (:slug, :package, :title, :method, :isAdmin, :isDynamic, :weight)";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
@@ -158,7 +170,7 @@ class LinkStorage extends DatabaseManager
     public function deleteRouteById(int $id): void
     {
         $sql = "DELETE FROM cmw_core_routes WHERE core_routes_id = :id";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
 
         $req = $db->prepare($sql);
         $req->execute(["id" => $id]);
@@ -207,7 +219,7 @@ class LinkStorage extends DatabaseManager
         $sql = "UPDATE cmw_core_routes SET core_routes_slug = :slug, core_routes_package = :package, 
                            core_routes_title = :title, core_routes_method = :method, core_routes_is_admin = :isAdmin,
                            core_routes_is_dynamic = :isAdmin, core_routes_weight = :weight WHERE core_routes_id = :id";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
 
         $req = $db->prepare($sql);
         $req->execute($var);

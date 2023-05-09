@@ -5,6 +5,7 @@ namespace CMW\Model\Users;
 use CMW\Entity\Users\UserPictureEntity;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Package\AbstractModel;
 use CMW\Manager\Uploads\ImagesManager;
 use Exception;
 
@@ -15,7 +16,7 @@ use Exception;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class UserPictureModel extends DatabaseManager
+class UserPictureModel extends AbstractModel
 {
 
 
@@ -37,7 +38,7 @@ class UserPictureModel extends DatabaseManager
         $imageName = ImagesManager::upload($image, 'users');
 
         $sql = "INSERT INTO cmw_users_pictures (users_pictures_user_id, users_pictures_image_name) VALUES (:userId, :imageName)";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
 
         $req = $db->prepare($sql);
 
@@ -57,7 +58,7 @@ class UserPictureModel extends DatabaseManager
     {
         $sql = "SELECT users_pictures_user_id FROM `cmw_users_pictures` WHERE users_pictures_user_id = :userId";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         return $req->execute(array('userId' => $userId)) && count($req->fetchAll()) >= 1;
@@ -95,7 +96,7 @@ class UserPictureModel extends DatabaseManager
         $sql = "UPDATE cmw_users_pictures SET users_pictures_image_name = :imageName, 
                                             users_pictures_last_update = CURRENT_TIMESTAMP() 
                                             WHERE users_pictures_user_id = :userId";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
 
         $req = $db->prepare($sql);
 
@@ -109,7 +110,7 @@ class UserPictureModel extends DatabaseManager
     public function getImageByUserId(int $userId): ?UserPictureEntity
     {
         $sql = "SELECT * FROM cmw_users_pictures WHERE users_pictures_user_id = :userId";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
 
         $req = $db->prepare($sql);
 
@@ -141,7 +142,7 @@ class UserPictureModel extends DatabaseManager
         ImagesManager::deleteImage($imageName, "users");
 
         $sql = "DELETE FROM cmw_users_pictures WHERE users_pictures_user_id = :userId";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
 
         $req = $db->prepare($sql);
 

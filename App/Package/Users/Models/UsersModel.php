@@ -10,6 +10,7 @@ use CMW\Entity\Users\UserEntity;
 use CMW\Manager\Database\DatabaseManager;
 
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Package\AbstractModel;
 use CMW\Model\Core\CoreModel;
 use CMW\Utils\Utils;
 use Exception;
@@ -20,14 +21,14 @@ use Exception;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class UsersModel extends DatabaseManager
+class UsersModel extends AbstractModel
 {
     public function getUserById(int $id): ?UserEntity
     {
 
         $sql = "SELECT * FROM cmw_users WHERE user_id = :user_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
 
         $res = $db->prepare($sql);
 
@@ -125,7 +126,7 @@ class UsersModel extends DatabaseManager
     {
         $sql = "SELECT user_id FROM cmw_users WHERE user_pseudo = :pseudo";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
 
         $req = $db->prepare($sql);
 
@@ -152,7 +153,7 @@ class UsersModel extends DatabaseManager
     public function countUsers(): int
     {
         $sql = "select count('users_id') as `result` from cmw_users";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
 
         $res = $db->prepare($sql);
 
@@ -167,7 +168,7 @@ class UsersModel extends DatabaseManager
     public function getUsers(): array
     {
         $sql = "select user_id from cmw_users";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
 
         $res = $db->prepare($sql);
 
@@ -197,7 +198,7 @@ class UsersModel extends DatabaseManager
         );
         $sql = "SELECT user_id, user_password FROM cmw_users WHERE user_state=1 AND user_email=:user_email";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -248,7 +249,7 @@ class UsersModel extends DatabaseManager
         $sql = "INSERT INTO cmw_users (user_email, user_pseudo, user_firstname, user_lastname, user_state, user_key) 
                 VALUES (:user_email, :user_pseudo, :user_firstname, :user_lastname, :user_state, :user_key)";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -271,7 +272,7 @@ class UsersModel extends DatabaseManager
 
             $sql = "INSERT INTO cmw_users_roles (user_id, role_id) VALUES (:user_id, :role_id)";
 
-            $db = self::getInstance();
+            $db = DatabaseManager::getInstance();
             $req = $db->prepare($sql);
             $req->execute($var);
         }
@@ -289,7 +290,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "UPDATE cmw_users SET user_email=:user_email,user_pseudo=:user_pseudo,user_firstname=:user_firstname,user_lastname=:user_lastname WHERE user_id=:user_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
 
@@ -307,7 +308,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "UPDATE cmw_users SET user_updated=NOW() WHERE user_id=:user_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
@@ -321,7 +322,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "DELETE FROM cmw_users_roles WHERE user_id = :user_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
 
@@ -338,7 +339,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "UPDATE cmw_users SET user_password=:user_password WHERE user_id=:user_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
 
@@ -354,7 +355,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "UPDATE cmw_users SET user_password=:user_password WHERE user_email=:user_email";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
 
@@ -370,7 +371,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "UPDATE cmw_users SET user_state=:user_state WHERE user_id=:user_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
 
@@ -384,7 +385,7 @@ class UsersModel extends DatabaseManager
         );
         $sql = "DELETE FROM cmw_users WHERE user_id=:user_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
@@ -397,7 +398,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "UPDATE cmw_users SET user_logged=NOW() WHERE user_id=:user_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
     }
@@ -450,7 +451,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "SELECT role_id FROM cmw_users_roles WHERE user_id = :user_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if (!$req->execute(array("user_id" => $userId))) {
@@ -482,7 +483,7 @@ class UsersModel extends DatabaseManager
                 ORDER BY cmw_roles.role_weight DESC
                 LIMIT 1";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if (!$req->execute(array("user_id" => $userId))) {
@@ -507,7 +508,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "SELECT user_id FROM `cmw_users` WHERE user_pseudo = :pseudo";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -525,7 +526,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "SELECT user_id FROM `cmw_users` WHERE user_email = :email";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -544,7 +545,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "SELECT user_id FROM `cmw_users` WHERE user_email = :email AND user_id != :userId";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -563,7 +564,7 @@ class UsersModel extends DatabaseManager
 
         $sql = "SELECT user_id FROM `cmw_users` WHERE user_pseudo = :pseudo AND user_id != :userId";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {

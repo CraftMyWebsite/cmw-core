@@ -4,7 +4,9 @@ namespace CMW\Controller\Users;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Flash\Alert;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\Link;
@@ -21,35 +23,21 @@ use JsonException;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class RolesController extends CoreController
+class RolesController extends AbstractController
 {
-
-
-    private UsersModel $userModel;
-    private RolesModel $roleModel;
-    private PermissionsModel $permissionsModel;
-
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->userModel = new UsersModel();
-        $this->roleModel = new RolesModel();
-        $this->permissionsModel = new PermissionsModel();
-    }
 
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/roles")]
     #[Link("/manage", Link::GET, [], "/cmw-admin/roles")]
-    public function adminRolesManage(): void
+    private function adminRolesManage(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.manage");
 
-        $rolesList = $this->roleModel->getRoles();
-        $permissionController = new PermissionsController();
-        $permissionModel = new PermissionsModel();
-        $rolesModel = new RolesModel();
+        $rolesList = RolesModel::getInstance()->getRoles();
+        $permissionController = PermissionsController::getInstance();
+        $permissionModel = PermissionsModel::getInstance();
+        $rolesModel = RolesModel::getInstance();
 
-        //Try to improve that ?
+        //Todo Try to improve that ?
         require_once(EnvManager::getInstance()->getValue("DIR") . "App/Package/Users/Functions/loadPermissions.php");
 
 
@@ -64,14 +52,14 @@ class RolesController extends CoreController
     }
 
     #[Link("/add", Link::GET, [], "/cmw-admin/roles")]
-    public function adminRolesAdd(): void
+    private function adminRolesAdd(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.add");
 
-        $permissionController = new PermissionsController();
-        $permissionModel = new PermissionsModel();
+        $permissionController = PermissionsController::getInstance();
+        $permissionModel = PermissionsModel::getInstance();
 
-        //Try to improve that ?
+        //Todo Try to improve that ?
         require_once(getenv("DIR") . "App/Package/users/functions/loadPermissions.php");
 
 
@@ -83,34 +71,34 @@ class RolesController extends CoreController
     }
 
     #[Link("/add", Link::POST, [], "/cmw-admin/roles")]
-    #[NoReturn] public function adminRolesAddPost(): void
+    #[NoReturn] private function adminRolesAddPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.add");
 
-        $role = new RolesModel();
+        $role = RolesModel::getInstance();
         $roleName = filter_input(INPUT_POST, "name");
         $roleDescription = filter_input(INPUT_POST, "description");
-        $permList = $_POST['perms'];
+        $permList = $_POST['perms']; //todo need to secure that !
         $roleWeight = filter_input(INPUT_POST, "weight", FILTER_SANITIZE_NUMBER_INT);
         $role->createRole($roleName, $roleDescription, $roleWeight, $permList);
 
-        Flash::send("success", LangManager::translate("core.toaster.success"),
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate('users.toaster_role_added'));
 
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
     #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
-    public function adminRolesEdit(Request $request, int $id): void
+    private function adminRolesEdit(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.edit");
 
-        $roleModel = new RolesModel();
-        $role = $this->roleModel->getRoleById($id);
+        $roleModel = RolesModel::getInstance();
+        $role = RolesModel::getInstance()->getRoleById($id);
         $permissionController = new PermissionsController();
         $permissionModel = new PermissionsModel();
 
-        //Try to improve that ?
+        //Todo Try to improve that ?
         require_once(EnvManager::getInstance()->getValue("DIR") . "App/Package/Users/Functions/loadPermissions.php");
 
         View::createAdminView("Users", "roles.edit")->addVariableList(array(
@@ -123,7 +111,7 @@ class RolesController extends CoreController
     }
 
     #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/roles")]
-    #[NoReturn] public function adminRolesEditPost(Request $request, int $id): void
+    #[NoReturn] private function adminRolesEditPost(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.edit");
 
@@ -132,9 +120,9 @@ class RolesController extends CoreController
         $permList = $_POST['perms'];
         $roleWeight = filter_input(INPUT_POST, "weight", FILTER_SANITIZE_NUMBER_INT);
 
-        $this->roleModel->updateRole($roleName, $roleDescription, $id, $roleWeight, $permList);
+        RolesModel::getInstance()->updateRole($roleName, $roleDescription, $id, $roleWeight, $permList);
 
-        Flash::send("success", LangManager::translate("core.toaster.success"),
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate('users.toaster_role_edited'));
 
 
@@ -142,13 +130,13 @@ class RolesController extends CoreController
     }
 
     #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
-    #[NoReturn] public function adminRolesDelete(Request $request, int $id): void
+    #[NoReturn] private function adminRolesDelete(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.delete");
 
-        $this->roleModel->deleteRole($id);
+        RolesModel::getInstance()->deleteRole($id);
 
-        Flash::send("success", LangManager::translate("core.toaster.success"),
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate('users.toaster_role_deleted'));
 
 
@@ -156,13 +144,13 @@ class RolesController extends CoreController
     }
 
     #[Link("/getRole/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
-    public function admingetRole(Request $request, int $id): void
+    private function adminGetRole(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.manage");
 
         $_SESSION['editRoleId'] = $id;
 
-        $role = (new RolesModel())->getRoleById($id);
+        $role = (RolesModel::getInstance())->getRoleById($id);
 
         $rolePermissions = [];
 
@@ -189,11 +177,11 @@ class RolesController extends CoreController
     }
 
     #[Link("/getRoles", Link::GET, [], "/cmw-admin/roles")]
-    public function admingGetRoles(): void
+    private function adminGetRoles(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.manage");
 
-        $roles = $this->roleModel->getRoles();
+        $roles = RolesModel::getInstance()->getRoles();
 
         $rolePermissions = [];
         $data = [];

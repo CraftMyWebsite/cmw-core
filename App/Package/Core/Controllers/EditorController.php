@@ -3,12 +3,13 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Utils\Website;
 
-class EditorController extends CoreController
+class EditorController extends AbstractController
 {
 
     public static function getInstalledStyles(): array
@@ -24,14 +25,14 @@ class EditorController extends CoreController
         return $toReturn;
     }
 
-    public static function getCurrentStyle(): string 
+    public static function getCurrentStyle(): string
     {
-        return (new CoreModel())->fetchOption("editor_style");
+        return CoreModel::getInstance()->fetchOption("editor_style");
     }
 
 
     #[Link("/editor/config", Link::GET, [], "/cmw-admin")]
-    public function editorConfiguration(): void
+    private function editorConfiguration(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.editor.edit");
 
@@ -44,7 +45,7 @@ class EditorController extends CoreController
     }
 
     #[Link("/editor/config", Link::POST, [], "/cmw-admin")]
-    public function editorConfigurationPost(): void
+    private function editorConfigurationPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.editor.edit");
 

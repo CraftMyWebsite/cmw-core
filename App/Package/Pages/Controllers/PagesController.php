@@ -5,6 +5,7 @@ namespace CMW\Controller\pages;
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\EditorController;
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Router\LinkStorage;
@@ -22,24 +23,15 @@ use JsonException;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class PagesController extends CoreController
+class PagesController extends AbstractController
 {
-
-    private PagesModel $pagesModel;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->pagesModel = new PagesModel();
-    }
-
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/pages")]
     #[Link("/list", Link::GET, [], "/cmw-admin/pages")]
-    public function adminPagesList(): void
+    private function adminPagesList(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.show");
 
-        $pagesList = $this->pagesModel->getPages();
+        $pagesList = PagesModel::getInstance()->getPages();
 
         View::createAdminView('Pages', 'list')
             ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
@@ -49,9 +41,11 @@ class PagesController extends CoreController
     }
 
     #[Link("/add", Link::GET, [], "/cmw-admin/pages")]
-    public function adminPagesAdd(): void
+    private function adminPagesAdd(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.add");
+
+        //Todo "pack script" to avoid that
 
         View::createAdminView('Pages', 'add')
             ->addScriptBefore("Admin/Resources/Vendors/Editorjs/Plugins/header.js",
@@ -73,7 +67,7 @@ class PagesController extends CoreController
     }
 
     #[Link("/add", Link::POST, [], "/cmw-admin/pages", secure: false)]
-    public function adminPagesAddPost(): void
+    private function adminPagesAddPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.add");
         $user = new UsersModel();
@@ -88,19 +82,20 @@ class PagesController extends CoreController
         $pageEntity = $page->createPage($pageTitle, $pageSlug, $pageContent, $userId, $pageState);
 
         //Add route
-        (new LinkStorage())->storeRoute('p/' . $pageSlug, 'page', 'Page | ' . $pageTitle, 'GET',
+        LinkStorage::getInstance()->storeRoute('p/' . $pageSlug, 'page', 'Page | ' . $pageTitle, 'GET',
             'false', 'false', 1);
 
         echo $pageEntity?->getId() ?? -1;
     }
 
     #[Link("/edit/:slug", Link::GET, ["slug" => ".*?"], "/cmw-admin/pages")]
-    public function adminPagesEdit(Request $request, string $slug): void
+    private function adminPagesEdit(Request $request, string $slug): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.edit");
 
-        $page = $this->pagesModel->getPageBySlug($slug);
+        $page = PagesModel::getInstance()->getPageBySlug($slug);
 
+        //Todo "pack script" to avoid that
         View::createAdminView('Pages', 'edit')
             ->addScriptBefore("Admin/Resources/Vendors/Editorjs/Plugins/header.js",
                 "Admin/Resources/Vendors/Editorjs/Plugins/image.js",
@@ -122,7 +117,7 @@ class PagesController extends CoreController
     }
 
     #[Link("/edit", Link::POST, [], "/cmw-admin/pages", secure: false)]
-    public function adminPagesEditPost(): void
+    private function adminPagesEditPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.edit");
 
@@ -141,18 +136,18 @@ class PagesController extends CoreController
     }
 
     #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/pages")]
-    #[NoReturn] public function adminPagesDelete(Request $request, int $id): void
+    #[NoReturn] private function adminPagesDelete(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.delete");
 
-        $this->pagesModel->deletePage($id);
+        PagesModel::getInstance()->deletePage($id);
 
         //Todo try to remove that
         $_SESSION['toaster'][0]['title'] = "CORE_TOASTER_TITLE";
         $_SESSION['toaster'][0]['type'] = "bg-success";
         $_SESSION['toaster'][0]['body'] = "CORE_TOASTER_DELETE_SUCCESS";
 
-        header("location: ../list");
+        header("location: ../list"); //todo redirect ?
     }
 
     /**
@@ -161,20 +156,14 @@ class PagesController extends CoreController
      * @return void
      */
     #[Link("/uploadImage/:type", Link::POST, ["type" => ".*?"], "/cmw-admin/pages", secure: false)]
-    public function adminPagesUploadImagePost(Request $request, string $type): void
+    private function adminPagesUploadImagePost(Request $request, string $type): void
     {
-
-        if ($type === "add") {
-            UsersController::hasPermission("core.dashboard", "pages.add");
-        } else {
-            UsersController::hasPermission("core.dashboard", "pages.edit");
-        }
-
+        UsersController::hasPermission("core.dashboard", "pages." . ( ($type === "add") ? "add" : "edit" ) );
 
         try {
             print(json_encode(ImagesManager::upload($_FILES['image'], "editor"), JSON_THROW_ON_ERROR));
         } catch (JsonException $e) {
-            echo $e;
+            echo $e; //todo error
         }
 
     }
@@ -185,13 +174,10 @@ class PagesController extends CoreController
      * @throws \CMW\Manager\Router\RouterException
      */
     #[Link('/p/:slug', Link::GET, ["slug" => ".*?"])]
-    public function publicShowPage(Request $request, string $slug): void
+    private function publicShowPage(Request $request, string $slug): void
     {
 
-        //Default controllers (important)
-        $page = new PagesModel();
-
-        $pageEntity = $page->getPageBySlug($slug);
+        $pageEntity = PagesModel::getInstance()->getPageBySlug($slug);
 
         //Include the Public view file ("Public/Themes/$themePath/Views/Pages/main.view.php")
         $view = new View('Pages', 'main');
