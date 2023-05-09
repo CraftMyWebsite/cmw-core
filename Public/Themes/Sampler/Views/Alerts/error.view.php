@@ -1,7 +1,7 @@
 <?php
 /** @var Alert $alert */
 
-use CMW\Manager\Response\Alert;
+use CMW\Manager\Flash\Alert;
 
 ?>
 <link rel="stylesheet" href="https://izitoast.marcelodolza.com/Css/iziToast.min.css">

@@ -4,7 +4,7 @@
 
 /** @var $description */
 
-use CMW\Utils\EnvManager;
+use CMW\Manager\Env\EnvManager;
 
 ?>
 <!DOCTYPE html>

@@ -3,6 +3,7 @@
 namespace CMW\Utils;
 
 
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Router\Route;
 use CMW\Manager\Router\Router;
 

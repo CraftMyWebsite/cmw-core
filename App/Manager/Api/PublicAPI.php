@@ -2,7 +2,7 @@
 
 namespace CMW\Manager\Api;
 
-use CMW\Utils\EnvManager;
+use CMW\Manager\Env\EnvManager;
 use JsonException;
 
 class PublicAPI

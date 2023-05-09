@@ -8,13 +8,13 @@ use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Requests\Request;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\ThemeModel;
 use CMW\Utils\Redirect;
-use CMW\Utils\Response;
 use JsonException;
 
 class ThemeController extends CoreController
@@ -219,7 +219,7 @@ class ThemeController extends CoreController
 
         CoreModel::updateOption("theme", $theme);
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send("success", LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
         header("Location: market");
@@ -234,7 +234,7 @@ class ThemeController extends CoreController
         $this->themeModel->deleteThemeConfig($themeName);
         $this->installThemeSettings($themeName);
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send("success", LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.Theme.regenerate"));
 
         header("Location: ../market");
@@ -248,7 +248,7 @@ class ThemeController extends CoreController
         $theme = PublicAPI::getData("resources/installResource&id=$id");
 
         if (!DownloadManager::installPackageWithLink($theme['file'], "Theme", $theme['name'])){
-            Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+            Flash::send("error", LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.downloads.errors.internalError",
                     ['name' => $theme['name'], 'version' => $theme['version_name']]));
             Redirect::redirectPreviousRoute();
@@ -300,7 +300,7 @@ class ThemeController extends CoreController
 
                     $this->themeModel->updateThemeConfig($conf, $imageName, self::getCurrentTheme()->getName());
                 } else {
-                    Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                    Flash::send("error", LangManager::translate("core.toaster.error"),
                         $conf . " => " . $imageName);
                 }
             }
@@ -318,7 +318,7 @@ class ThemeController extends CoreController
             }
         }
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send("success", LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
         header("location: manage");

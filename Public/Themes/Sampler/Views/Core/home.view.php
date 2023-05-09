@@ -1,5 +1,5 @@
 <?php use CMW\Controller\Users\UsersController;
-use CMW\Utils\EnvManager;
+use CMW\Manager\Env\EnvManager;
 
 $title = "Accueil";
 $description = "page d'accueil de CraftMyWebsite"; ?>

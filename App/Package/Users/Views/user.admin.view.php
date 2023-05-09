@@ -1,9 +1,9 @@
 <?php
 
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
-use CMW\Model\Users\RolesModel;
 use CMW\Manager\Security\SecurityManager;
-use CMW\Utils\EnvManager;
+use CMW\Model\Users\RolesModel;
 
 $title = LangManager::translate("users.edit.title");
 $description = LangManager::translate("users.edit.desc");

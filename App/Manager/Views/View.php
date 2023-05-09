@@ -6,9 +6,9 @@ use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\MenusController;
 use CMW\Controller\Core\ThemeController;
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\RouterException;
 use CMW\Model\Users\UsersModel;
-use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -274,7 +274,7 @@ class View
      */
     private function callAlerts(): string
     {
-        $alerts = Response::getAlerts();
+        $alerts = Flash::load();
         $alertContent = "";
         foreach ($alerts as $alert) {
             if(!$alert->isAdmin()) {
@@ -285,7 +285,7 @@ class View
             $view->addVariable("alert", $alert);
             $alertContent .= $view->loadFile();
         }
-        Response::clearAlerts();
+        Flash::clear();
         return $alertContent;
     }
 }

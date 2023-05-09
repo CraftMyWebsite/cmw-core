@@ -1,7 +1,7 @@
 <?php
 
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\EnvManager;
 use CMW\Utils\Website;
 
 $title = LangManager::translate("pages.edit.title");

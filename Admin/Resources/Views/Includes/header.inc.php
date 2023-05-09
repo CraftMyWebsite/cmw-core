@@ -1,9 +1,9 @@
 <?php
 
-use CMW\Manager\Lang\LangManager;
 use CMW\Entity\Users\UserEntity;
+use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Lang\LangManager;
 use CMW\Model\Users\UsersModel;
-use CMW\Utils\EnvManager;
 
 /* @var UserEntity $userAdmin */
 ?>

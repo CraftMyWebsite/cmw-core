@@ -1,8 +1,8 @@
 <?php
 
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Updater\UpdatesManager;
-use CMW\Utils\EnvManager;
 
 ?>
 </div>

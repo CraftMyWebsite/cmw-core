@@ -4,7 +4,7 @@
 
 namespace CMW\Entity\Core;
 
-use CMW\Utils\EnvManager;
+use CMW\Manager\Env\EnvManager;
 
 class ThemeEntity
 {

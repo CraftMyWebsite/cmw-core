@@ -5,7 +5,7 @@ namespace CMW\Manager\Events;
 use Closure;
 use CMW\Manager\Collections\Collection;
 use CMW\Manager\Collections\CollectionEntity;
-use CMW\Utils\Loader;
+use CMW\Manager\Loader\Loader;
 use JetBrains\PhpStorm\ExpectedValues;
 use ReflectionClass;
 use ReflectionMethod;

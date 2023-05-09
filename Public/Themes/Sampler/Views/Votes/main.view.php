@@ -1,9 +1,9 @@
 <?php
 
+use CMW\Manager\Env\EnvManager;
 use CMW\Model\Users\UsersModel;
 use cmw\Model\Votes\VotesConfigModel;
 use CMW\Model\Votes\VotesModel;
-use CMW\Utils\EnvManager;
 
 $title = "One-Dream | Voter";
 $description = "Votez pour le serveur One-Dream et gagnez des récompenses uniques!";

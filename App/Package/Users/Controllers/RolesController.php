@@ -3,16 +3,15 @@
 namespace CMW\Controller\Users;
 
 use CMW\Controller\Core\CoreController;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Requests\Request;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Users\PermissionsModel;
 use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UsersModel;
-use CMW\Utils\EnvManager;
-use CMW\Utils\Response;
-use CMW\Utils\Utils;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
@@ -95,7 +94,7 @@ class RolesController extends CoreController
         $roleWeight = filter_input(INPUT_POST, "weight", FILTER_SANITIZE_NUMBER_INT);
         $role->createRole($roleName, $roleDescription, $roleWeight, $permList);
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send("success", LangManager::translate("core.toaster.success"),
             LangManager::translate('users.toaster_role_added'));
 
         header("location: " . $_SERVER['HTTP_REFERER']);
@@ -135,7 +134,7 @@ class RolesController extends CoreController
 
         $this->roleModel->updateRole($roleName, $roleDescription, $id, $roleWeight, $permList);
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send("success", LangManager::translate("core.toaster.success"),
             LangManager::translate('users.toaster_role_edited'));
 
 
@@ -149,7 +148,7 @@ class RolesController extends CoreController
 
         $this->roleModel->deleteRole($id);
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send("success", LangManager::translate("core.toaster.success"),
             LangManager::translate('users.toaster_role_deleted'));
 
 

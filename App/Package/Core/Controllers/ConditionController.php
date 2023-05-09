@@ -4,10 +4,10 @@ namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\ConditionModel;
-use CMW\Utils\Response;
 use CMW\Utils\Utils;
 
 /**
@@ -56,7 +56,7 @@ class ConditionController extends CoreController
         $this->conditionModel->updateCondition($conditionId, $conditionContent,
             $conditionState === NULL ? 0 : 1, $_SESSION['cmwUserId']);
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send("success", LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
         header("Location: condition");

@@ -3,8 +3,8 @@
 namespace CMW\Manager\Metrics;
 
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Router\Route;
-use CMW\Utils\EnvManager;
 use CMW\Utils\Website;
 use JetBrains\PhpStorm\ExpectedValues;
 

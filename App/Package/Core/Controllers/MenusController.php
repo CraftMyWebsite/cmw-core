@@ -5,13 +5,13 @@ namespace CMW\Controller\Core;
 use CMW\Controller\Users\UsersController;
 use CMW\Interface\Core\IMenus;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Loader\Loader;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\MenusModel;
 use CMW\Model\Users\RolesModel;
-use CMW\Utils\Loader;
 use CMW\Utils\Redirect;
-use CMW\Utils\Response;
 use CMW\Utils\Utils;
 
 /**
@@ -81,7 +81,7 @@ class MenusController extends CoreController
         $menu = $this->menusModel->createMenu($name, $url, $targetBlank, $isRestricted);
 
         if (is_null($menu)) {
-            Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+            Flash::send("error", LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.toaster.internalError"));
 
             Redirect::redirectPreviousRoute();
@@ -95,7 +95,7 @@ class MenusController extends CoreController
             }
         }
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send("success", LangManager::translate("core.toaster.success"),
             LangManager::translate("core.menus.add.toaster.success"));
 
         Redirect::redirectPreviousRoute();

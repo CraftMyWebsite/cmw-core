@@ -1,6 +1,6 @@
 <?php
 
-use CMW\Utils\EnvManager;
+use CMW\Manager\Env\EnvManager;
 
 
 class CliBuilder{

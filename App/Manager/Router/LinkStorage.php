@@ -5,7 +5,7 @@ namespace CMW\Manager\Router;
 
 use CMW\Manager\Class\ClassManager;
 use CMW\Manager\Database\DatabaseManager;
-use CMW\Utils\EnvManager;
+use CMW\Manager\Env\EnvManager;
 use CMW\Utils\Utils;
 use ReflectionClass;
 use ReflectionException;

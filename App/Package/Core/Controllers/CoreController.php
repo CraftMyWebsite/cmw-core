@@ -3,18 +3,18 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Requests\Validator;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Router\RouterException;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
-use CMW\Utils\EnvManager;
-use CMW\Utils\Response;
 
 /**
  * Class: @coreController
@@ -94,7 +94,7 @@ class CoreController extends AbstractController
 
         echo ImagesManager::upload($_FILES['favicon'], "favicon", false, "favicon");
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send("success", LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
         header("location: configuration");

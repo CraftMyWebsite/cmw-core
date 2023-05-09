@@ -8,13 +8,13 @@ use CMW\Entity\Users\UserEntity;
 use CMW\Entity\Users\UserSettingsEntity;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Requests\Request;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UserPictureModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Utils\Redirect;
-use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use Exception;
 use JetBrains\PhpStorm\NoReturn;
@@ -163,7 +163,7 @@ class UsersController extends CoreController
         $this->userModel->update($id, $mail, $username, $firstname, $lastname, $_POST['roles']);
 
         //Todo Try to edit that
-        Response::sendAlert("success", LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.user_edited"));
+        Flash::send("success", LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.user_edited"));
 
         [$pass, $passVerif] = Utils::filterInput("pass", "passVerif");
 
@@ -171,7 +171,7 @@ class UsersController extends CoreController
             if ($pass === $passVerif) {
                 $this->userModel->updatePass($id, password_hash($pass, PASSWORD_BCRYPT));
             } else {
-                Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.pass_change_faild"));
+                Flash::send("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.pass_change_faild"));
 
             }
 
@@ -201,7 +201,7 @@ class UsersController extends CoreController
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
         if (UsersModel::getLoggedUser() === $id) {
-            Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.impossible"));
+            Flash::send("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.impossible"));
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             die();
         }
@@ -210,7 +210,7 @@ class UsersController extends CoreController
 
         $this->userModel->changeState($id, $state);
 
-        Response::sendAlert("success", LangManager::translate("users.toaster.success"),"Ok !");
+        Flash::send("success", LangManager::translate("users.toaster.success"),"Ok !");
 
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
@@ -223,7 +223,7 @@ class UsersController extends CoreController
         if (UsersModel::getLoggedUser() === $id) {
 
             //Todo Try to remove that
-            Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.impossible_user"));
+            Flash::send("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.impossible_user"));
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             die();
         }
@@ -231,7 +231,7 @@ class UsersController extends CoreController
         $this->userModel->delete($id);
 
         //Todo Try to remove that
-        Response::sendAlert("success", LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.user_deleted"));
+        Flash::send("success", LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.user_deleted"));
 
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
@@ -284,7 +284,7 @@ class UsersController extends CoreController
                 header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
 
             } else {
-                Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.mail_pass_matching"));
+                Flash::send("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.mail_pass_matching"));
                 Redirect::redirectToPreviousPage();
             }
         } else {
@@ -361,17 +361,17 @@ class UsersController extends CoreController
     {
         if(SecurityController::checkCaptcha()) {
         if ($this->userModel->checkPseudo(filter_input(INPUT_POST, "register_pseudo")) > 0) {
-            Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.used_pseudo"));
+            Flash::send("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.used_pseudo"));
             header('Location: register');
         } else if ($this->userModel->checkEmail(filter_input(INPUT_POST, "register_email")) > 0) {
-            Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.used_mail"));
+            Flash::send("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.used_mail"));
             header('Location: register');
         } else {
 
             [$mail, $pseudo, $password, $passwordVerify] = Utils::filterInput("register_email", "register_pseudo", "register_password", "register_password_verify");
 
             if (!is_null($password) && $password !== $passwordVerify) {
-                Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.not_same_pass"));
+                Flash::send("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.not_same_pass"));
                 header('Location: register');
             }
 
@@ -395,7 +395,7 @@ class UsersController extends CoreController
                 header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
 
 
-                Response::sendAlert("success", LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.welcome"));
+                Flash::send("success", LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.welcome"));
 
             }
 
@@ -457,7 +457,7 @@ class UsersController extends CoreController
         try {
             $this->userPictureModel->uploadImage($_SESSION['cmwUserId'], $image);
         } catch (Exception $e) {
-            Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+            Flash::send("error", LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.toaster.internalError") . " => $e");
         }
 
@@ -545,7 +545,7 @@ class UsersController extends CoreController
                 $this->userModel->updatePass($userId, password_hash($pass, PASSWORD_BCRYPT));
             } else {
                 //Todo Try to edit that
-                Response::sendAlert("error", LangManager::translate("users.toaster.error"),"Je sais pas ?");
+                Flash::send("error", LangManager::translate("users.toaster.error"),"Je sais pas ?");
             }
         }
 

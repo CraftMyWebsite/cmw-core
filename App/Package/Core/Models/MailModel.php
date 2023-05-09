@@ -4,7 +4,7 @@ namespace CMW\Model\Core;
 
 use CMW\Entity\Core\MailConfigEntity;
 use CMW\Manager\Database\DatabaseManager;
-use CMW\Utils\EnvManager;
+use CMW\Manager\Env\EnvManager;
 
 class MailModel extends DatabaseManager
 {

@@ -1,14 +1,17 @@
 <?php
 
-namespace CMW\Utils;
+namespace CMW\Manager\Loader;
 
 use CMW\Controller\Core\CoreController;
+use CMW\Manager\Env\EnvManager;
+use CMW\Utils\Directory;
+use CMW\Utils\Website;
 
 class AutoLoad
 {
     private static function isEnvValid(): bool
     {
-        require_once("EnvManager.php");
+        require_once("App/Manager/Env/EnvManager.php");
         return is_file(EnvManager::getInstance()->getValue("DIR") . "index.php");
     }
 

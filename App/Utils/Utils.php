@@ -2,6 +2,7 @@
 
 namespace CMW\Utils;
 
+use CMW\Manager\Env\EnvManager;
 use ReflectionClass;
 
 /**
@@ -105,8 +106,8 @@ class Utils
     }
 
     /**
-     * @return \CMW\Utils\EnvManager
-     * @deprecated please prefer {@see \CMW\Utils\EnvManager::getInstance()}
+     * @return \CMW\Manager\Env\EnvManager
+     * @deprecated please prefer {@see \CMW\Manager\Env\EnvManager::getInstance()}
      */
     public static function getEnv(): EnvManager
     {

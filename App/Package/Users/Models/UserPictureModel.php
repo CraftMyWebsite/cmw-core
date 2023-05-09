@@ -4,8 +4,8 @@ namespace CMW\Model\Users;
 
 use CMW\Entity\Users\UserPictureEntity;
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Uploads\ImagesManager;
-use CMW\Utils\EnvManager;
 use Exception;
 
 

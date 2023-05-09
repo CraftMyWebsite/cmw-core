@@ -4,13 +4,13 @@ namespace CMW\Controller\Users;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Entity\Users\UserSettingsEntity;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Users\UsersSettingsModel;
-use CMW\Utils\EnvManager;
-use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use JsonException;
 
@@ -54,7 +54,7 @@ class UsersSettingsController extends CoreController
                 $newDefaultImage = ImagesManager::upload($defaultPicture, "users/Default");
                 UsersSettingsModel::updateSetting("defaultImage", $newDefaultImage);
             } catch (JsonException $e) {
-                Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                Flash::send("error", LangManager::translate("core.toaster.error"),
                     LangManager::translate("core.toaster.internalError") . " => $e");
             }
 
@@ -65,7 +65,7 @@ class UsersSettingsController extends CoreController
         UsersSettingsModel::updateSetting("resetPasswordMethod", $resetPasswordMethod);
         UsersSettingsModel::updateSetting("profilePage", $profilePage);
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send("success", LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
         header("Location: settings");

@@ -80,6 +80,9 @@ class Router
     private function callRegisteredRoute(ReflectionMethod $method, Request $request, string ...$values): void
     {
         $classInstance = $method->getDeclaringClass()->getMethod("getInstance")->invoke(null);
+        if(!$method->isPrivate()) {
+            //todo warning, method Link must be private !
+        }
         $method->invoke($classInstance, $request, ...$values);
     }
 

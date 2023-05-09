@@ -4,7 +4,7 @@ namespace CMW\Controller\Core;
 
 use CMW\Entity\Core\PackageEntity;
 use CMW\Entity\Core\PackageMenusEntity;
-use CMW\Utils\EnvManager;
+use CMW\Manager\Env\EnvManager;
 use JsonException;
 
 class PackageController extends CoreController

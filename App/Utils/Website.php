@@ -2,6 +2,7 @@
 
 namespace CMW\Utils;
 
+use CMW\Manager\Env\EnvManager;
 use CMW\Model\Core\CoreModel;
 use JetBrains\PhpStorm\ExpectedValues;
 

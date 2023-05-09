@@ -2,7 +2,7 @@
 
 namespace CMW\Manager\Uploads;
 
-use CMW\Utils\EnvManager;
+use CMW\Manager\Env\EnvManager;
 use CMW\Utils\Utils;
 use Exception;
 use RuntimeException;

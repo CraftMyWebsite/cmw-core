@@ -2,9 +2,9 @@
 
 use CMW\Controller\Core\PackageController;
 use CMW\Controller\Core\ThemeController;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Updater\UpdatesManager;
-use CMW\Utils\EnvManager;
 
 ?>
 <div class="card-body">

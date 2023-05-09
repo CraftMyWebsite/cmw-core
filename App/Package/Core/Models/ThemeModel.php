@@ -4,7 +4,7 @@ namespace CMW\Model\Core;
 
 use CMW\Controller\Core\ThemeController;
 use CMW\Manager\Database\DatabaseManager;
-use CMW\Utils\EnvManager;
+use CMW\Manager\Env\EnvManager;
 
 /**
  * Class: @ThemeModel

@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Utils;
+namespace CMW\Manager\Env;
 
 use Closure;
 
@@ -24,7 +24,7 @@ class EnvManager
 
     public function __construct()
     {
-        $this->absPath = dirname(__DIR__, 2) . "/";
+        $this->absPath = dirname(__DIR__, 3) . "/";
         $this->envPath = $this->absPath;
         $this->path = $this->envPath . $this->envFileName;
         $this->apiURL = "https://apiv2.craftmywebsite.fr"; //TODO En production mettre la vraie URL de l'API
