@@ -1,14 +1,18 @@
 <?php
 
-namespace CMW\Manager\Response;
+namespace CMW\Manager\Flash;
 
 use JetBrains\PhpStorm\ExpectedValues;
 
 class Alert
 {
 
+    public const SUCCESS = "success";
+    public const ERROR = "error";
+    public const WARNING = "warning";
+
     public function __construct(
-        #[ExpectedValues(["success", "error", "warning"])]
+        #[ExpectedValues(flagsFromClass: Alert::class)]
         private readonly string $alertType,
         private readonly string $alertTitle,
         private readonly string $alertMessage,
@@ -21,7 +25,7 @@ class Alert
     /**
      * @return string
      */
-    #[ExpectedValues(["success", "error", "warning"])]
+    #[ExpectedValues(flagsFromClass: Alert::class)]
     public function getType(): string
     {
         return $this->alertType;

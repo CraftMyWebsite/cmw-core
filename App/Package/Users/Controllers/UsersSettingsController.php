@@ -4,13 +4,15 @@ namespace CMW\Controller\Users;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Entity\Users\UserSettingsEntity;
+use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Flash\Alert;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Flash\Flash;
+use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Users\UsersSettingsModel;
-use CMW\Utils\EnvManager;
-use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use JsonException;
 
@@ -20,7 +22,7 @@ use JsonException;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class UsersSettingsController extends CoreController
+class UsersSettingsController extends AbstractController
 {
 
     public static function getDefaultImageLink(): string
@@ -33,7 +35,7 @@ class UsersSettingsController extends CoreController
      */
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/users")]
     #[Link("/settings", Link::GET, [], "/cmw-admin/users")]
-    public function settings(): void
+    private function settings(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings");
 
@@ -43,7 +45,7 @@ class UsersSettingsController extends CoreController
     }
 
     #[Link("/settings", Link::POST, [], "/cmw-admin/users")]
-    public function settingsPost(): void
+    private function settingsPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings");
 
@@ -54,7 +56,7 @@ class UsersSettingsController extends CoreController
                 $newDefaultImage = ImagesManager::upload($defaultPicture, "users/Default");
                 UsersSettingsModel::updateSetting("defaultImage", $newDefaultImage);
             } catch (JsonException $e) {
-                Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+                Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                     LangManager::translate("core.toaster.internalError") . " => $e");
             }
 
@@ -65,7 +67,7 @@ class UsersSettingsController extends CoreController
         UsersSettingsModel::updateSetting("resetPasswordMethod", $resetPasswordMethod);
         UsersSettingsModel::updateSetting("profilePage", $profilePage);
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
         header("Location: settings");

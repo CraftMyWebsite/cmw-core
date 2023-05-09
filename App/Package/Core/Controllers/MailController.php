@@ -3,12 +3,14 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Flash\Alert;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Flash\Flash;
+use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\MailModel;
-use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -24,16 +26,8 @@ require_once(getenv("DIR") . 'App/Package/Core/Vendors/Phpmailer/Exception.php')
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class MailController extends CoreController
+class MailController extends AbstractController
 {
-
-    private MailModel $mailModel;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->mailModel = new MailModel();
-    }
 
 
     /**
@@ -45,7 +39,7 @@ class MailController extends CoreController
     public function sendMailSMTP(string $receiver, string $subject, string $body): void
     {
 
-        $config = $this->mailModel->getConfig();
+        $config = MailModel::getInstance()->getConfig();
 
         $mail = new PHPMailer(false);
 
@@ -99,7 +93,7 @@ class MailController extends CoreController
      */
     public function sendMail(string $receiver, string $object, string $body): void
     {
-        if($this->mailModel->getConfig() !== null && $this->mailModel->getConfig()->isEnable()){
+        if(MailModel::getInstance()->getConfig() !== null && MailModel::getInstance()->getConfig()->isEnable()){
             $this->sendMailSMTP($receiver, $object, $body);
         } else {
             $this->sendMailPHP($receiver, $object, $body);
@@ -112,11 +106,11 @@ class MailController extends CoreController
 
     #[Link(path: "/mail", method: Link::GET, scope: "/cmw-admin")]
     #[Link("/configuration", Link::GET, [], "/cmw-admin/mail")]
-    public function mailConfiguration(): void
+    private function mailConfiguration(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.mail.configuration");
 
-        $config = $this->mailModel->getConfig();
+        $config = MailModel::getInstance()->getConfig();
 
         View::createAdminView("Core", "mailConfig")
             ->addScriptBefore("App/Package/Core/Views/Resources/Js/mailConfig.js")
@@ -127,7 +121,7 @@ class MailController extends CoreController
     }
 
     #[Link("/configuration", Link::POST, [], "/cmw-admin/mail")]
-    public function mailConfigurationPost(): void
+    private function mailConfigurationPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.mail.configuration");
 
@@ -135,9 +129,9 @@ class MailController extends CoreController
             "mail", "mailReply", "addressSMTP", "user", "password", "port", "protocol", "footer", "enableSMTP");
 
 
-        $this->mailModel->create($mail, $mailReply, $addressSMTP, $user, $password, $port, $protocol, $footer, (is_null($enableSMTP) ? 0 : 1));
+        MailModel::getInstance()->create($mail, $mailReply, $addressSMTP, $user, $password, $port, $protocol, $footer, (is_null($enableSMTP) ? 0 : 1));
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
         header("Location: configuration");
@@ -145,7 +139,7 @@ class MailController extends CoreController
 
 
     #[Link("/test", Link::POST, [], "/cmw-admin/mail", secure: true)]
-    public function testMailConfigurationPost(): void
+    private function testMailConfigurationPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.mail.configuration");
 
@@ -153,7 +147,7 @@ class MailController extends CoreController
 
         $this->sendMail($receiver, "Test CraftMyWebsite - MAILS", "<p>Hello World !</p>");
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.mail.test", ["%mail%" => $receiver]));
 
         header("Location: configuration");

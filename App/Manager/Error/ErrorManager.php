@@ -3,8 +3,8 @@
 namespace CMW\Manager\Error;
 
 use CMW\Controller\Core\ThemeController;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Permission\PermissionManager;
-use CMW\Utils\EnvManager;
 use DateTime;
 use ErrorException;
 use Throwable;

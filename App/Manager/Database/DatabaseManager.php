@@ -2,7 +2,7 @@
 
 namespace CMW\Manager\Database;
 
-use CMW\Utils\EnvManager;
+use CMW\Manager\Env\EnvManager;
 use Exception;
 use PDO;
 

@@ -4,7 +4,8 @@ namespace CMW\Model\Core;
 
 use CMW\Controller\Core\ThemeController;
 use CMW\Manager\Database\DatabaseManager;
-use CMW\Utils\EnvManager;
+use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Package\AbstractModel;
 
 /**
  * Class: @ThemeModel
@@ -12,7 +13,7 @@ use CMW\Utils\EnvManager;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class ThemeModel extends DatabaseManager
+class ThemeModel extends AbstractModel
 {
     /**
      * @param string $config
@@ -29,7 +30,7 @@ class ThemeModel extends DatabaseManager
             $theme = ThemeController::getCurrentTheme()->getName();
         }
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config 
                                     WHERE theme_config_name = :config AND theme_config_theme = :theme');
 
@@ -53,7 +54,7 @@ class ThemeModel extends DatabaseManager
             $theme = ThemeController::getCurrentTheme()->getName();
         }
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config 
                                     WHERE theme_config_name = :config AND theme_config_theme = :theme');
 
@@ -71,7 +72,7 @@ class ThemeModel extends DatabaseManager
 
     public function fetchThemeConfigs(string $theme): array
     {
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT * FROM cmw_theme_config WHERE theme_config_theme = :theme');
 
         if ($req->execute(array("theme" => $theme))) {
@@ -83,7 +84,7 @@ class ThemeModel extends DatabaseManager
 
     public function storeThemeConfig(string $configName, string $configValue, string $theme): void
     {
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare('INSERT INTO cmw_theme_config (theme_config_name, theme_config_value, theme_config_theme) 
                                     VALUES (:theme_config_name, :theme_config_value, :theme_config_theme)');
         $req->execute(array("theme_config_name" => $configName,
@@ -93,7 +94,7 @@ class ThemeModel extends DatabaseManager
 
     public function updateThemeConfig(string $configName, ?string $configValue, string $theme): void
     {
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare('UPDATE cmw_theme_config SET theme_config_value = :theme_config_value 
                         WHERE theme_config_name = :theme_config_name AND theme_config_theme = :theme');
 
@@ -102,7 +103,7 @@ class ThemeModel extends DatabaseManager
 
     public function deleteThemeConfig(string $themeName): void
     {
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare('DELETE FROM cmw_theme_config WHERE theme_config_theme = :themeName');
 
         $req->execute(array("themeName" => $themeName));

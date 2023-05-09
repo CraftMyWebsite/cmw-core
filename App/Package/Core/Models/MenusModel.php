@@ -4,6 +4,7 @@ namespace CMW\Model\Core;
 
 use CMW\Entity\Core\MenuEntity;
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Manager\Package\AbstractModel;
 
 /**
  * Class: @MenusModel
@@ -11,7 +12,7 @@ use CMW\Manager\Database\DatabaseManager;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class MenusModel extends DatabaseManager
+class MenusModel extends AbstractModel
 {
 
     /**
@@ -34,7 +35,7 @@ class MenusModel extends DatabaseManager
         $sql = "INSERT INTO cmw_menus (menu_name, menu_url, menu_is_restricted, menu_order, menu_target_blank) 
                 VALUES (:name, :url, :restricted,:menu_order ,:target_blank)";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if (!$req->execute($var)){
@@ -53,7 +54,7 @@ class MenusModel extends DatabaseManager
     public function getMenuById(int $id): ?MenuEntity
     {
         $sql = "SELECT * FROM cmw_menus WHERE menu_id = :id";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if (!$req->execute(['id' => $id])){
@@ -82,7 +83,7 @@ class MenusModel extends DatabaseManager
     public function getMenus(): array
     {
         $sql = "SELECT menu_id FROM cmw_menus ORDER BY menu_order";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if (!$req){
@@ -109,7 +110,7 @@ class MenusModel extends DatabaseManager
     public function getLastMenuOrder(): int
     {
         $sql = "SELECT menu_order FROM cmw_menus WHERE menu_parent_id IS null ORDER BY menu_order DESC LIMIT 1";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if (!$req->execute()){
@@ -129,7 +130,7 @@ class MenusModel extends DatabaseManager
     {
         $sql = "INSERT INTO cmw_menus_groups_allowed (menus_groups_group_id, menus_groups_menu_id)
                 VALUES (:group_id, :menu_id)";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db ->prepare($sql);
         $req->execute(['group_id' => $roleId, 'menu_id' => $menuId]);
     }

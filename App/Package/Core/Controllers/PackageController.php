@@ -4,10 +4,11 @@ namespace CMW\Controller\Core;
 
 use CMW\Entity\Core\PackageEntity;
 use CMW\Entity\Core\PackageMenusEntity;
-use CMW\Utils\EnvManager;
+use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Package\AbstractController;
 use JsonException;
 
-class PackageController extends CoreController
+class PackageController extends AbstractController
 {
 
     public static array $corePackages = ['Core', 'Pages', 'Users'];

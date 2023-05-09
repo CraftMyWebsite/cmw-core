@@ -3,7 +3,7 @@
 namespace CMW\Model\Installer;
 
 use CMW\Manager\Download\DownloadManager;
-use CMW\Utils\EnvManager;
+use CMW\Manager\Env\EnvManager;
 use PDO;
 use PDOException;
 

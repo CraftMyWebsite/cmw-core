@@ -2,8 +2,8 @@
 /* @var \CMW\Controller\Installer\InstallerController $install */
 
 use CMW\Manager\Api\PublicAPI;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\EnvManager;
 
 ?>
 <div class="lg:flex flex-wrap mb-2">

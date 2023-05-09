@@ -3,6 +3,7 @@
 namespace CMW\Controller\Users;
 
 use CMW\Controller\Core\CoreController;
+use CMW\Manager\Package\AbstractController;
 use CMW\Model\Users\PermissionsModel;
 
 /**
@@ -11,7 +12,7 @@ use CMW\Model\Users\PermissionsModel;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class PermissionsController extends CoreController
+class PermissionsController extends AbstractController
 {
 
     /**
@@ -19,7 +20,7 @@ class PermissionsController extends CoreController
      */
     public function getParents(): array
     {
-        return (new PermissionsModel())->getParents();
+        return PermissionsModel::getInstance()->getParents();
     }
 
 

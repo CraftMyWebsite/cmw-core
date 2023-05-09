@@ -3,8 +3,8 @@
 namespace CMW\Manager\Lang;
 
 use CMW\Controller\Installer\InstallerController;
-use CMW\Utils\EnvManager;
-use CMW\Utils\Loader;
+use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Loader\Loader;
 
 class LangManager
 {

@@ -4,6 +4,7 @@ namespace CMW\Model\Pages;
 
 use CMW\Entity\Pages\PageEntity;
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Manager\Package\AbstractModel;
 use CMW\Model\Users\UsersModel;
 use JsonException;
 use PDOStatement;
@@ -14,7 +15,7 @@ use PDOStatement;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class PagesModel extends DatabaseManager
+class PagesModel extends AbstractModel
 {
 
     /*=> GET */
@@ -24,7 +25,7 @@ class PagesModel extends DatabaseManager
         $sql = "SELECT page_id, page_title, page_slug, user_id, page_content, page_state, page_created, page_updated 
                 FROM cmw_pages WHERE page_id = :page_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
 
         $res = $db->prepare($sql);
 
@@ -40,7 +41,7 @@ class PagesModel extends DatabaseManager
         $sql = "SELECT page_id, page_title, page_slug, user_id, page_content, page_state, 
                 page_created, page_updated FROM cmw_pages WHERE page_slug = :page_slug";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 
         if (!$res->execute(array("page_slug" => $slug))) {
@@ -57,7 +58,7 @@ class PagesModel extends DatabaseManager
     {
 
         $sql = "select page_id from cmw_pages";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
 
         $res = $db->prepare($sql);
 
@@ -90,7 +91,7 @@ class PagesModel extends DatabaseManager
         $sql = "INSERT INTO cmw_pages(page_title, page_slug, page_content, user_id, page_state) 
                 VALUES (:page_title, :page_slug, :page_content, :user_id, :page_state)";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($data)) {
@@ -110,7 +111,7 @@ class PagesModel extends DatabaseManager
         );
         $sql = "DELETE FROM cmw_pages WHERE page_id=:page_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         return $db->prepare($sql)->execute($var);
     }
 
@@ -129,7 +130,7 @@ class PagesModel extends DatabaseManager
         $sql = "UPDATE cmw_pages SET page_slug=:page_slug, page_title=:page_title,
                      page_content=:page_content, page_state=:page_state WHERE page_id=:page_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         if ($req->execute($var)) {
             $this->updateEditTime($id);
@@ -147,7 +148,7 @@ class PagesModel extends DatabaseManager
 
         $sql = "UPDATE cmw_pages SET page_updated = NOW() WHERE page_id=:page_id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
     }

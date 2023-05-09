@@ -4,9 +4,9 @@
  * Warning : This file must NOT be modified !
  */
 
-use CMW\Utils\Loader;
+use CMW\Manager\Loader\Loader;
 
-require_once("App/Utils/Loader.php");
+require_once("App/Manager/Loader/Loader.php");
 
 Loader::loadProject();
 

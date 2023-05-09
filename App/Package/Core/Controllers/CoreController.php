@@ -3,18 +3,18 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Requests\Validator;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Router\RouterException;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
-use CMW\Utils\EnvManager;
-use CMW\Utils\Response;
 
 /**
  * Class: @coreController
@@ -28,29 +28,25 @@ class CoreController extends AbstractController
     public static array $availableLocales = ['fr' => 'Français', 'en' => 'English']; //todo remove that
     public static array $exampleDateFormat = ["d-m-Y H:i:s", "d-m-Y Hh im ss", "d/m/Y H:i:s", "d/m/Y à H\h i\m s\s", "d/m/Y à H\h i\m", "d/m/Y at H\h i\m s\s"];
 
-    public function __construct()
-    {
-    }
-
     public static function getThemePath(): string {
-        self::$themeName = (new CoreModel())->fetchOption("Theme");
+        self::$themeName = CoreModel::getInstance()->fetchOption("Theme");
         return (empty($themeName = self::$themeName)) ? "" : "./Public/Themes/$themeName/";
     }
 
     public static function formatDate(string $date): string
     {
-        return date((new CoreModel())->fetchOption("dateFormat"), strtotime($date));
+        return date(CoreModel::getInstance()->fetchOption("dateFormat"), strtotime($date));
     }
 
     /* ADMINISTRATION */
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin")]
     #[Link("/dashboard", Link::GET, [], "/cmw-admin")]
-    public function adminDashboard(): void
+    private function adminDashboard(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard");
         //Redirect to the dashboard
         if ($_GET['url'] === "cmw-admin") {
-            header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
+            header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard'); //todo redirect
         }
 
         View::createAdminView("Core", "dashboard")
@@ -60,7 +56,7 @@ class CoreController extends AbstractController
     }
 
     #[Link(path: "/configuration", method: Link::GET, scope: "/cmw-admin")]
-    public function adminConfiguration(): void
+    private  function adminConfiguration(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
 
@@ -69,7 +65,7 @@ class CoreController extends AbstractController
     }
 
     #[Link(path: "/configuration", method: Link::POST, scope: "/cmw-admin")]
-    public function adminConfigurationPost(Request $request): void
+    private function adminConfigurationPost(Request $request): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
 
@@ -92,12 +88,12 @@ class CoreController extends AbstractController
 
         //update favicon
 
-        echo ImagesManager::upload($_FILES['favicon'], "favicon", false, "favicon");
+        echo ImagesManager::upload($_FILES['favicon'], "favicon", false, "favicon"); //todo remove echo ?
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send("success", LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
-        header("location: configuration");
+        header("location: configuration"); //todo redirect
     }
 
     /* PUBLIC FRONT */
@@ -105,7 +101,7 @@ class CoreController extends AbstractController
      * @throws \CMW\Manager\Router\RouterException
      */
     #[Link('/', Link::GET)]
-    public function frontHome(): void
+    private function frontHome(): void
     {
         $view = new View("Core", "home");
         $view->view();
@@ -115,7 +111,7 @@ class CoreController extends AbstractController
      * @throws \CMW\Manager\Router\RouterException
      */
     #[Link("/:errorCode", Link::GET, ["errorCode" => ".*?"], "geterror")]
-    public function errorView(Request $request, int $errorCode = 403): void
+    private function errorView(Request $request, int $errorCode = 403): void
     {
         $theme = ThemeController::getCurrentTheme()->getName();
 
@@ -138,7 +134,7 @@ class CoreController extends AbstractController
      * @throws \CMW\Manager\Router\RouterException
      */
     #[Link("/:errorCode", Link::GET, ["errorCode" => ".*?"], "error")]
-    public function threwRouterError(Request $request, $errorCode): void
+    private function threwRouterError(Request $request, $errorCode): void
     {
         throw new RouterException('Trowed Error', $errorCode);
     }
@@ -163,16 +159,15 @@ class CoreController extends AbstractController
      */
     public function cmwHead(string $title, string $description): string
     {
-        $toReturn = <<<HTML
+        $desc = htmlspecialchars_decode($description, ENT_QUOTES);
+
+        return <<<HTML
             <meta charset='utf-8'>
             <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
             <title>$title</title>
+            <meta name="description" content="$desc">
+            <meta name="author" content="CraftMyWebsite"> <!-- Todo review author list -->
             HTML;
-
-        $toReturn .= PHP_EOL . '<meta name="description" content= "' . htmlspecialchars_decode($description, ENT_QUOTES) . '">
-            <meta name="author" content="CraftMyWebsite">';
-
-        return $toReturn;
     }
 
     /*

@@ -5,7 +5,7 @@
 
 /** @var \CMW\Model\Forum\ForumModel $forumModel */
 
-use CMW\Utils\EnvManager;
+use CMW\Manager\Env\EnvManager;
 
 $title = "Titre de la page";
 $description = "Description de votre page";

@@ -1,6 +1,7 @@
 <?php
+
 use CMW\Controller\Users\UsersController;
-use CMW\Utils\EnvManager;
+use CMW\Manager\Env\EnvManager;
 use CMW\Utils\Website;
 
 ?>

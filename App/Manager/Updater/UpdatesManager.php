@@ -2,7 +2,7 @@
 
 namespace CMW\Manager\Updater;
 
-use CMW\Utils\EnvManager;
+use CMW\Manager\Env\EnvManager;
 use JsonException;
 
 class UpdatesManager

@@ -6,15 +6,17 @@ use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\SecurityController;
 use CMW\Entity\Users\UserEntity;
 use CMW\Entity\Users\UserSettingsEntity;
+use CMW\Manager\Flash\Alert;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UserPictureModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Utils\Redirect;
-use CMW\Utils\Response;
 use CMW\Utils\Utils;
 use Exception;
 use JetBrains\PhpStorm\NoReturn;
@@ -26,22 +28,8 @@ use JsonException;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class UsersController extends CoreController
+class UsersController extends AbstractController
 {
-    private UsersModel $userModel;
-    private RolesModel $roleModel;
-    private UserPictureModel $userPictureModel;
-    private UserSettingsEntity $userSettingsEntity;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->userModel = new UsersModel();
-        $this->roleModel = new RolesModel();
-        $this->userPictureModel = new UserPictureModel();
-        $this->userSettingsEntity = new UserSettingsEntity();
-    }
-
     public function adminDashboard(): void
     {
         header("Location" . getenv("PATH_SUBFOLDER") . ((self::isAdminLogged()) ? "cmw-admin/dashboard" : "login"));
@@ -72,17 +60,17 @@ class UsersController extends CoreController
             return null;
         }
 
-        return (new UsersModel())->getUserById($_SESSION['cmwUserId']);
+        return (UsersModel::getInstance())->getUserById($_SESSION['cmwUserId']);
     }
 
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/users")]
     #[Link("/manage", Link::GET, [], "/cmw-admin/users")]
-    public function adminUsersList(): void
+    private function adminUsersList(): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
-        $userList = $this->userModel->getUsers();
-        $roles = $this->roleModel->getRoles();
+        $userList = UsersModel::getInstance()->getUsers();
+        $roles = RolesModel::getInstance()->getRoles();
 
 
         View::createAdminView("Users", "manage")
@@ -102,11 +90,11 @@ class UsersController extends CoreController
     }
 
     #[Link("/getUser/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
-    public function admingetUser(Request $request, int $id): void
+    private function adminGetUser(Request $request, int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
-        $user = (new UsersModel())->getUserById($id);
+        $user = (UsersModel::getInstance())->getUserById($id);
 
         $roles = [];
 
@@ -139,13 +127,13 @@ class UsersController extends CoreController
 
 
     #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
-    public function adminUsersEdit(Request $request, int $id): void
+    private function adminUsersEdit(Request $request, int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
-        $userEntity = $this->userModel->getUserById($id);
+        $userEntity = UsersModel::getInstance()->getUserById($id);
 
-        $roles = $this->roleModel->getRoles();
+        $roles = RolesModel::getInstance()->getRoles();
 
         View::createAdminView("Users", "user")->addVariableList(array(
             "user" => $userEntity,
@@ -155,114 +143,114 @@ class UsersController extends CoreController
     }
 
     #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users")]
-    #[NoReturn] public function adminUsersEditPost(Request $request, int $id): void
+    #[NoReturn] private function adminUsersEditPost(Request $request, int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
         [$mail, $username, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "name", "lastname");
-        $this->userModel->update($id, $mail, $username, $firstname, $lastname, $_POST['roles']);
+        UsersModel::getInstance()->update($id, $mail, $username, $firstname, $lastname, $_POST['roles']);
 
         //Todo Try to edit that
-        Response::sendAlert("success", LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.user_edited"));
+        Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.user_edited"));
 
         [$pass, $passVerif] = Utils::filterInput("pass", "passVerif");
 
         if (!is_null($pass)) {
             if ($pass === $passVerif) {
-                $this->userModel->updatePass($id, password_hash($pass, PASSWORD_BCRYPT));
+                UsersModel::getInstance()->updatePass($id, password_hash($pass, PASSWORD_BCRYPT));
             } else {
-                Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.pass_change_faild"));
+                Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.pass_change_faild"));
 
             }
 
         }
 
-        header("location: ../edit/" . $id);
+        header("location: ../edit/" . $id); //Todo redirect
     }
 
 
     #[Link("/add", Link::POST, [], "/cmw-admin/users")]
-    public function adminUsersAddPost(): void
+    private function adminUsersAddPost(): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.add");
 
         [$mail, $username, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "firstname", "surname");
 
-        $userEntity = $this->userModel->create($mail, $username, $firstname, $lastname, $_POST['roles']);
+        $userEntity = UsersModel::getInstance()->create($mail, $username, $firstname, $lastname, $_POST['roles']);
 
-        $this->userModel->updatePass($userEntity?->getId(), password_hash(filter_input(INPUT_POST, "password"), PASSWORD_BCRYPT));
+        UsersModel::getInstance()->updatePass($userEntity?->getId(), password_hash(filter_input(INPUT_POST, "password"), PASSWORD_BCRYPT));
 
-        header("location: " . $_SERVER['HTTP_REFERER']);
+        header("location: " . $_SERVER['HTTP_REFERER']); //Todo redirect
     }
 
     #[Link("/state/:id/:state", Link::GET, ["id" => "[0-9]+", "state" => "[0-9]+"], "/cmw-admin/users")]
-    #[NoReturn] public function adminUserState(Request $request, int $id, int $state): void
+    #[NoReturn] private function adminUserState(Request $request, int $id, int $state): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
         if (UsersModel::getLoggedUser() === $id) {
-            Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.impossible"));
-            header('Location: ' . $_SERVER['HTTP_REFERER']);
+            Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.impossible"));
+            header('Location: ' . $_SERVER['HTTP_REFERER']);  //Todo redirect
             die();
         }
 
         $state = ($state) ? 0 : 1;
 
-        $this->userModel->changeState($id, $state);
+        UsersModel::getInstance()->changeState($id, $state);
 
-        Response::sendAlert("success", LangManager::translate("users.toaster.success"),"Ok !");
+        Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),"Ok !");
 
-        header("location: " . $_SERVER['HTTP_REFERER']);
+        header("location: " . $_SERVER['HTTP_REFERER']);  //Todo redirect
     }
 
     #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
-    #[NoReturn] public function adminUsersDelete(Request $request, int $id): void
+    #[NoReturn] private function adminUsersDelete(Request $request, int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.delete");
 
         if (UsersModel::getLoggedUser() === $id) {
 
             //Todo Try to remove that
-            Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.impossible_user"));
+            Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.impossible_user"));
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             die();
         }
 
-        $this->userModel->delete($id);
+        UsersModel::getInstance()->delete($id);
 
         //Todo Try to remove that
-        Response::sendAlert("success", LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.user_deleted"));
+        Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.user_deleted"));
 
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
     #[Link("/picture/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users")]
-    #[NoReturn] public function adminUsersEditPicturePost(Request $request, int $id): void
+    #[NoReturn] private function adminUsersEditPicturePost(Request $request, int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
         $image = $_FILES['profilePicture'];
 
 
-        $this->userPictureModel->uploadImage($id, $image);
+        UserPictureModel::getInstance()->uploadImage($id, $image);
 
-        header("location: " . $_SERVER['HTTP_REFERER']);
+        header("location: " . $_SERVER['HTTP_REFERER']);  //Todo redirect
     }
 
     #[Link("/picture/reset/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
-    #[NoReturn] public function adminUsersResetPicture(Request $request, int $id): void
+    #[NoReturn] private function adminUsersResetPicture(Request $request, int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
-        $this->userPictureModel->deleteUserPicture($id);
+        UserPictureModel::getInstance()->deleteUserPicture($id);
 
-        header("location: " . $_SERVER['HTTP_REFERER']);
+        header("location: " . $_SERVER['HTTP_REFERER']);  //Todo redirect
     }
 
     // PUBLIC SECTION
 
     #[Link('/login', Link::POST)]
-    public function loginPost(): void
+    private function loginPost(): void
     {
         if(SecurityController::checkCaptcha()) {
 
@@ -280,11 +268,11 @@ class UsersController extends CoreController
 
             $userId = UsersModel::logIn($infos, $cookie);
             if ($userId > 0 && $userId !== "ERROR") {
-                $this->userModel->updateLoggedTime($userId);
+                UsersModel::getInstance()->updateLoggedTime($userId);
                 header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
 
             } else {
-                Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.mail_pass_matching"));
+                Flash::send("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.mail_pass_matching"));
                 Redirect::redirectToPreviousPage();
             }
         } else {
@@ -297,10 +285,10 @@ class UsersController extends CoreController
      * @throws \CMW\Manager\Router\RouterException
      */
     #[Link('/login', Link::GET)]
-    public function login(): void
+    private function login(): void
     {
         if (UsersModel::getLoggedUser() !== -1) {
-            header('Location: ' . getenv('PATH_SUBFOLDER'));
+            header('Location: ' . getenv('PATH_SUBFOLDER'));  //Todo redirect
             die();
         }
 
@@ -313,10 +301,10 @@ class UsersController extends CoreController
      * @throws \CMW\Manager\Router\RouterException
      */
     #[Link('/login/forgot', Link::GET)]
-    public function forgotPassword(): void
+    private function forgotPassword(): void
     {
         if (UsersModel::getLoggedUser() !== -1) {
-            header('Location: ' . getenv('PATH_SUBFOLDER'));
+            header('Location: ' . getenv('PATH_SUBFOLDER'));  //Todo redirect
             die();
         }
 
@@ -326,18 +314,18 @@ class UsersController extends CoreController
 
 
     #[Link('/login/forgot', Link::POST)]
-    public function forgotPasswordPost(): void
+    private function forgotPasswordPost(): void
     {
         $mail = filter_input(INPUT_POST, "mail");
 
         //We check if this email exist
-        if($this->userModel->checkEmail($mail) <= 0) {
+        if(UsersModel::getInstance()->checkEmail($mail) <= 0) {
             //TODO toaster with error
             die();
         }
 
         //We send a verification link for this mail
-        $this->userModel->resetPassword($mail);
+        UsersModel::getInstance()->resetPassword($mail);
         header("Location: /login");
     }
 
@@ -345,10 +333,10 @@ class UsersController extends CoreController
      * @throws \CMW\Manager\Router\RouterException
      */
     #[Link('/register', Link::GET)]
-    public function register(): void
+    private function register(): void
     {
         if (UsersModel::getLoggedUser() !== -1) {
-            header('Location: ' . getenv('PATH_SUBFOLDER'));
+            header('Location: ' . getenv('PATH_SUBFOLDER'));  //Todo redirect
             die();
         }
 
@@ -357,27 +345,27 @@ class UsersController extends CoreController
     }
 
     #[Link('/register', Link::POST)]
-    public function registerPost(): void
+    private function registerPost(): void
     {
         if(SecurityController::checkCaptcha()) {
-        if ($this->userModel->checkPseudo(filter_input(INPUT_POST, "register_pseudo")) > 0) {
-            Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.used_pseudo"));
+        if (UsersModel::getInstance()->checkPseudo(filter_input(INPUT_POST, "register_pseudo")) > 0) {
+            Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.used_pseudo"));
             header('Location: register');
-        } else if ($this->userModel->checkEmail(filter_input(INPUT_POST, "register_email")) > 0) {
-            Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.used_mail"));
+        } else if (UsersModel::getInstance()->checkEmail(filter_input(INPUT_POST, "register_email")) > 0) {
+            Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.used_mail"));
             header('Location: register');
         } else {
 
             [$mail, $pseudo, $password, $passwordVerify] = Utils::filterInput("register_email", "register_pseudo", "register_password", "register_password_verify");
 
             if (!is_null($password) && $password !== $passwordVerify) {
-                Response::sendAlert("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.not_same_pass"));
+                Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.not_same_pass"));
                 header('Location: register');
             }
 
-            $userEntity = $this->userModel->create($mail, $pseudo, "", "", array("2"));
+            $userEntity = UsersModel::getInstance()->create($mail, $pseudo, "", "", array("2"));
 
-            $this->userModel->updatePass($userEntity?->getId(), password_hash($password, PASSWORD_BCRYPT));
+            UsersModel::getInstance()->updatePass($userEntity?->getId(), password_hash($password, PASSWORD_BCRYPT));
 
 
             /* Connection */
@@ -391,18 +379,18 @@ class UsersController extends CoreController
 
             $userId = UsersModel::logIn($infos, $cookie);
             if ($userId > 0 && $userId !== "ERROR") {
-                $this->userModel->updateLoggedTime($userId);
+                UsersModel::getInstance()->updateLoggedTime($userId);
                 header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
 
 
-                Response::sendAlert("success", LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.welcome"));
+                Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.welcome"));
 
             }
 
         }
         } else {
             //TODO Toaster invalid captcha
-            header('Location: ' . $_SERVER['HTTP_REFERER']);
+            header('Location: ' . $_SERVER['HTTP_REFERER']);  //Todo redirect
         }
 
     }
@@ -411,14 +399,14 @@ class UsersController extends CoreController
      * @throws \CMW\Manager\Router\RouterException
      */
     #[Link('/profile', Link::GET)]
-    public function publicProfile(): void
+    private function publicProfile(): void
     {
-        if (!$this->userSettingsEntity->isProfilePageEnabled() && UsersModel::getLoggedUser() === -1){
+        if (UsersModel::getLoggedUser() === -1 && !UserSettingsEntity::getInstance()->isProfilePageEnabled()){
             Redirect::redirect('login');
             return;
         }
 
-        if (!$this->userSettingsEntity->isProfilePageEnabled()){
+        if (!UserSettingsEntity::getInstance()->isProfilePageEnabled()){
             Redirect::redirectToHome();
             return;
         }
@@ -430,7 +418,7 @@ class UsersController extends CoreController
 
         $user = UsersModel::getCurrentUser();
 
-        if ($this->userSettingsEntity->getProfilePageStatus() === 1) {
+        if (UserSettingsEntity::getInstance()->getProfilePageStatus() === 1) {
             Redirect::redirect("profile/", ['pseudo' => $user?->getPseudo()]);
         }
 
@@ -440,9 +428,9 @@ class UsersController extends CoreController
     }
 
     #[Link('/profile', Link::POST)]
-    public function publicProfilePost(): void
+    private function publicProfilePost(): void
     {
-        if (!$this->userSettingsEntity->isProfilePageEnabled()){
+        if (!UserSettingsEntity::getInstance()->isProfilePageEnabled()){
             Redirect::redirectToHome();
             return;
         }
@@ -455,33 +443,33 @@ class UsersController extends CoreController
         $image = $_FILES['pictureProfile'];
 
         try {
-            $this->userPictureModel->uploadImage($_SESSION['cmwUserId'], $image);
+            UserPictureModel::getInstance()->uploadImage($_SESSION['cmwUserId'], $image);
         } catch (Exception $e) {
-            Response::sendAlert("error", LangManager::translate("core.toaster.error"),
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.toaster.internalError") . " => $e");
         }
 
-        header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
+        header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');  //Todo redirect
     }
 
     #[Link('/profile/:pseudo', Link::GET, ['pseudo' => '.*?'])]
-    public function publicProfileWithPseudo(Request $request, string $pseudo): void
+    private function publicProfileWithPseudo(Request $request, string $pseudo): void
     {
-        if (!$this->userSettingsEntity->isProfilePageEnabled() && UsersModel::getLoggedUser() === -1){
+        if (!UserSettingsEntity::getInstance()->isProfilePageEnabled() && UsersModel::getLoggedUser() === -1){
             Redirect::redirect('login');
             return;
         }
 
-        if (!$this->userSettingsEntity->isProfilePageEnabled()){
+        if (!UserSettingsEntity::getInstance()->isProfilePageEnabled()){
             Redirect::redirectToHome();
             return;
         }
 
-        if ($this->userSettingsEntity->getProfilePageStatus() === 0) {
+        if (UserSettingsEntity::getInstance()->getProfilePageStatus() === 0) {
             Redirect::redirect("profile");
         }
 
-        $user = $this->userModel->getUserWithPseudo($pseudo);
+        $user = UsersModel::getInstance()->getUserWithPseudo($pseudo);
 
         if (is_null($user)) {
             Redirect::errorPage(404);
@@ -493,30 +481,30 @@ class UsersController extends CoreController
     }
 
     #[Link("/profile/delete/:id", Link::GET, ["id" => "[0-9]+"])]
-    public function publicProfileDelete(Request $request, int $id): void
+    private function publicProfileDelete(Request $request, int $id): void
     {
         //Check if this is the current user account
         if ($_SESSION['cmwUserId'] !== $id) {
             //TODO ERROR MANAGEMENT (MESSAGE TO TELL THE USER CAN'T DELETE THIS ACCOUNT)
-            header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
+            header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');  //Todo redirect
             return;
         }
 
         UsersModel::logOut();
-        $this->userModel->delete($id);
+        UsersModel::getInstance()->delete($id);
 
-        header('Location: ' . getenv('PATH_SUBFOLDER'));
+        header('Location: ' . getenv('PATH_SUBFOLDER'));  //Todo redirect
     }
 
     #[Link('/logout', Link::GET)]
-    public function logOut(): void
+    private function logOut(): void
     {
         UsersModel::logOut();
-        header('Location: ' . getenv('PATH_SUBFOLDER'));
+        header('Location: ' . getenv('PATH_SUBFOLDER'));  //Todo redirect
     }
 
     #[Link('/profile/update', Link::POST)]
-    public function publicProfileUpdate(): void
+    private function publicProfileUpdate(): void
     {
         if (!isset($_SESSION['cmwUserId'])) {
             header('Location: ' . getenv('PATH_SUBFOLDER'));
@@ -535,21 +523,21 @@ class UsersController extends CoreController
             $rolesId[] = $role->getId();
         }
 
-        $this->userModel->update($userId, $mail, $username, $firstname, $lastname, $rolesId);
+        UsersModel::getInstance()->update($userId, $mail, $username, $firstname, $lastname, $rolesId);
 
 
         [$pass, $passVerif] = Utils::filterInput("password", "passwordVerif");
 
         if (!is_null($pass)) {
             if ($pass === $passVerif) {
-                $this->userModel->updatePass($userId, password_hash($pass, PASSWORD_BCRYPT));
+                UsersModel::getInstance()->updatePass($userId, password_hash($pass, PASSWORD_BCRYPT));
             } else {
                 //Todo Try to edit that
-                Response::sendAlert("error", LangManager::translate("users.toaster.error"),"Je sais pas ?");
+                Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),"Je sais pas ?");
             }
         }
 
-        header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
+        header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');  //Todo redirect
     }
 
 }

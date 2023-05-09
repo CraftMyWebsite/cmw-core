@@ -4,9 +4,10 @@ namespace CMW\Model\Core;
 
 use CMW\Entity\Core\MailConfigEntity;
 use CMW\Manager\Database\DatabaseManager;
-use CMW\Utils\EnvManager;
+use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Package\AbstractModel;
 
-class MailModel extends DatabaseManager
+class MailModel extends AbstractModel
 {
 
 
@@ -46,7 +47,7 @@ class MailModel extends DatabaseManager
                             mail_config_user, mail_config_port, mail_config_protocol, mail_config_footer, mail_config_enable) 
                 VALUES (:mail, :mailReply, :addressSMTP, :user, :port, :protocol, :footer, :enable)";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -67,7 +68,7 @@ class MailModel extends DatabaseManager
     {
         $sql = "SELECT * FROM `cmw_mail_config_smtp`";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute()) {
@@ -81,7 +82,7 @@ class MailModel extends DatabaseManager
     {
         $sql = "SELECT * FROM cmw_mail_config_smtp LIMIT 1 ";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
 
         $res = $db->prepare($sql);
 
@@ -142,7 +143,7 @@ class MailModel extends DatabaseManager
                 mail_config_protocol = :protocol, mail_config_footer = :footer, mail_config_enable = :enable
                 WHERE mail_config_id = :id";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
@@ -159,7 +160,7 @@ class MailModel extends DatabaseManager
     {
         $sql = "DELETE FROM `cmw_mail_config_smtp` WHERE mail_config_id = :id;";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 
         $res->execute(array("id" => $id));

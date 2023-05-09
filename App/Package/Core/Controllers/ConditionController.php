@@ -3,11 +3,13 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Flash\Alert;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Flash\Flash;
+use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\ConditionModel;
-use CMW\Utils\Response;
 use CMW\Utils\Utils;
 
 /**
@@ -16,24 +18,15 @@ use CMW\Utils\Utils;
  * @author Zomb
  * @version 1.0
  */
-class ConditionController extends CoreController
+class ConditionController extends AbstractController
 {
-
-    private ConditionModel $conditionModel;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->conditionModel = new ConditionModel();
-    }
-
     #[Link("/condition", Link::GET, [], "/cmw-admin")]
-    public function conditionDashboard(): void
+    private function conditionDashboard(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.condition.edit");
 
-        $cgv = $this->conditionModel->getCGV();
-        $cgu = $this->conditionModel->getCGU();
+        $cgv = ConditionModel::getInstance()->getCGV();
+        $cgu = ConditionModel::getInstance()->getCGU();
 
         View::createAdminView("Core", "condition")
             ->addStyle("Admin/Resources/Vendors/Summernote/summernote-lite.css",
@@ -46,28 +39,28 @@ class ConditionController extends CoreController
     }
 
     #[Link("/condition", Link::POST, [], "/cmw-admin")]
-    public function conditionDashboardPost(): void
+    private function conditionDashboardPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.condition.edit");
 
         [$conditionId, $conditionContent, $conditionState] = Utils::filterInput("conditionId",
             "conditionContent", "conditionState");
 
-        $this->conditionModel->updateCondition($conditionId, $conditionContent,
+        ConditionModel::getInstance()->updateCondition($conditionId, $conditionContent,
             $conditionState === NULL ? 0 : 1, $_SESSION['cmwUserId']);
 
-        Response::sendAlert("success", LangManager::translate("core.toaster.success"),
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
-        header("Location: condition");
+        header("Location: condition"); //Todo redirect ?
     }
 
     /* //////////////////// FRONT PUBLIC //////////////////// */
 
     #[Link('/cgv', Link::GET)]
-    public function frontCGUPublic(): void
+    private function frontCGUPublic(): void
     {
-        $cgv = $this->conditionModel->getCGV();
+        $cgv = ConditionModel::getInstance()->getCGV();
 
         //Include the Public view file ("Public/Themes/$themePath/Views/Core/cgv.view.php")
         $view = new View('core', 'cgv');
@@ -77,9 +70,9 @@ class ConditionController extends CoreController
 
 
     #[Link('/cgu', Link::GET)]
-    public function frontCGVPublic(): void
+    private function frontCGVPublic(): void
     {
-        $cgu = $this->conditionModel->getCGU();
+        $cgu = ConditionModel::getInstance()->getCGU();
 
         //Include the Public view file ("Public/Themes/$themePath/Views/Core/cgu.view.php")
         $view = new View('core', 'cgu');

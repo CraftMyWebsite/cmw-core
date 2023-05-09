@@ -5,9 +5,9 @@ namespace CMW\Entity\Users;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Users\UsersSettingsController;
+use CMW\Manager\Env\EnvManager;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Users\UsersSettingsModel;
-use CMW\Utils\EnvManager;
 
 class UserPictureEntity
 {

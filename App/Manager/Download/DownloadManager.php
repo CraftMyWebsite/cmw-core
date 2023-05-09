@@ -4,8 +4,8 @@ namespace CMW\Manager\Download;
 
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Manager\Env\EnvManager;
 use CMW\Model\Users\PermissionsModel;
-use CMW\Utils\EnvManager;
 use JetBrains\PhpStorm\ExpectedValues;
 use JsonException;
 use ZipArchive;

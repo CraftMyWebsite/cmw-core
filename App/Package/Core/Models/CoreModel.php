@@ -3,6 +3,7 @@
 namespace CMW\Model\Core;
 
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Manager\Package\AbstractModel;
 
 /**
  * Class: @coreController
@@ -10,12 +11,12 @@ use CMW\Manager\Database\DatabaseManager;
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
  */
-class CoreModel extends DatabaseManager
+class CoreModel extends AbstractModel
 {
 
     public function fetchOption(string $option): string
     {
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT option_value FROM cmw_core_options WHERE option_name = ?');
         $req->execute(array($option));
         $option = $req->fetch();
@@ -30,7 +31,7 @@ class CoreModel extends DatabaseManager
      */
     public static function getOptionValue(string $option): string
     {
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT option_value FROM cmw_core_options WHERE option_name = ?');
 
         return ($req->execute(array($option))) ? $req->fetch()["option_value"] : "";
@@ -38,7 +39,7 @@ class CoreModel extends DatabaseManager
 
     public function fetchOptions(): array
     {
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT * FROM cmw_core_options');
 
         if ($req->execute()) {
@@ -48,9 +49,9 @@ class CoreModel extends DatabaseManager
         return ($req->execute()) ? $req->fetchAll() : [];
     }
 
-    public static function updateOption(string $option_name, string $option_value): void
+    public static function updateOption(string $option_name, string $option_value): void //Todo remove Static method...
     {
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare('UPDATE cmw_core_options SET option_value=:option_value, option_updated=now() WHERE option_name=:option_name');
         $req->execute(array("option_name" => $option_name, "option_value" => $option_value));
     }

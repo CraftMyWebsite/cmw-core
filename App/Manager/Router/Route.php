@@ -29,19 +29,13 @@ class Route
 
     public function __debugInfo(): ?array
     {
-        $toReturn = array();
-
-        $toReturn["path"] = $this->path;
-        $toReturn["name"] = $this->name;
-        $toReturn["weight"] = $this->weight;
-        if (!empty($this->matches)) {
-            $toReturn["matches"] = $this->matches;
-        }
-        if (!empty($this->params)) {
-            $toReturn["params"] = $this->params;
-        }
-
-        return $toReturn;
+        return array(
+            "path" => $this->path,
+            "name" => $this->name,
+            "weight" => $this->weight,
+            "matches" => $this->matches,
+            "params" => $this->params
+        );
     }
 
     /**

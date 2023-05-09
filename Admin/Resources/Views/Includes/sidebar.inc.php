@@ -5,8 +5,8 @@
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\PackageController;
 use CMW\Entity\Users\UserEntity;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
-use CMW\Utils\EnvManager;
 use CMW\Utils\Website;
 
 ?>

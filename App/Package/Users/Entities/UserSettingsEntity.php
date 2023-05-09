@@ -12,12 +12,23 @@ class UserSettingsEntity
     private int $profilePageStatus;
     private int $resetPasswordMethod;
 
+    private static UserSettingsEntity $_instance;
+
 
     public function __construct()
     {
         $this->defaultImage = UsersSettingsModel::getSetting('defaultImage');
         $this->profilePageStatus = (int)UsersSettingsModel::getSetting('profilePage');
         $this->resetPasswordMethod = (int)UsersSettingsModel::getSetting('resetPasswordMethod');
+    }
+
+    public static function getInstance(): self
+    {
+        if (!isset(self::$_instance)) {
+            self::$_instance = new self();
+        }
+
+        return self::$_instance;
     }
 
     /**
@@ -60,7 +71,7 @@ class UserSettingsEntity
      */
     public function goToProfilePage(string $pseudo = ''): void
     {
-        match ($this->profilePageStatus){
+        match ($this->profilePageStatus) {
             0 => Redirect::redirect('profile'),
             1 => Redirect::redirect("profile/$pseudo"),
             2 => Redirect::redirectToHome()
