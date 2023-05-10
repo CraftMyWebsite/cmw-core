@@ -9,6 +9,21 @@ $description = LangManager::translate("core.mail.config.description");
 /* @var \CMW\Entity\Core\MailConfigEntity $config */
 
 ?>
+
+    <script>
+      tinymce.init({
+        selector: '#mytextarea',
+        promotion: false,
+        plugins: ['emoticons', 'autoresize', 'wordcount', 'lists', 'lists advlist', 'charmap', 'codesample', 'code', 'directionality', 'fullscreen', 'link', 'insertdatetime', 'media', 'pagebreak', 'nonbreaking', 'preview', 'quickbars', 'searchreplace', 'table', 'visualblocks', 'visualchars'],
+        toolbar: 'undo redo | formatpainter casechange blocks | bold italic backcolor | ' +
+          'alignleft aligncenter alignright alignjustify | ' +
+          'bullist numlist checklist outdent indent | removeformat | a11ycheck table  | visualchars visualblocks searchreplace nonbreaking pagebreak media insertdatetime link emoticons wordcount charmap codesample code | ltr rtl | preview fullscreen help',
+        menubar:false,
+        statusbar: false,
+      });
+    </script>
+
+
 <div class="d-flex flex-wrap justify-content-between">
     <h3><i class="fa-solid fa-envelope"></i> <span class="m-lg-auto">Mails</span></h3>
     <div class="buttons">
@@ -128,7 +143,7 @@ $description = LangManager::translate("core.mail.config.description");
                         </div>
                     </div>
                     <h6><?= LangManager::translate("core.mail.config.footer") ?> :</h6>
-                    <textarea name="footer" id="summernote-1"><?= $config?->getFooter() ?></textarea>
+                    <textarea name="footer" id="mytextarea">Hello, World!</textarea>
                 </form>
             </div>
         </div>
