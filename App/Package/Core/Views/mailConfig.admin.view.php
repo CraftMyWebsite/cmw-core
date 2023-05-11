@@ -9,6 +9,7 @@ $description = LangManager::translate("core.mail.config.description");
 /* @var \CMW\Entity\Core\MailConfigEntity $config */
 
 ?>
+
 <div class="d-flex flex-wrap justify-content-between">
     <h3><i class="fa-solid fa-envelope"></i> <span class="m-lg-auto">Mails</span></h3>
     <div class="buttons">
@@ -128,7 +129,7 @@ $description = LangManager::translate("core.mail.config.description");
                         </div>
                     </div>
                     <h6><?= LangManager::translate("core.mail.config.footer") ?> :</h6>
-                    <textarea name="footer" id="summernote-1"><?= $config?->getFooter() ?></textarea>
+                    <textarea name="footer" id="mytextarea">Hello, World!</textarea>
                 </form>
             </div>
         </div>

@@ -4,7 +4,7 @@ use CMW\Controller\Core\ThemeController;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Manager\Api\PublicAPI;
-use CMW\Utils\EnvManager;
+use CMW\Manager\Env\EnvManager;
 /* @var $currentTheme \CMW\Entity\Core\ThemeEntity */
 /* @var $installedThemes \CMW\Entity\Core\ThemeEntity[] */
 /* @var $themesList */
