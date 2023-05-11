@@ -113,7 +113,7 @@ class MailController extends AbstractController
         $config = MailModel::getInstance()->getConfig();
 
         View::createAdminView("Core", "mailConfig")
-            ->addScriptBefore("Admin/Resources/Vendors/Tinymce/tinymce.min.js")
+            ->addScriptBefore("Admin/Resources/Vendors/Tinymce/tinymce.min.js","Admin/Resources/Vendors/Tinymce/Config/full.js")
             ->addVariableList(['config' => $config])
             ->view();
     }

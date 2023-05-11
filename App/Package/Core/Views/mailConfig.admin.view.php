@@ -10,20 +10,6 @@ $description = LangManager::translate("core.mail.config.description");
 
 ?>
 
-    <script>
-      tinymce.init({
-        selector: '#mytextarea',
-        promotion: false,
-        plugins: ['emoticons', 'autoresize', 'wordcount', 'lists', 'lists advlist', 'charmap', 'codesample', 'code', 'directionality', 'fullscreen', 'link', 'insertdatetime', 'media', 'pagebreak', 'nonbreaking', 'preview', 'quickbars', 'searchreplace', 'table', 'visualblocks', 'visualchars'],
-        toolbar: 'undo redo | formatpainter casechange blocks | bold italic backcolor | ' +
-          'alignleft aligncenter alignright alignjustify | ' +
-          'bullist numlist checklist outdent indent | removeformat | a11ycheck table  | visualchars visualblocks searchreplace nonbreaking pagebreak media insertdatetime link emoticons wordcount charmap codesample code | ltr rtl | preview fullscreen help',
-        menubar:false,
-        statusbar: false,
-      });
-    </script>
-
-
 <div class="d-flex flex-wrap justify-content-between">
     <h3><i class="fa-solid fa-envelope"></i> <span class="m-lg-auto">Mails</span></h3>
     <div class="buttons">
