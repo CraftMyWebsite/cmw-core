@@ -5,18 +5,19 @@ namespace CMW\Manager\Package;
 abstract class GlobalObject
 {
 
-    protected static GlobalObject $_instance;
+    /** @var GlobalObject[] $_instances */
+    protected static array $_instances;
 
     /**
      * @return static Controller instance
      */
-    final public static function getInstance(): static
+    public static function getInstance(): static
     {
-        if (!isset(static::$_instance)) {
-            static::$_instance = new static();
+        if(!isset(GlobalObject::$_instances[get_called_class()])) {
+            GlobalObject::$_instances[get_called_class()] = new static;
         }
 
-        return static::$_instance;
+        return GlobalObject::$_instances[get_called_class()];
     }
 
 }
