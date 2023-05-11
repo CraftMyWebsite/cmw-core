@@ -36,7 +36,7 @@ $description = LangManager::translate("core.config.desc");
                 </div>
                 <div class="card-body">
                     <h6><?= LangManager::translate("core.condition.content") ?></h6>
-                    <textarea name="conditionContent" id="summernote-2"><?= $cgv->getContent() ?></textarea>
+                    <textarea name="conditionContent"><?= $cgv->getContent() ?></textarea>
                     <p><?= LangManager::translate("core.condition.updateby") ?> <?= $cgv->getLastEditor()?->getPseudo() ?>
                         <?= LangManager::translate("core.condition.on") ?> <?= CoreController::formatDate($cgv->getUpdate()) ?></p>
                     <div class="text-center mt-2">
@@ -66,7 +66,7 @@ $description = LangManager::translate("core.config.desc");
                 </div>
                 <div class="card-body">
                     <h6><?= LangManager::translate("core.condition.content") ?></h6>
-                    <textarea name="conditionContent" id="summernote-2"><?= $cgu->getContent() ?></textarea>
+                    <textarea name="conditionContent"><?= $cgu->getContent() ?></textarea>
                     <p><?= LangManager::translate("core.condition.updateby") ?> <?= $cgu->getLastEditor()?->getPseudo() ?>
                         <?= LangManager::translate("core.condition.on") ?> <?= CoreController::formatDate($cgu->getUpdate()) ?></p>
                     <div class="text-center mt-2">

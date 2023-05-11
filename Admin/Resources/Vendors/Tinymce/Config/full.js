@@ -1,7 +1,7 @@
 const useDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
 tinymce.init({
-  selector: '#mytextarea',
+  selector: 'textarea',
   promotion: false,
   toolbar_sticky: true,
   toolbar_mode: 'sliding',

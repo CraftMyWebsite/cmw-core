@@ -29,11 +29,7 @@ class ConditionController extends AbstractController
         $cgu = ConditionModel::getInstance()->getCGU();
 
         View::createAdminView("Core", "condition")
-            ->addStyle("Admin/Resources/Vendors/Summernote/summernote-lite.css",
-                "Admin/Resources/Assets/Css/Pages/summernote.css")
-            ->addScriptAfter("Admin/Resources/Vendors/jquery/jquery.min.js",
-                "Admin/Resources/Vendors/Summernote/summernote-lite.min.js",
-                "Admin/Resources/Assets/Js/Pages/summernote.js")
+            ->addScriptBefore("Admin/Resources/Vendors/Tinymce/tinymce.min.js","Admin/Resources/Vendors/Tinymce/Config/full.js")
             ->addVariableList(["cgv" => $cgv, "cgu" => $cgu])
             ->view();
     }
