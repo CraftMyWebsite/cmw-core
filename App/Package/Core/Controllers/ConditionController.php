@@ -59,7 +59,7 @@ class ConditionController extends AbstractController
         $cgv = ConditionModel::getInstance()->getCGV();
 
         //Include the Public view file ("Public/Themes/$themePath/Views/Core/cgv.view.php")
-        $view = new View('core', 'cgv');
+        $view = new View('Core', 'cgv');
         $view->addVariableList(["cgv" => $cgv]);
         $view->view();
     }
@@ -71,7 +71,7 @@ class ConditionController extends AbstractController
         $cgu = ConditionModel::getInstance()->getCGU();
 
         //Include the Public view file ("Public/Themes/$themePath/Views/Core/cgu.view.php")
-        $view = new View('core', 'cgu');
+        $view = new View('Core', 'cgu');
         $view->addVariableList(["cgu" => $cgu]);
         $view->view();
     }
