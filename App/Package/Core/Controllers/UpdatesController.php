@@ -34,7 +34,7 @@ class UpdatesController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.update");
 
-        (new CMSUpdaterManager())->doUpdate(UpdatesManager::getCmwLatest()->value);
+        (new CMSUpdaterManager())->doUpdate();
         Redirect::redirectPreviousRoute();
     }
 }

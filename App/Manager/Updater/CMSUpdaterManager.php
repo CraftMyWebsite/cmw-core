@@ -2,6 +2,7 @@
 
 namespace CMW\Manager\Updater;
 
+use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
@@ -16,19 +17,21 @@ class CMSUpdaterManager
     private static string $archiveUpdatePath = "Public/Uploads/update.zip";
 
     /**
-     * @param string $version
      * @return void
      * @desc Execute the whole cms update process
      */
-    public function doUpdate(string $version): void
+    public function doUpdate(): void
     {
-        if ($this->downloadUpdateFile() === false) {
+        $updateData = self::getUpdateLink();
+
+
+        if ($this->downloadUpdateFile($updateData) === false) {
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.updates.errors.download"));
             return;
         }
 
-        if ($this->downloadUpdateFile() === null) {
+        if ($this->downloadUpdateFile($updateData) === null) {
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.updates.errors.nullFileUpdate"));
             return;
@@ -52,19 +55,20 @@ class CMSUpdaterManager
             return;
         }
 
-        $this->updateVersionName($version);
+        $this->updateVersionName($updateData->value);
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.updates.success"));
     }
 
     /**
+     * @param mixed $data
      * @return ?bool
      * @desc Download the updater file
      */
-    private function downloadUpdateFile(): ?bool
+    private function downloadUpdateFile(mixed $data): ?bool
     {
-        $data = UpdatesManager::getCmwLatest()->file_update;
+        $data = $data->file_update;
 
         if ($data === null) {
             return null;
@@ -169,5 +173,20 @@ class CMSUpdaterManager
     private function updateVersionName(string $version): void
     {
         EnvManager::getInstance()->editValue("VERSION", $version);
+    }
+
+
+    /**
+     * @return mixed
+     * @desc Return useful data
+     */
+    private static function getUpdateLink(): mixed
+    {
+        try {
+            return json_decode(file_get_contents(PublicAPI::getUrl() . "/cms/update"), false, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException) {
+        }
+
+        return null;
     }
 }
