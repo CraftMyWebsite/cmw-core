@@ -1,5 +1,3 @@
-const useDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
 tinymce.init({
   selector: 'textarea',
   promotion: false,
@@ -24,5 +22,4 @@ tinymce.init({
   images_file_types: 'jpg,svg,webp',
   file_picker_types: 'file image media',
   statusbar: false,
-  skin: useDarkMode ? 'oxide-dark' : 'oxide',
 });
