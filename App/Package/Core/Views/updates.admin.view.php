@@ -37,7 +37,7 @@ $description = LangManager::translate("core.updates.description"); ?>
     <div class="col-12 col-lg-9">
         <div class="card">
             <div class="card-header">
-                <h4>Changelog</h4>
+                <h4>--Changelog--</h4>
             </div>
             <div class="card-body">
                 <div id="headingOne" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false"
