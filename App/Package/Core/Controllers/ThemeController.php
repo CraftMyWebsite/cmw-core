@@ -261,8 +261,7 @@ class ThemeController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
         View::createAdminView("Core", "themeManage")
-            ->addStyle("Admin/Resources/Vendors/Summernote/summernote-lite.css", "Admin/Resources/Assets/Css/Pages/summernote.css")
-            ->addScriptAfter("Admin/Resources/Vendors/Jquery/jquery.min.js", "Admin/Resources/Vendors/Summernote/summernote-lite.min.js", "Admin/Resources/Assets/Js/Pages/summernote.js")
+            ->addScriptBefore("Admin/Resources/Vendors/Tinymce/tinymce.min.js","Admin/Resources/Vendors/Tinymce/Config/full.js")
             ->view();
     }
 
