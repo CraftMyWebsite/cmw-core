@@ -113,7 +113,7 @@ class CMSUpdaterManager
         $filePath = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/delete_files.json';
 
         if (!file_exists($filePath)) {
-            return false;
+            return true;
         }
 
         $deletedFiles = file_get_contents($filePath);

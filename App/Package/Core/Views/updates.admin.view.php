@@ -28,7 +28,7 @@ $description = LangManager::translate("core.updates.description"); ?>
                 <p>Dernière version : <b><?= UpdatesManager::getCmwLatest()->value ?></b></p>
                 <?php if (UpdatesManager::checkNewUpdateAvailable()): ?>
                     <div class="buttons text-center">
-                        <a href="cms/update" type="button" class="btn btn-primary">Mettre à jours</a>
+                        <a href="updates/cms/update" type="button" class="btn btn-primary">Mettre à jours</a>
                     </div>
                 <?php endif; ?>
             </div>

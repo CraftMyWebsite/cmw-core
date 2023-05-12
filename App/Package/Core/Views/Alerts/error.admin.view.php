@@ -1,11 +1,12 @@
 <?php
 /** @var Alert $alert */
 
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
 
 ?>
-<link rel="stylesheet" href="https://izitoast.marcelodolza.com/Css/iziToast.min.css">
-<script src="https://izitoast.marcelodolza.com/Js/iziToast.min.js"></script>
+<link rel="stylesheet" href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Admin/Resources/Vendors/Izitoast/iziToast.min.css' ?>">
+<script src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Admin/Resources/Vendors/Izitoast/iziToast.min.js' ?>"></script>
 <script>
     iziToast.show(
         {
