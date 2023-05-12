@@ -282,7 +282,7 @@ class ThemeController extends AbstractController
                 $imageName = ImagesManager::upload($file, self::getCurrentTheme()->getName() . "/Img");
                 if (!str_contains($imageName, "ERROR")) {
                     $remoteImageValue = ThemeModel::fetchConfigValue($conf);
-                    $localImageValue = (new ThemeController())->getCurrentThemeConfigSetting($conf);
+                    $localImageValue = (new self())->getCurrentThemeConfigSetting($conf);
 
                     if ($remoteImageValue !== $file && $remoteImageValue !== $localImageValue) {
                         ImagesManager::deleteImage(self::getCurrentTheme()->getName() . "/Img/$remoteImageValue");
@@ -290,7 +290,7 @@ class ThemeController extends AbstractController
 
                     ThemeModel::getInstance()->updateThemeConfig($conf, $imageName, self::getCurrentTheme()->getName());
                 } else {
-                    Flash::send("error", LangManager::translate("core.toaster.error"),
+                    Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                         $conf . " => " . $imageName);
                 }
             }

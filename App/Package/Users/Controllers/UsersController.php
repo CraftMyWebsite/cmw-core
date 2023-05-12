@@ -272,7 +272,7 @@ class UsersController extends AbstractController
                 header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
 
             } else {
-                Flash::send("error", LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.mail_pass_matching"));
+                Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.mail_pass_matching"));
                 Redirect::redirectToPreviousPage();
             }
         } else {

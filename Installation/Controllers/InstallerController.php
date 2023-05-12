@@ -7,6 +7,7 @@ use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Error\ErrorManager;
+use CMW\Manager\Flash\Alert;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
@@ -180,7 +181,7 @@ class InstallerController extends AbstractController
     public function welcomeInstallPost(): void
     {
         if (!isset($_POST['cgu'])) {
-            Flash::send("error", LangManager::translate("core.toaster.error"),
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                 LangManager::translate('Installation.welcome.error.cgu'));
             Website::refresh();
             return;
@@ -232,7 +233,7 @@ class InstallerController extends AbstractController
     public function firstInstallPost(): void
     {
         if (Utils::isValuesEmpty($_POST, "bdd_name", "bdd_login", "bdd_address", "bdd_port", "install_folder")) {
-            Flash::send("error", LangManager::translate("core.toaster.error"),
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.toaster.db.missing_inputs"));
             return;
         }
@@ -246,7 +247,7 @@ class InstallerController extends AbstractController
         $timezone = date_default_timezone_get(); //TODO GET BROWSER TIMEZONE
 
         if (!InstallerModel::tryDatabaseConnection($host, $username, $password, $port)) {
-            Flash::send("error", LangManager::translate("core.toaster.error"),
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.toaster.db.config.error"));
             return;
         }
@@ -293,7 +294,7 @@ class InstallerController extends AbstractController
     public function secondInstallPost(): void
     {
         if (Utils::isValuesEmpty($_POST, "config_name", "config_description")) {
-            Flash::send("error", LangManager::translate("core.toaster.error"),
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.toaster.db.missing_inputs"));
             return;
         }
@@ -357,7 +358,7 @@ class InstallerController extends AbstractController
             $type = $package['type'] === 1 ? 'package' : 'Theme';
 
             if (!DownloadManager::installPackageWithLink($package['file'], $type, $package['name'])) {
-                Flash::send("error", LangManager::translate("core.toaster.error"),
+                Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                     LangManager::translate("core.downloads.errors.internalError",
                         ['name' => $package['name'], 'version' => $package['version_name']]));
             }
@@ -381,7 +382,7 @@ class InstallerController extends AbstractController
 
 
         if (!DownloadManager::installPackageWithLink($theme['file'], 'Theme', $theme['name'])) {
-            Flash::send("error", LangManager::translate("core.toaster.error"),
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.downloads.errors.internalError",
                     ['name' => $theme['name'], 'version' => $theme['version_name']]));
 
@@ -397,7 +398,7 @@ class InstallerController extends AbstractController
     public function sixInstallPost(): void
     {
         if (Utils::isValuesEmpty($_POST, "email", "pseudo", "password") || !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
-            Flash::send("error", LangManager::translate("core.toaster.error"),
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.toaster.db.missing_inputs"));
             return;
         }

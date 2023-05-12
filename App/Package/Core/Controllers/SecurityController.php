@@ -4,6 +4,7 @@ namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Flash\Alert;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Package\AbstractController;
@@ -55,7 +56,7 @@ class SecurityController extends AbstractController
                 break;
         }
 
-        Flash::send("success", LangManager::translate("core.toaster.success"),
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
         header("Location: ../../security");
