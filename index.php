@@ -10,13 +10,21 @@ require_once("App/Manager/Loader/Loader.php");
 
 Loader::loadProject();
 
-Loader::loadAttributes();
+try {
+    Loader::loadAttributes();
+} catch (ReflectionException $e) {
+    //TODO Errors
+}
 
 Loader::loadRoutes();
 
 Loader::setLocale();
 
-Loader::manageErrors();
+try {
+    Loader::manageErrors();
+} catch (ReflectionException $e) {
+    //TODO Errors
+}
 
 Loader::loadInstall();
 
