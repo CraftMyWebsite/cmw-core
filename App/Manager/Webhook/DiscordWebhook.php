@@ -222,7 +222,7 @@ class DiscordWebhook
             // Text-to-speech
             "tts" => $this->tts,
 
-            // File upload
+            // Files upload
             // "file" => "",
 
             // Embeds Array

@@ -179,7 +179,16 @@ return [
     ],
     "updates" => [
         "title" => "Mettez à jour votre site",
-        "description" => "Mettez à jour votre site CraftMyWebsite"
+        "description" => "Mettez à jour votre site CraftMyWebsite",
+        "errors" => [
+            "download" => "Impossible de télécharger la dernière version du CMS.",
+            "nullFileUpdate" => "Cette version n'à pas de fichier de MAJ.",
+            "prepareArchive" => "Impossible de préparer l'archive pour la MAJ.",
+            "deletedFiles" => "Impossible de supprimer les anciens fichiers.",
+            "deleteFile" => "Impossible de supprimer le fichier %file%",
+            "sqlUpdate" => "Impossible de mettre à jour la base de données.",
+        ],
+        "success" => "Mise à jour de votre site réussie",
     ],
     "security" => [
         "title" => "CMW - Sécurité",

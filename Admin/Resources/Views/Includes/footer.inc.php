@@ -17,7 +17,7 @@ use CMW\Manager\Updater\UpdatesManager;
                     <a href="/cmw-admin/updates/cms">
                         <span><?= LangManager::translate("core.footer.used") . "<span class='text-danger font-bold'>" . UpdatesManager::getVersion() ?></span>!
                         <br>
-                        <span><?= LangManager::translate("core.footer.upgrade") . "<span class='text-success font-bold'>" . UpdatesManager::getLatestVersion() ?></span>!
+                        <span><?= LangManager::translate("core.footer.upgrade") . "<span class='text-success font-bold'>" . UpdatesManager::getCmwLatest()->value ?></span>!
                     </a>
                 </p>
             </div>

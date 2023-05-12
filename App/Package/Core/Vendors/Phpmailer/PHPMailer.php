@@ -2274,7 +2274,7 @@ class PHPMailer
             'execute' => 'Could not execute: ',
             'extension_missing' => 'Extension missing: ',
             'file_access' => 'Could not access file: ',
-            'file_open' => 'File Error: Could not open file: ',
+            'file_open' => 'Files Error: Could not open file: ',
             'from_failed' => 'The following From address failed: ',
             'instantiate' => 'Could not instantiate mail function.',
             'invalid_address' => 'Invalid address: ',
@@ -3172,7 +3172,7 @@ class PHPMailer
      *
      * @param string $path        Path to the attachment
      * @param string $name        Overrides the attachment name
-     * @param string $encoding    File encoding (see $Encoding)
+     * @param string $encoding    Files encoding (see $Encoding)
      * @param string $type        MIME type, e.g. `image/jpeg`; determined automatically from $path if not specified
      * @param string $disposition Disposition to use
      *
@@ -3669,8 +3669,8 @@ class PHPMailer
      *
      * @param string $string      String attachment data
      * @param string $filename    Name of the attachment
-     * @param string $encoding    File encoding (see $Encoding)
-     * @param string $type        File extension (MIME) type
+     * @param string $encoding    Files encoding (see $Encoding)
+     * @param string $type        Files extension (MIME) type
      * @param string $disposition Disposition to use
      *
      * @throws Exception
@@ -3731,8 +3731,8 @@ class PHPMailer
      * @param string $cid         Content ID of the attachment; Use this to reference
      *                            the content when using an embedded image in HTML
      * @param string $name        Overrides the attachment filename
-     * @param string $encoding    File encoding (see $Encoding) defaults to `base64`
-     * @param string $type        File MIME type (by Default mapped from the `$path` filename's extension)
+     * @param string $encoding    Files encoding (see $Encoding) defaults to `base64`
+     * @param string $type        Files MIME type (by Default mapped from the `$path` filename's extension)
      * @param string $disposition Disposition to use: `inline` (Default) or `attachment`
      *                            (unlikely you want this – {@see `addAttachment()`} instead)
      *
@@ -3802,7 +3802,7 @@ class PHPMailer
      * @param string $name        A filename for the attachment. If this contains an extension,
      *                            PHPMailer will attempt to set a MIME type for the attachment.
      *                            For example 'file.jpg' would get an 'image/jpeg' MIME type.
-     * @param string $encoding    File encoding (see $Encoding), defaults to 'base64'
+     * @param string $encoding    Files encoding (see $Encoding), defaults to 'base64'
      * @param string $type        MIME type - will be used in preference to any automatically derived type
      * @param string $disposition Disposition to use
      *
@@ -4374,7 +4374,7 @@ class PHPMailer
     /**
      * Get the MIME type for a file extension.
      *
-     * @param string $ext File extension
+     * @param string $ext Files extension
      *
      * @return string MIME type of file
      */

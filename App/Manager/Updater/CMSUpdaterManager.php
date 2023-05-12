@@ -2,7 +2,172 @@
 
 namespace CMW\Manager\Updater;
 
+use CMW\Manager\Database\DatabaseManager;
+use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Flash\Alert;
+use CMW\Manager\Flash\Flash;
+use CMW\Manager\Lang\LangManager;
+use JsonException;
+use ZipArchive;
+
 class CMSUpdaterManager
 {
+    private static string $archivePath = "Public/Uploads/cmw.zip";
+    private static string $archiveUpdatePath = "Public/Uploads/update.zip";
 
+    /**
+     * @param string $version
+     * @return void
+     * @desc Execute the whole cms update process
+     */
+    public function doUpdate(string $version): void
+    {
+        if ($this->downloadUpdateFile() === false) {
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.updates.errors.download"));
+            return;
+        }
+
+        if ($this->downloadUpdateFile() === null) {
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.updates.errors.nullFileUpdate"));
+            return;
+        }
+
+        if (!$this->prepareArchive()) {
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.updates.errors.prepareArchive"));
+            return;
+        }
+
+        if (!$this->deletedFiles()) {
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.updates.errors.deletedFiles"));
+            return;
+        }
+
+        if (!$this->sqlUpdate()) {
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.updates.errors.sqlUpdate"));
+            return;
+        }
+
+        $this->updateVersionName($version);
+
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
+            LangManager::translate("core.updates.success"));
+    }
+
+    /**
+     * @return ?bool
+     * @desc Download the updater file
+     */
+    private function downloadUpdateFile(): ?bool
+    {
+        $data = UpdatesManager::getCmwLatest()->file_update;
+
+        if ($data === null) {
+            return null;
+        }
+
+        if (!file_put_contents(EnvManager::getInstance()->getValue("DIR") . self::$archivePath,
+            fopen($data, 'rb'))) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @return bool
+     * @desc Unzip maine archives
+     */
+    private function prepareArchive(): bool
+    {
+        $archiveUpdate = new ZipArchive;
+        if ($archiveUpdate->open(EnvManager::getInstance()->getValue("DIR") . self::$archivePath) === TRUE) {
+
+            $archiveUpdate->extractTo(EnvManager::getInstance()->getValue("DIR") . "Public/Uploads/");
+            $archiveUpdate->close();
+            //Delete download archive
+            unlink(EnvManager::getInstance()->getValue("DIR") . self::$archivePath);
+
+            if ($archiveUpdate->open(EnvManager::getInstance()->getValue("DIR") . self::$archiveUpdatePath) === TRUE) {
+
+                $archiveUpdate->extractTo(EnvManager::getInstance()->getValue("DIR"));
+                $archiveUpdate->close();
+                //Delete download archive
+                unlink(EnvManager::getInstance()->getValue("DIR") . self::$archiveUpdatePath);
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    /**
+     * @return bool
+     * @desc Delete files, based on delete_files.json
+     */
+    private function deletedFiles(): bool
+    {
+        $filePath = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/delete_files.json';
+
+        if (!file_exists($filePath)) {
+            return false;
+        }
+
+        $deletedFiles = file_get_contents($filePath);
+
+        try {
+            $json = json_decode($deletedFiles, true, 512, JSON_THROW_ON_ERROR);
+
+            foreach ($json as $file) {
+                if (!unlink(EnvManager::getInstance()->getValue('DIR') . $file)) {
+                    Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                        LangManager::translate("core.updates.errors.deleteFile", ['file' => $file]));
+                }
+            }
+
+        } catch (JsonException) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @return bool
+     * @desc Update database if file exist
+     */
+    private function sqlUpdate(): bool
+    {
+        $filePath = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/sql_update.sql';
+
+        if (!file_exists($filePath)) {
+            return true;
+        }
+
+        $content = file_get_contents($filePath);
+
+        $db = DatabaseManager::getLiteInstance();
+
+        $querySqlFile = file_get_contents($content);
+        if (!$req = $db->query($querySqlFile)) {
+            return false;
+        }
+
+        $req->closeCursor();
+
+        return true;
+    }
+
+    /**
+     * @param string $version
+     * @return void
+     * @desc Update .env VERSION
+     */
+    private function updateVersionName(string $version): void
+    {
+        EnvManager::getInstance()->editValue("VERSION", $version);
+    }
 }

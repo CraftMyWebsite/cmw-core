@@ -18,17 +18,17 @@ $description = LangManager::translate("core.updates.description"); ?>
             </div>
             <div class="card-body">
                 <p>Version installé :
-                    <?php if (UpdatesManager::getVersion() !== UpdatesManager::getLatestVersion()) {
+                    <?php if (UpdatesManager::getVersion() !== UpdatesManager::getCmwLatest()->value) {
                         echo "<b class='text-danger'>" . UpdatesManager::getVersion() . "</b>";
                     } else {
                         echo "<b class='text-sucess'>" . UpdatesManager::getVersion() . "</b>";
                     }
                     ?>
                 </p>
-                <p>Dernière version : <b><?= UpdatesManager::getLatestVersion() ?></b></p>
+                <p>Dernière version : <b><?= UpdatesManager::getCmwLatest()->value ?></b></p>
                 <?php if (UpdatesManager::checkNewUpdateAvailable()): ?>
                     <div class="buttons text-center">
-                        <a href="cms/install" type="button" class="btn btn-primary">Mettre à jours</a>
+                        <a href="cms/update" type="button" class="btn btn-primary">Mettre à jours</a>
                     </div>
                 <?php endif; ?>
             </div>

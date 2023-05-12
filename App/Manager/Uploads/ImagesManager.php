@@ -26,7 +26,7 @@ class ImagesManager
      * @param string $dirName
      * @return array
      *
-     * * @desc Upload images on the uploads' folder. File accepted [png, jpeg, jpg, gif, webp].
+     * * @desc Upload images on the uploads' folder. Files accepted [png, jpeg, jpg, gif, webp].
      * @throws Exception
      */
     public static function uploadMultiple(array $files, string $dirName = ""): array
@@ -49,7 +49,7 @@ class ImagesManager
      * @return string fileName
      *
      * @throws \JsonException
-     * @desc Upload image on the uploads' folder. File accepted [png, jpeg, jpg, gif, webp, ico, svg].
+     * @desc Upload image on the uploads' folder. Files accepted [png, jpeg, jpg, gif, webp, ico, svg].
      */
     public static function upload(array $file, string $dirName = "", bool $keepName = false, string $customName = ""): string
     {

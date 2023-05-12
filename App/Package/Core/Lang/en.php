@@ -179,7 +179,16 @@ return [
     ],
     "updates" => [
         "title" => "Update your website",
-        "description" => "Update your CraftMyWebsite website"
+        "description" => "Update your CraftMyWebsite website",
+        "errors" => [
+            "download" => "Unable to download the latest CMS version.",
+            "nullFileUpdate" => "This version doesn't contain any update file.",
+            "prepareArchive" => "Unable to prepare archive for update the CMS.",
+            "deletedFiles" => "Unable to delete old files.",
+            "deleteFile" => "Unable to delete file %file%",
+            "sqlUpdate" => "Unable to update your database.",
+        ],
+        "success" => "Website update with success",
     ],
     "security" => [
         "title" => "CMW - Security",
