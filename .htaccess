@@ -37,6 +37,13 @@
     satisfy all
 </Files>
 
+# Deny access to .cmw-version
+<Files .cmw-version>
+    Order allow,deny
+    Deny from all
+    satisfy all
+</Files>
+
 #Cache images / scripts
 <IfModule mod_expires.c>
     ExpiresActive on
