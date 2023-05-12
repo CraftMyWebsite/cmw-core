@@ -182,11 +182,6 @@ class CMSUpdaterManager
      */
     private static function getUpdateLink(): mixed
     {
-        try {
-            return json_decode(file_get_contents(PublicAPI::getUrl() . "/cms/update"), false, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException) {
-        }
-
-        return null;
+        return PublicAPI::getData("/cms/update", true, false);
     }
 }
