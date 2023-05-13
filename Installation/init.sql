@@ -201,9 +201,9 @@ CREATE TABLE IF NOT EXISTS `cmw_visits`
 
 /* INSERT AREA */
 
-INSERT INTO `cmw_core_condition` (`condition_content`)
-VALUES ('Veuillez écrire votre CGV !'),
-       ('Veuillez écrire votre CGU !');
+INSERT INTO `cmw_core_condition` (`condition_content`, `condition_last_editor`)
+VALUES ('Veuillez écrire votre CGV !', 1),
+       ('Veuillez écrire votre CGU !', 1);
 
 INSERT INTO `cmw_core_options` (`option_name`, `option_value`, `option_updated`)
 VALUES ('theme', 'Sampler', NOW()),

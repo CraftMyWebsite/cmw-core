@@ -17,13 +17,13 @@ class CMSUpdaterManager
     private static string $archiveUpdatePath = "Public/Uploads/update.zip";
 
     /**
+     * @param int $targetVersionId
      * @return void
      * @desc Execute the whole cms update process
      */
-    public function doUpdate(): void
+    public function doUpdate(int $targetVersionId): void
     {
-        $updateData = self::getUpdateLink();
-
+        $updateData = self::getUpdateLink($targetVersionId);
 
         if ($this->downloadUpdateFile($updateData) === false) {
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
@@ -177,11 +177,13 @@ class CMSUpdaterManager
 
 
     /**
+     * @param int $targetVersionId
      * @return mixed
      * @desc Return useful data
      */
-    private static function getUpdateLink(): mixed
+    private static function getUpdateLink(int $targetVersionId): mixed
     {
-        return PublicAPI::getData("/cms/update", true, false);
+        return PublicAPI::postData("/cms/update", ['current_version' => UpdatesManager::getVersion(),
+            'target_version_id' => $targetVersionId]);
     }
 }

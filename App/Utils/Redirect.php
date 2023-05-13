@@ -53,6 +53,10 @@ class Redirect
         header("Location: getError/$code");
     }
 
+    /**
+     * @return void
+     * @deprecated please prefer {@see CMW\Utils\Redirect::redirectPreviousRoute()}
+     */
     public static function redirectToPreviousPage(): void
     {
         http_response_code(302);

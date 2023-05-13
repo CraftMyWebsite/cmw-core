@@ -56,10 +56,10 @@ class PublicAPI
      * @param string $url
      * @param bool $useWebsiteKey
      * @param bool $useLang
-     * @return array
+     * @return mixed
      * @desc Use Stream context to get data.
      */
-    public static function getData(string $url, bool $useWebsiteKey = true, bool $useLang = true): array
+    public static function getData(string $url, bool $useWebsiteKey = true, bool $useLang = true): mixed
     {
         $url = self::getUrl()  . '/' . $url;
 
