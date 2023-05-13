@@ -58,6 +58,7 @@ use CMW\Manager\Lang\LangManager;
                 class="btn btn-primary" <?= InstallerController::checkAllRequired() ? '' : 'disabled' ?>>
             <?= LangManager::translate("core.btn.next") ?>
         </button>
+    </div>
 </form>
 
 <script>
