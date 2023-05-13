@@ -80,12 +80,26 @@ class InstallerModel
             'user_key' => uniqid('', true)
         ));
 
+        $userId = $db->lastInsertId();
+
         $query = $db->prepare("INSERT INTO cmw_users_roles (user_id, role_id) VALUES (:user_id, :role_id)");
         $query->execute(array(
-            "user_id" => $db->lastInsertId(),
+            "user_id" => $userId,
             "role_id" => 5 //Default administrator id is 5
         ));
 
+        self::initCondition($userId);
+    }
+
+    public static function initCondition(int $userId): void
+    {
+        $sql = "UPDATE cmw_core_condition SET condition_last_editor = :id";
+
+        $db = self::loadDatabaseWithoutParams();
+
+        $req = $db->prepare($sql);
+
+        $req->execute(['id' => $userId]);
     }
 
     public static function initConfig($name, $description): void
