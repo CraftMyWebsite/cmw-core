@@ -5,6 +5,7 @@ namespace CMW\Model\Core;
 use CMW\Entity\Core\MenuEntity;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Package\AbstractModel;
+use CMW\Model\Users\RolesModel;
 
 /**
  * Class: @MenusModel
@@ -73,7 +74,8 @@ class MenusModel extends AbstractModel
             $res['menu_url'],
             $res['menu_is_restricted'],
             $res['menu_order'],
-            $res['menu_target_blank']
+            $res['menu_target_blank'],
+            $this->getAllowedRoles($res['menu_id'])
         );
     }
 
@@ -133,6 +135,31 @@ class MenusModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $req = $db ->prepare($sql);
         $req->execute(['group_id' => $roleId, 'menu_id' => $menuId]);
+    }
+
+
+    /**
+     * @param int $menuId
+     * @return \CMW\Entity\Users\RoleEntity[]|null
+     */
+    public function getAllowedRoles(int $menuId): ?array
+    {
+        $sql = "SELECT menus_groups_group_id FROM cmw_menus_groups_allowed WHERE menus_groups_group_id = :id";
+        $db = DatabaseManager::getInstance();
+
+        $req = $db->prepare($sql);
+
+        if (!$req->execute(['id' => $menuId])){
+            return null;
+        }
+
+
+        $roles = [];
+        while ($role = $req->fetch()) {
+            $roles[] = RolesModel::getInstance()->getRoleById($role['menus_groups_group_id']);
+        }
+
+        return $roles;
     }
 
 }

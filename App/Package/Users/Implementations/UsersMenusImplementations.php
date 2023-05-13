@@ -3,16 +3,18 @@
 namespace CMW\Implementation\Users;
 
 use CMW\Interface\Core\IMenus;
+use CMW\Manager\Lang\LangManager;
 
-class UsersMenusImplementations implements IMenus {
+class UsersMenusImplementations implements IMenus
+{
 
     public function getRoutes(): array
     {
         return [
-            'login',
-            'register',
-            'login/forgot',
-            'profile'
+            LangManager::translate('users.login.title') => 'login',
+            LangManager::translate('users.register.title') => 'register',
+            LangManager::translate('users.login.forgot_password.title') => 'login/forgot',
+            LangManager::translate('users.profile') => 'profile'
         ];
     }
 

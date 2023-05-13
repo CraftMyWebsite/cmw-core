@@ -85,8 +85,8 @@ $description = LangManager::translate("core.menus.desc");
                                                     if ($routes !== []):?>
                                                         <option disabled>────────── <?= $package ?> ──────────</option>
                                                     <?php endif; ?>
-                                                    <?php foreach ($routes as $route): ?>
-                                                    <option value="<?= $route ?>"><?= $route ?></option>
+                                                    <?php foreach ($routes as $name => $route): ?>
+                                                    <option value="<?= $route ?>"><?= $name ?></option>
                                                 <?php endforeach; ?>
                                                 <?php endforeach; ?>
                                             </select>
