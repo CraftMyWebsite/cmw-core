@@ -183,7 +183,7 @@ class LinkStorage
     public function deleteAllRoutes(): void
     {
         $sql = "TRUNCATE TABLE `cmw_core_routes`";
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $db->query($sql);
     }
 

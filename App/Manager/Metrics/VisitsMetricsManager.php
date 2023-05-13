@@ -26,11 +26,12 @@ class VisitsMetricsManager extends DatabaseManager
 
         $path = $route->getPath() === '' ? '/' : $route->getPath();
 
-        $_SESSION['latestVisitPath'] = $path;
-
-        if ($this->isDuplicateVisit($path) || $this->isAdminVisit($path)){
+        if ($this->isDuplicateVisit($path) || $this->isAdminVisit($path) || $this->isErrorPage($path)){
+            echo "Route return";
             return;
         }
+
+        $_SESSION['latestVisitPath'] = $path;
 
         $data = Website::getClientIp() . "," . date('Y-m-d H:i:s') . "," . $path . "," . $package . "," . http_response_code() . "," . $isAdmin;
 
@@ -49,6 +50,11 @@ class VisitsMetricsManager extends DatabaseManager
     private function isAdminVisit(string $currentPath): bool
     {
         return str_contains($currentPath, 'cmw-admin');
+    }
+
+    private function isErrorPage(string $currentPath): bool
+    {
+        return str_contains($currentPath, 'geterror');
     }
 
     private function saveLogFile(string $data): void
