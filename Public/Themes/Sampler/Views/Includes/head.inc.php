@@ -9,8 +9,8 @@ use CMW\Manager\Views\View;
 /* @var array $includes */
 
 ?>
-    <!DOCTYPE html>
-    <html lang="<?= EnvManager::getInstance()->getValue('LOCALE') ?>>">
+<!DOCTYPE html>
+<html lang="<?= EnvManager::getInstance()->getValue('LOCALE') ?>>">
     <head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
@@ -19,11 +19,12 @@ use CMW\Manager\Views\View;
         <link rel="icon" type="image/x-icon"
               href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>Public/Themes/Sampler/Assets/favicon.ico"/>
         <!-- Core theme CSS (Includes Bootstrap)-->
-        <link href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>Public/Themes/Sampler/Resources/Assets/Css/main.css"
-              rel="stylesheet"/>
+        <link
+            href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>Public/Themes/Sampler/Resources/Assets/Css/main.css"
+            rel="stylesheet"/>
         <?php
         View::loadInclude($includes, "beforeScript", "styles");
         ?>
-    </head>
-    <body id="page-top">
+</head>
+<body id="page-top">
 <?= $core->cmwWarn() ?>
