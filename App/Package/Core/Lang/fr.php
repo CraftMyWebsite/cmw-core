@@ -34,6 +34,8 @@ return [
         "name" => "Nom :",
         "description" => "Description :",
         "edit" => "Modifier ces informations",
+        "visits" => "Visites",
+        "registers" => "Inscriptions",
     ],
     "menus" => [
         "title" => "Menus",
@@ -104,7 +106,7 @@ return [
                 "success" => "Configuration fonctionnelle",
                 "error" => "Configuration invalide"
             ],
-             "missing_inputs" => "Merci de remplir tous les champs !",
+            "missing_inputs" => "Merci de remplir tous les champs !",
         ],
     ],
     "datatables" => [
@@ -132,24 +134,24 @@ return [
         ],
     ],
     "Theme" => [
-      "config" => [
-          "title" => "Gestion de vos thèmes",
-          "description" => "Gérez les thèmes de votre site",
-          "select" => "Choisissez votre thème",
-          "list" => [
-              "title" => "Liste des Thèmes officiels",
-              "info" => "Vous pouvez directement télécharger nos Thèmes sur notre Market",
-              "name" => "Nom",
-              "version" => "Version",
-              "cmw_version" => "Version CMW",
-              "downloads" => "Nombre de téléchargement",
-              "download" => "Télécharger",
-          ],
-          "regen_config" => "Re-générer la config du thème"
-      ],
-      "manage" => [
-          "title" => "Gérez votre thème <b>%Theme%</b>",
-          "description" => "Gérez votre thème pour le personnaliser à votre guise !"
+        "config" => [
+            "title" => "Gestion de vos thèmes",
+            "description" => "Gérez les thèmes de votre site",
+            "select" => "Choisissez votre thème",
+            "list" => [
+                "title" => "Liste des Thèmes officiels",
+                "info" => "Vous pouvez directement télécharger nos Thèmes sur notre Market",
+                "name" => "Nom",
+                "version" => "Version",
+                "cmw_version" => "Version CMW",
+                "downloads" => "Nombre de téléchargement",
+                "download" => "Télécharger",
+            ],
+            "regen_config" => "Re-générer la config du thème"
+        ],
+        "manage" => [
+            "title" => "Gérez votre thème <b>%Theme%</b>",
+            "description" => "Gérez votre thème pour le personnaliser à votre guise !"
         ],
     ],
     "mail" => [
@@ -176,9 +178,9 @@ return [
         ]
     ],
     "downloads" => [
-      "errors" => [
-          "internalError" => "Erreur interne avec la resource %name% - %version%"
-      ]
+        "errors" => [
+            "internalError" => "Erreur interne avec la resource %name% - %version%"
+        ]
     ],
     "updates" => [
         "title" => "Mettez à jour votre site",
@@ -197,7 +199,7 @@ return [
         "title" => "CMW - Sécurité",
         "description" => "Gérez la sécurité de votre site",
         "captcha" => [
-          "title"  => "Gestion du captcha",
+            "title" => "Gestion du captcha",
             "type" => "Type de captcha",
         ],
     ],
@@ -222,7 +224,20 @@ return [
         "try" => "Tester",
         "continue" => "Continuer"
     ],
-    "months" => '["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Decembre"]',
+    "months" => [
+        1 => "Janvier",
+        2 => "Fevrier",
+        3 => "Mars",
+        4 => "Avril",
+        5 => "Mai",
+        6 => "Juin",
+        7 => "Juillet",
+        8 => "Août",
+        9 => "Septembre",
+        10 => "Octobre",
+        11 => "Novembre",
+        12 => "Decembre"
+    ],
     "errors" => [
         "requests" => [
             'required' => 'Champs %key% manquant',

@@ -6,6 +6,7 @@ use CMW\Controller\Users\UsersController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Metrics\VisitsMetricsManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Requests\Validator;
@@ -16,6 +17,7 @@ use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
+use CMW\Model\Users\UsersMetricsModel;
 
 /**
  * Class: @coreController
@@ -45,14 +47,19 @@ class CoreController extends AbstractController
     private function adminDashboard(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard");
+
         //Redirect to the dashboard
         if ($_GET['url'] === "cmw-admin") {
             header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard'); //todo redirect
         }
 
+        $visits = (new VisitsMetricsManager())->getPastMonthsVisits(5);
+        $registers = UsersMetricsModel::getInstance()->getPastMonthsRegisterNumbers(5);
+
         View::createAdminView("Core", "dashboard")
-        ->addScriptAfter("Admin/Resources/Vendors/Chart/chart.min.js",
-                                "App/Package/Core/Views/Resources/Js/dashboard.js")
+        ->addVariableList(['visits' => $visits, 'registers' => $registers])
+        ->addScriptBefore("Admin/Resources/Vendors/Chart/chart.min.js")
+        ->addScriptAfter("App/Package/Core/Views/Resources/Js/dashboard.js")
         ->view();
     }
 
