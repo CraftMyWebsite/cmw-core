@@ -53,6 +53,15 @@ class PackageController extends AbstractController
         return $toReturn;
     }
 
+    /**
+     * @return array
+     * @desc Return getCorePackages() and getInstalledPackages()
+     */
+    public static function getAllPackages(): array
+    {
+        return array_merge(self::getCorePackages(), self::getInstalledPackages());
+    }
+
     public static function getPackage(string $package): ?PackageEntity
     {
         

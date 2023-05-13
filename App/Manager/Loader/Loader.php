@@ -34,7 +34,7 @@ class Loader
     {
         $toReturn = [];
 
-        $packages = PackageController::getInstalledPackages();
+        $packages = PackageController::getAllPackages();
 
         foreach ($packages as $package) {
             $implementationsFolder = EnvManager::getInstance()->getValue("dir") . "App/Package/{$package->getName()}/Implementations";
