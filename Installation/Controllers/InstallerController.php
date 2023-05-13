@@ -296,6 +296,7 @@ class InstallerController extends AbstractController
         if (Utils::isValuesEmpty($_POST, "config_name", "config_description")) {
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.toaster.db.missing_inputs"));
+            Redirect::redirectPreviousRoute();
             return;
         }
 

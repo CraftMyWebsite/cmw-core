@@ -2,8 +2,6 @@
 
 use CMW\Manager\Env\EnvManager;
 use CMW\Model\Users\UsersModel;
-use cmw\Model\Votes\VotesConfigModel;
-use CMW\Model\Votes\VotesModel;
 
 $title = "One-Dream | Voter";
 $description = "Votez pour le serveur One-Dream et gagnez des récompenses uniques!";
@@ -12,7 +10,6 @@ $description = "Votez pour le serveur One-Dream et gagnez des récompenses uniqu
 /* @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $topCurrent */
 /* @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $topGlobal */
 ?>
-
 
 
 <main role="main">
@@ -70,7 +67,8 @@ $description = "Votez pour le serveur One-Dream et gagnez des récompenses uniqu
                             <?php foreach ($sites as $site): ?>
                                 <div class="package">
                                     <div class="package__info">
-                                        <h3><a href="<?= $site->getUrl() ?>" target="_BLANK"><?= $site->getTitle() ?></a></h3>
+                                        <h3><a href="<?= $site->getUrl() ?>"
+                                               target="_BLANK"><?= $site->getTitle() ?></a></h3>
                                         <div class="package__tags">
                                             <span class="tag tag--left tag--700">1 à 3 VotePoints</span>
                                             <span class="tag tag--danger"><i
@@ -137,7 +135,7 @@ $description = "Votez pour le serveur One-Dream et gagnez des récompenses uniqu
 
                                     <tr>
                                         <td>#<?= $i ?></td>
-                                        <td><?= $top->getUser()->getUsername() ?></td>
+                                        <td><?= $top->getUser()->getPseudo() ?></td>
                                         <td><?= $top->getVotes() ?></td>
                                     </tr>
 
@@ -173,7 +171,7 @@ $description = "Votez pour le serveur One-Dream et gagnez des récompenses uniqu
 
                                     <tr>
                                         <td>#<?= $i ?></td>
-                                        <td><?= $top->getUser()->getUsername() ?></td>
+                                        <td><?= $top->getUser()->getPseudo() ?></td>
                                         <td><?= $top->getVotes() ?></td>
                                     </tr>
 

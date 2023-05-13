@@ -4,16 +4,12 @@ namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Api\PublicAPI;
-use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Updater\CMSUpdaterManager;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Views\View;
 use CMW\Utils\Redirect;
-use CMW\Utils\Website;
-use JsonException;
-use ZipArchive;
 
 class UpdatesController extends AbstractController
 {
@@ -34,7 +30,13 @@ class UpdatesController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.update");
 
-        (new CMSUpdaterManager())->doUpdate();
+        // We get all the new versions id.
+        $targetVersions = PublicAPI::postData('cms/update', ['current_version' => UpdatesManager::getVersion()]);
+
+        foreach ($targetVersions as $key => $targetVersion) {
+            (new CMSUpdaterManager())->doUpdate($targetVersion);
+        }
+
         Redirect::redirectPreviousRoute();
     }
 }

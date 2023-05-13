@@ -42,6 +42,7 @@ $description = LangManager::translate("core.security.description");
             </div>
         </div>
     </div>
+    <!-- TODO -->
     <div class="col-12 col-lg-6">
         <div class="card">
             <div class="card-header">
@@ -52,7 +53,7 @@ $description = LangManager::translate("core.security.description");
                     <div class="row">
                         <h6>Obligation :</h6>
                         <fieldset class="form-group">
-                            <select class="form-select" id="basicSelect">
+                            <select class="form-select" id="basicSelect" disabled>
                                 <option>Aucune</option>
                                 <option>Pour le staff</option>
                                 <option>Pour tout les utilisateurs</option>
