@@ -3,6 +3,7 @@
 namespace CMW\Utils;
 
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Lang\LangManager;
 use ReflectionClass;
 
 /**
@@ -93,6 +94,23 @@ class Utils
     public static function genId(int $l = 5): string
     {
         return substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"), 10, $l);
+    }
+
+    /**
+     * @param int $pastMonths
+     * @return array
+     * @desc Get past months from now to - past months.
+     */
+    public static function getPastMonths(int $pastMonths): array
+    {
+        $toReturn = [];
+
+        for ($i = 0; $i < $pastMonths; $i++) {
+            $targetMonth = idate("m", strtotime("-$i months"));
+            $toReturn[] = LangManager::translate("core.months.$targetMonth");
+        }
+
+        return array_reverse($toReturn);
     }
 
     /**

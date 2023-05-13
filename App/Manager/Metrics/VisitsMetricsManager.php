@@ -2,8 +2,10 @@
 
 namespace CMW\Manager\Metrics;
 
+use Cassandra\Date;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Router\Route;
 use CMW\Utils\Website;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -154,6 +156,31 @@ class VisitsMetricsManager extends DatabaseManager
     }
 
     /**
+     * @param string $rangeStart
+     * @param string $rangeFinish
+     * @return int
+     */
+    public function getDataVisits(string $rangeStart, string $rangeFinish): int
+    {
+        $var = array(
+            "range_start" => $rangeStart,
+            "range_finish" => $rangeFinish
+        );
+
+        $sql = "SELECT COUNT(visits_id) AS `result` FROM cmw_visits WHERE visits_date BETWEEN (:range_start) AND (:range_finish)";
+
+        $db = self::getInstance();
+        $req = $db->prepare($sql);
+        $res = $req->execute($var);
+
+        if (!$res){
+            return 0;
+        }
+
+        return $req->fetch()['result'] ?? 0;
+    }
+
+    /**
      * @return int
      */
     public function getMonthlyBestVisits(): int
@@ -174,4 +201,30 @@ class VisitsMetricsManager extends DatabaseManager
         return $req->fetch()['count'] ?? 0;
     }
 
+    /**
+     * @param int $pastMonths
+     * @return array
+     */
+    public function getPastMonthsVisits(int $pastMonths): array
+    {
+        $currentMonth = idate('m');
+
+        $toReturn = [];
+
+        for ($i = 0; $i < $pastMonths; $i++) {
+            $targetMonth = idate("m", strtotime("-$i months"));
+            $targetMonthTranslate = LangManager::translate("core.months.$targetMonth");
+
+            $rangeStart = date("Y-m-d 00:00:00", strtotime("first day of -$i months"));
+            $rangeFinish = date("Y-m-d 23:59:59", strtotime("last day of -$i months"));
+
+            $toReturn[$targetMonthTranslate] = $this->getDataVisits($rangeStart, $rangeFinish);
+
+            if ($targetMonth === $currentMonth){
+                $toReturn[$targetMonthTranslate] += $this->getFileLineNumber();
+            }
+
+        }
+        return array_reverse($toReturn);
+    }
 }

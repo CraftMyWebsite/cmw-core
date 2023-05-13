@@ -3,10 +3,16 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Metrics\VisitsMetricsManager;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Core\CoreModel;
+use CMW\Utils\Log;
+use CMW\Utils\Utils;
 use CMW\Utils\Website;
 
 $title = LangManager::translate("core.dashboard.title");
-$description = LangManager::translate("core.dashboard.desc"); 
+$description = LangManager::translate("core.dashboard.desc");
+
+
+/* @var array $visits */
+/* @var array $registers */
 ?>
 
 <div class="d-flex flex-wrap justify-content-between">
@@ -28,7 +34,7 @@ $description = LangManager::translate("core.dashboard.desc");
                                 </div>
                                 <div class="col-sm-8">
                                     <h6 class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.total_member") ?></h6>
-                                    <h6 class="font-extrabold mb-0"><?= (new UsersModel())->countUsers() ?></h6>
+                                    <h6 class="font-extrabold mb-0"><?= UsersModel::getInstance()->countUsers() ?></h6>
                                 </div>
                             </div>
                         </div>
@@ -130,3 +136,45 @@ $description = LangManager::translate("core.dashboard.desc");
         </div>
     </section>
 </div>
+
+<script>
+    const ctx = document.getElementById('dashboardVisits');
+
+    const labels = <?= json_encode(Utils::getPastMonths(5), JSON_THROW_ON_ERROR) ?>;
+    const data = {
+        labels: labels,
+        datasets: [
+            {
+                data: [
+                    <?php foreach ($visits as $visit):
+                        echo json_encode($visit, JSON_THROW_ON_ERROR) . ",";
+                    endforeach;?>
+                ],
+                label: '<?= LangManager::translate('core.dashboard.visits') ?>',
+                borderColor: '#df305c',
+            },
+            {
+                label: '<?= LangManager::translate('core.dashboard.registers') ?>',
+                data: [
+                    <?php foreach ($registers as $register):
+                    echo json_encode($register, JSON_THROW_ON_ERROR) . ",";
+                endforeach;?>
+                ],
+                borderColor: '#5e4298',
+            }
+        ]
+    };
+
+    new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+            }
+        },
+    });
+</script>
