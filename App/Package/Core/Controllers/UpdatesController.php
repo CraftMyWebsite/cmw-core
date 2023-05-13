@@ -33,8 +33,8 @@ class UpdatesController extends AbstractController
         // We get all the new versions id.
         $targetVersions = PublicAPI::postData('cms/update', ['current_version' => UpdatesManager::getVersion()]);
 
-        foreach ($targetVersions as $key => $targetVersion) {
-            (new CMSUpdaterManager())->doUpdate($targetVersion);
+        foreach ($targetVersions as $targetVersion) {
+            (new CMSUpdaterManager())->doUpdate($targetVersion['id']);
         }
 
         Redirect::redirectPreviousRoute();

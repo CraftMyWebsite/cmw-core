@@ -55,7 +55,7 @@ class CMSUpdaterManager
             return;
         }
 
-        $this->updateVersionName($updateData->value);
+        $this->updateVersionName($updateData['value']);
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.updates.success"));
@@ -68,7 +68,7 @@ class CMSUpdaterManager
      */
     private function downloadUpdateFile(mixed $data): ?bool
     {
-        $data = $data->file_update;
+        $data = $data['file_update'];
 
         if ($data === null) {
             return null;
