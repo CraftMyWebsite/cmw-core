@@ -6,7 +6,7 @@ use CMW\Utils\Website;
 
 /*TITRE ET DESCRIPTION*/
 $title = Website::getName() . ' - CGU';
-$description = "Description de votre page";
+$description = "CGU de " . Website::getName();
 ?>
 
 <section class="page-section">
