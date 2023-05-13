@@ -27,7 +27,6 @@ class VisitsMetricsManager extends DatabaseManager
         $path = $route->getPath() === '' ? '/' : $route->getPath();
 
         if ($this->isDuplicateVisit($path) || $this->isAdminVisit($path) || $this->isErrorPage($path)){
-            echo "Route return";
             return;
         }
 

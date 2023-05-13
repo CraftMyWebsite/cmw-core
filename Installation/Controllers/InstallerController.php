@@ -115,7 +115,7 @@ class InstallerController extends AbstractController
         die();
     }
 
-    #[Link(path: "/Lang/:code", method: Link::GET, variables: ["code" => ".*?"], scope: "/installer")]
+    #[Link(path: "/lang/:code", method: Link::GET, variables: ["code" => ".*?"], scope: "/installer")]
     public function changeLang(Request $request, string $code): void
     {
         EnvManager::getInstance()->setOrEditValue("LOCALE", $code);
@@ -125,6 +125,12 @@ class InstallerController extends AbstractController
     #[Link(path: "/", method: Link::GET, scope: "/installer")]
     public function getInstallPage(): void
     {
+
+        if (self::getInstallationStep() === -1){
+            Redirect::redirectToHome();
+            return;
+        }
+
         $value = match (self::getInstallationStep()) {
             1 => "firstInstall",
             2 => "secondInstall",
