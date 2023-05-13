@@ -16,7 +16,7 @@ $description = "page d'accueil de CraftMyWebsite"; ?>
                 <hr class="divider"/>
             </div>
             <div class="col-lg-8 align-self-baseline">
-                <p class="text-white-75">Bienvenue sur votre nouveau site !</p>
+                <p class="text-white-75">Bienvenue sur votre site !</p>
                 <p class="text-white-75 mb-5">Il est maintenant temps de commencer la configuration, connectez-vous pour
                     accéder à votre panel d'administration.</p>
                 <?php if (UsersController::isAdminLogged()) : ?>
