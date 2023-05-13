@@ -83,7 +83,7 @@ $description = LangManager::translate("core.menus.desc");
                                             <select class="choices form-select" name="slugPackage">
                                                 <?php foreach ($packagesLinks as $package => $routes):
                                                     if ($routes !== []):?>
-                                                        <option disabled>────────── <?= $package ?> ──────────</option>
+                                                        <option disabled>──── <?= $package ?> ────</option>
                                                     <?php endif; ?>
                                                     <?php foreach ($routes as $name => $route): ?>
                                                     <option value="<?= $route ?>"><?= $name ?></option>
