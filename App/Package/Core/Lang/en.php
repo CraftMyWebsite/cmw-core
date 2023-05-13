@@ -1,6 +1,9 @@
 <?php
 
 return [
+    "home" => "Home",
+    "cgu" => "CGU",
+    "cgv" => "CGV",
     "general" => "General",
     "package" => "Package",
     "packages" => "Packages",

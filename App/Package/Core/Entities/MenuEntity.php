@@ -2,6 +2,11 @@
 
 namespace CMW\Entity\Core;
 
+use CMW\Controller\Users\UsersController;
+use CMW\Entity\Users\RoleEntity;
+use CMW\Model\Users\RolesModel;
+use CMW\Model\Users\UsersModel;
+
 class MenuEntity
 {
     private int $id;
@@ -10,6 +15,8 @@ class MenuEntity
     private int $isRestricted;
     private int $order;
     private int $targetBlank;
+    /* @var RoleEntity[]|null $restrictedRoles */
+    private ?array $restrictedRoles;
 
     /**
      * @param int $id
@@ -18,8 +25,9 @@ class MenuEntity
      * @param int $isRestricted
      * @param int $order
      * @param int $targetBlank
+     * @param RoleEntity[]|null $restrictedRoles
      */
-    public function __construct(int $id, string $name, string $url, int $isRestricted, int $order, int $targetBlank)
+    public function __construct(int $id, string $name, string $url, int $isRestricted, int $order, int $targetBlank, ?array $restrictedRoles)
     {
         $this->id = $id;
         $this->name = $name;
@@ -27,6 +35,7 @@ class MenuEntity
         $this->isRestricted = $isRestricted;
         $this->order = $order;
         $this->targetBlank = $targetBlank;
+        $this->restrictedRoles = $restrictedRoles;
     }
 
     /**
@@ -62,6 +71,32 @@ class MenuEntity
     }
 
     /**
+     * @return bool
+     */
+    public function isUserAllowed(): bool
+    {
+        if (!$this->isRestricted){
+            return true;
+        }
+
+        if (!UsersController::isUserLogged() && $this->isRestricted()){
+            return false;
+        }
+
+        if ($this->restrictedRoles === null){
+            return true;
+        }
+
+        foreach ($this->restrictedRoles as $restrictedRole){
+            if (RolesModel::playerHasRole(UsersModel::getLoggedUser(), $restrictedRole?->getId())){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @return int
      */
     public function getOrder(): int
@@ -75,5 +110,13 @@ class MenuEntity
     public function isTargetBlank(): bool
     {
         return $this->targetBlank;
+    }
+
+    /**
+     * @return RoleEntity[]|null
+     */
+    public function getRestrictedRoles(): ?array
+    {
+        return $this->restrictedRoles;
     }
 }

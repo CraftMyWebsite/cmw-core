@@ -1,6 +1,7 @@
 <?php
 
 return [
+    "profile" => "Profil",
     "login" => [
         "title" => "Connexion",
         "desc" => "Connectez-vous pour accéder au panneau d'administration",
@@ -17,6 +18,9 @@ return [
                 "body" => "Voici votre nouveau mot de passe à changer rapidement après votre connexion : <b> %password% </b>"
             ],
         ],
+    ],
+    "register" => [
+        "title" => "Inscription"
     ],
     "toaster" => [
         "error" => "Erreur",

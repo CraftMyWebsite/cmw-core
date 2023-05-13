@@ -1,6 +1,7 @@
 <?php
 
 return [
+    "profile" => "Profile",
     "login" => [
         "title" => "Login",
         "desc" => "Login to access the administration panel",
@@ -17,6 +18,9 @@ return [
                 "body" => "This is your new password, please change this password fast <b> %password% </b>"
             ],
         ],
+    ],
+    "register" => [
+        "title" => "Register"
     ],
     "toaster" => [
         "error" => "Error",
