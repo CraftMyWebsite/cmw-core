@@ -1,14 +1,14 @@
 tinymce.init({
-  selector: 'textarea',
+  selector: '.tinymce',
   promotion: false,
   toolbar_sticky: true,
   toolbar_mode: 'sliding',
   plugins: ['emoticons', 'image', 'autoresize', 'wordcount', 'advlist', 'lists', 'charmap', 'codesample', 'code', 'directionality', 'fullscreen', 'link', 'insertdatetime', 'media', 'pagebreak', 'nonbreaking', 'preview', 'quickbars', 'searchreplace', 'table', 'visualblocks', 'visualchars'],
-  toolbar: 
-    'undo redo | ' + 
-    'formatpainter casechange blocks fontsizeselect | ' + 
+  toolbar:
+    'undo redo | ' +
+    'formatpainter casechange blocks fontsizeselect | ' +
     'alignleft aligncenter alignright alignjustify | ' +
-    'bold italic strikethrough | ' + 
+    'bold italic strikethrough | ' +
     'forecolor backcolor removeformat |' +
     'bullist numlist outdent indent | '+
     'table | '+

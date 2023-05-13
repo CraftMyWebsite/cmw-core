@@ -1,5 +1,5 @@
 tinymce.init({
-  selector: 'textarea',
+  selector: '.tinymce',
   promotion: false,
   toolbar_sticky: true,
   toolbar_mode: 'sliding',
