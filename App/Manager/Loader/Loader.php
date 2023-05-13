@@ -184,9 +184,7 @@ class Loader
     {
         if (is_dir("Installation")) {
             if (EnvManager::getInstance()->getValue("INSTALLSTEP") !== '-1') {
-
                 ErrorManager::enableErrorDisplays(true);
-
                 InstallerController::goToInstall();
             }
         } elseif (!EnvManager::getInstance()->getValue("DEVMODE")) {
