@@ -3,6 +3,7 @@
 namespace CMW\Model\Core;
 
 use CMW\Controller\Core\ThemeController;
+use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Package\AbstractModel;
@@ -107,6 +108,30 @@ class ThemeModel extends AbstractModel
         $req = $db->prepare('DELETE FROM cmw_theme_config WHERE theme_config_theme = :themeName');
 
         $req->execute(array("themeName" => $themeName));
+    }
+
+    public function initConfigCache(string $themeName): void
+    {
+        $sql = "SELECT * FROM cmw_theme_config WHERE theme_config_theme = :theme";
+        $db = DatabaseManager::getInstance();
+
+        $req = $db->prepare($sql);
+
+        if (!$req->execute(['theme' => $themeName])){
+            return;
+        }
+
+        $res = $req->fetchAll();
+
+        if (!$res){
+            return;
+        }
+
+        if (SimpleCacheManager::cacheExist('config', "Themes/$themeName")){
+            SimpleCacheManager::deleteSpecificCacheFile('config', "Themes/$themeName");
+        }
+
+        SimpleCacheManager::storeCache($res, 'config', "Themes/$themeName");
     }
 
 }

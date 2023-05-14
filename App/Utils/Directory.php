@@ -2,6 +2,8 @@
 
 namespace CMW\Utils;
 
+use CMW\Manager\Env\EnvManager;
+
 class Directory
 {
 
@@ -103,6 +105,25 @@ class Directory
         }
 
         return rmdir($dir);
+    }
+
+    /**
+     * @param string ...$dirs
+     * @return bool
+     */
+    public static function createFolders(string ...$dirs): bool
+    {
+        foreach ($dirs as $dir):
+            if (is_dir($dir)){
+                continue;
+            }
+
+            if (!mkdir($dir, 0755, true) && !is_dir($dir)) {
+                return false;
+            }
+        endforeach;
+
+        return true;
     }
 
 }
