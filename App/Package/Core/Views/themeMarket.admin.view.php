@@ -43,7 +43,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                 <div class="card-in-card">
                                     <div class="d-flex justify-content-between align-items-center px-2 py-2">
                                         <b><?= $theme->getName() ?></b>
-                                        <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme->getName() ?>" class="btn btn-sm btn-primary">Détails</a>
+                                        <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme->getName() ?>" class="btn btn-sm btn-primary">Détails</button>
                                     </div>
                                     <div class="position-relative">
                                         <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
@@ -125,7 +125,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                     <div class="card-in-card">
                                         <div class="d-flex justify-content-between align-items-center px-2 py-2">
                                             <b><?= $theme['name'] ?></b>
-                                            <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme['id'] ?>" class="btn btn-sm btn-primary">Détails</a>
+                                            <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme['id'] ?>" class="btn btn-sm btn-primary">Détails</button>
                                         </div>
                                         <div class="position-relative">
                                             <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
@@ -205,7 +205,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                 <div class="card-in-card">
                                     <div class="d-flex justify-content-between align-items-center px-2 py-2">
                                         <b><?= $theme->getName() ?></b>
-                                        <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme->getName() ?>" class="btn btn-sm btn-primary">Détails</a>
+                                        <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme->getName() ?>" class="btn btn-sm btn-primary">Détails</button>
                                     </div>
                                     <div class="position-relative">
                                         <?php if ($theme->getName() != "Sampler"): ?>
@@ -283,7 +283,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                     <div class="card-in-card">
                                         <div class="d-flex justify-content-between align-items-center px-2 py-2">
                                             <b><?= $theme['name'] ?></b>
-                                            <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme['id'] ?>" class="btn btn-sm btn-primary">Détails</a>
+                                            <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme['id'] ?>" class="btn btn-sm btn-primary">Détails</button>
                                         </div>
                                         <div class="position-relative">
                                             <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
@@ -365,7 +365,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                     <div class="card-in-card">
                                         <div class="d-flex justify-content-between align-items-center px-2 py-2">
                                             <b><?= $theme['name'] ?></b>
-                                            <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme['id'] ?>" class="btn btn-sm btn-primary">Détails</a>
+                                            <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme['id'] ?>" class="btn btn-sm btn-primary">Détails</button>
                                         </div>
                                         <div class="position-relative">
                                             <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
