@@ -3,6 +3,7 @@
 namespace CMW\Utils;
 
 
+use CMW\Controller\Users\UsersController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Router\Route;
 use CMW\Manager\Router\Router;
@@ -32,6 +33,29 @@ class Redirect
         $route = self::getRouteByUrl($url);
 
         if (is_null($route)) {
+            return;
+        }
+
+        $strParams = implode(", ", $params);
+
+        http_response_code(302);
+        header("Location: " .  EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $route->getUrl() . '/' . $strParams);
+    }
+
+    /**
+     * @param string $url Url or Route Name.
+     * @desc Redirect to admin pages and check if the use has admin dashboard perm
+     */
+    public static function redirectToAdmin(string $url, array $params = []): void
+    {
+        $route = self::getRouteByUrl("cmw-admin/$url");
+
+        if (is_null($route)) {
+            return;
+        }
+
+        if (!UsersController::isAdminLogged()){
+            self::redirectToHome();
             return;
         }
 
