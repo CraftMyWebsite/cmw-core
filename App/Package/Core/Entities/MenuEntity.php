@@ -4,6 +4,7 @@ namespace CMW\Entity\Core;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Entity\Users\RoleEntity;
+use CMW\Manager\Env\EnvManager;
 use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UsersModel;
 
@@ -59,7 +60,7 @@ class MenuEntity
      */
     public function getUrl(): string
     {
-        return $this->url;
+        return EnvManager::getInstance()->getValue("PATH_SUBFOLDER").$this->url;
     }
 
     /**
