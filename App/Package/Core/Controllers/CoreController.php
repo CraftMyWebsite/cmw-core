@@ -18,6 +18,7 @@ use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Users\UsersMetricsModel;
+use CMW\Utils\Redirect;
 
 /**
  * Class: @coreController
@@ -108,6 +109,11 @@ class CoreController extends AbstractController
     /**
      * @throws \CMW\Manager\Router\RouterException
      */
+    #[Link('home', Link::GET)]
+    private function redirectToHome(): void {
+        Redirect::redirectToHome();
+    }
+
     #[Link('/', Link::GET)]
     private function frontHome(): void
     {
