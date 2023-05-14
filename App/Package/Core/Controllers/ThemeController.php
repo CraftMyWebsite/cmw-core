@@ -195,9 +195,7 @@ class ThemeController extends AbstractController
         $themesList = self::getMarketThemes();
         
         View::createAdminView("Core", "themeMarket")
-            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css", "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
             ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes, "themesList" => $themesList])
-            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js", "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
             ->view();
     }
 
