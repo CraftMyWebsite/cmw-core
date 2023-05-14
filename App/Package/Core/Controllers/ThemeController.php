@@ -193,6 +193,8 @@ class ThemeController extends AbstractController
         $currentTheme = self::getCurrentTheme();
         $installedThemes = self::getInstalledThemes();
         $themesList = self::getMarketThemes();
+
+        ThemeModel::getInstance()->initConfigCache($currentTheme->getName());
         
         View::createAdminView("Core", "themeMarket")
             ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes, "themesList" => $themesList])
