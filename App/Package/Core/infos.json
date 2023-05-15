@@ -46,6 +46,12 @@
         "Market": "theme/market",
         "Configure": "theme/manage"
       }
+    },
+    {
+      "name_menu_fr": "Packages",
+      "name_menu_en": "Packages",
+      "icon_menu": "fa-solid fa-puzzle-piece",
+      "url_menu": "packages"
     }
   ],
 

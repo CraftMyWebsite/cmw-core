@@ -22,11 +22,11 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <a class="nav-link active" id="setting1-tab" data-bs-toggle="tab" href="#setting1" role="tab"
-                       aria-selected="true">Mes thèmes</a>
+                       aria-selected="true"><?= LangManager::translate("core.Theme.myThemes") ?></a>
                 </li>
                 <li class="nav-item" role="presentation">
                     <a class="nav-link" id="setting2-tab" data-bs-toggle="tab" href="#setting2" role="tab"
-                       aria-selected="false">Parcourir les thèmes</a>
+                       aria-selected="false"><?= LangManager::translate("core.Theme.market") ?></a>
                 </li>
             </ul>
 
@@ -43,7 +43,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                 <div class="card-in-card">
                                     <div class="d-flex justify-content-between align-items-center px-2 py-2">
                                         <b><?= $theme->getName() ?></b>
-                                        <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme->getName() ?>" class="btn btn-sm btn-primary">Détails</button>
+                                        <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme->getName() ?>" class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.details") ?></button>
                                     </div>
                                     <div class="position-relative">
                                         <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
@@ -51,14 +51,14 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                         </div>-->
                                         <?php if ($theme->getName() != "Sampler"): ?>
                                         <div class="alert-light-warning color-warning position-absolute bottom-0 w-100 text-center" style="opacity: .85">
-                                            Non verifié par CMW.
+                                            <?= LangManager::translate("core.Theme.notVerified") ?>
                                         </div>
                                         <?php endif; ?>
                                         <img style="height: 200px; width: 100%;" src="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>Admin/Resources/Assets/Images/Default/local-theme.jpg" alt="img">  
                                     </div>
                                     <div class="d-flex justify-content-between align-items-center px-2 py-1">
-                                        <span class="text-success">Thème Actif</span>
-                                        <a href="manage" class="btn btn-sm btn-primary">Configurer</a>
+                                        <span class="text-success"><?= LangManager::translate("core.Theme.active") ?></span>
+                                        <a href="manage" class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.configure") ?></a>
                                     </div>
                                 </div>
                             </div>
@@ -69,12 +69,12 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                         <div class="modal-header">
                                             <h4 class="modal-title"><?= $theme->getName() ?></h4>
                                             <div class="d-flex justify-content-end mt-auto gap-3">
-                                                <a href="manage" class="btn btn-sm btn-primary">Configurer</a>
+                                                <a href="manage" class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.configure") ?></a>
                                                 <form action="market/regenerate" method="post">
                                                     <?php (new SecurityManager())->insertHiddenToken() ?>
                                                     <div class="button">
                                                         <button type="submit" class="btn btn-warning btn-sm float-left">
-                                                            Réinitialiser
+                                                            <?= LangManager::translate("core.Theme.reset") ?>
                                                         </button>
                                                     </div>
                                                 </form>
@@ -86,36 +86,31 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                                     <img style="height: 100%; width: 100%;" src="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>Admin/Resources/Assets/Images/Default/local-theme.jpg" alt="img">
                                                 </div>
                                                 <div class="col-12 col-lg-6 position-relative">
-                                                        <p class=""><b>Déscription : </b></p>
+                                                        <p class=""><b><?= LangManager::translate("core.Theme.description") ?></b></p>
                                                         <?php if ($theme->getName() != "Sampler"): ?>
-                                                            <p>Ce thème est installé manuellement, il n'est pas enregistrer auprès de CraftMyWebsite.<br>Utilisez ce thème en conaissance de cause.<br>Si vous développez ce thème pour le publier ensuite sur le Market de CraftMyWebsite ne tenez pas compte de ce message.</p>
+                                                            <p><?= LangManager::translate("core.Theme.descriptionManualInstall") ?></p>
                                                         <?php else: ?>
-                                                            <p>Sampler est le thème par défaut fournis avec CraftMyWebsite.</p>
+                                                            <p><?= LangManager::translate("core.Theme.descriptionIsSampler") ?></p>
                                                         <?php endif; ?>
                                                         <hr>
                                                         <p class="small">
-                                                            Autheur : <i><b><a href="" target="_blank"><?= $theme->getAuthor() ?? $theme->getAuthorsFormatted() ?></i></a></b></i>
+                                                            <?= LangManager::translate("core.Theme.author") ?><i><b><a href="" target="_blank"><?= $theme->getAuthor() ?? $theme->getAuthorsFormatted() ?></i></a></b></i>
                                                         </p>
                                                         <p class="small">
-                                                            Version du thème : <i><b><?= $theme->getVersion() ?></b></i><br>
-                                                            Version CMW recommandée : <i><b><?= $theme->getCmwVersion() ?></b></i>
+                                                            <?= LangManager::translate("core.Theme.themeVersion") ?><i><b><?= $theme->getVersion() ?></b></i><br>
+                                                            <?= LangManager::translate("core.Theme.CMWVersion") ?><i><b><?= $theme->getCmwVersion() ?></b></i>
                                                         </p>
                                                 </div>
                                             </div>
                                         </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-primary"data-bs-dismiss="modal">Fermer</button>
+                                                <button type="button" class="btn btn-primary"data-bs-dismiss="modal"><?= LangManager::translate("core.Theme.close") ?></button>
                                             </div>
                                     </div>
                                 </div>
                             </div>
                             <?php endif; ?>
                         <?php endforeach; ?>
-
-
-
-
-
                         <!------------------------------------------------
                         -----Listage des thèmes API installé et ACTIF---
                         -------------------------------------------------->
@@ -125,7 +120,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                     <div class="card-in-card">
                                         <div class="d-flex justify-content-between align-items-center px-2 py-2">
                                             <b><?= $theme['name'] ?></b>
-                                            <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme['id'] ?>" class="btn btn-sm btn-primary">Détails</button>
+                                            <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme['id'] ?>" class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.details") ?></button>
                                         </div>
                                         <div class="position-relative">
                                             <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
@@ -134,8 +129,8 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                             <img style="height: 200px; width: 100%;" src="<?= PublicAPI::getUrl() . '/' . $theme["icon"] ?>" alt="img">  
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center px-2 py-1">
-                                            <span class="text-success">Thème Actif</span>
-                                            <a href="manage" class="btn btn-sm btn-primary">Configurer</a>
+                                            <span class="text-success"><?= LangManager::translate("core.Theme.active") ?></span>
+                                            <a href="manage" class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.configure") ?></a>
                                         </div>
                                     </div>
                                 </div>
@@ -146,12 +141,12 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                             <div class="modal-header">
                                                 <h4 class="modal-title"><?= $theme['name'] ?></h4>
                                                 <div class="d-flex justify-content-end mt-auto gap-3">
-                                                    <a href="manage" class="btn btn-sm btn-primary">Configurer</a>
-                                                    <a href="install/<?= $theme['id'] ?>" class="btn btn-sm btn-danger">Réinstaller</a>
+                                                    <a href="manage" class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.configure") ?></a>
+                                                    <a href="install/<?= $theme['id'] ?>" class="btn btn-sm btn-danger"><?= LangManager::translate("core.Theme.reset") ?></a>
                                                    <form action="market/regenerate" method="post">
                                                         <?php (new SecurityManager())->insertHiddenToken() ?>
                                                         <div class="button">
-                                                            <button type="submit" class="btn btn-warning btn-sm float-left">Réinitialiser</button>
+                                                            <button type="submit" class="btn btn-warning btn-sm float-left"><?= LangManager::translate("core.Theme.reset") ?></button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -162,19 +157,19 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                                         <img style="height: 100%; width: 100%;" src="<?= PublicAPI::getUrl() . '/' . $theme["icon"] ?>" alt="img">
                                                     </div>
                                                     <div class="col-12 col-lg-6 position-relative">
-                                                        <p class=""><b>Déscription : </b><br><?= $theme['description'] ?></p>
+                                                        <p class=""><b><?= LangManager::translate("core.Theme.description") ?></b><br><?= $theme['description'] ?></p>
                                                         <hr>
                                                         <p class="small">
-                                                            Autheur : <i><b><a href="" target="_blank"><?= $theme['author_pseudo'] ?></i></a></b></i><br>
-                                                            Téléchargements : <i><b><?= $theme['downloads'] ?></b></i>
+                                                            <?= LangManager::translate("core.Theme.author") ?><i><b><a href="" target="_blank"><?= $theme['author_pseudo'] ?></i></a></b></i><br>
+                                                            <?= LangManager::translate("core.Theme.downloads") ?><i><b><?= $theme['downloads'] ?></b></i>
                                                         </p>
                                                         <p class="small">
-                                                            Version du thème : <i><b><?= $theme['version_name'] ?></b></i><br>
-                                                            Version CMW recommandée : <i><b><?= $theme['version_cmw'] ?></b></i>
+                                                            <?= LangManager::translate("core.Theme.themeVersion") ?><i><b><?= $theme['version_name'] ?></b></i><br>
+                                                            <?= LangManager::translate("core.Theme.CMWVersion") ?><i><b><?= $theme['version_cmw'] ?></b></i>
                                                         </p>
                                                         <div class="d-flex gap-3 align-items-center">
                                                             <?php if ($theme['demo']): ?>
-                                                            <a class="btn btn-sm btn-primary" href="<?= $theme['demo'] ?>" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> Démo</a>
+                                                            <a class="btn btn-sm btn-primary" href="<?= $theme['demo'] ?>" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> <?= LangManager::translate("core.Theme.demo") ?></a>
                                                             <?php endif; ?>
                                                             <?php if ($theme['code_link']): ?>
                                                                 <a class="btn btn-sm btn-primary" href="<?= $theme['code_link'] ?>" target="_blank"><i class="fa-brands fa-github"></i> GitHub</a>
@@ -184,18 +179,13 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-primary"data-bs-dismiss="modal">Fermer</button>
+                                                <button type="button" class="btn btn-primary"data-bs-dismiss="modal"><?= LangManager::translate("core.Theme.close") ?></button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             <?php endif; ?>
                         <?php endforeach; ?>
-
-
-
-
-
                         <!--------------------------------------
                         -----Listage des thèmes local inactif---
                         ---------------------------------------->
@@ -205,12 +195,12 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                 <div class="card-in-card">
                                     <div class="d-flex justify-content-between align-items-center px-2 py-2">
                                         <b><?= $theme->getName() ?></b>
-                                        <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme->getName() ?>" class="btn btn-sm btn-primary">Détails</button>
+                                        <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme->getName() ?>" class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.details") ?></button>
                                     </div>
                                     <div class="position-relative">
                                         <?php if ($theme->getName() != "Sampler"): ?>
                                         <div class="alert-light-warning color-warning position-absolute bottom-0 w-100 text-center" style="opacity: .85">
-                                            Non verifié par CMW.
+                                            <?= LangManager::translate("core.Theme.notVerified") ?>
                                         </div>
                                         <?php endif; ?>
                                         <img class="rounded-bottom" style="height: 200px; width: 100%;" src="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>Admin/Resources/Assets/Images/Default/local-theme.jpg" alt="im">
@@ -269,11 +259,6 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                             </div>
                             <?php endif; ?>
                         <?php endforeach; ?>
-
-
-
-
-
                         <!------------------------------------------------
                         -----Listage des thèmes API installé et inactif---
                         -------------------------------------------------->
@@ -283,7 +268,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                     <div class="card-in-card">
                                         <div class="d-flex justify-content-between align-items-center px-2 py-2">
                                             <b><?= $theme['name'] ?></b>
-                                            <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme['id'] ?>" class="btn btn-sm btn-primary">Détails</button>
+                                            <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme['id'] ?>" class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.details") ?></button>
                                         </div>
                                         <div class="position-relative">
                                             <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
@@ -360,12 +345,12 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                         -----Listage des thèmes API non nstallé---
                         ------------------------------------------>
                         <?php foreach ($themesList as $theme): ?>
-                            <?php if ($theme['name'] != ThemeController::isThemeInstalled($theme['name'])): ?>
+                            <?php if (!ThemeController::isThemeInstalled($theme['name'])): ?>
                                 <div class="col-12 col-lg-3 mb-4">
                                     <div class="card-in-card">
                                         <div class="d-flex justify-content-between align-items-center px-2 py-2">
                                             <b><?= $theme['name'] ?></b>
-                                            <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme['id'] ?>" class="btn btn-sm btn-primary">Détails</button>
+                                            <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme['id'] ?>" class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.details") ?></button>
                                         </div>
                                         <div class="position-relative">
                                             <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">

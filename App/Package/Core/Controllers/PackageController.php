@@ -2,10 +2,14 @@
 
 namespace CMW\Controller\Core;
 
+use CMW\Controller\Users\UsersController;
 use CMW\Entity\Core\PackageEntity;
 use CMW\Entity\Core\PackageMenusEntity;
+use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Package\AbstractController;
+use CMW\Manager\Router\Link;
+use CMW\Manager\Views\View;
 use JsonException;
 
 class PackageController extends AbstractController
@@ -127,6 +131,54 @@ class PackageController extends AbstractController
     public static function isInstalled(string $package): bool
     {
         return self::getPackage($package) !== null;
+    }
+
+    /**
+     * @return array
+     * @desc Return the list of public packages from our market
+     */
+    public static function getMarketPackages(): array {
+        return PublicAPI::getData("resources/getResources&resource_type=1");
+    }
+
+    /**
+     * @return PackageEntity[]
+     * @desc Return all packages local (remove packages get from the public market)
+     */
+    public static function getLocalPackages(): array
+    {
+        $toReturn = array();
+        $installedPackages = self::getInstalledPackages();
+
+        $marketPackagesName = array();
+
+        foreach (self::getMarketPackages() as $marketTheme):
+            $marketPackagesName[] = $marketTheme['name'];
+        endforeach;
+
+        foreach ($installedPackages as $installedPackage):
+            if (!in_array($installedPackage->getName(), $marketPackagesName, true)):
+                $toReturn[] = $installedPackage;
+            endif;
+        endforeach;
+
+        return $toReturn;
+    }
+
+    /* ADMINISTRATION */
+
+    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/packages")]
+    #[Link("/", Link::GET, [], "/cmw-admin/packages")]
+    private function adminPackageManage(): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
+
+        $installedPackages = self::getInstalledPackages();
+        $packagesList = self::getMarketPackages();
+
+        View::createAdminView("Core", "package")
+            ->addVariableList(["installedPackages" => $installedPackages, "packagesList" => $packagesList])
+            ->view();
     }
 
 }
