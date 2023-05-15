@@ -31,7 +31,7 @@ $description = LangManager::translate("users.settings.desc"); ?>
                         <h6><?= LangManager::translate("users.settings.default_picture") ?> :</h6>
                         <div class="text-center ">
                             <img class="w-25 border"
-                                 src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>public/uploads/users/default/<?= $settings->getDefaultImage() ?>"
+                                 src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Public/Uploads/Users/Default/<?= $settings->getDefaultImage() ?>"
                                  alt="<?= LangManager::translate("users.settings.default_picture") ?>">
                         </div>
                         <input class="mt-2 form-control form-control-lg" type="file" id="formFile"

@@ -42,7 +42,7 @@ class RolesController extends AbstractController
 
 
         View::createAdminView("Users", "roles")
-            ->addScriptBefore("App/Package/users/Views/Assets/Js/manageRoles.js",
+            ->addScriptBefore("App/Package/Users/Views/Assets/Js/manageRoles.js",
                 "Admin/Resources/Vendors/IziToast/iziToast.min.js",
                 "App/Package/users/Views/Assets/Js/rolesWeights.js")
             ->addStyle("Admin/Resources/Vendors/IziToast/iziToast.min.css")
