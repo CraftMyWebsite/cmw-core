@@ -11,7 +11,9 @@ $title = LangManager::translate("core.dashboard.title");
 $description = LangManager::translate("core.dashboard.desc");
 
 
-/* @var array $visits */
+/* @var array $monthlyVisits */
+/* @var array $dailyVisits */
+/* @var array $weeklyVisits */
 /* @var array $registers */
 ?>
 
@@ -101,28 +103,28 @@ $description = LangManager::translate("core.dashboard.desc");
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link active" id="setting1-tab" data-bs-toggle="tab" href="#setting1" role="tab"
-                                       aria-selected="true">Mois</a>
+                                       aria-selected="true">Jours</a>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link" id="setting2-tab" data-bs-toggle="tab" href="#setting2" role="tab"
-                                       aria-selected="false">Jours</a>
+                                       aria-selected="false">Semaine</a>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link" id="setting3-tab" data-bs-toggle="tab" href="#setting3" role="tab"
-                                       aria-selected="false">Année</a>
+                                       aria-selected="false">Mois</a>
                                 </li>
                             </ul>
                         </div>
                         <div class="card-body">
                             <div class="tab-content" id="myTabContent">
                                 <div class="tab-pane fade show active py-2" id="setting1" role="tabpanel" aria-labelledby="setting1-tab">
-                                    <canvas id="dashboardMonthlyVisits" width="710" height="200" style="display: block; box-sizing: border-box; height: 355px; width: 710px;"></canvas>
-                                </div>
-                                <div class="tab-pane fade py-2" id="setting2" role="tabpanel" aria-labelledby="setting2-tab">
                                     <canvas id="dashboardDailyVisits" width="710" height="200" style="display: block; box-sizing: border-box; height: 355px; width: 710px;"></canvas>
                                 </div>
+                                <div class="tab-pane fade py-2" id="setting2" role="tabpanel" aria-labelledby="setting2-tab">
+                                    <canvas id="dashboardWeeklyVisits" width="710" height="200" style="display: block; box-sizing: border-box; height: 355px; width: 710px;"></canvas>
+                                </div>
                                 <div class="tab-pane fade py-2" id="setting3" role="tabpanel" aria-labelledby="setting3-tab">
-                                    <canvas id="dashboardYearlyVisits" width="710" height="200" style="display: block; box-sizing: border-box; height: 355px; width: 710px;"></canvas>
+                                    <canvas id="dashboardMonthlyVisits" width="710" height="200" style="display: block; box-sizing: border-box; height: 355px; width: 710px;"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -166,7 +168,10 @@ $description = LangManager::translate("core.dashboard.desc");
     const dashboardMonthlyVisitsLabels = <?= json_encode(Utils::getPastMonths(5), JSON_THROW_ON_ERROR) ?>;
 
     const dashboardDailyVisits = document.getElementById('dashboardDailyVisits');
-    const dashboardDailyVisitsLabels = <?= json_encode(Utils::getPastMonths(5), JSON_THROW_ON_ERROR) ?>;
+    const dashboardDailyVisitsLabels = <?= json_encode(Utils::getPastDays(15), JSON_THROW_ON_ERROR) ?>;
+
+    const dashboardWeeklyVisits = document.getElementById('dashboardWeeklyVisits');
+    const dashboardWeeklyVisitsLabels = <?= json_encode(Utils::getPastWeeks(4), JSON_THROW_ON_ERROR) ?>;
 
 
     const dashboardMonthlyVisitsData = {
@@ -174,12 +179,14 @@ $description = LangManager::translate("core.dashboard.desc");
         datasets: [
             {
                 data: [
-                    <?php foreach ($visits as $visit):
-                        echo json_encode($visit, JSON_THROW_ON_ERROR) . ",";
+                    <?php foreach ($monthlyVisits as $monthlyVisit):
+                        echo json_encode($monthlyVisit, JSON_THROW_ON_ERROR) . ",";
                     endforeach;?>
                 ],
                 label: '<?= LangManager::translate('core.dashboard.visits') ?>',
-                borderColor: '#df305c',
+                backgroundColor: '#ab4057',
+                borderWidth: 2,
+                borderRadius: 10,
             },
             {
                 label: '<?= LangManager::translate('core.dashboard.registers') ?>',
@@ -188,7 +195,9 @@ $description = LangManager::translate("core.dashboard.desc");
                     echo json_encode($register, JSON_THROW_ON_ERROR) . ",";
                 endforeach;?>
                 ],
-                borderColor: '#5e4298',
+                backgroundColor: '#bf30df',
+                borderWidth: 2,
+                borderRadius: 10,
             }
         ]
     };
@@ -198,27 +207,37 @@ $description = LangManager::translate("core.dashboard.desc");
         datasets: [
             {
                 data: [
-                    <?php foreach ($visits as $visit):
-                    echo json_encode($visit, JSON_THROW_ON_ERROR) . ",";
+                    <?php foreach ($dailyVisits as $dailyVisit):
+                    echo json_encode($dailyVisit, JSON_THROW_ON_ERROR) . ",";
                 endforeach;?>
                 ],
                 label: '<?= LangManager::translate('core.dashboard.visits') ?>',
-                borderColor: '#df305c',
-            },
+                backgroundColor: '#ab4057',
+                borderWidth: 2,
+                borderRadius: 20,
+            }
+        ]
+    };
+
+    const dashboardWeeklyVisitsData = {
+        labels: dashboardWeeklyVisitsLabels,
+        datasets: [
             {
-                label: '<?= LangManager::translate('core.dashboard.registers') ?>',
                 data: [
-                    <?php foreach ($registers as $register):
-                    echo json_encode($register, JSON_THROW_ON_ERROR) . ",";
+                    <?php foreach ($weeklyVisits as $weeklyVisit):
+                    echo json_encode($weeklyVisit, JSON_THROW_ON_ERROR) . ",";
                 endforeach;?>
                 ],
-                borderColor: '#5e4298',
+                label: '<?= LangManager::translate('core.dashboard.visits') ?>',
+                backgroundColor: '#ab4057',
+                borderWidth: 2,
+                borderRadius: 10,
             }
         ]
     };
 
     new Chart(dashboardMonthlyVisits, {
-        type: 'line',
+        type: 'bar',
         data: dashboardMonthlyVisitsData,
         options: {
             responsive: true,
@@ -231,8 +250,21 @@ $description = LangManager::translate("core.dashboard.desc");
     });
 
     new Chart(dashboardDailyVisits, {
-        type: 'line',
+        type: 'bar',
         data: dashboardDailyVisitsData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+            }
+        },
+    });
+
+    new Chart(dashboardWeeklyVisits, {
+        type: 'bar',
+        data: dashboardWeeklyVisitsData,
         options: {
             responsive: true,
             plugins: {
