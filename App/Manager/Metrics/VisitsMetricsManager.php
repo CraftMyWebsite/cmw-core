@@ -133,14 +133,14 @@ class VisitsMetricsManager extends DatabaseManager
                 "range_finish" => $rangeFinish
             );
 
-            $sql = "SELECT COUNT(visits_id) AS `result` FROM cmw_visits WHERE visits_date BETWEEN (:range_start) AND (:range_finish)";
+            $sql = "SELECT COUNT(DISTINCT visits_ip) AS `result` FROM cmw_visits WHERE visits_date BETWEEN (:range_start) AND (:range_finish)";
 
             $db = self::getInstance();
             $req = $db->prepare($sql);
             $res = $req->execute($var);
 
         else:
-            $sql = "SELECT COUNT(visits_id) AS `result` FROM cmw_visits";
+            $sql = "SELECT COUNT(DISTINCT visits_ip) AS `result` FROM cmw_visits";
 
             $db = self::getInstance();
             $req = $db->prepare($sql);
@@ -167,7 +167,7 @@ class VisitsMetricsManager extends DatabaseManager
             "range_finish" => $rangeFinish
         );
 
-        $sql = "SELECT COUNT(visits_id) AS `result` FROM cmw_visits WHERE visits_date BETWEEN (:range_start) AND (:range_finish)";
+        $sql = "SELECT COUNT(DISTINCT visits_ip) AS `result` FROM cmw_visits WHERE visits_date BETWEEN (:range_start) AND (:range_finish)";
 
         $db = self::getInstance();
         $req = $db->prepare($sql);
@@ -185,7 +185,7 @@ class VisitsMetricsManager extends DatabaseManager
      */
     public function getMonthlyBestVisits(): int
     {
-        $sql = "SELECT DATE_FORMAT(`visits_date`, '%M') AS `month`, COUNT(visits_id) count
+        $sql = "SELECT DATE_FORMAT(`visits_date`, '%M') AS `month`, COUNT(DISTINCT visits_ip) count
                 FROM cmw_visits
                 GROUP BY DATE_FORMAT(`visits_date`, '%M') ORDER BY month DESC LIMIT 1";
 
@@ -222,6 +222,60 @@ class VisitsMetricsManager extends DatabaseManager
 
             if ($targetMonth === $currentMonth){
                 $toReturn[$targetMonthTranslate] += $this->getFileLineNumber();
+            }
+
+        }
+        return array_reverse($toReturn);
+    }
+
+    /**
+     * @param int $pastDays
+     * @return array
+     */
+    public function getPastDaysVisits(int $pastDays): array
+    {
+        $currentDays = idate("d");
+
+        $toReturn = [];
+
+        for ($i = 0; $i < $pastDays; $i++) {
+            $targetDay = idate("d", strtotime("-$i days"));
+
+
+            $rangeStart = date("Y-m-d 00:00:00", strtotime("-$i days"));
+            $rangeFinish = date("Y-m-d 23:59:59", strtotime("-$i days"));
+
+            $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish);
+
+            if ($targetDay === $currentDays){
+                $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish) + $this->getFileLineNumber();
+            }
+
+        }
+        return array_reverse($toReturn);
+    }
+
+    /**
+     * @param int $pastWeeks
+     * @return array
+     */
+    public function getPastWeeksVisits(int $pastWeeks): array
+    {
+        $currentWeeks = idate('W');
+
+        $toReturn = [];
+
+        for ($i = 0; $i < $pastWeeks; $i++) {
+            $targetWeek = idate("W", strtotime("-$i weeks"));
+
+
+            $rangeStart = date("Y-m-d 00:00:00", strtotime("-$i Monday"));
+            $rangeFinish = date("Y-m-d 23:59:59", strtotime("-$i Sunday"));
+
+            $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish);
+
+            if ($targetWeek === $currentWeeks){
+                $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish) + $this->getFileLineNumber();
             }
 
         }

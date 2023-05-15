@@ -27,6 +27,7 @@ return [
         "total_member" => "Total Members",
         "best_views" => "Record of Visits",
         "numbers_views" => "Number of Visits and inscriptions",
+        "daily_visits" => "Daily visits",
         "monthly_visits" => "Monthly Visits",
         "total_visits" => "Total Visits",
         "welcome" => "Welcome",
@@ -281,7 +282,7 @@ return [
         11 => "November",
         12 => "December"
     ],
-
+    "week" => "Week ",
     "errors" => [
         "requests" => [
             'required' => 'Missing input %key%',
