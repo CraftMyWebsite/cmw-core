@@ -133,14 +133,14 @@ class VisitsMetricsManager extends DatabaseManager
                 "range_finish" => $rangeFinish
             );
 
-            $sql = "SELECT COUNT(visits_id) AS `result` FROM cmw_visits WHERE visits_date BETWEEN (:range_start) AND (:range_finish)";
+            $sql = "SELECT COUNT(DISTINCT visits_ip) AS `result` FROM cmw_visits WHERE visits_date BETWEEN (:range_start) AND (:range_finish)";
 
             $db = self::getInstance();
             $req = $db->prepare($sql);
             $res = $req->execute($var);
 
         else:
-            $sql = "SELECT COUNT(visits_id) AS `result` FROM cmw_visits";
+            $sql = "SELECT COUNT(DISTINCT visits_ip) AS `result` FROM cmw_visits";
 
             $db = self::getInstance();
             $req = $db->prepare($sql);
@@ -167,7 +167,7 @@ class VisitsMetricsManager extends DatabaseManager
             "range_finish" => $rangeFinish
         );
 
-        $sql = "SELECT COUNT(visits_id) AS `result` FROM cmw_visits WHERE visits_date BETWEEN (:range_start) AND (:range_finish)";
+        $sql = "SELECT COUNT(DISTINCT visits_ip) AS `result` FROM cmw_visits WHERE visits_date BETWEEN (:range_start) AND (:range_finish)";
 
         $db = self::getInstance();
         $req = $db->prepare($sql);
@@ -185,7 +185,7 @@ class VisitsMetricsManager extends DatabaseManager
      */
     public function getMonthlyBestVisits(): int
     {
-        $sql = "SELECT DATE_FORMAT(`visits_date`, '%M') AS `month`, COUNT(visits_id) count
+        $sql = "SELECT DATE_FORMAT(`visits_date`, '%M') AS `month`, COUNT(DISTINCT visits_ip) count
                 FROM cmw_visits
                 GROUP BY DATE_FORMAT(`visits_date`, '%M') ORDER BY month DESC LIMIT 1";
 

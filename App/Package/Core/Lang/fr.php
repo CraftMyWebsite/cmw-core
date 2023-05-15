@@ -27,6 +27,7 @@ return [
         "total_member" => "Membres totaux",
         "best_views" => "Record de visites",
         "numbers_views" => "Nombres de visites et d'inscriptions",
+        "daily_visits" => "Visites du jours",
         "monthly_visits" => "Visites du mois",
         "total_visits" => "Visistes totales",
         "welcome" => "Bienvenue",
