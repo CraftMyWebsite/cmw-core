@@ -227,4 +227,58 @@ class VisitsMetricsManager extends DatabaseManager
         }
         return array_reverse($toReturn);
     }
+
+    /**
+     * @param int $pastDays
+     * @return array
+     */
+    public function getPastDaysVisits(int $pastDays): array
+    {
+        $currentDays = idate("d");
+
+        $toReturn = [];
+
+        for ($i = 0; $i < $pastDays; $i++) {
+            $targetDay = idate("d", strtotime("-$i days"));
+
+
+            $rangeStart = date("Y-m-d 00:00:00", strtotime("-$i days"));
+            $rangeFinish = date("Y-m-d 23:59:59", strtotime("-$i days"));
+
+            $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish);
+
+            if ($targetDay === $currentDays){
+                $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish) + $this->getFileLineNumber();
+            }
+
+        }
+        return array_reverse($toReturn);
+    }
+
+    /**
+     * @param int $pastWeeks
+     * @return array
+     */
+    public function getPastWeeksVisits(int $pastWeeks): array
+    {
+        $currentWeeks = idate('W');
+
+        $toReturn = [];
+
+        for ($i = 0; $i < $pastWeeks; $i++) {
+            $targetWeek = idate("W", strtotime("-$i weeks"));
+
+
+            $rangeStart = date("Y-m-d 00:00:00", strtotime("-$i Monday"));
+            $rangeFinish = date("Y-m-d 23:59:59", strtotime("-$i Sunday"));
+
+            $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish);
+
+            if ($targetWeek === $currentWeeks){
+                $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish) + $this->getFileLineNumber();
+            }
+
+        }
+        return array_reverse($toReturn);
+    }
 }

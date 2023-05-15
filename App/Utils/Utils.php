@@ -114,6 +114,39 @@ class Utils
     }
 
     /**
+     * @param int $pastMonths
+     * @return array
+     * @desc Get past days from now to - past days.
+     */
+    public static function getPastDays(int $pastDays): array
+    {
+        $toReturn = [];
+
+        for ($i = 0; $i < $pastDays; $i++) {
+            $toReturn[] = date('d/m/Y', strtotime("-$i days"));
+        }
+
+        return array_reverse($toReturn);
+    }
+
+    /**
+     * @param int $pastWeeks
+     * @return array
+     * @desc Get past weeks from now to - past weeks.
+     */
+    public static function getPastWeeks(int $pastWeeks): array
+    {
+        $toReturn = [];
+
+        for ($i = 0; $i < $pastWeeks; $i++) {
+            $targetWeek = date('W', strtotime("-$i weeks"));
+            $toReturn[] = LangManager::translate("core.week") . $targetWeek;
+        }
+
+        return array_reverse($toReturn);
+    }
+
+    /**
      * @param string|null ...$values
      * @return bool
      * @deprecated please prefer {@see \CMW\Utils\Utils::containsNullValue()}

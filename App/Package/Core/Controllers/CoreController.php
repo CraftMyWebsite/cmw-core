@@ -54,11 +54,13 @@ class CoreController extends AbstractController
             header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard'); //todo redirect
         }
 
-        $visits = (new VisitsMetricsManager())->getPastMonthsVisits(5);
+        $monthlyVisits = (new VisitsMetricsManager())->getPastMonthsVisits(5);
+        $dailyVisits = (new VisitsMetricsManager())->getPastDaysVisits(15);
+        $weeklyVisits = (new VisitsMetricsManager())->getPastWeeksVisits(4);
         $registers = UsersMetricsModel::getInstance()->getPastMonthsRegisterNumbers(5);
 
         View::createAdminView("Core", "dashboard")
-        ->addVariableList(['visits' => $visits, 'registers' => $registers])
+        ->addVariableList(['monthlyVisits' => $monthlyVisits,'dailyVisits' => $dailyVisits ,'weeklyVisits' => $weeklyVisits , 'registers' => $registers])
         ->addScriptBefore("Admin/Resources/Vendors/Chart/chart.min.js")
         ->addScriptAfter("App/Package/Core/Views/Resources/Js/dashboard.js")
         ->view();

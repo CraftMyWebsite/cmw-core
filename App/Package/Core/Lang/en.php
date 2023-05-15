@@ -282,7 +282,7 @@ return [
         11 => "November",
         12 => "December"
     ],
-
+    "week" => "Week ",
     "errors" => [
         "requests" => [
             'required' => 'Missing input %key%',

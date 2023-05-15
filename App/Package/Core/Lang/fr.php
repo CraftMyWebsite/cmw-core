@@ -283,6 +283,7 @@ return [
         11 => "Novembre",
         12 => "Decembre"
     ],
+    "week" => "Semaine ",
     "errors" => [
         "requests" => [
             'required' => 'Champs %key% manquant',
