@@ -8126,7 +8126,7 @@ body.theme-dark .sidebar-wrapper {
     position: fixed;
     top: 0;
     transition: left .5s ease-out;
-    width: 300px;
+    width: 250px;
     z-index: 10
 }
 
@@ -8149,7 +8149,7 @@ body.theme-dark .sidebar-wrapper .sidebar-toggler.x {
 body.theme-dark .sidebar-wrapper .menu {
     font-weight: 600;
     margin-top: 2rem;
-    padding: 0 2rem
+    padding: 0 .8rem
 }
 
 body.theme-dark .sidebar-wrapper .menu .sidebar-title {
@@ -8252,7 +8252,7 @@ body.theme-dark .sidebar-wrapper .menu .submenu .submenu-item a {
     font-size: .85rem;
     font-weight: 600;
     letter-spacing: .5px;
-    padding: .3rem 1.5rem;
+    padding: .3rem 1rem;
     transition: all .3s
 }
 
@@ -8873,7 +8873,7 @@ body.theme-dark .burger-btn {
 }
 
 body.theme-dark #main {
-    margin-left: 300px;
+    margin-left: 250px;
     min-height: 100vh;
     padding: 2rem
 }

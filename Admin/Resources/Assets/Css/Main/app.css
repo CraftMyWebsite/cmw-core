@@ -20642,7 +20642,7 @@ textarea.form-control-lg {
     position: fixed;
     top: 0;
     transition: left .5s ease-out;
-    width: 300px;
+    width: 250px;
     z-index: 10
 }
 
@@ -20666,7 +20666,7 @@ textarea.form-control-lg {
 .sidebar-wrapper .menu {
     font-weight: 600;
     margin-top: 2rem;
-    padding: 0 2rem
+    padding: 0 .8rem
 }
 
 .sidebar-wrapper .menu .sidebar-title {
@@ -20768,7 +20768,7 @@ textarea.form-control-lg {
     font-size: .85rem;
     font-weight: 600;
     letter-spacing: .5px;
-    padding: .3rem 1.5rem;
+    padding: .3rem 1rem;
     transition: all .3s
 }
 
@@ -21387,7 +21387,7 @@ textarea.form-control-lg {
 }
 
 #main {
-    margin-left: 300px;
+    margin-left: 250px;
     min-height: 100vh;
     padding: 2rem
 }
