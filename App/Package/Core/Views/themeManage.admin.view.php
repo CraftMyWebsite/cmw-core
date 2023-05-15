@@ -8,14 +8,14 @@ $title = LangManager::translate("core.Theme.manage.title", ["Theme" => ThemeCont
 $description = LangManager::translate("core.Theme.manage.description"); ?>
 
 <div class="d-flex flex-wrap justify-content-between" style="width: 100%">
-    <h3><i class="fa-solid fa-pen-nib"></i> <span class="m-lg-auto">Apparence de <b><?= ThemeController::getCurrentTheme()->getName() ?></b></span></h3>
+    <h3><i class="fa-solid fa-pen-nib"></i> <span class="m-lg-auto"><?= LangManager::translate("core.Theme.appearance") ?><b><?= ThemeController::getCurrentTheme()->getName() ?></b></span></h3>
     <div class="d-flex flex-wrap justify-content-end">
         <form class="me-4" action="market/regenerate" method="post">
             <?php (new SecurityManager())->insertHiddenToken() ?>
-            <button type="submit" class="btn btn-warning ">Réinitialiser</button>
+            <button type="submit" class="btn btn-warning "><?= LangManager::translate("core.Theme.reset") ?></button>
         </form>
         <div>
-            <button form="ThemeSettings" type="submit" class="btn btn-primary">Sauvegarder</button>
+            <button form="ThemeSettings" type="submit" class="btn btn-primary"><?= LangManager::translate("core.btn.save") ?></button>
         </div>
     </div>
 </div>
