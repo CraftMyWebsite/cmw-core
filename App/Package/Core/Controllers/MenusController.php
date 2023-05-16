@@ -9,6 +9,7 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Loader\Loader;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Package\AbstractController;
+use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\MenusModel;
@@ -39,8 +40,10 @@ class MenusController extends AbstractController
         $view = View::createAdminView('Core', 'menus')
             ->addVariableList(['packagesLinks' => $this->getPackagesLinks(), 'roles' => (new RolesModel())->getRoles(),
                 'menus' => MenusModel::getInstance()->getMenus()])
+            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
             ->addScriptBefore("App/Package/Core/Views/Resources/Js/sortable.min.js")
-            ->addScriptAfter("App/Package/Core/Views/Resources/Js/menu.js");
+            ->addScriptAfter("App/Package/Core/Views/Resources/Js/menu.js","Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
+                "Admin/Resources/Assets/Js/Pages/simple-datatables.js");
         $view->view();
     }
 
@@ -91,6 +94,22 @@ class MenusController extends AbstractController
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.menus.add.toaster.success"));
+
+        Redirect::redirectPreviousRoute();
+    }
+
+    #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/menus")]
+    public function adminMenuDelete(Request $request,int $id): int
+    {
+        Flash::send(Alert::SUCCESS, "sss","sssss");
+
+
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "contact.delete");
+
+        menusModel::getInstance()->deleteMessage($id);
+
+        /*Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
+            LangManager::translate("contact.toaster.delete.success"));*/
 
         Redirect::redirectPreviousRoute();
     }

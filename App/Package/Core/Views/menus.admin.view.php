@@ -147,22 +147,78 @@ $description = LangManager::translate("core.menus.desc");
                 </div>
             </div>
         </div>
-
-
-        <!-- List menus -->
-
-        <div class="container col-12 mt-4">
-            <div id="nested" class="card">
-                <div id="menus" class="list-group col nested-sortable">
-                    <?php foreach ($menus as $menu): ?>
-                        <div class="list-group-item nested-1">
-                            <i class="fas fa-arrows-alt handle"></i>
-                            <input type="hidden" value="<?= $menu->getId() ?>" name="id[]" hidden>
-                            <p class="content-editable" contenteditable="true"><?= $menu->getName() ?></p>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
+        <div class="card">
+            <div class="card-header">
+                <h4>Menu</h4>
             </div>
+            <div class="card-body">
+                <table class="table" id="table1">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Nom</th>
+                        <th class="text-center">Lien</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody class="text-center">
+                    <?php foreach ($menus as $menu): ?>
+                        <tr>
+                            <td><?= $menu->getName() ?></td>
+                            <td><?= $menu->getUrl() ?></td>
+                            <td>
+                                <a type="button" data-bs-toggle="modal" data-bs-target="#delete-<?= $menu->getId() ?>">
+                                    <i class="text-danger fas fa-trash-alt"></i>
+                                </a>
+                                <div class="modal fade text-left" id="delete-<?= $menu->getId() ?>" tabindex="-1"
+                                     role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                                         role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-danger">
+                                                <h5 class="modal-title white" id="myModalLabel160">
+                                                    Supprimer <?= $menu->getName() ?> ?</h5>
+                                            </div>
+                                            <div class="modal-body text-left">
+                                                Voulez-vous vraiment supprimé ce menu ?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-light-secondary"
+                                                        data-bs-dismiss="modal">
+                                                    <span class=""><?= LangManager::translate("core.btn.close") ?></span>
+                                                </button>
+                                                <a href="/cmw-admin/menus/delete/<?= $menu->getId() ?>"
+                                                   class="btn btn-danger">
+                                                    <span class="">Supprimer</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- List menus -->
+
+<div class="container col-12 mt-4">
+    <div id="nested" class="card">
+        <div id="menus" class="list-group col nested-sortable">
+            <?php foreach ($menus as $menu): ?>
+                <div class="list-group-item nested-1">
+                    <i class="fas fa-arrows-alt handle"></i>
+                    <input type="hidden" value="<?= $menu->getId() ?>" name="id[]" hidden>
+                    <p class="content-editable" contenteditable="true"><?= $menu->getName() ?></p>
+                </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </div>

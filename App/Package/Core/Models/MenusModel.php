@@ -162,4 +162,13 @@ class MenusModel extends AbstractModel
         return $roles;
     }
 
+    public function deleteMessage(int $id): int
+    {
+        $sql = "DELETE FROM cmw_menus WHERE menu_id=:id";
+
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare($sql);
+        $req->execute(array("id" => $id));
+    }
+
 }
