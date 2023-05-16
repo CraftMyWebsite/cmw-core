@@ -54,9 +54,9 @@ class CoreController extends AbstractController
             header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard'); //todo redirect
         }
 
-        $monthlyVisits = (new VisitsMetricsManager())->getPastMonthsVisits(5);
-        $dailyVisits = (new VisitsMetricsManager())->getPastDaysVisits(15);
-        $weeklyVisits = (new VisitsMetricsManager())->getPastWeeksVisits(4);
+        $monthlyVisits = (new VisitsMetricsManager())->getPastMonthsVisits(12);
+        $dailyVisits = (new VisitsMetricsManager())->getPastDaysVisits(17);
+        $weeklyVisits = (new VisitsMetricsManager())->getPastWeeksVisits(17);
         $registers = UsersMetricsModel::getInstance()->getPastMonthsRegisterNumbers(5);
 
         View::createAdminView("Core", "dashboard")

@@ -269,8 +269,8 @@ class VisitsMetricsManager extends DatabaseManager
             $targetWeek = idate("W", strtotime("-$i weeks"));
 
 
-            $rangeStart = date("Y-m-d 00:00:00", strtotime("-$i Monday"));
-            $rangeFinish = date("Y-m-d 23:59:59", strtotime("-$i Sunday"));
+            $rangeStart = date("Y-m-d 00:00:00", strtotime("-$i monday this week"));
+            $rangeFinish = date("Y-m-d 23:59:59", strtotime("-$i sunday this week"));
 
             $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish);
 
