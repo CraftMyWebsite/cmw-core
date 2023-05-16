@@ -45,6 +45,9 @@ class VisitsMetricsManager extends DatabaseManager
 
     private function isDuplicateVisit(string $currentPath): bool
     {
+        if (!isset($_SESSION['latestVisitPath'])){
+            return false;
+        }
         return $_SESSION['latestVisitPath'] === $currentPath;
     }
 
