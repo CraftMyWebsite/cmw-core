@@ -40,10 +40,8 @@ class MenusController extends AbstractController
         $view = View::createAdminView('Core', 'menus')
             ->addVariableList(['packagesLinks' => $this->getPackagesLinks(), 'roles' => (new RolesModel())->getRoles(),
                 'menus' => MenusModel::getInstance()->getMenus()])
-            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
             ->addScriptBefore("App/Package/Core/Views/Resources/Js/sortable.min.js")
-            ->addScriptAfter("App/Package/Core/Views/Resources/Js/menu.js","Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
-                "Admin/Resources/Assets/Js/Pages/simple-datatables.js");
+            ->addScriptAfter("App/Package/Core/Views/Resources/Js/menu.js");
         $view->view();
     }
 
@@ -99,9 +97,9 @@ class MenusController extends AbstractController
     }
 
     #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/menus")]
-    public function adminMenuDelete(Request $request,int $id): int
+    public function adminMenuDelete(Request $request,int $id): void
     {
-        Flash::send(Alert::SUCCESS, "sss","sssss");
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),"Menu supprimé");
 
 
         UsersController::redirectIfNotHavePermissions("core.dashboard", "contact.delete");
@@ -111,6 +109,6 @@ class MenusController extends AbstractController
         /*Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("contact.toaster.delete.success"));*/
 
-        Redirect::redirectPreviousRoute();
+        Redirect::redirect("cmw-admin/menus");
     }
 }
