@@ -165,13 +165,13 @@ $description = LangManager::translate("core.dashboard.desc");
 
 <script>
     const dashboardMonthlyVisits = document.getElementById('dashboardMonthlyVisits');
-    const dashboardMonthlyVisitsLabels = <?= json_encode(Utils::getPastMonths(5), JSON_THROW_ON_ERROR) ?>;
+    const dashboardMonthlyVisitsLabels = <?= json_encode(Utils::getPastMonths(12), JSON_THROW_ON_ERROR) ?>;
 
     const dashboardDailyVisits = document.getElementById('dashboardDailyVisits');
-    const dashboardDailyVisitsLabels = <?= json_encode(Utils::getPastDays(15), JSON_THROW_ON_ERROR) ?>;
+    const dashboardDailyVisitsLabels = <?= json_encode(Utils::getPastDays(17), JSON_THROW_ON_ERROR) ?>;
 
     const dashboardWeeklyVisits = document.getElementById('dashboardWeeklyVisits');
-    const dashboardWeeklyVisitsLabels = <?= json_encode(Utils::getPastWeeks(4), JSON_THROW_ON_ERROR) ?>;
+    const dashboardWeeklyVisitsLabels = <?= json_encode(Utils::getPastWeeks(17), JSON_THROW_ON_ERROR) ?>;
 
 
     const dashboardMonthlyVisitsData = {
@@ -188,7 +188,7 @@ $description = LangManager::translate("core.dashboard.desc");
                 borderWidth: 2,
                 borderRadius: 10,
             },
-            {
+            /*{
                 label: '<?= LangManager::translate('core.dashboard.registers') ?>',
                 data: [
                     <?php foreach ($registers as $register):
@@ -198,7 +198,7 @@ $description = LangManager::translate("core.dashboard.desc");
                 backgroundColor: '#bf30df',
                 borderWidth: 2,
                 borderRadius: 10,
-            }
+            }*/
         ]
     };
 
@@ -214,7 +214,7 @@ $description = LangManager::translate("core.dashboard.desc");
                 label: '<?= LangManager::translate('core.dashboard.visits') ?>',
                 backgroundColor: '#ab4057',
                 borderWidth: 2,
-                borderRadius: 20,
+                borderRadius: 10,
             }
         ]
     };
