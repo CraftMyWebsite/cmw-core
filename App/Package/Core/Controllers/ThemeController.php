@@ -223,6 +223,8 @@ class ThemeController extends AbstractController
         ThemeModel::getInstance()->deleteThemeConfig($themeName);
         $this->installThemeSettings($themeName);
 
+        ThemeModel::getInstance()->initConfigCache(self::getCurrentTheme()->getName());
+
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.Theme.regenerate"));
 
@@ -247,6 +249,8 @@ class ThemeController extends AbstractController
         //Install Theme settings
         $this->installThemeSettings($theme['name']);
         CoreModel::updateOption("theme", $theme['name']);
+
+        ThemeModel::getInstance()->initConfigCache($theme['name']);
 
         //TODO TOASTER
 

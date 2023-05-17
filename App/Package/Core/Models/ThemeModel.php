@@ -3,6 +3,7 @@
 namespace CMW\Model\Core;
 
 use CMW\Controller\Core\ThemeController;
+use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Package\AbstractModel;
@@ -17,24 +18,35 @@ class ThemeModel extends AbstractModel
 {
     /**
      * @param string $config
-     * @param string|null $theme
+     * @param string|null $themeName
      * <p>
      * If empty, we take the current active Theme
      * </p>
      * @return string|null
      * @desc Fetch config data
      */
-    public static function fetchConfigValue(string $config, string $theme = null): ?string
+    public static function fetchConfigValue(string $config, string $themeName = null): ?string
     {
-        if ($theme === null) {
-            $theme = ThemeController::getCurrentTheme()->getName();
+        if ($themeName === null) {
+            $themeName = ThemeController::getCurrentTheme()->getName();
+        }
+
+        //TODO Add a toggle ?
+        if (SimpleCacheManager::cacheExist('config', "Themes/$themeName")){
+            $data = SimpleCacheManager::getCache('config', "Themes/$themeName");
+
+            foreach ($data as $conf) {
+                if ($conf['theme_config_name'] === $config){
+                    return $conf['theme_config_value'] ?? "UNDEFINED_$config";
+                }
+           }
         }
 
         $db = DatabaseManager::getInstance();
-        $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config 
+        $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config
                                     WHERE theme_config_name = :config AND theme_config_theme = :theme');
 
-        $req->execute(array("config" => $config, "theme" => $theme));
+        $req->execute(array("config" => $config, "theme" => $themeName));
 
         return $req->fetch()["theme_config_value"] ?? "";
     }
@@ -107,6 +119,30 @@ class ThemeModel extends AbstractModel
         $req = $db->prepare('DELETE FROM cmw_theme_config WHERE theme_config_theme = :themeName');
 
         $req->execute(array("themeName" => $themeName));
+    }
+
+    public function initConfigCache(string $themeName): void
+    {
+        $sql = "SELECT * FROM cmw_theme_config WHERE theme_config_theme = :theme";
+        $db = DatabaseManager::getInstance();
+
+        $req = $db->prepare($sql);
+
+        if (!$req->execute(['theme' => $themeName])){
+            return;
+        }
+
+        $res = $req->fetchAll();
+
+        if (!$res){
+            return;
+        }
+
+        if (SimpleCacheManager::cacheExist('config', "Themes/$themeName")){
+            SimpleCacheManager::deleteSpecificCacheFile('config', "Themes/$themeName");
+        }
+
+        SimpleCacheManager::storeCache($res, 'config', "Themes/$themeName");
     }
 
 }
