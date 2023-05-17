@@ -25,7 +25,12 @@ class Loader
         AutoLoad::load();
     }
 
-    public static function &getAttributeList(): array
+    private static function &getAttributeListPointer(): array
+    {
+        return self::$attributeList;
+    }
+
+    public static function getAttributeList(): array
     {
         return self::$attributeList;
     }
@@ -168,11 +173,11 @@ class Loader
             $attrList = $method->getAttributes();
             foreach ($attrList as $attribute) {
 
-                if (!isset(self::getAttributeList()[$attribute->getName()])) {
-                    self::getAttributeList()[$attribute->getName()] = array();
+                if (!isset(self::getAttributeListPointer()[$attribute->getName()])) {
+                    self::getAttributeListPointer()[$attribute->getName()] = array();
                 }
 
-                self::getAttributeList()[$attribute->getName()][] = [$attribute, $method];
+                self::getAttributeListPointer()[$attribute->getName()][] = [$attribute, $method];
             }
         }
 

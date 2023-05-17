@@ -6,98 +6,133 @@ use Closure;
 use CMW\Manager\Collections\Collection;
 use CMW\Manager\Collections\CollectionEntity;
 use CMW\Manager\Loader\Loader;
+use CMW\Utils\Log;
 use JetBrains\PhpStorm\ExpectedValues;
 use ReflectionClass;
 use ReflectionMethod;
 
 class Emitter
 {
+    private static array $listenerCounter = array();
+    private static AbstractEvent $actualEvent;
 
-    private static function getData(): CollectionEntity {
-        return Collection::getInstance()->get("emitter");
+    private static function loadAttributeByEvent(array $attributeList, #[ExpectedValues(AbstractEvent::class)] string $eventName, array &$eventAttributes): void
+    {
+        /**
+         * @var $attr ReflectionClass
+         * @var $method ReflectionMethod
+         */
+        foreach ($attributeList as [$attr, $method]) {
+
+            /** @var Listener $attributeInstance */
+            $attributeInstance = $attr->newInstance();
+
+            //todo use GlobalObject getInstance
+            if ($eventName !== $attributeInstance->getEventName()) {
+                continue;
+            }
+
+            if (!isset(self::$listenerCounter[$eventName][$method->getName()])) {
+                self::$listenerCounter[$eventName][$method->getName()] = 0;
+            }
+
+            $eventAttributes[] = [$attributeInstance, $method];
+        }
     }
 
-    private static function getEventData(string $eventName): CollectionEntity | null {
-        return Collection::getInstance()->get("emitter")->getWithKey($eventName)?->getWithKey($eventName);
+    private static function sortAttributes(array &$eventAttributes): void
+    {
+        usort($eventAttributes, static function (array $a, array $b) {
+            [$firstAttr,] = $a;
+            [$secondAttr,] = $b;
+            return $secondAttr->getWeight() - $firstAttr->getWeight();
+        });
     }
-
 
     /**
      * @throws \ReflectionException
      */
-    public static function listen(#[ExpectedValues(AbstractEvent::class)] string $eventName, Closure $closure): void
+    private static function initEventClass(#[ExpectedValues(AbstractEvent::class)] string $eventName): void
     {
-
-        $event = new ReflectionClass($eventName);
-        /* @var \CMW\Manager\Events\AbstractEvent $eventInstance*/
-        $eventInstance = $event->newInstance();
-
-        $eventInstance->init();
-
-        echo $eventInstance->getName() . "<br>";
-        $eventInstance->increment();
-        echo $eventInstance->getCounter();
+        self::$actualEvent = (new ReflectionClass($eventName))->getMethod("getInstance")->invoke(null);
+        self::$actualEvent->init();
     }
 
-    public static function send(#[ExpectedValues(AbstractEvent::class)] string $eventName, mixed $data): void
+    private static function hasExceededCall(Listener $listener, int $listenerCounter): bool
     {
+        return $listener->getTimes() !== 0 && $listenerCounter > 0 && $listenerCounter >= $listener->getTimes();
+    }
 
-        $attrubuteList = Loader::getAttributeList()[Listener::class];
+    private static function getCounterByMethod(#[ExpectedValues(AbstractEvent::class)] string $eventName, ReflectionMethod $method): int
+    {
+        return self::$listenerCounter[$eventName][$method->getName()];
+    }
 
-        $eventAttributes = array();
+    /**
+     * @throws \ReflectionException
+     */
+    private static function invokeEventMethod(#[ExpectedValues(AbstractEvent::class)] string $eventName, ReflectionMethod $method, mixed $data): void
+    {
+        $controller = $method->getDeclaringClass()->getMethod("getInstance")->invoke(null);
+        $method->invoke($controller, $data);
 
-        if(!isset($attrubuteList)) {
-            return;
-        }
+        self::increment($eventName, $method);
+    }
 
-        foreach($attrubuteList as [$attr, $method]) {
+    private static function increment(#[ExpectedValues(AbstractEvent::class)] string $eventName, ReflectionMethod $method): void
+    {
+        self::$listenerCounter[$eventName][$method->getName()]++;
+    }
 
-            if($eventName !== $attr->newInstance()->getEventName()) {
-                continue;
-            }
+    /**
+     * @throws \ReflectionException
+     */
+    private static function invoke(#[ExpectedValues(AbstractEvent::class)] string $eventName, array $eventAttributes, mixed $data) : void
+    {
+        /* @var \CMW\Manager\Events\Listener $attr */
+        /* @var ReflectionMethod $method */
+        foreach ($eventAttributes as [$attr, $method]) {
 
-            $eventAttributes[] = [$attr->newInstance(), $method];
-        }
-
-        usort($eventAttributes, static function (array $a, array $b) {
-            return $a[0]->getWeight() > $b[0]->getWeight();
-        });
-
-
-        /**
-         * @var \CMW\Manager\Events\AbstractEvent $eventClass
-         */
-        $eventClass = (new \ReflectionClass($eventName))->newInstance();
-        $eventClass->init();
-
-        /**
-         * @var \CMW\Manager\Events\Listener $attr
-         * @var ReflectionMethod $method
-         */
-        foreach($eventAttributes as [$attr, $method]) {
-
-            /**
-             * Ici, le counter est mal fait, car on compte le nombre de fois que la classe à été appelée, alors qu'on veut sur la méthode, alors il faut le faire du'une autre façon ? :)
-             */
-            var_dump($eventClass->getCounter(), $attr->getTimes(), $eventClass->canPropagate());
-
-            //if($eventClass->getCounter() < $attr->getTimes()) {
-            if(false) {
-                continue;
-            }
-
-            if(!$eventClass->canPropagate()) {
+            if (!self::$actualEvent->canPropagate()) {
                 break;
             }
 
-            $controller = $method->getDeclaringClass()->newInstance();
-            $methodName = $method->getName();
-            $controller->$methodName($data);
+            if (self::hasExceededCall($attr, self::getCounterByMethod($eventName, $method))) {
+                continue;
+            }
 
-
-            $eventClass->increment();
-
+            self::invokeEventMethod($eventName, $method, $data);
         }
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public static function send(#[ExpectedValues(AbstractEvent::class)] string $eventName, mixed $data): void
+    {
+
+        $attributeList = Loader::getAttributeList()[Listener::class];
+        $eventAttributes = array();
+
+        if (empty($attributeList)) {
+            return;
+        }
+
+        if (!isset(self::$listenerCounter[$eventName])) {
+            self::$listenerCounter[$eventName] = array();
+        }
+
+        self::loadAttributeByEvent($attributeList, $eventName, $eventAttributes);
+
+        if (empty($eventAttributes)) {
+            return;
+        }
+
+        self::sortAttributes($eventAttributes);
+
+        self::initEventClass($eventName);
+
+        self::invoke($eventName, $eventAttributes, $data);
     }
 
 }
