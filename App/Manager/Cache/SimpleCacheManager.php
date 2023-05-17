@@ -42,7 +42,7 @@ class SimpleCacheManager
      * @param string $subFolder
      * @return mixed
      */
-    public function getCache(string $fileName, string $subFolder = "/"): mixed
+    public static function getCache(string $fileName, string $subFolder = "/"): mixed
     {
         $fileName .= ".cache";
 

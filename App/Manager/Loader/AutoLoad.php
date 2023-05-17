@@ -44,6 +44,7 @@ class AutoLoad
 
             return match (ucfirst($classPart[1])) {
                 "Controller" => self::callPackage($classPart, "App/Package/", "/Controllers/"),
+                "Event" => self::callPackage($classPart, "App/Package/", "/Events/"),
                 "Model" => self::callPackage($classPart, "App/Package/", "/Models/"),
                 "Entity" => self::callPackage($classPart, "App/Package/", "/Entities/"),
                 "Interface" => self::callPackage($classPart, "App/Package/", "/Interfaces/"),

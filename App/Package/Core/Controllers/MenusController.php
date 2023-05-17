@@ -9,6 +9,7 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Loader\Loader;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Package\AbstractController;
+use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\MenusModel;
@@ -93,5 +94,21 @@ class MenusController extends AbstractController
             LangManager::translate("core.menus.add.toaster.success"));
 
         Redirect::redirectPreviousRoute();
+    }
+
+    #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/menus")]
+    public function adminMenuDelete(Request $request,int $id): void
+    {
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),"Menu supprimé");
+
+
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "contact.delete");
+
+        menusModel::getInstance()->deleteMessage($id);
+
+        /*Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
+            LangManager::translate("contact.toaster.delete.success"));*/
+
+        Redirect::redirect("cmw-admin/menus");
     }
 }
