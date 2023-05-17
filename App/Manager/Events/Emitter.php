@@ -6,98 +6,90 @@ use Closure;
 use CMW\Manager\Collections\Collection;
 use CMW\Manager\Collections\CollectionEntity;
 use CMW\Manager\Loader\Loader;
+use CMW\Utils\Log;
 use JetBrains\PhpStorm\ExpectedValues;
 use ReflectionClass;
 use ReflectionMethod;
 
 class Emitter
 {
-
-    private static function getData(): CollectionEntity {
-        return Collection::getInstance()->get("emitter");
-    }
-
-    private static function getEventData(string $eventName): CollectionEntity | null {
-        return Collection::getInstance()->get("emitter")->getWithKey($eventName)?->getWithKey($eventName);
-    }
-
+    private static array $listenerCounter = array();
 
     /**
      * @throws \ReflectionException
      */
-    public static function listen(#[ExpectedValues(AbstractEvent::class)] string $eventName, Closure $closure): void
-    {
-
-        $event = new ReflectionClass($eventName);
-        /* @var \CMW\Manager\Events\AbstractEvent $eventInstance*/
-        $eventInstance = $event->newInstance();
-
-        $eventInstance->init();
-
-        echo $eventInstance->getName() . "<br>";
-        $eventInstance->increment();
-        echo $eventInstance->getCounter();
-    }
-
     public static function send(#[ExpectedValues(AbstractEvent::class)] string $eventName, mixed $data): void
     {
 
-        $attrubuteList = Loader::getAttributeList()[Listener::class];
+        $attributeList = Loader::getAttributeList()[Listener::class];
 
-        $eventAttributes = array();
-
-        if(!isset($attrubuteList)) {
+        if (empty($attributeList)) {
             return;
         }
 
-        foreach($attrubuteList as [$attr, $method]) {
+        $eventAttributes = array();
 
-            if($eventName !== $attr->newInstance()->getEventName()) {
+        if (!isset(static::$listenerCounter[$eventName])) {
+            static::$listenerCounter[$eventName] = array();
+        }
+
+        /**
+         * @var $attr ReflectionClass
+         * @var $method ReflectionMethod
+         */
+        foreach ($attributeList as [$attr, $method]) {
+
+            /** @var Listener $attributeInstance */
+            $attributeInstance = $attr->newInstance();
+
+            //todo use GlobalObject getInstance
+            if ($eventName !== $attributeInstance->getEventName()) {
                 continue;
             }
 
-            $eventAttributes[] = [$attr->newInstance(), $method];
+            if (!isset(static::$listenerCounter[$eventName][$method->getName()])) {
+                static::$listenerCounter[$eventName][$method->getName()] = 0;
+            }
+
+            $eventAttributes[] = [$attributeInstance, $method];
+        }
+
+        if (empty($eventAttributes)) {
+            return;
         }
 
         usort($eventAttributes, static function (array $a, array $b) {
-            return $a[0]->getWeight() > $b[0]->getWeight();
+            [$firstAttr, ] = $a;
+            [$secondAttr, ] = $b;
+            return $secondAttr->getWeight() - $firstAttr->getWeight();
         });
 
 
-        /**
-         * @var \CMW\Manager\Events\AbstractEvent $eventClass
-         */
-        $eventClass = (new \ReflectionClass($eventName))->newInstance();
+        /* @var \CMW\Manager\Events\AbstractEvent $eventClass */
+        $eventClass = (new ReflectionClass($eventName))->getMethod("getInstance")->invoke(null);
         $eventClass->init();
 
         /**
          * @var \CMW\Manager\Events\Listener $attr
          * @var ReflectionMethod $method
          */
-        foreach($eventAttributes as [$attr, $method]) {
+        foreach ($eventAttributes as [$attr, $method]) {
 
-            /**
-             * Ici, le counter est mal fait, car on compte le nombre de fois que la classe à été appelée, alors qu'on veut sur la méthode, alors il faut le faire du'une autre façon ? :)
-             */
-            var_dump($eventClass->getCounter(), $attr->getTimes(), $eventClass->canPropagate());
-
-            //if($eventClass->getCounter() < $attr->getTimes()) {
-            if(false) {
-                continue;
-            }
-
-            if(!$eventClass->canPropagate()) {
+            if (!$eventClass->canPropagate()) {
                 break;
             }
 
-            $controller = $method->getDeclaringClass()->newInstance();
-            $methodName = $method->getName();
-            $controller->$methodName($data);
+            if($attr->getTimes() !== 0 &&static::$listenerCounter[$eventName][$method->getName()] > 0 && static::$listenerCounter[$eventName][$method->getName()] >= $attr->getTimes()) {
+                continue;
+            }
 
+            $controller = $method->getDeclaringClass()->getMethod("getInstance")->invoke(null);
+            $method->invoke($controller, $data);
 
-            $eventClass->increment();
-
+            static::$listenerCounter[$eventName][$method->getName()]++;
         }
+
+        //Log::debug(static::$listenerCounter);
     }
 
 }
