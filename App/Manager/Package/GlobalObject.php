@@ -13,11 +13,11 @@ abstract class GlobalObject
      */
     public static function getInstance(): static
     {
-        if(!isset(GlobalObject::$_instances[get_called_class()])) {
-            GlobalObject::$_instances[get_called_class()] = new static;
+        if(!isset(self::$_instances[static::class])) {
+            self::$_instances[static::class] = new static;
         }
 
-        return GlobalObject::$_instances[get_called_class()];
+        return self::$_instances[static::class];
     }
 
 }
