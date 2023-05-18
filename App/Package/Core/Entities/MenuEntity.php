@@ -5,6 +5,8 @@ namespace CMW\Entity\Core;
 use CMW\Controller\Users\UsersController;
 use CMW\Entity\Users\RoleEntity;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Lang\LangManager;
+use CMW\Model\Core\MenusModel;
 use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UsersModel;
 
@@ -60,7 +62,12 @@ class MenuEntity
      */
     public function getUrl(): string
     {
-        return EnvManager::getInstance()->getValue("PATH_SUBFOLDER").$this->url;
+        if ($this->url !== "") {
+            return EnvManager::getInstance()->getValue("PATH_SUBFOLDER").$this->url;
+        } else {
+            return "#";
+        }
+
     }
 
     /**
@@ -103,6 +110,22 @@ class MenuEntity
     public function getOrder(): int
     {
         return $this->order;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastMenuOrder(): int
+    {
+        return MenusModel::getInstance()->getLastMenuOrder();
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastSubMenuOrder(int $id): int
+    {
+        return MenusModel::getInstance()->getLastSubMenuOrder($id);
     }
 
     /**
