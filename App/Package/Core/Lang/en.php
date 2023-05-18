@@ -4,6 +4,7 @@ return [
     "home" => "Home",
     "cgu" => "CGU",
     "cgv" => "CGV",
+    "nolink" => "No link or redirect",
     "general" => "General",
     "package" => "Package",
     "packages" => "Packages",
