@@ -38,7 +38,7 @@ class MenusController extends AbstractController
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menus.configuration");
 
         $packagesLinks = $this->getPackagesLinks();
-        $roles = (new RolesModel())->getRoles();
+        $roles = RolesModel::getInstance()->getRoles();
         $menus = MenusModel::getInstance();
 
         $view = View::createAdminView('Core', 'menus')
