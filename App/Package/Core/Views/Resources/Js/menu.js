@@ -3,26 +3,43 @@
     Get choice input select
  */
 
-const choice = document.getElementById('choice')
-const packageParent = document.getElementById('addPackage')
-const customParent = document.getElementById('addCustom')
+const choice = document.getElementsByClassName('super-choice')
+const packageParent = document.getElementsByClassName('addPackage')
+const customParent = document.getElementsByClassName('addCustom')
 
-choice.addEventListener("change", () => {
-    packageParent.classList.toggle('d-none')
-    customParent.classList.toggle('d-none')
-})
+for (let i = 0; i < choice.length; i++) {
+    choice[i].addEventListener("change", () => {
+        for (let o = 0; o < packageParent.length; o++) {
+            packageParent[o].classList.toggle('d-none');
+        }
+        for (let p = 0; p < customParent.length; p++) {
+            customParent[p].classList.toggle('d-none');
+        }
+    })
+}
 
 
 /*
     Display Allowed Groups list input
  */
 
-const toggleBtn = document.getElementById('allowedGroups')
-const allowedGroupsParent = document.getElementById('listAllowedGroups')
+const toggleBtn = document.getElementsByClassName('allowedGroups')
+const allowedGroupsParent = document.getElementsByClassName('listAllowedGroups')
 
-toggleBtn.addEventListener("change", () => {
-    allowedGroupsParent.classList.toggle('d-none')
-})
+for (let u = 0; u < toggleBtn.length; u++) {
+    toggleBtn[u].addEventListener("change", () => {
+        for (let y = 0; y < allowedGroupsParent.length; y++) {
+            allowedGroupsParent[y].classList.toggle('d-none')
+        }
+    })
+}
+
+
+
+
+
+
+
 
 
 /*

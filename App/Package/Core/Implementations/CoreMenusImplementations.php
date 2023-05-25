@@ -12,6 +12,7 @@ class CoreMenusImplementations implements IMenus
     {
         return [
             LangManager::translate('core.home') => 'home',
+            LangManager::translate('core.nolink') => '',
             LangManager::translate('core.cgu') => 'cgu',
             LangManager::translate('core.cgv') => 'cgv'
         ];
