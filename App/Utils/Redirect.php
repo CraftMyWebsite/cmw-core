@@ -7,6 +7,7 @@ use CMW\Controller\Users\UsersController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Router\Route;
 use CMW\Manager\Router\Router;
+use JetBrains\PhpStorm\NoReturn;
 
 class Redirect
 {
@@ -28,7 +29,7 @@ class Redirect
     /**
      * @param string $url Url or Route Name.
      */
-    public static function redirect(string $url, array $params = []): void
+    #[NoReturn] public static function redirect(string $url, array $params = []): void
     {
         $route = self::getRouteByUrl($url);
 
@@ -40,13 +41,14 @@ class Redirect
 
         http_response_code(302);
         header("Location: " .  EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $route->getUrl() . '/' . $strParams);
+        die();
     }
 
     /**
      * @param string $url Url or Route Name.
      * @desc Redirect to admin pages and check if the use has admin dashboard perm
      */
-    public static function redirectToAdmin(string $url, array $params = []): void
+    #[NoReturn] public static function redirectToAdmin(string $url, array $params = []): void
     {
         $route = self::getRouteByUrl("cmw-admin/$url");
 
@@ -70,33 +72,36 @@ class Redirect
      * @return void
      * @desc Redirect to errorPage
      */
-    public static function errorPage(int $code = 403): void
+    #[NoReturn] public static function errorPage(int $code = 403): void
     {
         http_response_code($code);
         // self::redirect("getError/$code"); ??
         header("Location: getError/$code");
+        die();
     }
 
     /**
      * @return void
      * @deprecated please prefer {@see CMW\Utils\Redirect::redirectPreviousRoute()}
      */
-    public static function redirectToPreviousPage(): void
+    #[NoReturn] public static function redirectToPreviousPage(): void
     {
         http_response_code(302);
         // use self::redirect ??
         header('Location: ' . $_SERVER['HTTP_REFERER']);
+        die();
     }
 
     /**
      * @return void
      * @desc Redirect to the website home page with 302
      */
-    public static function redirectToHome(): void
+    #[NoReturn] public static function redirectToHome(): void
     {
         http_response_code(302);
         // use self::redirect ??
         header("Location: " . EnvManager::getInstance()->getValue("PATH_SUBFOLDER"));
+        die();
     }
 
     public static function emulateRoute(string $url): void
@@ -114,11 +119,12 @@ class Redirect
      * @return void
      * @desc Redirect browser to previous page
      */
-    public static function redirectPreviousRoute(): void
+    #[NoReturn] public static function redirectPreviousRoute(): void
     {
         http_response_code(302);
         // use self::redirect ??
         header("Location: " .  $_SERVER['HTTP_REFERER']);
+        die();
     }
 
 }
