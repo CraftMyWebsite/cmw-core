@@ -21,7 +21,7 @@ $description = LangManager::translate("core.updates.description"); ?>
                     <?php if (UpdatesManager::getVersion() !== UpdatesManager::getCmwLatest()->value) {
                         echo "<b class='text-danger'>" . UpdatesManager::getVersion() . "</b>";
                     } else {
-                        echo "<b class='text-sucess'>" . UpdatesManager::getVersion() . "</b>";
+                        echo "<b class='text-success'>" . UpdatesManager::getVersion() . "</b>";
                     }
                     ?>
                 </p>
@@ -37,9 +37,21 @@ $description = LangManager::translate("core.updates.description"); ?>
     <div class="col-12 col-lg-9">
         <div class="card">
             <div class="card-header">
-                <h4>--Changelog--</h4>
+                <h4>Notes de version</h4>
             </div>
             <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-lg-6">
+                        <div class="card-in-card">
+                            <h4>Dernières verion</h4>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <div class="card-in-card">
+                            <h4>Version prècedentes</h4>
+                        </div>
+                    </div>
+                </div>
                 <div id="headingOne" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false"
                      aria-controls="collapseOne" role="button">
                     <h5>2.0.1 <i class="text-sm fa-solid fa-chevron-down"></i></h5>
@@ -79,34 +91,3 @@ $description = LangManager::translate("core.updates.description"); ?>
         </div>
     </div>
 </section>
-
-
-<!-- Vertically Centered modal Modal -->
-<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalTitle"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmModalTitle">Verification</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><i data-feather="x"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>
-                    Attention, ceci va réinitialiser tous les paramètres par defaut de votre thème, êtes-vous sûr de
-                    vouloir continuer ?
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal">
-                    <i class="bx bx-x d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block">Annuler</span>
-                </button>
-                <button type="button" class="btn btn-danger ml-1" data-bs-dismiss="modal">
-                    <i class="bx bx-check d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block">Confirmer</span>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
