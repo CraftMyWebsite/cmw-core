@@ -1,112 +1,98 @@
 <?php
 
+use CMW\Controller\Core\CoreController;
+use CMW\Controller\Core\UpdatesController;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Updater\UpdatesManager;
+
+/* @var UpdatesController[] $latestVersion */
+/* @var UpdatesController[] $previousVersions */
+/* @var UpdatesController[] $latestVersionChangelogGroup */
+/* @var UpdatesController[] $previousVersionChangelogGroup */
 
 $title = LangManager::translate("core.updates.title");
 $description = LangManager::translate("core.updates.description"); ?>
 
 <div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fas fa-arrows-rotate"></i> <span class="m-lg-auto">Mises à jours</span></h3>
+    <h3><i class="fas fa-arrows-rotate"></i> <span class="m-lg-auto"><?= LangManager::translate("core.updates.pageTitle") ?></span></h3>
 </div>
 
 <section class="row">
-    <div class="col-12 col-lg-3">
+    <div class="col-12 col-lg-6">
         <div class="card">
-            <div class="card-header">
-                <h4>CraftMyWebsite</h4>
-            </div>
+            <?php if (UpdatesManager::checkNewUpdateAvailable()): ?>
+                <div class="position-absolute end-0">
+                    <a href="cms/update" type="button" class="text-bg-primary rounded-2 py-1 px-2"><?= LangManager::translate("core.updates.updateButton") ?></a>
+                </div>
+            <?php endif; ?>
             <div class="card-body">
-                <p>Version installé :
-                    <?php if (UpdatesManager::getVersion() !== UpdatesManager::getCmwLatest()->value) {
-                        echo "<b class='text-danger'>" . UpdatesManager::getVersion() . "</b>";
-                    } else {
-                        echo "<b class='text-sucess'>" . UpdatesManager::getVersion() . "</b>";
-                    }
-                    ?>
-                </p>
-                <p>Dernière version : <b><?= UpdatesManager::getCmwLatest()->value ?></b></p>
-                <?php if (UpdatesManager::checkNewUpdateAvailable()): ?>
-                    <div class="buttons text-center">
-                        <a href="cms/update" type="button" class="btn btn-primary">Mettre à jours</a>
-                    </div>
+                <?php if (UpdatesManager::getVersion() !== UpdatesManager::getCmwLatest()->value): ?>
+                    <h5><span class="text-danger"><?= UpdatesManager::getVersion() ?></span>
+                        <i
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="<?= LangManager::translate("core.updates.warningUpdate") ?>"
+                            class="text-danger fa-solid fa-heart-crack fa-beat-fade"></i>
+                    </h5>
+                    <p><?= LangManager::translate("core.updates.updateTo") ?> <b
+                            class="text-success"><?= $latestVersion["value"] ?></b> !</p>
+                <?php else: ?>
+                    <h5><span class="text-success"><?= UpdatesManager::getVersion() ?></span>
+                        <i data-bs-toggle="tooltip"
+                           data-bs-placement="top"
+                           title="<?= LangManager::translate("core.updates.isUp") ?>"
+                           class="text-success fa-solid fa-heart-pulse fa-beat-fade"></i>
+                    </h5>
                 <?php endif; ?>
+                <p><?= LangManager::translate("core.updates.availableFrom") ?> <?= CoreController::formatDate($latestVersion["date_upload"]) ?></p>
+                <h6><?= LangManager::translate("core.updates.lastNote") ?></h6>
+                <div class="card">
+                    <?php foreach ($latestVersionChangelogGroup as $groupedType) : ?>
+                        <h6 class="text-center p-1 rounded bg-secondary"><?= $groupedType[0]['type'] ?></h6>
+                        <ul>
+                            <?php foreach ($groupedType as $changelogInfos) : ?>
+                                <li><?= $changelogInfos['content'] ?>
+                                    <?php if ($changelogInfos['code_link']): ?>
+                                    <small><a class="text-bg-primary px-1 rounded-2" href="<?= $changelogInfos['code_link'] ?>" target="_blank"><i class="fa-solid fa-link fa-xs"></i> d534333</a></small>
+                                    <?php endif; ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php endforeach; ?>
+                </div>
+
             </div>
         </div>
     </div>
-    <div class="col-12 col-lg-9">
+    <div class="col-12 col-lg-6">
         <div class="card">
-            <div class="card-header">
-                <h4>--Changelog--</h4>
-            </div>
             <div class="card-body">
-                <div id="headingOne" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false"
-                     aria-controls="collapseOne" role="button">
-                    <h5>2.0.1 <i class="text-sm fa-solid fa-chevron-down"></i></h5>
-                </div>
-                <div id="collapseOne" class="collapse pt-1" aria-labelledby="headingOne" data-parent="#cardAccordion">
-                    <div class="ms-4">
-                        <span class="badge bg-secondary">Fix</span>
-                        <ul>
-                            <li>Responsive template for Dashboard</li>
-                            <li>A center div useless</li>
-                        </ul>
-                        <span class="badge bg-secondary">Add</span>
-                        <ul>
-                            <li>2nd Dropdown for menu</li>
-                            <li>Spanish language</li>
-                        </ul>
-                        <span class="badge bg-secondary">Remove</span>
-                        <ul>
-                            <li>Paypal payement</li>
-                        </ul>
+                <h5><?= LangManager::translate("core.updates.previousVersion") ?></h5>
+                <?php foreach ($previousVersions as $previousVersion) : ?>
+                <div class="card-in-card pt-2 px-2 mb-3">
+                    <div id="heading<?= $previousVersion['id'] ?>" data-bs-toggle="collapse" data-bs-target="#collapse<?= $previousVersion['id'] ?>" aria-expanded="false"
+                         aria-controls="collapse<?= $previousVersion['id'] ?>" role="button">
+                        <h6><i class="text-sm fa-solid fa-chevron-down"></i> <?= $previousVersion['value'] ?></h6>
+                    </div>
+                    <div id="collapse<?= $previousVersion['id'] ?>" class="collapse pt-1" aria-labelledby="heading<?= $previousVersion['id'] ?>" data-parent="#cardAccordion">
+                        <p><?= LangManager::translate("core.updates.publishAt") ?> <?= CoreController::formatDate($previousVersion['date_upload']) ?></p>
+                        <div class="card">
+                            <?php foreach ($previousVersionChangelogGroup = UpdatesController::groupBy("type", $previousVersion['changelog']) as $previousGroupedType) : ?>
+                            <span class="badge bg-secondary"><?= $previousGroupedType[0]['type'] ?></span>
+                            <ul>
+                                <?php foreach ($previousGroupedType as $previousChangelogInfos) : ?>
+                                    <li><?= $previousChangelogInfos['content'] ?>
+                                        <?php if ($previousChangelogInfos['code_link']): ?>
+                                        <small><a class="text-bg-primary px-1 rounded-2" href="<?= $previousChangelogInfos['code_link'] ?>" target="_blank"><i class="fa-solid fa-link fa-xs"></i> d534333</a></small>
+                                        <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
                 </div>
-
-                <div id="headingTwo" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false"
-                     aria-controls="collapseOne" role="button">
-                    <h5>2.0.0 <i class="text-sm fa-solid fa-chevron-down"></i></h5>
-                </div>
-                <div id="collapseTwo" class="collapse pt-1" aria-labelledby="headingTwo" data-parent="#cardAccordion">
-                    <div class="ms-4">
-                        <span class="badge bg-secondary">Create</span>
-                        <ul>
-                            <li>The best CMS ever seen</li>
-                        </ul>
-                    </div>
-                </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </div>
 </section>
-
-
-<!-- Vertically Centered modal Modal -->
-<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalTitle"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmModalTitle">Verification</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><i data-feather="x"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>
-                    Attention, ceci va réinitialiser tous les paramètres par defaut de votre thème, êtes-vous sûr de
-                    vouloir continuer ?
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal">
-                    <i class="bx bx-x d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block">Annuler</span>
-                </button>
-                <button type="button" class="btn btn-danger ml-1" data-bs-dismiss="modal">
-                    <i class="bx bx-check d-block d-sm-none"></i>
-                    <span class="d-none d-sm-block">Confirmer</span>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>

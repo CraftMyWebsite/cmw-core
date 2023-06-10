@@ -13,6 +13,43 @@ use CMW\Utils\Redirect;
 
 class UpdatesController extends AbstractController
 {
+    /**
+     * @return array
+     * @desc Return the list of public changelog for last version
+     */
+    public static function getLatest(): array {
+        return PublicAPI::getData("cms/getLatest");
+    }
+
+    /**
+     * @return array
+     * @desc Return the list of public changelog for previous version
+     */
+    public static function getPrevious(): array {
+        $lastVersion = UpdatesManager::getCmwLatest()->value;
+        return PublicAPI::getData("cms/getPrevious&version=" . $lastVersion);
+    }
+
+    /**
+     * Function that groups an array of associative arrays by some key.
+     *
+     * @param {String} $key Property to sort by.
+     * @param {Array} $data Array that stores multiple associative arrays.
+     */
+    public static function groupBy($key, $data): array {
+        $result = array();
+
+        foreach($data as $val) {
+            if(array_key_exists($key, $val)){
+                $result[$val[$key]][] = $val;
+            }else{
+                $result[""][] = $val;
+            }
+        }
+
+        return $result;
+    }
+
     /* ADMINISTRATION */
 
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/updates")]
@@ -21,7 +58,12 @@ class UpdatesController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.update");
 
+        $latestVersion = self::getLatest();
+        $latestVersionChangelogGroup = self::groupBy("type", $latestVersion['changelog']);
+        $previousVersions = self::getPrevious();
+
         View::createAdminView("Core", "updates")
+            ->addVariableList(["latestVersion" => $latestVersion, "latestVersionChangelogGroup" => $latestVersionChangelogGroup, "previousVersions" => $previousVersions])
             ->view();
     }
 

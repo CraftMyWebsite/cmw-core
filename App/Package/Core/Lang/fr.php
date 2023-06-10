@@ -231,6 +231,15 @@ return [
     "updates" => [
         "title" => "Mettez à jour votre site",
         "description" => "Mettez à jour votre site CraftMyWebsite",
+        "pageTitle" => "Mises à jours du CMS",
+        "updateButton" => "Mettre à jour",
+        "warningUpdate" => "Attention ! Vous n'utilisez pas la dernière version du CMS, veuillez le mettre à jour dès maintenant.",
+        "updateTo" => "Veuillez mettre à jour vers",
+        "isUp" => "Votre CMS est à jour !",
+        "availableFrom" => "Disponnible depuis le :",
+        "lastNote" => "Note de version :",
+        "previousVersion" => "Version prècedentes",
+        "publishAt" => "Publié le",
         "errors" => [
             "download" => "Impossible de télécharger la dernière version du CMS.",
             "nullFileUpdate" => "Cette version n'à pas de fichier de MAJ.",
