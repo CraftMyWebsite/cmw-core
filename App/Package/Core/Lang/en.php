@@ -231,6 +231,15 @@ return [
     "updates" => [
         "title" => "Update your website",
         "description" => "Update your CraftMyWebsite website",
+        "pageTitle" => "CMS updates",
+        "updateButton" => "Update",
+        "warningUpdate" => "Attention ! You are not using the latest version of the CMS, please update it now.",
+        "updateTo" => "Please update to",
+        "isUp" => "Your CMS is up to date!",
+        "availableFrom" => "Available from:",
+        "lastNote" => "Release note:",
+        "previousVersion" => "Previous versions",
+        "publishAt" => "Published on",
         "errors" => [
             "download" => "Unable to download the latest CMS version.",
             "nullFileUpdate" => "This version doesn't contain any update file.",
