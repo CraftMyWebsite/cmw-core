@@ -63,7 +63,7 @@ class MenuEntity
     public function getUrl(): string
     {
         if ($this->url !== "") {
-            return EnvManager::getInstance()->getValue("PATH_SUBFOLDER").$this->url;
+            return EnvManager::getInstance()->getValue("PATH_SUBFOLDER").$this->url; //Todo verifier si c'est pas un custom URL
         } else {
             return "#";
         }
