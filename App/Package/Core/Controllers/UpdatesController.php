@@ -22,6 +22,15 @@ class UpdatesController extends AbstractController
     }
 
     /**
+     * @return array
+     * @desc Return the list of public changelog for previous version
+     */
+    public static function getPrevious(): array {
+        $lastVersion = UpdatesManager::getCmwLatest()->value;
+        return PublicAPI::getData("cms/getPrevious&version=" . $lastVersion);
+    }
+
+    /**
      * Function that groups an array of associative arrays by some key.
      *
      * @param {String} $key Property to sort by.
@@ -51,9 +60,10 @@ class UpdatesController extends AbstractController
 
         $latestVersion = self::getLatest();
         $latestVersionChangelogGroup = self::groupBy("type", $latestVersion['changelog']);
+        $previousVersions = self::getPrevious();
 
         View::createAdminView("Core", "updates")
-            ->addVariableList(["latestVersion" => $latestVersion, "latestVersionChangelogGroup" => $latestVersionChangelogGroup])
+            ->addVariableList(["latestVersion" => $latestVersion, "latestVersionChangelogGroup" => $latestVersionChangelogGroup, "previousVersions" => $previousVersions])
             ->view();
     }
 
