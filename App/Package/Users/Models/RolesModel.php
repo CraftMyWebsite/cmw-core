@@ -4,9 +4,7 @@ namespace CMW\Model\Users;
 
 use CMW\Entity\Users\PermissionEntity;
 use CMW\Entity\Users\RoleEntity;
-
 use CMW\Manager\Database\DatabaseManager;
-
 use CMW\Manager\Package\AbstractModel;
 use CMW\Utils\Utils;
 
@@ -51,6 +49,7 @@ class RolesModel extends AbstractModel
             $res['role_name'],
             $res['role_description'],
             $res['role_weight'],
+            $res['role_is_default'],
             $this->getPermissions($id)
         );
 
@@ -78,16 +77,26 @@ class RolesModel extends AbstractModel
         return $toReturn;
     }
 
-    public function createRole(string $roleName, string $roleDescription, int $roleWeight, ?array $permList): ?int
+    /**
+     * @param string $roleName
+     * @param string $roleDescription
+     * @param int $roleWeight
+     * @param int $roleIsDefault
+     * @param array|null $permList
+     * @return int|null
+     */
+    public function createRole(string $roleName, string $roleDescription, int $roleWeight, int $roleIsDefault, ?array $permList): ?int
     {
         //Create role & return roleId
         $var = array(
             "role_name" => $roleName,
             "role_description" => $roleDescription,
-            "role_weight" => $roleWeight
+            "role_weight" => $roleWeight,
+            "role_is_default" => $roleIsDefault
         );
 
-        $sql = "INSERT INTO cmw_roles (role_name, role_description, role_weight) VALUES (:role_name, :role_description, :role_weight)";
+        $sql = "INSERT INTO cmw_roles (role_name, role_description, role_weight, role_is_default) 
+                VALUES (:role_name, :role_description, :role_weight, :role_is_default)";
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -116,8 +125,8 @@ class RolesModel extends AbstractModel
     }
 
     /**
-     * @return PermissionEntity[]
      * @param int $roleId
+     * @return PermissionEntity[]
      */
     public function getPermissions(int $roleId): array
     {
@@ -157,22 +166,32 @@ class RolesModel extends AbstractModel
         return false;
     }
 
-    public function updateRole(string $roleName, string $roleDescription, int $roleId, int $roleWeight, ?array $permList): void
+    /**
+     * @param string $roleName
+     * @param string $roleDescription
+     * @param int $roleId
+     * @param int $roleWeight
+     * @param int $roleIsDefault
+     * @param array|null $permList
+     * @return void
+     */
+    public function updateRole(string $roleName, string $roleDescription, int $roleId, int $roleWeight, int $roleIsDefault, ?array $permList): void
     {
         //Update role
         $var = array(
             "role_name" => $roleName,
             "role_description" => $roleDescription,
             "role_id" => $roleId,
-            "role_weight" => $roleWeight
+            "role_weight" => $roleWeight,
+            "role_is_default" => $roleIsDefault
         );
 
-        $sql = "UPDATE cmw_roles SET role_name = :role_name, role_description = :role_description, role_weight = :role_weight WHERE role_id = :role_id";
+        $sql = "UPDATE cmw_roles SET role_name = :role_name, role_description = :role_description, 
+                     role_weight = :role_weight, role_is_default = :role_is_default WHERE role_id = :role_id";
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
-
 
         $this->updatePermission($roleId, $permList);
     }
@@ -223,6 +242,42 @@ class RolesModel extends AbstractModel
         }
 
         return false;
+    }
+
+    /**
+     * @return RoleEntity[]
+     */
+    public function getDefaultRoles(): array
+    {
+        $sql = 'SELECT * FROM cmw_roles WHERE role_is_default = 1';
+        $db = DatabaseManager::getInstance();
+
+        $req = $db->query($sql);
+
+        if (!$req) {
+            return [];
+        }
+
+        $res = $req->fetchAll();
+
+        if (!$res) {
+            return [];
+        }
+
+        $toReturn = [];
+
+        foreach ($res as $role) {
+            $toReturn[] = new RoleEntity(
+                $role["role_id"],
+                $role["role_name"],
+                $role["role_description"],
+                $role["role_weight"],
+                $role["role_is_default"],
+                $this->getPermissions($role["role_id"])
+            );
+        }
+
+        return $toReturn;
     }
 
 }

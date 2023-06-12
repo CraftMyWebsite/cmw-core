@@ -10,6 +10,7 @@ $title = LangManager::translate("users.settings.title");
 $description = LangManager::translate("users.settings.desc"); ?>
 
 <form action="" method="post" enctype="multipart/form-data">
+    <?php (new SecurityManager())->insertHiddenToken() ?>
     <div class="d-flex flex-wrap justify-content-between">
         <h3><i class="fa-solid fa-gears"></i> <span
                     class="m-lg-auto"><?= LangManager::translate("users.settings.title") ?></span></h3>
@@ -21,7 +22,6 @@ $description = LangManager::translate("users.settings.desc"); ?>
 
         <!-- Default picture -->
         <div class="col-12 col-lg-6">
-            <?php (new SecurityManager())->insertHiddenToken() ?>
             <div class="card">
                 <div class="card-header">
                     <h4><?= LangManager::translate("users.settings.visualIdentity") ?></h4>

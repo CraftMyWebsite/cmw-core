@@ -63,10 +63,11 @@ CREATE TABLE IF NOT EXISTS `cmw_users_settings`
 
 CREATE TABLE IF NOT EXISTS `cmw_roles`
 (
-    `role_id`          INT(11) NOT NULL AUTO_INCREMENT,
+    `role_id`          INT(11)  NOT NULL AUTO_INCREMENT,
     `role_name`        TINYTEXT NOT NULL,
     `role_description` TEXT,
     `role_weight`      INT     DEFAULT 0,
+    `role_is_default`  TINYINT(1) DEFAULT 0,
     PRIMARY KEY (`role_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
@@ -211,12 +212,12 @@ VALUES ('theme', 'Sampler', NOW()),
        ('dateFormat', 'd-m-Y H:i:s', NOW()),
        ('editor_style', 'a11y-dark.css', NOW());
 
-INSERT INTO `cmw_roles` (`role_name`, `role_description`, `role_weight`)
-VALUES ('Visiteur', 'Rôle pour les visiteurs', 0),
-       ('Utilisateur', 'Rôle pour les utilisateurs', 1),
-       ('Editeur', 'Rôle pour les éditeurs', 5),
-       ('Modérateur', 'Rôle pour les modérateurs', 10),
-       ('Administrateur', 'Rôle pour les administrateurs', 100);
+INSERT INTO `cmw_roles` (`role_name`, `role_description`, `role_weight`, `role_is_default`)
+VALUES ('Visiteur', 'Rôle pour les visiteurs', 0, 0),
+       ('Utilisateur', 'Rôle pour les utilisateurs', 1, 1),
+       ('Editeur', 'Rôle pour les éditeurs', 5, 0),
+       ('Modérateur', 'Rôle pour les modérateurs', 10, 0),
+       ('Administrateur', 'Rôle pour les administrateurs', 100, 0);
 
 
 INSERT INTO `cmw_permissions` (`permission_id`, `permission_parent_id`, `permission_code`)
