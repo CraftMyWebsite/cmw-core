@@ -4,6 +4,7 @@ namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Interface\Core\IMenus;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Loader\Loader;
@@ -14,6 +15,7 @@ use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\MenusModel;
 use CMW\Model\Users\RolesModel;
+use CMW\Utils\Log;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 
@@ -208,5 +210,32 @@ class MenusController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),$currentOrder);
 
         Redirect::redirect("cmw-admin/menus");
+    }
+
+    /**
+     * @param array $urls
+     * @return bool
+     */
+    public function isActiveNavbar(array $urls): bool
+    {
+        $currentSlug = str_replace(EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/', '', $_SERVER['REQUEST_URI']);
+
+        foreach ($urls as $url) {
+            if (str_starts_with($currentSlug, $url)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param string $url
+     * @return bool
+     */
+    public function isActiveNavbarItem(string $url): bool
+    {
+        $currentSlug = str_replace(EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/', '', $_SERVER['REQUEST_URI']);
+
+        return str_starts_with($currentSlug, $url);
     }
 }

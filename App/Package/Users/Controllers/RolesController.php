@@ -90,7 +90,7 @@ class RolesController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
+    #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles/manage")]
     private function adminRolesEdit(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.edit");
@@ -112,7 +112,7 @@ class RolesController extends AbstractController
             ->view();
     }
 
-    #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/roles")]
+    #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/roles/manage")]
     #[NoReturn] private function adminRolesEditPost(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.edit");

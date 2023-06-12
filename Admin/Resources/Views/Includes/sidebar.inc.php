@@ -3,6 +3,7 @@
 /* @var CoreController $coreAdmin */
 
 use CMW\Controller\Core\CoreController;
+use CMW\Controller\Core\MenusController;
 use CMW\Controller\Core\PackageController;
 use CMW\Entity\Users\UserEntity;
 use CMW\Manager\Env\EnvManager;
@@ -31,17 +32,16 @@ use CMW\Utils\Website;
                 </li>
                 <?php foreach (PackageController::getCorePackages() as $package):
                     foreach ($package->getMenus() as $menu):
-                        if (!empty($menu->getSubmenu())):
-                            $currentSlug = str_replace(EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/', '', $_SERVER['REQUEST_URI']); ?>
+                        if (!empty($menu->getSubmenu())): ?>
 
-                            <li class="sidebar-item has-sub <?= in_array($currentSlug, $menu->getSubmenu(), true) ? 'active' : '' ?>">
+                            <li class="sidebar-item has-sub <?= MenusController::getInstance()->isActiveNavbar($menu->getSubmenu()) ? 'active' : '' ?>">
                                 <a href="#" class="sidebar-link">
                                     <i class="<?= $menu->getIcon() ?>"></i>
                                     <span><?= $menu->getName() ?></span>
                                 </a>
-                                <ul class="submenu <?= in_array($currentSlug, $menu->getSubmenu(), true) ? 'active' : '' ?>">
+                                <ul class="submenu <?= MenusController::getInstance()->isActiveNavbar($menu->getSubmenu()) ? 'active' : '' ?>">
                                     <?php foreach ($menu->getSubmenu() as $subMenuName => $subMenuUrl): ?>
-                                        <li class="submenu-item <?= Website::isCurrentPage(EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/' . $subMenuUrl) ? 'active' : '' ?>">
+                                        <li class="submenu-item <?= MenusController::getInstance()->isActiveNavbarItem($subMenuUrl) ? 'active' : '' ?>">
                                             <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $subMenuUrl ?>">
                                                 <?= $subMenuName ?>
                                             </a>
@@ -50,7 +50,7 @@ use CMW\Utils\Website;
                                 </ul>
                             </li>
                         <?php else : ?>
-                            <li class="sidebar-item <?= Website::isCurrentPage(EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/' . $menu->getUrl()) ? 'active' : '' ?>">
+                            <li class="sidebar-item <?= MenusController::getInstance()->isActiveNavbarItem($menu->getUrl()) ? 'active' : '' ?>">
                                 <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $menu->getUrl() ?>"
                                    class="sidebar-link">
                                     <i class="<?= $menu->getIcon() ?>"></i>
@@ -65,17 +65,15 @@ use CMW\Utils\Website;
 
                 <?php foreach (PackageController::getInstalledPackages() as $package):
                     foreach ($package->getMenus() as $menu):
-                        if (!empty($menu->getSubmenu())):
-                            $currentSlug = str_replace(EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/', '', $_SERVER['REQUEST_URI']); ?>
-
-                            <li class="sidebar-item has-sub <?= in_array($currentSlug, $menu->getSubmenu(), true) ? 'active' : '' ?>">
+                        if (!empty($menu->getSubmenu())): ?>
+                            <li class="sidebar-item has-sub <?= MenusController::getInstance()->isActiveNavbar($menu->getSubmenu()) ? 'active' : '' ?>">
                                 <a href="#" class="sidebar-link">
                                     <i class="<?= $menu->getIcon() ?>"></i>
                                     <span><?= $menu->getName() ?></span>
                                 </a>
-                                <ul class="submenu <?= in_array($currentSlug, $menu->getSubmenu(), true) ? 'active' : '' ?>">
+                                <ul class="submenu <?= MenusController::getInstance()->isActiveNavbar($menu->getSubmenu()) ? 'active' : '' ?>">
                                     <?php foreach ($menu->getSubmenu() as $subMenuName => $subMenuUrl): ?>
-                                        <li class="submenu-item <?= Website::isCurrentPage(EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/' . $subMenuUrl) ? 'active' : '' ?>">
+                                        <li class="submenu-item <?= MenusController::getInstance()->isActiveNavbarItem($subMenuUrl) ? 'active' : '' ?>">
                                             <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $subMenuUrl ?>">
                                                 <?= $subMenuName ?>
                                             </a>
@@ -84,7 +82,7 @@ use CMW\Utils\Website;
                                 </ul>
                             </li>
                         <?php else : ?>
-                            <li class="sidebar-item <?= Website::isCurrentPage(EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/' . $menu->getUrl()) ? 'active' : '' ?>">
+                            <li class="sidebar-item <?= MenusController::getInstance()->isActiveNavbarItem($menu->getUrl()) ? 'active' : '' ?>">
                                 <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $menu->getUrl() ?>"
                                    class="sidebar-link">
                                     <i class="<?= $menu->getIcon() ?>"></i>

@@ -126,7 +126,7 @@ class UsersController extends AbstractController
     }
 
 
-    #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
+    #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users/manage")]
     private function adminUsersEdit(Request $request, int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
@@ -142,7 +142,7 @@ class UsersController extends AbstractController
             ->view();
     }
 
-    #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users")]
+    #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users/manage")]
     #[NoReturn] private function adminUsersEditPost(Request $request, int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
