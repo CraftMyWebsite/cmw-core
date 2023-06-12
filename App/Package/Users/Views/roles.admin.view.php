@@ -2,9 +2,9 @@
 
 use CMW\Controller\Users\PermissionsController;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Security\SecurityManager;
 use CMW\Model\Users\PermissionsModel;
 use CMW\Model\Users\RolesModel;
-use CMW\Manager\Security\SecurityManager;
 
 /* @var \CMW\Entity\Users\RoleEntity[] $rolesList */
 /**@var PermissionsController $permissionController */
@@ -35,7 +35,7 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                             <td><?= $role->getName() ?></td>
                             <td><?= $role->getDescription() ?></td>
                             <td class="text-center">
-                                <a href="edit/<?= $role->getId() ?>">
+                                <a href="roles/edit/<?= $role->getId() ?>">
                                     <i class="text-primary fa-solid fa-gears"></i>
                                 </a>
 
@@ -74,60 +74,78 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                     </button>
                 </div>
                 <div class="modal-body">
-                <div class="card-in-card mt-4">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12 col-lg-6">
-                            <h6><?= LangManager::translate("users.users.role") ?> :</h6>
-                            <div class="form-group position-relative has-icon-left">
-                                <input type="text" name="name" class="form-control"
-                                       placeholder="<?= LangManager::translate("users.users.role") ?>" required>
-                                <div class="form-control-icon">
-                                    <i class="fa-solid fa-id-card-clip"></i>
+                    <div class="card-in-card mt-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 col-lg-6">
+                                    <h6><?= LangManager::translate("users.users.role") ?> :</h6>
+                                    <div class="form-group position-relative has-icon-left">
+                                        <input type="text" name="name" class="form-control"
+                                               placeholder="<?= LangManager::translate("users.users.role") ?>" required>
+                                        <div class="form-control-icon">
+                                            <i class="fa-solid fa-id-card-clip"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-6">
+                                    <h6><?= LangManager::translate("users.users.weight") ?> :
+                                        <i data-bs-toggle="tooltip"
+                                           title="<?= LangManager::translate('users.roles.manage.weightTips') ?>"
+                                           class="fa-sharp fa-solid fa-circle-question"></i>
+                                    </h6>
+                                    <div class="form-group position-relative has-icon-left">
+                                        <input type="number" name="weight" class="form-control"
+                                               onkeyup="checkIfWeightsIsAlreadyTaken(this.value)"
+                                               placeholder="1" required>
+                                        <div class="form-control-icon">
+                                            <i class="fa-solid fa-weight-hanging"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-lg-9">
+                                    <h6><?= LangManager::translate("users.users.role_description") ?> :</h6>
+                                    <div class="form-group position-relative has-icon-left">
+                                        <input type="text" class="form-control" name="description"
+                                               placeholder="<?= LangManager::translate("users.users.role_description") ?>"
+                                               required>
+                                        <div class="form-control-icon">
+                                            <i class="fa-solid fa-circle-info"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-3">
+                                    <div class="form-switch">
+                                        <input class="me-1 form-check-input permission-input" type="checkbox" value="1"
+                                               id="isDefault" name="isDefault">
+
+                                        <label class="form-check-label" for="isDefault">
+                                            <?= LangManager::translate("users.roles.manage.default.title") ?> :
+                                            <i data-bs-toggle="tooltip"
+                                               title="<?= LangManager::translate('users.roles.manage.default.tips') ?>"
+                                               class="fa-sharp fa-solid fa-circle-question"></i>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-lg-6">
-                            <h6><?= LangManager::translate("users.users.weight") ?> :
-                                <i data-bs-toggle="tooltip"
-                                   title="<?= LangManager::translate('users.roles.manage.weightTips') ?>"
-                                   class="fa-sharp fa-solid fa-circle-question"></i>
-                            </h6>
-                            <div class="form-group position-relative has-icon-left">
-                                <input type="number" name="weight" class="form-control"
-                                       onkeyup="checkIfWeightsIsAlreadyTaken(this.value)"
-                                       placeholder="1" required>
-                                <div class="form-control-icon">
-                                    <i class="fa-solid fa-weight-hanging"></i>
-                                </div>
+                    </div>
+                    <div class="card-in-card mt-4">
+                        <div class="card-body">
+                            <h6><?= LangManager::translate("users.roles.manage.permissions_list") ?> :</h6>
+                            <div class="row mx-auto">
+                                <?php showPermission($permissionModel, $permissionController->getParents()) ?>
                             </div>
                         </div>
-                    </div>
-                        <h6><?= LangManager::translate("users.users.role_description") ?> :</h6>
-                        <div class="form-group position-relative has-icon-left">
-                            <input type="text" class="form-control" name="description"
-                                   placeholder="<?= LangManager::translate("users.users.role_description") ?>" required>
-                            <div class="form-control-icon">
-                                <i class="fa-solid fa-circle-info"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-in-card mt-4">
-                    <div class="card-body">
-                        <h6><?= LangManager::translate("users.roles.manage.permissions_list") ?> :</h6>
-                                        <div class="row mx-auto">
-                                        <?php showPermission($permissionModel, $permissionController->getParents()) ?>
-                    </div>
-                </div>     
                     </div>
                 </div>
                 <div class="modal-footer">
                     <div class="button">
                         <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                        <?= LangManager::translate("core.btn.close") ?>
+                            <?= LangManager::translate("core.btn.close") ?>
                         </button>
-                        <button type="submit" class="btn btn-primary ml-1" >
+                        <button type="submit" class="btn btn-primary ml-1">
                             <?= LangManager::translate("core.btn.add") ?>
                         </button>
                     </div>
@@ -141,7 +159,7 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
 <script>
     const modalDeleteRole = roleId => {
         return '' +
-                `<div class="modal fade" id="roleDeleteModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="roleDeleteModalTitle" aria-hidden="true">
+            `<div class="modal fade" id="roleDeleteModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="roleDeleteModalTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
                         <div class="modal-content">
                             <div class="modal-header">

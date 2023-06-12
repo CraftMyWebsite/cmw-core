@@ -14,6 +14,7 @@ use CMW\Manager\Views\View;
 use CMW\Model\Users\PermissionsModel;
 use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UsersModel;
+use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
@@ -80,12 +81,13 @@ class RolesController extends AbstractController
         $roleDescription = filter_input(INPUT_POST, "description");
         $permList = $_POST['perms']; //todo need to secure that !
         $roleWeight = filter_input(INPUT_POST, "weight", FILTER_SANITIZE_NUMBER_INT);
-        $role->createRole($roleName, $roleDescription, $roleWeight, $permList);
+        $roleIsDefault = isset($_POST['isDefault']) ? 1 : 0;
+        $role->createRole($roleName, $roleDescription, $roleWeight, $roleIsDefault, $permList);
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate('users.toaster_role_added'));
 
-        header("location: " . $_SERVER['HTTP_REFERER']);
+        Redirect::redirectPreviousRoute();
     }
 
     #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
@@ -119,14 +121,15 @@ class RolesController extends AbstractController
         $roleDescription = filter_input(INPUT_POST, "description");
         $permList = $_POST['perms'];
         $roleWeight = filter_input(INPUT_POST, "weight", FILTER_SANITIZE_NUMBER_INT);
+        $roleIsDefault = isset($_POST['isDefault']) ? 1 : 0;
 
-        RolesModel::getInstance()->updateRole($roleName, $roleDescription, $id, $roleWeight, $permList);
+        RolesModel::getInstance()->updateRole($roleName, $roleDescription, $id, $roleWeight, $roleIsDefault, $permList);
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate('users.toaster_role_edited'));
+            LangManager::translate('users.toaster.role_edited'));
 
 
-        header("location: " . $_SERVER['HTTP_REFERER']);
+        Redirect::redirectPreviousRoute();
     }
 
     #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]

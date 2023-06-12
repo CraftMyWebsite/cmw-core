@@ -36,7 +36,7 @@ return [
         "user_deleted" => "Utilisateur supprimé",
         "mail_pass_matching" => "Cette combinaison email/mot de passe est erronée",
         "role_added" => "Rôle ajouté",
-        "role_edit" => "Rôle modifié",
+        "role_edited" => "Rôle modifié",
         "role_deleted" => "Rôle supprimé"
     ],
     "manage" => [
@@ -81,6 +81,10 @@ return [
             "delete" => [
                 "title" => "Vérification",
                 "content" => "Vous êtes sur le point de supprimé un rôle, êtes-vous sûr ?"
+            ],
+            "default" => [
+                "title" => "Rôle par défaut",
+                "tips" => "Definissez ce rôle parmis les rôles par défaut. Lors de l'inscription, vos membres se verront ajouter automatiquement les rôles par défaut."
             ],
         ],
     ],

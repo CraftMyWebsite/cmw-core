@@ -2,7 +2,6 @@
 
 namespace CMW\Controller\Users;
 
-use CMW\Controller\Core\CoreController;
 use CMW\Entity\Users\UserSettingsEntity;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;

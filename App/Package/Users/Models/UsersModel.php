@@ -76,6 +76,7 @@ class UsersModel extends AbstractModel
                     $rl["role_name"],
                     $rl["role_description"],
                     $rl["role_weight"],
+                    $rl["role_is_default"],
                     $rolesModel->getPermissions($role["role_id"])
                 );
 

@@ -36,7 +36,7 @@ return [
         "user_deleted" => "User deleted",
         "mail_pass_matching" => "This email/password combination is wrong",
         "role_added" => "Role added",
-        "role_edit" => "Role edited",
+        "role_edited" => "Role edited",
         "role_deleted" => "Role deleted"
     ],
     "manage" => [
@@ -82,7 +82,11 @@ return [
                 "title" => "Verification",
                 "content" => "Are you sure about that, sir ?"
             ],
-        ]
+            "defaultRoles" => [
+                "title" => "Default roles",
+                "tips" => "Define your members role(s) when they sign up on your website."
+            ],
+        ],
     ],
     "delete" => [
         "toaster_error" => "You cannot delete the account you are logged in with.",

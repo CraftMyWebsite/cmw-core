@@ -363,7 +363,14 @@ class UsersController extends AbstractController
                 header('Location: register');
             }
 
-            $userEntity = UsersModel::getInstance()->create($mail, $pseudo, "", "", array("2"));
+            $defaultRoles = RolesModel::getInstance()->getDefaultRoles();
+            $defaultRolesId = [];
+
+            foreach ($defaultRoles as $role){
+                $defaultRolesId[] = $role->getId();
+            }
+
+            $userEntity = UsersModel::getInstance()->create($mail, $pseudo, "", "", $defaultRolesId);
 
             UsersModel::getInstance()->updatePass($userEntity?->getId(), password_hash($password, PASSWORD_BCRYPT));
 
