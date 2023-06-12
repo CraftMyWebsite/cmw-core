@@ -35,7 +35,7 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                             <td><?= $role->getName() ?></td>
                             <td><?= $role->getDescription() ?></td>
                             <td class="text-center">
-                                <a href="roles/edit/<?= $role->getId() ?>">
+                                <a href="manage/edit/<?= $role->getId() ?>">
                                     <i class="text-primary fa-solid fa-gears"></i>
                                 </a>
 

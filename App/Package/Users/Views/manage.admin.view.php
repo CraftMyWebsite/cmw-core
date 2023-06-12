@@ -95,7 +95,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
                             <td><?= $user->getLastConnection() ?></td>
                             <td>
                                 <a class="me-3 "
-                                   href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/users/edit/<?= $user->getId() ?>">
+                                   href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/users/manage/edit/<?= $user->getId() ?>">
                                     <i class="text-primary fa-solid fa-gears"></i>
                                 </a>
                                 <a type="button" data-bs-toggle="modal" data-bs-target="#delete-<?= $user->getId() ?>">
