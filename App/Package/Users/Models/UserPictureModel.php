@@ -35,7 +35,7 @@ class UserPictureModel extends AbstractModel
 
 
         //Upload image on the server
-        $imageName = ImagesManager::upload($image, 'users');
+        $imageName = ImagesManager::upload($image, 'Users');
 
         $sql = "INSERT INTO cmw_users_pictures (users_pictures_user_id, users_pictures_image_name) VALUES (:userId, :imageName)";
         $db = DatabaseManager::getInstance();
@@ -86,11 +86,11 @@ class UserPictureModel extends AbstractModel
 
         //Delete older image if this isn't the Default image
         if (!$this->userHasDefaultImage($userId)) {
-            ImagesManager::deleteImage($olderImageName, 'users');
+            ImagesManager::deleteImage($olderImageName, 'Users');
         }
 
         //Upload image on the server
-        $imageName = ImagesManager::upload($image, 'users');
+        $imageName = ImagesManager::upload($image, 'Users');
 
 
         $sql = "UPDATE cmw_users_pictures SET users_pictures_image_name = :imageName, 
@@ -139,7 +139,7 @@ class UserPictureModel extends AbstractModel
             return;
         }
 
-        ImagesManager::deleteImage($imageName, "users");
+        ImagesManager::deleteImage($imageName, "Users");
 
         $sql = "DELETE FROM cmw_users_pictures WHERE users_pictures_user_id = :userId";
         $db = DatabaseManager::getInstance();

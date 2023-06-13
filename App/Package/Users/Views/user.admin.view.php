@@ -181,7 +181,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'Admin/Resources/Js/main
                     <div class="col-md-6">
                         <div class="text-center ">
                             <img class="w-50"
-                                 src="<?= getenv('PATH_SUBFOLDER') ?>public/uploads/users/<?= $user->getUserPicture()->getImageName() ?>"
+                                 src="<?= getenv('PATH_SUBFOLDER') ?>Public/Uploads/Users/<?= $user->getUserPicture()->getImageName() ?>"
                                  alt="<?= LangManager::translate("users.users.image.image_alt") . $user->getPseudo() ?>">
                         </div>
                         <form action="../picture/edit/<?= $user->getId() ?>" method="post"
