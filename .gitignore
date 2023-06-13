@@ -11,6 +11,9 @@ __MACOSX/
 /App/Storage/Logs/*
 !/App/Storage/Logs/.gitkeep
 /App/Storage/Visits/history.log
+/App/Storage/Reports/*.txt
+/App/Storage/Cache/**/*.cache
+
 
 # Exclude all other packages, only if package is "Core" (Core, Users, Menus...)
 !/App/Package

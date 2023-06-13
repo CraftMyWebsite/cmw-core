@@ -45,6 +45,18 @@ class Redirect
     }
 
     /**
+     * @param string $url Internal URL.
+     */
+    #[NoReturn] public static function forceInternalRedirect(string $url, array $params = []): void
+    {
+        $strParams = implode(", ", $params);
+
+        http_response_code(302);
+        header("Location: " .  EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $url . '/' . $strParams);
+        die();
+    }
+
+    /**
      * @param string $url Url or Route Name.
      * @desc Redirect to admin pages and check if the use has admin dashboard perm
      */

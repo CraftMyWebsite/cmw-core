@@ -10,7 +10,9 @@ $description = LangManager::translate("core.security.description");
 ?>
 <div class="d-flex flex-wrap justify-content-between">
     <h3><i class="fa-solid fa-gears"></i> <span class="m-lg-auto">Sécurité</span></h3>
-    <div class="buttons"><button form="captchaConfig" type="submit" class="btn btn-primary">Sauvegarder</button></div>
+    <div class="buttons">
+        <button form="captchaConfig" type="submit" class="btn btn-primary">Sauvegarder</button>
+    </div>
 </div>
 <section class="row">
     <div class="col-12 col-lg-6">
@@ -24,7 +26,8 @@ $description = LangManager::translate("core.security.description");
                     <div class="row">
                         <h6><?= LangManager::translate("core.security.captcha.type") ?> :</h6>
                         <fieldset class="form-group">
-                            <select id="captcha" name="captcha" class="form-select" required onclick="generateCaptchaInputs()">
+                            <select id="captcha" name="captcha" class="form-select" required
+                                    onclick="generateCaptchaInputs()">
                                 <option value="captcha-none" <?= $captcha === "none" ? "selected" : "" ?>>
                                     Pas de catpcha
                                 </option>
@@ -64,9 +67,30 @@ $description = LangManager::translate("core.security.description");
             </div>
         </div>
     </div>
+
+    <div class="col-12 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h4><?= LangManager::translate('core.security.healthReport.title') ?></h4>
+            </div>
+            <div class="card-body">
+                <h4><?= LangManager::translate('core.security.healthReport.subtitle') ?></h4>
+
+                <?= LangManager::translate('core.security.healthReport.content') ?>
+
+                <a class="btn btn-danger" style="float: left"
+                   href="security/delete/report/health">
+                    <?= LangManager::translate('core.btn.delete') ?>
+                </a>
+
+                <a class="btn btn-success " style="float: right"
+                   href="security/generate/report/health">
+                    <?= LangManager::translate('core.btn.generate') ?>
+                </a>
+            </div>
+        </div>
+    </div>
 </section>
-
-
 
 
 <script>

@@ -110,6 +110,11 @@ return [
             ],
             "missing_inputs" => "Merci de remplir tous les champs !",
         ],
+        "security" => [
+            "healthReport" => [
+                "delete" => "Health Reports supprimés"
+            ],
+        ],
     ],
     "datatables" => [
         "list" => [
@@ -257,6 +262,23 @@ return [
             "title" => "Gestion du captcha",
             "type" => "Type de captcha",
         ],
+        "healthReport" => [
+            "title" => "Health Report",
+            "subtitle" => "Késako ?",
+            "content" => "<p>Notre health report permet à notre équipe de support de vous aider en envoyant un maximum
+                    d'informations (non sensibles) à propos de votre site.</p>
+
+                <p>
+                    <b>Pensez à supprimer vos health reports une fois le support terminé !
+                        Sinon vous vous exposez votre site à des failles.</b>
+                </p>
+
+                <p>
+                    <i>Il est <b>impératif</b> d'envoyer vos Health Report uniquement à <b>l'équipe CraftMyWebsite</b> si on vous le demande.</i>
+                </p>",
+            "emplacement" => "Emplacement du Health Report",
+            "copy" => "Copier le contenu"
+        ],
     ],
     "footer" => [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " Tous droits réservés.",
@@ -277,7 +299,8 @@ return [
         "confirm" => "Confirmer",
         "next" => "Suivant",
         "try" => "Tester",
-        "continue" => "Continuer"
+        "continue" => "Continuer",
+        "generate" => "Générer",
     ],
     "months" => [
         1 => "Janvier",
