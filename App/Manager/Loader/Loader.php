@@ -12,6 +12,7 @@ use CMW\Manager\Router\Router;
 use CMW\Manager\Router\RouterException;
 use CMW\Manager\Views\View;
 use CMW\Utils\Directory;
+use CMW\Utils\Log;
 use ReflectionClass;
 
 class Loader
@@ -131,10 +132,11 @@ class Loader
      */
     public static function loadAttributes(): void
     {
-        $files = array_merge(
-            Directory::getFilesRecursively("App/Package", "php"),
-            Directory::getFilesRecursively("Installation", "php")
-        );
+        $files = Directory::getFilesRecursively("App/Package", "php");
+
+        if (EnvManager::getInstance()->getValue('INSTALLSTEP') !== '-1'){
+            $files = [...$files, ...Directory::getFilesRecursively("Installation", "php")];
+        }
 
         foreach ($files as $file) {
             self::listAttributes($file);
@@ -151,13 +153,17 @@ class Loader
     /**
      * @throws \ReflectionException
      */
-    public static function listAttributes($file): void
+    public static function listAttributes(string $file): void
     {
         if (in_array($file, self::$fileLoadedAttr, true)) {
             return;
         }
 
+
+
         $className = ClassManager::getClassFullNameFromFile($file);
+
+        Log::debug(AutoLoad::$findNameSpace); //TODO Fix that
 
         if (is_null($className)) {
             return;
@@ -182,7 +188,6 @@ class Loader
         }
 
         self::$fileLoadedAttr[] = $file;
-
     }
 
     public static function loadInstall(): void
