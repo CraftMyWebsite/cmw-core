@@ -41,7 +41,7 @@ class Router
         return $this->get($link->getPath(), function (...$values) use ($method) {
 
             $request = new Request(url: $this->url, method: 'GET',
-                params: $this->getRouteByUrl('users/edit/:id')?->getParams() ?? [],
+                params: $this->getRouteByUrl($this->url)?->getParams() ?? [],
                 data: $_GET ?? [],
                 emitUrl: $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
 
