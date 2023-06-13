@@ -9,8 +9,12 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
+use CMW\Manager\Security\HealthReport;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
+use CMW\Utils\Redirect;
+use CMW\Utils\Website;
+use JetBrains\PhpStorm\NoReturn;
 
 /**
  * Class: @SecurityController
@@ -60,6 +64,37 @@ class SecurityController extends AbstractController
             LangManager::translate("core.toaster.config.success"));
 
         header("Location: ../../security");
+    }
+
+    #[NoReturn] #[Link("/security/generate/report/health", Link::GET, [], "/cmw-admin")]
+    private function adminGenerateReportHealth(): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.security.generate.report.health");
+
+        $healthReport = new HealthReport();
+
+        $reportName = $healthReport->generateReport();
+
+        $report = file_get_contents(EnvManager::getInstance()->getValue('DIR') . "App/Storage/Reports/$reportName");
+
+        View::createAdminView('core', 'security/displayHealthReport')
+            ->addVariableList(['report' => $report, 'reportName' => $reportName])
+            ->view();
+    }
+
+    #[NoReturn] #[Link("/security/delete/report/health", Link::GET, [], "/cmw-admin")]
+    private function adminDeleteReportHealth(): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.security.generate.report.health");
+
+        $healthReport = new HealthReport();
+
+        $healthReport->deleteHealthReports();
+
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+            LangManager::translate('core.toaster.security.healthReport.delete'));
+
+        Redirect::redirect('/cmw-admin/security');
     }
 
 

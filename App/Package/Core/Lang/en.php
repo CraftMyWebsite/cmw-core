@@ -110,6 +110,11 @@ return [
             ],
             "missing_inputs" => "Please fill all inputs !",
         ],
+        "security" => [
+            "healthReport" => [
+                "delete" => "Health Reports removed"
+            ],
+        ],
     ],
     "datatables" => [
         "list" => [
@@ -257,6 +262,21 @@ return [
             "title" => "Manage your captcha",
             "type" => "Captcha type",
         ],
+        "healthReport" => [
+            "title" => "Health Report",
+            "subtitle" => "What is that ?",
+            "content" => "<p>Our health report allows our support team to help you by sending as many
+                    (non-sensitive) information about your site.</p>
+
+                <p>
+                    <b>Remember to delete your health reports once the support is over!
+                        Otherwise, you expose your site to vulnerability.</b>
+                </p>
+
+                <p>
+                    <i>It is <b>imperative</b> to send your Health Reports only to <b>the CraftMyWebsite team</b> if you are asked to do it.</i>
+                </p>"
+        ],
     ],
     "footer" => [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " All right reserved.",
@@ -276,7 +296,8 @@ return [
         "confirm" => "Confirm",
         "next" => "Next",
         "try" => "Try",
-        "continue" => "Continue"
+        "continue" => "Continue",
+        "generate" => "Generate"
     ],
     "months" => [
         1 => "January",
