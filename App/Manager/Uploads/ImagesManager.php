@@ -17,6 +17,7 @@ class ImagesManager
         'image/gif' => 'gif',
         'image/webp' => 'webp',
         'image/x-icon' => 'ico',
+        'image/vnd.microsoft.icon' => 'ico',
         'image/x-tga' => 'ico',
         'image/svg+xml' => 'svg'
     ];

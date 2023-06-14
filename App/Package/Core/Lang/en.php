@@ -325,6 +325,7 @@ return [
             'dateTime' => 'Input %key% need to be a validate format (%format%)',
             'getValue' => 'Missing value %key%',
             'type' => 'Invalide type for %key%',
-        ]
-    ]
+        ],
+        "editConfiguration" => "Unable to edit configuration %config%"
+    ],
 ];

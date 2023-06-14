@@ -2,6 +2,7 @@
 
 namespace CMW\Manager\Cache;
 
+use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Utils\Directory;
 use JsonException;
@@ -81,6 +82,10 @@ class SimpleCacheManager
 
         Directory::createFolders(self::$dir . $subFolder);
 
+        if (self::cacheExist($fileName, $subFolder)){
+            self::deleteSpecificCacheFile($fileName, $subFolder);
+        }
+
         try {
             file_put_contents(self::getCompletePath() . $subFolder . $fileName, json_encode($value, JSON_THROW_ON_ERROR));
         } catch (JsonException) {
@@ -125,5 +130,22 @@ class SimpleCacheManager
         }
 
         unlink(self::getCompletePath() . $subFolder . $fileName);
+    }
+
+    /**
+     * @param string $valueKey
+     * @param mixed $newValue
+     * @param string $fileName
+     * @param string $subFolder
+     * @return void
+     */
+    public static function editCacheValue(string $valueKey, mixed $newValue, string $fileName, string $subFolder = "/"): void
+    {
+        $data = self::getCache($fileName, $subFolder);
+
+        $data[$valueKey] = $newValue;
+
+        self::storeCache($data, $fileName, $subFolder);
+
     }
 }

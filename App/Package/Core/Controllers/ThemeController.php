@@ -5,6 +5,7 @@ namespace CMW\Controller\Core;
 use CMW\Controller\Users\UsersController;
 use CMW\Entity\Core\ThemeEntity;
 use CMW\Manager\Api\PublicAPI;
+use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Lang\LangManager;
@@ -194,7 +195,8 @@ class ThemeController extends AbstractController
         $installedThemes = self::getInstalledThemes();
         $themesList = self::getMarketThemes();
 
-        ThemeModel::getInstance()->initConfigCache($currentTheme->getName());
+        $themeConfigs = ThemeModel::getInstance()->fetchThemeConfigs($currentTheme->getName());
+        SimpleCacheManager::storeCache($themeConfigs, 'config', "Themes/" . $currentTheme->getName());
         
         View::createAdminView("Core", "themeMarket")
             ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes, "themesList" => $themesList])
@@ -225,7 +227,8 @@ class ThemeController extends AbstractController
         ThemeModel::getInstance()->deleteThemeConfig($themeName);
         $this->installThemeSettings($themeName);
 
-        ThemeModel::getInstance()->initConfigCache(self::getCurrentTheme()->getName());
+        $themeConfigs = ThemeModel::getInstance()->fetchThemeConfigs($themeName);
+        SimpleCacheManager::storeCache($themeConfigs, 'config', "Themes/" . $themeName);
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.Theme.regenerate"));
@@ -245,14 +248,14 @@ class ThemeController extends AbstractController
                 LangManager::translate("core.downloads.errors.internalError",
                     ['name' => $theme['name'], 'version' => $theme['version_name']]));
             Redirect::redirectPreviousRoute();
-            return;
         }
 
         //Install Theme settings
         $this->installThemeSettings($theme['name']);
         CoreModel::updateOption("theme", $theme['name']);
 
-        ThemeModel::getInstance()->initConfigCache($theme['name']);
+        $themeConfigs = ThemeModel::getInstance()->fetchThemeConfigs($theme['name']);
+        SimpleCacheManager::storeCache($themeConfigs, 'config', "Themes/" . $theme['name']);
 
         //TODO TOASTER
 
@@ -311,6 +314,9 @@ class ThemeController extends AbstractController
                 ThemeModel::getInstance()->updateThemeConfig($conf, $_POST[$conf] ?? "0", self::getCurrentTheme()->getName());
             }
         }
+
+        $themeConfigs = ThemeModel::getInstance()->fetchThemeConfigs(self::getCurrentTheme()->getName());
+        SimpleCacheManager::storeCache($themeConfigs, 'config', "Themes/" . self::getCurrentTheme()->getName());
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));

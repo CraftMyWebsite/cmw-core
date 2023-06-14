@@ -224,7 +224,7 @@ class UsersController extends AbstractController
         header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
-    #[Link("/picture/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users")]
+    #[Link("/picture/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users/manage")]
     #[NoReturn] private function adminUsersEditPicturePost(Request $request, int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
@@ -237,7 +237,7 @@ class UsersController extends AbstractController
         header("location: " . $_SERVER['HTTP_REFERER']);  //Todo redirect
     }
 
-    #[Link("/picture/reset/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
+    #[Link("/picture/reset/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users/manage")]
     #[NoReturn] private function adminUsersResetPicture(Request $request, int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
