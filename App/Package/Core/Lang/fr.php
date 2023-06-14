@@ -328,6 +328,7 @@ return [
             'dateTime' => 'Le champs %key% doit être une date valide (%format%)',
             'getValue' => 'Valeur introuvable %key%',
             'type' => 'Type invalide pour %key%'
-        ]
+        ],
+        "editConfiguration" => "Impossible de modifier la configuration %config%"
     ]
 ];

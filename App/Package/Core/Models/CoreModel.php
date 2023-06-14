@@ -2,6 +2,7 @@
 
 namespace CMW\Model\Core;
 
+use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Package\AbstractModel;
 
@@ -16,6 +17,16 @@ class CoreModel extends AbstractModel
 
     public function fetchOption(string $option): string
     {
+        if (SimpleCacheManager::cacheExist('options', "Options")){
+            $data = SimpleCacheManager::getCache('options', "Options");
+
+            foreach ($data as $conf) {
+                if ($conf['option_name'] === $option){
+                    return $conf['option_value'] ?? "UNDEFINED_$option";
+                }
+            }
+        }
+
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT option_value FROM cmw_core_options WHERE option_name = ?');
         $req->execute(array($option));

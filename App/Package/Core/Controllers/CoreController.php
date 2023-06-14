@@ -3,6 +3,7 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Lang\LangManager;
@@ -17,8 +18,11 @@ use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
+use CMW\Model\Core\ThemeModel;
 use CMW\Model\Users\UsersMetricsModel;
 use CMW\Utils\Redirect;
+use JetBrains\PhpStorm\NoReturn;
+use JsonException;
 
 /**
  * Class: @coreController
@@ -75,36 +79,40 @@ class CoreController extends AbstractController
         ->view();
     }
 
-    #[Link(path: "/configuration", method: Link::POST, scope: "/cmw-admin")]
+    #[NoReturn] #[Link(path: "/configuration", method: Link::POST, scope: "/cmw-admin")]
     private function adminConfigurationPost(Request $request): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
-
-        // TODO Test
-        $validator = new Validator($request->getData());
-        $validator->checkType('string', 'name')
-            ->checkType('integer', 'age')
-            ->checkType('boolean', 'isFdp')
-            ->required('name', 'age')
-            ->length('age', '1', '3');
-
 
         foreach ($_POST as $option_name => $option_value):
             if ($option_name === "locale") {
                 EnvManager::getInstance()->editValue("LOCALE", $option_value);
             }
-
             CoreModel::updateOption($option_name, $option_value);
         endforeach;
 
         //update favicon
+        if ($_FILES['favicon']['name'] !== "") {
+            try {
+                $imgStatus = ImagesManager::upload($_FILES['favicon'], "Favicon", false, "favicon");
+                //Show error
+                if ($imgStatus !== 'favicon.ico'){
+                    Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                        LangManager::translate($imgStatus));
+                }
+            } catch (JsonException) {
+                Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                    LangManager::translate("core.errors.editConfiguration", ['config' => 'Favicon']));
+            }
+        }
 
-        echo ImagesManager::upload($_FILES['favicon'], "favicon", false, "favicon"); //todo remove echo ?
+        $options = CoreModel::getInstance()->fetchOptions();
+        SimpleCacheManager::storeCache($options, 'options', "Options");
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
-        header("location: configuration"); //todo redirect
+        Redirect::redirectPreviousRoute();
     }
 
     /* PUBLIC FRONT */
