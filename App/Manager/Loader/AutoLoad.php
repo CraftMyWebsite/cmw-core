@@ -135,19 +135,23 @@ class AutoLoad
             return false;
         }
 
+        $namespace = implode('\\', $classPart);
+
         $classPart = array_slice($classPart, 2);
 
         $fileName = array_pop($classPart) . ".php";
 
         $subFolderFile = count($classPart) ? implode("/", $classPart) . "/" : "";
 
-        $file = EnvManager::getInstance()->getValue("DIR") . $startDir . $subFolderFile . $fileName;
+        $filePath = EnvManager::getInstance()->getValue("DIR") . $startDir . $subFolderFile . $fileName;
 
-        if (!is_file($file)) {
+        if (!is_file($filePath)) {
             return false;
         }
 
-        require_once($file);
+        self::$findNameSpace[str_replace('/', '\\', $filePath)] = $namespace;
+
+        require_once($filePath);
         return true;
     }
 

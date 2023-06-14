@@ -160,10 +160,11 @@ class Loader
         }
 
 
-
         $className = ClassManager::getClassFullNameFromFile($file);
 
-        Log::debug(AutoLoad::$findNameSpace); //TODO Fix that
+        //Log::debug(AutoLoad::$findNameSpace); //TODO Fix that
+
+        Log::debug([$file, AutoLoad::$findNameSpace]);
 
         if (is_null($className)) {
             return;
