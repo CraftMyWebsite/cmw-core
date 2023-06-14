@@ -26,7 +26,7 @@ class DiscordWebhook
     private string $authorName;
     private ?string $authorUrl;
 
-    private ?array $fields;
+    private array $fields = [];
 
     //Optionnal (Text To Speech)
     private bool $tts = false;
@@ -120,12 +120,13 @@ class DiscordWebhook
     }
 
     /**
-     * @param string $color
+     * @param string $color : hex color string
      * @return DiscordWebhook
+     * @desc Provide hex color string without #, ex: a870fe
      */
     public function setColor(string $color): DiscordWebhook
     {
-        $this->color = $color;
+        $this->color = str_replace('#', '', $color);
         return $this;
     }
 
@@ -180,12 +181,11 @@ class DiscordWebhook
     }
 
     /**
-     * @param array|null $fields
+     * @param array $fields
      * @return DiscordWebhook
      * @desc EX: ["name" => "Field 1", "value" => "Field 1", "inline" => false],
-
      */
-    public function setFields(?array $fields): DiscordWebhook
+    public function setFields(array $fields): DiscordWebhook
     {
         $this->fields = $fields;
         return $this;
@@ -209,7 +209,7 @@ class DiscordWebhook
     public function send(): void
     {
         $timestamp = date("c");
-        $data = json_encode([
+        $data = [
             // Message
             "content" => $this->content,
 
@@ -259,18 +259,21 @@ class DiscordWebhook
                     ],
 
                     // Additional Fields array
-                    "fields" => $this->fields
-                ]
-            ]
+                    "fields" => $this->fields,
+                ],
+            ],
 
-        ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        ];
 
         if (!empty($this->imageUrl)) {
-            $data .= json_encode(['embeds' =>
+            $data += ['embeds' =>
                 ["image" => [
                     "url" => $this->imageUrl
-                ]]], JSON_THROW_ON_ERROR);
+                ]]];
+
         }
+
+        $data = json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
 
         $ch = curl_init($this->url);
@@ -280,10 +283,12 @@ class DiscordWebhook
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
-        $response = curl_exec($ch);
+        curl_exec($ch);
 
-        echo $response;
+        //curl_error($ch);
+
         curl_close($ch);
     }
 
