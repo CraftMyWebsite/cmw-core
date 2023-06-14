@@ -120,29 +120,4 @@ class ThemeModel extends AbstractModel
 
         $req->execute(array("themeName" => $themeName));
     }
-
-    public function initConfigCache(string $themeName): void
-    {
-        $sql = "SELECT * FROM cmw_theme_config WHERE theme_config_theme = :theme";
-        $db = DatabaseManager::getInstance();
-
-        $req = $db->prepare($sql);
-
-        if (!$req->execute(['theme' => $themeName])){
-            return;
-        }
-
-        $res = $req->fetchAll();
-
-        if (!$res){
-            return;
-        }
-
-        if (SimpleCacheManager::cacheExist('config', "Themes/$themeName")){
-            SimpleCacheManager::deleteSpecificCacheFile('config', "Themes/$themeName");
-        }
-
-        SimpleCacheManager::storeCache($res, 'config', "Themes/$themeName");
-    }
-
 }
