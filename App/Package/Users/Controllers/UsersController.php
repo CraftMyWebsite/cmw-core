@@ -18,6 +18,7 @@ use CMW\Model\Users\UserPictureModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
+use CMW\Utils\Website;
 use Exception;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
@@ -254,7 +255,7 @@ class UsersController extends AbstractController
     {
         if(SecurityController::checkCaptcha()) {
 
-            [$mail, $password] = Utils::filterInput("login_email", "login_password");
+            [$mail, $password, $previousRoute] = Utils::filterInput("login_email", "login_password", "previousRoute");
 
             $infos = array(
                 "email" => $mail,
@@ -269,16 +270,20 @@ class UsersController extends AbstractController
             $userId = UsersModel::logIn($infos, $cookie);
             if ($userId > 0 && $userId !== "ERROR") {
                 UsersModel::getInstance()->updateLoggedTime($userId);
-                header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
-
+                if ($previousRoute) {
+                    header('Location: ' . $previousRoute);
+                } else {
+                    header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
+                }
             } else {
                 Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.mail_pass_matching"));
-                Redirect::redirectToPreviousPage();
+                Redirect::redirectPreviousRoute();
             }
         } else {
             //TODO Toaster invalid captcha
-            Redirect::redirectToPreviousPage();
+            Redirect::redirectPreviousRoute();
         }
+
     }
 
     /**
