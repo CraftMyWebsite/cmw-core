@@ -26,7 +26,7 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                     <tr class="">
                         <th class="text-center"><?= LangManager::translate("users.roles.manage.name") ?></th>
                         <th class="text-center"><?= LangManager::translate("users.roles.manage.description") ?></th>
-                        <th class="text-center">Rôle par défaut</th>
+                        <th class="text-center"><?= LangManager::translate("users.roles.manage.default.title") ?></th>
                         <th class="text-center"><?= LangManager::translate("core.btn.action") ?></th>
                     </tr>
                     </thead>
