@@ -43,10 +43,9 @@ class RolesController extends AbstractController
 
 
         View::createAdminView("Users", "roles")
-            ->addScriptBefore("App/Package/Users/Views/Assets/Js/manageRoles.js",
-                "Admin/Resources/Vendors/IziToast/iziToast.min.js",
-                "App/Package/users/Views/Assets/Js/rolesWeights.js")
-            ->addStyle("Admin/Resources/Vendors/IziToast/iziToast.min.css")
+            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
+            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
+                "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
             ->addVariableList(["rolesList" => $rolesList, "permissionController" => $permissionController,
                 "permissionModel" => $permissionModel, "rolesModel" => $rolesModel])
             ->view();
@@ -121,15 +120,28 @@ class RolesController extends AbstractController
         $roleDescription = filter_input(INPUT_POST, "description");
         $permList = $_POST['perms'];
         $roleWeight = filter_input(INPUT_POST, "weight", FILTER_SANITIZE_NUMBER_INT);
-        $roleIsDefault = isset($_POST['isDefault']) ? 1 : 0;
 
-        RolesModel::getInstance()->updateRole($roleName, $roleDescription, $id, $roleWeight, $roleIsDefault, $permList);
+        RolesModel::getInstance()->updateRole($roleName, $roleDescription, $id, $roleWeight, $permList);
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate('users.toaster.role_edited'));
 
 
         Redirect::redirectPreviousRoute();
+    }
+
+    #[Link("/set_default/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
+    #[NoReturn] private function adminRolesSetDefault(Request $request, int $id): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.edit");
+
+        RolesModel::getInstance()->changeDefault($id);
+
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
+            LangManager::translate('users.toaster.role_edited'));
+
+
+        header("location: " . $_SERVER['HTTP_REFERER']);
     }
 
     #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]

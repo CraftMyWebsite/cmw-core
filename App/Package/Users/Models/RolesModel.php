@@ -95,6 +95,10 @@ class RolesModel extends AbstractModel
             "role_is_default" => $roleIsDefault
         );
 
+        if ($roleIsDefault === 1) {
+            $this->removePreviousDefaultRole();
+        }
+
         $sql = "INSERT INTO cmw_roles (role_name, role_description, role_weight, role_is_default) 
                 VALUES (:role_name, :role_description, :role_weight, :role_is_default)";
 
@@ -171,29 +175,51 @@ class RolesModel extends AbstractModel
      * @param string $roleDescription
      * @param int $roleId
      * @param int $roleWeight
-     * @param int $roleIsDefault
      * @param array|null $permList
      * @return void
      */
-    public function updateRole(string $roleName, string $roleDescription, int $roleId, int $roleWeight, int $roleIsDefault, ?array $permList): void
+    public function updateRole(string $roleName, string $roleDescription, int $roleId, int $roleWeight, ?array $permList): void
     {
         //Update role
         $var = array(
             "role_name" => $roleName,
             "role_description" => $roleDescription,
             "role_id" => $roleId,
-            "role_weight" => $roleWeight,
-            "role_is_default" => $roleIsDefault
+            "role_weight" => $roleWeight
         );
 
-        $sql = "UPDATE cmw_roles SET role_name = :role_name, role_description = :role_description, 
-                     role_weight = :role_weight, role_is_default = :role_is_default WHERE role_id = :role_id";
+        $sql = "UPDATE cmw_roles SET role_name = :role_name, role_description = :role_description, role_weight = :role_weight WHERE role_id = :role_id";
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
 
         $this->updatePermission($roleId, $permList);
+    }
+
+    /**
+     * @return void
+     */
+    public function changeDefault(int $id): void
+    {
+        $this->removePreviousDefaultRole();
+        $sql = "UPDATE cmw_roles SET role_is_default = 1 WHERE role_id = :id";
+
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare($sql);
+        $req->execute(array("id" => $id));
+    }
+
+    /**
+     * @return void
+     */
+    public function removePreviousDefaultRole(): void
+    {
+        $sql = "UPDATE cmw_roles SET role_is_default = 0 WHERE role_is_default = 1";
+
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare($sql);
+        $req->execute();
     }
 
     public function updatePermission(int $roleId, ?array $permList): void

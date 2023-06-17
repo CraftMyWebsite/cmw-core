@@ -65,19 +65,6 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-3">
-                        <div class="form-switch">
-                            <input class="me-1 form-check-input permission-input" type="checkbox" value="1"
-                                   id="isDefault" name="isDefault" <?= $role->isDefault() ? 'checked' : '' ?>>
-
-                            <label class="form-check-label" for="isDefault">
-                                <?= LangManager::translate("users.roles.manage.default.title") ?> :
-                                <i data-bs-toggle="tooltip"
-                                   title="<?= LangManager::translate('users.roles.manage.default.tips') ?>"
-                                   class="fa-sharp fa-solid fa-circle-question"></i>
-                            </label>
-                        </div>
-                    </div>
                 </div>
 
                 <h6><?= LangManager::translate("users.roles.manage.permissions_list") ?> :</h6>

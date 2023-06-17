@@ -6,6 +6,7 @@ use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\SecurityController;
 use CMW\Entity\Users\UserEntity;
 use CMW\Entity\Users\UserSettingsEntity;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
@@ -272,8 +273,10 @@ class UsersController extends AbstractController
                 UsersModel::getInstance()->updateLoggedTime($userId);
                 if ($previousRoute) {
                     header('Location: ' . $previousRoute);
+                    /*$previousRouteStr = str_replace(Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER"), "", $previousRoute);
+                    Redirect::redirect($previousRouteStr);*/
                 } else {
-                    header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
+                    Redirect::redirect("profile");
                 }
             } else {
                 Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.mail_pass_matching"));

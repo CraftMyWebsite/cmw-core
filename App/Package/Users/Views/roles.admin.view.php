@@ -23,17 +23,25 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
             <div class="card-body">
                 <table class="table" id="table1">
                     <thead>
-                    <tr>
-                        <th class=""><?= LangManager::translate("users.roles.manage.name") ?></th>
-                        <th class=""><?= LangManager::translate("users.roles.manage.description") ?></th>
+                    <tr class="">
+                        <th class="text-center"><?= LangManager::translate("users.roles.manage.name") ?></th>
+                        <th class="text-center"><?= LangManager::translate("users.roles.manage.description") ?></th>
+                        <th class="text-center">Rôle par défaut</th>
                         <th class="text-center"><?= LangManager::translate("core.btn.action") ?></th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php foreach ($rolesList as $role) : ?>
-                        <tr>
+                        <tr >
                             <td><?= $role->getName() ?></td>
                             <td><?= $role->getDescription() ?></td>
+                            <td class="text-center">
+                                <?php if ($role->isDefault()): ?>
+                                    <i class="text-success fa-regular fa-circle-dot fa-beat-fade"></i>
+                                <?php else: ?>
+                                    <a href="set_default/<?= $role->getId() ?>"><i class="fa-regular fa-circle fa-2xs"><span hidden>a</span></i></a>
+                                <?php endif; ?>
+                            </td>
                             <td class="text-center">
                                 <a href="manage/edit/<?= $role->getId() ?>">
                                     <i class="text-primary fa-solid fa-gears"></i>
