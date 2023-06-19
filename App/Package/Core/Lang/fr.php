@@ -106,7 +106,8 @@ return [
         "db" => [
             "config" => [
                 "success" => "Configuration fonctionnelle",
-                "error" => "Configuration invalide"
+                "error" => "Configuration invalide",
+                "alreadyInstalled" => "Base de donnée déjà installée !"
             ],
             "missing_inputs" => "Merci de remplir tous les champs !",
         ],

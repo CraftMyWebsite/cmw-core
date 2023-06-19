@@ -128,7 +128,6 @@ class InstallerController extends AbstractController
 
         if (self::getInstallationStep() === -1){
             Redirect::redirectToHome();
-            return;
         }
 
         $value = match (self::getInstallationStep()) {
@@ -166,7 +165,7 @@ class InstallerController extends AbstractController
         $view->view();
     }
 
-    #[Link(path: "/submit", method: Link::POST, scope: "/installer", secure: false)]
+    #[NoReturn] #[Link(path: "/submit", method: Link::POST, scope: "/installer", secure: false)]
     public function postInstallPage(): void
     {
         $value = match (self::getInstallationStep()) {
@@ -225,13 +224,19 @@ class InstallerController extends AbstractController
 
         [$host, $username, $password, $port] = Utils::filterInput("bdd_address", "bdd_login", "bdd_pass", "bdd_port");
 
-        if (InstallerModel::tryDatabaseConnection($host, $username, $password, $port)) {
-            print (json_encode(["status" => 1, "content" =>
-                LangManager::translate("core.toaster.db.config.success")],
-                JSON_THROW_ON_ERROR));
-        } else {
+        $db = filter_input(INPUT_POST, "bdd_name") ?? "cmw";
+
+        if (!InstallerModel::tryDatabaseConnection($host, $username, $password, $port)) {
             print (json_encode(["status" => 0,
                 "content" => LangManager::translate("core.toaster.db.config.error")],
+                JSON_THROW_ON_ERROR));
+        } else if (InstallerModel::checkIfDatabaseAlreadyInstalled($host, $username, $password, $db, $port)) {
+            print (json_encode(["status" => 0, "content" =>
+                LangManager::translate("core.toaster.db.config.alreadyInstalled")],
+                JSON_THROW_ON_ERROR));
+        } else {
+            print (json_encode(["status" => 1, "content" =>
+                LangManager::translate("core.toaster.db.config.success")],
                 JSON_THROW_ON_ERROR));
         }
     }
@@ -255,6 +260,12 @@ class InstallerController extends AbstractController
         if (!InstallerModel::tryDatabaseConnection($host, $username, $password, $port)) {
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.toaster.db.config.error"));
+            return;
+        }
+
+        if (InstallerModel::checkIfDatabaseAlreadyInstalled($host, $username, $password, $db, $port)) {
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.toaster.db.config.alreadyInstalled"));
             return;
         }
 
