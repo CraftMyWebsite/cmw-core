@@ -106,7 +106,8 @@ return [
         "db" => [
             "config" => [
                 "success" => "Configuration good",
-                "error" => "Configuration error"
+                "error" => "Configuration error",
+                "alreadyInstalled" => "Data base already installed !"
             ],
             "missing_inputs" => "Please fill all inputs !",
         ],

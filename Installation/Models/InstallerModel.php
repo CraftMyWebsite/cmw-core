@@ -2,6 +2,7 @@
 
 namespace CMW\Model\Installer;
 
+use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Env\EnvManager;
 use PDO;
@@ -47,6 +48,19 @@ class InstallerModel
         } catch (PDOException) {
             return false;
         }
+    }
+
+    public static function checkIfDatabaseAlreadyInstalled(string $servername, string $username, string $password, string $name, int $port): bool
+    {
+        $db = DatabaseManager::getCustomMysqlInstance($servername, $username, $password, $name, $port);
+
+        $sql = "SHOW TABLES LIKE 'cmw_users'";
+
+        $req = $db->query($sql);
+
+        $res = $req->fetchAll();
+
+        return count($res) > 0;
     }
 
     public static function initDatabase(string $serverName, string $database, string $username, string $password, int $port): void
