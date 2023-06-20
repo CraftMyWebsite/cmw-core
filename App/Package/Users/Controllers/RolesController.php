@@ -2,18 +2,16 @@
 
 namespace CMW\Controller\Users;
 
-use CMW\Controller\Core\CoreController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
-use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Users\PermissionsModel;
 use CMW\Model\Users\RolesModel;
-use CMW\Model\Users\UsersModel;
 use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
@@ -43,9 +41,13 @@ class RolesController extends AbstractController
 
 
         View::createAdminView("Users", "roles")
-            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
+            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css",
+                "Admin/Resources/Assets/Css/Pages/simple-datatables.css",
+                "Admin/Resources/Vendors/Izitoast/iziToast.min.css")
             ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
-                "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
+                "Admin/Resources/Assets/Js/Pages/simple-datatables.js",
+                "App/Package/Users/Views/Assets/Js/rolesWeights.js",
+                "Admin/Resources/Vendors/Izitoast/iziToast.min.js")
             ->addVariableList(["rolesList" => $rolesList, "permissionController" => $permissionController,
                 "permissionModel" => $permissionModel, "rolesModel" => $rolesModel])
             ->view();
