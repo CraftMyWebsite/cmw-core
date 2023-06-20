@@ -22,6 +22,12 @@
       }
     },
     {
+      "name_menu_fr": "Maintenance",
+      "name_menu_en": "Maintenance",
+      "icon_menu": "fas fa-helmet-safety",
+      "url_menu": "maintenance/manage"
+    },
+    {
       "name_menu_fr": "Mails",
       "name_menu_en": "Mails",
       "icon_menu": "fas fa-envelope",

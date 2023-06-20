@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `cmw_roles`
     `role_id`          INT(11)  NOT NULL AUTO_INCREMENT,
     `role_name`        TINYTEXT NOT NULL,
     `role_description` TEXT,
-    `role_weight`      INT     DEFAULT 0,
+    `role_weight`      INT        DEFAULT 0,
     `role_is_default`  TINYINT(1) DEFAULT 0,
     PRIMARY KEY (`role_id`)
 ) ENGINE = InnoDB
@@ -200,6 +200,20 @@ CREATE TABLE IF NOT EXISTS `cmw_visits`
   DEFAULT CHARSET = utf8mb4;
 
 
+CREATE TABLE IF NOT EXISTS `cmw_maintenance`
+(
+    `maintenance_id`              INT(11)                               NOT NULL AUTO_INCREMENT,
+    `maintenance_is_enable`       TINYINT(1)                            NOT NULL DEFAULT '0',
+    `maintenance_title`           VARCHAR(255)                          NULL,
+    `maintenance_description`     LONGTEXT                              NULL,
+    `maintenance_type`            TINYINT(1)                            NULL,
+    `maintenance_target_date`     TIMESTAMP                             NULL,
+    `maintenance_last_updated_at` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`maintenance_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
+
+
 /* INSERT AREA */
 
 INSERT INTO `cmw_core_condition` (`condition_content`)
@@ -231,4 +245,8 @@ VALUES ('1', '5');
 INSERT INTO `cmw_users_settings` (users_settings_name, users_settings_value)
 VALUES ('defaultImage', 'defaultImage.jpg'),
        ('resetPasswordMethod', '0'),
-       ('profilePage', '1')
+       ('profilePage', '1');
+
+INSERT INTO `cmw_maintenance` (maintenance_is_enable, maintenance_title, maintenance_description, maintenance_type,
+                               maintenance_target_date)
+VALUES (0, 'Maintenance', 'Maintenance en cours !', NULL, NULL);
