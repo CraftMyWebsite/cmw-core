@@ -6,6 +6,7 @@ use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\MenusController;
 use CMW\Controller\Core\ThemeController;
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\RouterException;
 use CMW\Model\Users\UsersModel;
@@ -173,7 +174,7 @@ class View
         }
         $theme = ThemeController::getCurrentTheme()->getName();
         return ($this->isAdminFile)
-            ? getenv("PATH_ADMIN_VIEW") . "template.php"
+            ? EnvManager::getInstance()->getValue("PATH_ADMIN_VIEW") . "template.php"
             : "Public/Themes/$theme/Views/template.php";
     }
 
@@ -185,7 +186,7 @@ class View
 
         if ($fileType === "styles") {
             foreach ($includes['styles'] as $style) {
-                $styleLink = getenv("PATH_SUBFOLDER") . $style;
+                $styleLink = EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $style;
                 echo <<<HTML
                     <link rel="stylesheet" href="$styleLink">
                 HTML;
@@ -197,7 +198,7 @@ class View
         $arrayAccess = $fileType === "beforeScript" ? "before" : "after";
 
         foreach ($includes['scripts'][$arrayAccess] as $script) {
-            $scriptLink = getenv("PATH_SUBFOLDER") . $script;
+            $scriptLink = EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $script;
             echo <<<HTML
                     <script src="$scriptLink"></script>
                 HTML;

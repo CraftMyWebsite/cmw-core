@@ -20,7 +20,6 @@ class EnvManager
     private string $path;
     private string $absPath;
     private string $apiURL;
-    private string $version;
 
     public function __construct()
     {
@@ -28,7 +27,6 @@ class EnvManager
         $this->envPath = $this->absPath;
         $this->path = $this->envPath . $this->envFileName;
         $this->apiURL = "https://apiv2.craftmywebsite.fr"; //TODO En production mettre la vraie URL de l'API
-        $this->version = file_get_contents($this->absPath . '.cmw-version');
 
         if (!$this->checkForFile()) {
             $this->createFile();
@@ -56,7 +54,6 @@ class EnvManager
 
     private function doWithFile(Closure $fn): void
     {
-
         $lines = file($this->path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
         if (!count($lines)) {
@@ -75,7 +72,6 @@ class EnvManager
 
             $fn($name, $value);
         }
-
     }
 
     public static function getInstance(): EnvManager
@@ -87,7 +83,12 @@ class EnvManager
         return self::$_instance;
     }
 
-    public function valueExist($key): bool
+    public function valueExist(string $key): bool
+    {
+        return isset($_ENV[$key]);
+    }
+
+    public function valueExistInFile(string $key): bool
     {
         $toReturn = false;
 
@@ -117,20 +118,11 @@ class EnvManager
     {
         $key = strtoupper($key);
 
-        $toReturn = null;
-
-        $this->doWithFile(function ($name, $value) use ($key, &$toReturn) {
-            if ($name === mb_strtoupper(trim($key))) {
-                $toReturn = $value;
-            }
-        });
-
-
-        if ($this->valueExist($key)) {
-            return $toReturn ?? $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);
+        if (!$this->valueExist($key)) {
+            return null;
         }
 
-        return $toReturn;
+        return $_ENV[$key];
     }
 
     public function deleteValue($key): void
@@ -152,7 +144,7 @@ class EnvManager
 
     public function addValue($key, $value): void
     {
-        if (!$this->valueExist($key)) {
+        if (!$this->valueExistInFile($key)) {
             $file = fopen($this->envPath . $this->envFileName, 'ab');
             $textToSet = static function ($key, $value) {
                 return mb_strtoupper(trim($key)) . "=" . trim($value) . PHP_EOL;
@@ -172,10 +164,8 @@ class EnvManager
         $this->doWithFile(static function ($name, $value) {
             $k = mb_strtoupper(trim($name));
 
-            if (!array_key_exists($k, $_SERVER) && !array_key_exists($k, $_ENV)) {
-                putenv(sprintf('%s=%s', $k, $value));
+            if (!array_key_exists($k, $_ENV)) {
                 $_ENV[$k] = $value;
-                $_SERVER[$k] = $value;
             }
         });
     }

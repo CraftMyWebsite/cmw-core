@@ -6,7 +6,7 @@ class ClassManager
 {
 
 
-    public static function getClassFullNameFromFile($filePathName): ?string
+    public static function getClassFullNameFromFile(string $filePathName): ?string
     {
         $namespace = self::getClassNamespaceFromFile($filePathName);
         $classname = self::getClassNameFromFile($filePathName);
@@ -19,14 +19,14 @@ class ClassManager
     }
 
 
-    public static function getClassObjectFromFile($filePathName)
+    public static function getClassObjectFromFile(string $filePathName)
     {
         $classString = self::getClassFullNameFromFile($filePathName);
 
         return new $classString;
     }
 
-    protected static function getClassNamespaceFromFile($filePathName): ?string
+    protected static function getClassNamespaceFromFile(string $filePathName): ?string
     {
         $fileContent = file_get_contents($filePathName);
 
@@ -55,7 +55,7 @@ class ClassManager
         return !$hasNamespace ? null : $namespace;
     }
 
-    protected static function getClassNameFromFile($filePathName)
+    protected static function getClassNameFromFile(string $filePathName)
     {
         $php_code = file_get_contents($filePathName);
 

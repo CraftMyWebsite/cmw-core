@@ -33,7 +33,7 @@ class DatabaseManager
 
         try {
 
-            self::$_instance = new PDO("mysql:host=" . getenv("DB_HOST"), getenv("DB_USERNAME"), getenv("DB_PASSWORD"),
+            self::$_instance = new PDO("mysql:host=" . EnvManager::getInstance()->getValue("DB_HOST"), EnvManager::getInstance()->getValue("DB_USERNAME"), EnvManager::getInstance()->getValue("DB_PASSWORD"),
                 array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', PDO::ATTR_PERSISTENT => true));
             self::$_instance->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
             self::$_instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -41,8 +41,8 @@ class DatabaseManager
 
             /** Todo, see before if we have permissions ? */
             self::$_instance->exec("SET CHARACTER SET utf8");
-            self::$_instance->exec("CREATE DATABASE IF NOT EXISTS " . getenv("DB_NAME") . ";");
-            self::$_instance->exec("USE " . getenv("DB_NAME") . ";");
+            self::$_instance->exec("CREATE DATABASE IF NOT EXISTS " . EnvManager::getInstance()->getValue("DB_NAME") . ";");
+            self::$_instance->exec("USE " . EnvManager::getInstance()->getValue("DB_NAME") . ";");
             return self::$_instance;
         } catch (Exception $e) {
             die("DATABASE ERROR" . $e->getMessage());
@@ -102,7 +102,7 @@ class DatabaseManager
      */
     public static function getCustomSqLiteInstance(string $file = "db.sqlite3", array $options = [], bool $createMemoryDb = false): PDO
     {
-        if ($createMemoryDb){
+        if ($createMemoryDb) {
             $db = new PDO("sqlite::memory:", $options);
         } else {
             $db = new PDO("sqlite:$file", $options);

@@ -5,10 +5,14 @@ namespace CMW\Manager\Loader;
 use CMW\Controller\Core\CoreController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Utils\Directory;
+use CMW\Utils\Log;
 use CMW\Utils\Website;
 
 class AutoLoad
 {
+
+    public static array $findNameSpace = [];
+
     private static function isEnvValid(): bool
     {
         require_once("App/Manager/Env/EnvManager.php");
@@ -96,27 +100,31 @@ class AutoLoad
 
     private static function callPackage(array $classPart, string $startDir, string $folderPackage = ""): bool
     {
-
         if (count($classPart) < 4) {
             return false;
         }
 
-        $classPart = array_slice($classPart, 2);
-        $packageName = strtolower($classPart[0]);
+        $namespace = implode('\\', $classPart);
 
-        $classPart = array_slice($classPart, 1);
+        $packageName = strtolower($classPart[2]);
 
-        $fileName = array_pop($classPart) . ".php";
+        $fileName = $classPart[count($classPart) - 1] . ".php";
 
-        $subFolderFile = count($classPart) ? implode("/", $classPart) . "/" : "";
+        $subFolderFile = '';
+        if (count($classPart) > 4) {
+            $subFolderFile = implode('\\', array_slice($classPart, 3, -1)) . '\\';
+        }
 
-        $file = EnvManager::getInstance()->getValue("DIR") . $startDir . ($packageName === "installer" ? "" : ucfirst($packageName)) . $folderPackage . $subFolderFile . $fileName;
+        $dir = EnvManager::getInstance()->getValue("DIR");
+        $filePath = $dir . $startDir . ($packageName === "installer" ? "" : ucfirst($packageName)) . $folderPackage . $subFolderFile . $fileName;
 
-        if (!is_file($file)) {
+        if (!is_file($filePath)) {
             return false;
         }
 
-        require_once($file);
+        self::$findNameSpace[str_replace('/', '\\', $filePath)] = $namespace;
+
+        require_once $filePath;
         return true;
     }
 
@@ -127,19 +135,23 @@ class AutoLoad
             return false;
         }
 
+        $namespace = implode('\\', $classPart);
+
         $classPart = array_slice($classPart, 2);
 
         $fileName = array_pop($classPart) . ".php";
 
         $subFolderFile = count($classPart) ? implode("/", $classPart) . "/" : "";
 
-        $file = EnvManager::getInstance()->getValue("DIR") . $startDir . $subFolderFile . $fileName;
+        $filePath = EnvManager::getInstance()->getValue("DIR") . $startDir . $subFolderFile . $fileName;
 
-        if (!is_file($file)) {
+        if (!is_file($filePath)) {
             return false;
         }
 
-        require_once($file);
+        self::$findNameSpace[str_replace('/', '\\', $filePath)] = $namespace;
+
+        require_once($filePath);
         return true;
     }
 

@@ -2,39 +2,49 @@
 
 namespace CMW\Utils;
 
-use CMW\Manager\Env\EnvManager;
-
 class Directory
 {
 
-    public static function getFilesRecursively($dir, $extension = null, &$results = array())
+    public static function getFilesRecursively(string $dir, ?string $extension = null): array
     {
+        $results = [];
+
         $content = scandir($dir);
 
-        foreach ($content as $_ => $value) {
+        if ($content === false) {
+            return $results;
+        }
 
+        foreach ($content as $value) {
             if ($value === "." || $value === "..") {
                 continue;
             }
 
             $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
 
-            if (!is_null($extension) && is_file($path)) {
-                $pathParts = explode(DIRECTORY_SEPARATOR, $path);
-                $fileParts = explode('.', end($pathParts));
-                if (strtolower(end($fileParts)) !== strtolower($extension)) {
-                    continue;
-                }
-            }
-
-            if (!is_dir($path)) {
-                $results[] = $path;
-            } else {
-                self::getFilesRecursively($path, $extension, $results);
+            if (is_dir($path)) {
+               self::arrayMerge($results, self::getFilesRecursively($path, $extension));
+            } elseif ((is_null($extension) || self::hasMatchingExtension($path, $extension)) && is_file($path)) {
+                    $results[] = $path;
             }
         }
 
         return $results;
+    }
+
+    private static function arrayMerge(array &$result, array $subResults): void
+    {
+        foreach ($subResults as $res) {
+            $result[] = $res;
+        }
+    }
+
+    private static function hasMatchingExtension(string $path, string $extension): bool
+    {
+        $fileExtension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+        $extension = strtolower($extension);
+
+        return $fileExtension === $extension;
     }
 
     public static function getElements(string $path): array
