@@ -12,7 +12,6 @@ use CMW\Manager\Router\Router;
 use CMW\Manager\Router\RouterException;
 use CMW\Manager\Views\View;
 use CMW\Utils\Directory;
-use CMW\Utils\Log;
 use ReflectionClass;
 
 class Loader
@@ -161,10 +160,6 @@ class Loader
 
 
         $className = ClassManager::getClassFullNameFromFile($file);
-
-        //Log::debug(AutoLoad::$findNameSpace); //TODO Fix that
-
-        Log::debug([$file, AutoLoad::$findNameSpace]);
 
         if (is_null($className)) {
             return;
