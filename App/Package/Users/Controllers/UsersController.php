@@ -32,11 +32,6 @@ use JsonException;
  */
 class UsersController extends AbstractController
 {
-    public function adminDashboard(): void
-    {
-        header("Location" . getenv("PATH_SUBFOLDER") . ((self::isAdminLogged()) ? "cmw-admin/dashboard" : "login"));
-    }
-
     public static function isAdminLogged(): bool
     {
         return UsersModel::hasPermission(self::getSessionUser(), "core.dashboard");
@@ -192,8 +187,7 @@ class UsersController extends AbstractController
 
         if (UsersModel::getLoggedUser() === $id) {
             Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.impossible"));
-            header('Location: ' . $_SERVER['HTTP_REFERER']);  //Todo redirect
-            die();
+            Redirect::redirectPreviousRoute();
         }
 
         $state = ($state) ? 0 : 1;
@@ -214,8 +208,7 @@ class UsersController extends AbstractController
 
             //Todo Try to remove that
             Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.impossible_user"));
-            header('Location: ' . $_SERVER['HTTP_REFERER']);
-            die();
+            Redirect::redirectPreviousRoute();
         }
 
         UsersModel::getInstance()->delete($id);
@@ -296,8 +289,7 @@ class UsersController extends AbstractController
     private function login(): void
     {
         if (UsersModel::getLoggedUser() !== -1) {
-            header('Location: ' . getenv('PATH_SUBFOLDER'));  //Todo redirect
-            die();
+           Redirect::redirectToHome();
         }
 
 
@@ -312,8 +304,7 @@ class UsersController extends AbstractController
     private function forgotPassword(): void
     {
         if (UsersModel::getLoggedUser() !== -1) {
-            header('Location: ' . getenv('PATH_SUBFOLDER'));  //Todo redirect
-            die();
+            Redirect::redirectToHome();
         }
 
         $view = new View("Users", "forgot_password");
@@ -344,8 +335,7 @@ class UsersController extends AbstractController
     private function register(): void
     {
         if (UsersModel::getLoggedUser() !== -1) {
-            header('Location: ' . getenv('PATH_SUBFOLDER'));  //Todo redirect
-            die();
+            Redirect::redirectToHome();
         }
 
         $view = new View("Users", "register");
@@ -358,17 +348,17 @@ class UsersController extends AbstractController
         if(SecurityController::checkCaptcha()) {
         if (UsersModel::getInstance()->checkPseudo(filter_input(INPUT_POST, "register_pseudo")) > 0) {
             Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.used_pseudo"));
-            header('Location: register');
+            Redirect::redirect('register');
         } else if (UsersModel::getInstance()->checkEmail(filter_input(INPUT_POST, "register_email")) > 0) {
             Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.used_mail"));
-            header('Location: register');
+            Redirect::redirect('register');
         } else {
 
             [$mail, $pseudo, $password, $passwordVerify] = Utils::filterInput("register_email", "register_pseudo", "register_password", "register_password_verify");
 
             if (!is_null($password) && $password !== $passwordVerify) {
                 Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.not_same_pass"));
-                header('Location: register');
+                Redirect::redirect('register');
             }
 
             $defaultRoles = RolesModel::getInstance()->getDefaultRoles();
@@ -395,11 +385,9 @@ class UsersController extends AbstractController
             $userId = UsersModel::logIn($infos, $cookie);
             if ($userId > 0 && $userId !== "ERROR") {
                 UsersModel::getInstance()->updateLoggedTime($userId);
-                header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');
-
 
                 Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.welcome"));
-
+                Redirect::redirect('profile');
             }
 
         }
@@ -418,17 +406,14 @@ class UsersController extends AbstractController
     {
         if (UsersModel::getLoggedUser() === -1 && !UserSettingsEntity::getInstance()->isProfilePageEnabled()){
             Redirect::redirect('login');
-            return;
         }
 
         if (!UserSettingsEntity::getInstance()->isProfilePageEnabled()){
             Redirect::redirectToHome();
-            return;
         }
 
         if (UsersModel::getLoggedUser() === -1) {
             Redirect::redirect('login');
-            return;
         }
 
         $user = UsersModel::getCurrentUser();
@@ -447,12 +432,10 @@ class UsersController extends AbstractController
     {
         if (!UserSettingsEntity::getInstance()->isProfilePageEnabled()){
             Redirect::redirectToHome();
-            return;
         }
 
         if (UsersModel::getLoggedUser() === -1) {
             Redirect::redirectToHome();
-            return;
         }
 
         $image = $_FILES['pictureProfile'];
@@ -464,7 +447,7 @@ class UsersController extends AbstractController
                 LangManager::translate("core.toaster.internalError") . " => $e");
         }
 
-        header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');  //Todo redirect
+        Redirect::redirect('profile');
     }
 
     #[Link('/profile/:pseudo', Link::GET, ['pseudo' => '.*?'])]
@@ -472,12 +455,10 @@ class UsersController extends AbstractController
     {
         if (!UserSettingsEntity::getInstance()->isProfilePageEnabled() && UsersModel::getLoggedUser() === -1){
             Redirect::redirect('login');
-            return;
         }
 
         if (!UserSettingsEntity::getInstance()->isProfilePageEnabled()){
             Redirect::redirectToHome();
-            return;
         }
 
         if (UserSettingsEntity::getInstance()->getProfilePageStatus() === 0) {
@@ -501,8 +482,7 @@ class UsersController extends AbstractController
         //Check if this is the current user account
         if ($_SESSION['cmwUserId'] !== $id) {
             //TODO ERROR MANAGEMENT (MESSAGE TO TELL THE USER CAN'T DELETE THIS ACCOUNT)
-            header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');  //Todo redirect
-            return;
+            Redirect::redirect('profile');
         }
 
         UsersModel::logOut();
@@ -523,7 +503,6 @@ class UsersController extends AbstractController
     {
         if (!isset($_SESSION['cmwUserId'])) {
             Redirect::redirectToHome();
-            return;
         }
 
         $userId = $_SESSION['cmwUserId'];
