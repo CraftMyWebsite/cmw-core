@@ -202,13 +202,15 @@ CREATE TABLE IF NOT EXISTS `cmw_visits`
 
 CREATE TABLE IF NOT EXISTS `cmw_maintenance`
 (
-    `maintenance_id`              INT(11)                               NOT NULL AUTO_INCREMENT,
-    `maintenance_is_enable`       TINYINT(1)                            NOT NULL DEFAULT '0',
-    `maintenance_title`           VARCHAR(255)                          NULL,
-    `maintenance_description`     LONGTEXT                              NULL,
-    `maintenance_type`            TINYINT(1)                            NULL,
-    `maintenance_target_date`     TIMESTAMP                             NULL,
-    `maintenance_last_updated_at` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `maintenance_id`                  INT(11)                               NOT NULL AUTO_INCREMENT,
+    `maintenance_is_enable`           TINYINT(1)                            NOT NULL DEFAULT '0',
+    `maintenance_is_override_theme`   TINYINT(1)                            NOT NULL DEFAULT '0',
+    `maintenance_override_theme_code` LONGTEXT                              NULL,
+    `maintenance_title`               VARCHAR(255)                          NULL,
+    `maintenance_description`         LONGTEXT                              NULL,
+    `maintenance_type`                TINYINT(1)                            NULL,
+    `maintenance_target_date`         TIMESTAMP                             NULL,
+    `maintenance_last_updated_at`     TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`maintenance_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;

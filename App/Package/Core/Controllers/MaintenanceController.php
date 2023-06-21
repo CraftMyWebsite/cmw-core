@@ -46,13 +46,15 @@ class MaintenanceController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.maintenance");
 
-        [$title, $description, $targetDate, $type] = Utils::filterInput('title', 'description', 'target-date', 'type');
+        [$title, $description, $targetDate, $type, $overrideThemeCode] = Utils::filterInput('title', 'description', 'target-date', 'type', 'overrideThemeCode');
 
         $isEnable = isset($_POST['isEnable']) ? 1 : 0;
+        $isOverrideTheme = isset($_POST['isOverrideTheme']) ? 1 : 0;
 
         $targetDate = date('Y-m-d H:i:s', strtotime($targetDate));
 
-        $updateMaintenance = MaintenanceModel::getInstance()->updateMaintenance($isEnable, $title, $description, $type, $targetDate);
+        $updateMaintenance = MaintenanceModel::getInstance()->updateMaintenance($isEnable, $title, $description,
+            $type, $targetDate, $isOverrideTheme, $overrideThemeCode);
 
         if ($isEnable === 1 && $updateMaintenance) {
             Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
@@ -84,13 +86,14 @@ class MaintenanceController extends AbstractController
         if ($isEnable && time() >= strtotime($maintenance->getTargetDate())) {
             MaintenanceModel::getInstance()->updateMaintenance(0,
                 $maintenance->getTitle(), $maintenance->getDescription(),
-                $maintenance->getType(), $maintenance->getTargetDate());
+                $maintenance->getType(), $maintenance->getTargetDate(), $maintenance->isOverrideTheme(),
+                $maintenance->getOverrideThemeCode());
             $this->redirectMaintenance();
         }
 
         $userCanByPass = UsersController::isAdminLogged() && UsersController::hasPermission('core.maintenance.bypass');
 
-        if($isEnable && $userCanByPass){
+        if ($isEnable && $userCanByPass) {
             return;
         }
 
@@ -124,9 +127,15 @@ class MaintenanceController extends AbstractController
             Redirect::redirectToHome();
         }
 
-        $view = new View('Core', 'maintenance');
-        $view->addVariableList(['maintenance' => $maintenance]);
-        $view->view();
+        if ($maintenance->isOverrideTheme()){
+
+            eval( '?>' . $maintenance->getOverrideThemeCode());
+
+        } else {
+            $view = new View('Core', 'maintenance');
+            $view->addVariableList(['maintenance' => $maintenance]);
+            $view->view();
+        }
     }
 
 }

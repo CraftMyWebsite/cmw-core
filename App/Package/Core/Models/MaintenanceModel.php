@@ -33,7 +33,9 @@ class MaintenanceModel extends AbstractModel
             $res['maintenance_description'],
             $res['maintenance_type'],
             $res['maintenance_target_date'],
-            $res['maintenance_last_updated_at']
+            $res['maintenance_last_updated_at'],
+            $res['maintenance_is_override_theme'],
+            $res['maintenance_override_theme_code']
         );
     }
 
@@ -43,21 +45,26 @@ class MaintenanceModel extends AbstractModel
      * @param string $description
      * @param int $type
      * @param string $targetDate
+     * @param int $isOverrideTheme
+     * @param string $overrideThemeCode
      * @return bool
      */
-    public function updateMaintenance(int $isEnable, string $title, string $description, int $type, string $targetDate): bool
+    public function updateMaintenance(int $isEnable, string $title, string $description, int $type, string $targetDate, int $isOverrideTheme, string $overrideThemeCode): bool
     {
         $var = [
             'isEnable' => $isEnable,
             'title' => $title,
             'description' => $description,
             'type' => $type,
-            'targetDate' => $targetDate
+            'targetDate' => $targetDate,
+            'isOverrideTheme' => $isOverrideTheme,
+            'overrideThemeCode' => $overrideThemeCode
         ];
 
         $sql = "UPDATE cmw_maintenance SET maintenance_is_enable = :isEnable, maintenance_title = :title, 
                            maintenance_description = :description, maintenance_type = :type, 
-                           maintenance_target_date = :targetDate";
+                           maintenance_target_date = :targetDate, maintenance_is_override_theme = :isOverrideTheme,
+                           maintenance_override_theme_code = :overrideThemeCode";
         $db = DatabaseManager::getInstance();
 
         return $db->prepare($sql)->execute($var);

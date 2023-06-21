@@ -1,5 +1,6 @@
 <?php
 
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 
@@ -90,7 +91,21 @@ $description = LangManager::translate("core.maintenance.description");
                             </div>
                         </div>
                     </div>
+                    <div class="card" id="mainCard">
+                        <div class="form-check-reverse form-switch align-right">
+                            <label class="form-check-label" for="isOverrideTheme">
+                                Utiliser son propre code
+                            </label>
+                            <input class="form-check-input" type="checkbox" id="isOverrideTheme" name="isOverrideTheme"
+                                   value="1" <?= $maintenance->isOverrideTheme() ? 'checked' : '' ?>>
+                        </div>
+                        <div class="card-body mt-3" style="height: 40vh; display: <?= $maintenance->isOverrideTheme() ? 'block' : 'none' ?>;" id="editor">
+                            <?= htmlspecialchars($maintenance->getOverrideThemeCode()) ?>
+                        </div>
+                        <input type="hidden" name="overrideThemeCode" id="overrideThemeCode" value="<?= htmlspecialchars($maintenance->getOverrideThemeCode()) ?>">
+                    </div>
                 </div>
+
             </form>
         </div>
     </div>
@@ -98,7 +113,8 @@ $description = LangManager::translate("core.maintenance.description");
 
 <!-- Set default dateTarget value if we don't set any target value -->
 <script>
-    if (<?= $maintenance->getTargetDate() === null ? 'true' : false ?>) {
+    let targetDateIsNull = <?= $maintenance->getTargetDate() === null ? 'true' : 'false'?>;
+    if (targetDateIsNull) {
         window.addEventListener("load", function () {
             const now = new Date();
             const offset = now.getTimezoneOffset() * 60000;
@@ -122,4 +138,104 @@ $description = LangManager::translate("core.maintenance.description");
             mainCard.style.display = 'none'
         }
     })
+</script>
+
+<!-- Display editor when enable -->
+<script>
+    const checkboxCustomCode = document.getElementById('isOverrideTheme')
+    checkboxCustomCode.addEventListener('click', function () {
+        const editorCard = document.getElementById('editor')
+
+        if (checkboxCustomCode.checked) {
+            editorCard.style.display = 'block'
+        } else {
+            editorCard.style.display = 'none'
+        }
+    })
+</script>
+
+<script src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Admin/Resources/Vendors/Ace/Src/ace.js' ?>"></script>
+<script src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Admin/Resources/Vendors/Ace/Src/ext-language_tools.js' ?>"></script>
+<script>
+    let langTools = ace.require("ace/ext/language_tools");
+    let editor = ace.edit("editor", {
+        mode: "ace/mode/php",
+        selectionStyle: "text",
+    });
+
+    editor.setOptions({
+        autoScrollEditorIntoView: true,
+        enableBasicAutocompletion: true,
+        enableLiveAutocompletion: true,
+        enableSnippets: false
+    })
+
+
+    editor.setTheme("ace/theme/one_dark");
+
+    editor.resize()
+    editor.session.setUseWrapMode(true);
+    editor.setShowPrintMargin(false);
+
+    editor.session.mergeUndoDeltas = true;
+
+    const defaultCompletions = [
+        "$title",
+        "$description",
+        "$maintenance"
+    ]
+
+    const maintenanceEntity = [
+        "$maintenance->isEnable()",
+        "$maintenance->getTitle()",
+        "$maintenance->getDescription()",
+        "$maintenance->getType()",
+        "$maintenance->getTargetDate()",
+        "$maintenance->getTargetDateFormatted()",
+        "$maintenance->getLastUpdateDate()",
+        "$maintenance->getLastUpdateDateFormatted()",
+    ]
+
+    let myCompleter = {
+        identifierRegexps: [/\S+/],
+        getCompletions: function (editor, session, pos, prefix, callback) {
+            callback(
+                null,
+                defaultCompletions.filter(entry => {
+                    return entry.includes(prefix);
+                }).map(entry => {
+                    return {
+                        value: entry,
+                        meta: "local"
+                    };
+                })
+            );
+            if (prefix.startsWith("$maintenance")) {
+                callback(
+                    null,
+                    maintenanceEntity.filter(entry => {
+                        return entry.includes(prefix);
+                    }).map(entry => {
+                        return {
+                            value: entry,
+                            meta: "string"
+                        };
+                    })
+                );
+            }
+        }
+    }
+
+    langTools.addCompleter(myCompleter);
+
+
+
+    // Add data to hidden input
+    const editorDom = document.getElementById('editor')
+    const editorInput = document.getElementById('overrideThemeCode')
+
+    editorDom.addEventListener('keyup', function () {
+        editorInput.value = editor.getValue()
+    })
+
 </script>

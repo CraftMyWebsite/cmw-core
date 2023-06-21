@@ -13,6 +13,8 @@ class MaintenanceEntity
     private ?int $type;
     private ?string $targetDate;
     private string $lastUpdateDate;
+    private bool $isOverrideTheme;
+    private ?string $overrideThemeCode;
 
     /**
      * @param bool $isEnable
@@ -21,8 +23,10 @@ class MaintenanceEntity
      * @param int|null $type
      * @param string|null $targetDate
      * @param string $lastUpdateDate
+     * @param bool $isOverrideTheme
+     * @param string|null $overrideThemeCode
      */
-    public function __construct(bool $isEnable, ?string $title, ?string $description, ?int $type, ?string $targetDate, string $lastUpdateDate)
+    public function __construct(bool $isEnable, ?string $title, ?string $description, ?int $type, ?string $targetDate, string $lastUpdateDate, bool $isOverrideTheme, ?string $overrideThemeCode)
     {
         $this->isEnable = $isEnable;
         $this->title = $title;
@@ -30,6 +34,8 @@ class MaintenanceEntity
         $this->type = $type;
         $this->targetDate = $targetDate;
         $this->lastUpdateDate = $lastUpdateDate;
+        $this->isOverrideTheme = $isOverrideTheme;
+        $this->overrideThemeCode = $overrideThemeCode;
     }
 
     /**
@@ -94,5 +100,21 @@ class MaintenanceEntity
     public function getLastUpdateDateFormatted(): string
     {
         return CoreController::formatDate($this->lastUpdateDate);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOverrideTheme(): bool
+    {
+        return $this->isOverrideTheme;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOverrideThemeCode(): ?string
+    {
+        return $this->overrideThemeCode;
     }
 }
