@@ -42,7 +42,7 @@ class EnvManager
         return $this->getValue($key);
     }
 
-    public function __set(string $key, string $value)
+    public function __set(string $key, ?string $value)
     {
         $this->setOrEditValue($key, $value);
     }
@@ -85,6 +85,7 @@ class EnvManager
 
     public function valueExist(string $key): bool
     {
+        $key = mb_strtoupper(trim($key));
         return isset($_ENV[$key]);
     }
 
@@ -92,8 +93,10 @@ class EnvManager
     {
         $toReturn = false;
 
+        $key = mb_strtoupper(trim($key));
+
         $this->doWithFile(function ($name, $_) use ($key, &$toReturn) {
-            if ($name === mb_strtoupper(trim($key))) {
+            if ($name === $key) {
                 $toReturn = !$toReturn;
             }
         });
@@ -101,13 +104,16 @@ class EnvManager
         return $toReturn;
     }
 
-    public function setOrEditValue($key, $value): void
+    public function setOrEditValue(string $key, ?string $value): void
     {
+        $key = mb_strtoupper(trim($key));
         $this->valueExist($key) ? $this->editValue($key, $value) : $this->addValue($key, $value);
     }
 
-    public function editValue($key, $value): void
+    public function editValue(string $key, ?string $value): void
     {
+        $key = mb_strtoupper(trim($key));
+
         if ($this->valueExist($key)) {
             $this->deleteValue($key);
             $this->addValue($key, $value);
@@ -116,7 +122,7 @@ class EnvManager
 
     public function getValue(string $key): ?string
     {
-        $key = strtoupper($key);
+        $key = mb_strtoupper(trim($key));
 
         if (!$this->valueExist($key)) {
             return null;
@@ -125,29 +131,32 @@ class EnvManager
         return $_ENV[$key];
     }
 
-    public function deleteValue($key): void
+    public function deleteValue(string $key): void
     {
-        if ($this->valueExist($key)) {
-            $k = mb_strtoupper(trim($key));
+        $key = mb_strtoupper(trim($key));
 
-            $buildLine = trim($k . "=" . $this->getValue($k)) . PHP_EOL;
+        if ($this->valueExist($key)) {
+
+            $buildLine = trim($key . "=" . $this->getValue($key)) . PHP_EOL;
 
             $contents = file_get_contents($this->path);
             $contents = str_replace($buildLine, '', $contents);
             file_put_contents($this->path, $contents);
-            unset($_ENV[$k], $_SERVER[$k]);
-            putenv($k);
+            unset($_ENV[$key], $_SERVER[$key]);
+            putenv($key);
 
             $this->load();
         }
     }
 
-    public function addValue($key, $value): void
+    public function addValue(string $key, ?string $value): void
     {
+        $key = mb_strtoupper(trim($key));
+
         if (!$this->valueExistInFile($key)) {
             $file = fopen($this->envPath . $this->envFileName, 'ab');
             $textToSet = static function ($key, $value) {
-                return mb_strtoupper(trim($key)) . "=" . trim($value) . PHP_EOL;
+                return $key . "=" . trim($value) . PHP_EOL;
             };
 
             $res = $textToSet($key, $value);
@@ -162,10 +171,10 @@ class EnvManager
     public function load(): void
     {
         $this->doWithFile(static function ($name, $value) {
-            $k = mb_strtoupper(trim($name));
+            $key = mb_strtoupper(trim($name));
 
-            if (!array_key_exists($k, $_ENV)) {
-                $_ENV[$k] = $value;
+            if (!array_key_exists($key, $_ENV)) {
+                $_ENV[$key] = $value;
             }
         });
     }
