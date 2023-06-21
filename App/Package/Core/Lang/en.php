@@ -292,6 +292,35 @@ return [
                 </p>"
         ],
     ],
+    "maintenance" => [
+        "title" => "Maintenance",
+        "description" => "Manage your website maintenance",
+        "settings" => [
+            "title" => "Settings",
+            "targetDateTitle" => "Maintenance target date",
+            "loginRegister" => [
+                'title' => "Login / Registers",
+                'type' => [
+                    0 => 'All disabled',
+                    1 => 'Enable logins / registers',
+                    2 => 'Only enable logins',
+                ],
+            ],
+            "maintenanceTitle" => [
+                'label' => "Maintenance title",
+                'placeholder' => 'We are coming soon !'
+            ],
+            "maintenanceDescription" => [
+                'label' => "Maintenance description",
+                'placeholder' => 'We are making some changes !'
+            ],
+            "toaster" => [
+                "enabled" => "Maintenance enabled",
+                "disabled" => "Maintenance disabled",
+                "error" => "Unable to update maintenance settings"
+            ],
+        ],
+    ],
     "footer" => [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " All right reserved.",
         "right" => "Thank you for using <a target='_blank' href='https://craftmywebsite.fr/'>CraftMyWebsite</a>.",
@@ -311,7 +340,9 @@ return [
         "next" => "Next",
         "try" => "Try",
         "continue" => "Continue",
-        "generate" => "Generate"
+        "generate" => "Generate",
+        "enable" => "Enable",
+        "enabled" => "Enabled",
     ],
     "months" => [
         1 => "January",

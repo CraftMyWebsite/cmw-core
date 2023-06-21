@@ -7,5 +7,7 @@
   "core.menus.configuration",
   "core.security.configuration",
   "core.theme.configuration",
-  "core.update"
+  "core.update",
+  "core.maintenance",
+  "core.maintenance.bypass"
 ]

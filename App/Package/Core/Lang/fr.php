@@ -294,6 +294,35 @@ return [
             "copy" => "Copier le contenu"
         ],
     ],
+    "maintenance" => [
+        "title" => "Maintenance",
+        "description" => "Gérez les maintenances de votre site",
+        "settings" => [
+            "title" => "Réglages",
+            "targetDateTitle" => "Fin de la maintenance",
+            "loginRegister" => [
+                'title' => "Connexions / Inscriptions",
+                'type' => [
+                    0 => 'Tout désactiver',
+                    1 => 'Activer les connexions / inscription',
+                    2 => 'Activer uniquement les connexions',
+                ],
+            ],
+            "maintenanceTitle" => [
+                'label' => "Titre de la maintenance",
+                'placeholder' => 'Nous revenons très vite !'
+            ],
+            "maintenanceDescription" => [
+                'label' => "Description de la maintenance",
+                'placeholder' => 'Nous faisons quelques modifications, nous revenons très vite !'
+            ],
+            "toaster" => [
+                "enabled" => "Maintenance activée",
+                "disabled" => "Maintenance désactivée",
+                "error" => "Impossible de mettre à jour la maintenance"
+            ],
+        ],
+    ],
     "footer" => [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " Tous droits réservés.",
         "right" => "Merci d'utiliser <a target='_blank' href='https://craftmywebsite.fr/'>CraftMyWebsite</a>.",
@@ -315,6 +344,8 @@ return [
         "try" => "Tester",
         "continue" => "Continuer",
         "generate" => "Générer",
+        "enable" => "Activer",
+        "enabled" => "Activé",
     ],
     "months" => [
         1 => "Janvier",

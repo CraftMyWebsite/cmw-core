@@ -6,6 +6,8 @@ use Closure;
 use CMW\Manager\Metrics\VisitsMetricsManager;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Security\SecurityManager;
+use CMW\Model\Core\MaintenanceModel;
+use CMW\Utils\Redirect;
 use ReflectionMethod;
 
 /**
@@ -176,13 +178,15 @@ class Router
 
         $matchedRoute = $this->getRouteByUrl($this->url);
 
-        if (!is_null($matchedRoute)) {
-            (new VisitsMetricsManager())->registerVisit($matchedRoute);
-            self::setActualRoute($matchedRoute);
-            return $matchedRoute->call();
+        if (is_null($matchedRoute)) {
+            throw new RouterException('No matching routes', 404);
         }
 
-        throw new RouterException('No matching routes', 404);
+        (new VisitsMetricsManager())->registerVisit($matchedRoute);
+
+        self::setActualRoute($matchedRoute);
+        return $matchedRoute->call();
+
     }
 
     public function getRouteByUrl(string $url): ?Route
