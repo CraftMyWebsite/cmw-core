@@ -9,9 +9,9 @@ $description = LangManager::translate("core.security.description");
 /* @var string $captcha */
 ?>
 <div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fa-solid fa-gears"></i> <span class="m-lg-auto">Sécurité</span></h3>
+    <h3><i class="fa-solid fa-gears"></i> <span class="m-lg-auto"><?= LangManager::translate("core.security.title") ?></span></h3>
     <div class="buttons">
-        <button form="captchaConfig" type="submit" class="btn btn-primary">Sauvegarder</button>
+        <button form="captchaConfig" type="submit" class="btn btn-primary"><?= LangManager::translate("core.btn.save") ?></button>
     </div>
 </div>
 <section class="row">
@@ -29,7 +29,7 @@ $description = LangManager::translate("core.security.description");
                             <select id="captcha" name="captcha" class="form-select" required
                                     onclick="generateCaptchaInputs()">
                                 <option value="captcha-none" <?= $captcha === "none" ? "selected" : "" ?>>
-                                    Pas de catpcha
+                                    <?= LangManager::translate("core.security.no_captcha") ?>
                                 </option>
                                 <option value="captcha-hcaptcha" <?= $captcha === "hcaptcha" ? "selected" : "" ?>>
                                     HCaptcha
@@ -110,7 +110,7 @@ $description = LangManager::translate("core.security.description");
         divPrepend2.setAttribute("class", "col-md-6");
 
         let divInfoCaptcha = document.createElement("p");
-        divInfoCaptcha.innerHTML += 'Obtenez vos clé ici gratuitement : <a href="https://www.hcaptcha.com/" target="_blank">https://www.hcaptcha.com/</a>';
+        divInfoCaptcha.innerHTML += '<?= LangManager::translate('core.security.free_key') ?> <a href="https://www.hcaptcha.com/" target="_blank">https://www.hcaptcha.com/</a>';
 
         let divFormGroupSiteKey = document.createElement("div");
         divFormGroupSiteKey.setAttribute("class", "form-group");
@@ -174,7 +174,7 @@ $description = LangManager::translate("core.security.description");
         divPrepend2.setAttribute("class", "col-md-6");
 
         let divInfoCaptcha = document.createElement("p");
-        divInfoCaptcha.innerHTML += 'Obtenez vos clé ici gratuitement : <a href="https://www.google.com/recaptcha/" target="_blank">https://www.google.com/recaptcha/</a>';
+        divInfoCaptcha.innerHTML += '<?= LangManager::translate('core.security.free_key') ?> <a href="https://www.google.com/recaptcha/" target="_blank">https://www.google.com/recaptcha/</a>';
 
         let divFormGroupSiteKey = document.createElement("div");
         divFormGroupSiteKey.setAttribute("class", "form-group");

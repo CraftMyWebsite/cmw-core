@@ -13,6 +13,7 @@ use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Pages\PagesModel;
 use CMW\Model\Users\UsersModel;
+use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
@@ -147,7 +148,7 @@ class PagesController extends AbstractController
         $_SESSION['toaster'][0]['type'] = "bg-success";
         $_SESSION['toaster'][0]['body'] = "CORE_TOASTER_DELETE_SUCCESS";
 
-        header("location: ../list"); //todo redirect ?
+        Redirect::redirectPreviousRoute();
     }
 
     /**

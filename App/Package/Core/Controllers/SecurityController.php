@@ -63,7 +63,7 @@ class SecurityController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
-        header("Location: ../../security");
+        Redirect::redirectPreviousRoute();
     }
 
     #[NoReturn] #[Link("/security/generate/report/health", Link::GET, [], "/cmw-admin")]
@@ -94,7 +94,7 @@ class SecurityController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('core.toaster.security.healthReport.delete'));
 
-        Redirect::redirect('/cmw-admin/security');
+        Redirect::redirectPreviousRoute();
     }
 
 

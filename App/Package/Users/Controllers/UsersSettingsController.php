@@ -12,6 +12,7 @@ use CMW\Manager\Router\Link;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Users\UsersSettingsModel;
+use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use JsonException;
 
@@ -69,7 +70,7 @@ class UsersSettingsController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
-        header("Location: settings");
+        Redirect::redirectPreviousRoute();
     }
 
 }

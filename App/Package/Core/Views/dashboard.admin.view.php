@@ -103,15 +103,15 @@ $description = LangManager::translate("core.dashboard.desc");
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link active" id="setting1-tab" data-bs-toggle="tab" href="#setting1" role="tab"
-                                       aria-selected="true">Jours</a>
+                                       aria-selected="true"><?= LangManager::translate("core.dashboard.days") ?></a>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link" id="setting2-tab" data-bs-toggle="tab" href="#setting2" role="tab"
-                                       aria-selected="false">Semaine</a>
+                                       aria-selected="false"><?= LangManager::translate("core.dashboard.weeks") ?></a>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <a class="nav-link" id="setting3-tab" data-bs-toggle="tab" href="#setting3" role="tab"
-                                       aria-selected="false">Mois</a>
+                                       aria-selected="false"><?= LangManager::translate("core.dashboard.months") ?></a>
                                 </li>
                             </ul>
                         </div>

@@ -167,7 +167,7 @@ class UsersController extends AbstractController
 
         }
 
-        header("location: ../edit/" . $id); //Todo redirect
+        Redirect::redirectPreviousRoute();
     }
 
 
@@ -182,7 +182,7 @@ class UsersController extends AbstractController
 
         UsersModel::getInstance()->updatePass($userEntity?->getId(), password_hash(filter_input(INPUT_POST, "password"), PASSWORD_BCRYPT));
 
-        header("location: " . $_SERVER['HTTP_REFERER']); //Todo redirect
+        Redirect::redirectPreviousRoute();
     }
 
     #[Link("/state/:id/:state", Link::GET, ["id" => "[0-9]+", "state" => "[0-9]+"], "/cmw-admin/users")]
@@ -202,7 +202,7 @@ class UsersController extends AbstractController
 
         Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),"Ok !");
 
-        header("location: " . $_SERVER['HTTP_REFERER']);  //Todo redirect
+        Redirect::redirectPreviousRoute();
     }
 
     #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
@@ -223,7 +223,7 @@ class UsersController extends AbstractController
         //Todo Try to remove that
         Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.user_deleted"));
 
-        header("location: " . $_SERVER['HTTP_REFERER']);
+        Redirect::redirectPreviousRoute();
     }
 
     #[Link("/picture/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users/manage")]
@@ -236,7 +236,7 @@ class UsersController extends AbstractController
 
         UserPictureModel::getInstance()->uploadImage($id, $image);
 
-        header("location: " . $_SERVER['HTTP_REFERER']);  //Todo redirect
+        Redirect::redirectPreviousRoute();
     }
 
     #[Link("/picture/reset/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users/manage")]
@@ -246,7 +246,7 @@ class UsersController extends AbstractController
 
         UserPictureModel::getInstance()->deleteUserPicture($id);
 
-        header("location: " . $_SERVER['HTTP_REFERER']);  //Todo redirect
+        Redirect::redirectPreviousRoute();
     }
 
     // PUBLIC SECTION
@@ -334,7 +334,7 @@ class UsersController extends AbstractController
 
         //We send a verification link for this mail
         UsersModel::getInstance()->resetPassword($mail);
-        header("Location: /login");
+        Redirect::redirect("login");
     }
 
     /**
@@ -405,7 +405,7 @@ class UsersController extends AbstractController
         }
         } else {
             //TODO Toaster invalid captcha
-            header('Location: ' . $_SERVER['HTTP_REFERER']);  //Todo redirect
+            Redirect::redirectPreviousRoute();
         }
 
     }
@@ -508,21 +508,21 @@ class UsersController extends AbstractController
         UsersModel::logOut();
         UsersModel::getInstance()->delete($id);
 
-        header('Location: ' . getenv('PATH_SUBFOLDER'));  //Todo redirect
+        Redirect::redirectToHome();
     }
 
     #[Link('/logout', Link::GET)]
     private function logOut(): void
     {
         UsersModel::logOut();
-        header('Location: ' . getenv('PATH_SUBFOLDER'));  //Todo redirect
+        Redirect::redirectToHome();
     }
 
     #[Link('/profile/update', Link::POST)]
     private function publicProfileUpdate(): void
     {
         if (!isset($_SESSION['cmwUserId'])) {
-            header('Location: ' . getenv('PATH_SUBFOLDER'));
+            Redirect::redirectToHome();
             return;
         }
 
@@ -552,7 +552,7 @@ class UsersController extends AbstractController
             }
         }
 
-        header('Location: ' . getenv('PATH_SUBFOLDER') . 'profile');  //Todo redirect
+        Redirect::redirectPreviousRoute();
     }
 
 }

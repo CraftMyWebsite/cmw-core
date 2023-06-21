@@ -55,7 +55,8 @@ class CoreController extends AbstractController
 
         //Redirect to the dashboard
         if ($_GET['url'] === "cmw-admin") {
-            header('Location: ' . getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard'); //todo redirect
+            Redirect::redirect(getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
+
         }
 
         $monthlyVisits = (new VisitsMetricsManager())->getPastMonthsVisits(12);

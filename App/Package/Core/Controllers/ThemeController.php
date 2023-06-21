@@ -215,7 +215,7 @@ class ThemeController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
-        header("Location: market");
+        Redirect::redirectPreviousRoute();
     }
 
     #[Link("/market/regenerate", Link::POST, [], "/cmw-admin/theme")]
@@ -233,7 +233,7 @@ class ThemeController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.Theme.regenerate"));
 
-        header("Location: ../market");
+        Redirect::redirectPreviousRoute();
     }
 
     #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/theme")]
@@ -321,7 +321,7 @@ class ThemeController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
-        header("location: manage");
+        Redirect::redirectPreviousRoute();
     }
 
 }

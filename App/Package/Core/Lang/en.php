@@ -38,10 +38,17 @@ return [
         "edit" => "Modify this information",
         "visits" => "Visits",
         "registers" => "Registers",
+        "days" => "Days",
+        "weeks" => "Weeks",
+        "months" => "Months",
     ],
     "menus" => [
         "title" => "Menus",
         "desc" => "Edit main site menu",
+        "delete_title" => "Remove :",
+        "delete_message" => "This deletion is final.",
+        "send_to" => "Send to :",
+        "add_sub_menu" => "Add sub menu to",
         "add" => [
             "name" => "Nom of the menu",
             "name_hint" => "Votes",
@@ -65,6 +72,7 @@ return [
         "preview" => 'Vous pouvez prévisualiser le rendu des styles <a href="https://highlightjs.org/static/demo/" target="_blank">ici</a>',
     ],
     "config" => [
+        "head" => "Settings",
         "title" => "Configuration",
         "desc" => "Configure your CMW website !",
         "favicon" => "Edit your website favicon",
@@ -166,7 +174,7 @@ return [
         "verification" => "Verification",
         "verificationText" => "Warning, this will reset all default settings of your theme, are you sure you want to continue ?",
         "config" => [
-            "title" => "Manage your themes",
+            "title" => "Manage",
             "description" => "Manage the themes of your website",
             "select" => "Select your Theme",
             "list" => [
@@ -219,6 +227,9 @@ return [
             "portSMTP" => "Port SMTP",
             "protocol" => "Sending protocol",
             "footer" => "Mails footer",
+            "formatting" => "Formatting",
+            "name" => "Display name :",
+            "placeholder" => "Name of your site",
             "test" => [
                 "btn" => "Try your configuration",
                 "title" => "Try now your configuration",
@@ -257,8 +268,10 @@ return [
         "success" => "Website update with success",
     ],
     "security" => [
-        "title" => "CMW - Security",
+        "title" => "Security",
         "description" => "Manage your website security",
+        "no_captcha" => "No captcha",
+        "free_key" => "Get your keys here for free :",
         "captcha" => [
             "title" => "Manage your captcha",
             "type" => "Captcha type",

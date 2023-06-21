@@ -10,6 +10,7 @@ use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\ConditionModel;
+use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 
 /**
@@ -48,7 +49,7 @@ class ConditionController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
-        header("Location: condition"); //Todo redirect ?
+        Redirect::redirectPreviousRoute();
     }
 
     /* //////////////////// FRONT PUBLIC //////////////////// */

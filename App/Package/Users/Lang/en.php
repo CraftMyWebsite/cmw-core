@@ -22,6 +22,7 @@ return [
     "register" => [
         "title" => "Register"
     ],
+    "files" => "Files allowed : png, jpg, jpeg, webp, svg, gif",
     "toaster" => [
         "error" => "Error",
         "success" => "Success",
@@ -87,6 +88,10 @@ return [
                 "tips" => "Define your members role(s) when they sign up on your website."
             ],
         ],
+    ],
+    "modal" => [
+        "delete" => "Remove",
+        "delete_message" => "La suppression de cet utilisateur est définitive !<br>Aucun retour possible !",
     ],
     "delete" => [
         "toaster_error" => "You cannot delete the account you are logged in with.",

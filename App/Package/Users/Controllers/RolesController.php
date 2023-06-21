@@ -142,8 +142,7 @@ class RolesController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate('users.toaster.role_edited'));
 
-
-        header("location: " . $_SERVER['HTTP_REFERER']);
+        Redirect::redirectPreviousRoute();
     }
 
     #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
@@ -151,13 +150,21 @@ class RolesController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.delete");
 
+        $isDefault = RolesModel::getInstance()->roleIsDefault($id);
+
+        if ($isDefault) {
+            Flash::send(Alert::ERROR,"Erreur", "Vous ne pouvez pas supprimé le rôle par defaut");
+            Redirect::redirectPreviousRoute();
+
+        }
+
         RolesModel::getInstance()->deleteRole($id);
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate('users.toaster_role_deleted'));
 
 
-        header("location: " . $_SERVER['HTTP_REFERER']);
+        Redirect::redirectPreviousRoute();
     }
 
     #[Link("/getRole/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]

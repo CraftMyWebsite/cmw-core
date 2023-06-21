@@ -12,7 +12,7 @@ $title = LangManager::translate("core.menus.title");
 $description = LangManager::translate("core.menus.desc");
 ?>
 <div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fas fa-bars"></i> <span class="m-lg-auto">Menus</span></h3>
+    <h3><i class="fas fa-bars"></i> <span class="m-lg-auto"><?= LangManager::translate("core.menus.title") ?></span></h3>
 </div>
 
 <section class="row">
@@ -149,7 +149,7 @@ $description = LangManager::translate("core.menus.desc");
                                         <?php if ($menu->getUrl() === "#"): ?>
                                             <small><?= LangManager::translate('core.nolink') ?></small>
                                         <?php else: ?>
-                                            <small>Renvoie vers : <?= $menu->getUrl() ?></small>
+                                            <small><?= LangManager::translate('core.menus.send_to') ?> <?= $menu->getUrl() ?></small>
                                         <?php endif; ?>
                                     </th>
                                     <th class="text-end">
@@ -171,7 +171,7 @@ $description = LangManager::translate("core.menus.desc");
                                             <?php if ($subMenu->getUrl() === "#"): ?>
                                                 <small><?= LangManager::translate('core.nolink') ?></small>
                                             <?php else: ?>
-                                                <small>Renvoie vers : <?= $subMenu->getUrl() ?></small>
+                                                <small><?= LangManager::translate('core.menus.send_to') ?> <?= $subMenu->getUrl() ?></small>
                                             <?php endif; ?>
                                         </td>
                                         <td class="text-end">
@@ -197,7 +197,7 @@ $description = LangManager::translate("core.menus.desc");
                                             <?php if ($subSubMenu->getUrl() === "#"): ?>
                                                 <small><?= LangManager::translate('core.nolink') ?></small>
                                             <?php else: ?>
-                                                <small>Renvoie vers : <?= $subSubMenu->getUrl() ?></small>
+                                                <small><?= LangManager::translate('core.menus.send_to') ?> <?= $subSubMenu->getUrl() ?></small>
                                             <?php endif; ?>
                                         </td>
                                         <td class="text-end">
@@ -221,11 +221,11 @@ $description = LangManager::translate("core.menus.desc");
                                             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header bg-danger">
-                                                        <h5 class="modal-title white" id="myModalLabel160">Supression de
-                                                            : <?= $subSubMenu->getName() ?></h5>
+                                                        <h5 class="modal-title white" id="myModalLabel160">
+                                                            <?= LangManager::translate("core.menus.delete_title") ?> <?= $subSubMenu->getName() ?></h5>
                                                     </div>
                                                     <div class="modal-body">
-                                                        Cette supression est définitive
+                                                        <?= LangManager::translate("core.menus.delete_message") ?>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
@@ -249,7 +249,7 @@ $description = LangManager::translate("core.menus.desc");
                                         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header bg-primary">
-                                                    <h5 class="modal-title white" id="myModalLabel160">Ajout d'un sous-menu dans <?= $subMenu->getName() ?></h5>
+                                                    <h5 class="modal-title white" id="myModalLabel160"><?= LangManager::translate("core.menus.add_sub_menu") ?> <?= $subMenu->getName() ?></h5>
                                                 </div>
                                                 <div class="modal-body">
                                                     <form action="menus/add-submenu" method="post">
@@ -371,11 +371,10 @@ $description = LangManager::translate("core.menus.desc");
                                         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header bg-danger">
-                                                    <h5 class="modal-title white" id="myModalLabel160">Supression de
-                                                        : <?= $subMenu->getName() ?></h5>
+                                                    <h5 class="modal-title white" id="myModalLabel160"><?= LangManager::translate("core.menus.delete_title") ?> <?= $subMenu->getName() ?></h5>
                                                 </div>
                                                 <div class="modal-body">
-                                                    Cette supression est définitive
+                                                    <?= LangManager::translate("core.menus.delete_message") ?>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
@@ -405,7 +404,7 @@ $description = LangManager::translate("core.menus.desc");
                         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header bg-primary">
-                                    <h5 class="modal-title white" id="myModalLabel160">Ajout d'un sous-menu dans <?= $menu->getName() ?></h5>
+                                    <h5 class="modal-title white" id="myModalLabel160"><?= LangManager::translate("core.menus.add_sub_menu") ?> <?= $menu->getName() ?></h5>
                                 </div>
                                 <div class="modal-body">
                                     <form action="menus/add-submenu" method="post">
@@ -523,11 +522,10 @@ $description = LangManager::translate("core.menus.desc");
                         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                             <div class="modal-content">
                                 <div class="modal-header bg-danger">
-                                    <h5 class="modal-title white" id="myModalLabel160">Supression de
-                                        : <?= $menu->getName() ?></h5>
+                                    <h5 class="modal-title white" id="myModalLabel160"><?= LangManager::translate("core.menus.delete_title") ?> <?= $menu->getName() ?></h5>
                                 </div>
                                 <div class="modal-body">
-                                    Cette supression est définitive
+                                    <?= LangManager::translate("core.menus.delete_message") ?>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">

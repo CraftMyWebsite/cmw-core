@@ -39,11 +39,11 @@
       "icon_menu": "fas fa-paintbrush",
       "url_menu": "",
       "urls_submenu_fr": {
-        "Market": "theme/market",
+        "Gestion": "theme/market",
         "Configurer": "theme/manage"
       },
       "urls_submenu_en": {
-        "Market": "theme/market",
+        "Manage": "theme/market",
         "Configure": "theme/manage"
       }
     },

@@ -14,6 +14,9 @@ return [
 		"message" => "La suppression de cette page est définitive !<br>Aucun retour possible !",
 		"button" => "Supprimer",
 	],
+    "editor" => [
+        "start" => "Commencez à taper ou cliquez sur le '+' pour choisir un bloc à ajouter...",
+    ],
 	"list" => [
 		"title" => "Liste des pages",
 		"sub_title" => "Pages",
@@ -33,10 +36,7 @@ return [
 		"update" => "Date de modification",
 		"add" => "Ajouter une page",
 		"content" => "Contenu",
-	],
-	"content" => [
-		"placeholder" => "Commencez à taper ou cliquez sur le \"+\" pour choisir un bloc à ajouter...",
-	],
+	]
 
 
 ];

@@ -22,6 +22,7 @@ return [
     "register" => [
         "title" => "Inscription"
     ],
+    "files" => "Fichiers autorisé : png, jpg, jpeg, webp, svg, gif",
     "toaster" => [
         "error" => "Erreur",
         "success" => "Succès",
@@ -87,6 +88,10 @@ return [
                 "tips" => "Definissez ce rôle parmis les rôles par défaut. Lors de l'inscription, vos membres se verront ajouter automatiquement les rôles par défaut."
             ],
         ],
+    ],
+    "modal" => [
+        "delete" => "Supprimer",
+        "delete_message" => "The deletion of this user is permanent!<br>No return possible!",
     ],
     "delete" => [
         "toaster_error" => "Vous ne pouvez pas supprimer le compte avec lequel vous êtes connecté.",

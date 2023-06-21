@@ -43,15 +43,44 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                                 <?php endif; ?>
                             </td>
                             <td class="text-center">
-                                <a href="manage/edit/<?= $role->getId() ?>">
+                                <a class="me-2" href="manage/edit/<?= $role->getId() ?>">
                                     <i class="text-primary fa-solid fa-gears"></i>
                                 </a>
 
-                                <button class="btn-clear" onclick="deleteRole(<?= $role->getId() ?>)">
-                                    <i class="ms-2 text-danger fa-solid fa-trash"></i>
-                                </button>
+                                <a type="button" data-bs-toggle="modal" data-bs-target="#delete-<?= $role->getId() ?>">
+                                    <i class="text-danger fas fa-trash-alt"></i>
+                                </a>
                             </td>
                         </tr>
+
+                        <!-- MODAL DELETE ROLE -->
+                        <div class="modal fade text-left" id="delete-<?= $role->getId() ?>" tabindex="-1"
+                             role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                                 role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-danger">
+                                        <h5 class="modal-title white" id="myModalLabel160">
+                                            Supprimer <?= $role->getName() ?> ?</h5>
+                                    </div>
+                                    <div class="modal-body text-left">
+                                        La suppression de ce rôle est définitive !<br>
+                                        Aucun retour possible !
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light-secondary"
+                                                data-bs-dismiss="modal">
+                                            <span class=""><?= LangManager::translate("core.btn.close") ?></span>
+                                        </button>
+                                        <a href="/cmw-admin/roles/delete/<?= $role->getId() ?>"
+                                           class="btn btn-danger">
+                                            <span class=""><?= LangManager::translate("core.btn.delete") ?></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     <?php endforeach; ?>
                     </tbody>
                 </table>
@@ -162,42 +191,6 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
         </div>
     </div>
 </div>
-
-<!-- MODAL DELETE ROLE -->
-<script>
-    const modalDeleteRole = roleId => {
-        return '' +
-            `<div class="modal fade" id="roleDeleteModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="roleDeleteModalTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="roleDeleteModalTitle">
-                                    <?= LangManager::translate('users.roles.manage.delete.title') ?>
-                                </h5>
-                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                    <i data-feather="x"></i>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <p>
-                                    <?= LangManager::translate('users.roles.manage.delete.content') ?>
-                                </p>
-                            </div>
-                            <div class="modal-footer">
-                                <div class="buttons">
-                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-                                        <?= LangManager::translate('core.btn.close') ?>
-                                    </button>
-                                    <a href="delete/${roleId}" class="btn btn-danger ml-1">
-                                        <?= LangManager::translate('core.btn.confirm') ?>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`
-    }
-</script>
 
 <!-- Trigger perm * and disabled all others perms checkbox -->
 <script>

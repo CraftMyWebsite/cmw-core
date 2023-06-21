@@ -118,12 +118,12 @@ $description = LangManager::translate("core.mail.config.description");
     <div class="col-12 col-lg-7">
         <div class="card">
             <div class="card-header">
-                <h4>Mise en forme</h4>
+                <h4><?= LangManager::translate("core.mail.config.formatting") ?></h4>
             </div>
             <div class="card-body">
-                    <h6>Nom d'affichage :</h6>
+                    <h6><?= LangManager::translate("core.mail.config.name") ?></h6>
                     <div class="form-group position-relative has-icon-left">
-                        <input type="text" class="form-control" placeholder="Nom de votre site">
+                        <input type="text" class="form-control" placeholder="<?= LangManager::translate("core.mail.config.placeholder") ?>">
                         <div class="form-control-icon">
                             <i class="fa-solid fa-envelope-open-text"></i>
                         </div>

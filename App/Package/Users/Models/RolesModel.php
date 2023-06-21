@@ -5,6 +5,8 @@ namespace CMW\Model\Users;
 use CMW\Entity\Users\PermissionEntity;
 use CMW\Entity\Users\RoleEntity;
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Manager\Flash\Alert;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Package\AbstractModel;
 use CMW\Utils\Utils;
 
@@ -250,6 +252,19 @@ class RolesModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
+    }
+
+    public function roleIsDefault(int $roleId): bool
+    {
+        $sql = "SELECT role_is_default FROM cmw_roles WHERE role_id = :id AND role_is_default = 1";
+
+        $db = DatabaseManager::getInstance();
+        $res = $db->prepare($sql);
+
+        if ($res->execute(array("id" => $roleId))) {
+            return $res->rowCount() === 1;
+        }
+        return false;
     }
 
     public static function playerHasRole(int $userId, int $roleId): bool

@@ -38,10 +38,17 @@ return [
         "edit" => "Modifier ces informations",
         "visits" => "Visites",
         "registers" => "Inscriptions",
+        "days" => "Jours",
+        "weeks" => "Semaines",
+        "months" => "Mois",
     ],
     "menus" => [
         "title" => "Menus",
         "desc" => "Gérez les menus de votre site",
+        "delete_title" => "Supression de :",
+        "delete_message" => "Cette suppression est définitive",
+        "send_to" => "Renvoie vers :",
+        "add_sub_menu" => "Ajout d'un sous-menu dans",
         "add" => [
             "name" => "Nom du menu",
             "name_hint" => "Votes",
@@ -65,6 +72,7 @@ return [
         "preview" => 'Vous pouvez prévisualiser le rendu des styles <a href="https://highlightjs.org/static/demo/" target="_blank">ici</a>',
     ],
     "config" => [
+        "head" => "Réglages",
         "title" => "Configuration",
         "desc" => "Configurez votre site CMW !",
         "favicon" => "Modifiez le favicon de votre site",
@@ -166,7 +174,7 @@ return [
         "verification" => "Vérification",
         "verificationText" => "Attention, ceci va réinitialiser tout les paramètres par defaut de votre thème, êtes vous sûr de vouloir continuer ?",
         "config" => [
-            "title" => "Gestion de vos thèmes",
+            "title" => "Gestion",
             "description" => "Gérez les thèmes de votre site",
             "select" => "Choisissez votre thème",
             "list" => [
@@ -219,6 +227,9 @@ return [
             "portSMTP" => "Port SMTP",
             "protocol" => "Protocol d'envoie",
             "footer" => "Footer de vos mails",
+            "formatting" => "Mise en forme",
+            "name" => "Nom d'affichage :",
+            "placeholder" => "Nom de votre site",
             "test" => [
                 "btn" => "Testez votre configuration",
                 "title" => "Essaye dès maintenant ta configuration",
@@ -257,8 +268,10 @@ return [
         "success" => "Mise à jour de votre site réussie",
     ],
     "security" => [
-        "title" => "CMW - Sécurité",
+        "title" => "Sécurité",
         "description" => "Gérez la sécurité de votre site",
+        "no_captcha" => "Pas de captcha",
+        "free_key" => "Obtenez vos clé ici gratuitement :",
         "captcha" => [
             "title" => "Gestion du captcha",
             "type" => "Type de captcha",

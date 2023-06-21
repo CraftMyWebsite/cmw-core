@@ -194,7 +194,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'Admin/Resources/Js/main
                                     <i class="fa-solid fa-upload"></i>
                                 </button>
                             </div>
-                            <span>Fichiers autorisé ; png, jpg, jpeg, webp, svg, gif</span>
+                            <span><?= LangManager::translate("users.files") ?></span>
                         </form>
                     </div>
                     <div class="col-md-6">

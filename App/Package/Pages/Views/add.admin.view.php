@@ -88,7 +88,7 @@ $description = LangManager::translate("pages.add.desc");
      * EditorJS
      */
     let editor = new EditorJS({
-        placeholder: "Commencez à taper ou cliquez sur le \"+\" pour choisir un bloc à ajouter...",
+        placeholder: "<?= LangManager::translate("pages.editor.start") ?>",
         logLevel: "ERROR",
         readOnly: false,
         holder: "editorjs",

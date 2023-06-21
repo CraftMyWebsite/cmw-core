@@ -11,6 +11,7 @@ use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\MailModel;
+use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -132,7 +133,7 @@ class MailController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
-        header("Location: configuration");
+        Redirect::redirectPreviousRoute();
     }
 
 
@@ -148,7 +149,7 @@ class MailController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.mail.test", ["%mail%" => $receiver]));
 
-        header("Location: configuration");
+        Redirect::redirectPreviousRoute();
     }
 
 }

@@ -108,11 +108,10 @@ $description = LangManager::translate("users.manage.desc"); ?>
                                         <div class="modal-content">
                                             <div class="modal-header bg-danger">
                                                 <h5 class="modal-title white" id="myModalLabel160">
-                                                    Supprimer <?= $user->getPseudo() ?> ?</h5>
+                                                    <?= LangManager::translate("users.modal.delete") ?> <?= $user->getPseudo() ?> ?</h5>
                                             </div>
                                             <div class="modal-body text-left">
-                                                La suppression de cet utilisateur est définitive !<br>
-                                                Aucun retour possible !
+                                                <?= LangManager::translate("users.modal.delete_message") ?>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-light-secondary"
