@@ -88,27 +88,30 @@ class MaintenanceController extends AbstractController
             $this->redirectMaintenance();
         }
 
+        $userCanByPass = UsersController::isAdminLogged() && UsersController::hasPermission('core.maintenance.bypass');
+
+        if($isEnable && $userCanByPass){
+            return;
+        }
 
         ///// Login checks
-        if ($isEnable && $maintenance->getType() === 0 && !UsersController::isAdminLogged() &&
+        if ($isEnable && $maintenance->getType() === 0 &&
             (Website::isCurrentPage('/login') || Website::isCurrentPage('/register'))) {
             Redirect::redirect('maintenance');
         }
 
-        if ($isEnable && $maintenance->getType() === 1 && !UsersController::isAdminLogged() &&
+        if ($isEnable && $maintenance->getType() === 1 &&
             (Website::isCurrentPage('/login') || Website::isCurrentPage('/register'))) {
             return;
         }
 
-        if ($isEnable && $maintenance->getType() === 2 && !UsersController::isAdminLogged() &&
+        if ($isEnable && $maintenance->getType() === 2 &&
             (Website::isCurrentPage('/login'))) {
             return;
         }
 
         //Force redirect to maintenance page
-        if ($isEnable && !UsersController::isAdminLogged()) {
-            Redirect::redirect('maintenance');
-        }
+        Redirect::redirect('maintenance');
     }
 
     // Public
