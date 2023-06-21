@@ -170,8 +170,11 @@ $description = LangManager::translate("core.maintenance.description");
         enableSnippets: false
     })
 
-
-    editor.setTheme("ace/theme/one_dark");
+    if (localStorage.getItem('theme') === 'theme-dark'){
+        editor.setTheme("ace/theme/cmw_dark");
+    } else {
+        editor.setTheme("ace/theme/cmw_light");
+    }
 
     editor.resize()
     editor.session.setUseWrapMode(true);
