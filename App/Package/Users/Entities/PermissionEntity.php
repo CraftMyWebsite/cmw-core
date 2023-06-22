@@ -61,7 +61,7 @@ class PermissionEntity
     /**
      * @return string
      */
-    public function getCode($package): string
+    public function getCode(): string
     {
         return $this->permissionCode;
     }
