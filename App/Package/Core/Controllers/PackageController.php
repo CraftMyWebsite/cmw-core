@@ -6,10 +6,17 @@ use CMW\Controller\Users\UsersController;
 use CMW\Entity\Core\PackageEntity;
 use CMW\Entity\Core\PackageMenusEntity;
 use CMW\Manager\Api\PublicAPI;
+use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Flash\Alert;
+use CMW\Manager\Flash\Flash;
+use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
+use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
+use CMW\Utils\Redirect;
+use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
 class PackageController extends AbstractController
@@ -28,7 +35,7 @@ class PackageController extends AbstractController
         $contentDirectory = array_diff(scandir("$packagesFolder/"), array('..', '.'));
         foreach ($contentDirectory as $package) {
 
-            if (in_array($package, self::$corePackages, true)){
+            if (in_array($package, self::$corePackages, true)) {
                 continue;
             }
 
@@ -68,8 +75,8 @@ class PackageController extends AbstractController
 
     public static function getPackage(string $package): ?PackageEntity
     {
-        
-        if (!file_exists("App/Package/$package/infos.json")){
+
+        if (!file_exists("App/Package/$package/infos.json")) {
             return null;
         }
 
@@ -137,7 +144,8 @@ class PackageController extends AbstractController
      * @return array
      * @desc Return the list of public packages from our market
      */
-    public static function getMarketPackages(): array {
+    public static function getMarketPackages(): array
+    {
         return PublicAPI::getData("resources/getResources&resource_type=1");
     }
 
@@ -167,7 +175,6 @@ class PackageController extends AbstractController
 
     /* ADMINISTRATION */
 
-    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/packages")]
     #[Link("/", Link::GET, [], "/cmw-admin/packages")]
     private function adminPackageManage(): void
     {
@@ -179,6 +186,30 @@ class PackageController extends AbstractController
         View::createAdminView("Core", "package")
             ->addVariableList(["installedPackages" => $installedPackages, "packagesList" => $packagesList])
             ->view();
+    }
+
+    #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/packages")]
+    #[NoReturn] private function adminPackageInstallation(Request $request, int $id): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.configuration");
+
+        $package = PublicAPI::getData("resources/installResource&id=$id");
+
+
+
+        if (!DownloadManager::installPackageWithLink($package['file'], "package", $package['name'])) {
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.downloads.errors.internalError",
+                    ['name' => $package['name'], 'version' => $package['version_name']]));
+            Redirect::redirectPreviousRoute();
+        }
+
+
+        //TODO TOASTER
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
+            LangManager::translate('core.Package.toasters.install.success', ['package' => $package['name']]));
+
+        Redirect::redirectPreviousRoute();
     }
 
 }

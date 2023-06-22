@@ -128,7 +128,7 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                         <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
                                             <?= LangManager::translate("core.Package.update") ?>
                                         </div>-->
-                                        <img class="rounded-3 " style="height: 200px; width: 100%;" src="<?= PublicAPI::getUrl() . '/' . $packages["icon"] ?>" alt="img">
+                                        <img class="rounded-3 " style="height: 200px; width: 100%;" src="<?= $packages["icon"] ?>" alt="img">
                                     </div>
                                     <div class="d-flex justify-content-around px-2 py-1">
                                         <a class="btn btn-sm btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#delete-<?= $packages['name'] ?>">
@@ -147,7 +147,7 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                         <div class="modal-body">
                                             <div class="row">
                                                 <div class="col-12 col-lg-6" style="height:20rem">
-                                                    <img style="height: 100%; width: 100%;" src="<?= PublicAPI::getUrl() . '/' . $packages["icon"] ?>" alt="img">
+                                                    <img style="height: 100%; width: 100%;" src="<?= $packages["icon"] ?>" alt="img">
                                                 </div>
                                                 <div class="col-12 col-lg-6 position-relative">
                                                     <p class=""><b><?= LangManager::translate("core.Package.description") ?></b></p>
@@ -212,10 +212,10 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                             <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
                                                 <?= LangManager::translate("core.Package.update") ?>
                                             </div>-->
-                                            <img style="height: 200px; width: 100%;" src="<?= PublicAPI::getUrl() . '/' . $apiPackages["icon"] ?>" alt="img">
+                                            <img style="height: 200px; width: 100%;" src="<?= $apiPackages["icon"] ?>" alt="img">
                                         </div>
                                         <div class="d-flex justify-content-center px-2 py-1">
-                                            <a href="install/<?= $apiPackages['id'] ?>" class="btn btn-sm btn-primary"><i class="fa-solid fa-download"></i> <?= LangManager::translate("core.Package.install") ?></a>
+                                            <a href="packages/install/<?= $apiPackages['id'] ?>" class="btn btn-sm btn-primary"><i class="fa-solid fa-download"></i> <?= LangManager::translate("core.Package.install") ?></a>
                                         </div>
                                     </div>
                                 </div>
@@ -226,13 +226,13 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                             <div class="modal-header">
                                                 <h4 class="modal-title"><?= $apiPackages['name'] ?></h4>
                                                 <div class="d-flex justify-content-end mt-auto gap-3">
-                                                    <a href="install/<?= $apiPackages['id'] ?>" class="btn btn-sm btn-primary"><i class="fa-solid fa-download"></i> <?= LangManager::translate("core.Package.install") ?></a>
+                                                    <a href="packages/install/<?= $apiPackages['id'] ?>" class="btn btn-sm btn-primary"><i class="fa-solid fa-download"></i> <?= LangManager::translate("core.Package.install") ?></a>
                                                 </div>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="row">
                                                     <div class="col-12 col-lg-6 mb-3" style="height:20rem">
-                                                        <img style="height: 100%; width: 100%;" src="<?= PublicAPI::getUrl() . '/' . $apiPackages["icon"] ?>" alt="img">
+                                                        <img style="height: 100%; width: 100%;" src="<?= $apiPackages["icon"] ?>" alt="img">
                                                     </div>
                                                     <div class="col-12 col-lg-6 position-relative">
                                                         <p class=""><b><?= LangManager::translate("core.Package.description") ?></b><br><?= $apiPackages['description'] ?></p>
