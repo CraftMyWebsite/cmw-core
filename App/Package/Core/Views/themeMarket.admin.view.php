@@ -49,7 +49,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                         <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
                                             <?= LangManager::translate("core.Theme.update") ?>
                                         </div>-->
-                                        <?php if ($theme->getName() != "Sampler"): ?>
+                                        <?php if ($theme->getName() !== "Sampler"): ?>
                                         <div class="alert-light-warning color-warning position-absolute bottom-0 w-100 text-center" style="opacity: .85">
                                             <?= LangManager::translate("core.Theme.notVerified") ?>
                                         </div>
@@ -87,7 +87,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                                 </div>
                                                 <div class="col-12 col-lg-6 position-relative">
                                                         <p class=""><b><?= LangManager::translate("core.Theme.description") ?></b></p>
-                                                        <?php if ($theme->getName() != "Sampler"): ?>
+                                                        <?php if ($theme->getName() !== "Sampler"): ?>
                                                             <p><?= LangManager::translate("core.Theme.descriptionManualInstall") ?></p>
                                                         <?php else: ?>
                                                             <p><?= LangManager::translate("core.Theme.descriptionIsSampler") ?></p>
@@ -126,7 +126,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                             <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
                                                 <?= LangManager::translate("core.Theme.update") ?>
                                             </div>-->
-                                            <img style="height: 200px; width: 100%;" src="<?= PublicAPI::getUrl() . '/' . $theme["icon"] ?>" alt="img">  
+                                            <img style="height: 200px; width: 100%;" src="<?= $theme["icon"] ?>" alt="Icon <?= $theme['name'] ?>">
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center px-2 py-1">
                                             <span class="text-success"><?= LangManager::translate("core.Theme.active") ?></span>
@@ -154,7 +154,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                             <div class="modal-body">
                                                 <div class="row">
                                                     <div class="col-12 col-lg-6 mb-3" style="height:20rem">
-                                                        <img style="height: 100%; width: 100%;" src="<?= PublicAPI::getUrl() . '/' . $theme["icon"] ?>" alt="img">
+                                                        <img style="height: 100%; width: 100%;" src="<?= $theme["icon"] ?>" alt="Icon <?= $theme['name'] ?>">
                                                     </div>
                                                     <div class="col-12 col-lg-6 position-relative">
                                                         <p class=""><b><?= LangManager::translate("core.Theme.description") ?></b><br><?= $theme['description'] ?></p>
@@ -198,7 +198,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                         <button type="button" data-bs-toggle="modal" data-bs-target="#modal-<?= $theme->getName() ?>" class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.details") ?></button>
                                     </div>
                                     <div class="position-relative">
-                                        <?php if ($theme->getName() != "Sampler"): ?>
+                                        <?php if ($theme->getName() !== "Sampler"): ?>
                                         <div class="alert-light-warning color-warning position-absolute bottom-0 w-100 text-center" style="opacity: .85">
                                             <?= LangManager::translate("core.Theme.notVerified") ?>
                                         </div>
@@ -235,7 +235,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                                 </div>
                                                 <div class="col-12 col-lg-6 position-relative">
                                                         <p class=""><b><?= LangManager::translate("core.Theme.description") ?></b></p>
-                                                        <?php if ($theme->getName() != "Sampler"): ?>
+                                                        <?php if ($theme->getName() !== "Sampler"): ?>
                                                             <p><?= LangManager::translate("core.Theme.descriptionManualInstall") ?></p>
                                                         <?php else: ?>
                                                             <p><?= LangManager::translate("core.Theme.descriptionIsSampler") ?></p>
@@ -274,7 +274,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                             <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
                                                 <?= LangManager::translate("core.Theme.update") ?>
                                             </div>-->
-                                            <img style="height: 200px; width: 100%;" src="<?= PublicAPI::getUrl() . '/' . $theme["icon"] ?>" alt="img">  
+                                            <img style="height: 200px; width: 100%;" src="<?= $theme["icon"] ?>" alt="Icon <?= $theme['name'] ?>">
                                         </div>
                                         <div class="d-flex justify-content-center px-2 py-1">
                                             <form action="" method="post">
@@ -305,7 +305,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                             <div class="modal-body">
                                                 <div class="row">
                                                     <div class="col-12 col-lg-6 mb-3" style="height:20rem">
-                                                        <img style="height: 100%; width: 100%;" src="<?= PublicAPI::getUrl() . '/' . $theme["icon"] ?>" alt="img">
+                                                        <img style="height: 100%; width: 100%;" src="<?= $theme["icon"] ?>" alt="Icon <?= $theme['name'] ?>">
                                                     </div>
                                                     <div class="col-12 col-lg-6 position-relative">
                                                         <p class=""><b><?= LangManager::translate("core.Theme.description") ?></b><br><?= $theme['description'] ?></p>
@@ -356,7 +356,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                             <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
                                                 <?= LangManager::translate("core.Theme.update") ?>
                                             </div>-->
-                                            <img style="height: 200px; width: 100%;" src="<?= PublicAPI::getUrl() . '/' . $theme["icon"] ?>" alt="img">  
+                                            <img style="height: 200px; width: 100%;" src="<?= $theme["icon"] ?>" alt="Icon <?= $theme['name'] ?>">
                                         </div>
                                         <div class="d-flex justify-content-center px-2 py-1">
                                             <a href="install/<?= $theme['id'] ?>" class="btn btn-sm btn-primary"><i class="fa-solid fa-download"></i> <?= LangManager::translate("core.Theme.install") ?></a>
@@ -376,7 +376,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                             <div class="modal-body">
                                                 <div class="row">
                                                     <div class="col-12 col-lg-6 mb-3" style="height:20rem">
-                                                        <img style="height: 100%; width: 100%;" src="<?= PublicAPI::getUrl() . '/' . $theme["icon"] ?>" alt="img">
+                                                        <img style="height: 100%; width: 100%;" src="<?= $theme["icon"] ?>" alt="Icon <?= $theme['name'] ?>">
                                                     </div>
                                                     <div class="col-12 col-lg-6 position-relative">
                                                         <p class=""><b><?= LangManager::translate("core.Theme.description") ?></b><br><?= $theme['description'] ?></p>
