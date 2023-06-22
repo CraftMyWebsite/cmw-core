@@ -61,7 +61,7 @@ use CMW\Manager\Lang\LangManager;
                             <input class="hidden" id="package_<?= $package['id'] ?>" type="checkbox" name="packages[]"
                                    value="<?= $package['id'] ?>">
                             <label class="label flex justify-start gap-2" for="package_<?= $package['id'] ?>">
-                                <img src='<?= PublicAPI::getUrl() . '/' . $package["icon"] ?>'
+                                <img src='<?= $package["icon"] ?>'
                                      style="max-height: 32px; max-width: 32px"
                                      class="rounded" alt="Logo <?= $package['name'] ?>">
                                 <span class="font-medium text-lg"><?= $package['name'] ?></span>

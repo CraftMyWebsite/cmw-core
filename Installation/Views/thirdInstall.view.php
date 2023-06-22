@@ -66,7 +66,7 @@ use CMW\Manager\Lang\LangManager;
         <li class="lg:w-1/3 lg:px-2 mb-4 h-fit">
             <div class="font-bold text-lg bg-gray-700 rounded-t-2xl p-1">
                 <div class="flex flex-wrap">
-                    <img class="w-7 mr-2" src="<?= $bundle['image'] ?>" alt="Image <?= $bundle['image'] ?>">
+                    <img class="w-7 mr-2" src="<?= $bundle['image'] ?>" alt="Image <?= $bundle['name'] ?>">
                     <span class="font-medium text-lg"><?= $bundle['name'] ?></span>
                 </div>
             </div>
