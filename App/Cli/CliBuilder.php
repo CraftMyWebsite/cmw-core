@@ -1,4 +1,5 @@
 <?php
+namespace CMW\Cli;
 
 use CMW\Manager\Env\EnvManager;
 
