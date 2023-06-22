@@ -189,7 +189,7 @@ class ThemeController extends AbstractController
     #[Link("/market", Link::GET, [], "/cmw-admin/theme")]
     private function adminThemeConfiguration(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
 
         $currentTheme = self::getCurrentTheme();
         $installedThemes = self::getInstalledThemes();
@@ -206,7 +206,7 @@ class ThemeController extends AbstractController
     #[Link("/market", Link::POST, [], "/cmw-admin/theme")]
     private function adminThemeConfigurationPost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
 
         $theme = filter_input(INPUT_POST, "theme");
 
@@ -221,7 +221,7 @@ class ThemeController extends AbstractController
     #[Link("/market/regenerate", Link::POST, [], "/cmw-admin/theme")]
     private function adminThemeConfigurationRegeneratePost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
 
         $themeName = self::getCurrentTheme()->getName();
         ThemeModel::getInstance()->deleteThemeConfig($themeName);
@@ -239,7 +239,7 @@ class ThemeController extends AbstractController
     #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/theme")]
     private function adminThemeInstallation(Request $request, int $id): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
 
         $theme = PublicAPI::getData("resources/installResource&id=$id");
 
@@ -266,7 +266,7 @@ class ThemeController extends AbstractController
     #[Link("/manage", Link::GET, [], "/cmw-admin/theme")]
     private function adminThemeManage(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
         View::createAdminView("Core", "themeManage")
             ->addScriptBefore("Admin/Resources/Vendors/Tinymce/tinymce.min.js","Admin/Resources/Vendors/Tinymce/Config/full.js")
             ->view();

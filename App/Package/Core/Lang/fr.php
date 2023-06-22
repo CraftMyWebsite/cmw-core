@@ -213,6 +213,11 @@ return [
         "desc" => "Gérer vos packages",
         "myPackages" => "Mes packages",
         "market" => "Market",
+        "toasters" => [
+            "install" => [
+                "success" => "Package %package% installé avec succès !"
+            ],
+        ],
     ],
     "mail" => [
         "config" => [

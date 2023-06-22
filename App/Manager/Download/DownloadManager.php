@@ -27,9 +27,8 @@ class DownloadManager
             return false;
         }
 
-        $data = PublicAPI::getUrl() . $url;
         file_put_contents(EnvManager::getInstance()->getValue("DIR") . "Public/resource.zip",
-            fopen($data, 'rb'));
+            fopen($url, 'rb'));
 
         $archiveUpdate = new ZipArchive;
         if ($archiveUpdate->open(EnvManager::getInstance()->getValue("DIR") . 'Public/resource.zip') === TRUE) {
