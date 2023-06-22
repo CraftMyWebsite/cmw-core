@@ -6,7 +6,9 @@ use CMW\Controller\Users\UsersController;
 use CMW\Entity\Core\ThemeEntity;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Cache\SimpleCacheManager;
+use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Download\DownloadManager;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
@@ -17,7 +19,10 @@ use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\ThemeModel;
+use CMW\Utils\Directory;
+use CMW\Utils\Log;
 use CMW\Utils\Redirect;
+use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
 class ThemeController extends AbstractController
@@ -320,6 +325,32 @@ class ThemeController extends AbstractController
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
+
+        Redirect::redirectPreviousRoute();
+    }
+
+    #[Link("/update/:id/:actualVersion/:themeName", Link::GET, ["id" => "[0-9]+", "actualVersion" => ".*?", "themeName" => ".*?"], "/cmw-admin/theme")]
+    #[NoReturn] private function adminThemeUpdate(Request $request, int $id, string $actualVersion, string $themeName): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.configuration");
+
+        $updates = PublicAPI::getData("resources/getResourceUpdates&id=$id&actualVersion=$actualVersion");
+
+        Log::debug($updates);
+
+        //Update package
+
+        Directory::delete(EnvManager::getInstance()->getValue('DIR') . "App/Public/Theme/$themeName");
+
+        $lastUpdateIndex = count($updates) - 1;
+        foreach ($updates as $i => $update) {
+            if ($i === $lastUpdateIndex){
+                DownloadManager::installPackageWithLink($update['file'], 'Theme', $themeName);
+            }
+        }
+
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
+            LangManager::translate('core.Theme.toasters.update.success', ['theme' => $themeName]));
 
         Redirect::redirectPreviousRoute();
     }

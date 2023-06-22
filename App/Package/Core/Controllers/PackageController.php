@@ -6,6 +6,7 @@ use CMW\Controller\Users\UsersController;
 use CMW\Entity\Core\PackageEntity;
 use CMW\Entity\Core\PackageMenusEntity;
 use CMW\Manager\Api\PublicAPI;
+use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
@@ -15,7 +16,10 @@ use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
+use CMW\Utils\Directory;
+use CMW\Utils\Log;
 use CMW\Utils\Redirect;
+use CMW\Utils\Utils;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
@@ -205,9 +209,38 @@ class PackageController extends AbstractController
         }
 
 
-        //TODO TOASTER
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate('core.Package.toasters.install.success', ['package' => $package['name']]));
+
+        Redirect::redirectPreviousRoute();
+    }
+
+    #[Link("/update/:id/:actualVersion/:packageName", Link::GET, ["id" => "[0-9]+", "actualVersion" => ".*?", "packageName" => ".*?"], "/cmw-admin/packages")]
+    #[NoReturn] private function adminPackageUpdate(Request $request, int $id, string $actualVersion, string $packageName): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.configuration");
+
+        $updates = PublicAPI::getData("resources/getResourceUpdates&id=$id&actualVersion=$actualVersion");
+
+        Log::debug($updates);
+
+        //Update package
+
+        Directory::delete(EnvManager::getInstance()->getValue('DIR') . "App/Package/$packageName");
+
+        $lastUpdateIndex = count($updates) - 1;
+        foreach ($updates as $i => $update) {
+            if ($update['sql_updater'] !== null){
+                DatabaseManager::getLiteInstance()->query($update['sql_updater']);
+            }
+
+            if ($i === $lastUpdateIndex){
+                DownloadManager::installPackageWithLink($update['file'], 'package', $packageName);
+            }
+        }
+
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
+            LangManager::translate('core.Package.toasters.update.success', ['package' => $packageName]));
 
         Redirect::redirectPreviousRoute();
     }

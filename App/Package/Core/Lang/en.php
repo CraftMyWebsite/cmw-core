@@ -192,24 +192,30 @@ return [
             "title" => "Manage your Theme <b>%Theme%</b>",
             "description" => "Manage your Theme to have a Theme that suits you ! "
         ],
+        "toasters" => [
+            "update" => [
+                "success" => "Theme %theme% update with success"
+            ],
+        ],
     ],
     "Package" => [
         "title" => "Packages",
         "delete" => "Delete",
         "install" => "Install",
+        "update" => "Update",
         "demo" => "Demo",
         "close" => "Close",
         "removeTitle" => "Do you want to delete ",
         "removeText" => "Removal of this package is permanent.<br>Do you want to continue ?",
-        "description" => "Description : ",
+        "description" => "Description: ",
         "descriptionNotAvailable" => "Descriptions are not available for local packages.",
         "details" => "Details",
-        "author" => "Author : ",
-        "downloads" => "Downloads : ",
-        "version" => "Package version : ",
-        "versionCMW" => "Recommended CMW version : ",
+        "author" => "Author: ",
+        "downloads" => "Downloads: ",
+        "version" => "Package version: ",
+        "versionCMW" => "Recommended CMW version: ",
         "notVerified" => "Not verified by CMW.",
-        "update" => "An update is available !",
+        "updateAvailable" => "An update is available !",
         "desc" => "Manage your packages",
         "myPackages" => "My Packages",
         "market" => "Market",
@@ -217,7 +223,11 @@ return [
             "install" => [
                 "success" => "Package %package% install with success !"
             ],
+            "update" => [
+                "success" => "Package %package% update with success !"
+            ],
         ],
+        "versionDistant" => "Last version"
     ],
     "mail" => [
         "config" => [
