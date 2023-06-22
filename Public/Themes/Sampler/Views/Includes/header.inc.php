@@ -2,8 +2,9 @@
 
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Env\EnvManager;
+use CMW\Model\Core\MenusModel;
 use CMW\Utils\Website;
-
+$menus = MenusModel::getInstance();
 ?>
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3 bg-dark" id="mainNav">
@@ -12,11 +13,24 @@ use CMW\Utils\Website;
         <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
                 aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+
         <div class="collapse navbar-collapse" id="navbarResponsive">
+
+            <ul class="navbar-nav ms-auto" style="">
+                <?php foreach ($menus->getMenus() as $menu): ?>
+                    <?php if ($menu->isUserAllowed()): ?>
+                        <li class="nav-item">
+                            <a href="<?= $menu->getUrl() ?>" class="nav-link" <?= !$menu->isTargetBlank() ?: "target='_blank'" ?>><?= $menu->getName() ?></a>
+                        </li>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+
             <ul class="navbar-nav ms-auto my-2 my-lg-0">
                 <?php if (UsersController::isAdminLogged()) : ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin">
+                        <a class="nav-link" target="_blank"
+                           href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin">
                             Accès à l'administration
                         </a>
                     </li>
