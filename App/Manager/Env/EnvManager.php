@@ -33,6 +33,7 @@ class EnvManager
         }
 
         $this->setDefaultValues();
+        $this->oneShotCmwVersionFile();
 
         $this->load();
     }
@@ -195,15 +196,19 @@ class EnvManager
         $this->addValue("dir", $this->absPath);
         $this->addValue("devMode", 0);
         $this->addValue("APIURL", $this->apiURL);
-        $this->addValue("VERSION", $this->oneShotCmwVersionFile());
+
     }
 
-    private function oneShotCmwVersionFile(): string
+    private function oneShotCmwVersionFile(): void
     {
-        $data = file_get_contents('.cmw-version');
-        unlink('.cmw-version');
+        if ($this->getValue('VERSION') !== null || !file_exists('.cmw-version')){
+            return;
+        }
 
-        return $data;
+        $data = file_get_contents('.cmw-version');
+        $this->addValue("VERSION", $data);
+
+        unlink('.cmw-version');
     }
 
 }
