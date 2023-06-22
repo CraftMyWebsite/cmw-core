@@ -118,6 +118,7 @@ $description = LangManager::translate("core.Package.desc"); ?>
                         -----Listage des packages API installé---
                         -------------------------------------->
                         <?php foreach ($packagesList as $packages): ?>
+                        <?php if (PackageController::isInstalled($packages['name'])): ?>
                             <div class="col-12 col-lg-3 mb-4">
                                 <div class="card-in-card">
                                     <div class="d-flex justify-content-between align-items-center px-2 py-2">
@@ -190,6 +191,7 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                     </div>
                                 </div>
                             </div>
+                        <?php endif; ?>
                         <?php endforeach; ?>
                     </div>
                 </div>
