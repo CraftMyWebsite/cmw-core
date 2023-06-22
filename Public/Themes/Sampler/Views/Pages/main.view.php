@@ -10,9 +10,10 @@ $description = "Description de votre page";
 ?>
 
 
-    <section>
-        <div class="container">
-            <?= $page->getConverted() ?>
-        </div>
-    </section>
+<section class="page-section">
+    <h1 class="text-center"><?= $page->getTitle() ?></h1>
+    <div class="container">
+        <?= $page->getConverted() ?>
+    </div>
+</section>
 

@@ -3,8 +3,8 @@ $title = "Erreur";
 $description = "Erreur";
 ?>
 
-<div class="container">
-
-    Mec, erreur {errorCode} !
-
-</div>
+<section class="page-section">
+    <div class="container">
+        Erreur {errorCode} !
+    </div>
+</section>
