@@ -2,6 +2,8 @@
 
 namespace CMW\Entity\Users;
 
+use CMW\Manager\Lang\LangManager;
+
 class PermissionEntity
 {
 
@@ -59,7 +61,7 @@ class PermissionEntity
     /**
      * @return string
      */
-    public function getCode(): string
+    public function getCode($package): string
     {
         return $this->permissionCode;
     }

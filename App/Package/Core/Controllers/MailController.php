@@ -3,6 +3,7 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Flash\Flash;
@@ -17,9 +18,9 @@ use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
-require_once(getenv("DIR") . 'App/Package/Core/Vendors/Phpmailer/PHPMailer.php');
-require_once(getenv("DIR") . 'App/Package/Core/Vendors/Phpmailer/SMTP.php');
-require_once(getenv("DIR") . 'App/Package/Core/Vendors/Phpmailer/Exception.php');
+require_once(EnvManager::getInstance()->getValue("DIR") . 'App/Package/Core/Vendors/Phpmailer/PHPMailer.php');
+require_once(EnvManager::getInstance()->getValue("DIR") . 'App/Package/Core/Vendors/Phpmailer/SMTP.php');
+require_once(EnvManager::getInstance()->getValue("DIR") . 'App/Package/Core/Vendors/Phpmailer/Exception.php');
 
 /**
  * Class: @MailController

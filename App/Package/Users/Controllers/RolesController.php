@@ -62,7 +62,7 @@ class RolesController extends AbstractController
         $permissionModel = PermissionsModel::getInstance();
 
         //Todo Try to improve that ?
-        require_once(getenv("DIR") . "App/Package/users/functions/loadPermissions.php");
+        require_once(EnvManager::getInstance()->getValue("DIR") . "App/Package/users/functions/loadPermissions.php");
 
 
         View::createAdminView("Users", "roles.add")->addVariableList(array(

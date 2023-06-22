@@ -55,7 +55,7 @@ class CoreController extends AbstractController
 
         //Redirect to the dashboard
         if ($_GET['url'] === "cmw-admin") {
-            Redirect::redirect(getenv('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
+            Redirect::redirect(EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . 'cmw-admin/dashboard');
 
         }
 

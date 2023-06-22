@@ -8,7 +8,7 @@ use CMW\Model\Users\RolesModel;
 $title = LangManager::translate("users.edit.title");
 $description = LangManager::translate("users.edit.desc");
 
-$scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'Admin/Resources/Js/main.js"></script>';
+$scripts = '<script src="' . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . 'Admin/Resources/Js/main.js"></script>';
 
 /** @var \CMW\Entity\Users\UserEntity $user */
 /** @var \CMW\Entity\Users\RoleEntity[] $roles */
@@ -181,7 +181,7 @@ $scripts = '<script src="' . getenv("PATH_SUBFOLDER") . 'Admin/Resources/Js/main
                     <div class="col-md-6">
                         <div class="text-center ">
                             <img class="w-50"
-                                 src="<?= getenv('PATH_SUBFOLDER') ?>Public/Uploads/Users/<?= $user->getUserPicture()->getImageName() ?>"
+                                 src="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>Public/Uploads/Users/<?= $user->getUserPicture()->getImageName() ?>"
                                  alt="<?= LangManager::translate("users.users.image.image_alt") . $user->getPseudo() ?>">
                         </div>
                         <form action="../picture/edit/<?= $user->getId() ?>" method="post"

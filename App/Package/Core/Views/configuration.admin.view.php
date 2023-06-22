@@ -1,4 +1,5 @@
 <?php use CMW\Controller\Core\CoreController;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Manager\Security\SecurityManager;
@@ -52,7 +53,7 @@ $description = LangManager::translate("core.config.desc");
                             <div class="form-group">
                                 <select class="choices form-select" name="locale" required>
                                     <?php foreach (CoreController::$availableLocales as $code => $name): ?>
-                                        <option value="<?= $code ?>" <?= $code === getenv("LOCALE") ? "selected" : "" ?>>
+                                        <option value="<?= $code ?>" <?= $code === EnvManager::getInstance()->getValue("LOCALE") ? "selected" : "" ?>>
                                             <?= $name ?>
                                         </option>
                                     <?php endforeach; ?>

@@ -217,11 +217,11 @@ class ImagesManager
             $dirName .= "/";
         }
 
-        if (!file_exists(getenv("DIR") . "Public/Uploads/" . $dirName) && !mkdir($concurrentDirectory = getenv("DIR") . "Public/Uploads/" . $dirName) && !is_dir($concurrentDirectory)) {
+        if (!file_exists(EnvManager::getInstance()->getValue("DIR") . "Public/Uploads/" . $dirName) && !mkdir($concurrentDirectory = EnvManager::getInstance()->getValue("DIR") . "Public/Uploads/" . $dirName) && !is_dir($concurrentDirectory)) {
             throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
 
-        $path = getenv("DIR") . "Public/Uploads/" . $dirName;
+        $path = EnvManager::getInstance()->getValue("DIR") . "Public/Uploads/" . $dirName;
 
         unlink($path . $imageName);
     }
