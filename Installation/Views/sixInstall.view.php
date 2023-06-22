@@ -14,7 +14,7 @@
             <p><?= LangManager::translate("users.users.mail") ?> :</p>
             <label class="input-group input-group">
                 <span><i class="fa-solid fa-at"></i></i></span>
-                <input type="text" placeholder="contact@craftmywebsite.fr" name="email"
+                <input type="email" placeholder="contact@craftmywebsite.fr" name="email"
                        class="input input-bordered input-sm w-full" required>
             </label>
         </div>

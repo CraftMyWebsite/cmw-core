@@ -60,7 +60,7 @@ class InstallerModel
 
         $res = $req->fetchAll();
 
-        return count($res) > 0;
+        return count($res) >= 1;
     }
 
     public static function initDatabase(string $serverName, string $database, string $username, string $password, int $port): void

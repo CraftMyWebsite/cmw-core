@@ -155,8 +155,8 @@ class EnvManager
 
         if (!$this->valueExistInFile($key)) {
             $file = fopen($this->envPath . $this->envFileName, 'ab');
-            $textToSet = static function ($key, $value) {
-                return $key . "=" . trim($value) . PHP_EOL;
+            $textToSet = static function (string $key, ?string $value) {
+                return $key . "=" . trim($value ?? 'UNDEFINED') . PHP_EOL;
             };
 
             $res = $textToSet($key, $value);

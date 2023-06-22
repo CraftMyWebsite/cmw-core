@@ -221,10 +221,9 @@ class InstallerController extends AbstractController
     #[Link(path: "/test/db", method: Link::POST, scope: "/installer", secure: false)]
     public function testDbConnection(): void
     {
-
         [$host, $username, $password, $port] = Utils::filterInput("bdd_address", "bdd_login", "bdd_pass", "bdd_port");
 
-        $db = filter_input(INPUT_POST, "bdd_name") ?? "cmw";
+        $db = isset($_POST['bdd_name']) ? filter_input(INPUT_POST, "bdd_name") : "cmw" ;
 
         if (!InstallerModel::tryDatabaseConnection($host, $username, $password, $port)) {
             print (json_encode(["status" => 0,
