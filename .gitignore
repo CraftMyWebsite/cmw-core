@@ -1,5 +1,9 @@
 # Exclude environment variables
 .env
+
+# Exclude .cmw-version, it's a generated file.
+.cmw-version
+
 .idea
 .vscode
 __MACOSX/
