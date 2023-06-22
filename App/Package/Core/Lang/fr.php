@@ -192,24 +192,30 @@ return [
             "title" => "Gérez votre thème <b>%Theme%</b>",
             "description" => "Gérez votre thème pour le personnaliser à votre guise !"
         ],
+        "toasters" => [
+            "update" => [
+                "success" => "Thème %theme% mis à jour avec succès"
+            ],
+        ],
     ],
     "Package" => [
         "title" => "Packages",
         "delete" => "Supprimer",
         "install" => "Installer",
+        "update" => "Mettre à jour",
         "demo" => "Démo",
         "close" => "Fermer",
         "removeTitle" => "Voulez-vous supprimer",
         "removeText" => "La suppression de ce package est définitive.<br>Voulez-vous continuer ?",
-        "description" => "Déscription : ",
+        "description" => "Déscription: ",
         "descriptionNotAvailable" => "Les déscription ne sont pas disponnible pour les packages local",
         "details" => "Détails",
         "author" => "Autheur : ",
-        "downloads" => "Téléchargements : ",
-        "version" => "Version du package : ",
-        "versionCMW" => "Version CMW recommandée : ",
+        "downloads" => "Téléchargements: ",
+        "version" => "Version du package: ",
+        "versionCMW" => "Version CMW recommandée: ",
         "notVerified" => "Non verifié par CMW.",
-        "update" => "Une mises à jour est disponible !",
+        "updateAvailable" => "Une mises à jour est disponible !",
         "desc" => "Gérer vos packages",
         "myPackages" => "Mes packages",
         "market" => "Market",
@@ -217,7 +223,11 @@ return [
             "install" => [
                 "success" => "Package %package% installé avec succès !"
             ],
+            "update" => [
+                "success" => "Package %package% mis à jour avec succès !"
+            ],
         ],
+        "versionDistant" => "Dernière version en ligne"
     ],
     "mail" => [
         "config" => [
