@@ -1,5 +1,5 @@
 <?php
-
+namespace CMW\Cli\Builder\Theme;
 
 class ThemeBuilderInstallation
 {

@@ -1,4 +1,7 @@
 <?php
+namespace CMW\Cli\Builder\Theme;
+
+use CMW\Cli\CliBuilder;
 
 require_once("App/Cli/CliBuilder.php");
 

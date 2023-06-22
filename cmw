@@ -1,24 +1,36 @@
 <?php
 
 //Get the command choice
-$command = (isset($argv[1]))?$argv[1]:null ;
+use CMW\Cli\Builder\Package\PackageBuilder;
+use CMW\Cli\Builder\Theme\ThemeBuilder;
+use CMW\Cli\CliBuilder;
+use CMW\Manager\Env\EnvManager;
+
+$command = $argv[1] ?? null;
 
 //Include the EnvManager
-include_once("app/Utils/EnvManager.php");
+include_once("App/Manager/Env/EnvManager.php");
 
 //If we don't have selected any option...
-if($command == null){
-	require_once(getenv("PATH_SUBFOLDER") . "App/Cli/CliBuilder.php");
+if($command === null){
+	require_once(EnvManager::getInstance()->getValue("DIR") . "App/Cli/CliBuilder.php");
 	$builder = new CliBuilder();
 	$builder->emptyArgs();
 }
 
 
 //Theme Builder
-if($command == "theme-init"){
-	require_once(getenv("PATH_SUBFOLDER") . "App/Cli/Builder/Theme/ThemeBuilder.php");
+if($command === "theme-init"){
+	require_once(EnvManager::getInstance()->getValue("DIR") . "App/Cli/Builder/Theme/ThemeBuilder.php");
 	new ThemeBuilder();
 }
+
+// Package Builder
+if($command === "package-init"){
+    require_once(EnvManager::getInstance()->getValue("DIR") . "App/Cli/Builder/Package/PackageBuilder.php");
+    new PackageBuilder();
+}
+
 
 
 
