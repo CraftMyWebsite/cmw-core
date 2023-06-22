@@ -3,7 +3,6 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
-use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
@@ -81,14 +80,14 @@ class MaintenanceController extends AbstractController
         }
 
         //Ignore installer
-        if (Website::isContainingRoute('installer')){
+        if (Website::isContainingRoute('installer')) {
             return;
         }
 
         $maintenance = MaintenanceModel::getInstance()->getMaintenance();
         $isEnable = $maintenance->isEnable();
 
-        if (!$isEnable){
+        if (!$isEnable) {
             return;
         }
 
@@ -103,22 +102,22 @@ class MaintenanceController extends AbstractController
 
         $userCanByPass = UsersController::isAdminLogged() && UsersController::hasPermission('core.maintenance.bypass');
 
-        if ($isEnable && $userCanByPass) {
+        if ($userCanByPass) {
             return;
         }
 
         ///// Login checks
-        if ($isEnable && $maintenance->getType() === 0 &&
+        if ($maintenance->getType() === 0 &&
             (Website::isCurrentPage('/login') || Website::isCurrentPage('/register'))) {
             Redirect::redirect('maintenance');
         }
 
-        if ($isEnable && $maintenance->getType() === 1 &&
+        if ($maintenance->getType() === 1 &&
             (Website::isCurrentPage('/login') || Website::isCurrentPage('/register'))) {
             return;
         }
 
-        if ($isEnable && $maintenance->getType() === 2 &&
+        if ($maintenance->getType() === 2 &&
             (Website::isCurrentPage('/login'))) {
             return;
         }
@@ -137,9 +136,9 @@ class MaintenanceController extends AbstractController
             Redirect::redirectToHome();
         }
 
-        if ($maintenance->isOverrideTheme()){
+        if ($maintenance->isOverrideTheme()) {
 
-            eval( '?>' . $maintenance->getOverrideThemeCode());
+            eval('?>' . $maintenance->getOverrideThemeCode());
 
         } else {
             $view = new View('Core', 'maintenance');
