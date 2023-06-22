@@ -8,6 +8,7 @@ use CMW\Manager\Requests\Request;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Model\Core\MaintenanceModel;
 use CMW\Utils\Redirect;
+use CMW\Utils\Website;
 use ReflectionMethod;
 
 /**
@@ -182,7 +183,11 @@ class Router
             throw new RouterException('No matching routes', 404);
         }
 
-        (new VisitsMetricsManager())->registerVisit($matchedRoute);
+        //Ignore metrics when we are on installer
+        if (!Website::isContainingRoute('installer')) {
+            (new VisitsMetricsManager())->registerVisit($matchedRoute);
+        }
+
 
         self::setActualRoute($matchedRoute);
         return $matchedRoute->call();

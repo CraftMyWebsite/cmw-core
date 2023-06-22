@@ -54,6 +54,16 @@ class Website
         return $currentUrl === $targetUrl || $currentUrl === $targetUrl . '/' || $currentUrl === $targetUrl . '#'; //Use Regex ?
     }
 
+    /**
+     * @param string $targetUrl
+     * @return bool
+     */
+    public static function isContainingRoute(string $targetUrl): bool
+    {
+        $path = explode("/", $_SERVER["REQUEST_URI"]);
+        return in_array($targetUrl, $path);
+    }
+
 
     /**
      * @return string

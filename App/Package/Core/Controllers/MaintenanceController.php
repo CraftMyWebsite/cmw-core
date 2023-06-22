@@ -3,6 +3,7 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
@@ -79,11 +80,20 @@ class MaintenanceController extends AbstractController
             return;
         }
 
+        //Ignore installer
+        if (Website::isContainingRoute('installer')){
+            return;
+        }
+
         $maintenance = MaintenanceModel::getInstance()->getMaintenance();
         $isEnable = $maintenance->isEnable();
 
+        if (!$isEnable){
+            return;
+        }
+
         //Check date
-        if ($isEnable && time() >= strtotime($maintenance->getTargetDate())) {
+        if (time() >= strtotime($maintenance->getTargetDate())) {
             MaintenanceModel::getInstance()->updateMaintenance(0,
                 $maintenance->getTitle(), $maintenance->getDescription(),
                 $maintenance->getType(), $maintenance->getTargetDate(), $maintenance->isOverrideTheme(),
