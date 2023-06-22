@@ -48,7 +48,7 @@ use CMW\Manager\Lang\LangManager;
                 <label class="label" for="theme_<?= $theme['id'] ?>">
                     <h2 class="font-bold text-lg text-center bg-gray-700 rounded-t-2xl p-1"><?= $theme['name'] ?></h2>
                     <div class="bg-gray-800">
-                        <figure><img src="<?= PublicAPI::getUrl() . '/' . $theme["icon"] ?>" alt="Shoes"/></figure>
+                        <figure><img src="<?= $theme["icon"] ?>" alt="Icon <?= $theme['icon'] ?>"/></figure>
                         <div class="p-2">
                             <p><?= $theme['description'] ?></p>
                             <?php foreach ($theme['tags'] as $tag): ?>
