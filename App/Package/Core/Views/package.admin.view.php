@@ -1,6 +1,7 @@
 <?php
 
 
+use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\PackageController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
@@ -13,7 +14,7 @@ $description = LangManager::translate("core.Package.desc"); ?>
 
 <div class="d-flex flex-wrap justify-content-between">
     <h3><i class="fa-solid fa-puzzle-piece"></i> <span
-                class="m-lg-auto"><?= LangManager::translate("core.Package.title") ?></span></h3>
+            class="m-lg-auto"><?= LangManager::translate("core.Package.title") ?></span></h3>
 </div>
 
 <div class="row">
@@ -38,31 +39,40 @@ $description = LangManager::translate("core.Package.desc"); ?>
                         -----Listage des packages local installé---
                         -------------------------------------->
                         <?php foreach (PackageController::getLocalPackages() as $packages): ?>
-                            <div class="col-12 col-lg-3 mb-4">
-                                <div class="card-in-card">
-                                    <div class="d-flex justify-content-between align-items-center px-2 py-2">
-                                        <b><?= $packages->getName() ?></b>
-                                        <button type="button" data-bs-toggle="modal"
-                                                data-bs-target="#modal-<?= $packages->getName() ?>"
-                                                class="btn btn-sm btn-primary"><?= LangManager::translate("core.Package.details") ?></button>
-                                    </div>
-                                    <div class="position-relative">
-                                        <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
-                                                <?= LangManager::translate("core.Package.update") ?>
-                                            </div>-->
-                                        <div class="alert-light-warning color-warning position-absolute bottom-0 w-100 text-center"
-                                             style="opacity: .85">
-                                            <?= LangManager::translate("core.Package.notVerified") ?>
-                                        </div>
-                                        <img class="rounded-3 " style="height: 200px; width: 100%;"
+                            <div class="col-12 col-lg-6 mb-4">
+                                <div class="card-in-card" style="overflow: hidden;">
+                                    <div class="d-flex card-body">
+                                        <img class="rounded-3 " style="height: 180px; width: 180px;"
                                              src="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>Admin/Resources/Assets/Images/Default/local-theme.jpg"
                                              alt="img">
+                                        <div class="d-flex justify-content-between px-2 py-2 w-100">
+                                            <div>
+                                                <h5><b><?= $packages->getName() ?></b></h5>
+                                                <p><?= LangManager::translate("core.Package.descriptionNotAvailable") ?></p>
+                                                <small
+                                                    class="align-items-end"><?= LangManager::translate("core.Package.author") ?> <?= $packages->getAuthor() ?></small>
+                                            </div>
+                                            <div>
+                                                <button type="button" data-bs-toggle="modal"
+                                                        data-bs-target="#modal-<?= $packages->getName() ?>"
+                                                        class="btn btn-sm btn-primary"><?= LangManager::translate("core.Package.details") ?></button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="d-flex justify-content-around px-2 py-1">
-                                        <a class="btn btn-sm btn-danger" type="button" data-bs-toggle="modal"
-                                           data-bs-target="#delete-<?= $packages->getName() ?>">
-                                            <?= LangManager::translate("core.Package.delete") ?>
-                                        </a>
+                                    <div class="position-absolute"
+                                         style="transform: rotate(-45deg); left: -3em; top: 4em; margin: 0; z-index: 50">
+                                        <div class="alert-light-warning color-warning text-center px-5"
+                                             style="opacity: .85;">
+                                            <?= LangManager::translate("core.Package.notVerified") ?>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <div class="d-flex justify-content-around px-2 py-1">
+                                            <a class="btn btn-sm btn-danger" type="button" data-bs-toggle="modal"
+                                               data-bs-target="#delete-<?= $packages->getName() ?>">
+                                                <?= LangManager::translate("core.Package.delete") ?>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -90,8 +100,8 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                                     <hr>
                                                     <p class="small">
                                                         <?= LangManager::translate("core.Package.author") ?><i><b><a
-                                                                        href=""
-                                                                        target="_blank"><?= $packages->getAuthor() ?>
+                                                                    href=""
+                                                                    target="_blank"><?= $packages->getAuthor() ?>
                                                         </i></a></b></i>
                                                     </p>
                                                     <p class="small">
@@ -127,7 +137,8 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                                 <span class=""><?= LangManager::translate("core.btn.close") ?></span>
                                             </button>
                                             <a href="" class="btn btn-danger">
-                                                <span class=""><?= LangManager::translate("core.Package.delete") ?></span>
+                                                <span
+                                                    class=""><?= LangManager::translate("core.Package.delete") ?></span>
                                             </a>
                                         </div>
                                     </div>
@@ -137,50 +148,78 @@ $description = LangManager::translate("core.Package.desc"); ?>
                         <!------------------------------------
                         -----Listage des packages API installé---
                         -------------------------------------->
-                        <?php foreach ($packagesList as $packages): ?>
+                        <?php foreach ($packagesList
+
+                                       as $packages): ?>
                             <?php if (PackageController::isInstalled($packages['name'])): ?>
                                 <?php $localPackage = PackageController::getPackage($packages['name']); ?>
-                                <div class="col-12 col-lg-3 mb-4">
-                                    <div class="card-in-card">
-                                        <div class="d-flex justify-content-between align-items-center px-2 py-2">
-                                            <b><?= $packages['name'] ?></b>
-                                            <button type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#modal-<?= $packages['name'] ?>"
-                                                    class="btn btn-sm btn-primary"><?= LangManager::translate("core.Package.details") ?></button>
-                                        </div>
-                                        <div class="position-relative">
-                                            <?php if ($localPackage->getVersion() !== $packages['version_name']): ?>
-                                            <div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
-                                            <?= LangManager::translate("core.Theme.update") ?>
-                                        </div>
-                                            <?php endif; ?>
-                                            <img class="rounded-3 " style="height: 200px; width: 100%;"
+                                <div class="col-12 col-lg-6 mb-4">
+                                    <div class="card-in-card" style="overflow: hidden;">
+                                        <div class="d-flex card-body">
+                                            <img class="rounded-3" style="height: 180px; width: 180px;"
                                                  src="<?= $packages["icon"] ?>" alt="img">
+
+                                            <div class="d-flex justify-content-between px-2 py-2 w-100">
+                                                <div>
+                                                    <h5><b><?= $packages['name'] ?></b></h5>
+                                                    <p><?= $packages['description'] ?></p>
+                                                    <small
+                                                        class="align-items-end"><?= LangManager::translate("core.Package.author") ?> <?= $packages['author_pseudo'] ?></small>
+                                                </div>
+                                                <div>
+                                                    <?php if ($localPackage->getVersion() !== $packages['version_name']): ?>
+                                                        <a class="btn btn-sm btn-warning" type="button"
+                                                           href="packages/update/<?= $packages['id'] ?>/<?= $localPackage->getVersion() ?>/<?= $localPackage->getName() ?>">
+                                                            <?= LangManager::translate("core.Package.update") ?>
+                                                        </a>
+                                                    <?php else: ?>
+                                                        <button type="button" data-bs-toggle="modal"
+                                                                data-bs-target="#modal-<?= $packages['name'] ?>"
+                                                                class="btn btn-sm btn-primary"><?= LangManager::translate("core.Package.details") ?></button>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="d-flex justify-content-around px-2 py-1">
 
-                                            <?php if ($localPackage->getVersion() !== $packages['version_name']): ?>
-                                                <a class="btn btn-sm btn-warning" type="button"
-                                                   href="packages/update/<?= $packages['id'] ?>/<?= $localPackage->getVersion() ?>/<?= $localPackage->getName() ?>">
-                                                    <?= LangManager::translate("core.Package.update") ?>
-                                                </a>
-                                            <?php endif; ?>
-
-                                            <a class="btn btn-sm btn-danger" type="button" data-bs-toggle="modal"
-                                               data-bs-target="#delete-<?= $packages['name'] ?>">
-                                                <?= LangManager::translate("core.Package.delete") ?>
-                                            </a>
+                                        <?php if ($localPackage->getVersion() !== $packages['version_name']): ?>
+                                            <div class="position-absolute"
+                                                 style="transform: rotate(-45deg); left: -4em; top: 5em; margin: 0; z-index: 50">
+                                                <div class="alert-light-warning color-warning text-center px-5"
+                                                     style="opacity: .85;">
+                                                    <?= LangManager::translate("core.Theme.update") ?>
+                                                </div>
+                                            </div>
+                                        <?php endif; ?>
+                                        <hr>
+                                        <div class="" style="font-size: small">
+                                            <div class="d-flex justify-content-between px-2 py-1">
+                                                <div>
+                                                    <!--TODO : rating sys-->
+                                                    <p><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i> (0)</p>
+                                                    <p>Utilisé par <b><?= $packages['downloads'] ?></b> utilisateurs</p>
+                                                </div>
+                                                <div class="text-end">
+                                                    <p>Sortie le <?= CoreController::formatDate($packages['date_release'])?></p>
+                                                    <p>Compatible avec <b><?= $packages['version_cmw'] ?></b></p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
+
                                 <!--Details modal -->
                                 <div class="modal fade text-left w-100" id="modal-<?= $packages['name'] ?>"
                                      tabindex="-1" role="dialog" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl"
                                          role="document">
                                         <div class="modal-content">
-                                            <div class="modal-header">
+                                            <div class="modal-header d-flex justify-content-between">
                                                 <h4 class="modal-title"><?= $packages['name'] ?></h4>
+                                                <a class="btn btn-sm btn-danger" type="button" data-bs-toggle="modal"
+                                                   data-bs-target="#delete-<?= $packages['name'] ?>">
+                                                    <?= LangManager::translate("core.Package.delete") ?>
+                                                </a>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="row">
@@ -250,10 +289,12 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-light-secondary"
                                                         data-bs-dismiss="modal">
-                                                    <span class=""><?= LangManager::translate("core.btn.close") ?></span>
+                                                    <span
+                                                        class=""><?= LangManager::translate("core.btn.close") ?></span>
                                                 </button>
                                                 <a href="" class="btn btn-danger">
-                                                    <span class=""><?= LangManager::translate("core.Package.delete") ?></span>
+                                                    <span
+                                                        class=""><?= LangManager::translate("core.Package.delete") ?></span>
                                                 </a>
                                             </div>
                                         </div>
@@ -268,31 +309,50 @@ $description = LangManager::translate("core.Package.desc"); ?>
                 <div class="tab-pane fade py-2" id="setting2" role="tabpanel" aria-labelledby="setting2-tab">
                     <div class="row">
                         <!----------------------------------------
-                        -----Listage des thèmes API non nstallé---
+                        -----Listage des packages API non nstallé---
                         ------------------------------------------>
                         <?php foreach ($packagesList as $apiPackages): ?>
                             <?php if (!PackageController::isInstalled($apiPackages['name'])): ?>
-                                <div class="col-12 col-lg-3 mb-4">
+                                <div class="col-12 col-lg-6 mb-4">
                                     <div class="card-in-card">
-                                        <div class="d-flex justify-content-between align-items-center px-2 py-2">
-                                            <b><?= $apiPackages['name'] ?></b>
-                                            <button type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#modal-<?= $apiPackages['id'] ?>"
-                                                    class="btn btn-sm btn-primary"><?= LangManager::translate("core.Package.details") ?></button>
+                                        <div class="d-flex card-body">
+                                            <img class="rounded-3" style="height: 180px; width: 180px;"
+                                                 src="<?= $apiPackages["icon"] ?>" alt="img">
+                                            <div class="d-flex justify-content-between px-2 py-2 w-100">
+                                                <div>
+                                                    <h5><b><?= $apiPackages['name'] ?></b></h5>
+                                                    <p><?= $apiPackages['description'] ?></p>
+                                                    <small
+                                                        class="align-items-end"><?= LangManager::translate("core.Package.author") ?> <?= $apiPackages['author_pseudo'] ?></small>
+                                                </div>
+                                                <div>
+                                                    <button type="button" data-bs-toggle="modal"
+                                                            data-bs-target="#modal-<?= $apiPackages['id'] ?>"
+                                                            class="btn btn-sm btn-primary"><?= LangManager::translate("core.Package.details") ?></button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="position-relative">
-                                            <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
-                                                <?= LangManager::translate("core.Package.update") ?>
-                                            </div>-->
-                                            <img style="height: 200px; width: 100%;" src="<?= $apiPackages["icon"] ?>"
-                                                 alt="img">
+                                        <hr>
+                                        <div class="" style="font-size: small">
+                                            <div class="d-flex justify-content-between px-2 py-1">
+                                                <div>
+                                                    <!--TODO : rating sys-->
+                                                    <p><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i> (0)</p>
+                                                    <p>Utilisé par <b><?= $packages['downloads'] ?></b> utilisateurs</p>
+                                                </div>
+                                                <div class="text-end">
+                                                    <p>Sortie le <?= CoreController::formatDate($packages['date_release'])?></p>
+                                                    <p>Compatible avec <b><?= $packages['version_cmw'] ?></b></p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="d-flex justify-content-center px-2 py-1">
+                                        <div class="d-flex justify-content-center pb-2">
                                             <a href="packages/install/<?= $apiPackages['id'] ?>"
                                                class="btn btn-sm btn-primary"><i
-                                                        class="fa-solid fa-download"></i> <?= LangManager::translate("core.Package.install") ?>
+                                                    class="fa-solid fa-download"></i> <?= LangManager::translate("core.Package.install") ?>
                                             </a>
                                         </div>
+
                                     </div>
                                 </div>
                                 <!--Details modal-->
@@ -306,7 +366,7 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                                 <div class="d-flex justify-content-end mt-auto gap-3">
                                                     <a href="packages/install/<?= $apiPackages['id'] ?>"
                                                        class="btn btn-sm btn-primary"><i
-                                                                class="fa-solid fa-download"></i> <?= LangManager::translate("core.Package.install") ?>
+                                                            class="fa-solid fa-download"></i> <?= LangManager::translate("core.Package.install") ?>
                                                     </a>
                                                 </div>
                                             </div>
@@ -343,7 +403,7 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                                             <?php if ($apiPackages['demo']): ?>
                                                                 <a class="btn btn-sm btn-primary"
                                                                    href="<?= $apiPackages['demo'] ?>" target="_blank"><i
-                                                                            class="fa-solid fa-arrow-up-right-from-square"></i> <?= LangManager::translate("core.Package.demo") ?>
+                                                                        class="fa-solid fa-arrow-up-right-from-square"></i> <?= LangManager::translate("core.Package.demo") ?>
                                                                 </a>
                                                             <?php endif; ?>
                                                             <?php if ($apiPackages['code_link']): ?>
