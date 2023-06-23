@@ -3,6 +3,7 @@
 namespace CMW\Model\Users;
 
 
+use CMW\Entity\Users\BlacklistedPseudoEntity;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Package\AbstractModel;
 
@@ -57,5 +58,119 @@ class UsersSettingsModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('DELETE FROM cmw_users_settings where users_settings_name = :settingName');
         $req->execute(array("settingName" => $settingName));
+    }
+
+    /**
+     * @param string $pseudo
+     * @return bool
+     */
+    public function addBlacklistedPseudo(string $pseudo): bool
+    {
+        $sql = "INSERT INTO cmw_users_blacklist_pseudo (pseudo) 
+                    VALUES (:pseudo)";
+        $db = DatabaseManager::getInstance();
+        return $db->prepare($sql)->execute(['pseudo' => $pseudo]);
+    }
+
+    /**
+     * @param int $id
+     * @param string $pseudo
+     * @return bool
+     */
+    public function editBlacklistedPseudo(int $id, string $pseudo): bool
+    {
+        $sql = "UPDATE cmw_users_blacklist_pseudo SET pseudo = :pseudo WHERE id = :id";
+        $db = DatabaseManager::getInstance();
+        return $db->prepare($sql)->execute(['id' => $id, 'pseudo' => $pseudo]);
+    }
+
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function removeBlacklistedPseudo(int $id): bool
+    {
+        $sql = "DELETE FROM cmw_users_blacklist_pseudo WHERE id = :id";
+        $db = DatabaseManager::getInstance();
+        return $db->prepare($sql)->execute(['id' => $id]);
+    }
+
+    /**
+     * @return \CMW\Entity\Users\BlacklistedPseudoEntity[]
+     */
+    public function getBlacklistedPseudos(): array
+    {
+        $sql = "SELECT * FROM cmw_users_blacklist_pseudo";
+        $db = DatabaseManager::getInstance();
+        $req = $db->query($sql);
+
+        $res = $req->fetchAll();
+
+        if (!$res){
+            return [];
+        }
+
+        $toReturn = [];
+
+        foreach ($res as $pseudo) {
+            $toReturn[] = new BlacklistedPseudoEntity(
+                $pseudo['id'],
+                $pseudo['pseudo'],
+                $pseudo['blacklisted_at']
+            );
+        }
+
+        return $toReturn;
+    }
+
+    /**
+     * @param int $id
+     * @return \CMW\Entity\Users\BlacklistedPseudoEntity|null
+     */
+    public function getBlacklistedPseudo(int $id): ?BlacklistedPseudoEntity
+    {
+        $sql = "SELECT * FROM cmw_users_blacklist_pseudo WHERE id = :id";
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare($sql);
+
+        if (!$req->execute(['id' => $id])){
+            return null;
+        }
+
+        $res = $req->fetch();
+
+        if (!$res){
+            return null;
+        }
+
+        return new BlacklistedPseudoEntity(
+            $res['id'],
+            $res['pseudo'],
+            $res['blacklisted_at']
+        );
+    }
+
+    /**
+     * @param string $pseudo
+     * @return bool
+     */
+    public function isPseudoBlacklisted(string $pseudo): bool
+    {
+        $sql = "SELECT id FROM cmw_users_blacklist_pseudo WHERE pseudo = :pseudo";
+        $db = DatabaseManager::getInstance();
+
+        $req = $db->prepare($sql);
+
+        if(!$req->execute(['pseudo' => $pseudo])){
+            return true;
+        }
+
+        $res = $req->fetch();
+
+        if (!$res){
+            return false;
+        }
+
+        return count($res) >= 1;
     }
 }

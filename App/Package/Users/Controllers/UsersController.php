@@ -17,6 +17,7 @@ use CMW\Manager\Views\View;
 use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UserPictureModel;
 use CMW\Model\Users\UsersModel;
+use CMW\Model\Users\UsersSettingsModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use CMW\Utils\Website;
@@ -352,6 +353,10 @@ class UsersController extends AbstractController
         } else if (UsersModel::getInstance()->checkEmail(filter_input(INPUT_POST, "register_email")) > 0) {
             Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.used_mail"));
             Redirect::redirect('register');
+        } else if (UsersSettingsModel::getInstance()->isPseudoBlacklisted(filter_input(INPUT_POST, "register_pseudo"))){
+            Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),
+                LangManager::translate("users.toaster.blacklisted_pseudo"));
+            Redirect::redirect('register');
         } else {
 
             [$mail, $pseudo, $password, $passwordVerify] = Utils::filterInput("register_email", "register_pseudo", "register_password", "register_password_verify");
@@ -507,7 +512,13 @@ class UsersController extends AbstractController
 
         $userId = $_SESSION['cmwUserId'];
 
-        [$mail, $username, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "name", "lastname");
+        [$mail, $pseudo, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "name", "lastname");
+
+        if (UsersSettingsModel::getInstance()->isPseudoBlacklisted($pseudo)){
+            Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),
+                LangManager::translate("users.toaster.blacklisted_pseudo"));
+            Redirect::redirectPreviousRoute();
+        }
 
         $roles = UsersModel::getRoles($userId);
 
@@ -517,7 +528,7 @@ class UsersController extends AbstractController
             $rolesId[] = $role->getId();
         }
 
-        UsersModel::getInstance()->update($userId, $mail, $username, $firstname, $lastname, $rolesId);
+        UsersModel::getInstance()->update($userId, $mail, $pseudo, $firstname, $lastname, $rolesId);
 
 
         [$pass, $passVerif] = Utils::filterInput("password", "passwordVerif");

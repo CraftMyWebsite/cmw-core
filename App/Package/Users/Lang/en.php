@@ -38,7 +38,8 @@ return [
         "mail_pass_matching" => "This email/password combination is wrong",
         "role_added" => "Role added",
         "role_edited" => "Role edited",
-        "role_deleted" => "Role deleted"
+        "role_deleted" => "Role deleted",
+        "blacklisted_pseudo" => "Pseudo blacklisted"
     ],
     "manage" => [
         "title" => "Manage users",
@@ -157,5 +158,34 @@ return [
                 2 => "Disable the profile page"
             ],
         ],
+        "blacklisted" => [
+            "pseudo" => [
+                "label" => "Manage blacklisted pseudos",
+                "hint" => "You can blacklisted pseudo from register and pseudo editing",
+                "goBtn" => "Manage blacklisted pseudos",
+                "title" => "Add players to your list",
+                "description" => "Blacklist pseudos",
+                "edit" => [
+                    "title" => "Edit blacklisted pseudo",
+                    "description" => "Edit a blacklisted pseudo",
+                    "label" => "Editing pseudo %pseudo%"
+                ],
+                "btn" => "Blacklist this pseudo",
+                "toasters" => [
+                    "add" => [
+                        "success" => "Pseudo %pseudo% added",
+                        "error" => "Unable to add %pseudo%",
+                    ],
+                    "edit" => [
+                        "success" => "Pseudo %pseudo% edited",
+                        "error" => "Unable to edit pseudo %pseudo%",
+                    ],
+                    "delete" => [
+                        "success" => "Pseudo deleted",
+                        "error" => "Unable to delete this pseudo"
+                    ]
+                ]
+            ]
+        ]
     ],
 ];

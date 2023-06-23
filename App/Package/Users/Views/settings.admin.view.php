@@ -105,5 +105,24 @@ $description = LangManager::translate("users.settings.desc"); ?>
                 </div>
             </div>
         </div>
+
+        <!-- Pseudo blacklist -->
+        <div class="col-12 col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4><?= LangManager::translate('users.settings.blacklisted.pseudo.label') ?>
+                        <i data-bs-toggle="tooltip"
+                           title="<?= LangManager::translate('users.settings.blacklisted.pseudo.hint') ?>"
+                           class="fa-sharp fa-solid fa-circle-question">
+                        </i>
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <a href="settings/blacklist/pseudo" class="btn btn-primary"><?= LangManager::translate('users.settings.blacklisted.pseudo.goBtn') ?></a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 </form>
