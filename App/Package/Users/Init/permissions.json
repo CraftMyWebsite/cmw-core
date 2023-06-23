@@ -3,6 +3,7 @@
   "users.add",
   "users.delete",
   "users.settings",
+  "users.settings.blacklist.pseudo",
   "users.roles.manage",
   "users.roles.add",
   "users.roles.edit",

@@ -38,7 +38,8 @@ return [
         "mail_pass_matching" => "Cette combinaison email/mot de passe est erronée",
         "role_added" => "Rôle ajouté",
         "role_edited" => "Rôle modifié",
-        "role_deleted" => "Rôle supprimé"
+        "role_deleted" => "Rôle supprimé",
+        "blacklisted_pseudo" => "Pseudo interdit"
     ],
     "manage" => [
         "title" => "Gestion des utilisateurs",
@@ -157,5 +158,35 @@ return [
                 2 => "Désactiver la page profil"
             ],
         ],
+        "blacklisted" => [
+            "pseudo" => [
+                "label" => "Gérez les pseudos blacklist",
+                "hint" => "Vous pouvez facilement interdir des pseudos que vous ne souhaitez pas avoir lors de
+                           l'inscription ou lors de la modification d'un pseudo.",
+                "goBtn" => "Gérer les pseudos interdits",
+                "title" => "Ajoutez des pseudos à votre liste",
+                "description" => "Blacklistez des pseudos",
+                "edit" => [
+                    "title" => "Modifiez un pseudo blacklist",
+                    "description" => "Édition d'un pseudo blacklist",
+                    "label" => "Modification du pseudo %pseudo%",
+                ],
+                "btn" => "Blacklister ce pseudo",
+                "toasters" => [
+                    "add" => [
+                        "success" => "Pseudo %pseudo% ajouté à la liste",
+                        "error" => "Impossible d'ajouter le pseudo %pseudo% à la liste",
+                    ],
+                    "edit" => [
+                        "success" => "Pseudo %pseudo% modifié",
+                        "error" => "Impossible de modifier le pseudo %pseudo%",
+                    ],
+                    "delete" => [
+                        "success" => "Pseudo supprimé",
+                        "error" => "Impossible de supprimer le pseudo"
+                    ],
+                ],
+            ],
+        ]
     ],
 ];

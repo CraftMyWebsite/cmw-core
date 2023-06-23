@@ -215,6 +215,16 @@ CREATE TABLE IF NOT EXISTS `cmw_maintenance`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `cmw_users_blacklist_pseudo`
+(
+    `id`             INT(11)      NOT NULL AUTO_INCREMENT,
+    `pseudo`         VARCHAR(255) NOT NULL,
+    `blacklisted_at` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE (`pseudo`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
+
 
 /* INSERT AREA */
 
