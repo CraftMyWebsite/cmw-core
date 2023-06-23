@@ -1,6 +1,7 @@
 <?php
 
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 
 /* @var \CMW\Controller\Core\CoreController $core */
@@ -22,6 +23,8 @@ use CMW\Manager\Views\View;
         <link
             href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>Public/Themes/Sampler/Resources/Assets/Css/main.css"
             rel="stylesheet"/>
+        <?= ImagesManager::getFaviconInclude() ?>
+
         <?php
         View::loadInclude($includes, "beforeScript", "styles");
         ?>
