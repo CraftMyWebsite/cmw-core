@@ -49,9 +49,6 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                                     class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.details") ?></button>
                                         </div>
                                         <div class="position-relative">
-                                            <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
-                                            <?= LangManager::translate("core.Theme.update") ?>
-                                        </div>-->
                                             <?php if ($theme->getName() !== "Sampler"): ?>
                                                 <div class="alert-light-warning color-warning position-absolute bottom-0 w-100 text-center"
                                                      style="opacity: .85">
@@ -137,6 +134,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                         -------------------------------------------------->
                         <?php foreach ($themesList as $theme): ?>
                             <?php if ($theme['name'] === $currentTheme->getName()): ?>
+                                <?php $localTheme = ThemeController::getTheme($theme['name']); ?>
                                 <div class="col-12 col-lg-3 mb-4">
                                     <div class="card-in-card">
                                         <div class="d-flex justify-content-between align-items-center px-2 py-2">
@@ -146,16 +144,25 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                                     class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.details") ?></button>
                                         </div>
                                         <div class="position-relative">
-                                            <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
+                                            <?php if ($localTheme->getVersion() !== $theme['version_name']): ?>
+                                            <div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
                                                 <?= LangManager::translate("core.Theme.update") ?>
-                                            </div>-->
+                                            </div>
+                                            <?php endif; ?>
                                             <img style="height: 200px; width: 100%;" src="<?= $theme["icon"] ?>"
                                                  alt="Icon <?= $theme['name'] ?>">
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center px-2 py-1">
                                             <span class="text-success"><?= LangManager::translate("core.Theme.active") ?></span>
+                                            <?php if ($localTheme->getVersion() !== $theme['version_name']): ?>
+                                                <a class="btn btn-sm btn-warning" type="button"
+                                                   href="update/<?= $theme['id'] ?>/<?= $localTheme->getVersion() ?>/<?= $localTheme->getName() ?>">
+                                                    <?= LangManager::translate("core.Package.update") ?>
+                                                </a>
+                                            <?php else: ?>
                                             <a href="manage"
                                                class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.configure") ?></a>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
@@ -340,9 +347,11 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                                     class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.details") ?></button>
                                         </div>
                                         <div class="position-relative">
-                                            <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
+                                            <?php if ($localTheme->getVersion() !== $theme['version_name']): ?>
+                                            <div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
                                                 <?= LangManager::translate("core.Theme.update") ?>
-                                            </div>-->
+                                            </div>
+                                            <?php endif; ?>
                                             <img style="height: 200px; width: 100%;" src="<?= $theme["icon"] ?>"
                                                  alt="Icon <?= $theme['name'] ?>">
                                         </div>

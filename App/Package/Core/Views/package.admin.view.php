@@ -149,9 +149,11 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                                     class="btn btn-sm btn-primary"><?= LangManager::translate("core.Package.details") ?></button>
                                         </div>
                                         <div class="position-relative">
-                                            <!--<div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
-                                            <?= LangManager::translate("core.Package.update") ?>
-                                        </div>-->
+                                            <?php if ($localPackage->getVersion() !== $packages['version_name']): ?>
+                                            <div class="alert-light-warning color-warning position-absolute w-100 text-center" style="opacity: .80">
+                                            <?= LangManager::translate("core.Theme.update") ?>
+                                        </div>
+                                            <?php endif; ?>
                                             <img class="rounded-3 " style="height: 200px; width: 100%;"
                                                  src="<?= $packages["icon"] ?>" alt="img">
                                         </div>
