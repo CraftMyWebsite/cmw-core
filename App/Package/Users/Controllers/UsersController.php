@@ -74,7 +74,7 @@ class UsersController extends AbstractController
         View::createAdminView("Users", "manage")
             ->addVariableList(["userList" => $userList, "roles" => $roles])
             ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
-            ->addScriptBefore("App/Package/users/Views/Assets/Js/edit.js")
+            ->addScriptBefore("App/Package/Users/Views/Assets/Js/edit.js")
             ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
                 "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
             ->view();
