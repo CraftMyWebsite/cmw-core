@@ -2,6 +2,7 @@
 
 
 use CMW\Controller\Core\SecurityController;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Security\SecurityManager;
 
 $title = "Connexion";
@@ -18,6 +19,7 @@ $description = "Description de votre page"; ?>
             <div class="col-lg-6">
                 <form action="" method="post" class="mb-4">
                     <?php (new SecurityManager())->insertHiddenToken() ?>
+                    <input hidden name="previousRoute" type="text" value="<?= $_SERVER['HTTP_REFERER'] ?>">
                     <div class="form-floating mb-3">
                         <input class="form-control" name="login_email" type="email" placeholder="Votre mail" required>
                         <label for="name">E-Mail</label>
@@ -26,12 +28,18 @@ $description = "Description de votre page"; ?>
                         <input class="form-control" type="password" name="login_password" placeholder="****" required>
                         <label for="email">Mot de passe</label>
                     </div>
-                    <div class="col-12 mb-2">
-                        <div class="icheck-primary">
-                            <input type="checkbox" id="login_keep_connect" name="login_keep_connect">
-                            <label for="login_keep_connect">Rester connecter</label>
+                    <div class="row">
+                        <div class="col-6 mb-2">
+                            <div class="icheck-primary">
+                                <input type="checkbox" id="login_keep_connect" name="login_keep_connect">
+                                <label for="login_keep_connect">Rester connecter</label>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-2 text-end">
+                            <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>login/forgot">Mot de passe oublié</a>
                         </div>
                     </div>
+
                     <?php SecurityController::getPublicData(); ?>
                     <div class="d-grid"><button class="btn btn-primary btn-xl" type="submit">Connexion</button></div>
                 </form>
