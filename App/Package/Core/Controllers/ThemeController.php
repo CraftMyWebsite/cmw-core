@@ -190,8 +190,25 @@ class ThemeController extends AbstractController
 
     /* ADMINISTRATION */
 
-    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/theme")]
     #[Link("/market", Link::GET, [], "/cmw-admin/theme")]
+    private function adminThemeMarket(): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
+
+        $currentTheme = self::getCurrentTheme();
+        $installedThemes = self::getInstalledThemes();
+        $themesList = self::getMarketThemes();
+
+        $themeConfigs = ThemeModel::getInstance()->fetchThemeConfigs($currentTheme->getName());
+        SimpleCacheManager::storeCache($themeConfigs, 'config', "Themes/" . $currentTheme->getName());
+
+        View::createAdminView("Core", "Theme/market")
+            ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes, "themesList" => $themesList])
+            ->view();
+    }
+
+    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/theme")]
+    #[Link("/my_theme", Link::GET, [], "/cmw-admin/theme")]
     private function adminThemeConfiguration(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
@@ -203,12 +220,12 @@ class ThemeController extends AbstractController
         $themeConfigs = ThemeModel::getInstance()->fetchThemeConfigs($currentTheme->getName());
         SimpleCacheManager::storeCache($themeConfigs, 'config', "Themes/" . $currentTheme->getName());
         
-        View::createAdminView("Core", "Theme/themeMarket")
+        View::createAdminView("Core", "Theme/my_themes")
             ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes, "themesList" => $themesList])
             ->view();
     }
 
-    #[Link("/market", Link::POST, [], "/cmw-admin/theme")]
+    #[Link("/my_theme", Link::POST, [], "/cmw-admin/theme")]
     private function adminThemeConfigurationPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
