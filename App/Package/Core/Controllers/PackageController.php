@@ -187,7 +187,7 @@ class PackageController extends AbstractController
         $installedPackages = self::getInstalledPackages();
         $packagesList = self::getMarketPackages();
 
-        View::createAdminView("Core", "package")
+        View::createAdminView("Core", "Package/package")
             ->addVariableList(["installedPackages" => $installedPackages, "packagesList" => $packagesList])
             ->view();
     }

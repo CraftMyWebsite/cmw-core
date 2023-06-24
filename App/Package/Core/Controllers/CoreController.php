@@ -64,7 +64,7 @@ class CoreController extends AbstractController
         $weeklyVisits = (new VisitsMetricsManager())->getPastWeeksVisits(17);
         $registers = UsersMetricsModel::getInstance()->getPastMonthsRegisterNumbers(5);
 
-        View::createAdminView("Core", "dashboard")
+        View::createAdminView("Core", "Dashboard/dashboard")
         ->addVariableList(['monthlyVisits' => $monthlyVisits,'dailyVisits' => $dailyVisits ,'weeklyVisits' => $weeklyVisits , 'registers' => $registers])
         ->addScriptBefore("Admin/Resources/Vendors/Chart/chart.min.js")
         ->addScriptAfter("App/Package/Core/Views/Resources/Js/dashboard.js")
@@ -76,7 +76,7 @@ class CoreController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
 
-        View::createAdminView("Core", "configuration")
+        View::createAdminView("Core", "Configuration/configuration")
         ->view();
     }
 

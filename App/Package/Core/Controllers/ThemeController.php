@@ -203,7 +203,7 @@ class ThemeController extends AbstractController
         $themeConfigs = ThemeModel::getInstance()->fetchThemeConfigs($currentTheme->getName());
         SimpleCacheManager::storeCache($themeConfigs, 'config', "Themes/" . $currentTheme->getName());
         
-        View::createAdminView("Core", "themeMarket")
+        View::createAdminView("Core", "Theme/themeMarket")
             ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes, "themesList" => $themesList])
             ->view();
     }
@@ -272,7 +272,7 @@ class ThemeController extends AbstractController
     private function adminThemeManage(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
-        View::createAdminView("Core", "themeManage")
+        View::createAdminView("Core", "Theme/themeManage")
             ->addScriptBefore("Admin/Resources/Vendors/Tinymce/tinymce.min.js","Admin/Resources/Vendors/Tinymce/Config/full.js")
             ->view();
     }

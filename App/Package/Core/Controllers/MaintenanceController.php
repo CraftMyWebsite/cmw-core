@@ -33,7 +33,7 @@ class MaintenanceController extends AbstractController
 
         $maintenance = MaintenanceModel::getInstance()->getMaintenance();
 
-        View::createAdminView("Core", "maintenance")
+        View::createAdminView("Core", "Maintenance/maintenance")
             ->addVariableList(['maintenance' => $maintenance])
             ->view();
     }

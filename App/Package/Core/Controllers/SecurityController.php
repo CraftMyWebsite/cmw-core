@@ -31,7 +31,7 @@ class SecurityController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.security.configuration");
 
-        View::createAdminView("Core", "security")
+        View::createAdminView("Core", "Security/security")
             ->addScriptAfter("App/Package/Core/Views/Resources/Js/security.js")
             ->addVariableList(["captcha" => self::getCaptchaType()])
             ->view();
@@ -77,7 +77,7 @@ class SecurityController extends AbstractController
 
         $report = file_get_contents(EnvManager::getInstance()->getValue('DIR') . "App/Storage/Reports/$reportName");
 
-        View::createAdminView('core', 'security/displayHealthReport')
+        View::createAdminView('Core', 'Security/displayHealthReport')
             ->addVariableList(['report' => $report, 'reportName' => $reportName])
             ->view();
     }
