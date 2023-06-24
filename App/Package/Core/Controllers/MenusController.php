@@ -43,7 +43,7 @@ class MenusController extends AbstractController
         $roles = RolesModel::getInstance()->getRoles();
         $menus = MenusModel::getInstance();
 
-        $view = View::createAdminView('Core', 'menus')
+        $view = View::createAdminView('Core', 'Menu/menus')
             ->addVariableList(['packagesLinks' => $packagesLinks, 'roles' => $roles, 'menus' => $menus])
             ->addScriptBefore("App/Package/Core/Views/Resources/Js/sortable.min.js")
             ->addScriptAfter("App/Package/Core/Views/Resources/Js/menu.js");

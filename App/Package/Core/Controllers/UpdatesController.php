@@ -62,7 +62,7 @@ class UpdatesController extends AbstractController
         $latestVersionChangelogGroup = self::groupBy("type", $latestVersion['changelog']);
         $previousVersions = self::getPrevious();
 
-        View::createAdminView("Core", "updates")
+        View::createAdminView("Core", "Update/updates")
             ->addVariableList(["latestVersion" => $latestVersion, "latestVersionChangelogGroup" => $latestVersionChangelogGroup, "previousVersions" => $previousVersions])
             ->view();
     }
