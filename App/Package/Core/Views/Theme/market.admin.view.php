@@ -13,8 +13,8 @@ $title = LangManager::translate("core.Theme.config.title");
 $description = LangManager::translate("core.Theme.config.description"); ?>
 
 <div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fa-solid fa-shop"></i> <span
-            class="m-lg-auto">Market</span></h3>
+    <h3><i class="fa-solid fa-feather"></i> <span
+            class="m-lg-auto"><?= LangManager::translate("core.Theme.market") ?></span></h3>
 </div>
 
 <section class="row">

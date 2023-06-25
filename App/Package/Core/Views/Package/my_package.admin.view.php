@@ -14,7 +14,7 @@ $description = LangManager::translate("core.Package.desc"); ?>
 
 <div class="d-flex flex-wrap justify-content-between">
     <h3><i class="fa-solid fa-puzzle-piece"></i> <span
-            class="m-lg-auto">Mes packages</span></h3>
+            class="m-lg-auto"><?= LangManager::translate("core.Package.my_packages") ?></span></h3>
 </div>
 
 <section class="row">
