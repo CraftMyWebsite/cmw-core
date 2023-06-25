@@ -12,6 +12,16 @@ return [
     "alt" => [
         "logo" => "Logo CMW",
     ],
+    "header" => [
+        "notification" => "Notifications",
+        "cms_ver" => "CMS : Version",
+        "cms_update" => "Une mises à jours du CMS est disponible !",
+        "update_to" => "Veuillez mettre à jours vers",
+        "package" => "Package",
+        "theme" => "Thème",
+        "all_is_fine" => "Tout va bien",
+        "is_up" => "Votre site est entièrement à jour",
+    ],
     "condition" => [
         "title" => "Condition general",
         "cgv" => "Condition général de vente (CGV)",
@@ -200,6 +210,7 @@ return [
     ],
     "Package" => [
         "title" => "Packages",
+        "my_packages" => "Mes packages",
         "delete" => "Supprimer",
         "install" => "Installer",
         "update" => "Mettre à jour",

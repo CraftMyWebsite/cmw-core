@@ -12,6 +12,16 @@ return [
     "alt" => [
         "logo" => "Logo CMW",
     ],
+    "header" => [
+        "notification" => "Notifications",
+        "cms_ver" => "CMS : Version",
+        "cms_update" => "A CMS update is available!",
+        "update_to" => "Please update to",
+        "package" => "Package",
+        "theme" => "Theme",
+        "all_is_fine" => "Everything's good",
+        "is_up" => "Your site is fully up to date",
+    ],
     "condition" => [
         "title" => "Terms and conditions",
         "cgv" => "General condition of sale (CGV)",
@@ -200,6 +210,7 @@ return [
     ],
     "Package" => [
         "title" => "Packages",
+        "my_packages" => "My packages",
         "delete" => "Delete",
         "install" => "Install",
         "update" => "Update",

@@ -14,7 +14,7 @@ use CMW\Manager\Updater\UpdatesManager;
         <?php if (UpdatesManager::checkNewUpdateAvailable()): ?>
             <div class="float-end">
                 <p class="text-center">
-                    <a href="/cmw-admin/updates/cms">
+                    <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/updates/cms">
                         <span><?= LangManager::translate("core.footer.used") . "<span class='text-danger font-bold'>" . UpdatesManager::getVersion() ?></span>!
                         <br>
                         <span><?= LangManager::translate("core.footer.upgrade") . "<span class='text-success font-bold'>" . UpdatesManager::getCmwLatest()->value ?></span>!

@@ -14,7 +14,7 @@ $description = LangManager::translate("core.Package.desc"); ?>
 
 <div class="d-flex flex-wrap justify-content-between">
     <h3><i class="fa-solid fa-puzzle-piece"></i> <span
-            class="m-lg-auto">Market</h3>
+            class="m-lg-auto"><?= LangManager::translate("core.Theme.market") ?></h3>
 </div>
 
 <div class="row">
@@ -138,4 +138,4 @@ $description = LangManager::translate("core.Package.desc"); ?>
             </div>
         <?php endif; ?>
     <?php endforeach; ?>
-
+</div>
