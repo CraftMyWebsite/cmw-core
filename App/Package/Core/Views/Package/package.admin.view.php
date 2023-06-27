@@ -60,7 +60,7 @@ $description = LangManager::translate("core.Package.desc"); ?>
                         </div>
                     </div>
                     <div class="d-flex justify-content-center pb-2">
-                        <a href="packages/install/<?= $apiPackages['id'] ?>"
+                        <a href="install/<?= $apiPackages['id'] ?>"
                            class="btn btn-sm btn-primary"><i
                                 class="fa-solid fa-download"></i> <?= LangManager::translate("core.Package.install") ?>
                         </a>
@@ -77,7 +77,7 @@ $description = LangManager::translate("core.Package.desc"); ?>
                         <div class="modal-header">
                             <h4 class="modal-title"><?= $apiPackages['name'] ?></h4>
                             <div class="d-flex justify-content-end mt-auto gap-3">
-                                <a href="packages/install/<?= $apiPackages['id'] ?>"
+                                <a href="install/<?= $apiPackages['id'] ?>"
                                    class="btn btn-sm btn-primary"><i
                                         class="fa-solid fa-download"></i> <?= LangManager::translate("core.Package.install") ?>
                                 </a>
