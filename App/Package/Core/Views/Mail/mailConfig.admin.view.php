@@ -129,7 +129,7 @@ $description = LangManager::translate("core.mail.config.description");
                         </div>
                     </div>
                     <h6><?= LangManager::translate("core.mail.config.footer") ?> :</h6>
-                    <textarea class="tinymce" name="footer"></textarea>
+                    <textarea class="tinymce" name="footer"><?= $config->getFooter() ?></textarea>
                 </form>
             </div>
         </div>
