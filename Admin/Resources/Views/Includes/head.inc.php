@@ -81,7 +81,7 @@ use CMW\Manager\Env\EnvManager;
 
 <body>
 <script>
-    const theme = localStorage.getItem('theme') || 'light';
+    const theme = localStorage.getItem('theme') || 'theme-dark';
     document.body.className = theme;
   </script>
 <div id="app">
