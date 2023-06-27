@@ -41,7 +41,8 @@ class UpdatesManager
      */
     public static function checkNewUpdateAvailable(): bool
     {
-        return self::getCmwLatest()->value !== null && self::getVersion() !== self::getCmwLatest()->value && !self::ignoreUpdates();
+        $latest = self::getCmwLatest()->value;
+        return $latest !== null && self::getVersion() !== $latest && !self::ignoreUpdates();
     }
 
     /**
