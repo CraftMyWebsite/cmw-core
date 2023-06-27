@@ -1,19 +1,16 @@
 <?php
 
-use CMW\Controller\Core\PackageController;
 use CMW\Controller\Core\ThemeController;
-use CMW\Entity\Users\UserEntity;
-use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
-use CMW\Manager\Updater\UpdatesManager;
 use CMW\Model\Users\UsersModel;
 
-$packagesList = PublicAPI::getData("resources/getResources&resource_type=1");
-$themesList = PublicAPI::getData("resources/getResources&resource_type=0");
+//$packagesList = PublicAPI::getData("resources/getResources&resource_type=1");
+//$themesList = PublicAPI::getData("resources/getResources&resource_type=0");
 $currentTheme = ThemeController::getCurrentTheme()->getName();
 $notificationNumber = 0;
-/* @var UserEntity $userAdmin */
+
+$user = UsersModel::getCurrentUser();
 ?>
 <div id="main" class="layout-navbar">
 
@@ -34,7 +31,7 @@ $notificationNumber = 0;
                 <div class="dropdown navbar-nav ms-auto mb-lg-0">
 
                     <div class="theme-toggle d-flex gap-2 align-items-center me-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                        <svg xmlns="http://www.w3.org/2000/svg"
                              aria-hidden="true" role="img" class="iconify iconify--system-uicons" width="20" height="20"
                              preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
                             <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round"
@@ -53,7 +50,7 @@ $notificationNumber = 0;
                                    style="cursor: pointer"/>
                             <label class="form-check-label"></label>
                         </div>
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                        <svg xmlns="http://www.w3.org/2000/svg"
                              aria-hidden="true" role="img" class="iconify iconify--mdi" width="20" height="20"
                              preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
                             <path fill="currentColor"
@@ -64,101 +61,119 @@ $notificationNumber = 0;
 
                     <ul class="navbar-nav ms-auto mb-lg-0">
                         <li class="nav-item dropdown me-3">
-                            <a class="nav-link active  text-gray-600" href="#" data-bs-toggle="dropdown"
-                               data-bs-display="static" aria-expanded="false">
-                                <div><i class="fa-solid fa-bell fa-xl"></i></div>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end notification-dropdown"
-                                aria-labelledby="dropdownMenuButton">
-                                <li class="dropdown-header">
-                                    <h6><?= LangManager::translate("core.header.notification") ?></h6>
-                                </li>
-                                <?php if (UpdatesManager::checkNewUpdateAvailable()): ?>
-                                    <li class="dropdown-item notification-item">
-                                        <a class="d-flex align-items-center"
-                                           href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/updates/cms">
-                                            <div class="d-flex align-items-center justify-content-center">
-                                                <i class="fa-solid fa-cubes text-warning fa-lg"></i>
-                                            </div>
-                                            <div class="notification-text ms-4">
-                                                <p class="notification-title font-bold"><?= LangManager::translate("core.header.cms_ver") ?></p>
-                                                <p class="notification-subtitle font-thin text-sm"><?= LangManager::translate("core.header.cms_update") ?></p>
-                                            </div>
-                                        </a>
-                                    </li>
-                                <?php $notificationNumber++; endif; ?>
-                                <?php foreach ($packagesList as $packages): ?>
-                                    <?php if (PackageController::isInstalled($packages['name'])): ?>
-                                        <?php $localPackage = PackageController::getPackage($packages['name']); ?>
-                                        <?php if ($localPackage->getVersion() !== $packages['version_name']): ?>
-                                            <li class="dropdown-item notification-item">
-                                                <a class="d-flex align-items-center"
-                                                   href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/packages/my_package">
-                                                    <div class="d-flex align-items-center justify-content-center">
-                                                        <i class="fa-solid fa-puzzle-piece text-warning fa-lg"></i>
-                                                    </div>
-                                                    <div class="notification-text ms-4">
-                                                        <p class="notification-title font-bold"><?= LangManager::translate("core.header.package") ?> : <?= $packages['name'] ?></p>
-                                                        <p class="notification-subtitle font-thin text-sm"><?= LangManager::translate("core.header.update_to") ?> <?= $packages['version_name'] ?></p>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        <?php $notificationNumber++; endif; ?>
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
-                                <!-- TODO : Theme actif non à jours -->
-                                <?php foreach ($themesList as $theme): ?>
-                                <?php if ($theme['name'] === $currentTheme): ?>
-                                        <?php $localTheme = ThemeController::getTheme($theme['name']); ?>
-                                        <?php if ($localTheme->getVersion() !== $theme['version_name']): ?>
-                                            <li class="dropdown-item notification-item">
-                                                <a class="d-flex align-items-center"
-                                                   href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/packages/my_package">
-                                                    <div class="d-flex align-items-center justify-content-center">
-                                                        <i class="fa-solid fa-feather text-warning fa-lg"></i>
-                                                    </div>
-                                                    <div class="notification-text ms-4">
-                                                        <p class="notification-title font-bold"><?= LangManager::translate("core.header.theme") ?> : <?= $theme['name'] ?></p>
-                                                        <p class="notification-subtitle font-thin text-sm"><?= LangManager::translate("core.header.update_to") ?> <?= $theme['version_name'] ?></p>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <?php $notificationNumber++; endif; ?>
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
-                                <?php if ($notificationNumber === 0): ?>
-                                    <li class="dropdown-item notification-item">
-                                        <a class="d-flex align-items-center"
-                                           href="#">
-                                            <div class="d-flex align-items-center justify-content-center">
-                                                <i class="fa-regular fa-thumbs-up text-success fa-lg"></i>
-                                            </div>
-                                            <div class="notification-text ms-4">
-                                                <p class="notification-title font-bold"><?= LangManager::translate("core.header.all_is_fine") ?></p>
-                                                <p class="notification-subtitle font-thin text-sm"><?= LangManager::translate("core.header.is_up") ?></p>
-                                            </div>
-                                        </a>
-                                    </li>
-                                <?php endif; ?>
-                            </ul>
-                            <?php if ($notificationNumber !== 0): ?>
-                                <span class="position-absolute bg-danger text-white rounded" style="font-size: small; top: -0.4rem; left: 1.3rem; padding: 0px 4px 0px 4px"><?= $notificationNumber ?></span>
-                            <?php else: ?>
-                                <span class="position-absolute bg-success text-white rounded" style="font-size: small; top: -0.4rem; left: 1.3rem; padding: 0px 4px 0px 4px">0</span>
-                            <?php endif; ?>
+<!--                            <a class="nav-link active  text-gray-600" href="#" data-bs-toggle="dropdown"-->
+<!--                               data-bs-display="static" aria-expanded="false">-->
+<!--                                <div><i class="fa-solid fa-bell fa-xl"></i></div>-->
+<!--                            </a>-->
+                            <!--                            <ul class="dropdown-menu dropdown-menu-end notification-dropdown"-->
+                            <!--                                aria-labelledby="dropdownMenuButton">-->
+                            <!--                                <li class="dropdown-header">-->
+                            <!--                                    <h6>-->
+                            <?php //= LangManager::translate("core.header.notification") ?><!--</h6>-->
+                            <!--                                </li>-->
+                            <!--                                --><?php //if (UpdatesManager::checkNewUpdateAvailable()): ?>
+                            <!--                                    <li class="dropdown-item notification-item">-->
+                            <!--                                        <a class="d-flex align-items-center"-->
+                            <!--                                           href="-->
+                            <?php //= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?><!--cmw-admin/updates/cms">-->
+                            <!--                                            <div class="d-flex align-items-center justify-content-center">-->
+                            <!--                                                <i class="fa-solid fa-cubes text-warning fa-lg"></i>-->
+                            <!--                                            </div>-->
+                            <!--                                            <div class="notification-text ms-4">-->
+                            <!--                                                <p class="notification-title font-bold">-->
+                            <?php //= LangManager::translate("core.header.cms_ver") ?><!--</p>-->
+                            <!--                                                <p class="notification-subtitle font-thin text-sm">-->
+                            <?php //= LangManager::translate("core.header.cms_update") ?><!--</p>-->
+                            <!--                                            </div>-->
+                            <!--                                        </a>-->
+                            <!--                                    </li>-->
+                            <!--                                    --><?php //$notificationNumber++; endif; ?>
+                            <!--                                --><?php //foreach ($packagesList as $packages): ?>
+                            <!--                                    --><?php //if (PackageController::isInstalled($packages['name'])): ?>
+                            <!--                                        --><?php //$localPackage = PackageController::getPackage($packages['name']); ?>
+                            <!--                                        --><?php //if ($localPackage->getVersion() !== $packages['version_name']): ?>
+                            <!--                                            <li class="dropdown-item notification-item">-->
+                            <!--                                                <a class="d-flex align-items-center"-->
+                            <!--                                                   href="-->
+                            <?php //= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?><!--cmw-admin/packages/my_package">-->
+                            <!--                                                    <div class="d-flex align-items-center justify-content-center">-->
+                            <!--                                                        <i class="fa-solid fa-puzzle-piece text-warning fa-lg"></i>-->
+                            <!--                                                    </div>-->
+                            <!--                                                    <div class="notification-text ms-4">-->
+                            <!--                                                        <p class="notification-title font-bold">--><?php //= LangManager::translate("core.header.package") ?>
+                            <!--                                                            : -->
+                            <?php //= $packages['name'] ?><!--</p>-->
+                            <!--                                                        <p class="notification-subtitle font-thin text-sm">-->
+                            <?php //= LangManager::translate("core.header.update_to") ?><!-- -->
+                            <?php //= $packages['version_name'] ?><!--</p>-->
+                            <!--                                                    </div>-->
+                            <!--                                                </a>-->
+                            <!--                                            </li>-->
+                            <!--                                            --><?php //$notificationNumber++; endif; ?>
+                            <!--                                    --><?php //endif; ?>
+                            <!--                                --><?php //endforeach; ?>
+                            <!--                                --><?php //foreach ($themesList as $theme): ?>
+                            <!--                                    --><?php //if ($theme['name'] === $currentTheme): ?>
+                            <!--                                        --><?php //$localTheme = ThemeController::getTheme($theme['name']); ?>
+                            <!--                                        --><?php //if ($localTheme->getVersion() !== $theme['version_name']): ?>
+                            <!--                                            <li class="dropdown-item notification-item">-->
+                            <!--                                                <a class="d-flex align-items-center"-->
+                            <!--                                                   href="-->
+                            <?php //= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?><!--cmw-admin/packages/my_package">-->
+                            <!--                                                    <div class="d-flex align-items-center justify-content-center">-->
+                            <!--                                                        <i class="fa-solid fa-feather text-warning fa-lg"></i>-->
+                            <!--                                                    </div>-->
+                            <!--                                                    <div class="notification-text ms-4">-->
+                            <!--                                                        <p class="notification-title font-bold">--><?php //= LangManager::translate("core.header.theme") ?>
+                            <!--                                                            : -->
+                            <?php //= $theme['name'] ?><!--</p>-->
+                            <!--                                                        <p class="notification-subtitle font-thin text-sm">-->
+                            <?php //= LangManager::translate("core.header.update_to") ?><!-- -->
+                            <?php //= $theme['version_name'] ?><!--</p>-->
+                            <!--                                                    </div>-->
+                            <!--                                                </a>-->
+                            <!--                                            </li>-->
+                            <!--                                            --><?php //$notificationNumber++; endif; ?>
+                            <!--                                    --><?php //endif; ?>
+                            <!--                                --><?php //endforeach; ?>
+                            <!--                                --><?php //if ($notificationNumber === 0): ?>
+                            <!--                                    <li class="dropdown-item notification-item">-->
+                            <!--                                        <a class="d-flex align-items-center"-->
+                            <!--                                           href="#">-->
+                            <!--                                            <div class="d-flex align-items-center justify-content-center">-->
+                            <!--                                                <i class="fa-regular fa-thumbs-up text-success fa-lg"></i>-->
+                            <!--                                            </div>-->
+                            <!--                                            <div class="notification-text ms-4">-->
+                            <!--                                                <p class="notification-title font-bold">-->
+                            <?php //= LangManager::translate("core.header.all_is_fine") ?><!--</p>-->
+                            <!--                                                <p class="notification-subtitle font-thin text-sm">-->
+                            <?php //= LangManager::translate("core.header.is_up") ?><!--</p>-->
+                            <!--                                            </div>-->
+                            <!--                                        </a>-->
+                            <!--                                    </li>-->
+                            <!--                                --><?php //endif; ?>
+                            <!--                            </ul>-->
+                            <!--                            --><?php //if ($notificationNumber !== 0): ?>
+                            <!--                                <span class="position-absolute bg-danger text-white rounded"-->
+                            <!--                                      style="font-size: small; top: -0.4rem; left: 1.3rem; padding: 0 4px 0 4px">-->
+                            <?php //= $notificationNumber ?><!--</span>-->
+                            <!--                            --><?php //else: ?>
+                            <!--                                <span class="position-absolute bg-success text-white rounded"-->
+                            <!--                                      style="font-size: small; top: -0.4rem; left: 1.3rem; padding: 0 4px 0 4px">0</span>-->
+                            <!--                            --><?php //endif; ?>
                         </li>
                     </ul>
                     <div class="dropdown">
                         <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
                             <div class="user-menu d-flex">
                                 <div class="user-name text-end me-3">
-                                    <h6 class="mb-0"><?= UsersModel::getCurrentUser()->getPseudo() ?></h6>
-                                    <p class="mb-0 text-sm text-gray-600"><?= UsersModel::getCurrentUser()->getHighestRole()->getName() ?></p>
+                                    <h6 class="mb-0"><?= $user->getPseudo() ?></h6>
+                                    <p class="mb-0 text-sm text-gray-600"><?= $user->getHighestRole()->getName() ?></p>
                                 </div>
                                 <div class="user-img d-none d-lg-flex align-items-center">
                                     <div class="avatar avatar-md">
-                                        <img src="<?= UsersModel::getCurrentUser()->getUserPicture()->getImageLink() ?>"
-                                             alt="<?= LangManager::translate("users.users.image.image_alt", ['username' => UsersModel::getCurrentUser()->getPseudo()]) ?>">
+                                        <img src="<?= $user->getUserPicture()->getImageLink() ?>"
+                                             alt="<?= LangManager::translate("users.users.image.image_alt", ['username' => $user->getPseudo()]) ?>">
                                     </div>
                                 </div>
                             </div>
@@ -168,7 +183,7 @@ $notificationNumber = 0;
 
                             <li>
                                 <a class="dropdown-item"
-                                   href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/users/manage/edit/' . UsersModel::getCurrentUser()->getId() ?>">
+                                   href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/users/manage/edit/' . $user->getId() ?>">
                                     <i class="fa-solid fa-user"></i>
                                     <?= LangManager::translate("users.users.link_profile") ?>
                                 </a>
