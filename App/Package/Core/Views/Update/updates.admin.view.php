@@ -47,6 +47,7 @@ $description = LangManager::translate("core.updates.description"); ?>
                 <h6><?= LangManager::translate("core.updates.lastNote") ?></h6>
                 <div class="card">
                     <?php foreach ($latestVersionChangelogGroup as $groupedType) : ?>
+                    <?php if ($groupedType[0]['content']): ?>
                         <h6 class="text-center p-1 rounded bg-secondary"><?= $groupedType[0]['type'] ?></h6>
                         <ul>
                             <?php foreach ($groupedType as $changelogInfos) : ?>
@@ -57,6 +58,7 @@ $description = LangManager::translate("core.updates.description"); ?>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
+                    <?php endif; ?>
                     <?php endforeach; ?>
                 </div>
 
@@ -77,7 +79,8 @@ $description = LangManager::translate("core.updates.description"); ?>
                         <p><?= LangManager::translate("core.updates.publishAt") ?> <?= CoreController::formatDate($previousVersion['date_upload']) ?></p>
                         <div class="card">
                             <?php foreach ($previousVersionChangelogGroup = UpdatesController::groupBy("type", $previousVersion['changelog']) as $previousGroupedType) : ?>
-                            <span class="badge bg-secondary"><?= $previousGroupedType[0]['type'] ?></span>
+                            <?php if ($previousGroupedType[0]['content']): ?>
+                                <span class="badge bg-secondary"><?= $previousGroupedType[0]['type'] ?></span>
                             <ul>
                                 <?php foreach ($previousGroupedType as $previousChangelogInfos) : ?>
                                     <li><?= $previousChangelogInfos['content'] ?>
@@ -87,6 +90,7 @@ $description = LangManager::translate("core.updates.description"); ?>
                                     </li>
                                 <?php endforeach; ?>
                             </ul>
+                            <?php endif; ?>
                             <?php endforeach; ?>
                         </div>
                     </div>
