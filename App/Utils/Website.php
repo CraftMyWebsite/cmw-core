@@ -51,6 +51,12 @@ class Website
     {
         $currentUrl = $_SERVER['REQUEST_URI'];
 
+        if ($targetUrl[0] === '/'){
+            $targetUrl = substr($targetUrl, 0);
+        }
+
+        $targetUrl = EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . $targetUrl;
+
         return $currentUrl === $targetUrl || $currentUrl === $targetUrl . '/' || $currentUrl === $targetUrl . '#'; //Use Regex ?
     }
 

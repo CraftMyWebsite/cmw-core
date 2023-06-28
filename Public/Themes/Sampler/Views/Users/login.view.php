@@ -19,7 +19,8 @@ $description = "Description de votre page"; ?>
             <div class="col-lg-6">
                 <form action="" method="post" class="mb-4">
                     <?php (new SecurityManager())->insertHiddenToken() ?>
-                    <input hidden name="previousRoute" type="text" value="<?= $_SERVER['HTTP_REFERER'] ?>">
+                    <input hidden name="previousRoute" type="text"
+                           value="<?= $_SERVER['HTTP_REFERER'] ?? (EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'login') ?>">
                     <div class="form-floating mb-3">
                         <input class="form-control" name="login_email" type="email" placeholder="Votre mail" required>
                         <label for="name">E-Mail</label>
@@ -36,12 +37,15 @@ $description = "Description de votre page"; ?>
                             </div>
                         </div>
                         <div class="col-6 mb-2 text-end">
-                            <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>login/forgot">Mot de passe oublié</a>
+                            <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>login/forgot">Mot de
+                                passe oublié</a>
                         </div>
                     </div>
 
                     <?php SecurityController::getPublicData(); ?>
-                    <div class="d-grid"><button class="btn btn-primary btn-xl" type="submit">Connexion</button></div>
+                    <div class="d-grid">
+                        <button class="btn btn-primary btn-xl" type="submit">Connexion</button>
+                    </div>
                 </form>
             </div>
         </div>
