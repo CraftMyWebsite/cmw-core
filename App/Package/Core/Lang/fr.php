@@ -326,7 +326,8 @@ return [
         "description" => "Gérez les maintenances de votre site",
         "settings" => [
             "title" => "Réglages",
-            "targetDateTitle" => "Fin de la maintenance",
+            "targetDateTitle" => "Fin",
+            "useMyCode" => "Uiliser mon code",
             "loginRegister" => [
                 'title' => "Connexions / Inscriptions",
                 'type' => [
@@ -336,11 +337,11 @@ return [
                 ],
             ],
             "maintenanceTitle" => [
-                'label' => "Titre de la maintenance",
+                'label' => "Titre",
                 'placeholder' => 'Nous revenons très vite !'
             ],
             "maintenanceDescription" => [
-                'label' => "Description de la maintenance",
+                'label' => "Description",
                 'placeholder' => 'Nous faisons quelques modifications, nous revenons très vite !'
             ],
             "toaster" => [

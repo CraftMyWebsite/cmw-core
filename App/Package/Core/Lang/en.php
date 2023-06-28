@@ -324,7 +324,8 @@ return [
         "description" => "Manage your website maintenance",
         "settings" => [
             "title" => "Settings",
-            "targetDateTitle" => "Maintenance target date",
+            "targetDateTitle" => "Target date",
+            "useMyCode" => "Use my code",
             "loginRegister" => [
                 'title' => "Login / Registers",
                 'type' => [
@@ -334,11 +335,11 @@ return [
                 ],
             ],
             "maintenanceTitle" => [
-                'label' => "Maintenance title",
+                'label' => "Title",
                 'placeholder' => 'We are coming soon !'
             ],
             "maintenanceDescription" => [
-                'label' => "Maintenance description",
+                'label' => "Description",
                 'placeholder' => 'We are making some changes !'
             ],
             "toaster" => [

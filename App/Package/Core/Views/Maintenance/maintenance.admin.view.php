@@ -10,47 +10,41 @@ $title = LangManager::translate("core.maintenance.title");
 $description = LangManager::translate("core.maintenance.description");
 
 ?>
-
-<div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fa-solid fa-gears"></i>
-        <span class="m-lg-auto">
-            <?= LangManager::translate("core.maintenance.settings.title") ?>
-        </span>
-    </h3>
-    <div class="buttons">
-        <button form="Configuration" type="submit"
-                class="btn btn-primary"><?= LangManager::translate("core.btn.save", lineBreak: true) ?></button>
+<form id="Configuration" action="" method="post" enctype="multipart/form-data">
+    <?php (new SecurityManager())->insertHiddenToken() ?>
+    <div class="d-flex flex-wrap justify-content-between">
+        <div class=" form-check-reverse form-switch">
+            <label><h4><i class="fa-solid fa-helmet-safety"></i> <span
+                            class="m-lg-auto"><?= LangManager::translate("core.maintenance.title") ?></span></h4>
+            </label>
+            <input class="form-check-input" type="checkbox" id="isEnable" name="isEnable"
+                   value="1" <?= $maintenance->isEnable() ? 'checked' : '' ?>>
+        </div>
+        <div class="buttons">
+            <button form="Configuration" type="submit"
+                    class="btn btn-primary"><?= LangManager::translate("core.btn.save") ?></button>
+        </div>
     </div>
-</div>
-<section class="row">
-    <div class="col-12">
+    <section id="mainCard" style="display: <?= $maintenance->isEnable() ? 'block' : 'none' ?>;">
         <div class="card">
-            <form id="Configuration" action="" method="post" enctype="multipart/form-data">
-                <?php (new SecurityManager())->insertHiddenToken() ?>
-                <div class="card-header">
-                    <h4><?= LangManager::translate("core.config.title") ?></h4>
-                    <div class="form-check-reverse form-switch align-right">
-                        <label class="form-check-label"
-                               for="isEnable"><?= LangManager::translate('core.btn.enable') ?></label>
-                        <input class="form-check-input" type="checkbox" id="isEnable" name="isEnable"
-                               value="1" <?= $maintenance->isEnable() ? 'checked' : '' ?>>
-                    </div>
-                </div>
-                <div class="card-body" id="mainCard"
-                     style="display: <?= $maintenance->isEnable() ? 'block' : 'none' ?>;">
+            <div class="card-body">
+                <div>
                     <div class="row">
                         <div class="col-md-6">
                             <h6><?= LangManager::translate('core.maintenance.settings.targetDateTitle') ?> :</h6>
-                            <div class="form-group">
-                                <input type="datetime-local" id="target-date"
+                            <div class="form-group position-relative has-icon-left">
+                                <input type="datetime-local" id="target-date" class="form-control" name="target-date"
                                        value="<?= $maintenance->getTargetDate() ?>"
-                                       name="target-date" class="form-control" required>
+                                       placeholder="contact@monsite.fr" required>
+                                <div class="form-control-icon">
+                                    <i class="fa-regular fa-clock"></i>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <h6><?= LangManager::translate('core.maintenance.settings.loginRegister.title') ?> :</h6>
-                            <div class="form-group">
-                                <select class="choices form-select" name="type" required>
+                            <div class="form-group position-relative has-icon-left">
+                                <select class="form-select" name="type" required>
                                     <option value="0" <?= $maintenance->getType() === 0 ? 'selected' : '' ?>>
                                         <?= LangManager::translate('core.maintenance.settings.loginRegister.type.0') ?>
                                     </option>
@@ -63,13 +57,11 @@ $description = LangManager::translate("core.maintenance.description");
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-6">
                             <h6><?= LangManager::translate('core.maintenance.settings.maintenanceTitle.label') ?> :</h6>
                             <div class="form-group position-relative has-icon-left">
-                                <input type="text" name="title" class="form-control" maxlength="255"
-                                       value="<?= $maintenance->getTitle() ?>"
+                                <input type="text" name="title" class="form-control"
+                                       value="<?= $maintenance->getTitle() ?>" maxlength="255"
                                        placeholder="<?= LangManager::translate('core.maintenance.settings.maintenanceTitle.label') ?>"
                                        required>
                                 <div class="form-control-icon">
@@ -82,7 +74,7 @@ $description = LangManager::translate("core.maintenance.description");
                                 :</h6>
                             <div class="form-group position-relative has-icon-left">
                                 <input type="text" name="description" class="form-control"
-                                       value="<?= $maintenance->getDescription() ?>"
+                                       value="<?= $maintenance->getDescription() ?>" maxlength="255"
                                        placeholder="<?= LangManager::translate('core.maintenance.settings.maintenanceDescription.placeholder') ?>"
                                        required>
                                 <div class="form-control-icon">
@@ -91,25 +83,35 @@ $description = LangManager::translate("core.maintenance.description");
                             </div>
                         </div>
                     </div>
-                    <div class="card" id="mainCard">
-                        <div class="form-check-reverse form-switch align-right">
-                            <label class="form-check-label" for="isOverrideTheme">
-                                Utiliser son propre code
-                            </label>
-                            <input class="form-check-input" type="checkbox" id="isOverrideTheme" name="isOverrideTheme"
-                                   value="1" <?= $maintenance->isOverrideTheme() ? 'checked' : '' ?>>
-                        </div>
-                        <div class="card-body mt-3" style="height: 40vh; display: <?= $maintenance->isOverrideTheme() ? 'block' : 'none' ?>;" id="editor">
-                            <?= htmlspecialchars($maintenance->getOverrideThemeCode()) ?>
-                        </div>
-                        <input type="hidden" name="overrideThemeCode" id="overrideThemeCode" value="<?= htmlspecialchars($maintenance->getOverrideThemeCode()) ?>">
+                </div>
+            </div>
+        </div>
+        <div class="card mt-4">
+            <div class="card-header">
+                <div class="d-flex flex-wrap justify-content-between">
+                    <div class="form-check-reverse form-switch">
+                        <label class="form-check-label" for="isOverrideTheme"><?= LangManager::translate('core.maintenance.settings.useMyCode') ?></label>
+                        <input class="form-check-input" type="checkbox" id="isOverrideTheme" name="isOverrideTheme"
+                               value="1" <?= $maintenance->isOverrideTheme() ? 'checked' : '' ?>>
                     </div>
                 </div>
+            </div>
+            <div class="card-body">
+                <div style="height: 40vh; display: <?= $maintenance->isOverrideTheme() ? 'block' : 'none' ?>;"
+                     id="editor">
 
-            </form>
+                    <div>
+                        <?= htmlspecialchars($maintenance->getOverrideThemeCode()) ?>
+                    </div>
+
+                </div>
+            </div>
         </div>
-    </div>
-</section>
+        <input type="hidden" name="overrideThemeCode" id="overrideThemeCode"
+               value="<?= htmlspecialchars($maintenance->getOverrideThemeCode()) ?>">
+    </section>
+</form>
+
 
 <!-- Set default dateTarget value if we don't set any target value -->
 <script>
@@ -170,7 +172,7 @@ $description = LangManager::translate("core.maintenance.description");
         enableSnippets: false
     })
 
-    if (localStorage.getItem('theme') === 'theme-dark'){
+    if (localStorage.getItem('theme') === 'theme-dark') {
         editor.setTheme("ace/theme/cmw_dark");
     } else {
         editor.setTheme("ace/theme/cmw_light");
@@ -230,7 +232,6 @@ $description = LangManager::translate("core.maintenance.description");
     }
 
     langTools.addCompleter(myCompleter);
-
 
 
     // Add data to hidden input
