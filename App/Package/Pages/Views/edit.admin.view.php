@@ -117,7 +117,7 @@ $description = LangManager::translate("pages.edit.desc");
                                     return {
                                         success: 1,
                                         file: {
-                                            url: "<?= EnvManager::getInstance()->getValue("PATH_URL")?>public/uploads/editor/" + response
+                                            url: "<?= EnvManager::getInstance()->getValue("PATH_URL")?>Public/Uploads/Editor/" + response
                                         }
                                     }
                                 })
@@ -184,7 +184,7 @@ $description = LangManager::translate("pages.edit.desc");
                 formData.append('news_content', JSON.stringify(savedData));
                 formData.append('page_state', page_state.toString());
 
-                fetch("<?= EnvManager::getInstance()->getValue("PATH_URL") ?>cmw-admin/Pages/edit", {
+                fetch("<?= EnvManager::getInstance()->getValue("PATH_URL") ?>cmw-admin/pages/edit", {
                     method: "POST",
                     body: formData
                 })
@@ -195,7 +195,7 @@ $description = LangManager::translate("pages.edit.desc");
                             button.innerHTML = "<i style='color: #16C329;' class='fa-solid fa-check fa-shake'></i> Ok !";
                         }, 850);
                 setTimeout(() => {
-                            document.location.replace("<?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . 'cmw-admin/Pages/list'?>");
+                            document.location.replace("<?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . 'cmw-admin/pages/list'?>");
                         }, 1000);
                 
             })

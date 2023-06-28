@@ -28,9 +28,11 @@ return [
         "success" => "Succès",
         "used_pseudo" => "Ce pseudo est déjà pris.",
         "used_mail" => "Cette e-mail est déjà prise.",
+        "not_registered_account" => "Ce compte n'existe pas",
+        "password_reset" => "Mot de passe réinitialisé et envoyé à l'adresse %mail%",
         "not_same_pass" => "les mots de passes non identiques",
         "welcome" => "Bienvenue !",
-        "user_edited" => "L'utilisateur viens d'être éditer",
+        "user_edited" => "Utilisateur modifié",
         "pass_change_faild" => "Impossible d'éditer le mot de passe",
         "impossible" => "Impossible de faire ceci",
         "impossible_user" => "Impossible de supprimé cet utilisateur",
@@ -39,7 +41,10 @@ return [
         "role_added" => "Rôle ajouté",
         "role_edited" => "Rôle modifié",
         "role_deleted" => "Rôle supprimé",
-        "blacklisted_pseudo" => "Pseudo interdit"
+        "blacklisted_pseudo" => "Pseudo interdit",
+        "status" => "Status de l'utilisateur changé !",
+        "error_add" => "Impossible d'ajouter cet utilisateur",
+        "success_add" => "Utilisateur %pseudo% ajouté"
     ],
     "manage" => [
         "title" => "Gestion des utilisateurs",

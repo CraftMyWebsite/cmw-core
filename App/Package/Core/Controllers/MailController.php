@@ -148,7 +148,7 @@ class MailController extends AbstractController
         $this->sendMail($receiver, "Test CraftMyWebsite - MAILS", "<p>Hello World !</p>");
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate("core.toaster.mail.test", ["%mail%" => $receiver]));
+            LangManager::translate("core.toaster.mail.test", ["mail" => $receiver]));
 
         Redirect::redirectPreviousRoute();
     }

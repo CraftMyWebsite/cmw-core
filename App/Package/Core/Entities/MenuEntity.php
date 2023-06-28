@@ -62,12 +62,15 @@ class MenuEntity
      */
     public function getUrl(): string
     {
-        if ($this->url !== "") {
-            return EnvManager::getInstance()->getValue("PATH_SUBFOLDER").$this->url; //Todo verifier si c'est pas un custom URL
-        } else {
+        if ($this->url === "") {
             return "#";
         }
 
+        if(str_starts_with($this->url, 'http')){
+            return $this->url;
+        }
+
+        return EnvManager::getInstance()->getValue("PATH_SUBFOLDER").$this->url;
     }
 
     /**

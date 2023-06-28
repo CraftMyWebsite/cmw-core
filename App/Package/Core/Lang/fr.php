@@ -235,6 +235,10 @@ return [
             "install" => [
                 "success" => "Package %package% installé avec succès !"
             ],
+            "delete" => [
+                "success" => "Package %package% supprimé avec succès",
+                "error" => "Impossible de supprimer le package %package%"
+            ],
             "update" => [
                 "success" => "Package %package% mis à jour avec succès !"
             ],

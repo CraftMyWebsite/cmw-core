@@ -101,7 +101,7 @@ $description = LangManager::translate("core.maintenance.description");
                      id="editor">
 
                     <div>
-                        <?= htmlspecialchars($maintenance->getOverrideThemeCode()) ?>
+                        <?= htmlspecialchars($maintenance->getOverrideThemeCode() ?? " ") ?>
                     </div>
 
                 </div>

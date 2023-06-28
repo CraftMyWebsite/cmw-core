@@ -57,7 +57,7 @@ $description = LangManager::translate("users.settings.desc"); ?>
                     <div class="row">
                         <h6><?= LangManager::translate('users.settings.resetPasswordMethod.label') ?> :</h6>
                         <fieldset class="form-group">
-                            <select class="form-select" id="basicSelect" name="reset_password_method" required>
+                            <select class="form-select" id="basicSelect" name="reset_password_method" disabled required>
                                 <option value="0" <?= $settings->getResetPasswordMethod() === 0 ? 'selected' : '' ?>>
                                     <?= LangManager::translate("users.settings.resetPasswordMethod.options.0") ?>
                                 </option>
