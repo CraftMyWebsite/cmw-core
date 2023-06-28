@@ -131,6 +131,7 @@ return [
         ],
         "security" => [
             "healthReport" => [
+                "copied" => "Content copied !",
                 "delete" => "Health Reports removed"
             ],
         ],
