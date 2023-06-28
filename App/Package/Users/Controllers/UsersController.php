@@ -172,16 +172,25 @@ class UsersController extends AbstractController
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.add");
 
-        [$mail, $username, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "firstname", "surname");
+        [$mail, $pseudo, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "firstname", "surname");
 
-        $userEntity = UsersModel::getInstance()->create($mail, $username, $firstname, $lastname, $_POST['roles']);
+        $userEntity = UsersModel::getInstance()->create($mail, $pseudo, $firstname, $lastname, $_POST['roles']);
+
+        if ($userEntity === null){
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('users.toaster.error_add'));
+            Redirect::redirectPreviousRoute();
+        }
 
         UsersModel::getInstance()->updatePass($userEntity?->getId(), password_hash(filter_input(INPUT_POST, "password"), PASSWORD_BCRYPT));
+
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+            LangManager::translate('users.toaster.success_add', ['pseudo' => $pseudo]));
 
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link("/state/:id/:state", Link::GET, ["id" => "[0-9]+", "state" => "[0-9]+"], "/cmw-admin/users")]
+    #[Link("/manage/state/:id/:state", Link::GET, ["id" => "[0-9]+", "state" => "[0-9]+"], "/cmw-admin/users")]
     #[NoReturn] private function adminUserState(Request $request, int $id, int $state): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
@@ -195,7 +204,7 @@ class UsersController extends AbstractController
 
         UsersModel::getInstance()->changeState($id, $state);
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),"Ok !");
+        Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.status"));
 
         Redirect::redirectPreviousRoute();
     }
@@ -320,12 +329,21 @@ class UsersController extends AbstractController
 
         //We check if this email exist
         if(UsersModel::getInstance()->checkEmail($mail) <= 0) {
-            //TODO toaster with error
-            die();
-        }
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('users.toaster.not_registered_account'));
 
+            Redirect::redirectPreviousRoute();
+        }
         //We send a verification link for this mail
         UsersModel::getInstance()->resetPassword($mail);
+
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+            LangManager::translate('users.toaster.password_reset', ['mail' => $mail]));
+
+        if (str_starts_with($_SERVER['HTTP_REFERER'], EnvManager::getInstance()->getValue('PATH_URL') . 'cmw-admin/')){
+            Redirect::redirectPreviousRoute();
+        }
+
         Redirect::redirect("login");
     }
 
