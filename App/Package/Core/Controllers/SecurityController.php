@@ -79,6 +79,8 @@ class SecurityController extends AbstractController
 
         View::createAdminView('Core', 'Security/displayHealthReport')
             ->addVariableList(['report' => $report, 'reportName' => $reportName])
+            ->addStyle("Admin/Resources/Vendors/Izitoast/iziToast.min.css")
+            ->addScriptAfter("Admin/Resources/Vendors/Izitoast/iziToast.min.js")
             ->view();
     }
 
@@ -94,7 +96,7 @@ class SecurityController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('core.toaster.security.healthReport.delete'));
 
-        Redirect::redirectPreviousRoute();
+        Redirect::redirect("cmw-admin/security");
     }
 
 

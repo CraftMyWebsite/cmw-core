@@ -4,6 +4,7 @@
 use CMW\Controller\Core\SecurityController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Security\SecurityManager;
+use CMW\Model\Core\ThemeModel;
 
 $title = "Connexion";
 $description = "Description de votre page"; ?>
@@ -44,8 +45,10 @@ $description = "Description de votre page"; ?>
 
                     <?php SecurityController::getPublicData(); ?>
                     <div class="d-grid">
-                        <button class="btn btn-primary btn-xl" type="submit">Connexion</button>
-                    </div>
+                      <button style="background: <?= ThemeModel::fetchConfigValue('buttonColor') ?>" class="btn btn-xl" type="submit">
+                        Connexion
+                      </button>
+                  </div>
                 </form>
             </div>
         </div>

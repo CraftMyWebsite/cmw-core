@@ -4,6 +4,7 @@
 use CMW\Controller\Core\SecurityController;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
+use CMW\Model\Core\ThemeModel;
 
 $title = "Inscription";
 $description = "Description de votre page"; ?>
@@ -37,7 +38,7 @@ $description = "Description de votre page"; ?>
                         <label for="email">Mot de passe</label>
                     </div>
                     <?php SecurityController::getPublicData(); ?>
-                    <div class="d-grid"><button class="btn btn-primary btn-xl" type="submit"><?= LangManager::translate("users.login.register") ?></button></div>
+                    <div class="d-grid"><button style="background: <?= ThemeModel::fetchConfigValue('buttonColor') ?>" class="btn btn-xl" type="submit"><?= LangManager::translate("users.login.register") ?></button></div>
                 </form>
             </div>
         </div>
