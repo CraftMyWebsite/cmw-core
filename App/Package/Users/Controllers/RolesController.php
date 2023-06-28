@@ -86,7 +86,7 @@ class RolesController extends AbstractController
         $role->createRole($roleName, $roleDescription, $roleWeight, $roleIsDefault, $permList);
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate('users.toaster_role_added'));
+            LangManager::translate('users.toaster.role_added'));
 
         Redirect::redirectPreviousRoute();
     }
@@ -161,7 +161,7 @@ class RolesController extends AbstractController
         RolesModel::getInstance()->deleteRole($id);
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate('users.toaster_role_deleted'));
+            LangManager::translate('users.toaster.role_deleted'));
 
 
         Redirect::redirectPreviousRoute();

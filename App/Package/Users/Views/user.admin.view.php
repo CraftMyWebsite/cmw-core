@@ -18,17 +18,14 @@ $scripts = '<script src="' . EnvManager::getInstance()->getValue("PATH_SUBFOLDER
 </div>
 
 <section class="row">
-    <div class="col-md-6">
+    <div class="col-lg-7">
         <!--UTILISATEUR-->
         <div class="card">
-            <div class="card-header">
-                <h4><?= LangManager::translate("users.users.user") ?></h4>
-            </div>
             <div class="card-body">
                 <form action="" method="post">
                     <?php (new SecurityManager())->insertHiddenToken() ?>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <h6><?= LangManager::translate("users.users.mail") ?> :</h6>
                             <div class="form-group position-relative has-icon-left">
                                 <input type="email" name="email" class="form-control" value="<?= $user->getMail() ?>"
@@ -38,7 +35,7 @@ $scripts = '<script src="' . EnvManager::getInstance()->getValue("PATH_SUBFOLDER
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <h6><?= LangManager::translate("users.users.pseudo") ?> :</h6>
                             <div class="form-group position-relative has-icon-left">
                                 <input type="text" name="pseudo" class="form-control" value="<?= $user->getPseudo() ?>"
@@ -48,7 +45,7 @@ $scripts = '<script src="' . EnvManager::getInstance()->getValue("PATH_SUBFOLDER
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <h6><?= LangManager::translate("users.users.firstname") ?> :</h6>
                             <div class="form-group position-relative has-icon-left">
                                 <input type="text" name="name" class="form-control" value="<?= $user->getFirstName() ?>"
@@ -58,7 +55,7 @@ $scripts = '<script src="' . EnvManager::getInstance()->getValue("PATH_SUBFOLDER
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <h6><?= LangManager::translate("users.users.surname") ?> :</h6>
                             <div class="form-group position-relative has-icon-left">
                                 <input type="text" name="lastname" class="form-control"
@@ -69,7 +66,7 @@ $scripts = '<script src="' . EnvManager::getInstance()->getValue("PATH_SUBFOLDER
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <h6><?= LangManager::translate("users.users.password") ?> :</h6>
                             <div class="input-group mb-3">
                                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
@@ -80,7 +77,7 @@ $scripts = '<script src="' . EnvManager::getInstance()->getValue("PATH_SUBFOLDER
                                 </button>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <h6><?= LangManager::translate("users.users.repeat_pass") ?> :</h6>
                             <div class="input-group mb-3">
                                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
@@ -103,117 +100,74 @@ $scripts = '<script src="' . EnvManager::getInstance()->getValue("PATH_SUBFOLDER
                         </select>
                     </fieldset>
 
-                    <div class="buttons text-center">
-                        <button type="submit"
-                                class="btn btn-primary"><?= LangManager::translate("core.btn.save", lineBreak: true) ?></button>
+                    <div class="table-responsive">
+                        <table class="table table-lg">
+                            <thead>
+                            <tr class="text-center">
+                                <th><?= LangManager::translate("users.users.creation") ?></th>
+                                <th><?= LangManager::translate("users.users.last_edit") ?></th>
+                                <th><?= LangManager::translate("users.users.last_connection") ?></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="text-center">
+                                <td><?= $user->getCreated() ?></td>
+                                <td><?= $user->getUpdated() ?></td>
+                                <td><?= $user->getLastConnection() ?></td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <!--A PROPOS-->
-        <div class="card">
-            <div class="card-header">
-                <h4><?= LangManager::translate("users.users.about") ?></h4>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <h6><?= LangManager::translate("users.users.creation") ?> :</h6>
-                        <div class="form-group position-relative has-icon-left">
-                            <input type="text" class="form-control" value="<?= $user->getCreated() ?>" disabled>
-                            <div class="form-control-icon">
-                                <i class="fa-solid fa-circle-plus"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <h6><?= LangManager::translate("users.users.last_edit") ?> :</h6>
-                        <div class="form-group position-relative has-icon-left">
-                            <input type="text" class="form-control" value="<?= $user->getUpdated() ?>" disabled>
-                            <div class="form-control-icon">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <h6><?= LangManager::translate("users.users.last_connection") ?> :</h6>
-                        <div class="form-group position-relative has-icon-left">
-                            <input type="text" class="form-control" value="<?= $user->getLastConnection() ?>" disabled>
-                            <div class="form-control-icon">
-                                <i class="fa-solid fa-right-to-bracket"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="row text-center mt-2">
-                    <div class="col-md-6">
+                    <div class="d-flex justify-content-around align-items-center">
                         <a href="../state/<?= $user->getId() ?>/<?= $user->getState() ?>" type="submit"
                            class="btn btn-<?= ($user->getState()) ? 'warning' : 'success' ?>"><i
                                     class="fa fa-user-slash"></i> <?= ($user->getState()) ? LangManager::translate("users.edit.disable_account") : LangManager::translate("users.edit.activate_account") ?>
                         </a>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="ml-3">
-                            <form method="post"
-                                  action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>login/forgot">
-                                <?php (new SecurityManager())->insertHiddenToken() ?>
-                                <input type="hidden" value="<?= $user->getMail() ?>" name="mail">
-                                <button type="submit" class="btn btn-warning">
-                                    <i class="fa fa-arrows-rotate"></i>
-                                    <?= LangManager::translate("users.edit.reset_password") ?>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--IMAGES-->
-        <div class="card">
-            <div class="card-header">
-                <h4><?= LangManager::translate("users.users.image.title") ?></h4>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="text-center ">
-                            <img class="w-50"
-                                 src="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>Public/Uploads/Users/<?= $user->getUserPicture()->getImageName() ?>"
-                                 alt="<?= LangManager::translate("users.users.image.image_alt") . $user->getPseudo() ?>">
-                        </div>
-                        <form action="../picture/edit/<?= $user->getId() ?>" method="post"
-                              enctype="multipart/form-data">
+                        <button type="submit"
+                                class="btn btn-primary"><?= LangManager::translate("core.btn.save", lineBreak: true) ?></button>
+                        <form method="post"
+                              action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>login/forgot">
                             <?php (new SecurityManager())->insertHiddenToken() ?>
-                            <div class="input-group mt-1">
-                                <input type="file" class="form-control" id="profilePicture" name="profilePicture"
-                                       accept=".png, .jpg, .jpeg, .webp, .gif">
-                                <button class="btn btn-primary" type="submit" id="profilePicture">
-                                    <i class="fa-solid fa-upload"></i>
-                                </button>
-                            </div>
-                            <span><?= LangManager::translate("users.files") ?></span>
+                            <input type="hidden" value="<?= $user->getMail() ?>" name="mail">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fa fa-arrows-rotate"></i>
+                                <?= LangManager::translate("users.edit.reset_password") ?>
+                            </button>
                         </form>
                     </div>
-                    <div class="col-md-6">
-                        <h6><?= LangManager::translate("users.users.image.last_update") ?> :</h6>
-                        <div class="form-group position-relative has-icon-left">
-                            <input type="text" class="form-control"
-                                   value="<?= ($user->getUserPicture()->getLastUpdate() ?? $user->getCreated()) ?>"
-                                   disabled>
-                            <div class="form-control-icon">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </div>
-                        </div>
-                        <div class="buttons text-center">
-                            <a href="../picture/reset/<?= $user->getId() ?>" type="submit" class="btn btn-warning"><i
-                                        class="fa fa-arrows-rotate"></i><?= LangManager::translate("users.users.image.reset") ?>
-                            </a>
-                        </div>
-                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-body">
+                <p><?= LangManager::translate("users.users.image.last_update") ?> : <small><?= ($user->getUserPicture()->getLastUpdate() ?? $user->getCreated()) ?></small></p>
+                <div class="text-center ">
+                    <img class="w-50"
+                         src="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>Public/Uploads/Users/<?= $user->getUserPicture()->getImageName() ?>"
+                         alt="<?= LangManager::translate("users.users.image.image_alt") . $user->getPseudo() ?>">
                 </div>
+                <form action="../picture/edit/<?= $user->getId() ?>" method="post"
+                      enctype="multipart/form-data">
+                    <?php (new SecurityManager())->insertHiddenToken() ?>
+                    <div class="input-group mt-1">
+                        <input type="file" class="form-control" id="profilePicture" name="profilePicture"
+                               accept=".png, .jpg, .jpeg, .webp, .gif">
+                        <button class="btn btn-primary" type="submit" id="profilePicture">
+                            <i class="fa-solid fa-upload"></i>
+                        </button>
+                    </div>
+                    <span><?= LangManager::translate("users.files") ?></span>
+                </form>
+                <div class="buttons text-center mt-4">
+                    <a href="../picture/reset/<?= $user->getId() ?>" type="submit" class="btn btn-warning"><i
+                                class="fa fa-arrows-rotate"></i><?= LangManager::translate("users.users.image.reset") ?>
+                    </a>
+                </div>
+
             </div>
         </div>
     </div>
