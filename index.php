@@ -21,6 +21,6 @@ Loader::setLocale();
 
 Loader::loadInstall();
 
-Loader::listenRouter();
-
 MaintenanceController::getInstance()->redirectMaintenance();
+
+Loader::listenRouter();

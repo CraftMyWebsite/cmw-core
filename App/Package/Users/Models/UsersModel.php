@@ -191,7 +191,7 @@ class UsersModel extends AbstractModel
         return (int)($_SESSION['cmwUserId'] ?? -1);
     }
 
-    public static function logIn($info, $cookie = false)
+    public static function logIn(array $info, bool $cookie = false)
     {
         $password = $info["password"];
         $var = array(

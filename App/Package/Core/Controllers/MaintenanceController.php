@@ -73,9 +73,8 @@ class MaintenanceController extends AbstractController
 
     public function redirectMaintenance(): void
     {
-
         //Prevent loop
-        if (Website::isCurrentPage('/maintenance')) {
+        if (Website::isCurrentPage('maintenance')) {
             return;
         }
 
@@ -107,18 +106,13 @@ class MaintenanceController extends AbstractController
         }
 
         ///// Login checks
-        if ($maintenance->getType() === 0 &&
-            (Website::isCurrentPage('/login') || Website::isCurrentPage('/register'))) {
-            Redirect::redirect('maintenance');
-        }
-
         if ($maintenance->getType() === 1 &&
-            (Website::isCurrentPage('/login') || Website::isCurrentPage('/register'))) {
+            (Website::isCurrentPage('login') || Website::isCurrentPage('register'))) {
             return;
         }
 
         if ($maintenance->getType() === 2 &&
-            (Website::isCurrentPage('/login'))) {
+            (Website::isCurrentPage('login'))) {
             return;
         }
 

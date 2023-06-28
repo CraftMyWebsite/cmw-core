@@ -234,6 +234,10 @@ return [
             "install" => [
                 "success" => "Package %package% install with success !"
             ],
+            "delete" => [
+              "success" => "Package %package% delete with success",
+              "error" => "Unable to delete package %package%"
+            ],
             "update" => [
                 "success" => "Package %package% update with success !"
             ],

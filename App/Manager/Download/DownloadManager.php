@@ -6,6 +6,7 @@ use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Model\Users\PermissionsModel;
+use CMW\Utils\Directory;
 use JetBrains\PhpStorm\ExpectedValues;
 use JsonException;
 use ZipArchive;
@@ -111,6 +112,19 @@ class DownloadManager
 
             }
         endforeach;
+    }
+
+    /**
+     * @param string $packageName
+     * @return bool
+     */
+    public static function deletePackage(string $packageName): bool
+    {
+        $path = EnvManager::getInstance()->getValue('DIR') . "App/Package/$packageName";
+
+        //TODO Delete database with a new file 'uninstall.sql' ??
+
+        return Directory::delete($path);
     }
 
 }

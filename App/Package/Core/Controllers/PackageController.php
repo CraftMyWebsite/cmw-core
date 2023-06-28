@@ -228,6 +228,25 @@ class PackageController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
+    #[Link("/delete/:package", Link::GET, ["package" => ".*?"], "/cmw-admin/packages")]
+    #[NoReturn] private function adminPackageDelete(Request $request, string $package): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.configuration");
+
+        if (!DownloadManager::deletePackage($package)) {
+            Flash::send(Alert::ERROR, LangManager::translate("core.package.error"),
+                LangManager::translate("core.Package.toasters.delete.error",
+                    ['package' => $package]));
+            Redirect::redirectPreviousRoute();
+        }
+
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
+            LangManager::translate("core.Package.toasters.delete.success",
+                ['package' => $package]));
+
+        Redirect::redirectPreviousRoute();
+    }
+
     #[Link("/update/:id/:actualVersion/:packageName", Link::GET, ["id" => "[0-9]+", "actualVersion" => ".*?", "packageName" => ".*?"], "/cmw-admin/packages")]
     #[NoReturn] private function adminPackageUpdate(Request $request, int $id, string $actualVersion, string $packageName): void
     {

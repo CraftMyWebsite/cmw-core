@@ -61,10 +61,10 @@ $user = UsersModel::getCurrentUser();
 
                     <ul class="navbar-nav ms-auto mb-lg-0">
                         <li class="nav-item dropdown me-3">
-<!--                            <a class="nav-link active  text-gray-600" href="#" data-bs-toggle="dropdown"-->
-<!--                               data-bs-display="static" aria-expanded="false">-->
-<!--                                <div><i class="fa-solid fa-bell fa-xl"></i></div>-->
-<!--                            </a>-->
+                            <!--                            <a class="nav-link active  text-gray-600" href="#" data-bs-toggle="dropdown"-->
+                            <!--                               data-bs-display="static" aria-expanded="false">-->
+                            <!--                                <div><i class="fa-solid fa-bell fa-xl"></i></div>-->
+                            <!--                            </a>-->
                             <!--                            <ul class="dropdown-menu dropdown-menu-end notification-dropdown"-->
                             <!--                                aria-labelledby="dropdownMenuButton">-->
                             <!--                                <li class="dropdown-header">-->
@@ -192,7 +192,8 @@ $user = UsersModel::getCurrentUser();
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <a class="dropdown-item text-danger" href="/logout">
+                                <a class="dropdown-item text-danger"
+                                   href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>logout">
                                     <i class="fa-solid fa-right-from-bracket"></i>
                                     <span><?= LangManager::translate("users.users.logout") ?></span>
                                 </a>

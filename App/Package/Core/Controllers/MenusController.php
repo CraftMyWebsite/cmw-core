@@ -6,16 +6,15 @@ use CMW\Controller\Users\UsersController;
 use CMW\Interface\Core\IMenus;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Loader\Loader;
-use CMW\Manager\Flash\Flash;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\MenusModel;
 use CMW\Model\Users\RolesModel;
-use CMW\Utils\Log;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 
@@ -27,12 +26,6 @@ use CMW\Utils\Utils;
  */
 class MenusController extends AbstractController
 {
-
-    public function cmwMenu(): array
-    {
-        return []; //TODO
-    }
-
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/menus")]
     #[Link("/", Link::GET, [], "/cmw-admin/menus")]
     private function adminMenus(): void
@@ -85,7 +78,6 @@ class MenusController extends AbstractController
                 LangManager::translate("core.toaster.internalError"));
 
             Redirect::redirectPreviousRoute();
-            return;
         }
 
 
@@ -124,7 +116,6 @@ class MenusController extends AbstractController
                 LangManager::translate("core.toaster.internalError"));
 
             Redirect::redirectPreviousRoute();
-            return;
         }
 
 
@@ -141,9 +132,9 @@ class MenusController extends AbstractController
     }
 
     #[Link("/delete/:id/:currentOrder", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/menus")]
-    public function adminMenuDelete(Request $request,int $id, int $currentOrder): void
+    public function adminMenuDelete(Request $request, int $id, int $currentOrder): void
     {
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),"Menu supprimé");
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"), "Menu supprimé");
 
 
         UsersController::redirectIfNotHavePermissions("core.dashboard", "contact.delete");
@@ -157,9 +148,9 @@ class MenusController extends AbstractController
     }
 
     #[Link("/delete/:id/:currentOrder/:parentId", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/menus")]
-    public function adminSubMenuDelete(Request $request,int $id, int $currentOrder, int $parentId): void
+    public function adminSubMenuDelete(Request $request, int $id, int $currentOrder, int $parentId): void
     {
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),"Menu supprimé");
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"), "Menu supprimé");
 
 
         UsersController::redirectIfNotHavePermissions("core.dashboard", "contact.delete");
@@ -173,41 +164,41 @@ class MenusController extends AbstractController
     }
 
     #[Link("/menuUp/:id/:currentOrder", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/menus")]
-    public function adminMenuUp(Request $request,int $id, int $currentOrder): void
+    public function adminMenuUp(Request $request, int $id, int $currentOrder): void
     {
         menusModel::getInstance()->upPositionMenu($id, $currentOrder);
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),$currentOrder);
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"), $currentOrder);
 
         Redirect::redirect("cmw-admin/menus");
     }
 
     #[Link("/menuDown/:id/:currentOrder", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/menus")]
-    public function adminMenuDown(Request $request,int $id, int $currentOrder): void
+    public function adminMenuDown(Request $request, int $id, int $currentOrder): void
     {
         menusModel::getInstance()->downPositionMenu($id, $currentOrder);
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),$currentOrder);
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"), $currentOrder);
 
         Redirect::redirect("cmw-admin/menus");
     }
 
     #[Link("/submenuUp/:id/:currentOrder/:parentId", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/menus")]
-    public function adminSubMenuUp(Request $request,int $id, int $currentOrder, int $parentId): void
+    public function adminSubMenuUp(Request $request, int $id, int $currentOrder, int $parentId): void
     {
         menusModel::getInstance()->upPositionSubMenu($id, $currentOrder, $parentId);
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),$currentOrder);
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"), $currentOrder);
 
         Redirect::redirect("cmw-admin/menus");
     }
 
     #[Link("/submenuDown/:id/:currentOrder/:parentId", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/menus")]
-    public function adminSubMenuDown(Request $request,int $id, int $currentOrder, int $parentId): void
+    public function adminSubMenuDown(Request $request, int $id, int $currentOrder, int $parentId): void
     {
         menusModel::getInstance()->downPositionSubMenu($id, $currentOrder, $parentId);
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),$currentOrder);
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"), $currentOrder);
 
         Redirect::redirect("cmw-admin/menus");
     }
@@ -221,7 +212,7 @@ class MenusController extends AbstractController
         $currentSlug = str_replace(EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/', '', $_SERVER['REQUEST_URI']);
 
         foreach ($urls as $url) {
-            if (str_starts_with($currentSlug, $url)){
+            if (str_starts_with($currentSlug, $url)) {
                 return true;
             }
         }

@@ -120,7 +120,7 @@ $description = LangManager::translate("pages.add.desc");
                                     return {
                                         success: 1,
                                         file: {
-                                            url: "<?= EnvManager::getInstance()->getValue("PATH_URL")?>public/uploads/editor/" + response
+                                            url: "<?= EnvManager::getInstance()->getValue("PATH_URL")?>Public/Uploads/Editor/" + response
                                         }
                                     }
                                 })

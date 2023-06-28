@@ -5,6 +5,7 @@ namespace CMW\Model\Installer;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Env\EnvManager;
+use CMW\Model\Users\UsersModel;
 use PDO;
 use PDOException;
 
@@ -103,6 +104,8 @@ class InstallerModel
         ));
 
         self::initCondition($userId);
+
+        self::loginAdmin($email, $password);
     }
 
     public static function initCondition(int $userId): void
@@ -131,6 +134,16 @@ class InstallerModel
             "option_name" => "description",
             "option_value" => $description
         ));
+    }
+
+    private static function loginAdmin(string $mail, string $password): void
+    {
+        $infos = array(
+            "email" => $mail,
+            "password" => $password
+        );
+
+        UsersModel::logIn($infos, 1);
     }
 
 }

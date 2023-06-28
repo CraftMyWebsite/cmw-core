@@ -100,7 +100,7 @@ $description = LangManager::translate("core.maintenance.description");
                                    value="1" <?= $maintenance->isOverrideTheme() ? 'checked' : '' ?>>
                         </div>
                         <div class="card-body mt-3" style="height: 40vh; display: <?= $maintenance->isOverrideTheme() ? 'block' : 'none' ?>;" id="editor">
-                            <?= htmlspecialchars($maintenance->getOverrideThemeCode()) ?>
+                            <?= htmlspecialchars($maintenance->getOverrideThemeCode() ?? " ") ?>
                         </div>
                         <input type="hidden" name="overrideThemeCode" id="overrideThemeCode" value="<?= htmlspecialchars($maintenance->getOverrideThemeCode()) ?>">
                     </div>

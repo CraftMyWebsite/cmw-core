@@ -28,6 +28,8 @@ return [
         "success" => "Success",
         "used_pseudo" => "This username is already taken.",
         "used_mail" => "This email is already taken.",
+        "not_registered_account" => "This account is not registered",
+        "password_reset" => "Password reset for this address %mail%",
         "not_same_pass" => "non-identical passwords",
         "welcome" => "Welcome !",
         "user_edited" => "User just edited",
@@ -39,7 +41,10 @@ return [
         "role_added" => "Role added",
         "role_edited" => "Role edited",
         "role_deleted" => "Role deleted",
-        "blacklisted_pseudo" => "Pseudo blacklisted"
+        "blacklisted_pseudo" => "Pseudo blacklisted",
+        "status" => "User status edited !",
+        "error_add" => "Unable to add this user",
+        "success_add" => "User %pseudo% added"
     ],
     "manage" => [
         "title" => "Manage users",
