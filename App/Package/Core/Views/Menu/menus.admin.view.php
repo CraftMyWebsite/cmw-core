@@ -240,7 +240,7 @@ $description = LangManager::translate("core.menus.desc");
                                             <div class="modal fade text-left" id="delete-<?= $subSubMenu->getId() ?>"
                                                  tabindex="-1" role="dialog"
                                                  aria-labelledby="myModalLabel160" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                                                <div class="modal-dialog modal-dialog-centered"
                                                      role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header bg-danger">
@@ -449,7 +449,7 @@ $description = LangManager::translate("core.menus.desc");
                     -->
                     <div class="modal fade " id="add-submenu-<?= $menu->getId() ?>" tabindex="-1" role="dialog"
                          aria-labelledby="myModalLabel160" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+                        <div class="modal-dialog modal-dialog-centered modal-lg"
                              role="document">
                             <div class="modal-content">
                                 <div class="modal-header bg-primary">
