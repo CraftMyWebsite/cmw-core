@@ -14,7 +14,7 @@ $description = LangManager::translate("core.Package.desc"); ?>
 
 <div class="d-flex flex-wrap justify-content-between">
     <h3><i class="fa-solid fa-puzzle-piece"></i> <span
-            class="m-lg-auto"><?= LangManager::translate("core.Package.my_packages") ?></span></h3>
+                class="m-lg-auto"><?= LangManager::translate("core.Package.my_packages") ?></span></h3>
 </div>
 
 <section class="row">
@@ -34,7 +34,7 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                 <h5><b><?= $packages->getName() ?></b></h5>
                                 <p><?= LangManager::translate("core.Package.descriptionNotAvailable") ?></p>
                                 <small
-                                    class="align-items-end"><?= LangManager::translate("core.Package.author") ?> <?= $packages->getAuthor() ?></small>
+                                        class="align-items-end"><?= LangManager::translate("core.Package.author") ?> <?= $packages->getAuthor() ?></small>
                             </div>
                             <div>
                                 <button type="button" data-bs-toggle="modal"
@@ -84,8 +84,8 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                     <hr>
                                     <p class="small">
                                         <?= LangManager::translate("core.Package.author") ?><i><b><a
-                                                    href=""
-                                                    target="_blank"><?= $packages->getAuthor() ?>
+                                                        href=""
+                                                        target="_blank"><?= $packages->getAuthor() ?>
                                         </i></a></b></i>
                                     </p>
                                     <p class="small">
@@ -120,9 +120,9 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                     data-bs-dismiss="modal">
                                 <span class=""><?= LangManager::translate("core.btn.close") ?></span>
                             </button>
-                            <a href="" class="btn btn-danger">
+                            <a href="delete/<?= $packages->getName() ?>" class="btn btn-danger">
                                                 <span
-                                                    class=""><?= LangManager::translate("core.Package.delete") ?></span>
+                                                        class=""><?= LangManager::translate("core.Package.delete") ?></span>
                             </a>
                         </div>
                     </div>
@@ -146,7 +146,7 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                     <h5><b><?= $packages['name'] ?></b></h5>
                                     <p><?= $packages['description'] ?></p>
                                     <small
-                                        class="align-items-end"><?= LangManager::translate("core.Package.author") ?> <?= $packages['author_pseudo'] ?></small>
+                                            class="align-items-end"><?= LangManager::translate("core.Package.author") ?> <?= $packages['author_pseudo'] ?></small>
                                 </div>
                                 <div>
                                     <?php if ($localPackage->getVersion() !== $packages['version_name']): ?>
@@ -178,8 +178,8 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                 <div>
                                     <!--TODO : rating sys-->
                                     <p><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i
-                                            class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i
-                                            class="fa-regular fa-star"></i> (0)</p>
+                                                class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i
+                                                class="fa-regular fa-star"></i> (0)</p>
                                     <p>Télécharger <b><?= $packages['downloads'] ?></b> fois</p>
                                 </div>
                                 <div class="text-end">
@@ -271,14 +271,15 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                 <p><?= LangManager::translate("core.Package.removeText") ?></p>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-light-secondary"
-                                        data-bs-dismiss="modal">
-                                                    <span
-                                                        class=""><?= LangManager::translate("core.btn.close") ?></span>
+                                <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                                        <span class="">
+                                            <?= LangManager::translate("core.btn.close") ?>
+                                         </span>
                                 </button>
-                                <a href="" class="btn btn-danger">
-                                                    <span
-                                                        class=""><?= LangManager::translate("core.Package.delete") ?></span>
+                                <a href="delete/<?= $packages['name'] ?>" class="btn btn-danger">
+                                    <span class="">
+                                        <?= LangManager::translate("core.Package.delete") ?>
+                                    </span>
                                 </a>
                             </div>
                         </div>
