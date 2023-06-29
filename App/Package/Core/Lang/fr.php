@@ -119,7 +119,8 @@ return [
             "test" => "Mail envoyé à l'adresse %mail%"
         ],
         "Theme" => [
-            "regenerate" => "Configuration du thème regénérée"
+            "regenerate" => "Configuration du thème regénérée",
+            "installed" => "viens d'être installer et activer."
         ],
         "db" => [
             "config" => [

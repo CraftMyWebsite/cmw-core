@@ -279,9 +279,10 @@ class ThemeController extends AbstractController
         $themeConfigs = ThemeModel::getInstance()->fetchThemeConfigs($theme['name']);
         SimpleCacheManager::storeCache($themeConfigs, 'config', "Themes/" . $theme['name']);
 
-        //TODO TOASTER
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
+            $theme['name'] . " " .LangManager::translate("core.toaster.Theme.installed"));
 
-        Redirect::redirectPreviousRoute();
+        Redirect::redirect("cmw-admin/theme/manage");
     }
 
 
