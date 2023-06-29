@@ -221,7 +221,7 @@ return [
         "removeTitle" => "Voulez-vous supprimer",
         "removeText" => "La suppression de ce package est définitive.<br>Voulez-vous continuer ?",
         "description" => "Déscription: ",
-        "descriptionNotAvailable" => "Les déscription ne sont pas disponnible pour les packages local",
+        "descriptionNotAvailable" => "Ce package est installé manuellement, il n'est pas enregistré auprès de CraftMyWebsite.<br>Utilisez ce package en connaissance de cause.<br>Si vous développez ce package pour le publier ensuite sur le Market de CraftMyWebsite, ne tenez pas compte de ce message.",
         "details" => "Détails",
         "author" => "Autheur : ",
         "downloads" => "Téléchargements: ",
