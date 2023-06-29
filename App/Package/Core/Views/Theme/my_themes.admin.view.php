@@ -39,7 +39,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                 <?= LangManager::translate("core.Theme.notVerified") ?>
                             </div>
                         <?php endif; ?>
-                        <img style="height: 200px; width: 100%;"
+                        <img style="height: 200px; width: 100%; object-fit: cover"
                              src="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>Admin/Resources/Assets/Images/Default/local-theme.jpg"
                              alt="img">
                     </div>
@@ -134,7 +134,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                 class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.details") ?></button>
                     </div>
                     <div class="position-relative">
-                        <img style="height: 200px; width: 100%;" src="<?= $theme["icon"] ?>"
+                        <img style="height: 200px; width: 100%; object-fit: cover" src="<?= $theme["icon"] ?>"
                              alt="Icon <?= $theme['name'] ?>">
                     </div>
                     <div class="d-flex justify-content-around align-items-center px-2 py-1">
@@ -259,7 +259,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                 <?= LangManager::translate("core.Theme.notVerified") ?>
                             </div>
                         <?php endif; ?>
-                        <img class="rounded-bottom" style="height: 200px; width: 100%;"
+                        <img class="rounded-bottom" style="height: 200px; width: 100%; object-fit: cover"
                              src="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>Admin/Resources/Assets/Images/Default/local-theme.jpg"
                              alt="im">
                     </div>
@@ -347,7 +347,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                 class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.details") ?></button>
                     </div>
                     <div class="position-relative">
-                        <img style="height: 200px; width: 100%;" src="<?= $theme["icon"] ?>"
+                        <img style="height: 200px; width: 100%; object-fit: cover" src="<?= $theme["icon"] ?>"
                              alt="Icon <?= $theme['name'] ?>">
                     </div>
                     <div class="d-flex justify-content-around px-2 py-1">

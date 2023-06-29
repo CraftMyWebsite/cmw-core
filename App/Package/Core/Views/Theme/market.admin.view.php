@@ -32,7 +32,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                 class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.details") ?></button>
                     </div>
                     <div class="position-relative">
-                        <img style="height: 200px; width: 100%;" src="<?= $theme["icon"] ?>"
+                        <img style="height: 200px; width: 100%; object-fit: cover" src="<?= $theme["icon"] ?>"
                              alt="Icon <?= $theme['name'] ?>">
                     </div>
                     <div class="d-flex justify-content-center px-2 py-1">
