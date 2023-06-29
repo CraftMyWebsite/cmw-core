@@ -149,6 +149,7 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                             class="align-items-end"><?= LangManager::translate("core.Package.author") ?> <?= $packages['author_pseudo'] ?></small>
                                 </div>
                                 <div>
+
                                     <?php if ($localPackage->getVersion() !== $packages['version_name']): ?>
                                         <a class="btn btn-sm btn-warning" type="button"
                                            href="packages/update/<?= $packages['id'] ?>/<?= $localPackage->getVersion() ?>/<?= $localPackage->getName() ?>">
@@ -207,11 +208,12 @@ $description = LangManager::translate("core.Package.desc"); ?>
                             </div>
                             <div class="modal-body">
                                 <div class="row">
-                                    <div class="col-12 col-lg-6" style="height:20rem">
-                                        <img style="height: 100%; width: 100%;"
+                                    <div class="col-12 col-lg-3 text-center">
+                                        <img style="height: 220px; width: 220px;"
                                              src="<?= $packages["icon"] ?>" alt="img">
                                     </div>
-                                    <div class="col-12 col-lg-6 position-relative">
+                                    <div class="col-12 col-lg-9 position-relative">
+
                                         <p class="">
                                             <b><?= LangManager::translate("core.Package.description") ?></b>
                                         </p>
@@ -289,3 +291,8 @@ $description = LangManager::translate("core.Package.desc"); ?>
         <?php endforeach; ?>
     </div>
 </section>
+
+
+
+
+
