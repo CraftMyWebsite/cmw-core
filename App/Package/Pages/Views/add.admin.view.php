@@ -181,9 +181,9 @@ $description = LangManager::translate("pages.add.desc");
             .then((savedData) => {
 
                 let formData = new FormData();
-                formData.append('news_title', document.getElementById("title").value);
-                formData.append('news_slug', document.getElementById("slug").value);
-                formData.append('news_content', JSON.stringify(savedData));
+                formData.append('page_title', document.getElementById("title").value);
+                formData.append('page_slug', document.getElementById("slug").value);
+                formData.append('page_content', JSON.stringify(savedData));
                 formData.append('page_state', page_state.toString());
 
                 fetch("<?= EnvManager::getInstance()->getValue("PATH_URL") ?>cmw-admin/pages/add", {
@@ -197,7 +197,7 @@ $description = LangManager::translate("pages.add.desc");
                             button.innerHTML = "<i style='color: #16C329;' class='fa-solid fa-check fa-shake'></i> Ok !";
                         }, 850);
                 setTimeout(() => {
-                            document.location.replace("<?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . 'cmw-admin/pages/list'?>");
+                            document.location.replace("<?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . 'cmw-admin/pages'?>");
                         }, 1000);
                 
             })

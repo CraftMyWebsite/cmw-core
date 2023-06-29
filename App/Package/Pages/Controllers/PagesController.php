@@ -27,14 +27,14 @@ use JsonException;
 class PagesController extends AbstractController
 {
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/pages")]
-    #[Link("/list", Link::GET, [], "/cmw-admin/pages")]
+    #[Link("/", Link::GET, [], "/cmw-admin/pages")]
     private function adminPagesList(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.show");
 
         $pagesList = PagesModel::getInstance()->getPages();
 
-        View::createAdminView('Pages', 'list')
+        View::createAdminView('Pages', 'page')
             ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
             ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js","Admin/Resources/Assets/Js/Pages/simple-datatables.js")
             ->addVariableList(["pagesList" => $pagesList])
@@ -74,9 +74,9 @@ class PagesController extends AbstractController
         $user = new UsersModel();
         
         $page = new PagesModel();
-        $pageTitle = filter_input(INPUT_POST, "news_title");
-        $pageSlug = Utils::normalizeForSlug(filter_input(INPUT_POST, "news_slug"));
-        $pageContent = filter_input(INPUT_POST, "news_content");
+        $pageTitle = filter_input(INPUT_POST, "page_title");
+        $pageSlug = Utils::normalizeForSlug(filter_input(INPUT_POST, "page_slug"));
+        $pageContent = filter_input(INPUT_POST, "page_content");
         $pageState = filter_input(INPUT_POST, "page_state");
         $userId = $user::getLoggedUser();
 
