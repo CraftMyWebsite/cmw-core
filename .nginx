@@ -26,6 +26,14 @@ location /.env {
     deny all;
 }
 
+location /.cmw-version {
+    deny all;
+}
+
+location /cmw {
+    deny all;
+}
+
 #Cache some data...
 location ~* \.(ico|jpg|jpeg|png|gif|js|css|webp|svg)$ {
     expires 7d;
