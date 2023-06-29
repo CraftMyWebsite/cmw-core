@@ -46,12 +46,12 @@
       "url_menu": "",
       "urls_submenu_fr": {
         "Apparence": "theme/manage",
-        "Mes thèmes": "theme/my_theme",
+        "Mes thèmes": "theme/theme",
         "Market": "theme/market"
       },
       "urls_submenu_en": {
         "Appearance": "theme/manage",
-        "My themes": "theme/my_theme",
+        "My themes": "theme/theme",
         "Market": "theme/market"
       }
     },
@@ -61,11 +61,11 @@
       "icon_menu": "fa-solid fa-puzzle-piece",
       "url_menu": "",
       "urls_submenu_fr": {
-        "Mes packages": "packages/my_package",
+        "Mes packages": "packages/package",
         "Market": "packages/market"
       },
       "urls_submenu_en": {
-        "My packages": "packages/my_package",
+        "My packages": "packages/package",
         "Market": "packages/market"
       }
     }

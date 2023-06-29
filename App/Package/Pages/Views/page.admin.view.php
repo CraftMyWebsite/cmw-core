@@ -74,7 +74,7 @@ $description = LangManager::translate("pages.list.desc"); ?>
             </table>
 
             <div class="button text-end">
-                    <a href="add" class="btn btn-primary">
+                    <a href="pages/add" class="btn btn-primary">
                         <?= LangManager::translate("pages.creation.add") ?>
                     </a>
             </div>

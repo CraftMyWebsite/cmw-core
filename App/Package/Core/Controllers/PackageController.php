@@ -187,12 +187,12 @@ class PackageController extends AbstractController
         $installedPackages = self::getInstalledPackages();
         $packagesList = self::getMarketPackages();
 
-        View::createAdminView("Core", "Package/package")
+        View::createAdminView("Core", "Package/market")
             ->addVariableList(["installedPackages" => $installedPackages, "packagesList" => $packagesList])
             ->view();
     }
 
-    #[Link("/my_package", Link::GET, [], "/cmw-admin/packages")]
+    #[Link("/package", Link::GET, [], "/cmw-admin/packages")]
     private function adminMyPackage(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.configuration");
@@ -200,7 +200,7 @@ class PackageController extends AbstractController
         $installedPackages = self::getInstalledPackages();
         $packagesList = self::getMarketPackages();
 
-        View::createAdminView("Core", "Package/my_package")
+        View::createAdminView("Core", "Package/package")
             ->addVariableList(["installedPackages" => $installedPackages, "packagesList" => $packagesList])
             ->view();
     }

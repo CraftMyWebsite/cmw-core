@@ -273,7 +273,7 @@ $description = LangManager::translate("core.menus.desc");
                                         <div class="modal fade " id="add-sub-submenu-<?= $subMenu->getId() ?>"
                                              tabindex="-1" role="dialog" aria-labelledby="myModalLabel160"
                                              aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+                                            <div class="modal-dialog modal-dialog-centered modal-lg"
                                                  role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header bg-primary">
