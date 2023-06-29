@@ -162,7 +162,7 @@ class PagesController extends AbstractController
         UsersController::hasPermission("core.dashboard", "pages." . ( ($type === "add") ? "add" : "edit" ) );
 
         try {
-            print(json_encode(ImagesManager::upload($_FILES['image'], "editor"), JSON_THROW_ON_ERROR));
+            print(json_encode(ImagesManager::upload($_FILES['image'], "Editor"), JSON_THROW_ON_ERROR));
         } catch (JsonException $e) {
             echo $e; //todo error
         }
