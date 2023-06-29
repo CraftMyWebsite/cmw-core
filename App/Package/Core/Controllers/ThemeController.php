@@ -208,7 +208,7 @@ class ThemeController extends AbstractController
     }
 
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/theme")]
-    #[Link("/my_theme", Link::GET, [], "/cmw-admin/theme")]
+    #[Link("/theme", Link::GET, [], "/cmw-admin/theme")]
     private function adminThemeConfiguration(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
@@ -220,12 +220,12 @@ class ThemeController extends AbstractController
         $themeConfigs = ThemeModel::getInstance()->fetchThemeConfigs($currentTheme->getName());
         SimpleCacheManager::storeCache($themeConfigs, 'config', "Themes/" . $currentTheme->getName());
         
-        View::createAdminView("Core", "Theme/my_themes")
+        View::createAdminView("Core", "Theme/themes")
             ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes, "themesList" => $themesList])
             ->view();
     }
 
-    #[Link("/my_theme", Link::POST, [], "/cmw-admin/theme")]
+    #[Link("/theme", Link::POST, [], "/cmw-admin/theme")]
     private function adminThemeConfigurationPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
