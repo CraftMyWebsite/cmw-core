@@ -195,7 +195,7 @@ $description = LangManager::translate("pages.edit.desc");
                             button.innerHTML = "<i style='color: #16C329;' class='fa-solid fa-check fa-shake'></i> Ok !";
                         }, 850);
                 setTimeout(() => {
-                            document.location.replace("<?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . 'cmw-admin/pages/list'?>");
+                            document.location.replace("<?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . 'cmw-admin/pages'?>");
                         }, 1000);
                 
             })
