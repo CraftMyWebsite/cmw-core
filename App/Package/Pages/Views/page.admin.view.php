@@ -39,7 +39,7 @@ $description = LangManager::translate("pages.list.desc"); ?>
                         <td><?= $page->getEdited() ?></td>
                         <td><?= $page->getCreated() ?></td>
                         <td>
-                            <a class="me-3" href="../pages/edit/<?= $page->getSlug() ?>">
+                            <a class="me-3" href="pages/edit/<?= $page->getSlug() ?>">
                                 <i class="text-primary fa-solid fa-gears"></i>
                             </a>
                             <a type="button" data-bs-toggle="modal" data-bs-target="#delete-<?= $page->getId() ?>">
@@ -58,7 +58,7 @@ $description = LangManager::translate("pages.list.desc"); ?>
                                             <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
                                                 <span class=""><?= LangManager::translate("core.btn.close") ?></span>
                                             </button>
-                                            <a href="../Pages/delete/<?= $page->getId() ?>" class="btn btn-danger">
+                                            <a href="pages/delete/<?= $page->getId() ?>" class="btn btn-danger">
                                                 <span class=""><?= LangManager::translate("pages.delete.button") ?></span>
                                             </a>
                                         </div>

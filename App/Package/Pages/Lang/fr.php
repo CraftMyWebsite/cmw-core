@@ -24,6 +24,9 @@ return [
 		"yes" => "Oui",
 		"no" => "Non",
 	],
+    "toaster" => [
+        "deleted" => "La page n'existe plus",
+    ],
 	"publish" => "Publication de la page",
 	"draft" => "Brouillon",
 

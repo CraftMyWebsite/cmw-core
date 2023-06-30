@@ -5,6 +5,9 @@ namespace CMW\Controller\pages;
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\EditorController;
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Flash\Alert;
+use CMW\Manager\Flash\Flash;
+use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
@@ -143,10 +146,8 @@ class PagesController extends AbstractController
 
         PagesModel::getInstance()->deletePage($id);
 
-        //Todo try to remove that
-        $_SESSION['toaster'][0]['title'] = "CORE_TOASTER_TITLE";
-        $_SESSION['toaster'][0]['type'] = "bg-success";
-        $_SESSION['toaster'][0]['body'] = "CORE_TOASTER_DELETE_SUCCESS";
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success')
+            , LangManager::translate('pages.toaster.deleted'));
 
         Redirect::redirectPreviousRoute();
     }
@@ -163,10 +164,10 @@ class PagesController extends AbstractController
 
         try {
             print(json_encode(ImagesManager::upload($_FILES['image'], "Editor"), JSON_THROW_ON_ERROR));
+
         } catch (JsonException $e) {
             echo $e; //todo error
         }
-
     }
 
 
