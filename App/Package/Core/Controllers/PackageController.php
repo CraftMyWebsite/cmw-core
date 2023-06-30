@@ -253,13 +253,18 @@ class PackageController extends AbstractController
 
         $updates = PublicAPI::getData("resources/getResourceUpdates&id=$id&actualVersion=$actualVersion");
 
+        if (isset($updates['error'])){
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), $updates['error']['code']);
+            Redirect::redirectPreviousRoute();
+        }
+
         //Update package
 
         Directory::delete(EnvManager::getInstance()->getValue('DIR') . "App/Package/$packageName");
 
         $lastUpdateIndex = count($updates) - 1;
         foreach ($updates as $i => $update) {
-            if ($update['sql_updater'] !== null){
+            if (!empty($update['sql_updater'])){
                 DatabaseManager::getLiteInstance()->query($update['sql_updater']);
             }
 
