@@ -213,7 +213,6 @@ class PackageController extends AbstractController
         $package = PublicAPI::getData("resources/installResource&id=$id");
 
 
-
         if (!DownloadManager::installPackageWithLink($package['file'], "package", $package['name'])) {
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.downloads.errors.internalError",
@@ -253,8 +252,6 @@ class PackageController extends AbstractController
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.configuration");
 
         $updates = PublicAPI::getData("resources/getResourceUpdates&id=$id&actualVersion=$actualVersion");
-
-        Log::debug($updates);
 
         //Update package
 

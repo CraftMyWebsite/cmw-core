@@ -152,7 +152,7 @@ $description = LangManager::translate("core.Package.desc"); ?>
 
                                     <?php if ($localPackage->getVersion() !== $packages['version_name']): ?>
                                         <a class="btn btn-sm btn-warning" type="button"
-                                           href="packages/update/<?= $packages['id'] ?>/<?= $localPackage->getVersion() ?>/<?= $localPackage->getName() ?>">
+                                           href="update/<?= $packages['id'] ?>/<?= $localPackage->getVersion() ?>/<?= $localPackage->getName() ?>">
                                             <?= LangManager::translate("core.Package.update") ?>
                                         </a>
                                     <?php else: ?>
