@@ -1,7 +1,7 @@
 <?php
 
 return [
-    "profile" => "Profile",
+    "profile" => "Profil",
     "login" => [
         "title" => "Login",
         "desc" => "Login to access the administration panel",

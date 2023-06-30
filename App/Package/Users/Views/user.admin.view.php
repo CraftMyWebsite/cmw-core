@@ -90,7 +90,7 @@ $scripts = '<script src="' . EnvManager::getInstance()->getValue("PATH_SUBFOLDER
                         </div>
                     </div>
                     <h6>Rôles (valeur multiple possible) :</h6>
-                    <fieldset class="form-group">
+                    <fieldset class="form-group position-relative" style="z-index: 5;">
                         <select class="choices choices__list--multiple" name="roles[]" multiple required>
                             <?php foreach ($roles as $role) : ?>
                                 <option value="<?= $role->getId() ?>"

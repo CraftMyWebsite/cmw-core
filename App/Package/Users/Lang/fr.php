@@ -22,7 +22,7 @@ return [
     "register" => [
         "title" => "Inscription"
     ],
-    "files" => "Fichiers autorisé : png, jpg, jpeg, webp, svg, gif",
+    "files" => "Fichiers autorisés : png, jpg, jpeg, webp, svg, gif",
     "toaster" => [
         "error" => "Erreur",
         "success" => "Succès",
@@ -146,7 +146,7 @@ return [
         "default_picture" => "Image de profil par défaut",
         "visualIdentity" => "Identité visuelle",
         "resetPasswordMethod" => [
-            "label" => "Méthode de réinitialisations du mot de passe",
+            "label" => "Méthode de réinitialisation du mot de passe",
             "tips" => "Définissez la méthode de réinitialisation des mots de passes de vos utilisateurs",
             "options" => [
                 0 => "Mot de passe envoyé par mail",
@@ -156,7 +156,7 @@ return [
         "profile_view" => [
             "title" => "Page profil",
             "label" => "Choisissez comment afficher la page profil",
-            "tips" => "Si vous n'utilisez pas la page profile, nous vous conseillons de désactiver la page profil.",
+            "tips" => "Si vous n'utilisez pas la page profil, nous vous conseillons de la désactiver.",
             "options" => [
                 0 => "/profile",
                 1 => "/profile/VotrePseudo",
