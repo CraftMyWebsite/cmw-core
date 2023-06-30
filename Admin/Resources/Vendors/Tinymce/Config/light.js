@@ -1,9 +1,7 @@
-const skin = localStorage.getItem('theme');
-
 tinymce.init({
   selector: '.tinymce',
-  skin: skin,
-  content_css: skin,
+  skin: 'theme-dark',
+  content_css: 'theme-dark',
   promotion: false,
   toolbar_sticky: true,
   toolbar_mode: 'sliding',
