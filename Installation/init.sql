@@ -229,8 +229,8 @@ CREATE TABLE IF NOT EXISTS `cmw_users_blacklist_pseudo`
 /* INSERT AREA */
 
 INSERT INTO `cmw_core_condition` (`condition_content`)
-VALUES ('Veuillez écrire votre CGV !'),
-       ('Veuillez écrire votre CGU !');
+VALUES ('Veuillez écrire vos CGV !'),
+       ('Veuillez écrire vos CGU !');
 
 INSERT INTO `cmw_core_options` (`option_name`, `option_value`, `option_updated`)
 VALUES ('theme', 'Sampler', NOW()),
