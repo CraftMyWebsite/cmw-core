@@ -11,10 +11,9 @@ return [
         ],
         "content" => "<p>If your configuration is not correct, please refer to the <a class='text-primary' href='' target='_blank'>prerequisites</a>
                         before continuing with the Installation.</p>
-                        <p>In the event of a request for support from CraftMyWebsite, this information may be useful to us to determine
-                        the environment you are in. Please write down any information that you do not know.</p>
+                        <p>If you request support from CMW, these informations may be useful to determine your environment. Please write down any information that you do not know.</p>
                         <p>Now let's move on to setting up your new site ...</p>",
-        "readaccept" => "I have read and accept the",
+        "readaccept" => "I have read and agreed to the general terms and conditions of use (of CMW)",
         "cgu" => "General Conditions of Use",
         "error" => [
             "cgu" => "Please accept the CGU before installing your CraftMyWebsite site"
@@ -22,6 +21,7 @@ return [
     ],
     "bundle" => [
         "custom" => "Custom",
+        "includes" => "This bundle includes the packages:",
         "customText" => "<p>Customize your Installation yourself.</p><p>This does not mean that it is not possible to customize it with other bundles.</p>",
     ],
     "password" => [

@@ -14,7 +14,7 @@ return [
                       <p>En cas de demande de support auprès de CraftMyWebsite ces informations peuvent nous être utiles pour determiner
                       l'environnement dans lequel vous êtes. Merci de bien vouloir noter les informations que vous ne connaissez pas.</p>
                       <p>Passons maintenant à l'Installation de votre nouveau site ...</p>",
-        "readaccept" => "J'ai lu et j'accepte les",
+        "readaccept" => "J'ai lu et j'accepte les conditions générales d'utilisations",
         "cgu" => "Condition Générale d'utilisation",
         "error" => [
             "cgu" => "Merci d'accepter les CGU avant de procéder à l'Installation de votre site CraftMyWebsite"
@@ -22,6 +22,7 @@ return [
     ],
     "bundle" => [
         "custom" => "Personnalisé",
+        "includes" => "Ce bundle inclut les packages :",
         "customText" => "<p>Personnaliser votre Installation vous-même.</p><p>Ceci ne veut pas dire qu'il n'est pas possible de le personnaliser avec d'autres bundle.</p>",
     ],
     "password" => [

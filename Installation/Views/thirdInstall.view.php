@@ -74,7 +74,7 @@ use CMW\Manager\Lang\LangManager;
             <div class="bg-gray-800 rounded-b-2xl">
                 <div class="p-4">
                     <p><?= $bundle['description'] ?></p>
-                    <p class="mt-2">Ce bundle inclus les packages :</p>
+                    <p class="mt-2"><?= LangManager::translate("Installation.bundle.includes") ?></p>
                     <ul style="list-style: inside;">
                         <?php foreach ($bundle['content'] as $bundleResource): ?>
                             <li>

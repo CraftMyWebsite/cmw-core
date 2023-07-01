@@ -60,7 +60,7 @@ return [
         "send_to" => "Send to :",
         "add_sub_menu" => "Add sub menu to",
         "add" => [
-            "name" => "Nom of the menu",
+            "name" => "Name of the menu",
             "name_hint" => "Votes",
             "targetBlank" => "Open link in new tab",
             "choice" => "Type of link",
@@ -124,7 +124,7 @@ return [
         ],
         "db" => [
             "config" => [
-                "success" => "Configuration good",
+                "success" => "Good configuration",
                 "error" => "Configuration error",
                 "alreadyInstalled" => "Data base already installed !"
             ],
@@ -355,7 +355,7 @@ return [
         ],
     ],
     "footer" => [
-        "left" => "Copyright &copy; 2014 - " . date("Y") . " All right reserved.",
+        "left" => "Copyright &copy; 2014 - " . date("Y") . " All rights reserved.",
         "right" => "Thank you for using <a target='_blank' href='https://craftmywebsite.fr/'>CraftMyWebsite</a>.",
         "used" => "You are using the version ",
         "upgrade" => "Please update to ",

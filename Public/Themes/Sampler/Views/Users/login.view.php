@@ -34,7 +34,7 @@ $description = "Description de votre page"; ?>
                         <div class="col-6 mb-2">
                             <div class="icheck-primary">
                                 <input type="checkbox" id="login_keep_connect" name="login_keep_connect">
-                                <label for="login_keep_connect">Rester connecter</label>
+                                <label for="login_keep_connect">Se souvenir de moi</label>
                             </div>
                         </div>
                         <div class="col-6 mb-2 text-end">
