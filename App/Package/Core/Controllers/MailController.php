@@ -38,10 +38,21 @@ class MailController extends AbstractController
      * @Param string $body -> html content with datas
      *
      */
-    public function sendMailSMTP(string $receiver, string $subject, string $body): void
+    public function sendMailSMTP(string $receiver, string $subject, string $body, ?string $senderMail, ?string $senderName): void
     {
 
         $config = MailModel::getInstance()->getConfig();
+
+        if ($senderMail !== "") {
+            $sender = $senderMail;
+        } else {
+            $sender = $config?->getMail();
+        }
+        if ($senderName !== "") {
+            $name = $senderName;
+        } else {
+            $name = (new CoreModel())->fetchOption("name");
+        }
 
         $mail = new PHPMailer(false);
 
@@ -58,7 +69,7 @@ class MailController extends AbstractController
             $mail->CharSet = 'UTF-8';
 
             //Receiver config
-            $mail->setFrom($config?->getMail(), (new CoreModel())->fetchOption("name"));
+            $mail->setFrom($sender , $name);
             $mail->addAddress($receiver);
             $mail->addReplyTo($config?->getMailReply());
 
@@ -96,9 +107,28 @@ class MailController extends AbstractController
     public function sendMail(string $receiver, string $object, string $body): void
     {
         if(MailModel::getInstance()->getConfig() !== null && MailModel::getInstance()->getConfig()->isEnable()){
-            $this->sendMailSMTP($receiver, $object, $body);
+            $this->sendMailSMTP($receiver, $object, $body, "" ,"");
         } else {
             $this->sendMailPHP($receiver, $object, $body);
+        }
+
+    }
+
+    /**
+     * @param string $senderMail
+     * @param string $senderName
+     * @param string $receiver
+     * @param string $object
+     * @param string $body
+     * @return void
+     * @desc Send mail (SMTP ONLY)
+     */
+    public function sendMailWithSender(string $senderMail, string $senderName, string $receiver, string $object, string $body): void
+    {
+        if(MailModel::getInstance()->getConfig() !== null && MailModel::getInstance()->getConfig()->isEnable()){
+            $this->sendMailSMTP($receiver, $object, $body, $senderMail ,$senderName);
+        } else {
+            Flash::send(Alert::ERROR,"Erreur" ,"Il y à un problème dans votre configuration SMTP !");
         }
 
     }
