@@ -44,7 +44,9 @@ return [
         "blacklisted_pseudo" => "Pseudo interdit",
         "status" => "Status de l'utilisateur changé !",
         "error_add" => "Impossible d'ajouter cet utilisateur",
-        "success_add" => "Utilisateur %pseudo% ajouté"
+        "success_add" => "Utilisateur %pseudo% ajouté",
+        "edited_not_pass_change" => "Utilisateur éditer (sans modifier son mot de passe)",
+        "edited_pass_change" => "Utilisateur éditer (avec édition de mot de passe)",
     ],
     "manage" => [
         "title" => "Gestion des utilisateurs",

@@ -150,14 +150,14 @@ class UsersController extends AbstractController
 
         if ($pass === "") {
             UsersModel::getInstance()->update($id, $mail, $username, $firstname, $lastname, $_POST['roles']);
-            Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),"Utilisateur éditer (sans modifier son mot de passe)");
+            Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.edited_not_pass_change"));
         } else {
             if ($pass === $passVerif) {
                 UsersModel::getInstance()->updatePass($id, password_hash($pass, PASSWORD_BCRYPT));
                 UsersModel::getInstance()->update($id, $mail, $username, $firstname, $lastname, $_POST['roles']);
-                Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),"Utilisateur éditer (avec édition de mot de passe)");
+                Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.edited_pass_change"));
             } else {
-                Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),"Les mots de passe ne correspondent pas bon");
+                Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.not_same_pass"));
             }
         }
 

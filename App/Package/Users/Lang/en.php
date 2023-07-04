@@ -44,7 +44,9 @@ return [
         "blacklisted_pseudo" => "Pseudo blacklisted",
         "status" => "User status edited !",
         "error_add" => "Unable to add this user",
-        "success_add" => "User %pseudo% added"
+        "success_add" => "User %pseudo% added",
+        "edited_not_pass_change" => "User edited (without changing password)",
+        "edited_pass_change" => "User edited (with password edit)",
     ],
     "manage" => [
         "title" => "Manage users",
