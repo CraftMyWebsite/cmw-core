@@ -145,22 +145,20 @@ class UsersController extends AbstractController
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
-        [$mail, $username, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "name", "lastname");
-        UsersModel::getInstance()->update($id, $mail, $username, $firstname, $lastname, $_POST['roles']);
-
-        //Todo Try to edit that
-        Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.user_edited"));
-
         [$pass, $passVerif] = Utils::filterInput("pass", "passVerif");
+        [$mail, $username, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "name", "lastname");
 
-        if (!is_null($pass)) {
+        if ($pass === "") {
+            UsersModel::getInstance()->update($id, $mail, $username, $firstname, $lastname, $_POST['roles']);
+            Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),"Utilisateur éditer (sans modifier son mot de passe)");
+        } else {
             if ($pass === $passVerif) {
                 UsersModel::getInstance()->updatePass($id, password_hash($pass, PASSWORD_BCRYPT));
+                UsersModel::getInstance()->update($id, $mail, $username, $firstname, $lastname, $_POST['roles']);
+                Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),"Utilisateur éditer (avec édition de mot de passe)");
             } else {
-                Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.pass_change_faild"));
-
+                Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),"Les mots de passe ne correspondent pas bon");
             }
-
         }
 
         Redirect::redirectPreviousRoute();
