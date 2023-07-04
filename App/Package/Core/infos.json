@@ -11,7 +11,7 @@
         "Configuration editor": "editor/config",
         "Conditions general": "condition",
         "Sécurité": "security",
-        "Mises à jours": "updates/cms"
+        "Mises à jour": "updates/cms"
       },
       "urls_submenu_en": {
         "Configuration": "configuration",

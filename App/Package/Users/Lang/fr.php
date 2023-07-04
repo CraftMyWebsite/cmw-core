@@ -65,7 +65,7 @@ return [
         "activate_account" => "Activer le compte",
         "disable_account" => "Désactiver le compte",
         "delete_account" => "Supprimer le compte",
-        "toaster_success" => "Le compte a bien été mis à jours !",
+        "toaster_success" => "Le compte a bien été mis à jour !",
         "toaster_pass_error" => "Une erreur est survenue dans la modification du mot de passe.<br>Les mots de passes ne correspondent pas.",
         "reset_password" => "Réinitialiser le mot de passe"
     ],

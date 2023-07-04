@@ -9,13 +9,13 @@ return [
         "config" => [
             "title" => "Faisons le point sur votre configuration",
         ],
-        "content" => "<p>Si votre configuration n'est pas bonne merci de vous referer aux <a class='text-primary' href='' target='_blank'>prérequis</a>
+        "content" => "<p>Si votre configuration n'est pas suffisante merci de vous référer aux <a class='text-primary' href='' target='_blank'>prérequis</a>
                       avant de continuer l'Installation.</p>
-                      <p>En cas de demande de support auprès de CraftMyWebsite ces informations peuvent nous être utiles pour determiner
+                      <p>En cas de demande de support auprès de CraftMyWebsite ces informations peuvent nous être utiles pour déterminer
                       l'environnement dans lequel vous êtes. Merci de bien vouloir noter les informations que vous ne connaissez pas.</p>
                       <p>Passons maintenant à l'Installation de votre nouveau site ...</p>",
         "readaccept" => "J'ai lu et j'accepte les conditions générales d'utilisations",
-        "cgu" => "Condition Générale d'utilisation",
+        "cgu" => "Condition Générale d'Utilisation",
         "error" => [
             "cgu" => "Merci d'accepter les CGU avant de procéder à l'Installation de votre site CraftMyWebsite"
         ]
@@ -38,14 +38,14 @@ return [
             "login" => "Identifiant",
             "name_about" => "Généralement <code>localhost</code>. Si localhost ne fonctionne pas, veuillez demander l'information à votre hébergeur.",
             "port" => "Port",
-            "address" => "Addresse",
+            "address" => "Adresse",
             "pass" => "Mot de passe"
         ],
         "settings" => [
             "settings" => "Réglages",
             "devmode" => "Activer le mode développeur",
-            "devmode_about" => "ATTENTION ! A n'utiliser qu'en connaissance de cause.<br>Le cocher inutilement peut engendrer des failles sur votre site internet. Il est fortement déconseillé d'activer cette option pour un site en production",
-            "site_folder" => "Dossier d'Installation",
+            "devmode_about" => "ATTENTION ! À n'utiliser qu'en connaissance de cause.<br>Le cocher inutilement peut engendrer des failles sur votre site internet. Il est fortement déconseillé d'activer cette option pour un site en production.",
+            "site_folder" => "Dossier d'installation",
             "site_folder_about" => "Généralement <code>/</code>. Si CraftMyWebsite se trouve dans un dossier, veuillez indiquer <code>/dossier/</code>."
         ]
     ],

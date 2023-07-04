@@ -15,8 +15,8 @@ return [
     "header" => [
         "notification" => "Notifications",
         "cms_ver" => "CMS : Version",
-        "cms_update" => "Une mises à jours du CMS est disponible !",
-        "update_to" => "Veuillez mettre à jours vers",
+        "cms_update" => "Une mises à jour du CMS est disponible !",
+        "update_to" => "Veuillez mettre à jour vers",
         "package" => "Package",
         "theme" => "Thème",
         "all_is_fine" => "Tout va bien",
@@ -38,7 +38,7 @@ return [
         "total_member" => "Membres totaux",
         "best_views" => "Record de visites",
         "numbers_views" => "Nombres de visites et d'inscriptions",
-        "daily_visits" => "Visites du jours",
+        "daily_visits" => "Visites du jour",
         "monthly_visits" => "Visites du mois",
         "total_visits" => "Visistes totales",
         "welcome" => "Bienvenue",
@@ -280,7 +280,7 @@ return [
     "updates" => [
         "title" => "Mettez à jour votre site",
         "description" => "Mettez à jour votre site CraftMyWebsite",
-        "pageTitle" => "Mises à jours du CMS",
+        "pageTitle" => "Mises à jour du CMS",
         "updateButton" => "Mettre à jour",
         "warningUpdate" => "Attention ! Vous n'utilisez pas la dernière version du CMS, veuillez le mettre à jour dès maintenant.",
         "updateTo" => "Veuillez mettre à jour vers",
@@ -332,7 +332,7 @@ return [
         "settings" => [
             "title" => "Réglages",
             "targetDateTitle" => "Fin",
-            "useMyCode" => "Uiliser mon code",
+            "useMyCode" => "Utiliser mon code",
             "loginRegister" => [
                 'title' => "Connexions / Inscriptions",
                 'type' => [
@@ -360,7 +360,7 @@ return [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " Tous droits réservés.",
         "right" => "Merci d'utiliser <a target='_blank' href='https://craftmywebsite.fr/'>CraftMyWebsite</a>.",
         "used" => "Vous utilisez la version ",
-        "upgrade" => "Veuillez mettre à jours vers ",
+        "upgrade" => "Veuillez mettre à jour vers ",
     ],
     "btn" => [
         "save" => "Sauvegarder",
