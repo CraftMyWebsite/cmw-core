@@ -1,41 +1,45 @@
 # A Propos : Pour fonctionner sur NGinx, veuillez indiquer la configuration serveur suivante :
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-XSS-Protection "1; mode=block";
+    add_header Referrer-Policy "strict-origin-when-cross-origin";
 
-autoindex off;
+    index index.html index.htm index.php;
 
-error_page 500 /error/500;
+    charset utf-8;
 
-error_page 404 /error/404;
+	error_page 401 /error/401;
+	error_page 403 /error/403;
+	error_page 404 /error/404;
+	error_page 500 /error/500;
 
-error_page 403 /error/403;
-
-
-location / {
-    if (!-e $request_filename){
-        rewrite ^(.*)$ /%1 redirect;
+    location = /cmw {
+        deny all;
     }
-    if (!-e $request_filename){
-        rewrite ^(.*)$ /index.php?url=$1 break;
+
+	location / {
+		rewrite ^/(.+)/$ /$1 permanent;
+		try_files $uri $uri/ /index.php?url=$uri;
+	}
+
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+
+	location ~ /\.(ht|env|cmw-version)$ {
+        deny all;
+	}
+
+	location ~* \.(ico|jpg|jpeg|png|gif|webp|svg)$ {
+		expires 1w;
+		add_header Cache-Control "public, max-age=84600";
+	}
+
+	location ~* \.(js|css)$ {
+		expires 1M;
+		add_header Cache-Control "public, max-age=2592000";
+	}
+
+	location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass php_upstream;
     }
-}
-
-location /.htaccess {
-    deny all;
-}
-
-location /.env {
-    deny all;
-}
-
-location /.cmw-version {
-    deny all;
-}
-
-location /cmw {
-    deny all;
-}
-
-#Cache some data...
-location ~* \.(ico|jpg|jpeg|png|gif|js|css|webp|svg)$ {
-    expires 7d;
-    add_header Cache-Control "public, no-transform";
 }
