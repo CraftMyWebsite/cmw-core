@@ -7,7 +7,7 @@
   Based on Jesse Leite's Atom syntax Theme 'An Old Hope'
     https://github.com/JesseLeite/an-old-hope-syntax-atom
 */
-code.hljs{display:block;overflow-x:auto;padding:1em}
+code.hljs{display:block;overflow-x:auto;padding-right: .5em; padding-left: .5em}
 /* Millenium Falcon */
 .hljs
 {

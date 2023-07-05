@@ -5,7 +5,7 @@
 
     Inspired by vim's jellybeans Theme (https://github.com/nanotech/jellybeans.vim)
 */
-code.hljs{display:block;overflow-x:auto;padding:1em}
+code.hljs{display:block;overflow-x:auto;padding-right: .5em; padding-left: .5em}
 
 .hljs {
   background: #000000;

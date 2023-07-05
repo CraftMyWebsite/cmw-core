@@ -18,7 +18,7 @@
    #ffa
    #fff
 */
-code.hljs{display:block;overflow-x:auto;padding:1em}
+code.hljs{display:block;overflow-x:auto;padding-right: .5em; padding-left: .5em}
 
 .hljs {
   background: #333;

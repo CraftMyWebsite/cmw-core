@@ -17,7 +17,7 @@ hue-6:   #986801
 hue-6-2: #c18401
 
 */
-code.hljs{display:block;overflow-x:auto;padding:1em}
+code.hljs{display:block;overflow-x:auto;padding-right: .5em; padding-left: .5em}
 
 .hljs {
   color: #383a42;
