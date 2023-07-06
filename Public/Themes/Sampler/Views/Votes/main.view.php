@@ -17,7 +17,7 @@ $description = "Votez pour le serveur";
     <div class="container">
         <div class="row">
             <div class="card col-lg-4">
-                <?php if (usersModel::getLoggedUser() === -1): ?>
+                <?php if (UsersModel::getCurrentUser()?->getId() === -1): ?>
                     <!-- Si le joueur n'est pas connecté -->
                     <div>
                         <h1>Connectez-vous</h1>
