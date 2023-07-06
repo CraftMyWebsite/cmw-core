@@ -74,16 +74,14 @@ class PagesController extends AbstractController
     private function adminPagesAddPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.add");
-        $user = new UsersModel();
         
-        $page = new PagesModel();
         $pageTitle = filter_input(INPUT_POST, "page_title");
         $pageSlug = Utils::normalizeForSlug(filter_input(INPUT_POST, "page_slug"));
         $pageContent = filter_input(INPUT_POST, "page_content");
         $pageState = filter_input(INPUT_POST, "page_state");
-        $userId = $user::getLoggedUser();
+        $userId = UsersModel::getCurrentUser()?->getId();
 
-        $pageEntity = $page->createPage($pageTitle, $pageSlug, $pageContent, $userId, $pageState);
+        $pageEntity = PagesModel::getInstance()->createPage($pageTitle, $pageSlug, $pageContent, $userId, $pageState);
 
         //Add route
         LinkStorage::getInstance()->storeRoute('p/' . $pageSlug, 'page', 'Page | ' . $pageTitle, 'GET',

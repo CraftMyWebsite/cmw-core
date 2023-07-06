@@ -2,9 +2,7 @@
 
 namespace CMW\Controller\Users;
 
-use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\SecurityController;
-use CMW\Entity\Users\UserEntity;
 use CMW\Entity\Users\UserSettingsEntity;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
@@ -20,13 +18,12 @@ use CMW\Model\Users\UsersModel;
 use CMW\Model\Users\UsersSettingsModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
-use CMW\Utils\Website;
 use Exception;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
 /**
- * Class: @usersController
+ * Class: @UsersController
  * @package Users
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
@@ -35,7 +32,7 @@ class UsersController extends AbstractController
 {
     public static function isAdminLogged(): bool
     {
-        return UsersModel::hasPermission(self::getSessionUser(), "core.dashboard");
+        return UsersModel::hasPermission(UsersModel::getCurrentUser(), "core.dashboard");
     }
 
     /**
@@ -44,21 +41,12 @@ class UsersController extends AbstractController
      */
     public static function isUserLogged(): bool
     {
-        return isset($_SESSION['cmwUserId']);
+        return UsersModel::getCurrentUser() !== null;
     }
 
     public static function hasPermission(string ...$permissions): bool
     {
-        return UsersModel::hasPermission(self::getSessionUser(), ...$permissions);
-    }
-
-    private static function getSessionUser(): ?UserEntity
-    {
-        if (!isset($_SESSION['cmwUserId'])) {
-            return null;
-        }
-
-        return (UsersModel::getInstance())->getUserById($_SESSION['cmwUserId']);
+        return UsersModel::hasPermission(UsersModel::getCurrentUser(), ...$permissions);
     }
 
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/users")]
@@ -195,7 +183,7 @@ class UsersController extends AbstractController
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
-        if (UsersModel::getLoggedUser() === $id) {
+        if (UsersModel::getCurrentUser()?->getId() === $id) {
             Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.impossible"));
             Redirect::redirectPreviousRoute();
         }
@@ -214,7 +202,7 @@ class UsersController extends AbstractController
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.delete");
 
-        if (UsersModel::getLoggedUser() === $id) {
+        if (UsersModel::getCurrentUser()?->getId() === $id) {
 
             //Todo Try to remove that
             Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.impossible_user"));
@@ -261,6 +249,11 @@ class UsersController extends AbstractController
 
             [$mail, $password, $previousRoute] = Utils::filterInput("login_email", "login_password", "previousRoute");
 
+            if (Utils::containsNullValue($mail, $password)){
+                Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("core.toaster.db.missing_inputs"));
+                Redirect::redirectPreviousRoute();
+            }
+
             $infos = array(
                 "email" => $mail,
                 "password" => $password
@@ -272,7 +265,7 @@ class UsersController extends AbstractController
             }
 
             $userId = UsersModel::logIn($infos, $cookie);
-            if ($userId > 0 && $userId !== "ERROR") {
+            if ($userId > 0) {
                 UsersModel::getInstance()->updateLoggedTime($userId);
                 if ($previousRoute) {
                     header('Location: ' . $previousRoute);
@@ -281,8 +274,17 @@ class UsersController extends AbstractController
                 } else {
                     Redirect::redirect("profile");
                 }
+            } else if ($userId === -1) {
+                Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                    LangManager::translate("users.toaster.mail_pass_matching"));
+                Redirect::redirectPreviousRoute();
+            } else if ($userId === -2){
+                Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                    LangManager::translate("users.toaster.not_registered_account"));
+                Redirect::redirectPreviousRoute();
             } else {
-                Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.mail_pass_matching"));
+                Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                    LangManager::translate("core.toaster.internalError"));
                 Redirect::redirectPreviousRoute();
             }
         } else {
@@ -298,7 +300,7 @@ class UsersController extends AbstractController
     #[Link('/login', Link::GET)]
     private function login(): void
     {
-        if (UsersModel::getLoggedUser() !== -1) {
+        if (self::isUserLogged()) {
            Redirect::redirectToHome();
         }
 
@@ -313,7 +315,7 @@ class UsersController extends AbstractController
     #[Link('/login/forgot', Link::GET)]
     private function forgotPassword(): void
     {
-        if (UsersModel::getLoggedUser() !== -1) {
+        if (!self::isUserLogged()) {
             Redirect::redirectToHome();
         }
 
@@ -322,7 +324,7 @@ class UsersController extends AbstractController
     }
 
 
-    #[Link('/login/forgot', Link::POST)]
+    #[NoReturn] #[Link('/login/forgot', Link::POST)]
     private function forgotPasswordPost(): void
     {
         $mail = filter_input(INPUT_POST, "mail");
@@ -353,7 +355,7 @@ class UsersController extends AbstractController
     #[Link('/register', Link::GET)]
     private function register(): void
     {
-        if (UsersModel::getLoggedUser() !== -1) {
+        if (!self::isUserLogged()) {
             Redirect::redirectToHome();
         }
 
@@ -361,7 +363,7 @@ class UsersController extends AbstractController
         $view->view();
     }
 
-    #[Link('/register', Link::POST)]
+    #[NoReturn] #[Link('/register', Link::POST)]
     private function registerPost(): void
     {
         if(SecurityController::checkCaptcha()) {
@@ -406,11 +408,24 @@ class UsersController extends AbstractController
             $cookie = 1;
 
             $userId = UsersModel::logIn($infos, $cookie);
-            if ($userId > 0 && $userId !== "ERROR") {
+            if ($userId > 0) {
                 UsersModel::getInstance()->updateLoggedTime($userId);
 
-                Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.welcome"));
+                Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),
+                    LangManager::translate("users.toaster.welcome"));
                 Redirect::redirect('profile');
+            } else if ($userId === -1) {
+                Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                    LangManager::translate("users.toaster.mail_pass_matching"));
+                Redirect::redirectPreviousRoute();
+            } else if ($userId === -2){
+                Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                    LangManager::translate("users.toaster.not_registered_account"));
+                Redirect::redirectPreviousRoute();
+            } else {
+                Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                    LangManager::translate("core.toaster.internalError"));
+                Redirect::redirectPreviousRoute();
             }
 
         }
@@ -427,7 +442,7 @@ class UsersController extends AbstractController
     #[Link('/profile', Link::GET)]
     private function publicProfile(): void
     {
-        if (UsersModel::getLoggedUser() === -1 && !UserSettingsEntity::getInstance()->isProfilePageEnabled()){
+        if (!self::isUserLogged() && !UserSettingsEntity::getInstance()->isProfilePageEnabled()){
             Redirect::redirect('login');
         }
 
@@ -435,7 +450,7 @@ class UsersController extends AbstractController
             Redirect::redirectToHome();
         }
 
-        if (UsersModel::getLoggedUser() === -1) {
+        if (!self::isUserLogged()) {
             Redirect::redirect('login');
         }
 
@@ -457,14 +472,14 @@ class UsersController extends AbstractController
             Redirect::redirectToHome();
         }
 
-        if (UsersModel::getLoggedUser() === -1) {
+        if (!self::isUserLogged()) {
             Redirect::redirectToHome();
         }
 
         $image = $_FILES['pictureProfile'];
 
         try {
-            UserPictureModel::getInstance()->uploadImage($_SESSION['cmwUserId'], $image);
+            UserPictureModel::getInstance()->uploadImage(UsersModel::getCurrentUser()?->getId(), $image);
         } catch (Exception $e) {
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.toaster.internalError") . " => $e");
@@ -476,7 +491,7 @@ class UsersController extends AbstractController
     #[Link('/profile/:pseudo', Link::GET, ['pseudo' => '.*?'])]
     private function publicProfileWithPseudo(Request $request, string $pseudo): void
     {
-        if (!UserSettingsEntity::getInstance()->isProfilePageEnabled() && UsersModel::getLoggedUser() === -1){
+        if (!self::isUserLogged() && !UserSettingsEntity::getInstance()->isProfilePageEnabled()){
             Redirect::redirect('login');
         }
 
@@ -499,13 +514,13 @@ class UsersController extends AbstractController
         $view->view();
     }
 
-    #[Link("/profile/delete/:id", Link::GET, ["id" => "[0-9]+"])]
+    #[NoReturn] #[Link("/profile/delete/:id", Link::GET, ["id" => "[0-9]+"])]
     private function publicProfileDelete(Request $request, int $id): void
     {
         //Check if this is the current user account
-        if ($_SESSION['cmwUserId'] !== $id) {
+        if (UsersModel::getCurrentUser()?->getId() !== $id) {
             //TODO ERROR MANAGEMENT (MESSAGE TO TELL THE USER CAN'T DELETE THIS ACCOUNT)
-            Redirect::redirect('profile');
+            Redirect::errorPage(403);
         }
 
         UsersModel::logOut();
@@ -514,21 +529,21 @@ class UsersController extends AbstractController
         Redirect::redirectToHome();
     }
 
-    #[Link('/logout', Link::GET)]
+    #[NoReturn] #[Link('/logout', Link::GET)]
     private function logOut(): void
     {
         UsersModel::logOut();
         Redirect::redirectToHome();
     }
 
-    #[Link('/profile/update', Link::POST)]
+    #[NoReturn] #[Link('/profile/update', Link::POST)]
     private function publicProfileUpdate(): void
     {
-        if (!isset($_SESSION['cmwUserId'])) {
+        if (!self::isUserLogged()) {
             Redirect::redirectToHome();
         }
 
-        $userId = $_SESSION['cmwUserId'];
+        $user = UsersModel::getCurrentUser();
 
         [$mail, $pseudo, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "name", "lastname");
 
@@ -538,7 +553,7 @@ class UsersController extends AbstractController
             Redirect::redirectPreviousRoute();
         }
 
-        $roles = UsersModel::getRoles($userId);
+        $roles = UsersModel::getRoles($user?->getId());
 
         $rolesId = array();
 
@@ -546,14 +561,14 @@ class UsersController extends AbstractController
             $rolesId[] = $role->getId();
         }
 
-        UsersModel::getInstance()->update($userId, $mail, $pseudo, $firstname, $lastname, $rolesId);
+        UsersModel::getInstance()->update($user?->getId(), $mail, $pseudo, $firstname, $lastname, $rolesId);
 
 
         [$pass, $passVerif] = Utils::filterInput("password", "passwordVerif");
 
         if (!is_null($pass)) {
             if ($pass === $passVerif) {
-                UsersModel::getInstance()->updatePass($userId, password_hash($pass, PASSWORD_BCRYPT));
+                UsersModel::getInstance()->updatePass($user?->getId(), password_hash($pass, PASSWORD_BCRYPT));
             } else {
                 //Todo Try to edit that
                 Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),"Je sais pas ?");
