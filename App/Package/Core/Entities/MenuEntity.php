@@ -99,7 +99,7 @@ class MenuEntity
         }
 
         foreach ($this->restrictedRoles as $restrictedRole){
-            if (RolesModel::playerHasRole(UsersModel::getLoggedUser(), $restrictedRole?->getId())){
+            if (RolesModel::playerHasRole(UsersModel::getCurrentUser()?->getId(), $restrictedRole?->getId())){
                 return true;
             }
         }

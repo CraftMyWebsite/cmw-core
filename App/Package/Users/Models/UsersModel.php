@@ -12,8 +12,10 @@ use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractModel;
 use CMW\Model\Core\CoreModel;
+use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use Exception;
+use http\Client\Curl\User;
 
 /**
  * Class: @usersModel
@@ -148,7 +150,17 @@ class UsersModel extends AbstractModel
 
     public static function getCurrentUser(): ?UserEntity
     {
-        return !isset($_SESSION['cmwUserId']) ? null : (new self)->getUserById($_SESSION['cmwUserId']);
+        //return !isset($_SESSION['cmwUserId']) ? null : (new self)->getUserById($_SESSION['cmwUserId']);
+
+        if (isset($_SESSION['cmwUser']) && $_SESSION['cmwUser'] instanceof UserEntity){
+            return $_SESSION['cmwUser'];
+        }
+
+        if (isset($_COOKIE['cmw_cookies_user_id']) && filter_var($_COOKIE['cmw_cookies_user_id'], FILTER_VALIDATE_INT)){
+            return self::getInstance()->getUserById($_COOKIE['cmw_cookies_user_id']);
+        }
+
+        return null;
     }
 
     public function countUsers(): int
@@ -186,31 +198,33 @@ class UsersModel extends AbstractModel
         return $toReturn;
     }
 
-    public static function getLoggedUser(): int
-    {
-        return (int)($_SESSION['cmwUserId'] ?? -1);
-    }
-
-    public static function logIn(array $info, bool $cookie = false)
+    public static function logIn(array $info, bool $cookie = false): int
     {
         $password = $info["password"];
         $var = array(
             "user_email" => $info["email"]
         );
-        $sql = "SELECT user_id, user_password FROM cmw_users WHERE user_state=1 AND user_email=:user_email";
+        $sql = "SELECT * FROM cmw_users WHERE user_state=1 AND user_email=:user_email";
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
-            $result = $req->fetch();
-            if ($result) {
-                if (password_verify($password, $result["user_password"])) {
-                    $id = $result["user_id"];
+            $res = $req->fetch();
+            if ($res) {
+                if (password_verify($password, $res["user_password"])) {
+                    $id = $res["user_id"];
 
-                    $_SESSION['cmwUserId'] = $id;
+                    $user = self::getInstance()->getUserById($id);
+
+                    if (is_null($user)){
+                        Redirect::errorPage(500);
+                    }
+
+                    $_SESSION['cmwUser'] = $user;
+
                     if ($cookie) {
-                        setcookie('cmw_cookies_user_id', $id, time() + 60 * 60 * 24 * 30, "/");
+                        setcookie('cmw_cookies_user_id', $id, time() + 60 * 60 * 24 * 30, "/", true, true);
                     }
 
                     return $id;
@@ -234,6 +248,8 @@ class UsersModel extends AbstractModel
             $params["secure"], $params["httponly"]
         );
         session_destroy();
+
+        setcookie('cmw_cookies_user_id', '', time() + 60 * 60 * 24 * 30, "/", true, true);
     }
 
     public function create(string $mail, ?string $username, ?string $firstName, ?string $lastName, array $roles): ?UserEntity

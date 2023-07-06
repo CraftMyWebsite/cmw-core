@@ -30,7 +30,7 @@ class SecurityManager extends HoneyInput
 
     public function __construct($excludeUrl = null, &$post = null, &$session = null, &$server = null)
     {
-        $this->sessionTokenLabel = 'CSRF_TOKEN_SESS_ID_' . UsersModel::getLoggedUser();
+        $this->sessionTokenLabel = 'CSRF_TOKEN_SESS_ID_' . UsersModel::getCurrentUser()?->getId();
 
         if (!is_null($excludeUrl)) {
             $this->excludeUrl = $excludeUrl;
