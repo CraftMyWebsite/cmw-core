@@ -2,10 +2,15 @@
 
 namespace CMW\Manager\Class;
 
+/**
+ * @deprecated please prefer {@see CMW\Manager\Class\PackageManager} class
+ */
 class ClassManager
 {
 
-
+    /**
+     * @deprecated please prefer {@see CMW\Manager\Class\PackageManager::getClassNamespaceFromPath()}
+     */
     public static function getClassFullNameFromFile(string $filePathName): ?string
     {
         $namespace = self::getClassNamespaceFromFile($filePathName);
@@ -19,6 +24,9 @@ class ClassManager
     }
 
 
+    /**
+     * @deprecated please don't use this method.
+     */
     public static function getClassObjectFromFile(string $filePathName)
     {
         $classString = self::getClassFullNameFromFile($filePathName);
@@ -26,7 +34,7 @@ class ClassManager
         return new $classString;
     }
 
-    protected static function getClassNamespaceFromFile(string $filePathName): ?string
+    private static function getClassNamespaceFromFile(string $filePathName): ?string
     {
         $fileContent = file_get_contents($filePathName);
 
@@ -55,7 +63,7 @@ class ClassManager
         return !$hasNamespace ? null : $namespace;
     }
 
-    protected static function getClassNameFromFile(string $filePathName)
+    private static function getClassNameFromFile(string $filePathName)
     {
         $php_code = file_get_contents($filePathName);
 
