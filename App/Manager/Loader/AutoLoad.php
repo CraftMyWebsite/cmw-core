@@ -16,6 +16,7 @@ class AutoLoad
     private static function isEnvValid(): bool
     {
         require_once("App/Manager/Env/EnvManager.php");
+        require_once("App/Manager/Class/PackageManager.php");
         return is_file(EnvManager::getInstance()->getValue("DIR") . "index.php");
     }
 
@@ -35,7 +36,7 @@ class AutoLoad
                 return false;
             }
 
-            if (count($classPart) < 2 || $classPart[0] !== "CMW") {
+            if ($classPart[0] !== "CMW") {
                 return false;
             }
 
@@ -46,18 +47,7 @@ class AutoLoad
                 };
             }
 
-            return match (ucfirst($classPart[1])) {
-                "Controller" => self::callPackage($classPart, "App/Package/", "/Controllers/"),
-                "Event" => self::callPackage($classPart, "App/Package/", "/Events/"),
-                "Model" => self::callPackage($classPart, "App/Package/", "/Models/"),
-                "Entity" => self::callPackage($classPart, "App/Package/", "/Entities/"),
-                "Interface" => self::callPackage($classPart, "App/Package/", "/Interfaces/"),
-                "Implementation" => self::callPackage($classPart, "App/Package/", "/Implementations/"),
-                "PackageInfo" => self::callPackage($classPart, "App/Package", "/"),
-                "Manager" => self::callPackage($classPart, "App/Manager/", "/"),
-                "Utils" => self::callCoreClass($classPart, "App/Utils/"),
-                default => false,
-            };
+            return self::getPackageElements($classPart, $classPart[1]);
         });
     }
 
@@ -98,16 +88,44 @@ class AutoLoad
         }
     }
 
+    private static function getPackageElements(array $namespace, string $elementName): ?string
+    {
+        $startDir = static function ($elementName) {
+            return match ($elementName) {
+                "Controller", "Model", "Entity", "Implementation", "Interface", "Event", "PackageInfo" => "App/Package/",
+                "Manager" => "App/Manager/",
+                "Utils" => "App/Utils/",
+                default => "",
+            };
+        };
+
+        $folderPackage = static function ($elementName) {
+            return match ($elementName) {
+                "Controller" => "Controllers/",
+                "Model" => "Models/",
+                "Entity" => "Entities/",
+                "Implementation" => "Implementations/",
+                "Interface" => "Interfaces/",
+                "Event" => "Events/",
+                "PackageInfo", "Manager" => "",
+            };
+        };
+
+        return match ($elementName) {
+            "Utils" => self::callCoreClass($namespace, $startDir($elementName)),
+            default => self::callPackage($namespace, $startDir($elementName), "/{$folderPackage($elementName)}")
+        };
+    }
+
+
     private static function callPackage(array $classPart, string $startDir, string $folderPackage = ""): bool
     {
-        if (count($classPart) < 4) {
+        if (empty($startDir) || count($classPart) < 4) {
             return false;
         }
 
         $namespace = implode('\\', $classPart);
-
         $packageName = strtolower($classPart[2]);
-
         $fileName = $classPart[count($classPart) - 1] . ".php";
 
         $subFolderFile = '';

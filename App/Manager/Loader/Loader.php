@@ -5,6 +5,7 @@ namespace CMW\Manager\Loader;
 use CMW\Controller\Core\PackageController;
 use CMW\Controller\Installer\InstallerController;
 use CMW\Manager\Class\ClassManager;
+use CMW\Manager\Class\PackageManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Error\ErrorManager;
 use CMW\Manager\Router\Link;
@@ -12,6 +13,7 @@ use CMW\Manager\Router\Router;
 use CMW\Manager\Router\RouterException;
 use CMW\Manager\Views\View;
 use CMW\Utils\Directory;
+use CMW\Utils\Log;
 use ReflectionClass;
 
 class Loader
@@ -158,8 +160,7 @@ class Loader
             return;
         }
 
-
-        $className = ClassManager::getClassFullNameFromFile($file);
+        $className = PackageManager::getClassNamespaceFromPath($file);
 
         if (is_null($className)) {
             return;

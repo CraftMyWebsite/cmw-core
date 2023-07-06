@@ -4,6 +4,7 @@ namespace CMW\Manager\Router;
 
 
 use CMW\Manager\Class\ClassManager;
+use CMW\Manager\Class\PackageManager;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Package\AbstractModel;
@@ -97,7 +98,7 @@ class LinkStorage
             return [];
         }
 
-        $className = ClassManager::getClassFullNameFromFile($file);
+        $className = PackageManager::getClassNamespaceFromPath($file);
 
         try {
             $classRef = new ReflectionClass($className);
