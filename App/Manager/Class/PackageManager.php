@@ -26,17 +26,6 @@ class PackageManager
         };
     }
 
-    private static function manageExceptions(string $path, string $className): ?string
-    {
-
-        if (str_contains(mb_strtolower($path), "phpmailer")) {
-            $PHPMAILER_NAMESPACE = "PHPMailer\\PHPMailer";
-            return "$PHPMAILER_NAMESPACE\\$className";
-        }
-
-        return null;
-    }
-
     private static function getStartDirFromElementName(string $elementName): ?string
     {
         return match ($elementName) {
@@ -62,7 +51,7 @@ class PackageManager
         $className = explode(".php", $fileParts[count($fileParts) - $CLASSNAME_POSITION])[0];
 
         if ($element === null) {
-            return self::manageExceptions($path, $className);
+            return null;
         }
 
         return "$PACKAGE_PREFIX\\$element\\$package\\$className";
