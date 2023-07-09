@@ -4,7 +4,6 @@ namespace CMW\Manager\Updater;
 
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Env\EnvManager;
-use JsonException;
 
 class UpdatesManager
 {
@@ -20,18 +19,13 @@ class UpdatesManager
 
 
     /**
-     * @return mixed
+     * @return \stdClass|null
      * @desc Return the latest CMW version. If we can't reach API, we return NULL
      * @todo Cache this data
      */
     public static function getCmwLatest(): mixed
     {
-        try {
-            return json_decode(file_get_contents(PublicAPI::getUrl() . "/cms/getLatest"), false, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException) {
-        }
-
-        return null;
+        return PublicAPI::getData('/cms/getLatest', false, false);
     }
 
 
@@ -41,7 +35,7 @@ class UpdatesManager
      */
     public static function checkNewUpdateAvailable(): bool
     {
-        $latest = self::getCmwLatest()->value;
+        $latest = self::getCmwLatest()['value'];
         return $latest !== null && self::getVersion() !== $latest && !self::ignoreUpdates();
     }
 
