@@ -5,12 +5,11 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Metrics\VisitsMetricsManager;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Core\CoreModel;
-use CMW\Utils\Log;
 use CMW\Utils\Utils;
 use CMW\Utils\Website;
 
-$title = LangManager::translate("core.dashboard.title");
-$description = LangManager::translate("core.dashboard.desc");
+Website::setTitle(LangManager::translate("core.dashboard.title"));
+Website::setDescription(LangManager::translate("core.dashboard.desc"));
 
 
 /* @var array $monthlyVisits */

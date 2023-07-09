@@ -5,6 +5,7 @@
 /** @var $description */
 
 use CMW\Manager\Env\EnvManager;
+use CMW\Utils\Website;
 
 ?>
 <!DOCTYPE html>
@@ -12,8 +13,8 @@ use CMW\Manager\Env\EnvManager;
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>CraftMyWebsite | <?= $title ?></title>
-    <meta name="description" content="<?= $description ?>">
+    <title>CraftMyWebsite | <?= $title ?? Website::getTitle(useSiteName: false) ?></title>
+    <meta name="description" content="<?= $description ?? Website::getDescription() ?>">
     <meta name="robots" content="NOINDEX, NOFOLLOW">
 
     <script src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Js/darkMode.js"></script>
@@ -83,5 +84,5 @@ use CMW\Manager\Env\EnvManager;
 <script>
     const theme = localStorage.getItem('theme') || 'theme-dark';
     document.body.className = theme;
-  </script>
+</script>
 <div id="app">

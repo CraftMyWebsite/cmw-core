@@ -5,8 +5,8 @@ use CMW\Utils\Website;
 /* @var CMW\Entity\Core\ConditionEntity $cgu */
 
 /*TITRE ET DESCRIPTION*/
-$title = Website::getName() . ' - CGU';
-$description = "CGU de " . Website::getName();
+$title = Website::getWebsiteName() . ' - CGU';
+$description = "CGU de " . Website::getWebsiteName();
 ?>
 
 <section class="page-section">

@@ -9,6 +9,44 @@ use JetBrains\PhpStorm\ExpectedValues;
 class Website
 {
 
+    private static string $title;
+    private static string $description;
+
+    /**
+     * @param string $title
+     * @return string
+     */
+    public static function setTitle(string $title): string
+    {
+        self::$title = $title;
+        return $title;
+    }
+
+    /**
+     * @param bool $useSiteName
+     * @return string
+     */
+    public static function getTitle(bool $useSiteName = true): string
+    {
+        return $useSiteName ? self::getWebsiteName() . " | " . self::$title : self::$title;
+    }
+
+    /**
+     * @param string $description
+     * @return string
+     */
+    public static function setDescription(string $description): string
+    {
+        self::$description = $description;
+        return $description;
+    }
+
+    public static function getDescription(): string
+    {
+        return self::$description;
+    }
+
+
     #[ExpectedValues(values: ['https', 'http'])]
     public static function getProtocol(): string
     {
@@ -75,18 +113,18 @@ class Website
      * @return string
      * @Desc Get the website name
      */
-    public static function getName(): string
+    public static function getWebsiteName(): string
     {
-        return (new CoreModel())->fetchOption("name"); //todo getInstance
+        return CoreModel::getInstance()->fetchOption("name");
     }
 
     /**
      * @return string
      * @Desc Get the website description
      */
-    public static function getDescription(): string
+    public static function getWebsiteDescription(): string
     {
-        return (new CoreModel())->fetchOption("description"); //todo getInstance
+        return CoreModel::getInstance()->fetchOption("description");
     }
 
     public static function getLogoPath(): string

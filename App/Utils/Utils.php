@@ -258,11 +258,11 @@ class Utils
     /**
      * @return string
      * @Desc Get the website name
-     * @deprecated please prefer {@see \CMW\Utils\Website::getName()}
+     * @deprecated please prefer {@see \CMW\Utils\Website::getWebsiteName()}
      */
     public static function getSiteName(): string
     {
-        return Website::getName();
+        return Website::getWebsiteName();
     }
 
     /**
