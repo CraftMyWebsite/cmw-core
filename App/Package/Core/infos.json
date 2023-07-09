@@ -9,7 +9,7 @@
       "urls_submenu_fr": {
         "Configuration": "configuration",
         "Configuration editor": "editor/config",
-        "Conditions general": "condition",
+        "Conditions général": "condition",
         "Sécurité": "security",
         "Mises à jour": "updates/cms"
       },

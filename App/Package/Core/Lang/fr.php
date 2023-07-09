@@ -23,7 +23,7 @@ return [
         "is_up" => "Votre site est entièrement à jour",
     ],
     "condition" => [
-        "title" => "Conditions Générales",
+        "title" => "Conditions générales",
         "cgv" => "Condition général de vente (CGV)",
         "cgu" => "Condition général d'utilisation (CGU)",
         "activecgv" => "Activer les CGV",
@@ -40,7 +40,7 @@ return [
         "numbers_views" => "Nombres de visites et d'inscriptions",
         "daily_visits" => "Visites du jour",
         "monthly_visits" => "Visites du mois",
-        "total_visits" => "Visistes totales",
+        "total_visits" => "Visites totales",
         "welcome" => "Bienvenue",
         "site_info" => "Information du site",
         "name" => "Nom :",
@@ -76,7 +76,7 @@ return [
         ],
     ],
     "editor" => [
-        "title" => "Configuration Editor",
+        "title" => "Configuration Editeur",
         "desc" => "Personnaliser l'éditeur de pages",
         "style" => "Style du syntax highlighter",
         "preview" => 'Vous pouvez prévisualiser le rendu des styles <a href="https://highlightjs.org/static/demo/" target="_blank">ici</a>',
@@ -88,7 +88,7 @@ return [
         "favicon" => "Modifiez le favicon de votre site",
         "favicon_tips" => 'CraftMyWebsite accepte uniquement les images <a href="https://www.icoconverter.com" target="_blank">.ico</a> pour des soucis de performances.',
         "dateFormat" => "Format des dates",
-        "dateFormatTooltip" => "Vous pouvez personalisé le façon dont vous affichez les dates",
+        "dateFormatTooltip" => "Vous pouvez personnaliser le façon dont vous affichez les dates",
         "custom" => "-- Personnalisez-moi --",
     ],
     "Lang" => [
@@ -316,7 +316,7 @@ return [
 
                 <p>
                     <b>Pensez à supprimer vos health reports une fois le support terminé !
-                        Sinon vous vous exposez votre site à des failles.</b>
+                        Sinon vous exposez votre site à des failles.</b>
                 </p>
 
                 <p>

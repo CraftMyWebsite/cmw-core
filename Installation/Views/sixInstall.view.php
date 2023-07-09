@@ -6,7 +6,7 @@
             <p><?= LangManager::translate("users.users.pseudo") ?> :</p>
             <label class="input-group input-group">
                 <span><i class="fa-solid fa-user"></i></span>
-                <input type="text" placeholder="cwm" name="pseudo" class="input input-bordered input-sm w-full"
+                <input type="text" placeholder="cmw" name="pseudo" class="input input-bordered input-sm w-full"
                        required>
             </label>
         </div>
