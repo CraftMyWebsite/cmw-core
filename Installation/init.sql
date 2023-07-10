@@ -262,3 +262,9 @@ VALUES ('defaultImage', 'defaultImage.jpg'),
 INSERT INTO `cmw_maintenance` (maintenance_is_enable, maintenance_title, maintenance_description, maintenance_type,
                                maintenance_target_date)
 VALUES (0, 'Maintenance', 'Maintenance en cours !', NULL, NULL);
+
+INSERT INTO `cmw_menus` (menu_id, menu_name, menu_url, menu_parent_id, menu_is_restricted, menu_order, menu_target_blank)
+VALUES (1, 'Accueil', 'home', NULL, 0, 1, 0), (2, 'CraftMyWebsite', 'https://craftmywebsite.fr', NULL, 1, 2, 1);
+
+INSERT INTO `cmw_menus_groups_allowed` (menus_groups_id ,menus_groups_group_id, menus_groups_menu_id)
+VALUES (1, 5, 2)
