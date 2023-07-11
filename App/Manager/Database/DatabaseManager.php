@@ -34,13 +34,13 @@ class DatabaseManager
         try {
 
             self::$_instance = new PDO("mysql:host=" . EnvManager::getInstance()->getValue("DB_HOST"), EnvManager::getInstance()->getValue("DB_USERNAME"), EnvManager::getInstance()->getValue("DB_PASSWORD"),
-                array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', PDO::ATTR_PERSISTENT => true));
+                [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4', PDO::ATTR_PERSISTENT => true]);
             self::$_instance->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
             self::$_instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             self::$_instance->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
             /** Todo, see before if we have permissions ? */
-            self::$_instance->exec("SET CHARACTER SET utf8");
+            self::$_instance->exec("SET CHARACTER SET utf8mb4");
             self::$_instance->exec("CREATE DATABASE IF NOT EXISTS " . EnvManager::getInstance()->getValue("DB_NAME") . ";");
             self::$_instance->exec("USE " . EnvManager::getInstance()->getValue("DB_NAME") . ";");
             return self::$_instance;
