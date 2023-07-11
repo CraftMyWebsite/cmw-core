@@ -17,6 +17,7 @@ use CMW\Manager\Router\LinkStorage;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Installer\InstallerModel;
+use CMW\Utils\Directory;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use CMW\Utils\Website;
@@ -429,14 +430,18 @@ class InstallerController extends AbstractController
         EnvManager::getInstance()->editValue("installStep", 7);
     }
 
-    #[Link(path: "/finish", method: Link::GET, scope: "/installer")]
+    #[NoReturn] #[Link(path: "/finish", method: Link::GET, scope: "/installer")]
     public function endInstallation(): void
     {
         // Reset to Default settings (with dev mode or not)
         ErrorManager::enableErrorDisplays();
         EnvManager::getInstance()->editValue("installStep", -1);
 
-        header("location: " . EnvManager::getInstance()->getValue('PATH_SUBFOLDER'));
+        if (EnvManager::getInstance()->getValue('DEVMODE') === '0'){
+            Directory::delete(EnvManager::getInstance()->getValue('DIR') . 'Installation');
+        }
+
+        Redirect::redirectToHome();
     }
 
 
