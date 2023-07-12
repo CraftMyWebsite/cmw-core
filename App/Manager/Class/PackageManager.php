@@ -44,8 +44,7 @@ class PackageManager
         $PART_POSITION = 2;
         $CLASSNAME_POSITION = 1;
 
-
-        $fileParts = explode("\\", $path);
+        $fileParts = explode(DIRECTORY_SEPARATOR, $path);
         $package = self::getPackageNameByPathPart($fileParts[count($fileParts) - $PACKAGE_POSITION]);
         $element = self::getElementNameByPathPart($fileParts[count($fileParts) - $PART_POSITION]);
         $className = explode(".php", $fileParts[count($fileParts) - $CLASSNAME_POSITION])[0];
