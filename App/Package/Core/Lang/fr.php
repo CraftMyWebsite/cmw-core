@@ -42,7 +42,7 @@ return [
         "monthly_visits" => "Visites du mois",
         "total_visits" => "Visites totales",
         "welcome" => "Bienvenue",
-        "site_info" => "Information du site",
+        "site_info" => "Informations du site",
         "name" => "Nom :",
         "description" => "Description :",
         "edit" => "Modifier ces informations",
@@ -337,7 +337,7 @@ return [
                 'title' => "Connexions / Inscriptions",
                 'type' => [
                     0 => 'Tout désactiver',
-                    1 => 'Activer les connexions / inscription',
+                    1 => 'Activer les connexions / inscriptions',
                     2 => 'Activer uniquement les connexions',
                 ],
             ],
