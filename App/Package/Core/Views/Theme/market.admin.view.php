@@ -36,9 +36,9 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                              alt="Icon <?= $theme['name'] ?>">
                     </div>
                     <div class="d-flex justify-content-center px-2 py-1">
-                        <a href="install/<?= $theme['id'] ?>" class="btn btn-sm btn-primary"><i
+                        <button onclick="this.disabled = true; window.location = 'install/<?= $theme['id'] ?>'" class="btn btn-sm btn-primary"><i
                                 class="fa-solid fa-download"></i> <?= LangManager::translate("core.Theme.install") ?>
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -51,10 +51,10 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                         <div class="modal-header">
                             <h4 class="modal-title"><?= $theme['name'] ?></h4>
                             <div class="d-flex justify-content-end mt-auto gap-3">
-                                <a href="install/<?= $theme['id'] ?>"
+                                <button onclick="this.disabled = true; window.location = 'install/<?= $theme['id'] ?>'"
                                    class="btn btn-sm btn-primary"><i
                                         class="fa-solid fa-download"></i> <?= LangManager::translate("core.Theme.install") ?>
-                                </a>
+                                </button>
                             </div>
                         </div>
                         <div class="modal-body">
@@ -108,5 +108,4 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
             </div>
             <?php endif; ?>
     <?php endforeach; ?>
-
 </section>

@@ -372,7 +372,7 @@ class MenusModel extends AbstractModel
      */
     public function getAllowedRoles(int $menuId): ?array
     {
-        $sql = "SELECT menus_groups_group_id FROM cmw_menus_groups_allowed WHERE menus_groups_group_id = :id";
+        $sql = "SELECT menus_groups_group_id FROM cmw_menus_groups_allowed WHERE menus_groups_menu_id = :id";
         $db = DatabaseManager::getInstance();
 
         $req = $db->prepare($sql);

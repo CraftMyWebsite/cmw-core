@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS `cmw_core_options`
     `option_updated` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY `option_name` (`option_name`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `cmw_mail_config_smtp`
 (
@@ -20,7 +21,8 @@ CREATE TABLE IF NOT EXISTS `cmw_mail_config_smtp`
     `mail_config_enable`       TINYINT(1)   NOT NULL DEFAULT 1,
     PRIMARY KEY (`mail_config_id`)
 ) ENGINE = InnoDB
-  CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `cmw_users`
 (
@@ -39,7 +41,8 @@ CREATE TABLE IF NOT EXISTS `cmw_users`
     UNIQUE KEY `user_email` (`user_email`),
     UNIQUE KEY `user_pseudo` (`user_pseudo`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `cmw_users_pictures`
 (
@@ -50,7 +53,8 @@ CREATE TABLE IF NOT EXISTS `cmw_users_pictures`
     CONSTRAINT `cmw_users_pictures_ibfk_1` FOREIGN KEY (`users_pictures_user_id`)
         REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `cmw_users_settings`
 (
@@ -59,7 +63,8 @@ CREATE TABLE IF NOT EXISTS `cmw_users_settings`
     `users_settings_updated` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY (`users_settings_name`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `cmw_roles`
 (
@@ -70,7 +75,8 @@ CREATE TABLE IF NOT EXISTS `cmw_roles`
     `role_is_default`  TINYINT(1) DEFAULT 0,
     PRIMARY KEY (`role_id`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 
 CREATE TABLE IF NOT EXISTS `cmw_users_roles`
@@ -86,7 +92,8 @@ CREATE TABLE IF NOT EXISTS `cmw_users_roles`
     CONSTRAINT `cmw_users_roles_ibfk_2` FOREIGN KEY (`role_id`)
         REFERENCES `cmw_roles` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS cmw_permissions
 (
@@ -128,7 +135,8 @@ CREATE TABLE IF NOT EXISTS `cmw_menus`
     CONSTRAINT `cmw_menus_ibfk_1` FOREIGN KEY (`menu_parent_id`)
         REFERENCES `cmw_menus` (`menu_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `cmw_menus_groups_allowed`
 (
@@ -143,7 +151,8 @@ CREATE TABLE IF NOT EXISTS `cmw_menus_groups_allowed`
     CONSTRAINT `cmw_menus_groups_allowed_ibfk_2` FOREIGN KEY (`menus_groups_menu_id`)
         REFERENCES `cmw_menus` (`menu_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `cmw_core_condition`
 (
@@ -158,7 +167,8 @@ CREATE TABLE IF NOT EXISTS `cmw_core_condition`
     CONSTRAINT `cmw_core_condition_ibfk_1` FOREIGN KEY (`condition_last_editor`)
         REFERENCES `cmw_users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `cmw_theme_config`
 (
@@ -197,7 +207,8 @@ CREATE TABLE IF NOT EXISTS `cmw_visits`
     `visits_is_admin` TINYINT(4)   NOT NULL DEFAULT '0',
     PRIMARY KEY (`visits_id`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 
 CREATE TABLE IF NOT EXISTS `cmw_maintenance`
@@ -213,7 +224,8 @@ CREATE TABLE IF NOT EXISTS `cmw_maintenance`
     `maintenance_last_updated_at`     TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`maintenance_id`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `cmw_users_blacklist_pseudo`
 (
@@ -223,7 +235,8 @@ CREATE TABLE IF NOT EXISTS `cmw_users_blacklist_pseudo`
     PRIMARY KEY (`id`),
     UNIQUE (`pseudo`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 
 /* INSERT AREA */
@@ -262,3 +275,11 @@ VALUES ('defaultImage', 'defaultImage.jpg'),
 INSERT INTO `cmw_maintenance` (maintenance_is_enable, maintenance_title, maintenance_description, maintenance_type,
                                maintenance_target_date)
 VALUES (0, 'Maintenance', 'Maintenance en cours !', NULL, NULL);
+
+INSERT INTO `cmw_menus` (menu_id, menu_name, menu_url, menu_parent_id, menu_is_restricted, menu_order,
+                         menu_target_blank)
+VALUES (1, 'Accueil', 'home', NULL, 0, 1, 0),
+       (2, 'CraftMyWebsite', 'https://craftmywebsite.fr', NULL, 1, 2, 1);
+
+INSERT INTO `cmw_menus_groups_allowed` (menus_groups_id, menus_groups_group_id, menus_groups_menu_id)
+VALUES (1, 5, 2)

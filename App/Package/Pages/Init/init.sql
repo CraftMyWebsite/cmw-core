@@ -10,4 +10,5 @@ CREATE TABLE IF NOT EXISTS `cmw_pages`
     `page_slug`    VARCHAR(255) NOT NULL,
     CONSTRAINT fk_pages_users FOREIGN KEY (user_id) REFERENCES cmw_users (user_id) ON UPDATE CASCADE ON DELETE SET NULL
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;

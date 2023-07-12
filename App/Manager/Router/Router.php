@@ -5,6 +5,7 @@ namespace CMW\Manager\Router;
 use Closure;
 use CMW\Manager\Metrics\VisitsMetricsManager;
 use CMW\Manager\Requests\Request;
+use CMW\Manager\Security\RateLimiter;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Model\Core\MaintenanceModel;
 use CMW\Utils\Redirect;
@@ -86,6 +87,7 @@ class Router
         if(!$method->isPrivate()) {
             //todo warning, method Link must be private !
         }
+        new RateLimiter();
         $method->invoke($classInstance, $request, ...$values);
     }
 
