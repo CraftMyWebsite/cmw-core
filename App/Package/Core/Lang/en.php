@@ -378,6 +378,7 @@ return [
         "enabled" => "Enabled",
     ],
     "months" => [
+        "list" => '["January","February","March","April","May","June","July","August","September","October","November","December"]',
         1 => "January",
         2 => "February",
         3 => "March",
