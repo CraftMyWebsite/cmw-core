@@ -14,6 +14,7 @@ use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Router\LinkStorage;
+use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Installer\InstallerModel;
@@ -428,7 +429,9 @@ class InstallerController extends AbstractController
         $pseudo = filter_input(INPUT_POST, "pseudo");
         $password = password_hash(filter_input(INPUT_POST, "password"), PASSWORD_BCRYPT);
 
-        InstallerModel::initAdmin($email, $pseudo, $password);
+        $encryptedMail = EncryptManager::encrypt($email);
+
+        InstallerModel::initAdmin($encryptedMail, $pseudo, $password);
 
         EnvManager::getInstance()->editValue("installStep", 7);
     }
