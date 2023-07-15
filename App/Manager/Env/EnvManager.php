@@ -3,6 +3,9 @@
 namespace CMW\Manager\Env;
 
 use Closure;
+use CMW\Manager\Security\EncryptManager;
+use CMW\Utils\Utils;
+use Exception;
 
 /**
  * Class: @EnvManager
@@ -12,7 +15,6 @@ use Closure;
  */
 class EnvManager
 {
-
     private static EnvManager $_instance;
 
     private string $envFileName = ".env";
@@ -196,7 +198,35 @@ class EnvManager
         $this->addValue("dir", $this->absPath);
         $this->addValue("devMode", 0);
         $this->addValue("APIURL", $this->apiURL);
+        $this->generateSalt();
+    }
 
+    /**
+     * @desc Generate a random string for salt if salt not exist
+     */
+    private function generateSalt(): void
+    {
+        if ($this->valueExist('SALT') && $this->valueExist('SALT_PASS') && $this->valueExist('SALT_IV')){
+            return;
+        }
+
+        require_once $this->absPath . 'App/Utils/Utils.php';
+
+        try {
+            $salt = Utils::genId(random_int(15, 45));
+        } catch (Exception) {
+            $salt = Utils::genId(25);
+        }
+
+        try {
+            $saltPass = Utils::genId(random_int(15, 45));
+        } catch (Exception) {
+            $saltPass = Utils::genId(25);
+        }
+
+        $this->addValue('SALT', $salt);
+        $this->addValue('SALT_PASS', $saltPass);
+        $this->addValue('SALT_IV', openssl_random_pseudo_bytes(16));
     }
 
     private function oneShotCmwVersionFile(): void
