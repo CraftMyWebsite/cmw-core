@@ -6,11 +6,12 @@ use CMW\Controller\Core\SecurityController;
 use CMW\Entity\Users\UserSettingsEntity;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
-use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\Link;
+use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UserPictureModel;
@@ -61,7 +62,8 @@ class UsersController extends AbstractController
 
         View::createAdminView("Users", "manage")
             ->addVariableList(["userList" => $userList, "roles" => $roles])
-            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
+            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css",
+                "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
             ->addScriptBefore("App/Package/Users/Views/Assets/Js/edit.js")
             ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
                 "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
@@ -84,7 +86,7 @@ class UsersController extends AbstractController
 
         $roles = [];
 
-        foreach ($user?->getRoles() as $role){
+        foreach ($user?->getRoles() as $role) {
             $roles[] .= $role->getName();
         }
 
@@ -138,31 +140,34 @@ class UsersController extends AbstractController
 
         if ($pass === "") {
             UsersModel::getInstance()->update($id, $mail, $username, $firstname, $lastname, $_POST['roles']);
-            Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.edited_not_pass_change"));
+            Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),
+                LangManager::translate("users.toaster.edited_not_pass_change"));
+        } else if ($pass === $passVerif) {
+            UsersModel::getInstance()->updatePass($id, password_hash($pass, PASSWORD_BCRYPT));
+            UsersModel::getInstance()->update($id, $mail, $username, $firstname, $lastname, $_POST['roles']);
+            Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),
+                LangManager::translate("users.toaster.edited_pass_change"));
         } else {
-            if ($pass === $passVerif) {
-                UsersModel::getInstance()->updatePass($id, password_hash($pass, PASSWORD_BCRYPT));
-                UsersModel::getInstance()->update($id, $mail, $username, $firstname, $lastname, $_POST['roles']);
-                Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.edited_pass_change"));
-            } else {
-                Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.not_same_pass"));
-            }
+            Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),
+                LangManager::translate("users.toaster.not_same_pass"));
         }
 
         Redirect::redirectPreviousRoute();
     }
 
 
-    #[Link("/add", Link::POST, [], "/cmw-admin/users")]
+    #[NoReturn] #[Link("/add", Link::POST, [], "/cmw-admin/users")]
     private function adminUsersAddPost(): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.add");
 
         [$mail, $pseudo, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "firstname", "surname");
 
-        $userEntity = UsersModel::getInstance()->create($mail, $pseudo, $firstname, $lastname, $_POST['roles']);
+        $encryptedMail = EncryptManager::encrypt($mail);
 
-        if ($userEntity === null){
+        $userEntity = UsersModel::getInstance()->create($encryptedMail, $pseudo, $firstname, $lastname, $_POST['roles']);
+
+        if ($userEntity === null) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
                 LangManager::translate('users.toaster.error_add'));
             Redirect::redirectPreviousRoute();
@@ -182,7 +187,8 @@ class UsersController extends AbstractController
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
         if (UsersModel::getCurrentUser()?->getId() === $id) {
-            Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.impossible"));
+            Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),
+                LangManager::translate("users.toaster.impossible"));
             Redirect::redirectPreviousRoute();
         }
 
@@ -190,7 +196,8 @@ class UsersController extends AbstractController
 
         UsersModel::getInstance()->changeState($id, $state);
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.status"));
+        Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),
+            LangManager::translate("users.toaster.status"));
 
         Redirect::redirectPreviousRoute();
     }
@@ -203,14 +210,16 @@ class UsersController extends AbstractController
         if (UsersModel::getCurrentUser()?->getId() === $id) {
 
             //Todo Try to remove that
-            Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.impossible_user"));
+            Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),
+                LangManager::translate("users.toaster.impossible_user"));
             Redirect::redirectPreviousRoute();
         }
 
         UsersModel::getInstance()->delete($id);
 
         //Todo Try to remove that
-        Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),LangManager::translate("users.toaster.user_deleted"));
+        Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),
+            LangManager::translate("users.toaster.user_deleted"));
 
         Redirect::redirectPreviousRoute();
     }
@@ -221,7 +230,6 @@ class UsersController extends AbstractController
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
         $image = $_FILES['profilePicture'];
-
 
         UserPictureModel::getInstance()->uploadImage($id, $image);
 
@@ -243,24 +251,24 @@ class UsersController extends AbstractController
     #[Link('/login', Link::POST)]
     private function loginPost(): void
     {
-        if(SecurityController::checkCaptcha()) {
+        if (SecurityController::checkCaptcha()) {
 
             [$mail, $password, $previousRoute] = Utils::filterInput("login_email", "login_password", "previousRoute");
 
-            if (Utils::containsNullValue($mail, $password)){
-                Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("core.toaster.db.missing_inputs"));
+            if (Utils::containsNullValue($mail, $password)) {
+                Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),
+                    LangManager::translate("core.toaster.db.missing_inputs"));
                 Redirect::redirectPreviousRoute();
             }
 
-            $infos = array(
-                "email" => $mail,
-                "password" => $password
-            );
-            $cookie = 0;
+            $encryptedMail = EncryptManager::encrypt($mail);
 
-            if (isset($_POST['login_keep_connect']) && $_POST['login_keep_connect']) {
-                $cookie = 1;
-            }
+            $infos = [
+                "email" => $encryptedMail,
+                "password" => $password
+            ];
+
+            $cookie = isset($_POST['login_keep_connect']) && $_POST['login_keep_connect'] ? 1 : 0;
 
             $userId = UsersModel::logIn($infos, $cookie);
             if ($userId > 0) {
@@ -276,7 +284,7 @@ class UsersController extends AbstractController
                 Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                     LangManager::translate("users.toaster.mail_pass_matching"));
                 Redirect::redirectPreviousRoute();
-            } else if ($userId === -2){
+            } else if ($userId === -2) {
                 Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                     LangManager::translate("users.toaster.not_registered_account"));
                 Redirect::redirectPreviousRoute();
@@ -299,7 +307,7 @@ class UsersController extends AbstractController
     private function login(): void
     {
         if (self::isUserLogged()) {
-           Redirect::redirectToHome();
+            Redirect::redirectToHome();
         }
 
 
@@ -325,26 +333,33 @@ class UsersController extends AbstractController
     #[NoReturn] #[Link('/login/forgot', Link::POST)]
     private function forgotPasswordPost(): void
     {
-        $mail = filter_input(INPUT_POST, "mail");
+        if (SecurityController::checkCaptcha()) {
+            $mail = filter_input(INPUT_POST, "mail");
 
-        //We check if this email exist
-        if(UsersModel::getInstance()->checkEmail($mail) <= 0) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                LangManager::translate('users.toaster.not_registered_account'));
+            $encryptedMail = EncryptManager::encrypt($mail);
 
+            //We check if this email exist
+            if (UsersModel::getInstance()->checkEmail($encryptedMail) <= 0) {
+                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                    LangManager::translate('users.toaster.not_registered_account'));
+
+                Redirect::redirectPreviousRoute();
+            }
+            //We send a verification link for this mail
+            UsersModel::getInstance()->resetPassword($encryptedMail);
+
+            Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+                LangManager::translate('users.toaster.password_reset', ['mail' => $mail]));
+
+            if (str_starts_with($_SERVER['HTTP_REFERER'], EnvManager::getInstance()->getValue('PATH_URL') . 'cmw-admin/')) {
+                Redirect::redirectPreviousRoute();
+            }
+
+            Redirect::redirect("login");
+        } else {
+            //TODO Toaster invalid captcha
             Redirect::redirectPreviousRoute();
         }
-        //We send a verification link for this mail
-        UsersModel::getInstance()->resetPassword($mail);
-
-        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-            LangManager::translate('users.toaster.password_reset', ['mail' => $mail]));
-
-        if (str_starts_with($_SERVER['HTTP_REFERER'], EnvManager::getInstance()->getValue('PATH_URL') . 'cmw-admin/')){
-            Redirect::redirectPreviousRoute();
-        }
-
-        Redirect::redirect("login");
     }
 
     /**
@@ -353,7 +368,7 @@ class UsersController extends AbstractController
     #[Link('/register', Link::GET)]
     private function register(): void
     {
-        if (!self::isUserLogged()) {
+        if (self::isUserLogged()) {
             Redirect::redirectToHome();
         }
 
@@ -364,69 +379,70 @@ class UsersController extends AbstractController
     #[NoReturn] #[Link('/register', Link::POST)]
     private function registerPost(): void
     {
-        if(SecurityController::checkCaptcha()) {
-        if (UsersModel::getInstance()->checkPseudo(filter_input(INPUT_POST, "register_pseudo")) > 0) {
-            Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.used_pseudo"));
-            Redirect::redirect('register');
-        } else if (UsersModel::getInstance()->checkEmail(filter_input(INPUT_POST, "register_email")) > 0) {
-            Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.used_mail"));
-            Redirect::redirect('register');
-        } else if (UsersSettingsModel::getInstance()->isPseudoBlacklisted(filter_input(INPUT_POST, "register_pseudo"))){
-            Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),
-                LangManager::translate("users.toaster.blacklisted_pseudo"));
-            Redirect::redirect('register');
-        } else {
-
-            [$mail, $pseudo, $password, $passwordVerify] = Utils::filterInput("register_email", "register_pseudo", "register_password", "register_password_verify");
-
-            if (!is_null($password) && $password !== $passwordVerify) {
-                Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),LangManager::translate("users.toaster.not_same_pass"));
+        if (SecurityController::checkCaptcha()) {
+            $encryptedMail = EncryptManager::encrypt(filter_input(INPUT_POST, "register_email"));
+            if (UsersModel::getInstance()->checkPseudo(filter_input(INPUT_POST, "register_pseudo")) > 0) {
+                Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),
+                    LangManager::translate("users.toaster.used_pseudo"));
                 Redirect::redirect('register');
-            }
-
-            $defaultRoles = RolesModel::getInstance()->getDefaultRoles();
-            $defaultRolesId = [];
-
-            foreach ($defaultRoles as $role){
-                $defaultRolesId[] = $role->getId();
-            }
-
-            $userEntity = UsersModel::getInstance()->create($mail, $pseudo, "", "", $defaultRolesId);
-
-            UsersModel::getInstance()->updatePass($userEntity?->getId(), password_hash($password, PASSWORD_BCRYPT));
-
-
-            /* Connection */
-
-            $infos = array(
-                "email" => filter_input(INPUT_POST, "register_email"),
-                "password" => filter_input(INPUT_POST, "register_password")
-            );
-
-            $cookie = 1;
-
-            $userId = UsersModel::logIn($infos, $cookie);
-            if ($userId > 0) {
-                UsersModel::getInstance()->updateLoggedTime($userId);
-
-                Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),
-                    LangManager::translate("users.toaster.welcome"));
-                Redirect::redirect('profile');
-            } else if ($userId === -1) {
-                Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                    LangManager::translate("users.toaster.mail_pass_matching"));
-                Redirect::redirectPreviousRoute();
-            } else if ($userId === -2){
-                Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                    LangManager::translate("users.toaster.not_registered_account"));
-                Redirect::redirectPreviousRoute();
+            } else if (UsersModel::getInstance()->checkEmail($encryptedMail) > 0) {
+                Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),
+                    LangManager::translate("users.toaster.used_mail"));
+                Redirect::redirect('register');
+            } else if (UsersSettingsModel::getInstance()->isPseudoBlacklisted(filter_input(INPUT_POST, "register_pseudo"))) {
+                Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),
+                    LangManager::translate("users.toaster.blacklisted_pseudo"));
+                Redirect::redirect('register');
             } else {
-                Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                    LangManager::translate("core.toaster.internalError"));
-                Redirect::redirectPreviousRoute();
-            }
+                [$pseudo, $password, $passwordVerify] = Utils::filterInput("register_pseudo", "register_password", "register_password_verify");
 
-        }
+                if (!is_null($password) && $password !== $passwordVerify) {
+                    Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),
+                        LangManager::translate("users.toaster.not_same_pass"));
+                    Redirect::redirect('register');
+                }
+
+                $defaultRoles = RolesModel::getInstance()->getDefaultRoles();
+                $defaultRolesId = [];
+
+                foreach ($defaultRoles as $role) {
+                    $defaultRolesId[] = $role->getId();
+                }
+
+                $userEntity = UsersModel::getInstance()->create($encryptedMail, $pseudo, "", "", $defaultRolesId);
+
+                UsersModel::getInstance()->updatePass($userEntity?->getId(), password_hash($password, PASSWORD_BCRYPT));
+
+
+                /* Connection */
+
+                $infos = array(
+                    "email" => $encryptedMail,
+                    "password" => $password
+                );
+
+                $userId = UsersModel::logIn($infos, 1);
+                if ($userId > 0) {
+                    UsersModel::getInstance()->updateLoggedTime($userId);
+
+                    Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),
+                        LangManager::translate("users.toaster.welcome"));
+                    Redirect::redirect('profile');
+                } else if ($userId === -1) {
+                    Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                        LangManager::translate("users.toaster.mail_pass_matching"));
+                    Redirect::redirectPreviousRoute();
+                } else if ($userId === -2) {
+                    Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                        LangManager::translate("users.toaster.not_registered_account"));
+                    Redirect::redirectPreviousRoute();
+                } else {
+                    Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                        LangManager::translate("core.toaster.internalError"));
+                    Redirect::redirectPreviousRoute();
+                }
+
+            }
         } else {
             //TODO Toaster invalid captcha
             Redirect::redirectPreviousRoute();
@@ -440,11 +456,11 @@ class UsersController extends AbstractController
     #[Link('/profile', Link::GET)]
     private function publicProfile(): void
     {
-        if (!self::isUserLogged() && !UserSettingsEntity::getInstance()->isProfilePageEnabled()){
+        if (!self::isUserLogged() && !UserSettingsEntity::getInstance()->isProfilePageEnabled()) {
             Redirect::redirect('login');
         }
 
-        if (!UserSettingsEntity::getInstance()->isProfilePageEnabled()){
+        if (!UserSettingsEntity::getInstance()->isProfilePageEnabled()) {
             Redirect::redirectToHome();
         }
 
@@ -466,7 +482,7 @@ class UsersController extends AbstractController
     #[Link('/profile', Link::POST)]
     private function publicProfilePost(): void
     {
-        if (!UserSettingsEntity::getInstance()->isProfilePageEnabled()){
+        if (!UserSettingsEntity::getInstance()->isProfilePageEnabled()) {
             Redirect::redirectToHome();
         }
 
@@ -489,11 +505,11 @@ class UsersController extends AbstractController
     #[Link('/profile/:pseudo', Link::GET, ['pseudo' => '.*?'])]
     private function publicProfileWithPseudo(Request $request, string $pseudo): void
     {
-        if (!self::isUserLogged() && !UserSettingsEntity::getInstance()->isProfilePageEnabled()){
+        if (!self::isUserLogged() && !UserSettingsEntity::getInstance()->isProfilePageEnabled()) {
             Redirect::redirect('login');
         }
 
-        if (!UserSettingsEntity::getInstance()->isProfilePageEnabled()){
+        if (!UserSettingsEntity::getInstance()->isProfilePageEnabled()) {
             Redirect::redirectToHome();
         }
 
@@ -545,7 +561,7 @@ class UsersController extends AbstractController
 
         [$mail, $pseudo, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "name", "lastname");
 
-        if (UsersSettingsModel::getInstance()->isPseudoBlacklisted($pseudo)){
+        if (UsersSettingsModel::getInstance()->isPseudoBlacklisted($pseudo)) {
             Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),
                 LangManager::translate("users.toaster.blacklisted_pseudo"));
             Redirect::redirectPreviousRoute();
@@ -555,7 +571,7 @@ class UsersController extends AbstractController
 
         $rolesId = array();
 
-        foreach ($roles as $role){
+        foreach ($roles as $role) {
             $rolesId[] = $role->getId();
         }
 
@@ -569,7 +585,7 @@ class UsersController extends AbstractController
                 UsersModel::getInstance()->updatePass($user?->getId(), password_hash($pass, PASSWORD_BCRYPT));
             } else {
                 //Todo Try to edit that
-                Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),"Je sais pas ?");
+                Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"), "Je sais pas ?");
             }
         }
 

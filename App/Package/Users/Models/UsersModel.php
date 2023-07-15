@@ -11,6 +11,7 @@ use CMW\Manager\Database\DatabaseManager;
 
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractModel;
+use CMW\Manager\Security\EncryptManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
@@ -45,7 +46,7 @@ class UsersModel extends AbstractModel
         }
 
 
-        $roles = array();
+        $roles = [];
 
         $roleSql = "select * from cmw_users_roles where user_id = :user_id";
         $roleRes = $db->prepare($roleSql);
@@ -106,7 +107,7 @@ class UsersModel extends AbstractModel
 
         return new UserEntity(
             $res["user_id"],
-            $res["user_email"],
+            EncryptManager::decrypt($res["user_email"]),
             $res["user_pseudo"],
             $res["user_firstname"] ?? "",
             $res["user_lastname"] ?? "",
@@ -134,6 +135,29 @@ class UsersModel extends AbstractModel
         $req = $db->prepare($sql);
 
         if (!$req->execute(['pseudo' => $pseudo])){
+            return null;
+        }
+
+        $res = $req->fetch();
+
+        if (!$res){
+            return null;
+        }
+
+        $userId = (int)$res['user_id'];
+
+        return $this->getUserById($userId);
+    }
+
+    public function getUserWithMail(string $mail): ?UserEntity
+    {
+        $sql = "SELECT user_id FROM cmw_users WHERE user_email = :mail";
+
+        $db = DatabaseManager::getInstance();
+
+        $req = $db->prepare($sql);
+
+        if (!$req->execute(['mail' => $mail])){
             return null;
         }
 

@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `cmw_mail_config_smtp`
 CREATE TABLE IF NOT EXISTS `cmw_users`
 (
     `user_id`        INT(11)      NOT NULL AUTO_INCREMENT,
-    `user_email`     VARCHAR(255) NOT NULL,
+    `user_email`     VARCHAR(500) NOT NULL,
     `user_pseudo`    VARCHAR(255)          DEFAULT NULL,
     `user_firstname` VARCHAR(255)          DEFAULT NULL,
     `user_lastname`  VARCHAR(255)          DEFAULT NULL,
