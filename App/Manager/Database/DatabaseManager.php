@@ -38,7 +38,7 @@ class DatabaseManager
             $pass = EnvManager::getInstance()->getValue("DB_PASSWORD");
 
             self::$_instance = new PDO("mysql:host=" . $host . ";charset=utf8mb4", $user, $pass, [
-                PDO::ATTR_PERSISTENT => true
+                PDO::ATTR_PERSISTENT => true, PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4'
             ]);
 
             self::$_instance->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
