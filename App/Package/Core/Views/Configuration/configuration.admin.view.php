@@ -8,7 +8,7 @@ $title = LangManager::translate("core.config.title");
 $description = LangManager::translate("core.config.desc");
 ?>
 <div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fa-solid fa-gears"></i> <span class="m-lg-auto"><?= LangManager::translate("core.config.head") ?></span></h3>
+    <h3><i class="fa-solid fa-gears"></i> <span class="m-lg-auto"><?= LangManager::translate("core.config.title") ?></span></h3>
     <div class="buttons">
         <button form="Configuration" type="submit"
                 class="btn btn-primary"><?= LangManager::translate("core.btn.save", lineBreak: true) ?></button>
@@ -18,7 +18,7 @@ $description = LangManager::translate("core.config.desc");
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h4><?= LangManager::translate("core.config.title") ?></h4>
+                <h4><?= LangManager::translate("core.config.head") ?></h4>
             </div>
             <div class="card-body">
                 <form id="Configuration" action="" method="post" enctype="multipart/form-data">

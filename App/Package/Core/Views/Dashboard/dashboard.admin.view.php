@@ -146,9 +146,11 @@ Website::setDescription(LangManager::translate("core.dashboard.desc"));
                             <h5><?= LangManager::translate("core.dashboard.site_info") ?></h5>
                         </div>
                         <div class="card-body ">
-                            <p><?= LangManager::translate("core.dashboard.name") ?>
+                            <p><?= LangManager::translate("core.dashboard.name",
+                                    ['name' => CoreModel::getOptionValue("name")]) ?>
                                 <b><?= CoreModel::getOptionValue("name") ?></b></p>
-                            <p><?= LangManager::translate("core.dashboard.description") ?> <span
+                            <p><?= LangManager::translate("core.dashboard.description",
+                                    ['description' => CoreModel::getOptionValue("description")]) ?> <span
                                         class="text-muted"><?= CoreModel::getOptionValue("description") ?></span></p>
                             <div class="px-4 text-center">
                                 <a href="<?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "cmw-admin/configuration" ?>"
