@@ -7,7 +7,7 @@ return [
 		"create" => "Créer pour enregistrer"
 	],
 	"edit" => [
-		"title" => "Edition",
+		"title" => "Édition",
 		"desc" => "Modifiez votre page",
 	],
 	"delete" => [

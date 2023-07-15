@@ -286,7 +286,7 @@ class ThemeController extends AbstractController
         SimpleCacheManager::storeCache($themeConfigs, 'config', "Themes/" . $theme['name']);
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate("core.toaster.Theme.installed", ['theme' => $theme['name']]));
+            $theme['name'] . " " .LangManager::translate("core.toaster.Theme.installed"));
 
         Redirect::redirect("cmw-admin/theme/manage");
     }
