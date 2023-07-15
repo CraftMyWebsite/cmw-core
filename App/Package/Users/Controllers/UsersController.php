@@ -138,13 +138,15 @@ class UsersController extends AbstractController
         [$pass, $passVerif] = Utils::filterInput("pass", "passVerif");
         [$mail, $username, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "name", "lastname");
 
+        $encryptedMail = EncryptManager::encrypt($mail);
+
         if ($pass === "") {
-            UsersModel::getInstance()->update($id, $mail, $username, $firstname, $lastname, $_POST['roles']);
+            UsersModel::getInstance()->update($id, $encryptedMail, $username, $firstname, $lastname, $_POST['roles']);
             Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),
                 LangManager::translate("users.toaster.edited_not_pass_change"));
         } else if ($pass === $passVerif) {
             UsersModel::getInstance()->updatePass($id, password_hash($pass, PASSWORD_BCRYPT));
-            UsersModel::getInstance()->update($id, $mail, $username, $firstname, $lastname, $_POST['roles']);
+            UsersModel::getInstance()->update($id, $encryptedMail, $username, $firstname, $lastname, $_POST['roles']);
             Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),
                 LangManager::translate("users.toaster.edited_pass_change"));
         } else {
