@@ -15,7 +15,7 @@ return [
                       l'environnement dans lequel vous êtes. Merci de bien vouloir noter les informations que vous ne connaissez pas.</p>
                       <p>Passons maintenant à l'Installation de votre nouveau site ...</p>",
         "readaccept" => "J'ai lu et j'accepte les conditions générales d'utilisations",
-        "cgu" => "Condition Générale d'Utilisation",
+        "cgu" => "Conditions Générales d'Utilisation",
         "error" => [
             "cgu" => "Merci d'accepter les CGU avant de procéder à l'Installation de votre site CraftMyWebsite"
         ]
@@ -27,7 +27,7 @@ return [
     ],
     "password" => [
         "strenght" => "Force du mot de passe :",
-        "notmatch" => "Les mot de passe ne correspondent pas !"
+        "notmatch" => "Les mots de passe ne correspondent pas !"
     ],
     "search" => "Rechercher",
     "config" => [
@@ -44,7 +44,7 @@ return [
         "settings" => [
             "settings" => "Réglages",
             "devmode" => "Activer le mode développeur",
-            "devmode_about" => "ATTENTION ! À n'utiliser qu'en connaissance de cause.<br>Le cocher inutilement peut engendrer des failles sur votre site internet. Il est fortement déconseillé d'activer cette option pour un site en production.",
+            "devmode_about" => "ATTENTION ! À n'utiliser qu'en connaissance de cause.<br>L'activer inutilement peut engendrer des failles sur votre site internet. Il est fortement déconseillé de l'activer pour un site en production.",
             "site_folder" => "Dossier d'installation",
             "site_folder_about" => "Généralement <code>/</code>. Si CraftMyWebsite se trouve dans un dossier, veuillez indiquer <code>/dossier/</code>."
         ]
@@ -70,19 +70,18 @@ return [
         "tags" => "Tags",
         "help" => [
             "title" => "Personnalisez votre Installation",
-            "content" => "<b>Informations :</b> Cette étape vous permet en quelques click d'installer les package dont vous aurez
+            "content" => "<b>Informations :</b> Cette étape vous permet en quelques clique d'installer les packages dont vous aurez
                 besoin pour bien commencer votre site.<br>
-                Cette configuration n'est pas définitive, il est possible d'en ajouter d'autre plus tard via votre panel
+                Cette configuration n'est pas définitive, il est possible d'en ajouter ou d'en retirer par la suite via votre panel
                 d'administration.<br><br>
-                <b>Presets : </b>Les presets vous précoche les package les plus adapté à vos besoin, vous pouvez toutes
-                fois en enlever / rajouter d'autre en fonctione de vos besoin.<br>",
+                <b>Presets : </b>Les presets vous présélectionne les packages les plus adaptés à vos besoins, vous pouvez tout de même en ajouter d'autres ou en retirer en fonction de vos besoin.<br>",
             "footer" => "**Survolez un package pour en savoir plus"
         ]
     ],
 
     "themes" => [
         "title" => "Choix d'un thème",
-        "sub_title" => "Cliquez sur l'image pour séléctionner",
+        "sub_title" => "Cliquez sur l'image pour sélectionner",
         "compatibility" => "Compatibilité",
         "more" => "Plus d'informations"
     ],
@@ -97,7 +96,7 @@ return [
         "review" => "Revoyons ensemble votre configuration :",
         "version" => "Version CMW :",
         "Theme" => "Thème :",
-        "bundle" => "bundle :",
+        "bundle" => "Bundle :",
         "package" => "Packages :",
         "goToMySite" => "Aller sur mon site",
     ],
