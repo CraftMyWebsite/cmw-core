@@ -4,7 +4,7 @@ return [
     "home" => "Accueil",
     "cgu" => "CGU",
     "cgv" => "CGV",
-    "nolink" => "Pas de lien ou de redirection",
+    "nolink" => "Pas de lien ou de rediréction",
     "general" => "Général",
     "package" => "Package",
     "packages" => "Packages",
@@ -15,8 +15,8 @@ return [
     "header" => [
         "notification" => "Notifications",
         "cms_ver" => "CMS : Version",
-        "cms_update" => "Une mise à jour du CMS est disponible !",
-        "update_to" => "Veuillez mettre à jour vers la version %version%",
+        "cms_update" => "Une mises à jour du CMS est disponible !",
+        "update_to" => "Veuillez mettre à jour vers",
         "package" => "Package",
         "theme" => "Thème",
         "all_is_fine" => "Tout va bien",
@@ -24,13 +24,13 @@ return [
     ],
     "condition" => [
         "title" => "Conditions générales",
-        "cgv" => "Conditions générales de vente (CGV)",
-        "cgu" => "Conditions générales d'utilisation (CGU)",
+        "cgv" => "Condition général de vente (CGV)",
+        "cgu" => "Condition général d'utilisation (CGU)",
         "activecgv" => "Activer les CGV",
         "activecgu" => "Activer les CGU",
         "content" => "Contenu :",
-        "updateby" => "Mis à jour par %author%",
-        "on" => "le %date%",
+        "updateby" => "Mis à jour par",
+        "on" => "le",
     ],
     "dashboard" => [
         "title" => "Tableau de bord",
@@ -43,8 +43,8 @@ return [
         "total_visits" => "Visites totales",
         "welcome" => "Bienvenue",
         "site_info" => "Informations du site",
-        "name" => "Nom : %name%",
-        "description" => "Description : %description%",
+        "name" => "Nom :",
+        "description" => "Description :",
         "edit" => "Modifier ces informations",
         "visits" => "Visites",
         "registers" => "Inscriptions",
@@ -55,10 +55,10 @@ return [
     "menus" => [
         "title" => "Menus",
         "desc" => "Gérez les menus de votre site",
-        "delete_title" => "Supression de : %menu%",
+        "delete_title" => "Supression de :",
         "delete_message" => "Cette suppression est définitive",
-        "send_to" => "Renvoie vers : %url%",
-        "add_sub_menu" => "Ajout d'un sous-menu dans %menu%",
+        "send_to" => "Renvoie vers :",
+        "add_sub_menu" => "Ajout d'un sous-menu dans",
         "add" => [
             "name" => "Nom du menu",
             "name_hint" => "Votes",
@@ -82,13 +82,13 @@ return [
         "preview" => 'Vous pouvez prévisualiser le rendu des styles <a href="https://highlightjs.org/static/demo/" target="_blank">ici</a>',
     ],
     "config" => [
-        "title" => "Configuration",
         "head" => "Réglages",
+        "title" => "Configuration",
         "desc" => "Configurez votre site CMW !",
         "favicon" => "Modifiez le favicon de votre site",
         "favicon_tips" => 'CraftMyWebsite accepte uniquement les images <a href="https://www.icoconverter.com" target="_blank">.ico</a> pour des soucis de performances.',
         "dateFormat" => "Format des dates",
-        "dateFormatTooltip" => "Vous pouvez personnaliser la façon dont vous affichez les dates",
+        "dateFormatTooltip" => "Vous pouvez personnaliser le façon dont vous affichez les dates",
         "custom" => "-- Personnalisez-moi --",
     ],
     "Lang" => [
@@ -105,7 +105,7 @@ return [
         "register" => "Autorisez uniquement les comptes Minecraft PREMIUM à s'inscrire sur votre site",
     ],
     "database" => [
-        "error" => "Erreur de base de données : ",
+        "error" => "Erreur base de donnée: ",
     ],
     "toaster" => [
         "success" => "Succès",
@@ -120,19 +120,19 @@ return [
         ],
         "Theme" => [
             "regenerate" => "Configuration du thème regénérée",
-            "installed" => "%theme% viens d'être installé et activé."
+            "installed" => "viens d'être installer et activer."
         ],
         "db" => [
             "config" => [
                 "success" => "Configuration fonctionnelle",
                 "error" => "Configuration invalide",
-                "alreadyInstalled" => "Base de données déjà installée !"
+                "alreadyInstalled" => "Base de donnée déjà installée !"
             ],
             "missing_inputs" => "Merci de remplir tous les champs !",
         ],
         "security" => [
             "healthReport" => [
-                "copied" => "Contenu copié !",
+                "copied" => "Contenue copié !",
                 "delete" => "Health Reports supprimés"
             ],
         ],
@@ -164,17 +164,17 @@ return [
     "Theme" => [
         "myThemes" => "Mes thèmes",
         "market" => "Market",
-        "details" => "Détails",
+        "details" => "Details",
         "install" => "Installer",
         "notVerified" => "Non verifié par CMW.",
         "active" => "Thème actif",
         "configure" => "Configurer",
         "reset" => "Réinitialiser",
         "reinstall" => "Réinstaller",
-        "description" => "Description : ",
-        "update" => "Mise à jour disponible !",
-        "descriptionManualInstall" => "Ce thème est installé manuellement, il n'est pas enregistré auprès de CraftMyWebsite.<br>Utilisez ce thème en connaissance de cause.<br>Si vous développez ce thème pour le publier ensuite sur le Market de CraftMyWebsite ne tenez pas compte de ce message.",
-        "descriptionIsSampler" => "Sampler est le thème par défaut fourni avec CraftMyWebsite.",
+        "description" => "Déscription : ",
+        "update" => "Mises à jour disponible !",
+        "descriptionManualInstall" => "Ce thème est installé manuellement, il n'est pas enregistrer auprès de CraftMyWebsite.<br>Utilisez ce thème en conaissance de cause.<br>Si vous développez ce thème pour le publier ensuite sur le Market de CraftMyWebsite ne tenez pas compte de ce message.",
+        "descriptionIsSampler" => "Sampler est le thème par défaut fournis avec CraftMyWebsite.",
         "author" => "Auteur : ",
         "demo" => "Démo",
         "activate" => "Activer",
@@ -184,21 +184,21 @@ return [
         "close" => "Fermer",
         "appearance" => "Apparence de ",
         "verification" => "Vérification",
-        "verificationText" => "Attention, ceci va réinitialiser tout les paramètres par defaut de votre thème, êtes-vous sûr de vouloir continuer ?",
+        "verificationText" => "Attention, ceci va réinitialiser tout les paramètres par defaut de votre thème, êtes vous sûr de vouloir continuer ?",
         "config" => [
             "title" => "Gestion",
             "description" => "Gérez les thèmes de votre site",
             "select" => "Choisissez votre thème",
             "list" => [
-                "title" => "Liste des thèmes officiels",
-                "info" => "Vous pouvez directement télécharger nos thèmes sur notre Market",
+                "title" => "Liste des Thèmes officiels",
+                "info" => "Vous pouvez directement télécharger nos Thèmes sur notre Market",
                 "name" => "Nom",
                 "version" => "Version",
                 "cmw_version" => "Version CMW",
-                "downloads" => "Nombre de téléchargements",
+                "downloads" => "Nombre de téléchargement",
                 "download" => "Télécharger",
             ],
-            "regen_config" => "Regénérer la config du thème"
+            "regen_config" => "Re-générer la config du thème"
         ],
         "manage" => [
             "title" => "Gérez votre thème <b>%Theme%</b>",
@@ -218,17 +218,17 @@ return [
         "update" => "Mettre à jour",
         "demo" => "Démo",
         "close" => "Fermer",
-        "removeTitle" => "Voulez-vous supprimer %package% ?",
+        "removeTitle" => "Voulez-vous supprimer",
         "removeText" => "La suppression de ce package est définitive.<br>Voulez-vous continuer ?",
-        "description" => "Description: ",
+        "description" => "Déscription: ",
         "descriptionNotAvailable" => "Ce package est installé manuellement, il n'est pas enregistré auprès de CraftMyWebsite.<br>Utilisez ce package en connaissance de cause.<br>Si vous développez ce package pour le publier ensuite sur le Market de CraftMyWebsite, ne tenez pas compte de ce message.",
         "details" => "Détails",
         "author" => "Auteur : ",
-        "downloads" => "Téléchargements : ",
-        "version" => "Version du package : ",
-        "versionCMW" => "Version CMW recommandée : ",
+        "downloads" => "Téléchargements: ",
+        "version" => "Version du package: ",
+        "versionCMW" => "Version CMW recommandée: ",
         "notVerified" => "Non verifié par CMW.",
-        "updateAvailable" => "Mise à jour disponible !",
+        "updateAvailable" => "Mises à jour disponible !",
         "desc" => "Gérer vos packages",
         "myPackages" => "Mes packages",
         "market" => "Market",
@@ -257,8 +257,8 @@ return [
             "userSMTP" => "Utilisateur SMTP",
             "passwordSMTP" => "Mot de passe",
             "portSMTP" => "Port SMTP",
-            "protocol" => "Protocole d'envoi",
-            "footer" => "Signature de vos mails",
+            "protocol" => "Protocole d'envoie",
+            "footer" => "Footer de vos mails",
             "formatting" => "Mise en forme",
             "name" => "Nom d'affichage :",
             "placeholder" => "Nom de votre site",
@@ -268,13 +268,13 @@ return [
                 "warning" => "Pensez à bien sauvegarder votre configuration avant de débuter le test !",
                 "description" => "Vous pouvez tester votre configuration en envoyant un mail à votre adresse e-mail.",
                 "receiverMail" => "Adresse e-mail du destinataire",
-                "receiverMailPlaceholder" => "Entrez l'adresse mail",
+                "receiverMailPlaceholder" => "Entrez l'adresse e-mail",
             ]
         ]
     ],
     "downloads" => [
         "errors" => [
-            "internalError" => "Erreur interne avec la ressource %name% - %version%"
+            "internalError" => "Erreur interne avec la resource %name% - %version%"
         ]
     ],
     "updates" => [
@@ -283,15 +283,15 @@ return [
         "pageTitle" => "Mises à jour du CMS",
         "updateButton" => "Mettre à jour",
         "warningUpdate" => "Attention ! Vous n'utilisez pas la dernière version du CMS, veuillez le mettre à jour dès maintenant.",
-        "updateTo" => "Veuillez mettre à jour vers la version",
+        "updateTo" => "Veuillez mettre à jour vers",
         "isUp" => "Votre CMS est à jour !",
-        "availableFrom" => "Disponible depuis le :",
-        "lastNote" => "Notes de version :",
-        "previousVersion" => "Versions précedentes",
+        "availableFrom" => "Disponnible depuis le :",
+        "lastNote" => "Note de version :",
+        "previousVersion" => "Version prècedentes",
         "publishAt" => "Publié le",
         "errors" => [
             "download" => "Impossible de télécharger la dernière version du CMS.",
-            "nullFileUpdate" => "Cette version n'a pas de fichier de MAJ.",
+            "nullFileUpdate" => "Cette version n'à pas de fichier de MAJ.",
             "prepareArchive" => "Impossible de préparer l'archive pour la MAJ.",
             "deletedFiles" => "Impossible de supprimer les anciens fichiers.",
             "deleteFile" => "Impossible de supprimer le fichier %file%",
@@ -360,7 +360,7 @@ return [
         "left" => "Copyright &copy; 2014 - " . date("Y") . " Tous droits réservés.",
         "right" => "Merci d'utiliser <a target='_blank' href='https://craftmywebsite.fr/'>CraftMyWebsite</a>.",
         "used" => "Vous utilisez la version ",
-        "upgrade" => "Veuillez mettre à jour vers la version",
+        "upgrade" => "Veuillez mettre à jour vers ",
     ],
     "btn" => [
         "save" => "Sauvegarder",
@@ -381,9 +381,9 @@ return [
         "enabled" => "Activé",
     ],
     "months" => [
-        "list" => '["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"]',
+        "list" => '["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Decembre"]',
         1 => "Janvier",
-        2 => "Février",
+        2 => "Fevrier",
         3 => "Mars",
         4 => "Avril",
         5 => "Mai",
@@ -393,18 +393,18 @@ return [
         9 => "Septembre",
         10 => "Octobre",
         11 => "Novembre",
-        12 => "Décembre"
+        12 => "Decembre"
     ],
     "week" => "Semaine ",
     "errors" => [
         "requests" => [
-            'required' => 'Champ %key% manquant',
-            'empty' => 'Champ %key% vide',
+            'required' => 'Champs %key% manquant',
+            'empty' => 'Champs %key% vide',
             'slug' => 'Slug %key% invalide',
-            'minLength' => 'Le champ %key% doit contenir plus de %min% caractères',
-            'maxLength' => 'Le champ %key% doit contenir moins de %max% caractères',
-            'betweenLength' => 'Le champ %key% doit contenir entre %min% et %max% caractères',
-            'dateTime' => 'Le champ %key% doit être une date valide (%format%)',
+            'minLength' => 'Le champs %key% doit contenir plus de %min% caractères',
+            'maxLength' => 'Le champs %key% doit contenir moins de %max% caractères',
+            'betweenLength' => 'Le champs %key% doit contenir entre %min% et %max% caractères',
+            'dateTime' => 'Le champs %key% doit être une date valide (%format%)',
             'getValue' => 'Valeur introuvable %key%',
             'type' => 'Type invalide pour %key%'
         ],

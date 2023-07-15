@@ -110,11 +110,7 @@ $description = LangManager::translate("core.Package.desc"); ?>
                     <div class="modal-content">
                         <div class="modal-header bg-danger">
                             <h5 class="modal-title white"
-                                id="myModalLabel160">
-                                <?= LangManager::translate("core.Package.removeTitle",
-                                    ['package' => $packages->getName()]) ?>
-                                <?= $packages->getName() ?>
-                            </h5>
+                                id="myModalLabel160"><?= LangManager::translate("core.Package.removeTitle") ?> <?= $packages->getName() ?></h5>
                         </div>
                         <div class="modal-body text-left">
                             <p><?= LangManager::translate("core.Package.removeText") ?></p>
@@ -271,11 +267,7 @@ $description = LangManager::translate("core.Package.desc"); ?>
                         <div class="modal-content">
                             <div class="modal-header bg-danger">
                                 <h5 class="modal-title white"
-                                    id="myModalLabel160">
-                                    <?= LangManager::translate("core.Package.removeTitle",
-                                        ['package' => $packages['name']]) ?>
-                                    <?= $packages['name'] ?>
-                                </h5>
+                                    id="myModalLabel160"><?= LangManager::translate("core.Package.removeTitle") ?> <?= $packages['name'] ?></h5>
                             </div>
                             <div class="modal-body text-left">
                                 <p><?= LangManager::translate("core.Package.removeText") ?></p>
