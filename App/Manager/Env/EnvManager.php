@@ -3,7 +3,6 @@
 namespace CMW\Manager\Env;
 
 use Closure;
-use CMW\Manager\Security\EncryptManager;
 use CMW\Utils\Utils;
 use Exception;
 
