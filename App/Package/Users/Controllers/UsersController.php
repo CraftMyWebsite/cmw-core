@@ -313,7 +313,7 @@ class UsersController extends AbstractController
     #[Link('/login/forgot', Link::GET)]
     private function forgotPassword(): void
     {
-        if (!self::isUserLogged()) {
+        if (self::isUserLogged()) {
             Redirect::redirectToHome();
         }
 
