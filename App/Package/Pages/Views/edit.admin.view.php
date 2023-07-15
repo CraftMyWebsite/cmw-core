@@ -178,11 +178,11 @@ $description = LangManager::translate("pages.edit.desc");
             .then((savedData) => {
 
                 let formData = new FormData();
-                formData.append('news_id', document.getElementById("page_id").value);
-                formData.append('news_title', document.getElementById("title").value);
-                formData.append('news_slug', document.getElementById("slug").value);
-                formData.append('news_content', JSON.stringify(savedData));
-                formData.append('page_state', page_state.toString());
+                formData.append('id', document.getElementById("page_id").value);
+                formData.append('title', document.getElementById("title").value);
+                formData.append('slug', document.getElementById("slug").value);
+                formData.append('content', JSON.stringify(savedData));
+                formData.append('state', page_state.toString());
 
                 fetch("<?= EnvManager::getInstance()->getValue("PATH_URL") ?>cmw-admin/pages/edit", {
                     method: "POST",

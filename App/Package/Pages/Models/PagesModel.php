@@ -10,7 +10,7 @@ use JsonException;
 use PDOStatement;
 
 /**
- * Class: @pagesModel
+ * Class: @PagesModel
  * @package Pages
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
  * @version 1.0
@@ -78,7 +78,7 @@ class PagesModel extends AbstractModel
 
     /*=> CREATE */
 
-    public function createPage($title, $slug, $content, $userId, $state): ?PageEntity
+    public function createPage(string $title, string $slug, string $content, int $userId, int $state): ?PageEntity
     {
         $data = array(
             "page_title" => mb_strimwidth($title, 0, 255),
@@ -104,7 +104,7 @@ class PagesModel extends AbstractModel
 
     /*=> DELETE */
 
-    public function deletePage($id): bool
+    public function deletePage(int $id): bool
     {
         $var = array(
             "page_id" => $id,
@@ -117,7 +117,7 @@ class PagesModel extends AbstractModel
 
     /*=> UPDATE */
 
-    public function updatePage($id, $slug, $title, $content, $state): ?PageEntity
+    public function updatePage(int $id, string $slug, string $title, string $content, int $state): ?PageEntity
     {
         $var = array(
             "page_id" => $id,
@@ -140,7 +140,7 @@ class PagesModel extends AbstractModel
         return null;
     }
 
-    public function updateEditTime($id): void
+    public function updateEditTime(int $id): void
     {
         $var = array(
             "page_id" => $id,

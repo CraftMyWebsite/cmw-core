@@ -8,10 +8,10 @@ use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Error\ErrorManager;
 use CMW\Manager\Flash\Alert;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
-use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Router\LinkStorage;
 use CMW\Manager\Views\View;
@@ -127,7 +127,7 @@ class InstallerController extends AbstractController
     public function getInstallPage(): void
     {
 
-        if (self::getInstallationStep() === -1){
+        if (self::getInstallationStep() === -1) {
             Redirect::redirectToHome();
         }
 
@@ -160,7 +160,7 @@ class InstallerController extends AbstractController
             ->setCustomTemplate(EnvManager::getInstance()->getValue("DIR") . "Installation/Views/template.php")
             ->addStyle("Admin/Resources/Vendors/Izitoast/iziToast.min.css")
             ->addScriptAfter("Admin/Resources/Vendors/Izitoast/iziToast.min.js",
-                                    "Installation/Views/Assets/Js/changeLang.js")
+                "Installation/Views/Assets/Js/changeLang.js")
             ->addVariableList(['lang' => $lang]);
 
         $view->view();
@@ -211,6 +211,9 @@ class InstallerController extends AbstractController
             EnvManager::getInstance()->setOrEditValue('CMW_KEY', $apiReturn['uuid']);
         } else {
             EnvManager::getInstance()->setOrEditValue('CMW_KEY', 'ERROR');
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.toaster.internalError' . ' (CMW_KEY)'));
+            Website::refresh();
         }
 
         EnvManager::getInstance()->editValue("installStep", 1);
@@ -224,7 +227,7 @@ class InstallerController extends AbstractController
     {
         [$host, $username, $password, $port] = Utils::filterInput("bdd_address", "bdd_login", "bdd_pass", "bdd_port");
 
-        $db = isset($_POST['bdd_name']) ? filter_input(INPUT_POST, "bdd_name") : "cmw" ;
+        $db = isset($_POST['bdd_name']) ? filter_input(INPUT_POST, "bdd_name") : "cmw";
 
         if (!InstallerModel::tryDatabaseConnection($host, $username, $password, $port)) {
             print (json_encode(["status" => 0,
@@ -437,7 +440,7 @@ class InstallerController extends AbstractController
         ErrorManager::enableErrorDisplays();
         EnvManager::getInstance()->editValue("installStep", -1);
 
-        if (EnvManager::getInstance()->getValue('DEVMODE') === '0'){
+        if (EnvManager::getInstance()->getValue('DEVMODE') === '0') {
             Directory::delete(EnvManager::getInstance()->getValue('DIR') . 'Installation');
         }
 

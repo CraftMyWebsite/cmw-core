@@ -33,8 +33,15 @@ class DatabaseManager
 
         try {
 
-            self::$_instance = new PDO("mysql:host=" . EnvManager::getInstance()->getValue("DB_HOST"), EnvManager::getInstance()->getValue("DB_USERNAME"), EnvManager::getInstance()->getValue("DB_PASSWORD"),
-                [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4', PDO::ATTR_PERSISTENT => true]);
+            $host = EnvManager::getInstance()->getValue("DB_HOST");
+            $user = EnvManager::getInstance()->getValue("DB_USERNAME");
+            $pass = EnvManager::getInstance()->getValue("DB_PASSWORD");
+
+            self::$_instance = new PDO("mysql:host=" . $host . ";charset=utf8mb4", $user, $pass, [
+                PDO::ATTR_PERSISTENT => true
+            ]);
+
+            self::$_instance->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
             self::$_instance->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
             self::$_instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             self::$_instance->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
