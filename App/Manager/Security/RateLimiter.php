@@ -4,10 +4,12 @@
 namespace CMW\Manager\Security;
 
 
+use CMW\Manager\Env\EnvManager;
+
 class RateLimiter
 {
     private string $cookieName = "cmw_rate_limit";
-    private int $maxCount = 30;
+    private int $maxCount = 100;
 
     public function __construct()
     {
@@ -20,6 +22,11 @@ class RateLimiter
      */
     private function logic(): void
     {
+        // If we are in devmode, we ignore the rateLimiter
+        if (EnvManager::getInstance()->getValue('DEVMODE') === '1'){
+            return;
+        }
+
         if ($this->getCount() >= $this->maxCount) {
             http_response_code(429);
             die();

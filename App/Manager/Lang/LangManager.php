@@ -80,7 +80,7 @@ class LangManager
         return self::getTranslationList($package, $lang);
     }
 
-    public static function translate(string $valueToTranslate, array $vars = [], bool $lineBreak = false): string
+    public static function translate(string $valueToTranslate, array $vars = [], bool $lineBreak = false, bool $forJs = false): string
     {
         $CANNOT_TRANSLATE = strtoupper(str_replace("%value%", "<b>$valueToTranslate</b>", self::CANNOT_TRANSLATE));
 
@@ -103,6 +103,12 @@ class LangManager
             return $CANNOT_TRANSLATE;
         }
 
-        return self::parseVariables($translation, $vars) . ($lineBreak ? "<br>" : "");
+        $toReturn = self::parseVariables($translation, $vars) . ($lineBreak ? "<br>" : "");
+
+        if ($forJs){
+            $toReturn = '"' . $toReturn . '"';
+        }
+
+        return $toReturn;
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
-namespace CMW\Controller\pages;
+namespace CMW\Controller\Pages;
 
-use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\EditorController;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Flash\Alert;
@@ -29,7 +28,6 @@ use JsonException;
  */
 class PagesController extends AbstractController
 {
-    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/pages")]
     #[Link("/", Link::GET, [], "/cmw-admin/pages")]
     private function adminPagesList(): void
     {
@@ -38,8 +36,8 @@ class PagesController extends AbstractController
         $pagesList = PagesModel::getInstance()->getPages();
 
         View::createAdminView('Pages', 'page')
-            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css","Admin/Resources/Assets/Css/Pages/simple-datatables.css")
-            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js","Admin/Resources/Assets/Js/Pages/simple-datatables.js")
+            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css", "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
+            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js", "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
             ->addVariableList(["pagesList" => $pagesList])
             ->view();
     }
@@ -74,17 +72,16 @@ class PagesController extends AbstractController
     private function adminPagesAddPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.add");
-        
-        $pageTitle = filter_input(INPUT_POST, "page_title");
-        $pageSlug = Utils::normalizeForSlug(filter_input(INPUT_POST, "page_slug"));
-        $pageContent = filter_input(INPUT_POST, "page_content");
-        $pageState = filter_input(INPUT_POST, "page_state");
-        $userId = UsersModel::getCurrentUser()?->getId();
 
-        $pageEntity = PagesModel::getInstance()->createPage($pageTitle, $pageSlug, $pageContent, $userId, $pageState);
+        $userId = UsersModel::getCurrentUser()?->getId();
+        $slug = Utils::normalizeForSlug(filter_input(INPUT_POST, "page_slug"));
+
+        [$title, $content, $state] = Utils::filterInput('title', 'content', 'state');
+
+        $pageEntity = PagesModel::getInstance()->createPage($title, $slug, $content, $userId, $state);
 
         //Add route
-        LinkStorage::getInstance()->storeRoute('p/' . $pageSlug, 'page', 'Page | ' . $pageTitle, 'GET',
+        LinkStorage::getInstance()->storeRoute('p/' . $slug, 'page', 'Page | ' . $title, 'GET',
             'false', 'false', 1);
 
         echo $pageEntity?->getId() ?? -1;
@@ -123,15 +120,16 @@ class PagesController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.edit");
 
-        $page = new PagesModel();
-      
-        $id = filter_input(INPUT_POST, "news_id");
-        $title = filter_input(INPUT_POST, "news_title");
-        $slug = filter_input(INPUT_POST, "news_slug");
-        $content = filter_input(INPUT_POST, "news_content");
-        $state = filter_input(INPUT_POST, "page_state");
+        [$id, $title, $slug, $content, $state] = Utils::filterInput('id', 'title', 'slug', 'content', 'state');
 
-        $pageEntity = $page->updatePage($id, $slug, $title, $content, $state);
+        if (Utils::containsNullValue($id, $title, $slug, $content, $state)){
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('pages.toaster.errors.emptyFields'));
+            echo -1;
+            die();
+        }
+
+        $pageEntity = PagesModel::getInstance()->updatePage($id, $slug, $title, $content, $state);
 
         echo $pageEntity?->getId() ?? -1;
 
@@ -158,7 +156,7 @@ class PagesController extends AbstractController
     #[Link("/uploadImage/:type", Link::POST, ["type" => ".*?"], "/cmw-admin/pages", secure: false)]
     private function adminPagesUploadImagePost(Request $request, string $type): void
     {
-        UsersController::hasPermission("core.dashboard", "pages." . ( ($type === "add") ? "add" : "edit" ) );
+        UsersController::hasPermission("core.dashboard", "pages." . (($type === "add") ? "add" : "edit"));
 
         try {
             print(json_encode(ImagesManager::upload($_FILES['image'], "Editor"), JSON_THROW_ON_ERROR));
@@ -181,11 +179,12 @@ class PagesController extends AbstractController
 
         //Include the Public view file ("Public/Themes/$themePath/Views/Pages/main.view.php")
         $view = new View('Pages', 'main');
-        $view->addScriptBefore("Admin/Resources/Vendors/Highlight/highlight.min.js","Admin/Resources/Vendors/Highlight/highlightAll.js");
+        $view->addScriptBefore("Admin/Resources/Vendors/Highlight/highlight.min.js",
+            "Admin/Resources/Vendors/Highlight/highlightAll.js");
         $view->addStyle("Admin/Resources/Vendors/Highlight/Style/" . EditorController::getCurrentStyle());
-        $view->addVariableList( ["pages" => $page, "page" => $pageEntity]);
+        $view->addVariableList(["page" => $pageEntity]);
         $view->view();
-        
+
     }
 
 

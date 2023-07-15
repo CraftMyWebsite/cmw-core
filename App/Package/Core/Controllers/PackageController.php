@@ -212,6 +212,11 @@ class PackageController extends AbstractController
 
         $package = PublicAPI::getData("resources/installResource&id=$id");
 
+        if (empty($package)){
+            Flash::send(Alert::ERROR,LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.toaster.internalError") . ' (API)');
+            Redirect::redirectPreviousRoute();
+        }
 
         if (!DownloadManager::installPackageWithLink($package['file'], "package", $package['name'])) {
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),

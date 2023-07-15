@@ -258,12 +258,18 @@ class ThemeController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/theme")]
+    #[NoReturn] #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/theme")]
     private function adminThemeInstallation(Request $request, int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
 
         $theme = PublicAPI::getData("resources/installResource&id=$id");
+
+        if (empty($theme)){
+            Flash::send(Alert::ERROR,LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.toaster.internalError") . ' (API)');
+            Redirect::redirectPreviousRoute();
+        }
 
         if (!DownloadManager::installPackageWithLink($theme['file'], "Theme", $theme['name'])){
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),

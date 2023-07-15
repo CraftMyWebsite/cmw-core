@@ -75,9 +75,13 @@ class Website
         return $clientIp;
     }
 
-    public static function refresh(): void
+    public static function refresh(bool $die = false): void
     {
         header("Refresh:0");
+
+        if ($die){
+            die();
+        }
     }
 
     /**

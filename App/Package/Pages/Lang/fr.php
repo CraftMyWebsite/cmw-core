@@ -26,6 +26,9 @@ return [
 	],
     "toaster" => [
         "deleted" => "La page n'existe plus",
+        "errors" => [
+            "emptyFields" => "Merci de remplir tous les champs"
+        ]
     ],
 	"publish" => "Publication de la page",
 	"draft" => "Brouillon",
