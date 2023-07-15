@@ -37,8 +37,10 @@ $description = LangManager::translate("core.config.desc");
                 <div class="card-body">
                     <h6><?= LangManager::translate("core.condition.content") ?></h6>
                     <textarea class="tinymce" name="conditionContent"><?= $cgv->getContent() ?></textarea>
-                    <p><?= LangManager::translate("core.condition.updateby") ?> <?= $cgv->getLastEditor()?->getPseudo() ?>
-                        <?= LangManager::translate("core.condition.on") ?> <?= CoreController::formatDate($cgv->getUpdate()) ?></p>
+                    <p><?= LangManager::translate("core.condition.updateby", ['author' => $cgv->getLastEditor()?->getPseudo()]) ?>
+                        <?= $cgv->getLastEditor()?->getPseudo() ?>
+                        <?= LangManager::translate("core.condition.on", ['date' => $cgv->getUpdateFormatted()]) ?>
+                        <?= $cgv->getUpdateFormatted() ?></p>
                     <div class="text-center mt-2">
                         <button type="submit" class="btn btn-primary float-right">
                             <?= LangManager::translate("core.btn.save") ?>
@@ -67,7 +69,8 @@ $description = LangManager::translate("core.config.desc");
                 <div class="card-body">
                     <h6><?= LangManager::translate("core.condition.content") ?></h6>
                     <textarea class="tinymce" name="conditionContent"><?= $cgu->getContent() ?></textarea>
-                    <p><?= LangManager::translate("core.condition.updateby") ?> <?= $cgu->getLastEditor()?->getPseudo() ?>
+                    <p><?= LangManager::translate("core.condition.updateby", ['author' => $cgv->getLastEditor()?->getPseudo()]) ?>
+                        <?= $cgu->getLastEditor()?->getPseudo() ?>
                         <?= LangManager::translate("core.condition.on") ?> <?= CoreController::formatDate($cgu->getUpdate()) ?></p>
                     <div class="text-center mt-2">
                         <button type="submit" class="btn btn-primary float-right">

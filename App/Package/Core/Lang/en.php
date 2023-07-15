@@ -16,7 +16,7 @@ return [
         "notification" => "Notifications",
         "cms_ver" => "CMS : Version",
         "cms_update" => "A CMS update is available!",
-        "update_to" => "Please update to",
+        "update_to" => "Please update to %version%",
         "package" => "Package",
         "theme" => "Theme",
         "all_is_fine" => "Everything's good",
@@ -29,8 +29,8 @@ return [
         "activecgv" => "Enable this terms",
         "activecgu" => "Enable this terms",
         "content" => "Content :",
-        "updateby" => "Updated by",
-        "on" => "on",
+        "updateby" => "Updated by %author%",
+        "on" => "on %date%",
     ],
     "dashboard" => [
         "title" => "Dashboard",
@@ -43,8 +43,8 @@ return [
         "total_visits" => "Total Visits",
         "welcome" => "Welcome",
         "site_info" => "Site Information",
-        "name" => "Name :",
-        "description" => "Description :",
+        "name" => "Name : %name%",
+        "description" => "Description : %description%",
         "edit" => "Modify this information",
         "visits" => "Visits",
         "registers" => "Registers",
@@ -55,10 +55,10 @@ return [
     "menus" => [
         "title" => "Menus",
         "desc" => "Edit main site menu",
-        "delete_title" => "Remove :",
+        "delete_title" => "Remove : %menu%",
         "delete_message" => "This deletion is final.",
-        "send_to" => "Send to :",
-        "add_sub_menu" => "Add sub menu to",
+        "send_to" => "Send to : %url%",
+        "add_sub_menu" => "Add sub menu to %menu%",
         "add" => [
             "name" => "Name of the menu",
             "name_hint" => "Votes",
@@ -120,7 +120,7 @@ return [
         ],
         "Theme" => [
             "regenerate" => "Theme configuration regenerate",
-            "installed" => "just installed and activated."
+            "installed" => "%theme% just installed and activated."
         ],
         "db" => [
             "config" => [
@@ -218,7 +218,7 @@ return [
         "update" => "Update",
         "demo" => "Demo",
         "close" => "Close",
-        "removeTitle" => "Do you want to delete ",
+        "removeTitle" => "Do you want to delete %package% ?",
         "removeText" => "Removal of this package is permanent.<br>Do you want to continue ?",
         "description" => "Description: ",
         "descriptionNotAvailable" => "This package is installed manually, it is not registered with CraftMyWebsite.<br>Use this package wisely.<br>If you develop this package and then publish it on CraftMyWebsite Market, disregard this message.",

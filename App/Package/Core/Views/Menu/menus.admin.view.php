@@ -156,7 +156,9 @@ $description = LangManager::translate("core.menus.desc");
                                             <?php if ($menu->getUrl() === "#"): ?>
                                                 <small><?= LangManager::translate('core.nolink') ?></small>
                                             <?php else: ?>
-                                                <small><?= LangManager::translate('core.menus.send_to') ?> <?= $menu->getUrl() ?></small>
+                                                <small><?= LangManager::translate('core.menus.send_to',
+                                                        ['url' => $menu->getUrl()]) ?>
+                                                    <?= $menu->getUrl() ?></small>
                                             <?php endif; ?>
                                         </th>
                                         <th class="text-end">
@@ -178,7 +180,10 @@ $description = LangManager::translate("core.menus.desc");
                                                 <?php if ($subMenu->getUrl() === "#"): ?>
                                                     <small><?= LangManager::translate('core.nolink') ?></small>
                                                 <?php else: ?>
-                                                    <small><?= LangManager::translate('core.menus.send_to') ?> <?= $subMenu->getUrl() ?></small>
+                                                    <small><?= LangManager::translate('core.menus.send_to',
+                                                            ['url' => $subMenu->getUrl()]) ?>
+                                                        <?= $subMenu->getUrl() ?>
+                                                    </small>
                                                 <?php endif; ?>
                                             </td>
                                             <td class="text-end">
@@ -211,7 +216,10 @@ $description = LangManager::translate("core.menus.desc");
                                                     <?php if ($subSubMenu->getUrl() === "#"): ?>
                                                         <small><?= LangManager::translate('core.nolink') ?></small>
                                                     <?php else: ?>
-                                                        <small><?= LangManager::translate('core.menus.send_to') ?> <?= $subSubMenu->getUrl() ?></small>
+                                                        <small><?= LangManager::translate('core.menus.send_to',
+                                                                ['url' => $subSubMenu->getUrl()]) ?>
+                                                            <?= $subSubMenu->getUrl() ?>
+                                                        </small>
                                                     <?php endif; ?>
                                                 </td>
                                                 <td class="text-end">
@@ -245,7 +253,10 @@ $description = LangManager::translate("core.menus.desc");
                                                     <div class="modal-content">
                                                         <div class="modal-header bg-danger">
                                                             <h5 class="modal-title white" id="myModalLabel160">
-                                                                <?= LangManager::translate("core.menus.delete_title") ?> <?= $subSubMenu->getName() ?></h5>
+                                                                <?= LangManager::translate("core.menus.delete_title",
+                                                                    ['menu' => $subSubMenu->getName()]) ?>
+                                                                <?= $subSubMenu->getName() ?>
+                                                            </h5>
                                                         </div>
                                                         <div class="modal-body">
                                                             <?= LangManager::translate("core.menus.delete_message") ?>
@@ -278,10 +289,14 @@ $description = LangManager::translate("core.menus.desc");
                                                 <div class="modal-content">
                                                     <div class="modal-header bg-primary">
                                                         <h5 class="modal-title white"
-                                                            id="myModalLabel160"><?= LangManager::translate("core.menus.add_sub_menu") ?> <?= $subMenu->getName() ?></h5>
+                                                            id="myModalLabel160"><?= LangManager::translate("core.menus.add_sub_menu",
+                                                                ['menu' => $subMenu->getName()]) ?>
+                                                            <?= $subMenu->getName() ?>
+                                                        </h5>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form action="menus/add-submenu" method="post" name="sub-submenu">
+                                                        <form action="menus/add-submenu" method="post"
+                                                              name="sub-submenu">
                                                             <?php (new SecurityManager())->insertHiddenToken() ?>
                                                             <input hidden name="parentId" type="text"
                                                                    value="<?= $subMenu->getId() ?>">
@@ -394,7 +409,8 @@ $description = LangManager::translate("core.menus.desc");
                                                             <i class="bx bx-x"></i>
                                                             <span class=""><?= LangManager::translate("core.btn.close") ?></span>
                                                         </button>
-                                                        <button type="submit" form="sub-submenu" class="btn btn-primary ml-1">
+                                                        <button type="submit" form="sub-submenu"
+                                                                class="btn btn-primary ml-1">
                                                             <i class="bx bx-check"></i>
                                                             <span class=""><?= LangManager::translate("core.btn.add") ?></span>
                                                         </button>
@@ -416,7 +432,10 @@ $description = LangManager::translate("core.menus.desc");
                                                 <div class="modal-content">
                                                     <div class="modal-header bg-danger">
                                                         <h5 class="modal-title white"
-                                                            id="myModalLabel160"><?= LangManager::translate("core.menus.delete_title") ?> <?= $subMenu->getName() ?></h5>
+                                                            id="myModalLabel160"><?= LangManager::translate("core.menus.delete_title",
+                                                                ['menu' => $subMenu->getName()]) ?>
+                                                            <?= $subMenu->getName() ?>
+                                                        </h5>
                                                     </div>
                                                     <div class="modal-body">
                                                         <?= LangManager::translate("core.menus.delete_message") ?>
@@ -454,7 +473,10 @@ $description = LangManager::translate("core.menus.desc");
                             <div class="modal-content">
                                 <div class="modal-header bg-primary">
                                     <h5 class="modal-title white"
-                                        id="myModalLabel160"><?= LangManager::translate("core.menus.add_sub_menu") ?> <?= $menu->getName() ?></h5>
+                                        id="myModalLabel160">
+                                        <?= LangManager::translate("core.menus.add_sub_menu", ['menu' => $menu->getName()]) ?>
+                                        <?= $menu->getName() ?>
+                                    </h5>
                                 </div>
                                 <div class="modal-body">
                                     <form action="menus/add-submenu" method="post">
@@ -575,7 +597,10 @@ $description = LangManager::translate("core.menus.desc");
                             <div class="modal-content">
                                 <div class="modal-header bg-danger">
                                     <h5 class="modal-title white"
-                                        id="myModalLabel160"><?= LangManager::translate("core.menus.delete_title") ?> <?= $menu->getName() ?></h5>
+                                        id="myModalLabel160"><?= LangManager::translate("core.menus.delete_title",
+                                            ['menu' => $menu->getName()]) ?>
+                                        <?= $menu->getName() ?>
+                                    </h5>
                                 </div>
                                 <div class="modal-body">
                                     <?= LangManager::translate("core.menus.delete_message") ?>

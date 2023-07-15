@@ -16,7 +16,7 @@ return [
         "notification" => "Notifications",
         "cms_ver" => "CMS : Version",
         "cms_update" => "Une mise à jour du CMS est disponible !",
-        "update_to" => "Veuillez mettre à jour vers la version", //TODO ADD VARIABLE VERSION
+        "update_to" => "Veuillez mettre à jour vers la version %version%",
         "package" => "Package",
         "theme" => "Thème",
         "all_is_fine" => "Tout va bien",
@@ -29,8 +29,8 @@ return [
         "activecgv" => "Activer les CGV",
         "activecgu" => "Activer les CGU",
         "content" => "Contenu :",
-        "updateby" => "Mis à jour par", //TODO ADD VARIABLE AUTEUR
-        "on" => "le", //TODO ADD VARIABLE DATE
+        "updateby" => "Mis à jour par %author%",
+        "on" => "le %date%",
     ],
     "dashboard" => [
         "title" => "Tableau de bord",
@@ -43,8 +43,8 @@ return [
         "total_visits" => "Visites totales",
         "welcome" => "Bienvenue",
         "site_info" => "Informations du site",
-        "name" => "Nom :", //TODO ADD VARIABLE NOM DU SITE
-        "description" => "Description :", //TODO ADD VARIABLE DESCRIPTION DU SITE
+        "name" => "Nom : %name%",
+        "description" => "Description : %description%",
         "edit" => "Modifier ces informations",
         "visits" => "Visites",
         "registers" => "Inscriptions",
@@ -55,10 +55,10 @@ return [
     "menus" => [
         "title" => "Menus",
         "desc" => "Gérez les menus de votre site",
-        "delete_title" => "Supression de :", //TODO ADD VARIABLE SUPPRESSION
+        "delete_title" => "Supression de : %menu%",
         "delete_message" => "Cette suppression est définitive",
-        "send_to" => "Renvoie vers :", //TODO ADD VARIABLE
-        "add_sub_menu" => "Ajout d'un sous-menu dans", //TODO ADD VARIABLE
+        "send_to" => "Renvoie vers : %url%",
+        "add_sub_menu" => "Ajout d'un sous-menu dans %menu%",
         "add" => [
             "name" => "Nom du menu",
             "name_hint" => "Votes",
@@ -120,7 +120,7 @@ return [
         ],
         "Theme" => [
             "regenerate" => "Configuration du thème regénérée",
-            "installed" => "viens d'être installé et activé." //TODO ADD VARIABLE THEME
+            "installed" => "%theme% viens d'être installé et activé."
         ],
         "db" => [
             "config" => [
@@ -218,7 +218,7 @@ return [
         "update" => "Mettre à jour",
         "demo" => "Démo",
         "close" => "Fermer",
-        "removeTitle" => "Voulez-vous supprimer", //TODO AJOUTER VARIABLE NOM PACKAGE + "?"
+        "removeTitle" => "Voulez-vous supprimer %package% ?",
         "removeText" => "La suppression de ce package est définitive.<br>Voulez-vous continuer ?",
         "description" => "Description: ",
         "descriptionNotAvailable" => "Ce package est installé manuellement, il n'est pas enregistré auprès de CraftMyWebsite.<br>Utilisez ce package en connaissance de cause.<br>Si vous développez ce package pour le publier ensuite sur le Market de CraftMyWebsite, ne tenez pas compte de ce message.",
