@@ -4,10 +4,12 @@ namespace CMW\Controller\Users;
 
 use CMW\Controller\Core\SecurityController;
 use CMW\Entity\Users\UserSettingsEntity;
+use CMW\Interface\Users\IUsersProfilePicture;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Loader\Loader;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
@@ -17,6 +19,7 @@ use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UserPictureModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Users\UsersSettingsModel;
+use CMW\Utils\Log;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use Exception;
@@ -34,6 +37,31 @@ class UsersController extends AbstractController
     public static function isAdminLogged(): bool
     {
         return UsersModel::hasPermission(UsersModel::getCurrentUser(), "core.dashboard");
+    }
+
+    /**
+     * @param string $interface
+     * @return mixed
+     */
+    private function getHighestImplementation(string $interface): mixed
+    {
+        $implementations = Loader::loadImplementations($interface);
+
+        $index = 0;
+        $highestWeight = 1;
+
+        $i = 0;
+        foreach ($implementations as $implementation) {
+            $weight = $implementation->weight();
+
+            if ($weight > $highestWeight){
+                $index = $i;
+                $highestWeight = $weight;
+            }
+            ++$i;
+        }
+
+        return $implementations[$index];
     }
 
     /**
@@ -232,10 +260,7 @@ class UsersController extends AbstractController
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
         $image = $_FILES['profilePicture'];
-
-        UserPictureModel::getInstance()->uploadImage($id, $image);
-
-        Redirect::redirectPreviousRoute();
+        $this->getHighestImplementation(IUsersProfilePicture::class)->changeMethod($image, $id);
     }
 
     #[Link("/picture/reset/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users/manage")]
@@ -243,9 +268,7 @@ class UsersController extends AbstractController
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
-        UserPictureModel::getInstance()->deleteUserPicture($id);
-
-        Redirect::redirectPreviousRoute();
+        $this->getHighestImplementation(IUsersProfilePicture::class)->resetPicture($id);
     }
 
     // PUBLIC SECTION
