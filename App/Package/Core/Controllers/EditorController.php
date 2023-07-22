@@ -15,7 +15,7 @@ class EditorController extends AbstractController
     public static function getInstalledStyles(): array
     {
         $toReturn = array();
-        $stylesFolder = 'Admin/Resources/Vendors/Highlight/Style';
+        $stylesFolder = 'Admin/Resources/Vendors/Prismjs/Style';
         $contentDirectory = array_diff(scandir("$stylesFolder/"), array('..', '.'));
         foreach ($contentDirectory as $style) {
             if(!empty(file_get_contents("$stylesFolder/$style"))) {
