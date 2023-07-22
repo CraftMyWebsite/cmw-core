@@ -50,21 +50,8 @@ class PagesController extends AbstractController
         //Todo "pack script" to avoid that
 
         View::createAdminView('Pages', 'add')
-            ->addScriptBefore("Admin/Resources/Vendors/Editorjs/Plugins/header.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/image.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/delimiter.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/list.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/quote.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/code.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/table.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/link.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/warning.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/embed.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/marker.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/underline.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/drag-drop.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/undo.js",
-                "Admin/Resources/Vendors/Editorjs/editor.js")
+            ->addScriptBefore("Admin/Resources/Vendors/Tinymce/tinymce.min.js",
+                "Admin/Resources/Vendors/Tinymce/Config/full.js")
             ->view();
     }
 
@@ -78,13 +65,15 @@ class PagesController extends AbstractController
 
         [$title, $content, $state] = Utils::filterInput('title', 'content', 'state');
 
-        $pageEntity = PagesModel::getInstance()->createPage($title, $slug, $content, $userId, $state);
+        PagesModel::getInstance()->createPage($title, $slug, $content, $userId, $state === NULL ? 0 : 1);
 
         //Add route
         LinkStorage::getInstance()->storeRoute('p/' . $slug, 'page', 'Page | ' . $title, 'GET',
             'false', 'false', 1);
 
-        echo $pageEntity?->getId() ?? -1;
+        Flash::send(Alert::SUCCESS,LangManager::translate('core.toaster.success'), LangManager::translate('pages.alert.added'));
+
+        Redirect::redirectPreviousRoute();
     }
 
     #[Link("/edit/:slug", Link::GET, ["slug" => ".*?"], "/cmw-admin/pages")]
@@ -96,42 +85,29 @@ class PagesController extends AbstractController
 
         //Todo "pack script" to avoid that
         View::createAdminView('Pages', 'edit')
-            ->addScriptBefore("Admin/Resources/Vendors/Editorjs/Plugins/header.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/image.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/delimiter.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/list.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/quote.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/code.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/table.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/link.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/warning.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/embed.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/marker.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/underline.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/drag-drop.js",
-                "Admin/Resources/Vendors/Editorjs/Plugins/undo.js",
-                "Admin/Resources/Vendors/Editorjs/editor.js")
+            ->addScriptBefore("Admin/Resources/Vendors/Tinymce/tinymce.min.js",
+                "Admin/Resources/Vendors/Tinymce/Config/full.js")
             ->addVariableList(["page" => $page])
             ->view();
     }
 
-    #[Link("/edit", Link::POST, [], "/cmw-admin/pages", secure: false)]
-    private function adminPagesEditPost(): void
+    #[Link("/edit/:slug", Link::POST, [], "/cmw-admin/pages")]
+    private function adminPagesEditPost(Request $request, string $slug): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.edit");
 
-        [$id, $title, $slug, $content, $state] = Utils::filterInput('id', 'title', 'slug', 'content', 'state');
+        [$id, $title, $content, $state] = Utils::filterInput('id', 'title', 'content', 'state');
 
-        if (Utils::containsNullValue($id, $title, $slug, $content, $state)){
+        if (Utils::containsNullValue($id, $title, $content)){
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
                 LangManager::translate('pages.toaster.errors.emptyFields'));
-            echo -1;
-            die();
+            Redirect::redirectPreviousRoute();
         }
 
-        $pageEntity = PagesModel::getInstance()->updatePage($id, $slug, $title, $content, $state);
+        PagesModel::getInstance()->updatePage($id, $slug, $title, $content, $state === NULL ? 0 : 1);
 
-        echo $pageEntity?->getId() ?? -1;
+        Flash::send(Alert::SUCCESS,LangManager::translate('core.toaster.success'), LangManager::translate('pages.alert.edited'));
+        Redirect::redirectPreviousRoute();
 
     }
 
@@ -179,9 +155,8 @@ class PagesController extends AbstractController
 
         //Include the Public view file ("Public/Themes/$themePath/Views/Pages/main.view.php")
         $view = new View('Pages', 'main');
-        $view->addScriptBefore("Admin/Resources/Vendors/Highlight/highlight.min.js",
-            "Admin/Resources/Vendors/Highlight/highlightAll.js");
-        $view->addStyle("Admin/Resources/Vendors/Highlight/Style/" . EditorController::getCurrentStyle());
+        $view->addScriptBefore("Admin/Resources/Vendors/Prismjs/prism.js");
+        $view->addStyle("Admin/Resources/Vendors/Prismjs/Style/" . EditorController::getCurrentStyle());
         $view->addVariableList(["page" => $pageEntity]);
         $view->view();
 

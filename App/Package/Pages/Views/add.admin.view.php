@@ -2,6 +2,7 @@
 
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Security\SecurityManager;
 use CMW\Utils\Website;
 
 $title = LangManager::translate("pages.add.title");
@@ -16,13 +17,14 @@ $description = LangManager::translate("pages.add.desc");
 <section>
     <div class="card">
         <div class="card-body">
-
+            <form action="" method="post">
+                <?php (new SecurityManager())->insertHiddenToken() ?>
                 <div class="row">
                     <div class="col-12 col-lg-6">
                         <h6><?= LangManager::translate("pages.title") ?> :</h6>
                         <div class="form-group position-relative has-icon-left">
                             <input type="hidden" id="page_id" name="page_id">
-                            <input type="text" class="form-control" id="title" required
+                            <input type="text" class="form-control" name="title" id="title" required
                                    placeholder="<?= LangManager::translate("pages.title") ?>" maxlength="255">
                             <div class="form-control-icon">
                                 <i class="fas fa-heading"></i>
@@ -36,173 +38,26 @@ $description = LangManager::translate("pages.add.desc");
                               id="inputGroup-sizing-default"><?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "p/" ?></span>
                             <input type="text" id="slug" class="form-control"
                                    placeholder="<?= LangManager::translate("pages.link") ?>"
-                                   aria-label="Slug" aria-describedby="inputGroup-sizing-default" name="news_slug"
+                                   aria-label="Slug" aria-describedby="inputGroup-sizing-default" name="page_slug"
                                    required>
                         </div>
 
                     </div>
                 </div>
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="draft" name="draft">
+                    <input class="form-check-input" type="checkbox" id="draft" value="0" name="state">
                     <label class="form-check-label" for="draft"><h6><?= LangManager::translate("pages.draft") ?></h6>
                     </label>
                 </div>
                 <h6><?= LangManager::translate("pages.creation.content") ?> :</h6>
 
-                <div>
-                    <div class="card-in-card" id="editorjs"></div>
-                </div>
+                <textarea class="tinymce" name="content"></textarea>
 
                 <div class="text-center mt-2">
-                    <button id="saveButton" type="submit" disabled="disabled" class="btn btn-primary"><i
-                                class="fa-solid fa-spinner fa-spin-pulse"></i> <?= LangManager::translate("pages.add.create") ?>
+                    <button id="saveButton" type="submit" class="btn btn-primary"><?= LangManager::translate("core.btn.save") ?>
                     </button>
                 </div>
+            </form>
         </div>
     </div>
 </section>
-
-
-<!-- Initialization -->
-<script>
-    /**
-     * Check inpt befor send
-     */
-    let input_title = document.querySelector("#title");
-    let input_slug = document.querySelector("#slug");
-    let button = document.querySelector("#saveButton");
-    input_title.addEventListener("change", stateHandle);
-    input_slug.addEventListener("change", stateHandle);
-
-    function stateHandle() {
-        if (document.querySelector("#title").value != "" && document.querySelector("#slug").value != "") {
-            button.disabled = false;
-            button.innerHTML = "<?= LangManager::translate("core.btn.add") ?>";
-        } else {
-            button.disabled = true;
-            button.innerHTML = "<i class='fa-solid fa-spinner fa-spin-pulse'></i> <?= LangManager::translate("pages.add.create") ?>";
-        }
-    }
-
-    /**
-     * EditorJS
-     */
-    let editor = new EditorJS({
-        placeholder: "<?= LangManager::translate("pages.editor.start") ?>",
-        logLevel: "ERROR",
-        readOnly: false,
-        holder: "editorjs",
-        /**
-         * Tools list
-         */
-        tools: {
-            header: {
-                class: Header,
-                config: {
-                    placeholder: "Entrez un titre",
-                    levels: [2, 3, 4],
-                    defaultLevel: 2
-                }
-            },
-
-            image: {
-                class: ImageTool,
-                config: {
-                    uploader: {
-                        uploadByFile(file) {
-                            let formData = new FormData();
-                            formData.append('image', file);
-                            return fetch("<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER")?>cmw-admin/pages/uploadImage/add", {
-                                method: "POST",
-                                body: formData
-                            }).then(res => res.json())
-                                .then(response => {
-                                    return {
-                                        success: 1,
-                                        file: {
-                                            url: "<?= EnvManager::getInstance()->getValue("PATH_URL")?>Public/Uploads/Editor/" + response
-                                        }
-                                    }
-                                })
-                        }
-                    }
-                }
-            },
-            list: List,
-            quote: {
-                class: Quote,
-                config: {
-                    quotePlaceholder: "",
-                    captionPlaceholder: "Auteur",
-                },
-            },
-            warning: Warning,
-            code: CodeTool,
-            delimiter: Delimiter,
-            table: Table,
-            embed: {
-                class: Embed,
-                config: {
-                    services: {
-                        youtube: true,
-                        coub: true
-                    }
-                }
-            },
-            Marker: Marker,
-            underline: Underline,
-        },
-        defaultBlock: "paragraph",
-        /**
-         * Initial Editor data
-         */
-        data: {},
-        onReady: function () {
-            new Undo({editor});
-            const undo = new Undo({editor});
-            new DragDrop(editor);
-        },
-        onChange: function () {
-        }
-    });
-    /**
-     * Saving button
-     */
-    const saveButton = document.getElementById("saveButton");
-    /**
-     * Saving action
-     */
-    saveButton.addEventListener("click", function () {
-        let page_state = 1;
-        if (document.getElementById("draft").checked) {
-            page_state = 2;
-        }
-        editor.save()
-            .then((savedData) => {
-
-                let formData = new FormData();
-                formData.append('page_title', document.getElementById("title").value);
-                formData.append('page_slug', document.getElementById("slug").value);
-                formData.append('page_content', JSON.stringify(savedData));
-                formData.append('page_state', page_state.toString());
-
-                fetch("<?= EnvManager::getInstance()->getValue("PATH_URL") ?>cmw-admin/pages/add", {
-                    method: "POST",
-                    body: formData
-                })
-
-                button.disabled = true;
-                button.innerHTML = "<i class='fa-solid fa-spinner fa-spin-pulse'></i> Enregistrement en cours ...";
-                setTimeout(() => {
-                            button.innerHTML = "<i style='color: #16C329;' class='fa-solid fa-check fa-shake'></i> Ok !";
-                        }, 850);
-                setTimeout(() => {
-                            document.location.replace("<?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . 'cmw-admin/pages'?>");
-                        }, 1000);
-                
-            })
-            .catch((error) => {
-                alert("Error : " + error);
-            });
-    });
-</script>

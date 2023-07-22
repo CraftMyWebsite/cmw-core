@@ -42,7 +42,12 @@ return [
         "update" => "Modification date",
         "add" => "Add Page",
         "content" => "Content",
-    ]
+    ],
+
+    "alert" => [
+        "added" => "Page added",
+        "edited" => "Page edited"
+    ],
 
 
 ];
