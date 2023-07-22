@@ -21,6 +21,7 @@ tinymce.init({
     'wordcount codesample code |' +
     'preview fullscreen help',
   menubar:false,
+  min_height: 350,
   images_file_types: 'jpg,svg,webp',
   file_picker_types: 'file image media',
   statusbar: false,
