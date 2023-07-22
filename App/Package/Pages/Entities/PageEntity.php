@@ -77,6 +77,15 @@ class PageEntity
     }
 
     /**
+     * @return string
+     */
+    public function getContentNotTranslate(): string
+    {
+
+        return htmlspecialchars($this->pageContent);
+    }
+
+    /**
      * @return \CMW\Entity\Users\UserEntity
      */
     public function getUser(): UserEntity
