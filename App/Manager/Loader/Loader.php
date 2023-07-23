@@ -4,7 +4,6 @@ namespace CMW\Manager\Loader;
 
 use CMW\Controller\Core\PackageController;
 use CMW\Controller\Installer\InstallerController;
-use CMW\Manager\Class\ClassManager;
 use CMW\Manager\Class\PackageManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Error\ErrorManager;
@@ -13,7 +12,6 @@ use CMW\Manager\Router\Router;
 use CMW\Manager\Router\RouterException;
 use CMW\Manager\Views\View;
 use CMW\Utils\Directory;
-use CMW\Utils\Log;
 use ReflectionClass;
 
 class Loader
@@ -61,7 +59,13 @@ class Loader
 
                 $namespace = 'CMW\\Implementation\\' . ucfirst($package->getName()) . '\\' . $className;
 
-                $toReturn[] = new $namespace();
+                $classInstance = new $namespace();
+
+                if (!is_subclass_of($classInstance, $interface)){
+                    continue;
+                }
+
+                $toReturn[] = $classInstance;
             }
         }
 
@@ -135,7 +139,7 @@ class Loader
     {
         $files = Directory::getFilesRecursively("App/Package", "php");
 
-        if (EnvManager::getInstance()->getValue('INSTALLSTEP') !== '-1'){
+        if (EnvManager::getInstance()->getValue('INSTALLSTEP') !== '-1') {
             $files = [...$files, ...Directory::getFilesRecursively("Installation", "php")];
         }
 
