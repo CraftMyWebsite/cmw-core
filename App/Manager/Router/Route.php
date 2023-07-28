@@ -57,7 +57,7 @@ class Route
     /**
      * @return array
      */
-    public function getParams(): array
+    public function &getParams(): array
     {
         return $this->params;
     }
