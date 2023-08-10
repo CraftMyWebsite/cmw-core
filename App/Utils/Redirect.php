@@ -40,7 +40,7 @@ class Redirect
         $strParams = implode(", ", $params);
 
         http_response_code(302);
-        header("Location: " .  EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $route->getUrl() . '/' . $strParams);
+        header("Location: " . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $route->getUrl() . '/' . $strParams);
         die();
     }
 
@@ -52,7 +52,7 @@ class Redirect
         $strParams = implode(", ", $params);
 
         http_response_code(302);
-        header("Location: " .  EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $url . '/' . $strParams);
+        header("Location: " . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $url . '/' . $strParams);
         die();
     }
 
@@ -68,15 +68,14 @@ class Redirect
             return;
         }
 
-        if (!UsersController::isAdminLogged()){
+        if (!UsersController::isAdminLogged()) {
             self::redirectToHome();
-            return;
         }
 
         $strParams = implode(", ", $params);
 
         http_response_code(302);
-        header("Location: " .  EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $route->getUrl() . '/' . $strParams);
+        header("Location: " . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $route->getUrl() . '/' . $strParams);
     }
 
     /**
@@ -87,8 +86,7 @@ class Redirect
     #[NoReturn] public static function errorPage(int $code = 403): void
     {
         http_response_code($code);
-        // self::redirect("getError/$code"); ??
-        header("Location: getError/$code");
+        header("Location: " . Website::getUrl() . $code);
         die();
     }
 
@@ -135,7 +133,7 @@ class Redirect
     {
         http_response_code(302);
         // use self::redirect ??
-        header("Location: " .  $_SERVER['HTTP_REFERER']);
+        header("Location: " . $_SERVER['HTTP_REFERER']);
         die();
     }
 
