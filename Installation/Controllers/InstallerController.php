@@ -33,8 +33,8 @@ use JetBrains\PhpStorm\NoReturn;
 class InstallerController extends AbstractController
 {
 
-    static public float $minPhpVersion = 8.1;
-    static public int $minPhpVersionId = 80100;
+    static public float $minPhpVersion = 8.2;
+    static public int $minPhpVersionId = 80200;
     static public array $requiredSettings = ['php', 'zip', 'curl', 'pdo'];
 
     static public array $installSteps = [0 => "welcome", 1 => "config", 2 => "details", 3 => "bundle", 4 => "packages",
