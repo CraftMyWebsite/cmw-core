@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Manager\ORM;
+namespace CMW\Manager\ORM\Database;
 
 use ReflectionException;
 

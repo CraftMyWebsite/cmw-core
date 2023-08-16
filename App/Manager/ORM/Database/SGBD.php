@@ -1,11 +1,10 @@
 <?php
 
-namespace CMW\Manager\ORM;
+namespace CMW\Manager\ORM\Database;
 
 interface SGBD
 {
     public function connect(): mixed;
-
     public function create(): void;
     public function read(): void;
     public function update(): void;

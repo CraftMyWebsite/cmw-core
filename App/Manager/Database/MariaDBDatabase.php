@@ -2,13 +2,12 @@
 
 namespace CMW\Manager\Database;
 
-use CMW\Manager\Env\EnvManager;
-use CMW\Manager\ORM\getSGBDInstance;
-use CMW\Manager\ORM\SGBD;
-use Exception;
+
 use PDO;
 use PDOException;
-
+use CMW\Manager\Env\EnvManager;
+use CMW\Manager\ORM\Database\getSGBDInstance;
+use CMW\Manager\ORM\Database\SGBD;
 class MariaDBDatabase implements SGBD
 {
 
