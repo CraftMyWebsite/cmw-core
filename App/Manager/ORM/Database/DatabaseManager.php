@@ -4,6 +4,10 @@ namespace CMW\Manager\ORM\Database;
 
 use ReflectionException;
 
+/**
+ * TODO: Recreate this class...
+ */
+
 class DatabaseManager
 {
 

@@ -5,8 +5,9 @@ namespace CMW\Entity\Pages;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Entity\Users\UserEntity;
+use CMW\Manager\Package\AbstractEntity;
 
-class PageEntity
+class PageEntity implements AbstractEntity
 {
 
     private int $pageId;

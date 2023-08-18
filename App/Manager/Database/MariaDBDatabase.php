@@ -3,6 +3,7 @@
 namespace CMW\Manager\Database;
 
 
+use CMW\Manager\ORM\SGBD\Data\SGBDReceiver;
 use PDO;
 use PDOException;
 use CMW\Manager\Env\EnvManager;
@@ -47,23 +48,11 @@ class MariaDBDatabase implements SGBD
         }
     }
 
-    public function create(): void
+    public function generate(SGBDReceiver $receiver): array
     {
-        // TODO: Implement create() method.
-    }
 
-    public function read(): void
-    {
-        // TODO: Implement read() method.
-    }
+        //TODO read receiver and generate query :D
 
-    public function update(): void
-    {
-        // TODO: Implement update() method.
-    }
-
-    public function delete(): void
-    {
-        // TODO: Implement delete() method.
+        return array();
     }
 }

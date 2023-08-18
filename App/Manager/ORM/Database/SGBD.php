@@ -2,11 +2,10 @@
 
 namespace CMW\Manager\ORM\Database;
 
+use CMW\Manager\ORM\SGBD\Data\SGBDReceiver;
+
 interface SGBD
 {
     public function connect(): mixed;
-    public function create(): void;
-    public function read(): void;
-    public function update(): void;
-    public function delete(): void;
+    public function generate(SGBDReceiver $receiver): array;
 }

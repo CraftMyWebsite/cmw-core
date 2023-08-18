@@ -5,14 +5,19 @@ namespace CMW\Manager\ORM;
 use CMW\Manager\ORM\Database\DatabaseManager;
 use CMW\Manager\ORM\Database\SGBD;
 use CMW\Manager\ORM\SGBD\Actions;
+use CMW\Manager\ORM\SGBD\Data\SGBDReceiver;
 use CMW\Manager\Package\AbstractEntity;
+use CMW\Utils\Log;
 
 class ORM
 {
     //TODO : Store actions, clauses and do execute method
 
+
+
     private function __construct(
-        private readonly SGBD $_sgbdInstance
+        private readonly ?SGBD $_sgbdInstance,
+        private readonly SGBDReceiver $_sgbdReceiver
     )
     {
     }
@@ -22,16 +27,26 @@ class ORM
         return $this->_sgbdInstance;
     }
 
-    public function execute(): array
+    public function getReceiver(): SGBDReceiver
     {
-        echo "execute";
-        return array();
+        return $this->_sgbdReceiver;
     }
 
-    public static function getInstance(?SGBD $sgbdInstance): Actions
+    public function execute(): array
+    {
+        Log::debug($this->getReceiver());
+        return $this->getSGBD()->generate($this->getReceiver());
+    }
+
+    public static function getInstance(?SGBD $sgbdInstance = null): Actions
     {
         $sgbd = $sgbdInstance ?? DatabaseManager::getInstance();
-        return new Actions(new self($sgbd));
+
+        if ($sgbd === null) {
+            throw new \Exception("No SGBD instance found");
+        }
+
+        return new Actions(new self($sgbd, new SGBDReceiver()));
     }
 
 }

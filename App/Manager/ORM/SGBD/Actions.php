@@ -4,6 +4,10 @@ namespace CMW\Manager\ORM\SGBD;
 
 use CMW\Manager\ORM\ORM;
 use CMW\Manager\ORM\SGBD\Clauses as Clauses;
+use CMW\Manager\ORM\SGBD\Data\Parts\Statement;
+use CMW\Manager\ORM\SGBD\Data\Parts\Types\Table;
+use CMW\Manager\Package\AbstractEntity;
+use JetBrains\PhpStorm\ExpectedValues;
 
 readonly class Actions
 {
@@ -14,9 +18,25 @@ readonly class Actions
     {
     }
 
-    public function read(): Clauses\ReadClauses
+    public function read(#[ExpectedValues(AbstractEntity::class)] string $entityClazz): Clauses\Parts\ReadClauses
     {
-        return new Clauses\ReadClauses($this);
+        $this->_ormInstance->getReceiver()->setLocation(
+            new Table(
+                "test",
+                ""
+            )
+        );
+        $this->_ormInstance->getReceiver()->setStatement(
+            new Statement(
+                Data\Parts\Types\Actions::SELECT
+            )
+        );
+        return new Clauses\Parts\ReadClauses($this);
+    }
+
+    public function getORM(): ORM
+    {
+        return $this->_ormInstance;
     }
 
     public function execute(): array
