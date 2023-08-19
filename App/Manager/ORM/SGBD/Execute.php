@@ -13,9 +13,9 @@ readonly class Execute
     {
     }
 
-    public function execute(): void
+    public function execute(): array
     {
-        $this->_clauseInstance->execute();
+        return $this->_clauseInstance->execute();
     }
 
 }

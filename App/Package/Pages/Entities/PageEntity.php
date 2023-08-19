@@ -5,11 +5,15 @@ namespace CMW\Entity\Pages;
 
 use CMW\Controller\Core\CoreController;
 use CMW\Entity\Users\UserEntity;
+use CMW\Manager\ORM\Attributes\Column;
+use CMW\Manager\ORM\Attributes\Table;
 use CMW\Manager\Package\AbstractEntity;
 
+#[Table(name: "cmw_pages")]
 class PageEntity implements AbstractEntity
 {
 
+    #[Column(name: 'page_id')]
     private int $pageId;
     private string $pageSlug;
     private string $pageTitle;

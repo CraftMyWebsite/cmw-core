@@ -2,7 +2,8 @@
 
 namespace CMW\Manager\ORM\SGBD\Data\Parts;
 
-use CMW\Manager\ORM\SGBD\Data\Parts\Types\SortType;
+use CMW\Manager\ORM\SGBD\Data\Parts\Types\Sort\Sort;
+use CMW\Manager\ORM\SGBD\Data\Parts\Types\Sort\SortType;
 use CMW\Manager\ORM\SGBD\Data\Parts\Types\Where\Where;
 use CMW\Manager\ORM\SGBD\Data\Parts\Types\Where\WhereOperator;
 
@@ -13,8 +14,11 @@ class Filter
      * @var Where[] $where
      */
     private array $where = [];
+
+    /**
+     * @var Sort[] $sort
+     */
     private array $sort = [];
-    private SortType $sortType;
     private int $limit = 0;
 
     public function __construct()
@@ -23,10 +27,14 @@ class Filter
 
     public function __debugInfo(): ?array
     {
+        $sortList = [];
+        foreach ($this->sort as $sort) {
+            $sortList[] = implode(', ', $sort->getColumn()) . ' ' . $sort->getType()->name;
+        }
+
         return [
             'where' => $this->where,
-            'sort' => implode($this->sort),
-            'sortType' => $this->sortType->name,
+            'sort' => $sortList,
             'limit' => $this->limit
         ];
     }
@@ -36,14 +44,17 @@ class Filter
         return $this->where;
     }
 
+    /**
+     * @return Sort[]
+     */
     public function getSortList(): array
     {
         return $this->sort;
     }
 
-    public function getSortType(): SortType
+    public function getLimit(): int
     {
-        return $this->sortType;
+        return $this->limit;
     }
 
     public function addWhere(string $column, WhereOperator $operator, int|string|array|null $value = null): void
@@ -51,18 +62,9 @@ class Filter
         $this->where[] = new Where($column, $operator, $value);
     }
 
-    public function addSort(string ...$sort): void
+    public function addSort(array $column, SortType $type): void
     {
-        foreach ($sort as $s) {
-            if (!in_array($s, $this->sort, true)) {
-                $this->sort[] = $s;
-            }
-        }
-    }
-
-    public function setSortType(SortType $sortType): void
-    {
-        $this->sortType = $sortType;
+        $this->sort[] = new Sort($column, $type);
     }
 
     public function setLimit(int $limit): void

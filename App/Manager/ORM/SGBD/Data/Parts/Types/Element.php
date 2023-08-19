@@ -7,7 +7,7 @@ readonly class Element
 
     public function __construct(
         protected string $name,
-        protected ?string $alias
+        protected ?string $alias = null
     )
     {
     }

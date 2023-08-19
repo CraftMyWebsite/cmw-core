@@ -9,7 +9,7 @@ trait getSGBDInstance
     public static function getInstance(): mixed
     {
         if (!isset(self::$_sgbdInstance)) {
-            self::$_sgbdInstance = self::connect();
+            self::$_sgbdInstance = (new self)->connect();
         }
 
         return self::$_sgbdInstance;

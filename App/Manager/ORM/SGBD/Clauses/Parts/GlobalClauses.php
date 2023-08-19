@@ -4,7 +4,6 @@ namespace CMW\Manager\ORM\SGBD\Clauses\Parts;
 
 use CMW\Manager\ORM\SGBD\Clauses\AbstractClauses;
 use CMW\Manager\ORM\SGBD\Clauses\ConstructClause;
-use CMW\Manager\ORM\SGBD\Data\Parts\Types\SortType;
 use CMW\Manager\ORM\SGBD\Execute;
 
 class GlobalClauses extends AbstractClauses
@@ -17,10 +16,10 @@ class GlobalClauses extends AbstractClauses
         return new WhereClauses($this->_actionsInstance, $column);
     }
 
-    public function order(string $column) : SortClauses
+    public function order(string ...$column) : SortClauses
     {
-        $this->_actionsInstance->getORM()->getReceiver()->getFilter()->addSort($column);
-        return new SortClauses($this->_actionsInstance);
+        $columnList = [...$column];
+        return new SortClauses($this->_actionsInstance, $columnList);
     }
 
     public function limit(int $int): Execute

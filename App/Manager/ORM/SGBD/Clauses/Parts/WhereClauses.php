@@ -43,31 +43,31 @@ class WhereClauses
         return new GlobalClauses($this->_actionsInstance);
     }
 
-    public function greater(int|string $value): GlobalClauses
+    public function greater(int $value): GlobalClauses
     {
         $this->filter->addWhere($this->column, WhereOperator::GREATER_THAN, $value);
         return new GlobalClauses($this->_actionsInstance);
     }
 
-    public function greaterOrEquals(int|string $value): GlobalClauses
+    public function greaterOrEquals(int $value): GlobalClauses
     {
         $this->filter->addWhere($this->column, WhereOperator::GREATER_THAN_OR_EQUALS, $value);
         return new GlobalClauses($this->_actionsInstance);
     }
 
-    public function less(int|string $value): GlobalClauses
+    public function less(int $value): GlobalClauses
     {
         $this->filter->addWhere($this->column, WhereOperator::LESS_THAN, $value);
         return new GlobalClauses($this->_actionsInstance);
     }
 
-    public function lessOrEquals(int|string $value): GlobalClauses
+    public function lessOrEquals(int $value): GlobalClauses
     {
         $this->filter->addWhere($this->column, WhereOperator::LESS_THAN_OR_EQUALS, $value);
         return new GlobalClauses($this->_actionsInstance);
     }
 
-    public function between(int|string $firstValue, int|string $secondValue): GlobalClauses
+    public function between(int $firstValue, int $secondValue): GlobalClauses
     {
         $this->filter->addWhere($this->column, WhereOperator::BETWEEN, [$firstValue, $secondValue]);
         return new GlobalClauses($this->_actionsInstance);

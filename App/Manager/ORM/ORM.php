@@ -34,7 +34,6 @@ class ORM
 
     public function execute(): array
     {
-        Log::debug($this->getReceiver());
         return $this->getSGBD()->generate($this->getReceiver());
     }
 
