@@ -8,4 +8,6 @@ interface SGBD
 {
     public function connect(): mixed;
     public function generate(SGBDReceiver $receiver): array;
+
+    public function describe(string $table): array;
 }

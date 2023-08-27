@@ -8,7 +8,7 @@ class Statement
 {
 
     /**
-     * @var Types\Column[] $columns
+     * @var Types\ColumnWithoutType[] $columns
      */
     private array $columns = [];
 
@@ -32,7 +32,7 @@ class Statement
 
     public function addColumn(string $column, ?string $alias= null): void
     {
-        $col = new Types\Column($column, $alias);
+        $col = new Types\ColumnWithoutType($column, $alias);
         if(!in_array($col, $this->columns, true)) {
             $this->columns[] = $col;
         }

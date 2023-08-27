@@ -4,6 +4,7 @@ namespace CMW\Manager\ORM\SGBD;
 
 use CMW\Manager\ORM\ORM;
 use CMW\Manager\ORM\SGBD\Clauses as Clauses;
+use CMW\Manager\ORM\SGBD\Data\EntityReader;
 use CMW\Manager\ORM\SGBD\Data\Parts\Statement;
 use CMW\Manager\ORM\SGBD\Data\Parts\Types\Table;
 use CMW\Manager\Package\AbstractEntity;
@@ -11,6 +12,9 @@ use JetBrains\PhpStorm\ExpectedValues;
 use ReflectionException;
 use RuntimeException;
 
+/**
+ * @template T of AbstractEntity
+ */
 readonly class Actions
 {
 
@@ -20,26 +24,21 @@ readonly class Actions
     {
     }
 
+    /**
+     * @param class-string<T> $entityClazz
+     * @return Clauses\Parts\ReadClauses
+     */
     public function read(#[ExpectedValues(AbstractEntity::class)] string $entityClazz): Clauses\Parts\ReadClauses
     {
+        $entityChecker = new EntityReader($this->_ormInstance, $entityClazz);
 
-        try {
-            $entity = new \ReflectionClass($entityClazz);
-            $table = $entity->getAttributes(\CMW\Manager\ORM\Attributes\Table::class);
-            if(empty($table)) {
-                throw new RuntimeException("The entity class $entityClazz does not have a table attribute");
-            }
+        $this->_ormInstance->getReceiver()->setEntityObject($entityClazz);
 
-            $tableInstance = $table[0]->newInstance();
+        $this->_ormInstance->getReceiver()->getEntityObject()->addColumns(...$entityChecker->getColumns());
 
-            $this->_ormInstance->getReceiver()->setLocation(
-                new Table(
-                    $tableInstance->getName()
-                )
-            );
-        } catch (ReflectionException $e) {
-            throw new RuntimeException("The entity class $entityClazz does not exist");
-        }
+        $this->_ormInstance->getReceiver()->setLocation(
+            $entityChecker->getTable()
+        );
 
         $this->_ormInstance->getReceiver()->setStatement(
             new Statement(
@@ -54,7 +53,7 @@ readonly class Actions
         return $this->_ormInstance;
     }
 
-    public function execute(): array
+    public function execute(): ORM
     {
         return $this->_ormInstance->execute();
     }

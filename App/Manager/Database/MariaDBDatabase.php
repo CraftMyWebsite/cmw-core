@@ -3,8 +3,10 @@
 namespace CMW\Manager\Database;
 
 
+use CMW\Manager\ORM\Attributes\Column;
+use CMW\Manager\ORM\Attributes\ColumnType;
 use CMW\Manager\ORM\SGBD\Data\Parts\Types\Actions;
-use CMW\Manager\ORM\SGBD\Data\Parts\Types\Column;
+use CMW\Manager\ORM\SGBD\Data\Parts\Types\ColumnWithoutType;
 use CMW\Manager\ORM\SGBD\Data\Parts\Types\Element;
 use CMW\Manager\ORM\SGBD\Data\Parts\Types\Sort\Sort;
 use CMW\Manager\ORM\SGBD\Data\Parts\Types\Sort\SortType;
@@ -68,10 +70,14 @@ class MariaDBDatabase implements SGBD
     }
 
     /**
-     * @param Column[] $columnList
+     * @param ColumnWithoutType[]|string[] $columnList
      */
     private function generateColumns(array $columnList): string
     {
+        if(count($columnList) === 1 && $columnList[0] === '*') {
+            return '*';
+        }
+
         $query = "";
         foreach ($columnList as $column) {
             $query .= $this->printElement($column) . ", ";
@@ -126,7 +132,8 @@ class MariaDBDatabase implements SGBD
                 case WhereOperator::NOT_EQUALS:
                     $query .= "!= " . $roundSingleQuotes($where->getValue());
                     break;
-                case WhereOperator::GREATER_THAN:;
+                case WhereOperator::GREATER_THAN:
+                    ;
                     $query .= "> " . $roundSingleQuotes($where->getValue());
                     break;
                 case WhereOperator::GREATER_THAN_OR_EQUALS:
@@ -149,13 +156,13 @@ class MariaDBDatabase implements SGBD
                     break;
             }
 
-           $query .= " ";
+            $query .= " ";
             $countWhere++;
         }
 
     }
 
-    private function generateOrder(array $orderByList, string &$query) : void
+    private function generateOrder(array $orderByList, string &$query): void
     {
         $countOrderBy = 0;
         foreach ($orderByList as $orderBy) {
@@ -164,7 +171,7 @@ class MariaDBDatabase implements SGBD
                 SortType::ASC => "ASC",
                 SortType::DESC => "DESC",
             };
-            if($countOrderBy !== 0){
+            if ($countOrderBy !== 0) {
                 $query .= "AND ";
             }
 
@@ -173,9 +180,9 @@ class MariaDBDatabase implements SGBD
         }
     }
 
-    private function generateLimit(int $limit, string &$query) : void
+    private function generateLimit(int $limit, string &$query): void
     {
-        if($limit > 0){
+        if ($limit > 0) {
             $query .= "LIMIT " . $limit;
         }
     }
@@ -217,6 +224,7 @@ class MariaDBDatabase implements SGBD
          */
         $pdo = self::getInstance();
 
+        //TODO remove this
         echo "<pre>";
         echo "============ QUERY ============\n";
         echo $query . "\n";
@@ -225,10 +233,56 @@ class MariaDBDatabase implements SGBD
         $returns = $pdo->prepare($query);
         $res = $returns->execute();
 
-        if($res === false){
+        if ($res === false) {
             throw new Exception("Error in query: " . $query);
         }
 
         return $returns->fetchAll();
+    }
+
+    private function describeType(string $type): ColumnType
+    {
+        $parenthesisPos = strpos($type, '(');
+        if ($parenthesisPos !== false) {
+            $type = substr($type, 0, $parenthesisPos);
+        }
+
+        return match ($type) {
+            'int' => ColumnType::INT,
+            'bool' => ColumnType::BOOLEAN,
+            'float', 'double' => ColumnType::FLOAT,
+            'date', 'datetime', 'timestamp' => ColumnType::DATETIME,
+            'blob' => ColumnType::BLOB,
+            'json' => ColumnType::JSON,
+            default => ColumnType::TEXT,
+        };
+    }
+
+    public function describe(string $table): array
+    {
+        $query = "DESCRIBE $table";
+        /**
+         * @var PDO $pdo
+         */
+        $pdo = self::getInstance();
+        $returns = $pdo->prepare($query);
+        $res = $returns->execute();
+
+        if ($res === false) {
+            throw new Exception("Error in query: " . $query);
+        }
+
+        $columns = array();
+
+        foreach ($returns->fetchAll() as $row) {
+            $columns[] = new Column(
+                $row["Field"],
+                $this->describeType($row["Type"]),
+                $row["Null"] === "YES",
+            );
+        };
+
+
+        return $columns;
     }
 }

@@ -2,9 +2,8 @@
 
 namespace CMW\Manager\ORM\SGBD\Data\Parts\Types;
 
-readonly class Column extends Element
+readonly class ColumnWithoutType extends Element
 {
-
     public function __debugInfo(): ?array
     {
         return [
