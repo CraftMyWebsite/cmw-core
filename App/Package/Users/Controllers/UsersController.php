@@ -4,8 +4,13 @@ namespace CMW\Controller\Users;
 
 use CMW\Controller\Core\SecurityController;
 use CMW\Entity\Users\UserSettingsEntity;
+use CMW\Event\Users\DeleteUserAccountEvent;
+use CMW\Event\Users\LoginEvent;
+use CMW\Event\Users\LogoutEvent;
+use CMW\Event\Users\RegisterEvent;
 use CMW\Interface\Users\IUsersProfilePicture;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Events\Emitter;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
@@ -205,8 +210,12 @@ class UsersController extends AbstractController
 
         UsersModel::getInstance()->updatePass($userEntity?->getId(), password_hash(filter_input(INPUT_POST, "password"), PASSWORD_BCRYPT));
 
+        $userId = $userEntity->getId();
+
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('users.toaster.success_add', ['pseudo' => $pseudo]));
+
+        Emitter::send(RegisterEvent::class, $userId);
 
         Redirect::redirectPreviousRoute();
     }
@@ -245,7 +254,10 @@ class UsersController extends AbstractController
             Redirect::redirectPreviousRoute();
         }
 
+        Emitter::send(DeleteUserAccountEvent::class, $id);
+
         UsersModel::getInstance()->delete($id);
+
 
         //Todo Try to remove that
         Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"),
@@ -305,6 +317,7 @@ class UsersController extends AbstractController
                 } else {
                     Redirect::redirect("profile");
                 }
+                Emitter::send(LoginEvent::class, $userId);
             } else if ($userId === -1) {
                 Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                     LangManager::translate("users.toaster.mail_pass_matching"));
@@ -436,6 +449,10 @@ class UsersController extends AbstractController
 
                 $userEntity = UsersModel::getInstance()->create($encryptedMail, $pseudo, "", "", $defaultRolesId);
 
+                $userId = $userEntity->getId();
+
+                Emitter::send(RegisterEvent::class, $userId);
+
                 UsersModel::getInstance()->updatePass($userEntity?->getId(), password_hash($password, PASSWORD_BCRYPT));
 
 
@@ -562,6 +579,8 @@ class UsersController extends AbstractController
             Redirect::errorPage(403);
         }
 
+        Emitter::send(DeleteUserAccountEvent::class, $id);
+
         UsersModel::logOut();
         UsersModel::getInstance()->delete($id);
 
@@ -571,6 +590,8 @@ class UsersController extends AbstractController
     #[NoReturn] #[Link('/logout', Link::GET)]
     private function logOut(): void
     {
+        $userId = UsersModel::getCurrentUser()->getId();
+        Emitter::send(LogoutEvent::class, $userId);
         UsersModel::logOut();
         Redirect::redirectToHome();
     }
