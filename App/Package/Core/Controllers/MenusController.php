@@ -17,6 +17,7 @@ use CMW\Model\Core\MenusModel;
 use CMW\Model\Users\RolesModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
+use JetBrains\PhpStorm\NoReturn;
 
 /**
  * Class: @MenusController
@@ -93,14 +94,29 @@ class MenusController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link("/add-submenu", Link::POST, [], "/cmw-admin/menus")]
-    private function adminMenusAddSubPost(): void
+    #[Link("/add-submenu/:menuId", Link::GET, [], "/cmw-admin/menus")]
+    private function adminMenusAddSub(Request $request, int $menuId): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menus.configuration");
 
-        [$name, $parentId, $choice] = Utils::filterInput('name', 'parentId', 'choice');
+        $packagesLinks = $this->getPackagesLinks();
+        $roles = RolesModel::getInstance()->getRoles();
+        $instanceMenu = MenusModel::getInstance()->getMenuById($menuId);
 
-        $targetBlank = empty($_POST['targetBlank']) ? 0 : 1;
+        $view = View::createAdminView('Core', 'Menu/addSub')
+            ->addVariableList(['packagesLinks' => $packagesLinks, 'roles' => $roles, 'instanceMenu' => $instanceMenu])
+            ->addScriptAfter("App/Package/Core/Views/Resources/Js/menu.js");;
+        $view->view();
+    }
+
+    #[NoReturn] #[Link("/add-submenu/:menuId", Link::POST, [], "/cmw-admin/menus")]
+    private function adminMenusAddSubPost(Request $request, int $menuId): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menus.configuration");
+
+        [$name, $choice, $targetBlank] = Utils::filterInput('name', 'choice', 'targetBlank');
+
+        if ($targetBlank === null) {$targetBlank = 0;} else {$targetBlank = 1;}
         $isRestricted = empty($_POST['allowedGroupsToggle']) ? 0 : 1;
 
         if ($choice === 'package') {
@@ -109,12 +125,67 @@ class MenusController extends AbstractController
             $url = Utils::filterInput('slugCustom')[0];
         }
 
-        $menu = MenusModel::getInstance()->createSubMenu($name, $parentId, $url, $targetBlank, $isRestricted);
+        $menu = MenusModel::getInstance()->createSubMenu($name, $menuId, $url, $targetBlank, $isRestricted);
 
         if (is_null($menu)) {
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.toaster.internalError"));
 
+            //TODO redirect vers /menus
+            Redirect::redirectPreviousRoute();
+        }
+
+
+        if (!empty($_POST['allowedGroupsToggle']) && !empty($_POST['allowedGroups'])) {
+            foreach ($_POST['allowedGroups'] as $roleId) {
+                MenusModel::getInstance()->addMenuGroupsAllowed($menu->getId(), $roleId);
+            }
+        }
+
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
+            LangManager::translate("core.menus.add.toaster.success"));
+
+        Redirect::redirectPreviousRoute();
+    }
+
+    #[Link("/edit/:menuId", Link::GET, [], "/cmw-admin/menus")]
+    private function adminMenusEdit(Request $request, int $menuId): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menus.configuration");
+
+        $packagesLinks = $this->getPackagesLinks();
+        $roles = RolesModel::getInstance()->getRoles();
+        $instanceMenu = MenusModel::getInstance()->getMenuById($menuId);
+
+        $view = View::createAdminView('Core', 'Menu/edit')
+            ->addVariableList(['packagesLinks' => $packagesLinks, 'roles' => $roles, 'instanceMenu' => $instanceMenu])
+            ->addScriptAfter("App/Package/Core/Views/Resources/Js/menu.js");;
+        $view->view();
+    }
+
+    #[NoReturn] #[Link("/edit/:menuId", Link::POST, [], "/cmw-admin/menus")]
+    private function adminMenusEditPost(Request $request, int $menuId): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menus.configuration");
+
+        [$name, $choice, $targetBlank] = Utils::filterInput('name', 'choice', 'targetBlank');
+
+        if ($targetBlank === null) {$targetBlank = 0;} else {$targetBlank = 1;}
+        $isRestricted = empty($_POST['allowedGroupsToggle']) ? 0 : 1;
+
+        if ($choice === 'package') {
+            $url = Utils::filterInput('slugPackage')[0];
+        } else {
+            $url = Utils::filterInput('slugCustom')[0];
+        }
+
+        $menu = MenusModel::getInstance()->createSubMenu($name, $menuId, $url, $targetBlank, $isRestricted);
+
+        if (is_null($menu)) {
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.toaster.internalError"));
+
+            //TODO redirect vers /menus
             Redirect::redirectPreviousRoute();
         }
 

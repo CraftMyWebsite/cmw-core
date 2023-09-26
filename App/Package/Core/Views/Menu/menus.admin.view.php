@@ -89,7 +89,7 @@ $description = LangManager::translate("core.menus.desc");
                     <div class="row align-items-center">
                         <div class="col-md-6 mt-3">
                             <div class="form-check form-switch">
-                                <input class="form-check-input allowedGroups" type="checkbox"
+                                <input class="form-check-input allowedGroups" id="allowedGroups" type="checkbox"
                                        name="allowedGroupsToggle"
                                 >
                                 <label class="form-check-label" for="allowedGroups">
@@ -156,15 +156,17 @@ $description = LangManager::translate("core.menus.desc");
                                             <?php if ($menu->getUrl() === "#"): ?>
                                                 <small><?= LangManager::translate('core.nolink') ?></small>
                                             <?php else: ?>
-                                                <small><?= LangManager::translate('core.menus.send_to',
-                                                        ['url' => $menu->getUrl()]) ?>
-                                                    <?= $menu->getUrl() ?></small>
+                                                <small><?= LangManager::translate('core.menus.send_to', ['url' => $menu->getUrl()]) ?>
+                                                    </small>
                                             <?php endif; ?>
+                                            <?php if (!$menu->isUserAllowed()): ?><small style="color: #af1a1a">*Accès restreint</small><?php endif; ?>
                                         </th>
                                         <th class="text-end">
-                                            <a type="button" data-bs-toggle="modal"
-                                               data-bs-target="#add-submenu-<?= $menu->getId() ?>">
+                                            <a href="menus/add-submenu/<?= $menu->getId() ?>">
                                                 <i class="text-success me-3 fa-solid fa-circle-plus"></i>
+                                            </a>
+                                            <a href="menus/edit/<?= $menu->getId() ?>">
+                                                <i class="text-primary me-3 fa-solid fa-pen-to-square"></i>
                                             </a>
                                             <a type="button" data-bs-toggle="modal"
                                                data-bs-target="#delete-<?= $menu->getId() ?>">
@@ -181,10 +183,9 @@ $description = LangManager::translate("core.menus.desc");
                                                     <small><?= LangManager::translate('core.nolink') ?></small>
                                                 <?php else: ?>
                                                     <small><?= LangManager::translate('core.menus.send_to',
-                                                            ['url' => $subMenu->getUrl()]) ?>
-                                                        <?= $subMenu->getUrl() ?>
-                                                    </small>
+                                                            ['url' => $subMenu->getUrl()]) ?></small>
                                                 <?php endif; ?>
+                                                <?php if (!$subMenu->isUserAllowed()): ?><small style="color: #af1a1a">*Accès restreint</small><?php endif; ?>
                                             </td>
                                             <td class="text-end">
                                                 <span style="display: none" class="loader me-3"><i
@@ -200,9 +201,11 @@ $description = LangManager::translate("core.menus.desc");
                                                                                  href="menus/submenuUp/<?= $subMenu->getId() ?>/<?= $subMenu->getOrder() ?>/<?= $menu->getId() ?>"><i
                                                                     class="fa-xs fa-solid fa-chevron-down"></i></a></span>
                                                 <?php endif; ?>
-                                                <a type="button" data-bs-toggle="modal"
-                                                   data-bs-target="#add-sub-submenu-<?= $subMenu->getId() ?>">
+                                                <a href="menus/add-submenu/<?= $subMenu->getId() ?>">
                                                     <i class="text-success me-3 fa-solid fa-circle-plus"></i>
+                                                </a>
+                                                <a href="menus/edit/<?= $subMenu->getId() ?>">
+                                                    <i class="text-primary me-3 fa-solid fa-pen-to-square"></i>
                                                 </a>
                                                 <a type="button" data-bs-toggle="modal"
                                                    data-bs-target="#delete-<?= $subMenu->getId() ?>">
@@ -218,9 +221,9 @@ $description = LangManager::translate("core.menus.desc");
                                                     <?php else: ?>
                                                         <small><?= LangManager::translate('core.menus.send_to',
                                                                 ['url' => $subSubMenu->getUrl()]) ?>
-                                                            <?= $subSubMenu->getUrl() ?>
                                                         </small>
                                                     <?php endif; ?>
+                                                    <?php if (!$subSubMenu->isUserAllowed()): ?><small style="color: #af1a1a">*Accès restreint</small><?php endif; ?>
                                                 </td>
                                                 <td class="text-end">
                                                     <span style="display: none" class="loader me-3"><i
@@ -236,6 +239,9 @@ $description = LangManager::translate("core.menus.desc");
                                                                                      href="menus/submenuUp/<?= $subSubMenu->getId() ?>/<?= $subSubMenu->getOrder() ?>/<?= $subMenu->getId() ?>"><i
                                                                         class="fa-xs fa-solid fa-chevron-down"></i></a></span>
                                                     <?php endif; ?>
+                                                    <a href="menus/edit/<?= $subSubMenu->getId() ?>">
+                                                        <i class="text-primary me-3 fa-solid fa-pen-to-square"></i>
+                                                    </a>
                                                     <a type="button" data-bs-toggle="modal"
                                                        data-bs-target="#delete-<?= $subSubMenu->getId() ?>">
                                                         <i class="text-danger fas fa-trash-alt"></i>
@@ -277,150 +283,6 @@ $description = LangManager::translate("core.menus.desc");
                                                 </div>
                                             </div>
                                         <?php endforeach; ?>
-
-                                        <!--
-                                        --MODAL ADD SUB-SUBMENU FORUM--
-                                        -->
-                                        <div class="modal fade " id="add-sub-submenu-<?= $subMenu->getId() ?>"
-                                             tabindex="-1" role="dialog" aria-labelledby="myModalLabel160"
-                                             aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered modal-lg"
-                                                 role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header bg-primary">
-                                                        <h5 class="modal-title white"
-                                                            id="myModalLabel160"><?= LangManager::translate("core.menus.add_sub_menu",
-                                                                ['menu' => $subMenu->getName()]) ?>
-                                                            <?= $subMenu->getName() ?>
-                                                        </h5>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form action="menus/add-submenu" method="post"
-                                                              name="sub-submenu">
-                                                            <?php (new SecurityManager())->insertHiddenToken() ?>
-                                                            <input hidden name="parentId" type="text"
-                                                                   value="<?= $subMenu->getId() ?>">
-                                                            <div class="row align-items-center">
-                                                                <div class="col-md-6">
-                                                                    <h6><?= LangManager::translate("core.menus.add.name") ?>
-                                                                        :</h6>
-                                                                    <div class="form-group position-relative has-icon-left">
-                                                                        <input type="text" name="name"
-                                                                               class="form-control"
-                                                                               placeholder="<?= LangManager::translate("core.menus.add.name_hint") ?>"
-                                                                               required>
-                                                                        <div class="form-control-icon">
-                                                                            <i class="fa-solid fa-text-width"></i>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6 mt-3">
-                                                                    <div class="form-check form-switch">
-                                                                        <input class="form-check-input" type="checkbox"
-                                                                               name="targetBlank"
-                                                                               id="targetBlank">
-                                                                        <label class="form-check-label"
-                                                                               for="targetBlank"><?= LangManager::translate("core.menus.add.targetBlank") ?></label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row mt-2 align-items-center">
-                                                                <div class="col-md-6">
-                                                                    <h6><?= LangManager::translate("core.menus.add.choice") ?>
-                                                                        :</h6>
-                                                                    <div class="form-group">
-                                                                        <select class="choices form-select super-choice"
-                                                                                name="choice" required>
-                                                                            <option value="package">
-                                                                                <?= LangManager::translate("core.menus.add.package") ?>
-                                                                            </option>
-                                                                            <option value="custom">
-                                                                                <?= LangManager::translate("core.menus.add.custom") ?>
-                                                                            </option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <!-- Dynamic input type -->
-                                                                <div class="col-md-6 addPackage">
-                                                                    <h6><?= LangManager::translate("core.menus.add.package_select") ?>
-                                                                        :</h6>
-                                                                    <div class="form-group">
-                                                                        <select class="choices form-select"
-                                                                                name="slugPackage">
-                                                                            <?php foreach ($packagesLinks as $package => $routes):
-                                                                                if ($routes !== []):?>
-                                                                                    <option disabled>
-                                                                                        ──── <?= $package ?> ────
-                                                                                    </option>
-                                                                                <?php endif; ?>
-                                                                                <?php foreach ($routes as $name => $route): ?>
-                                                                                <option value="<?= $route ?>"><?= $name ?></option>
-                                                                            <?php endforeach; ?>
-                                                                            <?php endforeach; ?>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-md-6 d-none addCustom">
-                                                                    <h6><?= LangManager::translate("core.menus.add.custom") ?>
-                                                                        :</h6>
-                                                                    <div class="form-group position-relative has-icon-left">
-                                                                        <input type="text" name="slugCustom"
-                                                                               class="form-control"
-                                                                               placeholder="<?= LangManager::translate("core.menus.add.custom_hint") ?>">
-                                                                        <div class="form-control-icon">
-                                                                            <i class="fa-solid fa-link"></i>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row align-items-center">
-                                                                <div class="col-md-6 mt-3">
-                                                                    <div class="form-check form-switch">
-                                                                        <input class="form-check-input allowedGroups"
-                                                                               type="checkbox"
-                                                                               name="allowedGroupsToggle"
-                                                                        >
-                                                                        <label class="form-check-label"
-                                                                               for="allowedGroups">
-                                                                            <?= LangManager::translate("core.menus.add.allowedGroups") ?>
-                                                                        </label>
-                                                                    </div>
-                                                                </div>
-                                                                <!-- List groups -->
-                                                                <div class="col-md-6 mt-2 d-none listAllowedGroups">
-                                                                    <h6><?= LangManager::translate("core.menus.add.group_select") ?>
-                                                                        :</h6>
-                                                                    <div class="form-group">
-                                                                        <select class="choices form-select"
-                                                                                name="allowedGroups[]" multiple>
-                                                                            <?php foreach ($roles as $role): ?>
-                                                                                <option
-                                                                                        value="<?= $role->getId() ?>"><?= $role->getName() ?></option>
-                                                                            <?php endforeach; ?>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-light-secondary"
-                                                                data-bs-dismiss="modal">
-                                                            <i class="bx bx-x"></i>
-                                                            <span class=""><?= LangManager::translate("core.btn.close") ?></span>
-                                                        </button>
-                                                        <button type="submit" form="sub-submenu"
-                                                                class="btn btn-primary ml-1">
-                                                            <i class="bx bx-check"></i>
-                                                            <span class=""><?= LangManager::translate("core.btn.add") ?></span>
-                                                        </button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
                                         <!--
                                        --MODAL SUPPRESSION SUB MENU--
                                         -->
@@ -459,130 +321,6 @@ $description = LangManager::translate("core.menus.desc");
                                     <?php endforeach; ?>
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!--
-                    --MODAL SUBMENU FORUM--
-                    -->
-                    <div class="modal fade " id="add-submenu-<?= $menu->getId() ?>" tabindex="-1" role="dialog"
-                         aria-labelledby="myModalLabel160" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-lg"
-                             role="document">
-                            <div class="modal-content">
-                                <div class="modal-header bg-primary">
-                                    <h5 class="modal-title white"
-                                        id="myModalLabel160">
-                                        <?= LangManager::translate("core.menus.add_sub_menu", ['menu' => $menu->getName()]) ?>
-                                        <?= $menu->getName() ?>
-                                    </h5>
-                                </div>
-                                <div class="modal-body">
-                                    <form action="menus/add-submenu" method="post">
-                                        <?php (new SecurityManager())->insertHiddenToken() ?>
-                                        <input hidden name="parentId" type="text" value="<?= $menu->getId() ?>">
-                                        <div class="row align-items-center">
-                                            <div class="col-md-6">
-                                                <h6><?= LangManager::translate("core.menus.add.name") ?> :</h6>
-                                                <div class="form-group position-relative has-icon-left">
-                                                    <input type="text" name="name" class="form-control"
-                                                           placeholder="<?= LangManager::translate("core.menus.add.name_hint") ?>"
-                                                           required>
-                                                    <div class="form-control-icon">
-                                                        <i class="fa-solid fa-text-width"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 mt-3">
-                                                <div class="form-check form-switch">
-                                                    <input class="form-check-input" type="checkbox" name="targetBlank"
-                                                           id="targetBlank">
-                                                    <label class="form-check-label"
-                                                           for="targetBlank"><?= LangManager::translate("core.menus.add.targetBlank") ?></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-2 align-items-center">
-                                            <div class="col-md-6">
-                                                <h6><?= LangManager::translate("core.menus.add.choice") ?> :</h6>
-                                                <div class="form-group">
-                                                    <select class="choices form-select super-choice" name="choice"
-                                                            required>
-                                                        <option value="package">
-                                                            <?= LangManager::translate("core.menus.add.package") ?>
-                                                        </option>
-                                                        <option value="custom">
-                                                            <?= LangManager::translate("core.menus.add.custom") ?>
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <!-- Dynamic input type -->
-                                            <div class="col-md-6 addPackage">
-                                                <h6><?= LangManager::translate("core.menus.add.package_select") ?>
-                                                    :</h6>
-                                                <div class="form-group">
-                                                    <select class="choices form-select" name="slugPackage">
-                                                        <?php foreach ($packagesLinks as $package => $routes):
-                                                            if ($routes !== []):?>
-                                                                <option disabled>──── <?= $package ?> ────</option>
-                                                            <?php endif; ?>
-                                                            <?php foreach ($routes as $name => $route): ?>
-                                                            <option value="<?= $route ?>"><?= $name ?></option>
-                                                        <?php endforeach; ?>
-                                                        <?php endforeach; ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6 d-none addCustom">
-                                                <h6><?= LangManager::translate("core.menus.add.custom") ?> :</h6>
-                                                <div class="form-group position-relative has-icon-left">
-                                                    <input type="text" name="slugCustom" class="form-control"
-                                                           placeholder="<?= LangManager::translate("core.menus.add.custom_hint") ?>">
-                                                    <div class="form-control-icon">
-                                                        <i class="fa-solid fa-link"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row align-items-center">
-                                            <div class="col-md-6 mt-3">
-                                                <div class="form-check form-switch">
-                                                    <input class="form-check-input allowedGroups" type="checkbox"
-                                                           name="allowedGroupsToggle"
-                                                    >
-                                                    <label class="form-check-label" for="allowedGroups">
-                                                        <?= LangManager::translate("core.menus.add.allowedGroups") ?>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <!-- List groups -->
-                                            <div class="col-md-6 mt-2 d-none listAllowedGroups">
-                                                <h6><?= LangManager::translate("core.menus.add.group_select") ?> :</h6>
-                                                <div class="form-group">
-                                                    <select class="choices form-select" name="allowedGroups[]" multiple>
-                                                        <?php foreach ($roles as $role): ?>
-                                                            <option
-                                                                    value="<?= $role->getId() ?>"><?= $role->getName() ?></option>
-                                                        <?php endforeach; ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                                        <i class="bx bx-x"></i>
-                                        <span class=""><?= LangManager::translate("core.btn.close") ?></span>
-                                    </button>
-                                    <button type="submit" class="btn btn-primary ml-1">
-                                        <i class="bx bx-check"></i>
-                                        <span class=""><?= LangManager::translate("core.btn.add") ?></span>
-                                    </button>
-                                    </form>
-                                </div>
                             </div>
                         </div>
                     </div>
