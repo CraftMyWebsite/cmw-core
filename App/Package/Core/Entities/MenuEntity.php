@@ -75,6 +75,19 @@ class MenuEntity
 
     /**
      * @return bool
+     * @desc allows you to check if you are on the active page to activate or not a class as "active" in your menu
+     */
+    public function urlIsActive(): bool
+    {
+        if (str_contains($_SERVER['REQUEST_URI'], $this->getUrl())) {
+            return true;
+        }
+        if ($_SERVER['REQUEST_URI']==="/" && $this->getUrl()==="/home") { return true;}
+        return false;
+    }
+
+    /**
+     * @return bool
      */
     public function isRestricted(): bool
     {
