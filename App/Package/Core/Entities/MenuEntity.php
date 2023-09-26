@@ -66,11 +66,11 @@ class MenuEntity
             return "#";
         }
 
-        if(str_starts_with($this->url, 'http')){
+        if (str_starts_with($this->url, 'http')) {
             return $this->url;
         }
 
-        return EnvManager::getInstance()->getValue("PATH_SUBFOLDER").$this->url;
+        return EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $this->url;
     }
 
     /**
@@ -82,7 +82,9 @@ class MenuEntity
         if (str_contains($_SERVER['REQUEST_URI'], $this->getUrl())) {
             return true;
         }
-        if ($_SERVER['REQUEST_URI']==="/" && $this->getUrl()==="/home") { return true;}
+        if ($_SERVER['REQUEST_URI'] === "/" && $this->getUrl() === "/home") {
+            return true;
+        }
         return false;
     }
 
@@ -99,20 +101,20 @@ class MenuEntity
      */
     public function isUserAllowed(): bool
     {
-        if (!$this->isRestricted){
+        if (!$this->isRestricted) {
             return true;
         }
 
-        if (!UsersController::isUserLogged() && $this->isRestricted()){
+        if (!UsersController::isUserLogged() && $this->isRestricted()) {
             return false;
         }
 
-        if ($this->restrictedRoles === null){
+        if ($this->restrictedRoles === null) {
             return true;
         }
 
-        foreach ($this->restrictedRoles as $restrictedRole){
-            if (RolesModel::playerHasRole(UsersModel::getCurrentUser()?->getId(), $restrictedRole?->getId())){
+        foreach ($this->restrictedRoles as $restrictedRole) {
+            if (RolesModel::playerHasRole(UsersModel::getCurrentUser()?->getId(), $restrictedRole?->getId())) {
                 return true;
             }
         }
