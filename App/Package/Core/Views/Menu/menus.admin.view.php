@@ -159,7 +159,7 @@ $description = LangManager::translate("core.menus.desc");
                                                 <small><?= LangManager::translate('core.menus.send_to', ['url' => $menu->getUrl()]) ?>
                                                     </small>
                                             <?php endif; ?>
-                                            <?php if (!$menu->isUserAllowed()): ?><small style="color: #af1a1a">*Accès restreint</small><?php endif; ?>
+                                            <?php if ($menu->isRestricted()): ?><small style="color: #af1a1a">Restreint <i data-bs-toggle="tooltip" title="<?php foreach ( $menus->getAllowedRoles($menu->getId()) as $allowedRoles): ?> - <?= $allowedRoles->getName() ?> <?php endforeach; ?>" class="fa-sharp fa-solid fa-circle-info"></i> </small><?php endif; ?>
                                         </th>
                                         <th class="text-end">
                                             <a href="menus/add-submenu/<?= $menu->getId() ?>">
