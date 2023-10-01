@@ -19,26 +19,35 @@ for (let i = 0; i < choice.length; i++) {
 }
 
 
-/*
-    Display Allowed Groups list input
- */
+//Ajout d'un menu
+const allowedGroupsToggleCheckbox = document.getElementById("allowedGroups");
+const allowedGroups = document.getElementById("listAllowedGroups");
 
-const toggleBtn = document.getElementsByClassName('allowedGroups')
-const allowedGroupsParent = document.getElementsByClassName('listAllowedGroups')
-
-for (let u = 0; u < toggleBtn.length; u++) {
-    toggleBtn[u].addEventListener("change", () => {
-        for (let y = 0; y < allowedGroupsParent.length; y++) {
-            allowedGroupsParent[y].classList.toggle('d-none')
-        }
-    })
+if (allowedGroupsToggleCheckbox.checked) {
+    allowedGroups.style.display = "block";
+} else {
+    allowedGroups.style.display = "none";
 }
+allowedGroupsToggleCheckbox.addEventListener("change", function () {
+    if (allowedGroupsToggleCheckbox.checked) {
+        allowedGroups.style.display = "block";
+    } else {
+        allowedGroups.style.display = "none";
+    }
+});
 
 
-
-
-
-
+//loader
+function load() {
+    let loader = document.getElementsByClassName("loader");
+    for (let f = 0; f < loader.length; f++) {
+        loader[f].style.display = "inline";
+    }
+    let sorter = document.getElementsByClassName('sorter');
+    for (let i = 0; i < sorter.length; i++) {
+        sorter[i].style.display = 'none';
+    }
+}
 
 
 

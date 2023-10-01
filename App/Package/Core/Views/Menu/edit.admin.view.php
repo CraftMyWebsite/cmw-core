@@ -3,6 +3,7 @@
 use CMW\Entity\Users\RoleEntity;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
+use CMW\Model\Core\MenusModel;
 
 /* @var array $packagesLinks */
 /* @var RoleEntity[] $roles */
@@ -99,12 +100,16 @@ $description = LangManager::translate("core.menus.desc");
                             </div>
                         </div>
                         <!-- List groups -->
-                        <div class="col-md-6 mt-2 d-none listAllowedGroups">
+                        <div class="col-md-6 mt-2" id="listAllowedGroups">
                             <h6><?= LangManager::translate("core.menus.add.group_select") ?> :</h6>
                             <div class="form-group">
                                 <select class="choices form-select" name="allowedGroups[]" multiple>
                                     <?php foreach ($roles as $role): ?>
                                         <option
+                                            <?php foreach (MenusModel::getInstance()->getAllowedRoles($instanceMenu->getId()) as $allowedRoles): ?>
+                                                <?= $allowedRoles->getName() === $role->getName() ? 'selected' : '' ?>
+                                            <?php endforeach ?>
+
                                             value="<?= $role->getId() ?>"><?= $role->getName() ?></option>
                                     <?php endforeach; ?>
                                 </select>
@@ -114,7 +119,7 @@ $description = LangManager::translate("core.menus.desc");
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary">
                             <i class="bx bx-check"></i>
-                            <span class=""><?= LangManager::translate("core.btn.add") ?></span>
+                            <span class=""><?= LangManager::translate("core.btn.edit") ?></span>
                         </button>
                     </div>
 

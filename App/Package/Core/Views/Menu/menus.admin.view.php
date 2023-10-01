@@ -98,7 +98,7 @@ $description = LangManager::translate("core.menus.desc");
                             </div>
                         </div>
                         <!-- List groups -->
-                        <div class="col-md-6 mt-2 d-none listAllowedGroups">
+                        <div style="display: none" class="col-md-6 mt-2" id="listAllowedGroups">
                             <h6><?= LangManager::translate("core.menus.add.group_select") ?> :</h6>
                             <div class="form-group">
                                 <select class="choices form-select" name="allowedGroups[]" multiple>
@@ -363,17 +363,3 @@ $description = LangManager::translate("core.menus.desc");
         </div>
     </div>
 </section>
-
-
-<script>
-    function load() {
-        let loader = document.getElementsByClassName("loader");
-        for (let f = 0; f < loader.length; f++) {
-            loader[f].style.display = "inline";
-        }
-        let sorter = document.getElementsByClassName('sorter');
-        for (let i = 0; i < sorter.length; i++) {
-            sorter[i].style.display = 'none';
-        }
-    }
-</script>
