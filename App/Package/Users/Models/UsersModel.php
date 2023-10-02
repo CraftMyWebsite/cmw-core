@@ -113,6 +113,7 @@ class UsersModel extends AbstractModel
             $res["user_lastname"] ?? "",
             $res["user_state"],
             $res["user_key"],
+            $res['user_2fa_secret'],
             $res["user_logged"],
             $roles,
             $highestRole,

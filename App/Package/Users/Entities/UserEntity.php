@@ -15,6 +15,7 @@ class UserEntity
     private string $userLastName;
     private int $userState;
     private string $userKey;
+    private ?string $user2FaSecret;
     private string $userLastConnection;
     /** @var \CMW\Entity\Users\RoleEntity|\CMW\Entity\Users\RoleEntity[] $userRoles */
     private array $userRoles;
@@ -32,6 +33,7 @@ class UserEntity
      * @param string $userLastName
      * @param int $userState
      * @param string $userKey
+     * @param string|null $user2FaSecret
      * @param string $userLastConnection
      * @param \CMW\Entity\Users\RoleEntity[] $userRoles
      * @param ?\CMW\Entity\Users\RoleEntity $userHighestRole
@@ -39,7 +41,7 @@ class UserEntity
      * @param string $userUpdated
      * @param \CMW\Entity\Users\UserPictureEntity|null $userPicture
      */
-    public function __construct(int $userId, string $userMail, string $userPseudo, string $userFirstName, string $userLastName, int $userState, string $userKey, string $userLastConnection, array $userRoles, ?RoleEntity $userHighestRole, string $userCreated, string $userUpdated, ?UserPictureEntity $userPicture)
+    public function __construct(int $userId, string $userMail, string $userPseudo, string $userFirstName, string $userLastName, int $userState, string $userKey, ?string $user2FaSecret, string $userLastConnection, array $userRoles, ?RoleEntity $userHighestRole, string $userCreated, string $userUpdated, ?UserPictureEntity $userPicture)
     {
         $this->userId = $userId;
         $this->userMail = $userMail;
@@ -48,6 +50,7 @@ class UserEntity
         $this->userLastName = $userLastName;
         $this->userState = $userState;
         $this->userKey = $userKey;
+        $this->user2FaSecret = $user2FaSecret;
         $this->userLastConnection = $userLastConnection;
         $this->userRoles = $userRoles;
         $this->userHighestRole = $userHighestRole;
@@ -110,6 +113,22 @@ class UserEntity
     public function getUserKey(): string
     {
         return $this->userKey;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function get2FaSecret(): ?string
+    {
+        return $this->user2FaSecret;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUsing2Fa(): bool
+    {
+        return !is_null($this->user2FaSecret);
     }
 
     /**
