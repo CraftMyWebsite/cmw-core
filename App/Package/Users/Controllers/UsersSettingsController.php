@@ -12,6 +12,7 @@ use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
+use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UsersSettingsModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
@@ -41,8 +42,10 @@ class UsersSettingsController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings");
 
+        $roles = RolesModel::getInstance()->getRoles();
+
         View::createAdminView("Users", "settings")
-            ->addVariableList(["settings" => new UserSettingsEntity()])
+            ->addVariableList(["settings" => new UserSettingsEntity(), "roles" => $roles])
             ->view();
     }
 
