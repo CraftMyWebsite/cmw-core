@@ -1,7 +1,16 @@
-tinymce.init({
+document.addEventListener("DOMContentLoaded", function () {
+    // Recherchez la classe "theme-dark" ou "dark" sur la balise <body> ou un autre élément pertinent.
+    const bodyElement = document.body;
+    const hasDarkTheme = bodyElement.classList.contains("theme-dark") || bodyElement.classList.contains("dark");
+
+    // Définissez le skin en fonction de hasDarkTheme
+    const tinymceSkin = hasDarkTheme ? 'theme-dark' : 'theme-light';
+
+
+    tinymce.init({
   selector: '.tinymce',
-  skin: 'theme-dark',
-  content_css: 'theme-dark',
+  skin: tinymceSkin,
+  content_css: tinymceSkin,
   promotion: false,
   toolbar_sticky: true,
   toolbar_mode: 'sliding',
@@ -17,4 +26,5 @@ tinymce.init({
   images_file_types: 'jpg,svg,webp',
   file_picker_types: 'file image media',
   statusbar: false,
+});
 });
