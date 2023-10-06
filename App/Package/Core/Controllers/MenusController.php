@@ -68,11 +68,13 @@ class MenusController extends AbstractController
 
         if ($choice === 'package') {
             $url = Utils::filterInput('slugPackage')[0];
+            $customUrl = 0;
         } else {
             $url = Utils::filterInput('slugCustom')[0];
+            $customUrl = 1;
         }
 
-        $menu = MenusModel::getInstance()->createMenu($name, $url, $targetBlank, $isRestricted);
+        $menu = MenusModel::getInstance()->createMenu($name, $url, $targetBlank, $isRestricted, $customUrl);
 
         if (is_null($menu)) {
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
@@ -121,11 +123,13 @@ class MenusController extends AbstractController
 
         if ($choice === 'package') {
             $url = Utils::filterInput('slugPackage')[0];
+            $customUrl = 0;
         } else {
             $url = Utils::filterInput('slugCustom')[0];
+            $customUrl = 1;
         }
 
-        $menu = MenusModel::getInstance()->createSubMenu($name, $menuId, $url, $targetBlank, $isRestricted);
+        $menu = MenusModel::getInstance()->createSubMenu($name, $menuId, $url, $targetBlank, $isRestricted,$customUrl);
 
         if (is_null($menu)) {
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
@@ -175,11 +179,13 @@ class MenusController extends AbstractController
 
         if ($choice === 'package') {
             $url = Utils::filterInput('slugPackage')[0];
+            $customUrl = 0;
         } else {
             $url = Utils::filterInput('slugCustom')[0];
+            $customUrl = 1;
         }
 
-        $menu = MenusModel::getInstance()->createSubMenu($name, $menuId, $url, $targetBlank, $isRestricted);
+        $menu = MenusModel::getInstance()->editMenu($menuId,$name,$url,$targetBlank,$isRestricted, $customUrl);
 
         if (is_null($menu)) {
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
@@ -189,15 +195,19 @@ class MenusController extends AbstractController
             Redirect::redirectPreviousRoute();
         }
 
+        if ($isRestricted === 0) {
+            MenusModel::getInstance()->deleteMenuGroupsAllowed($menu->getId());
+        }
 
         if (!empty($_POST['allowedGroupsToggle']) && !empty($_POST['allowedGroups'])) {
+            MenusModel::getInstance()->deleteMenuGroupsAllowed($menu->getId());
             foreach ($_POST['allowedGroups'] as $roleId) {
                 MenusModel::getInstance()->addMenuGroupsAllowed($menu->getId(), $roleId);
             }
         }
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate("core.menus.add.toaster.success"));
+            "Menu éditer !");
 
         Redirect::redirectPreviousRoute();
     }

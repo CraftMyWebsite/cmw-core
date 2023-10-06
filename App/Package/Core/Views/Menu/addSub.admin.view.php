@@ -49,7 +49,7 @@ $description = LangManager::translate("core.menus.desc");
                         <div class="col-md-6">
                             <h6><?= LangManager::translate("core.menus.add.choice") ?> :</h6>
                             <div class="form-group">
-                                <select class="choices form-select super-choice" name="choice" required>
+                                <select class="choices form-select" id="super-choice" name="choice" required>
                                     <option value="package">
                                         <?= LangManager::translate("core.menus.add.package") ?>
                                     </option>
@@ -60,7 +60,7 @@ $description = LangManager::translate("core.menus.desc");
                             </div>
                         </div>
                         <!-- Dynamic input type -->
-                        <div class="col-md-6 addPackage">
+                        <div class="col-md-6" id="addPackage">
                             <h6><?= LangManager::translate("core.menus.add.package_select") ?> :</h6>
                             <div class="form-group">
                                 <select class="choices form-select" name="slugPackage">
@@ -76,7 +76,7 @@ $description = LangManager::translate("core.menus.desc");
                             </div>
                         </div>
 
-                        <div class="col-md-6 d-none addCustom">
+                        <div class="col-md-6" id="addCustom" style="display: none">
                             <h6><?= LangManager::translate("core.menus.add.custom") ?> :</h6>
                             <div class="form-group position-relative has-icon-left">
                                 <input type="text" name="slugCustom" class="form-control"

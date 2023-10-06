@@ -21,20 +21,22 @@ class MenusModel extends AbstractModel
      * @param string $url
      * @param int $targetBlank
      * @param int $isRestricted
+     * @param int $customUrl
      * @return \CMW\Entity\Core\MenuEntity|null
      */
-    public function createMenu(string $name, string $url, int $targetBlank, int $isRestricted): ?MenuEntity
+    public function createMenu(string $name, string $url, int $targetBlank, int $isRestricted, int $customUrl): ?MenuEntity
     {
         $var = [
             "name" => $name,
             "url" => $url,
             "menu_order" => $this->getLastMenuOrder() + 1,
             "target_blank" => $targetBlank,
-            "restricted" => $isRestricted
+            "restricted" => $isRestricted,
+            "customUrl" => $customUrl
         ];
 
-        $sql = "INSERT INTO cmw_menus (menu_name, menu_url, menu_is_restricted, menu_order, menu_target_blank) 
-                VALUES (:name, :url, :restricted,:menu_order ,:target_blank)";
+        $sql = "INSERT INTO cmw_menus (menu_name, menu_url, menu_is_restricted, menu_order, menu_target_blank, menu_is_custom_url) 
+                VALUES (:name, :url, :restricted,:menu_order ,:target_blank, :customUrl)";
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -54,9 +56,10 @@ class MenusModel extends AbstractModel
      * @param string $url
      * @param int $targetBlank
      * @param int $isRestricted
+     * @param int $customUrl
      * @return \CMW\Entity\Core\MenuEntity|null
      */
-    public function createSubMenu(string $name,string $parentId, string $url, int $targetBlank, int $isRestricted): ?MenuEntity
+    public function createSubMenu(string $name,string $parentId, string $url, int $targetBlank, int $isRestricted, int $customUrl): ?MenuEntity
     {
         $var = [
             "name" => $name,
@@ -64,11 +67,12 @@ class MenusModel extends AbstractModel
             "url" => $url,
             "menu_order" => $this->getLastSubMenuOrder($parentId) + 1,
             "target_blank" => $targetBlank,
-            "restricted" => $isRestricted
+            "restricted" => $isRestricted,
+            "customUrl" => $customUrl
         ];
 
-        $sql = "INSERT INTO cmw_menus (menu_name, menu_parent_id, menu_url, menu_is_restricted, menu_order, menu_target_blank) 
-                VALUES (:name, :parentId, :url, :restricted,:menu_order ,:target_blank)";
+        $sql = "INSERT INTO cmw_menus (menu_name, menu_parent_id, menu_url, menu_is_restricted, menu_order, menu_target_blank, menu_is_custom_url) 
+                VALUES (:name, :parentId, :url, :restricted,:menu_order ,:target_blank, :customUrl)";
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -80,6 +84,19 @@ class MenusModel extends AbstractModel
         $id = $db->lastInsertId();
 
         return $this->getMenuById($id);
+    }
+
+    /**
+     * @return ?MenuEntity
+     * @desc Edit the menu
+     */
+    public function editMenu(int $menuId,string $name, string $url, int $targetBlank, int $isRestricted, int $customUrl): ?MenuEntity
+    {
+        $sql = "UPDATE cmw_menus SET menu_name=:menu_name, menu_url=:menu_url, menu_is_restricted=:menu_is_restricted, menu_target_blank=:menu_target_blank, menu_is_custom_url=:customUrl WHERE menu_id = :menu_id";
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare($sql);
+        $req->execute(array("menu_id" => $menuId,"menu_name" => $name,"menu_url" => $url,"menu_target_blank" => $targetBlank,"menu_is_restricted" => $isRestricted, "customUrl" => $customUrl));
+        return $this->getMenuById($menuId);
     }
 
     /**
@@ -107,6 +124,7 @@ class MenusModel extends AbstractModel
             $res['menu_name'],
             $res['menu_url'],
             $res['menu_is_restricted'],
+            $res['menu_is_custom_url'],
             $res['menu_order'],
             $res['menu_target_blank'],
             $this->getAllowedRoles($res['menu_id'])
@@ -363,6 +381,15 @@ class MenusModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $req = $db ->prepare($sql);
         $req->execute(['group_id' => $roleId, 'menu_id' => $menuId]);
+    }
+
+    public function deleteMenuGroupsAllowed(int $id): bool
+    {
+        $sql = "DELETE FROM cmw_menus_groups_allowed WHERE menus_groups_menu_id = :menus_groups_menu_id";
+
+        $db = DatabaseManager::getInstance();
+
+        return $db->prepare($sql)->execute(array("menus_groups_menu_id" => $id));
     }
 
 

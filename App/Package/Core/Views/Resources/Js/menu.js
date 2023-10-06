@@ -2,24 +2,29 @@
 /*
     Get choice input select
  */
+function toggleDivVisibility() {
+    var selectedOption = document.getElementById('super-choice').value;
+    var addPackageDiv = document.getElementById('addPackage');
+    var addCustomDiv = document.getElementById('addCustom');
 
-const choice = document.getElementsByClassName('super-choice')
-const packageParent = document.getElementsByClassName('addPackage')
-const customParent = document.getElementsByClassName('addCustom')
-
-for (let i = 0; i < choice.length; i++) {
-    choice[i].addEventListener("change", () => {
-        for (let o = 0; o < packageParent.length; o++) {
-            packageParent[o].classList.toggle('d-none');
-        }
-        for (let p = 0; p < customParent.length; p++) {
-            customParent[p].classList.toggle('d-none');
-        }
-    })
+    if (selectedOption === 'package') {
+        addPackageDiv.style.display = 'block';
+        addCustomDiv.style.display = 'none';
+    } else if (selectedOption === 'custom') {
+        addPackageDiv.style.display = 'none';
+        addCustomDiv.style.display = 'block';
+    }
 }
 
+// Appeler la fonction au chargement de la page
+window.addEventListener('load', toggleDivVisibility);
 
-//Ajout d'un menu
+// Écouter le changement de sélection
+document.getElementById('super-choice').addEventListener('change', toggleDivVisibility);
+
+
+
+//Allowed groups
 const allowedGroupsToggleCheckbox = document.getElementById("allowedGroups");
 const allowedGroups = document.getElementById("listAllowedGroups");
 

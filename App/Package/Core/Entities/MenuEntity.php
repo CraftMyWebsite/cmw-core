@@ -16,6 +16,7 @@ class MenuEntity
     private string $name;
     private string $url;
     private int $isRestricted;
+    private int $isCustomUrl;
     private int $order;
     private int $targetBlank;
     /* @var RoleEntity[]|null $restrictedRoles */
@@ -26,16 +27,18 @@ class MenuEntity
      * @param string $name
      * @param string $url
      * @param int $isRestricted
+     * @param int $isCustomUrl
      * @param int $order
      * @param int $targetBlank
      * @param RoleEntity[]|null $restrictedRoles
      */
-    public function __construct(int $id, string $name, string $url, int $isRestricted, int $order, int $targetBlank, ?array $restrictedRoles)
+    public function __construct(int $id, string $name, string $url, int $isRestricted, int $isCustomUrl, int $order, int $targetBlank, ?array $restrictedRoles)
     {
         $this->id = $id;
         $this->name = $name;
         $this->url = $url;
         $this->isRestricted = $isRestricted;
+        $this->isCustomUrl = $isCustomUrl;
         $this->order = $order;
         $this->targetBlank = $targetBlank;
         $this->restrictedRoles = $restrictedRoles;
@@ -74,6 +77,14 @@ class MenuEntity
     }
 
     /**
+     * @return string
+     */
+    public function getUnformatedUrl(): string
+    {
+        return $this->url;
+    }
+
+    /**
      * @return bool
      * @desc allows you to check if you are on the active page to activate or not a class as "active" in your menu
      */
@@ -94,6 +105,14 @@ class MenuEntity
     public function isRestricted(): bool
     {
         return $this->isRestricted;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCustomUrl(): bool
+    {
+        return $this->isCustomUrl;
     }
 
     /**

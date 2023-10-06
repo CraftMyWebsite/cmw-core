@@ -128,6 +128,7 @@ CREATE TABLE IF NOT EXISTS `cmw_menus`
     `menu_url`           VARCHAR(255)        NOT NULL,
     `menu_parent_id`     INT(11) DEFAULT NULL,
     `menu_is_restricted` INT(1)  DEFAULT 0,
+    `menu_is_custom_url` INT(1)  DEFAULT 0,
     `menu_order`         INT(10) UNSIGNED    NOT NULL,
     `menu_target_blank`  TINYINT(1) UNSIGNED NOT NULL,
     PRIMARY KEY (`menu_id`),

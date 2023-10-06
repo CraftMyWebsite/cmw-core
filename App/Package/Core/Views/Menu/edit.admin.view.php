@@ -50,37 +50,36 @@ $description = LangManager::translate("core.menus.desc");
                         <div class="col-md-6">
                             <h6><?= LangManager::translate("core.menus.add.choice") ?> :</h6>
                             <div class="form-group">
-                                <select class="choices form-select super-choice" name="choice" required>
-                                    <option value="package">
+                                <select class="choices form-select" id="super-choice" name="choice" required>
+                                    <option <?= $instanceMenu->isCustomUrl() ? '' : 'selected' ?> value="package">
                                         <?= LangManager::translate("core.menus.add.package") ?>
                                     </option>
-                                    <option value="custom">
+                                    <option <?= $instanceMenu->isCustomUrl() ? 'selected' : '' ?> value="custom">
                                         <?= LangManager::translate("core.menus.add.custom") ?>
                                     </option>
                                 </select>
                             </div>
                         </div>
                         <!-- Dynamic input type -->
-                        <div class="col-md-6 addPackage">
+                        <div class="col-md-6" id="addPackage">
                             <h6><?= LangManager::translate("core.menus.add.package_select") ?> :</h6>
                             <div class="form-group">
                                 <select class="choices form-select" name="slugPackage">
-                                    <?php foreach ($packagesLinks as $package => $routes):
-                                        if ($routes !== []):?>
+                                    <?php foreach ($packagesLinks as $package => $routes): if ($routes !== []):?>
                                             <option disabled>──── <?= $package ?> ────</option>
                                         <?php endif; ?>
                                         <?php foreach ($routes as $name => $route): ?>
-                                        <option value="<?= $route ?>"><?= $name ?></option>
+                                        <option <?= $instanceMenu->getUnformatedUrl() === $route ? 'selected' : '' ?> value="<?= $route ?>"><?= $name ?></option>
                                     <?php endforeach; ?>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
 
-                        <div class="col-md-6 d-none addCustom">
+                        <div class="col-md-6" id="addCustom" style="display: none">
                             <h6><?= LangManager::translate("core.menus.add.custom") ?> :</h6>
                             <div class="form-group position-relative has-icon-left">
-                                <input type="text" name="slugCustom" class="form-control"
+                                <input type="text" name="slugCustom" value="<?= $instanceMenu->getUrl() ?>" class="form-control"
                                        placeholder="<?= LangManager::translate("core.menus.add.custom_hint") ?>">
                                 <div class="form-control-icon">
                                     <i class="fa-solid fa-link"></i>
