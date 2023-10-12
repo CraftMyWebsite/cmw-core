@@ -1,6 +1,11 @@
 document.getElementById("sendMail").addEventListener("submit", function(event) {
     event.preventDefault(); // Empêche le rechargement de la page
 
+    var button = document.getElementById("testButton");
+    button.disabled = true;
+    var originalText = button.innerHTML;
+    button.innerHTML = originalText + '<i class="fa-solid fa-spinner fa-spin"></i>';
+
     // Récupérez l'adresse e-mail du formulaire
     var receiver = document.getElementById("receiver").value;
 
@@ -33,6 +38,8 @@ document.getElementById("sendMail").addEventListener("submit", function(event) {
                     transitionIn: 'fadeInLeft',
                     transitionOut: 'fadeOutRight',
                 });
+            button.disabled = false;
+            button.innerHTML = originalText;
         } else {
             iziToast.show(
                 {
@@ -54,6 +61,8 @@ document.getElementById("sendMail").addEventListener("submit", function(event) {
                     transitionIn: 'fadeInLeft',
                     transitionOut: 'fadeOutRight',
                 });
+            button.disabled = false;
+            button.innerHTML = originalText;
             console.error(xhr.statusText);
         }
     };
@@ -81,6 +90,8 @@ document.getElementById("sendMail").addEventListener("submit", function(event) {
                 transitionIn: 'fadeInLeft',
                 transitionOut: 'fadeOutRight',
             });
+        button.disabled = false;
+        button.innerHTML = originalText;
     };
 
     // Préparez les données à envoyer
