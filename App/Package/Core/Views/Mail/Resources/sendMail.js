@@ -1,16 +1,16 @@
 document.getElementById("sendMail").addEventListener("submit", function(event) {
     event.preventDefault(); // Empêche le rechargement de la page
 
-    var button = document.getElementById("testButton");
+    const button = document.getElementById("testButton");
     button.disabled = true;
-    var originalText = button.innerHTML;
+    const originalText = button.innerHTML;
     button.innerHTML = originalText + '<i class="fa-solid fa-spinner fa-spin"></i>';
 
     // Récupérez l'adresse e-mail du formulaire
-    var receiver = document.getElementById("receiver").value;
+    const receiver = document.getElementById("receiver").value;
 
     // Créez une instance de XMLHttpRequest
-    var xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
 
     // Configurez la requête
     xhr.open("POST", "/cmw-admin/mail/test", true);
@@ -95,7 +95,7 @@ document.getElementById("sendMail").addEventListener("submit", function(event) {
     };
 
     // Préparez les données à envoyer
-    var data = "receiver=" + receiver;
+    const data = "receiver=" + receiver;
 
     // Définissez les en-têtes pour la requête POST
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
