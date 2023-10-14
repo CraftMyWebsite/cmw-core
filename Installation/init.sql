@@ -26,21 +26,32 @@ CREATE TABLE IF NOT EXISTS `cmw_mail_config_smtp`
 
 CREATE TABLE IF NOT EXISTS `cmw_users`
 (
-    `user_id`         INT(11)      NOT NULL AUTO_INCREMENT,
-    `user_email`      VARCHAR(500) NOT NULL,
-    `user_pseudo`     VARCHAR(255)          DEFAULT NULL,
-    `user_firstname`  VARCHAR(255)          DEFAULT NULL,
-    `user_lastname`   VARCHAR(255)          DEFAULT NULL,
-    `user_password`   VARCHAR(255)          DEFAULT NULL,
-    `user_state`      TINYINT(1)   NOT NULL DEFAULT '1',
-    `user_key`        VARCHAR(255) NOT NULL,
-    `user_2fa_secret` VARCHAR(255) NULL,
-    `user_created`    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `user_updated`    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `user_logged`     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `user_id`        INT(11)      NOT NULL AUTO_INCREMENT,
+    `user_email`     VARCHAR(500) NOT NULL,
+    `user_pseudo`    VARCHAR(255)          DEFAULT NULL,
+    `user_firstname` VARCHAR(255)          DEFAULT NULL,
+    `user_lastname`  VARCHAR(255)          DEFAULT NULL,
+    `user_password`  VARCHAR(255)          DEFAULT NULL,
+    `user_state`     TINYINT(1)   NOT NULL DEFAULT '1',
+    `user_key`       VARCHAR(255) NOT NULL,
+    `user_created`   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `user_updated`   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `user_logged`    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`user_id`),
     UNIQUE KEY `user_email` (`user_email`),
     UNIQUE KEY `user_pseudo` (`user_pseudo`)
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `cmw_users_2fa`
+(
+    `users_2fa_user_id`    INT(11)      NOT NULL,
+    `users_2fa_is_enabled` TINYINT(1)   NOT NULL DEFAULT 0,
+    `users_2fa_secret`     VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`users_2fa_user_id`),
+    CONSTRAINT `cmw_users_2fa_ibfk_1` FOREIGN KEY (`users_2fa_user_id`)
+        REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;

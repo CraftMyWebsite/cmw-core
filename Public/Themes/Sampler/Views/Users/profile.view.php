@@ -52,51 +52,38 @@ $description = "Description de votre page";
                 <div class="card p-2 mt-2">
                     <h4 class="text-center">Sécurité :
                         <small>
-                            <?php if ($user->isUsing2Fa()): ?>
+                            <?php if ($user->get2Fa()->isEnabled()): ?>
                                 <span style="color: green">Actif !</span>
                             <?php else: ?>
                                 <span style="color: red">Inactif !</span>
                             <?php endif; ?>
                         </small>
                     </h4>
-                    <?php if ($user->isUsing2Fa()): ?>
-                        <span style="color: green">Actif !</span>
-                    <?php else: ?>
+                    <?php if (!$user->get2Fa()->isEnabled()): ?>
                         <p>Pour activer l'authentification à double facteur scannez le QR code dans une application
                             d'authentification (GoogleAuthenticator, Aegis ...)</p>
                     <?php endif; ?>
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="text-center">
-                                <img height="50%" width="50%"
-                                     src="https://qrcg-free-editor.qr-code-generator.com/main/assets/images/websiteQRCode_noFrame.png">
+                                <img height="50%" width="50%" src='<?= $user->get2Fa()->getQrCode(250) ?>'
+                                     alt="QR Code double authentification">
+                                <span><?= $user->get2Fa()->get2FaSecretDecoded() ?></span>
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <?php if ($user->isUsing2Fa()): ?>
-                                <form class="space-y-6" action="profile/disable_2fa" method="post">
-                                    <?php (new SecurityManager())->insertHiddenToken() ?>
-                                    <div class="form-floating mb-3">
-                                        <input class="form-control" name="disable_2fa" type="text"
-                                               value="" required>
-                                        <label for="name">Code d'authentification</label>
-                                    </div>
-                                    <span style="color: green">Actif !</span>
-                                    <button class="btn btn-primary btn" type="submit">Desactiver</button>
-                                </form>
-                            <?php else: ?>
-                                <form class="space-y-6" action="profile/enable_2fa" method="post">
-                                    <?php (new SecurityManager())->insertHiddenToken() ?>
-                                    <div class="form-floating mb-3">
-                                        <input class="form-control" name="enable_2fa" type="text"
-                                               value="" required>
-                                        <label for="name">Code d'authentification</label>
-                                    </div>
-                                    <div class="text-center">
-                                        <button class="btn btn-primary btn" type="submit">Activer</button>
-                                    </div>
-                                </form>
-                            <?php endif; ?>
+                        <div class="col-lg-6 text-center mt-4">
+                            <form class="space-y-6"
+                                  action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile/2fa/toggle"
+                                  method="post">
+                                <?php (new SecurityManager())->insertHiddenToken() ?>
+                                <div class="form-floating mb-3">
+                                    <input class="form-control" name="secret" type="number" maxlength="7" required>
+                                    <label for="name">Code d'authentification</label>
+                                </div>
+                                <button class="btn btn-primary btn" type="submit">
+                                    <?= $user->get2Fa()->isEnabled() ? 'Désactiver' : 'Activer' ?>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

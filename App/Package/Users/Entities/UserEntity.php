@@ -15,7 +15,7 @@ class UserEntity
     private string $userLastName;
     private int $userState;
     private string $userKey;
-    private ?string $user2FaSecret;
+    private User2FaEntity $user2Fa;
     private string $userLastConnection;
     /** @var \CMW\Entity\Users\RoleEntity|\CMW\Entity\Users\RoleEntity[] $userRoles */
     private array $userRoles;
@@ -33,7 +33,7 @@ class UserEntity
      * @param string $userLastName
      * @param int $userState
      * @param string $userKey
-     * @param string|null $user2FaSecret
+     * @param \CMW\Entity\Users\User2FaEntity $user2Fa
      * @param string $userLastConnection
      * @param \CMW\Entity\Users\RoleEntity[] $userRoles
      * @param ?\CMW\Entity\Users\RoleEntity $userHighestRole
@@ -41,7 +41,7 @@ class UserEntity
      * @param string $userUpdated
      * @param \CMW\Entity\Users\UserPictureEntity|null $userPicture
      */
-    public function __construct(int $userId, string $userMail, string $userPseudo, string $userFirstName, string $userLastName, int $userState, string $userKey, ?string $user2FaSecret, string $userLastConnection, array $userRoles, ?RoleEntity $userHighestRole, string $userCreated, string $userUpdated, ?UserPictureEntity $userPicture)
+    public function __construct(int $userId, string $userMail, string $userPseudo, string $userFirstName, string $userLastName, int $userState, string $userKey, User2FaEntity $user2Fa, string $userLastConnection, array $userRoles, ?RoleEntity $userHighestRole, string $userCreated, string $userUpdated, ?UserPictureEntity $userPicture)
     {
         $this->userId = $userId;
         $this->userMail = $userMail;
@@ -50,7 +50,7 @@ class UserEntity
         $this->userLastName = $userLastName;
         $this->userState = $userState;
         $this->userKey = $userKey;
-        $this->user2FaSecret = $user2FaSecret;
+        $this->user2Fa = $user2Fa;
         $this->userLastConnection = $userLastConnection;
         $this->userRoles = $userRoles;
         $this->userHighestRole = $userHighestRole;
@@ -116,19 +116,11 @@ class UserEntity
     }
 
     /**
-     * @return string|null
+     * @return \CMW\Entity\Users\User2FaEntity
      */
-    public function get2FaSecret(): ?string
+    public function get2Fa(): User2FaEntity
     {
-        return $this->user2FaSecret;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isUsing2Fa(): bool
-    {
-        return !is_null($this->user2FaSecret);
+        return $this->user2Fa;
     }
 
     /**

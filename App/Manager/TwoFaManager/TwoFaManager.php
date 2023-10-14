@@ -3,6 +3,7 @@
 namespace CMW\Manager\TwoFaManager;
 
 use CMW\Manager\Env\EnvManager;
+use CMW\Utils\Website;
 use RobThree\Auth\TwoFactorAuth;
 use RobThree\Auth\TwoFactorAuthException;
 
@@ -20,6 +21,9 @@ class TwoFaManager
         require_once EnvManager::getInstance()->getValue('DIR') . 'App/Manager/TwoFaManager/Vendors/twofactorauth/lib/Providers/Rng/CSRNGProvider.php';
         require_once EnvManager::getInstance()->getValue('DIR') . 'App/Manager/TwoFaManager/Vendors/twofactorauth/lib/Providers/Time/ITimeProvider.php';
         require_once EnvManager::getInstance()->getValue('DIR') . 'App/Manager/TwoFaManager/Vendors/twofactorauth/lib/Providers/Time/LocalMachineTimeProvider.php';
+        require_once EnvManager::getInstance()->getValue('DIR') . 'App/Manager/TwoFaManager/Vendors/twofactorauth/lib/Providers/Qr/IQRCodeProvider.php';
+        require_once EnvManager::getInstance()->getValue('DIR') . 'App/Manager/TwoFaManager/Vendors/twofactorauth/lib/Providers/Qr/BaseHTTPQRCodeProvider.php';
+        require_once EnvManager::getInstance()->getValue('DIR') . 'App/Manager/TwoFaManager/Vendors/twofactorauth/lib/Providers/Qr/QRServerProvider.php';
 
         $this->_instance = new TwoFactorAuth();
     }
@@ -55,6 +59,20 @@ class TwoFaManager
     public function isSecretValid(string $secret, string $submittedSecret): bool
     {
         return $this->_instance->verifyCode($secret, $submittedSecret);
+    }
+
+    /**
+     * @param string $secret
+     * @param int $size
+     * @return string|false
+     */
+    public function getQrCode(string $secret, int $size): string|false
+    {
+        try {
+            return $this->_instance->getQRCodeImageAsDataUri(Website::getWebsiteName(), $secret, $size);
+        } catch (TwoFactorAuthException $e) {
+            return false;
+        }
     }
 
 }
