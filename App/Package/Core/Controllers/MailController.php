@@ -145,7 +145,9 @@ class MailController extends AbstractController
         $config = MailModel::getInstance()->getConfig();
 
         View::createAdminView("Core", "Mail/mailConfig")
+            ->addStyle("Admin/Resources/Vendors/Izitoast/iziToast.min.css")
             ->addScriptBefore("Admin/Resources/Vendors/Tinymce/tinymce.min.js","Admin/Resources/Vendors/Tinymce/Config/full.js")
+            ->addScriptAfter("App/Package/Core/Views/Mail/Resources/sendMail.js","Admin/Resources/Vendors/Izitoast/iziToast.min.js")
             ->addVariableList(['config' => $config])
             ->view();
     }
@@ -168,19 +170,11 @@ class MailController extends AbstractController
     }
 
 
-    #[Link("/test", Link::POST, [], "/cmw-admin/mail", secure: true)]
+    #[Link("/test", Link::POST, [], "/cmw-admin/mail", secure: false)]
     private function testMailConfigurationPost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.mail.configuration");
-
         $receiver = filter_input(INPUT_POST,"receiver");
-
         $this->sendMail($receiver, "Test CraftMyWebsite - MAILS", "<p>Hello World !</p>");
-
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate("core.toaster.mail.test", ["mail" => $receiver]));
-
-        Redirect::redirectPreviousRoute();
     }
 
 }

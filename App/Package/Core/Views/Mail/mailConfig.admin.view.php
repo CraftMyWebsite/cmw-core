@@ -117,7 +117,7 @@ $description = LangManager::translate("core.mail.config.description");
                                 </div>
                             </div>
                             <div class="buttons align-self-end mt-2">
-                                <button type="button" data-bs-toggle="modal" data-bs-target="#testModal"
+                                <button id="testButton" type="button" data-bs-toggle="modal" data-bs-target="#testModal"
                                         class="btn btn-primary"><?= LangManager::translate("core.mail.config.test.btn") ?>
                                 </button>
                             </div>
@@ -158,7 +158,7 @@ $description = LangManager::translate("core.mail.config.description");
                 <p>
                     <?= LangManager::translate("core.mail.config.test.description") ?>
                 </p>
-                <form id="sendMail" action="test" method="post">
+                <form id="sendMail">
                     <?php (new SecurityManager())->insertHiddenToken() ?>
                     <h6><?= LangManager::translate("core.mail.config.test.receiverMail") ?> :</h6>
                     <div class="form-group position-relative has-icon-left">
