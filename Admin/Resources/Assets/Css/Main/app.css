@@ -12,6 +12,9 @@
   background: #8B93A0; 
 }
 
+.fc-theme-standard td, .fc-theme-standard th {
+    border: 1px solid #232342 !important;
+}
 
 @charset "UTF-8";
 .ps {

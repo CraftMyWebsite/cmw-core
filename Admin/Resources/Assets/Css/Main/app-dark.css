@@ -310,9 +310,8 @@ body.theme-dark caption {
     text-align: left
 }
 
-body.theme-dark th {
-    text-align: inherit;
-    text-align: -webkit-match-parent
+.fc-theme-standard td, .fc-theme-standard th {
+    border: 1px solid #232342 !important;
 }
 
 body.theme-dark tbody, body.theme-dark td, body.theme-dark tfoot, body.theme-dark th, body.theme-dark thead, body.theme-dark tr {
