@@ -2,10 +2,18 @@
 
 namespace CMW\Model\Installer;
 
+use CMW\Controller\Users\UsersController;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Flash\Alert;
+use CMW\Manager\Flash\Flash;
+use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Security\EncryptManager;
+use CMW\Manager\TwoFaManager\TwoFaManager;
+use CMW\Model\Users\Users2FaModel;
 use CMW\Model\Users\UsersModel;
+use CMW\Utils\Redirect;
 use PDO;
 use PDOException;
 
@@ -105,7 +113,18 @@ class InstallerModel
 
         self::initCondition($userId);
 
-        self::loginAdmin($email, $password);
+        $tfaSecret = EncryptManager::encrypt((new TwoFaManager())->generateSecret());
+        Users2FaModel::getInstance()->create($userId, $tfaSecret);
+
+        $user = UsersModel::getInstance()->getUserById($userId);
+
+        if (is_null($user)){
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.toaster.internalError"));
+            Redirect::redirectPreviousRoute();
+        }
+
+        UsersController::getInstance()->loginUser($user, 1);
     }
 
     public static function initCondition(int $userId): void
@@ -134,16 +153,6 @@ class InstallerModel
             "option_name" => "description",
             "option_value" => $description
         ));
-    }
-
-    private static function loginAdmin(string $mail, string $password): void
-    {
-        $infos = array(
-            "email" => $mail,
-            "password" => $password
-        );
-
-        UsersModel::logIn($infos, 1);
     }
 
 }

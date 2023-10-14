@@ -5,6 +5,7 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 
 /* @var \CMW\Entity\Users\UserSettingsEntity $settings */
+/* @var RoleEntity[] $roles */
 
 $title = LangManager::translate("users.settings.title");
 $description = LangManager::translate("users.settings.desc"); ?>
@@ -42,8 +43,8 @@ $description = LangManager::translate("users.settings.desc"); ?>
             </div>
         </div>
 
-        <!-- Reset password -->
         <div class="col-12 col-lg-6">
+            <!-- Reset password -->
             <div class="card">
                 <div class="card-header">
                     <h4><?= LangManager::translate("users.users.password") ?>
@@ -67,6 +68,37 @@ $description = LangManager::translate("users.settings.desc"); ?>
                                 </option>-->
                             </select>
                         </fieldset>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2fa -->
+            <div class="card">
+                <div class="card-header">
+                    <h4>Double facteur</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <h6>Obligatoire pour :</h6>
+                        <fieldset class="form-group">
+                            <select class="form-select" id="forceTo" name="forceTo"  required>
+                                <option value="0">Personne</option>
+                                <option value="1">Tout le monde</option>
+                                <option value="2">Administrateurs</option>
+                                <option value="3">Ayant le rôle :</option>
+                            </select>
+                        </fieldset>
+                        <div class="mt-2" id="listAllowedGroups">
+                            <h6><?= LangManager::translate("core.menus.add.group_select") ?> :</h6>
+                            <div class="form-group">
+                                <select class="choices form-select" name="allowedGroups[]" multiple>
+                                    <?php foreach ($roles as $role): ?>
+                                        <option
+                                            value="<?= $role->getId() ?>"><?= $role->getName() ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -126,3 +158,28 @@ $description = LangManager::translate("users.settings.desc"); ?>
         </div>
     </section>
 </form>
+
+
+<script>
+    var basicSelect = document.getElementById('forceTo');
+    var listAllowedGroups = document.getElementById('listAllowedGroups');
+
+    basicSelect.addEventListener('change', function() {
+        if (basicSelect.value === "3") {
+            listAllowedGroups.style.display = 'block';
+        } else {
+            listAllowedGroups.style.display = 'none';
+        }
+    });
+
+    if (basicSelect.value === "3") {
+        listAllowedGroups.style.display = 'block';
+    } else {
+        listAllowedGroups.style.display = 'none';
+    }
+</script>
+
+
+
+
+

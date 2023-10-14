@@ -44,6 +44,18 @@ CREATE TABLE IF NOT EXISTS `cmw_users`
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `cmw_users_2fa`
+(
+    `users_2fa_user_id`    INT(11)      NOT NULL,
+    `users_2fa_is_enabled` TINYINT(1)   NOT NULL DEFAULT 0,
+    `users_2fa_secret`     VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`users_2fa_user_id`),
+    CONSTRAINT `cmw_users_2fa_ibfk_1` FOREIGN KEY (`users_2fa_user_id`)
+        REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `cmw_users_pictures`
 (
     `users_pictures_user_id`     INT          NOT NULL,
