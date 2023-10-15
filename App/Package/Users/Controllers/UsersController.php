@@ -21,7 +21,7 @@ use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Security\EncryptManager;
-use CMW\Manager\TwoFaManager\TwoFaManager;
+use CMW\Manager\Twofa\TwoFaManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UserPictureModel;
@@ -617,6 +617,11 @@ class UsersController extends AbstractController
 
         $user = UsersModel::getCurrentUser();
 
+        if (UsersModel::getCurrentUser()?->getId() !== $user->getId()) {
+            Flash::send(Alert::ERROR,LangManager::translate("core.toaster.error"),"Vous ne pouvez pas éditer le profile de quelqu'un d'autre !" );
+            Redirect::redirectToHome();
+        }
+
         if (UserSettingsEntity::getInstance()->getProfilePageStatus() === 1) {
             Redirect::redirect("profile/", ['pseudo' => $user?->getPseudo()]);
         }
@@ -665,6 +670,11 @@ class UsersController extends AbstractController
         }
 
         $user = UsersModel::getInstance()->getUserWithPseudo($pseudo);
+
+        if (UsersModel::getCurrentUser()?->getId() !== $user->getId()) {
+            Flash::send(Alert::ERROR,LangManager::translate("core.toaster.error"),"Vous ne pouvez pas éditer le profile de quelqu'un d'autre !" );
+            Redirect::redirectToHome();
+        }
 
         if (is_null($user)) {
             Redirect::errorPage(404);

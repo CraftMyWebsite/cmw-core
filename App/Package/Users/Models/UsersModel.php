@@ -14,7 +14,7 @@ use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractModel;
 use CMW\Manager\Security\EncryptManager;
-use CMW\Manager\TwoFaManager\TwoFaManager;
+use CMW\Manager\Twofa\TwoFaManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;

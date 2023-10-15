@@ -10,7 +10,7 @@ use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\EncryptManager;
-use CMW\Manager\TwoFaManager\TwoFaManager;
+use CMW\Manager\Twofa\TwoFaManager;
 use CMW\Model\Users\Users2FaModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Utils\Redirect;

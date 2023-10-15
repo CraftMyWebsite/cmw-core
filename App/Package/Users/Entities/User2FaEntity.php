@@ -3,7 +3,7 @@
 namespace CMW\Entity\Users;
 
 use CMW\Manager\Security\EncryptManager;
-use CMW\Manager\TwoFaManager\TwoFaManager;
+use CMW\Manager\Twofa\TwoFaManager;
 
 class User2FaEntity
 {
