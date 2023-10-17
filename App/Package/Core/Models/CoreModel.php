@@ -17,7 +17,8 @@ class CoreModel extends AbstractModel
 
     public function fetchOption(string $option): string
     {
-        if (SimpleCacheManager::cacheExist('options', "Options")){
+//        TODO Le cache ne fonctionne pas et du coup ralenti le chargement des page
+        /*if (SimpleCacheManager::cacheExist('options', "Options")){
             $data = SimpleCacheManager::getCache('options', "Options");
 
             foreach ($data as $conf) {
@@ -25,7 +26,7 @@ class CoreModel extends AbstractModel
                     return $conf['option_value'] ?? "UNDEFINED_$option";
                 }
             }
-        }
+        }*/
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT option_value FROM cmw_core_options WHERE option_name = ?');
