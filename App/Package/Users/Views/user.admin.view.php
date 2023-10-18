@@ -122,7 +122,7 @@ $scripts = '<script src="' . EnvManager::getInstance()->getValue("PATH_SUBFOLDER
                     <div class="d-flex justify-content-around align-items-center">
                         <a href="../state/<?= $user->getId() ?>/<?= $user->getState() ?>" type="submit"
                            class="btn btn-<?= ($user->getState()) ? 'warning' : 'success' ?>"><i
-                                    class="fa fa-user-slash"></i> <?= ($user->getState()) ? LangManager::translate("users.edit.disable_account") : LangManager::translate("users.edit.activate_account") ?>
+                                class="fa fa-user-slash"></i> <?= ($user->getState()) ? LangManager::translate("users.edit.disable_account") : LangManager::translate("users.edit.activate_account") ?>
                         </a>
                         <button type="submit"
                                 class="btn btn-primary"><?= LangManager::translate("core.btn.save", lineBreak: true) ?></button>
@@ -144,10 +144,11 @@ $scripts = '<script src="' . EnvManager::getInstance()->getValue("PATH_SUBFOLDER
     <div class="col-lg-5">
         <div class="card">
             <div class="card-body">
-                <p><?= LangManager::translate("users.users.image.last_update") ?> : <small><?= ($user->getUserPicture()->getLastUpdate() ?? $user->getCreated()) ?></small></p>
+                <p><?= LangManager::translate("users.users.image.last_update") ?> :
+                    <small><?= ($user->getUserPicture()->getLastUpdate() ?? $user->getCreated()) ?></small></p>
                 <div class="text-center ">
                     <img class="w-50"
-                         src="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>Public/Uploads/Users/<?= $user->getUserPicture()->getImageName() ?>"
+                         src="<?= $user->getUserPicture()->getImage() ?>"
                          alt="<?= LangManager::translate("users.users.image.image_alt") . $user->getPseudo() ?>">
                 </div>
                 <form action="../picture/edit/<?= $user->getId() ?>" method="post"
@@ -164,7 +165,7 @@ $scripts = '<script src="' . EnvManager::getInstance()->getValue("PATH_SUBFOLDER
                 </form>
                 <div class="buttons text-center mt-4">
                     <a href="../picture/reset/<?= $user->getId() ?>" type="submit" class="btn btn-warning"><i
-                                class="fa fa-arrows-rotate"></i><?= LangManager::translate("users.users.image.reset") ?>
+                            class="fa fa-arrows-rotate"></i><?= LangManager::translate("users.users.image.reset") ?>
                     </a>
                 </div>
 

@@ -4,6 +4,7 @@ namespace CMW\Controller\Users;
 
 use CMW\Controller\Core\SecurityController;
 use CMW\Entity\Users\UserEntity;
+use CMW\Entity\Users\UserPictureEntity;
 use CMW\Entity\Users\UserSettingsEntity;
 use CMW\Event\Users\DeleteUserAccountEvent;
 use CMW\Event\Users\LoginEvent;
@@ -126,6 +127,24 @@ class UsersController extends AbstractController
 
         UsersModel::getInstance()->updateLoggedTime($user->getId());
         Emitter::send(LoginEvent::class, $user->getId());
+    }
+
+    /**
+     * @param int|null $userId
+     * @return \CMW\Entity\Users\UserPictureEntity|null
+     */
+    public function getUserProfilePicture(?int $userId = null): ?UserPictureEntity
+    {
+        if ($userId === null) {
+            $user = UsersModel::getCurrentUser();
+
+            if ($user === null) {
+                return null;
+            }
+
+            $userId = $user->getId();
+        }
+        return $this->getHighestImplementation(IUsersProfilePicture::class)->getUserProfilePicture($userId);
     }
 
     #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/users")]

@@ -42,7 +42,7 @@ class UserPictureModel extends AbstractModel
 
         $req = $db->prepare($sql);
 
-        if (!$req->execute(array("userId" => $userId, "imageName" => $imageName))) {
+        if (!$req->execute(["userId" => $userId, "imageName" => $imageName])) {
             return null;
         }
 
@@ -61,12 +61,12 @@ class UserPictureModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        return $req->execute(array('userId' => $userId)) && count($req->fetchAll()) >= 1;
+        return $req->execute(['userId' => $userId]) && count($req->fetchAll()) >= 1;
     }
 
     public function userHasDefaultImage(int $userId): bool
     {
-        return  is_file(EnvManager::getInstance()->getValue("DIR") . "Public/Uploads/Users/Default/" . UsersSettingsModel::getSetting("defaultImage")) && !$this->userHasImage($userId);
+        return is_file(EnvManager::getInstance()->getValue("DIR") . "Public/Uploads/Users/Default/" . UsersSettingsModel::getSetting("defaultImage")) && !$this->userHasImage($userId);
     }
 
     /**
@@ -82,7 +82,7 @@ class UserPictureModel extends AbstractModel
         $userPictureEntity = $this->getImageByUserId($userId);
 
 
-        $olderImageName = $userPictureEntity?->getImageName();
+        $olderImageName = $userPictureEntity?->getImage();
 
         //Delete older image if this isn't the Default image
         if (!$this->userHasDefaultImage($userId)) {
@@ -100,7 +100,7 @@ class UserPictureModel extends AbstractModel
 
         $req = $db->prepare($sql);
 
-        if (!$req->execute(array("userId" => $userId, "imageName" => $imageName))) {
+        if (!$req->execute(["userId" => $userId, "imageName" => $imageName])) {
             return null;
         }
 
@@ -114,7 +114,7 @@ class UserPictureModel extends AbstractModel
 
         $req = $db->prepare($sql);
 
-        if (!$req->execute(array("userId" => $userId))) {
+        if (!$req->execute(["userId" => $userId])) {
             return null;
         }
 
@@ -127,16 +127,16 @@ class UserPictureModel extends AbstractModel
         );
     }
 
-    public function deleteUserPicture(int $userId): void
+    public function deleteUserPicture(int $userId): bool
     {
         if ($this->userHasDefaultImage($userId)) {
-           return;
+            return false;
         }
 
-        $imageName = $this->getImageByUserId($userId)?->getImageName();
+        $imageName = $this->getImageByUserId($userId)?->getImage();
 
-        if (is_null($imageName)){
-            return;
+        if (is_null($imageName)) {
+            return false;
         }
 
         ImagesManager::deleteImage($imageName, "Users");
@@ -144,9 +144,7 @@ class UserPictureModel extends AbstractModel
         $sql = "DELETE FROM cmw_users_pictures WHERE users_pictures_user_id = :userId";
         $db = DatabaseManager::getInstance();
 
-        $req = $db->prepare($sql);
-
-        $req->execute(array("userId" => $userId));
+        return $db->prepare($sql)->execute(["userId" => $userId]);
     }
 
 }

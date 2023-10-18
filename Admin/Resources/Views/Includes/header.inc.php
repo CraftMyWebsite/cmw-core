@@ -172,7 +172,7 @@ $user = UsersModel::getCurrentUser();
                                 </div>
                                 <div class="user-img d-none d-lg-flex align-items-center">
                                     <div class="avatar avatar-md">
-                                        <img src="<?= $user->getUserPicture()->getImageLink() ?>"
+                                        <img src="<?= $user->getUserPicture()->getImage() ?>"
                                              alt="<?= LangManager::translate("users.users.image.image_alt", ['username' => $user->getPseudo()]) ?>">
                                     </div>
                                 </div>

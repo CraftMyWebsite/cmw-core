@@ -3,6 +3,8 @@
 namespace CMW\Interface\Users;
 
 
+use CMW\Entity\Users\UserPictureEntity;
+
 interface IUsersProfilePicture
 {
 
@@ -29,15 +31,22 @@ interface IUsersProfilePicture
     public function resetPicture(int $userId): void;
 
     /**
+     * @param int $userId
      * @return bool
      * @desc This methode is when you want to delete a profile picture
      */
-    public function deleteUserProfilePicture(): bool;
+    public function deleteUserProfilePicture(int $userId): bool;
 
     /**
      * @param int $userId
-     * @return string
-     * @desc Return the profile picture link
+     * @return UserPictureEntity
+     * @desc Return the profile picture entity @UserPictureEntity
      */
-    public function getUserProfilePicture(int $userId): string;
+    public function getUserProfilePicture(int $userId): UserPictureEntity;
+
+    /**
+     * @return string
+     * @desc Return the default profile picture link
+     */
+    public function getDefaultProfilePicture(): string;
 }

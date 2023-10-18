@@ -4,6 +4,7 @@ namespace CMW\Model\Users;
 
 use CMW\Controller\Core\MailController;
 use CMW\Controller\Users\LoginStatus;
+use CMW\Controller\Users\UsersController;
 use CMW\Entity\Users\RoleEntity;
 use CMW\Entity\Users\User2FaEntity;
 use CMW\Entity\Users\UserPictureEntity;
@@ -91,21 +92,6 @@ class UsersModel extends AbstractModel
 
         }
 
-        $userPictureSql = "SELECT * FROM cmw_users_pictures WHERE users_pictures_user_id = :user_id";
-
-        $resUserPicture = $db->prepare($userPictureSql);
-
-        $resUserPicture->execute(["user_id" => $id]);
-
-        $resUserPicture = $resUserPicture->fetch();
-
-
-        $userPicture = new UserPictureEntity(
-            $resUserPicture['users_pictures_user_id'] ?? $id,
-            $resUserPicture['users_pictures_image_name'] ?? ("Default/" . UsersSettingsModel::getSetting("defaultImage")),
-            $resUserPicture['users_pictures_last_update'] ?? null
-        );
-
         $highestRole = $this->getUserHighestRole($res['user_id']);
 
 
@@ -127,7 +113,7 @@ class UsersModel extends AbstractModel
             $highestRole,
             $res["user_created"],
             $res["user_updated"],
-            $userPicture
+            UsersController::getInstance()->getUserProfilePicture($res["user_id"])
         );
     }
 

@@ -2,12 +2,17 @@
 
 namespace CMW\Implementation\Users;
 
+use CMW\Controller\Users\UsersSettingsController;
+use CMW\Entity\Users\UserPictureEntity;
 use CMW\Interface\Users\IUsersProfilePicture;
+use CMW\Manager\Env\EnvManager;
 use CMW\Model\Users\UserPictureModel;
+use CMW\Model\Users\UsersModel;
 use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
 
-class UsersProfilePictureImplementation implements  IUsersProfilePicture {
+class UsersProfilePictureImplementation implements IUsersProfilePicture
+{
 
     public function weight(): int
     {
@@ -18,25 +23,46 @@ class UsersProfilePictureImplementation implements  IUsersProfilePicture {
     {
         UserPictureModel::getInstance()->uploadImage($userId, $picture);
 
+        UsersModel::updateStoredUser(UsersModel::getInstance()->getUserById($userId));
+
         Redirect::redirectPreviousRoute();
     }
 
-    public function deleteUserProfilePicture(): bool
+    public function deleteUserProfilePicture(int $userId): bool
     {
-        // TODO: Implement deleteUserProfilePicture() method.
-        return true;
+        return UserPictureModel::getInstance()->deleteUserPicture($userId);
     }
 
-    public function getUserProfilePicture(int $userId): string
-    {
-        // TODO: Implement getUserProfilePicture() method.
-        return "";
-    }
-
-    public function resetPicture(int $userId): void
+    #[NoReturn] public function resetPicture(int $userId): void
     {
         UserPictureModel::getInstance()->deleteUserPicture($userId);
 
         Redirect::redirectPreviousRoute();
+    }
+
+    public function getUserProfilePicture(int $userId): UserPictureEntity
+    {
+        if (UserPictureModel::getInstance()->userHasImage($userId)) {
+            $img = UserPictureModel::getInstance()->getImageByUserId($userId);
+            $imgPath = EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "Public/Uploads/Users/" . $img?->getImage();
+
+            return new UserPictureEntity(
+                $userId,
+                $imgPath,
+                $img?->getLastUpdate()
+            );
+        }
+
+        return new UserPictureEntity(
+            $userId,
+            $this->getDefaultProfilePicture(),
+            null,
+        );
+
+    }
+
+    public function getDefaultProfilePicture(): string
+    {
+        return UsersSettingsController::getDefaultImageLink();
     }
 }
