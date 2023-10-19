@@ -197,7 +197,7 @@ class UsersController extends AbstractController
             "lastConnection" => $user?->getLastConnection(),
             "dateCreated" => $user?->getCreated(),
             "dateUpdated" => $user?->getUpdated(),
-            "pictureLink" => $user?->getUserPicture()?->getImageLink(),
+            "pictureLink" => $user?->getUserPicture()?->getImage(),
             "pictureLastUpdate" => $user?->getUserPicture()?->getLastUpdate(),
             "userHighestRole" => $user?->getHighestRole()?->getName(),
             "roles" => $roles,

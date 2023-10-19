@@ -37,7 +37,7 @@ $description = "Affichage de la news " . $news->getTitle();
             <div class="card mb-2">
                 <div class="row">
                     <div class="col-lg-2 text-center">
-                        <img style="max-width: 150px" src="<?= $comment->getUser()->getUserPicture()->getImageLink() ?>"
+                        <img style="max-width: 150px" src="<?= $comment->getUser()->getUserPicture()->getImage() ?>"
                              alt="...">
                     </div>
                     <div class="col-lg-9">
