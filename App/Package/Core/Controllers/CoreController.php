@@ -176,33 +176,5 @@ class CoreController extends AbstractController
         }
         return null;
     }
-
-    /*
-     * Head constructor
-     */
-    public function cmwHead(string $title, string $description): string
-    {
-        $desc = htmlspecialchars_decode($description, ENT_QUOTES);
-
-        return <<<HTML
-            <meta charset='utf-8'>
-            <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
-            <title>$title</title>
-            <meta name="description" content="$desc">
-            <meta name="author" content="CraftMyWebsite"> <!-- Todo review author list -->
-            HTML;
-    }
-
-    /*
-     * Footer constructor
-     */
-    public function cmwFooter(): string
-    {
-        $version = UpdatesManager::getVersion();
-        //Todo Set that in Lang
-        return <<<HTML
-            <p>Un site fièrement propulsé par <a href='https://craftmywebsite.fr/'>CraftMyWebsite $version</a></p>
-        HTML;
-    }
 }
 

@@ -28,7 +28,9 @@ class Website
      */
     public static function getTitle(bool $useSiteName = true): string
     {
-        return $useSiteName ? self::getWebsiteName() . " | " . self::$title : self::$title;
+        $title = $useSiteName ? self::getWebsiteName() . " | " . self::$title : self::$title;
+
+        return htmlspecialchars_decode($title, ENT_QUOTES);
     }
 
     /**
@@ -43,7 +45,7 @@ class Website
 
     public static function getDescription(): string
     {
-        return self::$description;
+        return htmlspecialchars_decode(self::$description, ENT_QUOTES);
     }
 
 

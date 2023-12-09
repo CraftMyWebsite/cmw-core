@@ -5,9 +5,13 @@ use CMW\Controller\Core\SecurityController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Model\Core\ThemeModel;
+use CMW\Utils\Website;
 
-$title = "Connexion";
-$description = "Description de votre page"; ?>
+Website::setTitle("Connexion");
+Website::setDescription("Connectez-vous à votre compte " . Website::getWebsiteName());
+?>
+
+
 <section class="page-section" id="contact">
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
@@ -45,10 +49,11 @@ $description = "Description de votre page"; ?>
 
                     <?php SecurityController::getPublicData(); ?>
                     <div class="d-grid">
-                      <button style="background: <?= ThemeModel::fetchConfigValue('buttonColor') ?>" class="btn btn-xl" type="submit">
-                        Connexion
-                      </button>
-                  </div>
+                        <button style="background: <?= ThemeModel::fetchConfigValue('buttonColor') ?>"
+                                class="btn btn-xl" type="submit">
+                            Connexion
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

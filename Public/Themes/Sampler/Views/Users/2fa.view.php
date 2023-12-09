@@ -3,9 +3,10 @@
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Model\Core\ThemeModel;
+use CMW\Utils\Website;
 
-$title = "Connexion - 2Fa";
-$description = "Description de votre page";
+Website::setTitle("Connexion - 2FA");
+Website::setDescription("Double authentification");
 ?>
 
 <section class="page-section" id="contact">

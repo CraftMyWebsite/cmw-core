@@ -4,9 +4,10 @@
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Security\SecurityManager;
+use CMW\Utils\Website;
 
-$title = "News - " . $news->getTitle();
-$description = "Affichage de la news " . $news->getTitle();
+Website::setTitle("News - " . $news->getTitle());
+Website::setDescription("Affichage de la news " . $news->getTitle());
 ?>
 
 

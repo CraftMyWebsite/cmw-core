@@ -4,9 +4,8 @@ use CMW\Utils\Website;
 
 /* @var CMW\Entity\Core\ConditionEntity $cgu */
 
-/*TITRE ET DESCRIPTION*/
-$title = Website::getWebsiteName() . ' - CGU';
-$description = "CGU de " . Website::getWebsiteName();
+Website::setTitle("CGU");
+Website::setDescription(Website::getWebsiteName() . " CGU");
 ?>
 
 <section class="page-section">
