@@ -9,14 +9,12 @@ use CMW\Controller\Users\UsersController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\RouterException;
-use CMW\Model\Users\UsersModel;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
 
 class View
 {
-
     private ?string $package;
     private ?string $viewFile;
     private ?string $customPath = null;
@@ -26,18 +24,26 @@ class View
     private bool $needAdminControl;
     private bool $isAdminFile;
 
-    public function __construct(?string $package = null, ?string $viewFile = null, ?bool $isAdminFile = false, bool $basicVars = true)
+    /**
+     * @param string|null $package
+     * @param string|null $viewFile
+     * @param bool|null $isAdminFile
+     */
+    public function __construct(?string $package = null, ?string $viewFile = null, ?bool $isAdminFile = false)
     {
         $this->package = $package;
         $this->viewFile = $viewFile;
         $this->includes = $this->generateInclude();
-        $this->variables = $basicVars ? $this->generateVariables() : [];
+        $this->variables = [];
         $this->needAdminControl = false;
         $this->isAdminFile = $isAdminFile;
     }
 
     /**
-     * @throws RouterException
+     * @param string $package
+     * @param string $viewFile
+     * @return void
+     * @throws \CMW\Manager\Router\RouterException
      */
     public static function basicPublicView(string $package, string $viewFile): void
     {
@@ -45,6 +51,11 @@ class View
         $view->view();
     }
 
+    /**
+     * @param string $package
+     * @param string $viewFile
+     * @return \CMW\Manager\Views\View
+     */
     public static function createAdminView(string $package, string $viewFile): View
     {
         $view = new self($package, $viewFile);
@@ -54,47 +65,77 @@ class View
         return $view;
     }
 
-    #[ArrayShape(["styles" => "array", "scripts" => "array"])]
+    /**
+     * @return array|array[]
+     */
+    #[ArrayShape(["styles" => "array", "scripts" => "array", "php" => "array"])]
     private function generateInclude(): array
     {
-        $array = array("styles" => array(),
-            "scripts" => array());
+        $array = ["styles" => [], "scripts" => [], "array" => []];
 
-        $array["scripts"]["before"] = array();
-        $array["scripts"]["after"] = array();
+        $array["scripts"]["before"] = [];
+        $array["scripts"]["after"] = [];
+
+        $array["php"]["before"] = [];
+        $array["php"]["after"] = [];
 
         return $array;
     }
 
-    #[ArrayShape(["core" => CoreController::class, "menu" => MenusController::class])]
-    private function generateVariables(): array
-    {
-        return array("core" => new CoreController(), "menu" => new MenusController());
-    }
-
+    /**
+     * @param string $position
+     * @param string $fileName
+     * @return void
+     */
     private function addScript(#[ExpectedValues(["after", "before"])] string $position, string $fileName): void
     {
         $this->includes["scripts"][$position][] = $fileName;
     }
 
+    /**
+     * @param string $position
+     * @param string $fileName
+     * @return void
+     */
+    private function addPhp(#[ExpectedValues(["after", "before"])] string $position, string $fileName): void
+    {
+        $this->includes["php"][$position][] = $fileName;
+    }
+
+    /**
+     * @param string $package
+     * @return $this
+     */
     public function setPackage(string $package): self
     {
         $this->package = $package;
         return $this;
     }
 
+    /**
+     * @param string $viewFile
+     * @return $this
+     */
     public function setViewFile(string $viewFile): self
     {
         $this->viewFile = $viewFile;
         return $this;
     }
 
+    /**
+     * @param bool $needAdminControl
+     * @return $this
+     */
     public function needAdminControl(bool $needAdminControl = true): self
     {
         $this->needAdminControl = $needAdminControl;
         return $this;
     }
 
+    /**
+     * @param bool $isAdminFile
+     * @return $this
+     */
     public function setAdminView(bool $isAdminFile = true): self
     {
         $this->isAdminFile = $isAdminFile;
@@ -102,12 +143,21 @@ class View
 
     }
 
+    /**
+     * @param string $variableName
+     * @param mixed $variable
+     * @return $this
+     */
     public function addVariable(string $variableName, mixed $variable): self
     {
         $this->variables[$variableName] ??= $variable;
         return $this;
     }
 
+    /**
+     * @param array $variableList
+     * @return $this
+     */
     public function addVariableList(array $variableList): self
     {
         foreach ($variableList as $key => $value) {
@@ -117,6 +167,10 @@ class View
         return $this;
     }
 
+    /**
+     * @param string ...$script
+     * @return $this
+     */
     public function addScriptBefore(string ...$script): self
     {
         foreach ($script as $scriptFile) {
@@ -126,6 +180,10 @@ class View
         return $this;
     }
 
+    /**
+     * @param string ...$script
+     * @return $this
+     */
     public function addScriptAfter(string ...$script): self
     {
         foreach ($script as $scriptFile) {
@@ -135,6 +193,36 @@ class View
         return $this;
     }
 
+    /**
+     * @param string ...$php
+     * @return $this
+     */
+    public function addPhpBefore(string ...$php): self
+    {
+        foreach ($php as $scriptFile) {
+            $this->addPhp("before", $scriptFile);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string ...$php
+     * @return $this
+     */
+    public function addPhpAfter(string ...$php): self
+    {
+        foreach ($php as $scriptFile) {
+            $this->addPhp("after", $scriptFile);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string ...$style
+     * @return $this
+     */
     public function addStyle(string ...$style): self
     {
         foreach ($style as $styleFile) {
@@ -144,21 +232,32 @@ class View
         return $this;
     }
 
+    /**
+     * @param string $path
+     * @return $this
+     */
     public function setCustomPath(string $path): self
     {
         $this->customPath = $path;
         return $this;
     }
 
+    /**
+     * @param string $path
+     * @return $this
+     */
     public function setCustomTemplate(string $path): self
     {
         $this->customTemplate = $path;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     private function getViewPath(): string
     {
-        if($this->customPath !== null) {
+        if ($this->customPath !== null) {
             return $this->customPath;
         }
         $theme = ThemeController::getCurrentTheme()->getName();
@@ -167,9 +266,12 @@ class View
             : "Public/Themes/$theme/Views/$this->package/$this->viewFile.view.php";
     }
 
+    /**
+     * @return string
+     */
     private function getTemplateFile(): string
     {
-        if($this->customTemplate !== null) {
+        if ($this->customTemplate !== null) {
             return $this->customTemplate;
         }
         $theme = ThemeController::getCurrentTheme()->getName();
@@ -178,12 +280,18 @@ class View
             : "Public/Themes/$theme/Views/template.php";
     }
 
-    private static function loadIncludeFile(array $includes, #[ExpectedValues(["beforeScript", "afterScript", "styles"])] string $fileType): void
+    /**
+     * @param array $includes
+     * @param string $fileType
+     * @return void
+     */
+    private static function loadIncludeFile(array $includes, #[ExpectedValues(["beforeScript", "afterScript", "beforePhp", "afterPhp", "styles"])] string $fileType): void
     {
-        if (!in_array($fileType, ["beforeScript", "afterScript", "styles"])) {
+        if (!in_array($fileType, ["beforeScript", "afterScript", "beforePhp", "afterPhp", "styles"])) {
             return;
         }
 
+        //STYLES
         if ($fileType === "styles") {
             foreach ($includes['styles'] as $style) {
                 $styleLink = EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $style;
@@ -191,17 +299,26 @@ class View
                     <link rel="stylesheet" href="$styleLink">
                 HTML;
             }
-
-            return;
         }
 
-        $arrayAccess = $fileType === "beforeScript" ? "before" : "after";
-
-        foreach ($includes['scripts'][$arrayAccess] as $script) {
-            $scriptLink = EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $script;
-            echo <<<HTML
+        // SCRIPTS
+        if (in_array($fileType, ['beforeScript', 'afterScript'])) {
+            $arrayAccessJs = $fileType === "beforeScript" ? "before" : "after";
+            foreach ($includes['scripts'][$arrayAccessJs] as $script) {
+                $scriptLink = EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $script;
+                echo <<<HTML
                     <script src="$scriptLink"></script>
                 HTML;
+            }
+        }
+
+        //PHP
+        if (in_array($fileType, ['beforePhp', 'afterPhp'])) {
+            $arrayAccessPhp = $fileType === "beforePhp" ? "before" : "after";
+            foreach ($includes['php'][$arrayAccessPhp] as $php) {
+                $phpLink = EnvManager::getInstance()->getValue("DIR") . $php;
+                include_once $phpLink;
+            }
         }
     }
 
@@ -230,27 +347,22 @@ class View
     public function view(): void
     {
 
+        //Check admin permissions
         if ($this->needAdminControl) {
             UsersController::redirectIfNotHavePermissions("core.dashboard");
         }
 
-        if ($this->needAdminControl && isset($_SESSION["cmwUserId"])) {
-            $this->addVariableList(array(
-                "userAdmin" => (new UsersModel())->getUserById($_SESSION["cmwUserId"])
-            ));
-        }
-
-        extract($this->variables, EXTR_OVERWRITE);
+        extract($this->variables);
         $includes = $this->includes;
 
         if (is_null($this->customPath) && Utils::containsNullValue($this->package, $this->viewFile)) {
-            throw new RouterException(null, 404);
+            throw new RouterException(null, 404); //TODO Real errors?
         }
 
         $path = $this->getViewPath();
 
         if (!is_file($path)) {
-            throw new RouterException(null, 404);
+            throw new RouterException(null, 404); //TODO Real errors?
         }
 
         //Show Alerts
@@ -263,7 +375,12 @@ class View
         require_once($this->getTemplateFile());
     }
 
-    public static function loadInclude(array $includes, #[ExpectedValues(flags: ["beforeScript", "afterScript", "styles"])] string ...$files): void
+    /**
+     * @param array $includes
+     * @param string ...$files
+     * @return void
+     */
+    public static function loadInclude(array $includes, #[ExpectedValues(flags: ["beforeScript", "afterScript", "beforePhp", "afterPhp", "styles"])] string ...$files): void
     {
         foreach ($files as $file) {
             self::loadIncludeFile($includes, $file);
@@ -278,7 +395,7 @@ class View
         $alerts = Flash::load();
         $alertContent = "";
         foreach ($alerts as $alert) {
-            if(!$alert->isAdmin()) {
+            if (!$alert->isAdmin()) {
                 $view = new View("Alerts", $alert->getType());
             } else {
                 $view = new View("Core", "Alerts/{$alert->getType()}", true);
