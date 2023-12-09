@@ -92,7 +92,7 @@ class AutoLoad
     {
         $startDir = static function ($elementName) {
             return match ($elementName) {
-                "Controller", "Model", "Entity", "Implementation", "Interface", "Event", "PackageInfo" => "App/Package/",
+                "Controller", "Model", "Entity", "Implementation", "Interface", "Event", "PackageInfo", "Package" => "App/Package/",
                 "Manager" => "App/Manager/",
                 "Utils" => "App/Utils/",
                 default => "",
@@ -108,6 +108,7 @@ class AutoLoad
                 "Interface" => "Interfaces/",
                 "Event" => "Events/",
                 "PackageInfo", "Manager" => "",
+                "Package" => "/"
             };
         };
 

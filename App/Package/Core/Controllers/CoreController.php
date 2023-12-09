@@ -18,7 +18,7 @@ use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Users\UsersMetricsModel;
-use CMW\Utils\Redirect;
+use CMW\Model\Users\UsersModel;use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
