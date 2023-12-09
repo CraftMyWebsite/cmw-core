@@ -2,10 +2,13 @@
 
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Security\SecurityManager;
+use CMW\Utils\Website;
 
-$title = "Profil";
-$description = "Description de votre page";
 /* @var \CMW\Entity\Users\UserEntity $user */
+
+Website::setTitle("Profil " . $user->getPseudo());
+Website::setDescription("Découvrez le profil de l'utilisateur " . $user->getPseudo());
+
 ?>
 
 

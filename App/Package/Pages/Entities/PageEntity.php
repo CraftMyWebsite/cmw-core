@@ -77,6 +77,22 @@ class PageEntity
     }
 
     /**
+     * @param int $length => Max chars ton display. (<b>Default 128</b>)
+     * @param bool $useDoted => Add "..." after the content. (<b>Default true</b>)
+     * @return string
+     */
+    public function getContentPreview(int $length = 128, bool $useDoted = true): string
+    {
+        $desc = trim(substr($this->pageContent, 0, $length));
+
+        if ($useDoted){
+            $desc .= "...";
+        }
+
+        return $desc;
+    }
+
+    /**
      * @return string
      */
     public function getContentNotTranslate(): string

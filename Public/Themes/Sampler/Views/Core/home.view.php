@@ -1,9 +1,11 @@
 <?php use CMW\Controller\Users\UsersController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Model\Core\ThemeModel;
+use CMW\Utils\Website;
 
-$title = "Accueil";
-$description = "page d'accueil de CraftMyWebsite"; ?>
+Website::setTitle("Accueil");
+Website::setDescription("page d'accueil de CraftMyWebsite");
+?>
 
 
 <!-- Masthead-->

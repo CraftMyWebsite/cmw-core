@@ -1,13 +1,11 @@
 <?php
 
-use CMW\Utils\Utils;
 use CMW\Utils\Website;
 
 /* @var CMW\Entity\Core\ConditionEntity $cgv */
 
-/*TITRE ET DESCRIPTION*/
-$title = Website::getWebsiteName() . ' - CGV';
-$description = "CGV de " . Website::getWebsiteName();
+Website::setTitle("CGV");
+Website::setDescription(Website::getWebsiteName() . " CGV");
 ?>
 
 <section class="page-section">

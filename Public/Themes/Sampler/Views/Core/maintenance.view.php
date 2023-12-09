@@ -1,15 +1,16 @@
 <?php
 
+use CMW\Utils\Website;
+
 /* @var \CMW\Entity\Core\MaintenanceEntity $maintenance */
 
-/*TITRE ET DESCRIPTION*/
-$title = "Maintenance";
-$description = "Maintenance en cours sur le site";
+Website::setTitle("Maintenance");
+Website::setDescription("Maintenance en cours sur le site");
 ?>
 
 <section class="page-section">
     <div class="container">
-        <?php if($maintenance->isEnable()): ?>
+        <?php if ($maintenance->isEnable()): ?>
             <div>
                 <h1><?= $maintenance->getTitle() ?></h1>
             </div>
@@ -18,7 +19,7 @@ $description = "Maintenance en cours sur le site";
                 <p><?= $maintenance->getDescription() ?></p>
             </div>
 
-                <hr>
+            <hr>
 
             <div>
                 <h3>Fin de la maintenance: <?= $maintenance->getTargetDateFormatted() ?></h3>

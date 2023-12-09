@@ -1,6 +1,9 @@
 <?php
-$title = "Page introuvable";
-$description = "Erreur";
+
+use CMW\Utils\Website;
+
+Website::setTitle("Page introuvable");
+Website::setDescription("Erreur, page introuvable.");
 ?>
 
 <section class="page-section">

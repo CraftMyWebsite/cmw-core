@@ -2,9 +2,10 @@
 
 use CMW\Manager\Env\EnvManager;
 use CMW\Model\Users\UsersModel;
+use CMW\Utils\Website;
 
-$title = "Voter";
-$description = "Votez pour le serveur";
+Website::setTitle("Voter");
+Website::setDescription("Votez dès maintenant pour le site " . Website::getWebsiteName());
 
 /* @var \CMW\Entity\Votes\VotesSitesEntity[] $sites */
 /* @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $topCurrent */
