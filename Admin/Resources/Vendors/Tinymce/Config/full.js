@@ -34,5 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
   images_file_types: 'jpg,svg,webp',
   file_picker_types: 'file image media',
   statusbar: false,
+  relative_urls : false,
 });
 });
