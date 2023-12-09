@@ -16,8 +16,8 @@ use ReflectionClass;
 
 class Loader
 {
-    private static array $fileLoadedAttr = array();
-    private static array $attributeList = array();
+    private static array $fileLoadedAttr = [];
+    private static array $attributeList = [];
 
     public static function loadProject(): void
     {
@@ -42,26 +42,26 @@ class Loader
         $packages = PackageController::getAllPackages();
 
         foreach ($packages as $package) {
-            $implementationsFolder = EnvManager::getInstance()->getValue("dir") . "App/Package/{$package->getName()}/Implementations";
+            $implementationsFolder = EnvManager::getInstance()->getValue("dir") . "App/Package/{$package->name()}/Implementations";
 
             if (!is_dir($implementationsFolder)) {
                 continue;
             }
 
-            $implementationsFiles = array_diff(scandir($implementationsFolder), array('..', '.'));
+            $implementationsFiles = array_diff(scandir($implementationsFolder), ['..', '.']);
 
             foreach ($implementationsFiles as $implementationsFile) {
 
                 $implementationsFilePath = EnvManager::getInstance()->getValue("dir") . "App/Package/" .
-                    ucfirst($package->getName()) . "/Implementations/" . $implementationsFile;
+                    $package->name() . "/Implementations/" . $implementationsFile;
 
                 $className = pathinfo($implementationsFilePath, PATHINFO_FILENAME);
 
-                $namespace = 'CMW\\Implementation\\' . ucfirst($package->getName()) . '\\' . $className;
+                $namespace = 'CMW\\Implementation\\' . $package->name() . '\\' . $className;
 
                 $classInstance = new $namespace();
 
-                if (!is_subclass_of($classInstance, $interface)){
+                if (!is_subclass_of($classInstance, $interface)) {
                     continue;
                 }
 
@@ -181,7 +181,7 @@ class Loader
             foreach ($attrList as $attribute) {
 
                 if (!isset(self::getAttributeListPointer()[$attribute->getName()])) {
-                    self::getAttributeListPointer()[$attribute->getName()] = array();
+                    self::getAttributeListPointer()[$attribute->getName()] = [];
                 }
 
                 self::getAttributeListPointer()[$attribute->getName()][] = [$attribute, $method];

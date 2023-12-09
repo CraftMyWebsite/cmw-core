@@ -4,7 +4,6 @@ namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Entity\Core\PackageEntity;
-use CMW\Entity\Core\PackageMenusEntity;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Download\DownloadManager;
@@ -13,15 +12,13 @@ use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
+use CMW\Manager\Package\IPackageConfig;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Utils\Directory;
-use CMW\Utils\Log;
 use CMW\Utils\Redirect;
-use CMW\Utils\Utils;
 use JetBrains\PhpStorm\NoReturn;
-use JsonException;
 
 class PackageController extends AbstractController
 {
@@ -29,21 +26,21 @@ class PackageController extends AbstractController
     public static array $corePackages = ['Core', 'Pages', 'Users'];
 
     /**
-     * @return PackageEntity[]
+     * @return IPackageConfig[]
      * @desc Return packages they are not natives, like Core, Pages and Users
      */
     public static function getInstalledPackages(): array
     {
-        $toReturn = array();
+        $toReturn = [];
         $packagesFolder = 'App/Package/';
-        $contentDirectory = array_diff(scandir("$packagesFolder/"), array('..', '.'));
+        $contentDirectory = array_diff(scandir("$packagesFolder/"), ['..', '.']);
         foreach ($contentDirectory as $package) {
 
             if (in_array($package, self::$corePackages, true)) {
                 continue;
             }
 
-            if (file_exists("$packagesFolder/$package/infos.json") && !in_array($package, self::$corePackages, true)) {
+            if (file_exists("$packagesFolder/$package/Package.php") && !in_array($package, self::$corePackages, true)) {
                 $toReturn[] = self::getPackage($package);
             }
         }
@@ -52,15 +49,15 @@ class PackageController extends AbstractController
     }
 
     /**
-     * @return PackageEntity[]
+     * @return IPackageConfig[]
      * @desc Return natives packages (core, users, pages) => self::$corePackages
      */
     public static function getCorePackages(): array
     {
-        $toReturn = array();
+        $toReturn = [];
         $packagesFolder = 'App/Package/';
         foreach (self::$corePackages as $package) {
-            if (file_exists("$packagesFolder/$package/infos.json")) {
+            if (file_exists("$packagesFolder/$package/Package.php")) {
                 $toReturn[] = self::getPackage($package);
             }
         }
@@ -77,66 +74,17 @@ class PackageController extends AbstractController
         return array_merge(self::getCorePackages(), self::getInstalledPackages());
     }
 
-    public static function getPackage(string $package): ?PackageEntity
+    public static function getPackage(string $packageName): ?IPackageConfig
     {
+        $namespace = 'CMW\\Package\\' . $packageName . "\\Package";
 
-        if (!file_exists("App/Package/$package/infos.json")) {
+        $classInstance = new $namespace();
+
+        if (!is_subclass_of($classInstance, IPackageConfig::class)) {
             return null;
         }
 
-        try {
-            $strJsonFileContents = file_get_contents("App/Package/$package/infos.json");
-            $packageInfos = json_decode($strJsonFileContents, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException) {
-            return null;
-        }
-
-        return new PackageEntity(
-            $packageInfos['name'] ?? "",
-            $packageInfos['description'] ?? "",
-            $packageInfos['version'] ?? "",
-            $packageInfos['author'] ?? "",
-            self::getPackageMenus($package),
-            $packageInfos['isGame'] ?? false,
-            $packageInfos['isCore'] ?? false,
-        );
-    }
-
-    /**
-     * @param string $package
-     * @return PackageMenusEntity[]
-     */
-    public static function getPackageMenus(string $package): array
-    {
-        try {
-            $strJsonFileContents = file_get_contents("App/Package/$package/infos.json");
-            $packageInfos = json_decode($strJsonFileContents, true, 512, JSON_THROW_ON_ERROR)['menus'];
-        } catch (JsonException) {
-            return [];
-        }
-
-        $toReturn = [];
-
-        foreach ($packageInfos as $packageInfo):
-            if (empty($packageInfo['url_menu'])) {
-                $toReturn[] = new PackageMenusEntity(
-                    $packageInfo['name_menu_' . EnvManager::getInstance()->getValue("LOCALE")],
-                    $packageInfo['icon_menu'],
-                    $packageInfo['url_menu'],
-                    $packageInfo['urls_submenu_' . EnvManager::getInstance()->getValue("LOCALE")]
-                );
-            } else {
-                $toReturn[] = new PackageMenusEntity(
-                    $packageInfo['name_menu_' . EnvManager::getInstance()->getValue("LOCALE")],
-                    $packageInfo['icon_menu'],
-                    $packageInfo['url_menu'],
-                    []
-                );
-            }
-        endforeach;
-
-
-        return $toReturn;
+        return $classInstance;
     }
 
     public static function isInstalled(string $package): bool
@@ -159,10 +107,10 @@ class PackageController extends AbstractController
      */
     public static function getLocalPackages(): array
     {
-        $toReturn = array();
+        $toReturn = [];
         $installedPackages = self::getInstalledPackages();
 
-        $marketPackagesName = array();
+        $marketPackagesName = [];
 
         foreach (self::getMarketPackages() as $marketTheme):
             $marketPackagesName[] = $marketTheme['name'];
@@ -212,8 +160,8 @@ class PackageController extends AbstractController
 
         $package = PublicAPI::getData("resources/installResource&id=$id");
 
-        if (empty($package)){
-            Flash::send(Alert::ERROR,LangManager::translate("core.toaster.error"),
+        if (empty($package)) {
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.toaster.internalError") . ' (API)');
             Redirect::redirectPreviousRoute();
         }
@@ -258,7 +206,7 @@ class PackageController extends AbstractController
 
         $updates = PublicAPI::getData("resources/getResourceUpdates&id=$id&actualVersion=$actualVersion");
 
-        if (isset($updates['error'])){
+        if (isset($updates['error'])) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), $updates['error']['code']);
             Redirect::redirectPreviousRoute();
         }
@@ -269,11 +217,11 @@ class PackageController extends AbstractController
 
         $lastUpdateIndex = count($updates) - 1;
         foreach ($updates as $i => $update) {
-            if (!empty($update['sql_updater'])){
+            if (!empty($update['sql_updater'])) {
                 DatabaseManager::getLiteInstance()->query($update['sql_updater']);
             }
 
-            if ($i === $lastUpdateIndex){
+            if ($i === $lastUpdateIndex) {
                 DownloadManager::installPackageWithLink($update['file'], 'package', $packageName);
             }
         }
