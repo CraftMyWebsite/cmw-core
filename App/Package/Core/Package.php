@@ -71,6 +71,73 @@ class Package implements IPackageConfig
                 ],
             ),
             new PackageMenuType(
+                lang: "fr",
+                icon: "fas fa-helmet-safety",
+                title: "Maintenance",
+                url: "maintenance/manage",
+                permission: "core.maintenance",
+                subMenus: [],
+            ),
+            new PackageMenuType(
+                lang: "fr",
+                icon: "fas fa-envelope",
+                title: "Mails",
+                url: "mail/configuration",
+                permission: "core.mail.configuration",
+                subMenus: [],
+            ),
+            new PackageMenuType(
+                lang: "fr",
+                icon: "fas fa-bars",
+                title: "Menus",
+                url: "menus",
+                permission: "core.menus.configuration",
+                subMenus: [],
+            ),
+            new PackageMenuType(
+                lang: "fr",
+                icon: "fas fa-paintbrush",
+                title: "Thèmes",
+                url: null,
+                permission: null,
+                subMenus: [
+                    new PackageSubMenuType(
+                        title: 'Apparence',
+                        permission: 'core.theme.configuration',
+                        url: 'theme/manage',
+                    ),
+                    new PackageSubMenuType(
+                        title: 'Mes thèmes',
+                        permission: 'core.theme.configuration',
+                        url: 'theme/theme',
+                    ),
+                    new PackageSubMenuType(
+                        title: 'Market',
+                        permission: 'core.theme.configuration',
+                        url: 'theme/market',
+                    ),
+                ],
+            ),
+            new PackageMenuType(
+                lang: "fr",
+                icon: "fas fa-puzzle-piece",
+                title: "Packages",
+                url: null,
+                permission: null,
+                subMenus: [
+                    new PackageSubMenuType(
+                        title: 'Mes packages',
+                        permission: 'core.todo', //TODO PERMS
+                        url: 'packages/package',
+                    ),
+                    new PackageSubMenuType(
+                        title: 'Market',
+                        permission: 'core.todo', //TODO PERMS
+                        url: 'packages/market',
+                    ),
+                ],
+            ),
+            new PackageMenuType(
                 lang: "en",
                 icon: "fas fa-th",
                 title: "General",
@@ -101,6 +168,73 @@ class Package implements IPackageConfig
                         title: 'Updates',
                         permission: 'core.update',
                         url: 'update/cms',
+                    ),
+                ],
+            ),
+            new PackageMenuType(
+                lang: "en",
+                icon: "fas fa-helmet-safety",
+                title: "Maintenance",
+                url: "maintenance/manage",
+                permission: "core.maintenance",
+                subMenus: [],
+            ),
+            new PackageMenuType(
+                lang: "en",
+                icon: "fas fa-envelope",
+                title: "Mails",
+                url: "mail/configuration",
+                permission: "core.mail.configuration",
+                subMenus: [],
+            ),
+            new PackageMenuType(
+                lang: "en",
+                icon: "fas fa-bars",
+                title: "Menus",
+                url: "menus",
+                permission: "core.menus.configuration",
+                subMenus: [],
+            ),
+            new PackageMenuType(
+                lang: "en",
+                icon: "fas fa-paintbrush",
+                title: "Themes",
+                url: null,
+                permission: null,
+                subMenus: [
+                    new PackageSubMenuType(
+                        title: 'Appearance',
+                        permission: 'core.theme.configuration',
+                        url: 'theme/manage',
+                    ),
+                    new PackageSubMenuType(
+                        title: 'My themes',
+                        permission: 'core.theme.configuration',
+                        url: 'theme/theme',
+                    ),
+                    new PackageSubMenuType(
+                        title: 'Market',
+                        permission: 'core.theme.configuration',
+                        url: 'theme/market',
+                    ),
+                ],
+            ),
+            new PackageMenuType(
+                lang: "en",
+                icon: "fas fa-puzzle-piece",
+                title: "Packages",
+                url: null,
+                permission: null,
+                subMenus: [
+                    new PackageSubMenuType(
+                        title: 'My packages',
+                        permission: 'core.todo', //TODO PERMS
+                        url: 'packages/package',
+                    ),
+                    new PackageSubMenuType(
+                        title: 'Market',
+                        permission: 'core.todo', //TODO PERMS
+                        url: 'packages/market',
                     ),
                 ],
             ),
