@@ -3,7 +3,6 @@
 
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\PackageController;
-use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 
 /* @var \CMW\Entity\Core\PackageEntity[] $installedPackages */
@@ -13,8 +12,10 @@ $title = LangManager::translate("core.Package.title");
 $description = LangManager::translate("core.Package.desc"); ?>
 
 <div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fa-solid fa-puzzle-piece"></i> <span
-            class="m-lg-auto"><?= LangManager::translate("core.Theme.market") ?></h3>
+    <h3>
+        <i class="fa-solid fa-puzzle-piece"></i>
+        <?= LangManager::translate("core.Theme.market") ?>
+    </h3>
 </div>
 
 <div class="row">
@@ -34,17 +35,19 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                 <h5><b><?= $apiPackages['name'] ?></b></h5>
                                 <p><?= $apiPackages['description'] ?></p>
                                 <small
-                                    class="align-items-end"><?= LangManager::translate("core.Package.author") ?> <?= $apiPackages['author_pseudo'] ?></small>
+                                    class="align-items-end"><?= LangManager::translate("core.Package.author") ?> <?= $apiPackages['author_pseudo'] ?>
+                                </small>
                             </div>
                             <div>
                                 <button type="button" data-bs-toggle="modal"
                                         data-bs-target="#modal-<?= $apiPackages['id'] ?>"
-                                        class="btn btn-sm btn-primary"><?= LangManager::translate("core.Package.details") ?></button>
+                                        class="btn btn-sm btn-primary"><?= LangManager::translate("core.Package.details") ?>
+                                </button>
                             </div>
                         </div>
                     </div>
                     <hr>
-                    <div class="" style="font-size: small">
+                    <div style="font-size: small">
                         <div class="d-flex justify-content-between px-2 py-1">
                             <div>
                                 <!--TODO : rating sys-->
@@ -61,8 +64,8 @@ $description = LangManager::translate("core.Package.desc"); ?>
                     </div>
                     <div class="d-flex justify-content-center pb-2">
                         <button onclick="this.disabled = true; window.location = 'install/<?= $apiPackages['id'] ?>'"
-                           class="btn btn-sm btn-primary"><i
-                                class="fa-solid fa-download"></i> <?= LangManager::translate("core.Package.install") ?>
+                                class="btn btn-sm btn-primary">
+                            <i class="fa-solid fa-download"></i> <?= LangManager::translate("core.Package.install") ?>
                         </button>
                     </div>
 
@@ -77,9 +80,10 @@ $description = LangManager::translate("core.Package.desc"); ?>
                         <div class="modal-header">
                             <h4 class="modal-title"><?= $apiPackages['name'] ?></h4>
                             <div class="d-flex justify-content-end mt-auto gap-3">
-                                <button onclick="this.disabled = true; window.location = 'install/<?= $apiPackages['id'] ?>'"
-                                   class="btn btn-sm btn-primary"><i
-                                        class="fa-solid fa-download"></i> <?= LangManager::translate("core.Package.install") ?>
+                                <button
+                                    onclick="this.disabled = true; window.location = 'install/<?= $apiPackages['id'] ?>'"
+                                    class="btn btn-sm btn-primary">
+                                    <i class="fa-solid fa-download"></i> <?= LangManager::translate("core.Package.install") ?>
                                 </button>
                             </div>
                         </div>
@@ -90,14 +94,15 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                          src="<?= $apiPackages["icon"] ?>" alt="img">
                                 </div>
                                 <div class="col-12 col-lg-6 position-relative">
-                                    <p class="">
+                                    <p>
                                         <b><?= LangManager::translate("core.Package.description") ?></b><br><?= $apiPackages['description'] ?>
                                     </p>
                                     <hr>
                                     <p class="small">
                                         <?= LangManager::translate("core.Package.author") ?>
-                                        <i><b>
-                                                <a href="" target="_blank">
+                                        <i>
+                                            <b>
+                                                <a href="#" target="_blank">
                                                     <?= $apiPackages['author_pseudo'] ?>
                                                 </a>
                                             </b>
@@ -131,7 +136,8 @@ $description = LangManager::translate("core.Package.desc"); ?>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary"
-                                    data-bs-dismiss="modal"><?= LangManager::translate("core.Package.close") ?></button>
+                                    data-bs-dismiss="modal"><?= LangManager::translate("core.Package.close") ?>
+                            </button>
                         </div>
                     </div>
                 </div>

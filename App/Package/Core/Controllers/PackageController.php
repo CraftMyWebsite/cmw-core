@@ -78,6 +78,10 @@ class PackageController extends AbstractController
     {
         $namespace = 'CMW\\Package\\' . $packageName . "\\Package";
 
+        if (!class_exists($namespace)){
+            return null;
+        }
+
         $classInstance = new $namespace();
 
         if (!is_subclass_of($classInstance, IPackageConfig::class)) {
@@ -102,7 +106,7 @@ class PackageController extends AbstractController
     }
 
     /**
-     * @return PackageEntity[]
+     * @return IPackageConfig[]
      * @desc Return all packages local (remove packages get from the public market)
      */
     public static function getLocalPackages(): array
@@ -117,7 +121,7 @@ class PackageController extends AbstractController
         endforeach;
 
         foreach ($installedPackages as $installedPackage):
-            if (!in_array($installedPackage->getName(), $marketPackagesName, true)):
+            if (!in_array($installedPackage->name(), $marketPackagesName, true)):
                 $toReturn[] = $installedPackage;
             endif;
         endforeach;
