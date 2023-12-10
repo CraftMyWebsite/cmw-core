@@ -21,7 +21,7 @@ class EncryptManager
 
     public static function getSaltIv(): string
     {
-        return EnvManager::getInstance()->getValue('SALT_IV');
+        return hex2bin(EnvManager::getInstance()->getValue('SALT_IV'));
     }
 
     /**

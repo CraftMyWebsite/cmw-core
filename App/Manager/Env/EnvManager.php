@@ -225,7 +225,7 @@ class EnvManager
 
         $this->addValue('SALT', $salt);
         $this->addValue('SALT_PASS', $saltPass);
-        $this->addValue('SALT_IV', openssl_random_pseudo_bytes(16));
+        $this->addValue('SALT_IV', bin2hex(openssl_random_pseudo_bytes(16)));
     }
 
     private function oneShotCmwVersionFile(): void
