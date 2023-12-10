@@ -7,6 +7,7 @@ use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Error\ErrorManager;
+use CMW\Manager\Filter\FilterManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
@@ -425,11 +426,11 @@ class InstallerController extends AbstractController
             return;
         }
 
-        $email = filter_input(INPUT_POST, "email");
-        $pseudo = filter_input(INPUT_POST, "pseudo");
-        $password = password_hash(filter_input(INPUT_POST, "password"), PASSWORD_BCRYPT);
+        $email = FilterManager::filterInputStringPost("email");
+        $pseudo = FilterManager::filterInputStringPost("pseudo");
+        $password = password_hash(FilterManager::filterInputStringPost("password"), PASSWORD_BCRYPT);
 
-        $encryptedMail = mb_strtolower(EncryptManager::encrypt($email));
+        $encryptedMail = EncryptManager::encrypt(mb_strtolower($email));
 
         InstallerModel::initAdmin($encryptedMail, $pseudo, $password);
 
