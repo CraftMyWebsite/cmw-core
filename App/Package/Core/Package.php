@@ -66,7 +66,7 @@ class Package implements IPackageConfig
                     new PackageSubMenuType(
                         title: 'Mises à jour',
                         permission: 'core.update',
-                        url: 'update/cms',
+                        url: 'updates/cms',
                     ),
                 ],
             ),
@@ -167,7 +167,7 @@ class Package implements IPackageConfig
                     new PackageSubMenuType(
                         title: 'Updates',
                         permission: 'core.update',
-                        url: 'update/cms',
+                        url: 'updates/cms',
                     ),
                 ],
             ),
