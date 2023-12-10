@@ -429,7 +429,7 @@ class InstallerController extends AbstractController
         $pseudo = filter_input(INPUT_POST, "pseudo");
         $password = password_hash(filter_input(INPUT_POST, "password"), PASSWORD_BCRYPT);
 
-        $encryptedMail = EncryptManager::encrypt($email);
+        $encryptedMail = mb_strtolower(EncryptManager::encrypt($email));
 
         InstallerModel::initAdmin($encryptedMail, $pseudo, $password);
 

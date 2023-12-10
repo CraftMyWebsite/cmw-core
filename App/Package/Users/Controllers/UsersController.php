@@ -262,7 +262,7 @@ class UsersController extends AbstractController
 
         [$mail, $pseudo, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "firstname", "surname");
 
-        $encryptedMail = EncryptManager::encrypt($mail);
+        $encryptedMail = EncryptManager::encrypt(mb_strtolower($mail));
 
         $userEntity = UsersModel::getInstance()->create($encryptedMail, $pseudo, $firstname, $lastname, $_POST['roles']);
 
@@ -366,11 +366,9 @@ class UsersController extends AbstractController
             Redirect::redirectPreviousRoute();
         }
 
-        $encryptedMail = EncryptManager::encrypt($mail);
-
+        $encryptedMail = EncryptManager::encrypt(mb_strtolower($mail));
 
         $cookie = isset($_POST['login_keep_connect']) && $_POST['login_keep_connect'] ? 1 : 0;
-
 
         $loginStatus = $this->checkLogin($encryptedMail, $password);
 
@@ -560,8 +558,8 @@ class UsersController extends AbstractController
     private function registerPost(): void
     {
         if (SecurityController::checkCaptcha()) {
-            $encryptedMail = EncryptManager::encrypt(filter_input(INPUT_POST, "register_email"));
-            if (UsersModel::getInstance()->checkPseudo(filter_input(INPUT_POST, "register_pseudo")) > 0) {
+            $encryptedMail = EncryptManager::encrypt(mb_strtolower(FilterManager::filterInputStringPost("register_email")));
+            if (UsersModel::getInstance()->checkPseudo(FilterManager::filterInputStringPost("register_pseudo")) > 0) {
                 Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),
                     LangManager::translate("users.toaster.used_pseudo"));
                 Redirect::redirect('register');
