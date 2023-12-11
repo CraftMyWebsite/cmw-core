@@ -3,22 +3,23 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
+use CMW\Interface\Core\IDashboardElements;
 use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Loader\Loader;
 use CMW\Manager\Metrics\VisitsMetricsManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
-use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Router\RouterException;
-use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Users\UsersMetricsModel;
-use CMW\Model\Users\UsersModel;use CMW\Utils\Redirect;
+use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
@@ -34,7 +35,8 @@ class CoreController extends AbstractController
     public static array $availableLocales = ['fr' => 'Français', 'en' => 'English']; //todo remove that
     public static array $exampleDateFormat = ["d-m-Y H:i:s", "d-m-Y Hh im ss", "d/m/Y H:i:s", "d/m/Y à H\h i\m s\s", "d/m/Y à H\h i\m", "d/m/Y at H\h i\m s\s"];
 
-    public static function getThemePath(): string {
+    public static function getThemePath(): string
+    {
         self::$themeName = CoreModel::getInstance()->fetchOption("Theme");
         return (empty($themeName = self::$themeName)) ? "" : "./Public/Themes/$themeName/";
     }
@@ -63,19 +65,33 @@ class CoreController extends AbstractController
         $registers = UsersMetricsModel::getInstance()->getPastMonthsRegisterNumbers(5);
 
         View::createAdminView("Core", "Dashboard/dashboard")
-        ->addVariableList(['monthlyVisits' => $monthlyVisits,'dailyVisits' => $dailyVisits ,'weeklyVisits' => $weeklyVisits , 'registers' => $registers])
-        ->addScriptBefore("Admin/Resources/Vendors/Chart/chart.min.js")
-        ->addScriptAfter("App/Package/Core/Views/Resources/Js/dashboard.js")
-        ->view();
+            ->addVariableList(['monthlyVisits' => $monthlyVisits, 'dailyVisits' => $dailyVisits,
+                'weeklyVisits' => $weeklyVisits, 'registers' => $registers])
+            ->addScriptBefore("Admin/Resources/Vendors/Chart/chart.min.js")
+            ->addScriptAfter("App/Package/Core/Views/Resources/Js/dashboard.js")
+            ->view();
+    }
+
+    /**
+     * @return void
+     * @desc Load all packages implementations for {@CMW\Interface\Core\IDashboardElements}
+     */
+    public function getPackagesDashboardElements(): void
+    {
+        $data = Loader::loadImplementations(IDashboardElements::class);
+
+        foreach ($data as $package) {
+            $package->widgets();
+        }
     }
 
     #[Link(path: "/configuration", method: Link::GET, scope: "/cmw-admin")]
-    private  function adminConfiguration(): void
+    private function adminConfiguration(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
 
         View::createAdminView("Core", "Configuration/configuration")
-        ->view();
+            ->view();
     }
 
     #[NoReturn] #[Link(path: "/configuration", method: Link::POST, scope: "/cmw-admin")]
@@ -95,7 +111,7 @@ class CoreController extends AbstractController
             try {
                 $imgStatus = ImagesManager::upload($_FILES['favicon'], "Favicon", false, "favicon");
                 //Show error
-                if ($imgStatus !== 'favicon.ico'){
+                if ($imgStatus !== 'favicon.ico') {
                     Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                         LangManager::translate($imgStatus));
                 }
@@ -119,7 +135,8 @@ class CoreController extends AbstractController
      * @throws \CMW\Manager\Router\RouterException
      */
     #[Link('home', Link::GET)]
-    private function redirectToHome(): void {
+    private function redirectToHome(): void
+    {
         Redirect::redirectToHome();
     }
 
