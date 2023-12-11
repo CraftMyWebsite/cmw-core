@@ -1,9 +1,9 @@
 <?php
 
+use CMW\Controller\Core\CoreController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Metrics\VisitsMetricsManager;
-use CMW\Manager\Security\EncryptManager;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Core\CoreModel;
 use CMW\Utils\Utils;
@@ -159,6 +159,9 @@ Website::setDescription(LangManager::translate("core.dashboard.desc"));
                     </div>
                 </div>
             </div>
+
+        <?php CoreController::getInstance()->getPackagesDashboardElements(); ?>
+
     </section>
 </div>
 
