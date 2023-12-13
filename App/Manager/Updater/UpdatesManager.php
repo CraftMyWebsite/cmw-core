@@ -14,7 +14,7 @@ class UpdatesManager
      */
     public static function getVersion(): string
     {
-        return EnvManager::getInstance()->getValue("VERSION");
+        return EnvManager::getInstance()->getValue("VERSION") ?? 'DEV';
     }
 
 
