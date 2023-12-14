@@ -196,10 +196,15 @@ class Router
 
     }
 
-    public function getRouteByUrl(string $url): ?Route
+    public function getRouteByUrl(string $url, string $method = null): ?Route
     {
+        if ($method === null) {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+
         $matchedRoute = null;
-        foreach ($this->getRoutes()[$_SERVER['REQUEST_METHOD']] as $route) {
+
+        foreach ($this->getRoutes()[$method] as $route) {
             /** @var Route $route */
             if ($route->match($url)) {
                 if (is_null($matchedRoute) || $route->getWeight() > $matchedRoute->getWeight()) {

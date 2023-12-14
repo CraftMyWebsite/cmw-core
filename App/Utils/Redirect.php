@@ -15,7 +15,7 @@ class Redirect
     private static function getRouteByUrl(string $url): ?Route
     {
         $router = Router::getInstance();
-        $route = $router->getRouteByUrl($url);
+        $route = $router->getRouteByUrl($url, 'GET');
         if (is_null($route)) {
             $route = $router->getRouteByName($url);
             if (is_null($route)) {
@@ -39,7 +39,7 @@ class Redirect
 
         $strParams = implode(", ", $params);
 
-        http_response_code(302);
+        http_response_code(307);
         header("Location: " . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $route->getUrl() . '/' . $strParams);
         die();
     }
