@@ -39,7 +39,7 @@ class Redirect
 
         $strParams = implode(", ", $params);
 
-        http_response_code(307);
+        http_response_code(302);
         header("Location: " . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $route->getUrl() . '/' . $strParams);
         die();
     }
