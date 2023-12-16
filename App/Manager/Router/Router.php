@@ -4,6 +4,7 @@ namespace CMW\Manager\Router;
 
 use Closure;
 use CMW\Manager\Metrics\VisitsMetricsManager;
+use CMW\Manager\Requests\HttpMethodsType;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Security\RateLimiter;
 use CMW\Manager\Security\SecurityManager;
@@ -196,10 +197,15 @@ class Router
 
     }
 
-    public function getRouteByUrl(string $url): ?Route
+    public function getRouteByUrl(string $url, ?HttpMethodsType $method = null): ?Route
     {
+        if ($method === null) {
+            $method = HttpMethodsType::fromName($_SERVER['REQUEST_METHOD']);
+        }
+
         $matchedRoute = null;
-        foreach ($this->getRoutes()[$_SERVER['REQUEST_METHOD']] as $route) {
+
+        foreach ($this->getRoutes()[$method->name] as $route) {
             /** @var Route $route */
             if ($route->match($url)) {
                 if (is_null($matchedRoute) || $route->getWeight() > $matchedRoute->getWeight()) {
