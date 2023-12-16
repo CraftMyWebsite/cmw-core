@@ -4,6 +4,7 @@ namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Interface\Core\IDashboardElements;
+use CMW\Interface\Core\ITopBarElements;
 use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
@@ -79,6 +80,19 @@ class CoreController extends AbstractController
     public function getPackagesDashboardElements(): void
     {
         $data = Loader::loadImplementations(IDashboardElements::class);
+
+        foreach ($data as $package) {
+            $package->widgets();
+        }
+    }
+
+    /**
+     * @return void
+     * @desc Load all packages implementations for {@CMW\Interface\Core\ITopBarElements}
+     */
+    public function getPackagesTopBarElements(): void
+    {
+        $data = Loader::loadImplementations(ITopBarElements::class);
 
         foreach ($data as $package) {
             $package->widgets();
