@@ -6,11 +6,15 @@ use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\MenusController;
 use CMW\Controller\Core\PackageController;
 use CMW\Entity\Users\UserEntity;
+use CMW\Interface\Core\ISideBarElements;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Loader\Loader;
 use CMW\Model\Users\UsersModel;
 
 $currentUser = UsersModel::getCurrentUser();
+
+$sideBarImplementations = Loader::loadImplementations(ISideBarElements::class);
 
 ?>
 <div id="sidebar" class="active">
@@ -25,6 +29,11 @@ $currentUser = UsersModel::getCurrentUser();
         </div>
         <div class="sidebar-menu">
             <ul class="menu">
+
+                <?php foreach ($sideBarImplementations as $package):
+                    $package->beforeWidgets();
+                endforeach; ?>
+
                 <li class="sidebar-title"><?= LangManager::translate('core.general') ?></li>
                 <li class="sidebar-item <?= MenusController::getInstance()->isActiveNavbarItem('dashboard') ? 'active' : '' ?>">
                     <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/dashboard"
@@ -109,6 +118,11 @@ $currentUser = UsersModel::getCurrentUser();
                         <?php endif; ?>
                     <?php endforeach; ?>
                 <?php endforeach; ?>
+
+                <?php foreach ($sideBarImplementations as $package):
+                    $package->afterWidgets();
+                endforeach; ?>
+
             </ul>
         </div>
     </div>
