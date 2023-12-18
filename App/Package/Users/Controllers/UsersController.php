@@ -394,7 +394,8 @@ class UsersController extends AbstractController
                 }
                 $this->loginUser($user, $cookie);
                 if ($previousRoute) {
-                    Redirect::redirectPreviousRoute();
+                    header('Location: ' . $previousRoute);
+                    Redirect::redirect($previousRoute);
                 } else {
                     Redirect::redirect("profile");
                 }
