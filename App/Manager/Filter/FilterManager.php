@@ -17,14 +17,16 @@ class FilterManager
     /**
      * @param string $data
      * @param int $maxLength
+     * @param int $filter
      * @return string
-     * @desc Securely filter data with maxlength parameter
+     * @desc Securely filter data with maxlength parameter and custom filter, see @link
+     * @link https://www.php.net/manual/en/filter.filters.sanitize.php
      */
-    public static function filterData(string $data, int $maxLength = 128): string
+    public static function filterData(string $data, int $maxLength = 128, int $filter = FILTER_UNSAFE_RAW): string
     {
         $data = trim(preg_replace("/<\?.*\?>/", '', $data)); //Remove scripts tags
         $data = mb_substr($data, 0, $maxLength);
-        return filter_var($data, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        return filter_var($data, $filter);
     }
 
     /**
@@ -50,7 +52,7 @@ class FilterManager
      */
     public static function filterInputStringPost(string $data, int $maxLength = 255): string
     {
-        return mb_substr(trim(filter_input(INPUT_POST, $data, FILTER_SANITIZE_FULL_SPECIAL_CHARS)), 0, $maxLength);
+        return mb_substr(trim(filter_input(INPUT_POST, $data, FILTER_UNSAFE_RAW)), 0, $maxLength);
     }
 
     /**
@@ -61,7 +63,7 @@ class FilterManager
      */
     public static function filterInputIntPost(string $data, int $maxLength = 128): int
     {
-        return mb_substr(trim(filter_input(INPUT_POST, $data, FILTER_SANITIZE_NUMBER_INT)), 0, $maxLength);
+        return (int)mb_substr(trim(filter_input(INPUT_POST, $data, FILTER_SANITIZE_NUMBER_INT)), 0, $maxLength);
     }
 
     /**
@@ -72,7 +74,7 @@ class FilterManager
      */
     public static function filterInputStringGet(string $data, int $maxLength = 128): string
     {
-        return mb_substr(trim(filter_input(INPUT_GET, $data, FILTER_SANITIZE_FULL_SPECIAL_CHARS)), 0, $maxLength);
+        return mb_substr(trim(filter_input(INPUT_GET, $data, FILTER_UNSAFE_RAW)), 0, $maxLength);
     }
 
     /**
