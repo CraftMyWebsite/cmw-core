@@ -47,11 +47,17 @@ class FilterManager
     /**
      * @param string $data
      * @param int $maxLength
-     * @return string
-     * @desc Securely filter data with maxlength parameter => optimized for strings
+     * @param mixed|null $orElse
+     * @return mixed
+     * @desc Securely filter data with maxlength parameter => optimized for strings.
+     * <p>If <b>orElse</b> parameter is used, you can return anything you want if value is not set or null.</p>
      */
-    public static function filterInputStringPost(string $data, int $maxLength = 255): string
+    public static function filterInputStringPost(string $data, int $maxLength = 255, mixed $orElse = false): mixed
     {
+        if ((!$orElse) && !isset($_POST[$data]) && !is_null($_POST[$data])) {
+            return $orElse;
+        }
+
         return mb_substr(trim(filter_input(INPUT_POST, $data, FILTER_UNSAFE_RAW)), 0, $maxLength);
     }
 
