@@ -13,7 +13,7 @@ use CMW\Utils\Website;
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>CraftMyWebsite | <?= $title ?? Website::getTitle(useSiteName: false) ?></title>
+    <title><?= Website::getWebsiteName() ?> - Admin | <?= $title ?? Website::getTitle(useSiteName: false) ?></title>
     <meta name="description" content="<?= $description ?? Website::getDescription() ?>">
     <meta name="robots" content="NOINDEX, NOFOLLOW">
 
