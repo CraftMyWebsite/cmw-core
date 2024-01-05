@@ -25,7 +25,7 @@ class PermissionsModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute(array("permission_id" => $id))) {
+        if (!$req->execute(["permission_id" => $id])) {
             return null;
         }
 
@@ -61,11 +61,11 @@ class PermissionsModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute(array("permission_parent_id" => $parentId))) {
-            return array();
+        if (!$req->execute(["permission_parent_id" => $parentId])) {
+            return [];
         }
 
-        $toReturn = array();
+        $toReturn = [];
 
         while ($res = $req->fetch()) {
 
@@ -96,7 +96,7 @@ class PermissionsModel extends AbstractModel
             return "";
         }
 
-        $toReturn = array($permissionEntity->getCode());
+        $toReturn = [$permissionEntity->getCode()];
 
         while (!is_null($permissionEntity->getParent())) {
 
@@ -124,11 +124,11 @@ class PermissionsModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute(array("permission_code" => $code))) {
-            return array();
+        if (!$req->execute(["permission_code" => $code])) {
+            return [];
         }
 
-        $toReturn = array();
+        $toReturn = [];
 
         while ($res = $req->fetch()) {
 
@@ -150,7 +150,7 @@ class PermissionsModel extends AbstractModel
     {
         $codeList = explode(".", $code);
 
-        $idCodeList = array();
+        $idCodeList = [];
 
         foreach ($codeList as $key => $value) {
 
@@ -195,13 +195,13 @@ class PermissionsModel extends AbstractModel
             }
         }
 
-        $sql = "INSERT INTO cmw_permissions(permission_parent_id, permission_code) VALUES (null, :permission_code)";
+        $sql = "INSERT INTO cmw_permissions(permission_parent_id, permission_code) VALUES (NULL, :permission_code)";
 
         $db = DatabaseManager::getInstance();
 
         $req = $db->prepare($sql);
 
-        if ($req->execute(array("permission_code" => $code))) {
+        if ($req->execute(["permission_code" => $code])) {
             $id = $db->lastInsertId();
             return new PermissionEntity($id, null, $code);
         }
@@ -232,7 +232,7 @@ class PermissionsModel extends AbstractModel
 
         $req = $db->prepare($sql);
 
-        if ($req->execute(array("parent_id" => $parentId, "permission_code" => $code))) {
+        if ($req->execute(["parent_id" => $parentId, "permission_code" => $code])) {
             $id = $db->lastInsertId();
             return new PermissionEntity($id, $parent, $code);
         }
@@ -317,10 +317,10 @@ class PermissionsModel extends AbstractModel
         $req = $db->prepare($sql);
 
         if (!$req->execute()) {
-            return array();
+            return [];
         }
 
-        $toReturn = array();
+        $toReturn = [];
 
         while ($res = $req->fetch()) {
 
@@ -342,13 +342,11 @@ class PermissionsModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute(array("permission_parent_id" => $id))) {
+        if (!$req->execute(["permission_parent_id" => $id])) {
             return false;
         }
 
         return (bool)$req->rowCount();
-
-
     }
 
 }

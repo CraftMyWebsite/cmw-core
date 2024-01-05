@@ -1,6 +1,7 @@
 <?php
 
 use CMW\Controller\Users\PermissionsController;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Model\Users\PermissionsModel;
@@ -32,14 +33,15 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                     </thead>
                     <tbody>
                     <?php foreach ($rolesList as $role) : ?>
-                        <tr >
+                        <tr>
                             <td><?= $role->getName() ?></td>
                             <td><?= $role->getDescription() ?></td>
                             <td class="text-center">
                                 <?php if ($role->isDefault()): ?>
                                     <i class="text-success fa-regular fa-circle-dot fa-beat-fade"></i>
                                 <?php else: ?>
-                                    <a href="set_default/<?= $role->getId() ?>"><i class="fa-regular fa-circle fa-2xs"><span hidden>a</span></i></a>
+                                    <a href="set_default/<?= $role->getId() ?>"><i
+                                            class="fa-regular fa-circle fa-2xs"><span hidden>a</span></i></a>
                                 <?php endif; ?>
                             </td>
                             <td class="text-center">
@@ -84,8 +86,12 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
-                <div class="text-end ">
-                    <button data-bs-toggle="modal" data-bs-target="#roleAddModal" type="button" class="btn btn-primary">
+
+                <div class="d-flex flex-wrap justify-content-between">
+                    <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/roles/permissions/import' ?>" class="btn btn-primary">Importer permissions</a>
+
+                    <button data-bs-toggle="modal" data-bs-target="#roleAddModal" type="button"
+                            class="btn btn-primary">
                         <?= LangManager::translate("users.roles.manage.add") ?>
                     </button>
                 </div>
@@ -107,7 +113,7 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                     <h5 class="modal-title"
                         id="roleAddModalTitle"><?= LangManager::translate("users.roles.manage.add") ?> </h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><i
-                                data-feather="x"></i>
+                            data-feather="x"></i>
                     </button>
                 </div>
                 <div class="modal-body">

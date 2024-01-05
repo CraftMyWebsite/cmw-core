@@ -2,7 +2,6 @@
 
 namespace CMW\Manager\Download;
 
-use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Model\Users\PermissionsModel;
@@ -47,7 +46,7 @@ class DownloadManager
 
 
             //INSTALL INIT FOLDER
-            if ($type === 'package'){
+            if ($type === 'package') {
                 self::initPackages($name);
             }
 
@@ -57,7 +56,7 @@ class DownloadManager
         return false;
     }
 
-    public static function initPackages(string... $packages): void
+    public static function initPackages(string...$packages): void
     {
         foreach ($packages as $package):
             $initFolder = EnvManager::getInstance()->getValue("dir") . "App/Package/$package/Init";
@@ -66,7 +65,7 @@ class DownloadManager
                 continue;
             }
 
-            $initFiles = array_diff(scandir($initFolder), array('..', '.'));
+            $initFiles = array_diff(scandir($initFolder), ['..', '.']);
 
             if (empty($initFiles)) {
                 continue;
@@ -75,13 +74,13 @@ class DownloadManager
             // Load permissions files
             $permissionFile = "$initFolder/permissions.json";
 
-            if (file_exists($permissionFile)){
+            if (file_exists($permissionFile)) {
 
                 try {
                     $permissions = json_decode(file_get_contents($permissionFile), false, 512, JSON_THROW_ON_ERROR);
 
                     foreach ($permissions as $permission) {
-                        (new PermissionsModel())->addFullCodePermission($permission);
+                        PermissionsModel::getInstance()->addFullCodePermission($permission);
                     }
                 } catch (JsonException) {
                 }

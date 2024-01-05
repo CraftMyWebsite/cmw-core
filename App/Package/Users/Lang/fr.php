@@ -47,6 +47,8 @@ return [
         "success_add" => "Utilisateur %pseudo% ajouté",
         "edited_not_pass_change" => "Utilisateur modifié (mot de passe non modifié)",
         "edited_pass_change" => "Utilisateur édité (mot de passe modifié)",
+        "load_permissions_error" => "Impossible de charger les permissions du package %package%",
+        "load_permissions_success" => "Permissions chargées avec succès !",
     ],
     "manage" => [
         "title" => "Gestion des utilisateurs",

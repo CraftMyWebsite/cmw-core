@@ -47,6 +47,8 @@ return [
         "success_add" => "User %pseudo% added",
         "edited_not_pass_change" => "User edited (without changing password)",
         "edited_pass_change" => "User edited (with password edit)",
+        "load_permissions_error" => "Unable to load package permissions %package%",
+        "load_permissions_success" => "Permissions loaded with success!",
     ],
     "manage" => [
         "title" => "Manage users",

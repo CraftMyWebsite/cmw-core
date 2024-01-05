@@ -66,7 +66,7 @@ class PackageController extends AbstractController
     }
 
     /**
-     * @return array
+     * @return IPackageConfig[]
      * @desc Return getCorePackages() and getInstalledPackages()
      */
     public static function getAllPackages(): array
