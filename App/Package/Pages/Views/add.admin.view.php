@@ -35,7 +35,7 @@ $description = LangManager::translate("pages.add.desc");
                         <h6>URL :</h6>
                         <div class="input-group mb-3">
                         <span class="input-group-text"
-                              id="inputGroup-sizing-default"><?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "p/" ?></span>
+                              id="inputGroup-sizing-default"><?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?></span>
                             <input type="text" id="slug" class="form-control"
                                    placeholder="<?= LangManager::translate("pages.link") ?>"
                                    aria-label="Slug" aria-describedby="inputGroup-sizing-default" name="page_slug"

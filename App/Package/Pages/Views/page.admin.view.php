@@ -33,7 +33,7 @@ $description = LangManager::translate("pages.list.desc"); ?>
                     <?php /** @var \CMW\Entity\Pages\PageEntity[] $pagesList */ foreach ($pagesList as $page) : ?>
                     <tr>
                         <td><?= $page->getTitle() ?></td>
-                        <td><a href="<?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "p/" . $page->getSlug() ?>" target="_blank"><?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "p/" . $page->getSlug() ?></a></td>
+                        <td><a href="<?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $page->getSlug() ?>" target="_blank"><?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $page->getSlug() ?></a></td>
                         <td><?= $page->getUser()->getPseudo() ?></td>
                         <td><?php if ($page->getState() === 2): ?> <?= LangManager::translate("pages.list.yes") ?> <?php else: ?> <?= LangManager::translate("pages.list.no") ?> <?php endif; ?></td>
                         <td><?= $page->getEdited() ?></td>

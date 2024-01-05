@@ -12,7 +12,7 @@ class PagesMenusImplementations implements IMenus {
         $slug = [];
 
         foreach ((new PagesModel())->getPages() as $page) {
-            $slug[$page->getTitle()] = "p/" . $page->getSlug();
+            $slug[$page->getTitle()] = $page->getSlug();
         }
 
         return $slug;

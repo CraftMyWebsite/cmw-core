@@ -40,7 +40,7 @@ $description = LangManager::translate("pages.edit.desc");
                         <h6>URL :</h6>
                         <div class="input-group mb-3">
                         <span class="input-group-text"
-                              id="inputGroup-sizing-default"><?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "p/" ?></span>
+                              id="inputGroup-sizing-default"><?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?></span>
                             <input type="text" value="<?= $page->getSlug() ?>" id="slug" name="slug" class="form-control"
                                    aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
                                    disabled>

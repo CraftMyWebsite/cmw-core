@@ -6,7 +6,6 @@ use CMW\Entity\Pages\PageEntity;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Package\AbstractModel;
 use CMW\Model\Users\UsersModel;
-use JsonException;
 use PDOStatement;
 
 /**
@@ -29,7 +28,7 @@ class PagesModel extends AbstractModel
 
         $res = $db->prepare($sql);
 
-        if (!$res->execute(array("page_id" => $id))) {
+        if (!$res->execute(["page_id" => $id])) {
             return null;
         }
 
@@ -44,7 +43,7 @@ class PagesModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 
-        if (!$res->execute(array("page_slug" => $slug))) {
+        if (!$res->execute(["page_slug" => $slug])) {
             return null;
         }
 
@@ -57,16 +56,16 @@ class PagesModel extends AbstractModel
     public function getPages(): array
     {
 
-        $sql = "select page_id from cmw_pages";
+        $sql = "SELECT page_id FROM cmw_pages";
         $db = DatabaseManager::getInstance();
 
         $res = $db->prepare($sql);
 
         if (!$res->execute()) {
-            return array();
+            return [];
         }
 
-        $toReturn = array();
+        $toReturn = [];
 
         while ($page = $res->fetch()) {
             $toReturn[] = $this->getPageById($page["page_id"]);
@@ -80,13 +79,13 @@ class PagesModel extends AbstractModel
 
     public function createPage(string $title, string $slug, string $content, int $userId, int $state): ?PageEntity
     {
-        $data = array(
+        $data = [
             "page_title" => mb_strimwidth($title, 0, 255),
             "page_slug" => $slug,
             "page_content" => $content,
             "user_id" => $userId,
-            "page_state" => $state
-        );
+            "page_state" => $state,
+        ];
 
         $sql = "INSERT INTO cmw_pages(page_title, page_slug, page_content, user_id, page_state) 
                 VALUES (:page_title, :page_slug, :page_content, :user_id, :page_state)";
@@ -106,9 +105,9 @@ class PagesModel extends AbstractModel
 
     public function deletePage(int $id): bool
     {
-        $var = array(
+        $var = [
             "page_id" => $id,
-        );
+        ];
         $sql = "DELETE FROM cmw_pages WHERE page_id=:page_id";
 
         $db = DatabaseManager::getInstance();
@@ -119,13 +118,13 @@ class PagesModel extends AbstractModel
 
     public function updatePage(int $id, string $slug, string $title, string $content, int $state): ?PageEntity
     {
-        $var = array(
+        $var = [
             "page_id" => $id,
             "page_slug" => $slug,
             "page_title" => mb_strimwidth($title, 0, 255),
             "page_content" => $content,
-            "page_state" => $state
-        );
+            "page_state" => $state,
+        ];
 
         $sql = "UPDATE cmw_pages SET page_slug=:page_slug, page_title=:page_title,
                      page_content=:page_content, page_state=:page_state WHERE page_id=:page_id";
@@ -142,9 +141,9 @@ class PagesModel extends AbstractModel
 
     public function updateEditTime(int $id): void
     {
-        $var = array(
+        $var = [
             "page_id" => $id,
-        );
+        ];
 
         $sql = "UPDATE cmw_pages SET page_updated = NOW() WHERE page_id=:page_id";
 
@@ -156,11 +155,12 @@ class PagesModel extends AbstractModel
     private function fetchPageResult(PDOStatement $res): ?PageEntity
     {
         $res = $res->fetch();
-        $user = (new UsersModel())->getUserById($res["user_id"]);
 
-        if(!$user) {
+        if (!$res) {
             return null;
         }
+
+        $user = UsersModel::getInstance()->getUserById($res["user_id"]);
 
         return new PageEntity(
             $res["page_id"],

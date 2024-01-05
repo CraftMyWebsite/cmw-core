@@ -11,6 +11,7 @@ use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Router\LinkStorage;
+use CMW\Manager\Router\Router;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Pages\PagesModel;
@@ -71,7 +72,7 @@ class PagesController extends AbstractController
         LinkStorage::getInstance()->storeRoute('p/' . $slug, 'page', 'Page | ' . $title, 'GET',
             'false', 'false', 1);
 
-        Flash::send(Alert::SUCCESS,LangManager::translate('core.toaster.success'), LangManager::translate('pages.alert.added'));
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'), LangManager::translate('pages.alert.added'));
 
         Redirect::redirectPreviousRoute();
     }
@@ -98,7 +99,7 @@ class PagesController extends AbstractController
 
         [$id, $title, $content, $state] = Utils::filterInput('id', 'title', 'content', 'state');
 
-        if (Utils::containsNullValue($id, $title, $content)){
+        if (Utils::containsNullValue($id, $title, $content)) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
                 LangManager::translate('pages.toaster.errors.emptyFields'));
             Redirect::redirectPreviousRoute();
@@ -106,7 +107,7 @@ class PagesController extends AbstractController
 
         PagesModel::getInstance()->updatePage($id, $slug, $title, $content, $state === NULL ? 0 : 1);
 
-        Flash::send(Alert::SUCCESS,LangManager::translate('core.toaster.success'), LangManager::translate('pages.alert.edited'));
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'), LangManager::translate('pages.alert.edited'));
         Redirect::redirectPreviousRoute();
 
     }
@@ -147,19 +148,24 @@ class PagesController extends AbstractController
     /**
      * @throws \CMW\Manager\Router\RouterException
      */
-    #[Link('/p/:slug', Link::GET, ["slug" => ".*?"])]
+    #[Link('/:slug', Link::GET, ["slug" => ".*?"], weight: 0)]
     private function publicShowPage(Request $request, string $slug): void
     {
-
         $pageEntity = PagesModel::getInstance()->getPageBySlug($slug);
 
-        //Include the Public view file ("Public/Themes/$themePath/Views/Pages/main.view.php")
-        $view = new View('Pages', 'main');
-        $view->addScriptBefore("Admin/Resources/Vendors/Prismjs/prism.js");
-        $view->addStyle("Admin/Resources/Vendors/Prismjs/Style/" . EditorController::getCurrentStyle());
-        $view->addVariableList(["page" => $pageEntity]);
-        $view->view();
+        // If page slug exist
+        if (!is_null($pageEntity)) {
+            //Include the Public view file ("Public/Themes/$themePath/Views/Pages/main.view.php")
+            $view = new View('Pages', 'main');
+            $view->addScriptBefore("Admin/Resources/Vendors/Prismjs/prism.js");
+            $view->addStyle("Admin/Resources/Vendors/Prismjs/Style/" . EditorController::getCurrentStyle());
+            $view->addVariableList(["page" => $pageEntity]);
+            $view->view();
+        }
 
+        if (is_null(Router::getInstance()->getRouteByUrl($slug))) {
+            Redirect::redirectToHome();
+        }
     }
 
 
