@@ -56,7 +56,7 @@ class HealthReport {
         #Packages
         $packages = "";
         foreach (PackageController::getInstalledPackages() as $package) {
-            $packages .= "      - " . $package->getName() . " @" . $package->getVersion() . " \n ";
+            $packages .= "      - " . $package->name() . " @" . $package->version() . " \n ";
         }
 
         #Themes
