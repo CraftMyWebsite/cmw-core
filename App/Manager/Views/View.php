@@ -24,12 +24,14 @@ class View
     private bool $needAdminControl;
     private bool $isAdminFile;
 
+    private bool $isBuilderFile;
+
     /**
      * @param string|null $package
      * @param string|null $viewFile
      * @param bool|null $isAdminFile
      */
-    public function __construct(?string $package = null, ?string $viewFile = null, ?bool $isAdminFile = false)
+    public function __construct(?string $package = null, ?string $viewFile = null, ?bool $isAdminFile = false, ?bool $isBuilderFile = false)
     {
         $this->package = $package;
         $this->viewFile = $viewFile;
@@ -37,6 +39,7 @@ class View
         $this->variables = [];
         $this->needAdminControl = false;
         $this->isAdminFile = $isAdminFile;
+        $this->isBuilderFile = $isBuilderFile;
     }
 
     /**
@@ -61,6 +64,20 @@ class View
         $view = new self($package, $viewFile);
 
         $view->setAdminView()->needAdminControl();
+
+        return $view;
+    }
+
+    /**
+     * @param string $package
+     * @param string $viewFile
+     * @return \CMW\Manager\Views\View
+     */
+    public static function createBuilderView(string $package, string $viewFile): View
+    {
+        $view = new self($package, $viewFile);
+
+        $view->setAdminView()->setBuilderView()->needAdminControl();
 
         return $view;
     }
@@ -139,6 +156,17 @@ class View
     public function setAdminView(bool $isAdminFile = true): self
     {
         $this->isAdminFile = $isAdminFile;
+        return $this;
+
+    }
+
+    /**
+     * @param bool $isBuilderFile
+     * @return $this
+     */
+    public function setBuilderView(bool $isBuilderFile = true): self
+    {
+        $this->isBuilderFile = $isBuilderFile;
         return $this;
 
     }
@@ -262,7 +290,9 @@ class View
         }
         $theme = ThemeController::getCurrentTheme()->getName();
         return ($this->isAdminFile)
-            ? "App/Package/$this->package/Views/$this->viewFile.admin.view.php"
+            ? ($this->isBuilderFile)
+                ? "App/Package/$this->package/Views/$this->viewFile.builder.admin.view.php"
+                : "App/Package/$this->package/Views/$this->viewFile.admin.view.php"
             : "Public/Themes/$theme/Views/$this->package/$this->viewFile.view.php";
     }
 
@@ -276,7 +306,9 @@ class View
         }
         $theme = ThemeController::getCurrentTheme()->getName();
         return ($this->isAdminFile)
-            ? EnvManager::getInstance()->getValue("PATH_ADMIN_VIEW") . "template.php"
+            ? ($this->isBuilderFile)
+                ? "Public/Themes/$theme/Views/template.php"
+                : EnvManager::getInstance()->getValue("PATH_ADMIN_VIEW") . "template.php"
             : "Public/Themes/$theme/Views/template.php";
     }
 
@@ -345,6 +377,37 @@ class View
      * @throws RouterException
      */
     public function view(): void
+    {
+
+        //Check admin permissions
+        if ($this->needAdminControl) {
+            UsersController::redirectIfNotHavePermissions("core.dashboard");
+        }
+
+        extract($this->variables);
+        $includes = $this->includes;
+
+        if (is_null($this->customPath) && Utils::containsNullValue($this->package, $this->viewFile)) {
+            throw new RouterException(null, 404); //TODO Real errors?
+        }
+
+        $path = $this->getViewPath();
+
+        if (!is_file($path)) {
+            throw new RouterException(null, 404); //TODO Real errors?
+        }
+
+        //Show Alerts
+
+        ob_start();
+        require_once($path);
+        echo $this->callAlerts();
+        $content = ob_get_clean();
+
+        require_once($this->getTemplateFile());
+    }
+
+    public function builderView(): void
     {
 
         //Check admin permissions

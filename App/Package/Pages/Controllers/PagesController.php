@@ -3,6 +3,7 @@
 namespace CMW\Controller\Pages;
 
 use CMW\Controller\Core\EditorController;
+use CMW\Controller\Core\ThemeController;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
@@ -47,12 +48,26 @@ class PagesController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.add");
 
-        //Todo "pack script" to avoid that
 
-        View::createAdminView('Pages', 'add')
-            ->addScriptBefore("Admin/Resources/Vendors/Tinymce/tinymce.min.js",
-                "Admin/Resources/Vendors/Tinymce/Config/full.js")
-            ->view();
+        View::createBuilderView('Pages', 'add')
+            ->addStyle("Admin/Resources/Vendors/GrapesJS/Assets/grapes.min.css")
+            ->addScriptBefore(
+                "Admin/Resources/Vendors/GrapesJS/Plugins/preset-webpage.js",
+                "Admin/Resources/Vendors/GrapesJS/Plugins/block-basic.js",
+                "Admin/Resources/Vendors/GrapesJS/Plugins/component-countdown.js",
+                "Admin/Resources/Vendors/GrapesJS/Plugins/forms.js",
+                "Admin/Resources/Vendors/GrapesJS/Plugins/export.js",
+                "Admin/Resources/Vendors/GrapesJS/Plugins/tabs.js",
+                "Admin/Resources/Vendors/GrapesJS/Plugins/custom-code.js",
+                "Admin/Resources/Vendors/GrapesJS/Plugins/touch.js",
+                "Admin/Resources/Vendors/GrapesJS/Plugins/parser-postcss.js",
+                "Admin/Resources/Vendors/GrapesJS/Plugins/tooltip.js",
+                "Admin/Resources/Vendors/GrapesJS/Plugins/tui-image-editor.js",
+                "Admin/Resources/Vendors/GrapesJS/Plugins/typed.js",
+                "Admin/Resources/Vendors/GrapesJS/Plugins/style-bg.js"
+            )
+            ->addScriptAfter("Admin/Resources/Vendors/GrapesJS/grapes.min.js" , "Admin/Resources/Vendors/GrapesJS/Config/default.js")
+            ->builderView();
     }
 
     #[Link("/add", Link::POST, [], "/cmw-admin/pages", secure: false)]
@@ -153,7 +168,7 @@ class PagesController extends AbstractController
 
         $pageEntity = PagesModel::getInstance()->getPageBySlug($slug);
 
-        //Include the Public view file ("Public/Themes/$themePath/Views/Pages/main.view.php")
+        //Includes the Public view file ("Public/Themes/$themePath/Views/Pages/main.view.php")
         $view = new View('Pages', 'main');
         $view->addScriptBefore("Admin/Resources/Vendors/Prismjs/prism.js");
         $view->addStyle("Admin/Resources/Vendors/Prismjs/Style/" . EditorController::getCurrentStyle());
