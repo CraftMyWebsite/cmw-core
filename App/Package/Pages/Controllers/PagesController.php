@@ -43,11 +43,12 @@ class PagesController extends AbstractController
             ->view();
     }
 
-    #[Link("/add", Link::GET, [], "/cmw-admin/pages")]
-    private function adminPagesAdd(): void
+    #[Link("/build/:pageId", Link::GET, [], "/cmw-admin/pages")]
+    private function adminPagesAdd(Request $request, string $pageId): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.add");
 
+        $pageContent = PagesModel::getInstance()->getPageById($pageId)->getContent();
 
         View::createBuilderView('Pages', 'add')
             ->addStyle("Admin/Resources/Vendors/GrapesJS/Assets/grapes.min.css")
@@ -67,6 +68,7 @@ class PagesController extends AbstractController
                 "Admin/Resources/Vendors/GrapesJS/Plugins/style-bg.js"
             )
             ->addScriptAfter("Admin/Resources/Vendors/GrapesJS/grapes.min.js" , "Admin/Resources/Vendors/GrapesJS/Config/default.js")
+            ->addVariableList(["pageContent" => $pageContent])
             ->builderView();
     }
 
@@ -78,9 +80,12 @@ class PagesController extends AbstractController
         $userId = UsersModel::getCurrentUser()?->getId();
         $slug = Utils::normalizeForSlug(filter_input(INPUT_POST, "page_slug"));
 
-        [$title, $content, $state] = Utils::filterInput('title', 'content', 'state');
+        [$title, $state] = Utils::filterInput('title');
 
-        PagesModel::getInstance()->createPage($title, $slug, $content, $userId, $state === NULL ? 0 : 1);
+        //TODO : Pourrais être un paramèters définie par le thème pour créer un pré template
+        $content = "<h1>Bienvenue</h1>";
+
+        $page = PagesModel::getInstance()->createPage($title, $slug, $content, $userId, $state === NULL ? 0 : 1);
 
         //Add route
         LinkStorage::getInstance()->storeRoute('p/' . $slug, 'page', 'Page | ' . $title, 'GET',
@@ -88,7 +93,8 @@ class PagesController extends AbstractController
 
         Flash::send(Alert::SUCCESS,LangManager::translate('core.toaster.success'), LangManager::translate('pages.alert.added'));
 
-        Redirect::redirectPreviousRoute();
+        //TODO : Not work :( again
+        Redirect::redirect("build/". $page->getId());
     }
 
     #[Link("/edit/:slug", Link::GET, ["slug" => ".*?"], "/cmw-admin/pages")]
