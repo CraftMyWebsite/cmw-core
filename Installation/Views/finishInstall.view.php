@@ -26,7 +26,7 @@ use CMW\Manager\Updater\UpdatesManager;
                 <li><?= LangManager::translate("Installation.finish.package") ?>
                     <ul style="list-style: inside;">
                         <?php foreach (PackageController::getInstalledPackages() as $installedPackage): ?>
-                            <li><b><?= $installedPackage->getName() . ' - v' . $installedPackage->getVersion() ?></b>
+                            <li><b><?= $installedPackage->name() . ' - v' . $installedPackage->version() ?></b>
                             </li>
                         <?php endforeach; ?>
                     </ul>
