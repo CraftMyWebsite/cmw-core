@@ -237,24 +237,26 @@ class VisitsMetricsManager extends DatabaseManager
      */
     public function getPastDaysVisits(int $pastDays): array
     {
-        $currentDays = idate("d");
+        $currentDay = idate("d");
 
         $toReturn = [];
 
         for ($i = 0; $i < $pastDays; $i++) {
-            $targetDay = idate("d", strtotime("-$i days"));
+            $targetDay = date("d", strtotime("-$i days"));
 
+            if ($targetDay === $currentDay) {
+                $rangeStart = date("Y-m-d 00:00:00", strtotime("-$i days"));
+                $rangeFinish = date("Y-m-d 23:59:59", strtotime("-$i days"));
 
-            $rangeStart = date("Y-m-d 00:00:00", strtotime("-$i days"));
-            $rangeFinish = date("Y-m-d 23:59:59", strtotime("-$i days"));
-
-            $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish);
-
-            if ($targetDay === $currentDays){
-                $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish) + $this->getFileLineNumber();
+                $dataVisits = $this->getDataVisits($rangeStart, $rangeFinish);
+                $toReturn[] = $dataVisits + $this->getFileLineNumber();
+            } else {
+                $rangeStart = date("Y-m-d 00:00:00", strtotime("-$i days"));
+                $rangeFinish = date("Y-m-d 23:59:59", strtotime("-$i days"));
+                $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish);
             }
-
         }
+
         return array_reverse($toReturn);
     }
 

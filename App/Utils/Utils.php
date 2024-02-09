@@ -123,7 +123,7 @@ class Utils
         $toReturn = [];
 
         for ($i = 0; $i < $pastDays; $i++) {
-            $toReturn[] = date('d/m/Y', strtotime("-$i days"));
+            $toReturn[] = date('d/m', strtotime("-$i days"));
         }
 
         return array_reverse($toReturn);
@@ -140,7 +140,7 @@ class Utils
 
         for ($i = 0; $i < $pastWeeks; $i++) {
             $targetWeek = date('W', strtotime("-$i weeks"));
-            $toReturn[] = LangManager::translate("core.week") . $targetWeek;
+            $toReturn[] = $targetWeek;
         }
 
         return array_reverse($toReturn);
