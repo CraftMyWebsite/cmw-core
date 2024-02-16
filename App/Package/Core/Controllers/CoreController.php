@@ -64,12 +64,12 @@ class CoreController extends AbstractController
         $monthlyVisits = (new VisitsMetricsManager())->getPastMonthsVisits(12);
         $dailyVisits = (new VisitsMetricsManager())->getPastDaysVisits(17);
         $weeklyVisits = (new VisitsMetricsManager())->getPastWeeksVisits(17);
-        $registers = UsersMetricsModel::getInstance()->getPastMonthsRegisterNumbers(5);
+        $registers = UsersMetricsModel::getInstance()->getPastMonthsRegisterNumbers(12);
 
         View::createAdminView("Core", "Dashboard/dashboard")
             ->addVariableList(['monthlyVisits' => $monthlyVisits, 'dailyVisits' => $dailyVisits,
                 'weeklyVisits' => $weeklyVisits, 'registers' => $registers])
-            ->addScriptBefore("Admin/Resources/Vendors/Chart/chart.min.js")
+            ->addScriptBefore("Admin/Resources/Vendors/Apexcharts/Js/apexcharts.js")
             ->addScriptAfter("App/Package/Core/Views/Resources/Js/dashboard.js")
             ->view();
     }
