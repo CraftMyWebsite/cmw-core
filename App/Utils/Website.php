@@ -11,6 +11,7 @@ class Website
 
     private static string $title;
     private static string $description;
+    private static ?string $customHeader;
 
     /**
      * @param string $title
@@ -48,6 +49,23 @@ class Website
         return htmlspecialchars_decode(self::$description, ENT_QUOTES);
     }
 
+    /**
+     * @param string $data
+     * @return string
+     */
+    public static function setCustomHeader(string $data): string
+    {
+        self::$customHeader = $data;
+        return $data;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getCustomHeader(): string
+    {
+        return htmlspecialchars_decode(self::$customHeader ?? "", ENT_HTML5);
+    }
 
     #[ExpectedValues(values: ['https', 'http'])]
     public static function getProtocol(): string

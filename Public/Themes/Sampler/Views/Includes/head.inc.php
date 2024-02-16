@@ -26,6 +26,9 @@ $siteName = Website::getWebsiteName();
         <meta property="og:type" content="website"/>
         <meta property="og:url" content="<?= EnvManager::getInstance()->getValue('PATH_URL') ?>">
 
+        <!-- CUSTOM HEADERS -->
+        <?= Website::getCustomHeader() ?>
+
         <title><?= Website::getTitle() ?></title>
         <meta name="description" content="<?= Website::getDescription() ?>">
 
