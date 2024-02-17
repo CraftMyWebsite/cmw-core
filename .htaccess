@@ -72,9 +72,13 @@
     ExpiresByType application/javascript "access plus 1 month"
 
     ExpiresByType text/css "access plus 1 month"
+
+    ExpiresByType font/woff2  "access plus 1 year"
+    ExpiresByType application/font-woff2  "access plus 1 year"
+    ExpiresByType application/x-font-woff2  "access plus 1 year"
 </IfModule>
 
-<filesMatch ".(ico|jpg|jpeg|png|gif|js|css|webp|svg)$">
+<filesMatch ".(ico|jpg|jpeg|png|gif|js|css|webp|svg|woff2|otf)$">
     Header set Cache-Control "max-age=84600, public"
 </filesMatch>
 
