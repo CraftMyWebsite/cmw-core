@@ -103,4 +103,14 @@ class FilterManager
     {
         return filter_var($mail, FILTER_VALIDATE_EMAIL);
     }
+
+    /**
+     * @param string $data
+     * @return string
+     * @desc Prepare string for sql. Fix #039 for apostrophe.
+     */
+    public static function prepareSqlInsert(string $data): string
+    {
+        return html_entity_decode(trim($data), ENT_QUOTES, 'UTF-8');
+    }
 }
