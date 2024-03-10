@@ -18,6 +18,8 @@ Website::setDescription(LangManager::translate("core.dashboard.desc"));
 /* @var array $weeklyVisits */
 /* @var array $registers */
 ?>
+<div class="alert alert-warning">Veuillez noter que CraftMyWebsite2 est actuellement en phase alpha et n'est pas encore achevé. <br>Son utilisation en environnement de production est fortement déconseillée. Des fonctionnalités clés peuvent manquer ou ne pas fonctionner comme prévu. <br><b>Pendant cette phase, des réinstallations complètes du système pourront être nécessaires.</b> <br>Nous vous remercions de votre compréhension et de votre patience pendant que nous travaillons sur CraftMyWebsite.</div>
+
 <div class="d-flex flex-wrap justify-content-between">
     <h3><i class="fa-solid fa-table-columns"></i> <span
                 class="m-lg-auto"><?= LangManager::translate("core.dashboard.title") ?></span></h3>
@@ -25,9 +27,6 @@ Website::setDescription(LangManager::translate("core.dashboard.desc"));
 
 <div class="page-content">
     <section class="row">
-            <div class="row">
-
-            </div>
             <div class="row">
                 <div class="col-lg-9">
                     <div class="card" >
