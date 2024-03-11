@@ -49,7 +49,7 @@ Website::setDescription("Connectez-vous à votre compte " . Website::getWebsiteN
 
                     <?php SecurityController::getPublicData(); ?>
                     <div class="d-grid">
-                        <button style="background: <?= ThemeModel::fetchConfigValue('buttonColor') ?>"
+                        <button style="background: <?= ThemeModel::getInstance()->fetchConfigValue('buttonColor') ?>"
                                 class="btn btn-xl" type="submit">
                             Connexion
                         </button>

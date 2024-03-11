@@ -46,7 +46,7 @@ Website::setDescription("Inscrivez-vous sur le site " . Website::getWebsiteName(
                     </div>
                     <?php SecurityController::getPublicData(); ?>
                     <div class="d-grid">
-                        <button style="background: <?= ThemeModel::fetchConfigValue('buttonColor') ?>"
+                        <button style="background: <?= ThemeModel::getInstance()->fetchConfigValue('buttonColor') ?>"
                                 class="btn btn-xl"
                                 type="submit"><?= LangManager::translate("users.login.register") ?></button>
                     </div>

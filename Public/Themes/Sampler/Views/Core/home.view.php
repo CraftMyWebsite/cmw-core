@@ -11,7 +11,7 @@ Website::setDescription("page d'accueil de CraftMyWebsite");
 <!-- Masthead-->
 <header class="masthead"
         style="background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%),
-            url('<?= ThemeModel::fetchImageLink("background") ?>');">
+            url('<?= ThemeModel::getInstance()->fetchImageLink("background") ?>');">
     <div class="container px-4 px-lg-5 h-100">
         <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
             <div class="col-lg-8 align-self-end">
@@ -27,7 +27,7 @@ Website::setDescription("page d'accueil de CraftMyWebsite");
                        href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin">Panel
                         d'administration</a>
                 <?php else: ?>
-                    <a class="btn btn-xl" style="background: <?= ThemeModel::fetchConfigValue('buttonColor') ?>"
+                    <a class="btn btn-xl" style="background: <?= ThemeModel::getInstance()->fetchConfigValue('buttonColor') ?>"
                        href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>login">Connexion</a>
                 <?php endif; ?>
             </div>

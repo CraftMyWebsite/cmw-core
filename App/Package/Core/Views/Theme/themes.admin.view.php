@@ -1,12 +1,12 @@
 <?php
 
-use CMW\Controller\Core\ThemeController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
+use CMW\Manager\Theme\ThemeManager;
 
-/* @var $currentTheme \CMW\Entity\Core\ThemeEntity */
-/* @var $installedThemes \CMW\Entity\Core\ThemeEntity[] */
+/* @var $currentTheme \CMW\Manager\Theme\IThemeConfig */
+/* @var $installedThemes \CMW\Manager\Theme\IThemeConfig[] */
 /* @var $themesList */
 
 $title = LangManager::translate("core.Theme.config.title");
@@ -22,18 +22,18 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
     <!------------------------------------
     -----Listage des thèmes local ACTIF---
     -------------------------------------->
-    <?php foreach (ThemeController::getLocalThemes() as $theme): ?>
-        <?php if ($theme->getName() === $currentTheme->getName()): ?>
+    <?php foreach (ThemeManager::getInstance()->getLocalThemes() as $theme): ?>
+        <?php if ($theme->name() === $currentTheme->name()): ?>
             <div class="col-12 col-lg-3 mb-4">
                 <div class="card" style="overflow: hidden;">
                     <div class="d-flex justify-content-between align-items-center px-2 py-2">
-                        <b><?= $theme->getName() ?></b>
+                        <b><?= $theme->name() ?></b>
                         <button type="button" data-bs-toggle="modal"
-                                data-bs-target="#modal-<?= $theme->getName() ?>"
+                                data-bs-target="#modal-<?= $theme->name() ?>"
                                 class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.details") ?></button>
                     </div>
                     <div class="position-relative">
-                        <?php if ($theme->getName() !== "Sampler"): ?>
+                        <?php if ($theme->name() !== "Sampler"): ?>
                             <div class="alert-light-warning color-warning position-absolute bottom-0 w-100 text-center"
                                  style="opacity: .85">
                                 <?= LangManager::translate("core.Theme.notVerified") ?>
@@ -57,13 +57,13 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                 </div>
             </div>
             <!--Details modal -->
-            <div class="modal fade text-left w-100" id="modal-<?= $theme->getName() ?>"
+            <div class="modal fade text-left w-100" id="modal-<?= $theme->name() ?>"
                  tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl"
                      role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title"><?= $theme->getName() ?></h4>
+                            <h4 class="modal-title"><?= $theme->name() ?></h4>
                             <div class="d-flex justify-content-end mt-auto gap-3">
                                 <a href="manage"
                                    class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.configure") ?></a>
@@ -89,23 +89,23 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                     <p class="">
                                         <b><?= LangManager::translate("core.Theme.description") ?></b>
                                     </p>
-                                    <?php if ($theme->getName() !== "Sampler"): ?>
+                                    <?php if ($theme->name() !== "Sampler"): ?>
                                         <p><?= LangManager::translate("core.Theme.descriptionManualInstall") ?></p>
                                     <?php else: ?>
                                         <p><?= LangManager::translate("core.Theme.descriptionIsSampler") ?></p>
                                     <?php endif; ?>
                                     <hr>
                                     <p class="small">
-                                        <?= LangManager::translate("core.Theme.author") ?><i><b><a
-                                                    href=""
-                                                    target="_blank"><?= $theme->getAuthor() ?? $theme->getAuthorsFormatted() ?>
-                                        </i></a></b></i>
+                                        <?= LangManager::translate("core.Theme.author") ?><a
+                                            href=""
+                                            target="_blank"><?= $theme->author() ?? $theme->authors() ?>
+                                        </a>
                                     </p>
                                     <p class="small">
                                         <?= LangManager::translate("core.Theme.themeVersion") ?>
-                                        <i><b><?= $theme->getVersion() ?></b></i><br>
+                                        <i><b><?= $theme->version() ?></b></i><br>
                                         <?= LangManager::translate("core.Theme.CMWVersion") ?>
-                                        <i><b><?= $theme->getCmwVersion() ?></b></i>
+                                        <i><b><?= $theme->cmwVersion() ?></b></i>
                                     </p>
                                 </div>
                             </div>
@@ -123,8 +123,8 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
     -----Listage des thèmes API installé et ACTIF---
     -------------------------------------------------->
     <?php foreach ($themesList as $theme): ?>
-        <?php if ($theme['name'] === $currentTheme->getName()): ?>
-            <?php $localTheme = ThemeController::getTheme($theme['name']); ?>
+        <?php if ($theme['name'] === $currentTheme->name()): ?>
+            <?php $localTheme = ThemeManager::getInstance()->getTheme($theme['name']); ?>
             <div class="col-12 col-lg-3 mb-4">
                 <div class="card" style="overflow: hidden;">
                     <div class="d-flex justify-content-between align-items-center px-2 py-2">
@@ -138,14 +138,14 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                              alt="Icon <?= $theme['name'] ?>">
                     </div>
                     <div class="d-flex justify-content-around align-items-center px-2 py-1">
-                        <?php if ($localTheme->getVersion() !== $theme['version_name']): ?>
+                        <?php if ($localTheme->version() !== $theme['version_name']): ?>
                             <a class="btn btn-sm btn-warning" type="button"
-                               href="update/<?= $theme['id'] ?>/<?= $localTheme->getVersion() ?>/<?= $localTheme->getName() ?>">
+                               href="update/<?= $theme['id'] ?>/<?= $localTheme->version() ?>/<?= $localTheme->name() ?>">
                                 <?= LangManager::translate("core.Package.update") ?>
                             </a>
                         <?php endif; ?>
-                            <a href="manage"
-                               class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.configure") ?></a>
+                        <a href="manage"
+                           class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.configure") ?></a>
 
                     </div>
                     <div class="position-absolute"
@@ -155,7 +155,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                             <?= LangManager::translate("core.Theme.active") ?>
                         </div>
                     </div>
-                    <?php if ($localTheme->getVersion() !== $theme['version_name']): ?>
+                    <?php if ($localTheme->version() !== $theme['version_name']): ?>
                         <div class="position-absolute"
                              style="transform: rotate(-45deg); left: -4em; top: 5em; margin: 0; z-index: 50">
                             <div class="alert-light-warning color-warning text-center"
@@ -201,10 +201,10 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                     </p>
                                     <hr>
                                     <p class="small">
-                                        <?= LangManager::translate("core.Theme.author") ?><i><b><a
-                                                    href=""
-                                                    target="_blank"><?= $theme['author_pseudo'] ?>
-                                        </i></a></b></i><br>
+                                        <?= LangManager::translate("core.Theme.author") ?><a
+                                            href=""
+                                            target="_blank"><?= $theme['author_pseudo'] ?>
+                                        </a><br>
                                         <?= LangManager::translate("core.Theme.downloads") ?>
                                         <i><b><?= $theme['downloads'] ?></b></i>
                                     </p>
@@ -240,20 +240,20 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
         <?php endif; ?>
     <?php endforeach; ?>
     <!--------------------------------------
-    -----Listage des thèmes local inactif---
+    -----Listage des thèmes locaux inactif---
     ---------------------------------------->
-    <?php foreach (ThemeController::getLocalThemes() as $theme): ?>
-        <?php if ($theme->getName() != $currentTheme->getName()): ?>
+    <?php foreach (ThemeManager::getInstance()->getLocalThemes() as $theme): ?>
+        <?php if ($theme->name() !== $currentTheme->name()): ?>
             <div class="col-12 col-lg-3 mb-4">
                 <div class="card">
                     <div class="d-flex justify-content-between align-items-center px-2 py-2">
-                        <b><?= $theme->getName() ?></b>
+                        <b><?= $theme->name() ?></b>
                         <button type="button" data-bs-toggle="modal"
-                                data-bs-target="#modal-<?= $theme->getName() ?>"
+                                data-bs-target="#modal-<?= $theme->name() ?>"
                                 class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.details") ?></button>
                     </div>
                     <div class="position-relative">
-                        <?php if ($theme->getName() !== "Sampler"): ?>
+                        <?php if ($theme->name() !== "Sampler"): ?>
                             <div class="alert-light-warning color-warning position-absolute bottom-0 w-100 text-center"
                                  style="opacity: .85">
                                 <?= LangManager::translate("core.Theme.notVerified") ?>
@@ -266,7 +266,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                     <div class="d-flex justify-content-center px-2 py-1">
                         <form action="" method="post">
                             <?php (new SecurityManager())->insertHiddenToken() ?>
-                            <input hidden type="text" name="theme" value="<?= $theme->getName() ?>">
+                            <input hidden type="text" name="theme" value="<?= $theme->name() ?>">
                             <button type="submit"
                                     class="btn btn-sm btn-success"><?= LangManager::translate("core.Theme.activate") ?></button>
                         </form>
@@ -274,18 +274,18 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                 </div>
             </div>
             <!--Details modal -->
-            <div class="modal fade text-left w-100" id="modal-<?= $theme->getName() ?>"
+            <div class="modal fade text-left w-100" id="modal-<?= $theme->name() ?>"
                  tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl"
                      role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title"><?= $theme->getName() ?></h4>
+                            <h4 class="modal-title"><?= $theme->name() ?></h4>
                             <div class="d-flex justify-content-end px-2 py-1">
                                 <form action="" method="post">
                                     <?php (new SecurityManager())->insertHiddenToken() ?>
                                     <input hidden type="text" name="theme"
-                                           value="<?= $theme->getName() ?>">
+                                           value="<?= $theme->name() ?>">
                                     <button type="submit"
                                             class="btn btn-sm btn-success"><?= LangManager::translate("core.Theme.activate") ?></button>
                                 </form>
@@ -302,23 +302,23 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                     <p class="">
                                         <b><?= LangManager::translate("core.Theme.description") ?></b>
                                     </p>
-                                    <?php if ($theme->getName() !== "Sampler"): ?>
+                                    <?php if ($theme->name() !== "Sampler"): ?>
                                         <p><?= LangManager::translate("core.Theme.descriptionManualInstall") ?></p>
                                     <?php else: ?>
                                         <p><?= LangManager::translate("core.Theme.descriptionIsSampler") ?></p>
                                     <?php endif; ?>
                                     <hr>
                                     <p class="small">
-                                        <?= LangManager::translate("core.Theme.author") ?><i><b><a
-                                                    href=""
-                                                    target="_blank"><?= $theme->getAuthor() ?? $theme->getAuthorsFormatted() ?>
-                                        </i></a></b></i>
+                                        <?= LangManager::translate("core.Theme.author") ?><a
+                                            href=""
+                                            target="_blank"><?= $theme->author() ?? $theme->authors() ?>
+                                        </a>
                                     </p>
                                     <p class="small">
                                         <?= LangManager::translate("core.Theme.themeVersion") ?>
-                                        <i><b><?= $theme->getVersion() ?></b></i><br>
+                                        <i><b><?= $theme->version() ?></b></i><br>
                                         <?= LangManager::translate("core.Theme.CMWVersion") ?>
-                                        <i><b><?= $theme->getCmwVersion() ?></b></i>
+                                        <i><b><?= $theme->cmwVersion() ?></b></i>
                                     </p>
                                 </div>
                             </div>
@@ -336,8 +336,8 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
     -----Listage des thèmes API installé et inactif---
     -------------------------------------------------->
     <?php foreach ($themesList as $theme): ?>
-        <?php if (ThemeController::isThemeInstalled($theme['name']) && $theme['name'] !== $currentTheme->getName()): ?>
-            <?php $localTheme = ThemeController::getTheme($theme['name']); ?>
+        <?php if ($theme['name'] !== $currentTheme->name() && ThemeManager::getInstance()->isThemeInstalled($theme['name'])): ?>
+            <?php $localTheme = ThemeManager::getInstance()->getTheme($theme['name']); ?>
             <div class="col-12 col-lg-3 mb-4">
                 <div class="card" style="overflow: hidden;">
                     <div class="d-flex justify-content-between align-items-center px-2 py-2">
@@ -351,9 +351,9 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                              alt="Icon <?= $theme['name'] ?>">
                     </div>
                     <div class="d-flex justify-content-around px-2 py-1">
-                        <?php if ($localTheme->getVersion() !== $theme['version_name']): ?>
+                        <?php if ($localTheme->version() !== $theme['version_name']): ?>
                             <a class="btn btn-sm btn-warning" type="button"
-                               href="update/<?= $theme['id'] ?>/<?= $localTheme->getVersion() ?>/<?= $localTheme->getName() ?>">
+                               href="update/<?= $theme['id'] ?>/<?= $localTheme->version() ?>/<?= $localTheme->name() ?>">
                                 <?= LangManager::translate("core.Package.update") ?>
                             </a>
                         <?php endif; ?>
@@ -365,7 +365,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                             </button>
                         </form>
                     </div>
-                    <?php if ($localTheme->getVersion() !== $theme['version_name']): ?>
+                    <?php if ($localTheme->version() !== $theme['version_name']): ?>
                         <div class="position-absolute"
                              style="transform: rotate(-45deg); left: -4em; top: 5em; margin: 0; z-index: 50">
                             <div class="alert-light-warning color-warning text-center "
@@ -425,9 +425,9 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                     </p>
                                     <p class="small">
                                         <?= LangManager::translate("core.Theme.themeVersion") ?>
-                                        <i><b><?= $localTheme->getVersion() ?></b></i><br>
+                                        <i><b><?= $localTheme->version() ?></b></i><br>
                                     </p>
-                                    <?php if ($localTheme->getVersion() !== $theme['version_name']): ?>
+                                    <?php if ($localTheme->version() !== $theme['version_name']): ?>
                                         <p class="small">
                                             <?= LangManager::translate('core.Package.versionDistant') ?>
                                             :
@@ -439,7 +439,6 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                     <?php endif; ?>
                                     <?= LangManager::translate("core.Theme.CMWVersion") ?>
                                     <i><b><?= $theme['version_cmw'] ?></b></i>
-                                    </p>
                                     <div class="d-flex gap-3 align-items-center">
                                         <?php if ($theme['demo']): ?>
                                             <a class="btn btn-sm btn-primary"
@@ -499,5 +498,4 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
             </div>
         </div>
     </div>
-</div>
 </div>

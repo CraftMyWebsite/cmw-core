@@ -6,7 +6,6 @@ use CMW\Controller\Core\PackageController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 
-/* @var \CMW\Entity\Core\PackageEntity[] $installedPackages */
 /* @var PackageController[] $packagesList */
 
 $title = LangManager::translate("core.Package.title");

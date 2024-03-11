@@ -9,6 +9,7 @@ use CMW\Controller\Users\UsersController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\RouterException;
+use CMW\Manager\Theme\ThemeManager;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -260,7 +261,7 @@ class View
         if ($this->customPath !== null) {
             return $this->customPath;
         }
-        $theme = ThemeController::getCurrentTheme()->getName();
+        $theme = ThemeManager::getInstance()->getCurrentTheme()->name();
         return ($this->isAdminFile)
             ? "App/Package/$this->package/Views/$this->viewFile.admin.view.php"
             : "Public/Themes/$theme/Views/$this->package/$this->viewFile.view.php";
@@ -274,7 +275,7 @@ class View
         if ($this->customTemplate !== null) {
             return $this->customTemplate;
         }
-        $theme = ThemeController::getCurrentTheme()->getName();
+        $theme = ThemeManager::getInstance()->getCurrentTheme()->name();
         return ($this->isAdminFile)
             ? EnvManager::getInstance()->getValue("PATH_ADMIN_VIEW") . "template.php"
             : "Public/Themes/$theme/Views/template.php";

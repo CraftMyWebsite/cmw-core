@@ -5,7 +5,6 @@ namespace CMW\Manager\Loader;
 use CMW\Controller\Core\CoreController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Utils\Directory;
-use CMW\Utils\Log;
 use CMW\Utils\Website;
 
 class AutoLoad
@@ -32,7 +31,7 @@ class AutoLoad
 
             $classPart = explode("\\", $class);
 
-            if(in_array($class, get_declared_classes())) {
+            if (in_array($class, get_declared_classes())) {
                 return false;
             }
 
@@ -95,6 +94,7 @@ class AutoLoad
                 "Controller", "Model", "Entity", "Implementation", "Interface", "Event", "Exception", "Type", "PackageInfo", "Package" => "App/Package/",
                 "Manager" => "App/Manager/",
                 "Utils" => "App/Utils/",
+                "Theme" => "Public/Themes/",
                 default => "",
             };
         };
@@ -110,7 +110,7 @@ class AutoLoad
                 "Exception" => "Exception/",
                 "Type" => "Type/",
                 "PackageInfo", "Manager" => "",
-                "Package" => "/"
+                "Package", "Theme" => "/",
             };
         };
 

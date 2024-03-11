@@ -3,7 +3,6 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
-use CMW\Entity\Core\PackageEntity;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Download\DownloadManager;

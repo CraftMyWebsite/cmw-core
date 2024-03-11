@@ -1,12 +1,8 @@
 <?php
 
-use CMW\Controller\Core\ThemeController;
-use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
-use CMW\Manager\Security\SecurityManager;
+use CMW\Manager\Theme\ThemeManager;
 
-/* @var $currentTheme \CMW\Entity\Core\ThemeEntity */
-/* @var $installedThemes \CMW\Entity\Core\ThemeEntity[] */
 /* @var $themesList */
 
 $title = LangManager::translate("core.Theme.config.title");
@@ -22,7 +18,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
     -----Listage des thèmes API non nstallé---
     ------------------------------------------>
     <?php foreach ($themesList as $theme): ?>
-        <?php if (!ThemeController::isThemeInstalled($theme['name'])): ?>
+        <?php if (!ThemeManager::getInstance()->isThemeInstalled($theme['name'])): ?>
             <div class="col-12 col-lg-3 mb-4">
                 <div class="card">
                     <div class="d-flex justify-content-between align-items-center px-2 py-2">
@@ -36,7 +32,8 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                              alt="Icon <?= $theme['name'] ?>">
                     </div>
                     <div class="d-flex justify-content-center px-2 py-1">
-                        <button onclick="this.disabled = true; window.location = 'install/<?= $theme['id'] ?>'" class="btn btn-sm btn-primary"><i
+                        <button onclick="this.disabled = true; window.location = 'install/<?= $theme['id'] ?>'"
+                                class="btn btn-sm btn-primary"><i
                                 class="fa-solid fa-download"></i> <?= LangManager::translate("core.Theme.install") ?>
                         </button>
                     </div>
@@ -52,7 +49,7 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                             <h4 class="modal-title"><?= $theme['name'] ?></h4>
                             <div class="d-flex justify-content-end mt-auto gap-3">
                                 <button onclick="this.disabled = true; window.location = 'install/<?= $theme['id'] ?>'"
-                                   class="btn btn-sm btn-primary"><i
+                                        class="btn btn-sm btn-primary"><i
                                         class="fa-solid fa-download"></i> <?= LangManager::translate("core.Theme.install") ?>
                                 </button>
                             </div>
@@ -70,12 +67,12 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                                     </p>
                                     <hr>
                                     <p class="small">
-                                        <?= LangManager::translate("core.Theme.author") ?><i><b><a
-                                                    href=""
-                                                    target="_blank"><?= $theme['author_pseudo'] ?>
-                                        </i></a></b></i><br>
-                                        <?= LangManager::translate("core.Theme.downloads") ?>
-                                        <i><b><?= $theme['downloads'] ?></b></i>
+                                        <?= LangManager::translate("core.Theme.author") ?><i><a
+                                                href=""
+                                                target="_blank"><?= $theme['author_pseudo'] ?>
+                                            </a><br>
+                                            <?= LangManager::translate("core.Theme.downloads") ?>
+                                            <i><b><?= $theme['downloads'] ?></b></i>
                                     </p>
                                     <p class="small">
                                         <?= LangManager::translate("core.Theme.themeVersion") ?>
@@ -106,6 +103,6 @@ $description = LangManager::translate("core.Theme.config.description"); ?>
                     </div>
                 </div>
             </div>
-            <?php endif; ?>
+        <?php endif; ?>
     <?php endforeach; ?>
 </section>

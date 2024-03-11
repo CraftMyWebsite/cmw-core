@@ -16,13 +16,13 @@ use CMW\Manager\Lang\LangManager;use CMW\Model\Core\ThemeModel;use CMW\Manager\S
     <div class="tab-pane fade show active py-2" id="setting1" role="tabpanel" aria-labelledby="setting1-tab">
         <div class="form-group">
             <label for="buttonColor">Couleur des boutons :</label>
-            <input type="color" id="buttonColor" name="buttonColor" value="<?= ThemeModel::fetchConfigValue('buttonColor') ?>">
+            <input type="color" id="buttonColor" name="buttonColor" value="<?= ThemeModel::getInstance()->fetchConfigValue('buttonColor') ?>">
         </div>
         <hr>
         <div class="form-group">
             <h4 for="backgroundColor">Image de fond :</h4>
-            <input type="file" id="background" name="background" value="<?= ThemeModel::fetchConfigValue('background') ?>">
-            <img width="100%" src='<?= ThemeModel::fetchImageLink("background") ?>'>
+            <input type="file" id="background" name="background" value="<?= ThemeModel::getInstance()->fetchConfigValue('background') ?>">
+            <img width="100%" src='<?= ThemeModel::getInstance()->fetchImageLink("background") ?>'>
         </div>
     </div>
 </div>

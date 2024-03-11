@@ -27,7 +27,7 @@ Website::setDescription("Double authentification");
                         <label for="name">Code d'authentification</label>
                     </div>
                     <div class="d-grid">
-                        <button style="background: <?= ThemeModel::fetchConfigValue('buttonColor') ?>"
+                        <button style="background: <?= ThemeModel::getInstance()->fetchConfigValue('buttonColor') ?>"
                                 class="btn btn-xl" type="submit">
                             Connexion
                         </button>
