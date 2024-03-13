@@ -43,8 +43,19 @@ class ConditionController extends AbstractController
         [$conditionId, $conditionContent, $conditionState] = Utils::filterInput("conditionId",
             "conditionContent", "conditionState");
 
+         $user = UsersModel::getCurrentUser();
+
+        if (is_null($user)) {
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.toaster.internalError"));
+
+            Redirect::redirectPreviousRoute();
+        }
+
+        $userId = UsersModel::getCurrentUser()?->getId();
+
         ConditionModel::getInstance()->updateCondition($conditionId, $conditionContent,
-            $conditionState === NULL ? 0 : 1, $_SESSION['cmwUserId']);
+            $conditionState === NULL ? 0 : 1, $userId);
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
@@ -59,6 +70,10 @@ class ConditionController extends AbstractController
     {
         $cgv = ConditionModel::getInstance()->getCGV();
 
+        if (!$cgv?->isState()){
+            Redirect::redirectToHome();
+        }
+
         //Include the Public view file ("Public/Themes/$themePath/Views/Core/cgv.view.php")
         $view = new View('Core', 'cgv');
         $view->addVariableList(["cgv" => $cgv]);
@@ -70,6 +85,10 @@ class ConditionController extends AbstractController
     private function frontCGVPublic(): void
     {
         $cgu = ConditionModel::getInstance()->getCGU();
+
+        if (!$cgu?->isState()){
+            Redirect::redirectToHome();
+        }
 
         //Include the Public view file ("Public/Themes/$themePath/Views/Core/cgu.view.php")
         $view = new View('Core', 'cgu');
