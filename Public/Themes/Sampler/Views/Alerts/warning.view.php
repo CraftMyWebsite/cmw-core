@@ -10,15 +10,15 @@ use CMW\Manager\Flash\Alert;
 <script>
     iziToast.show(
         {
-            titleSize: '14',
-            messageSize: '12',
-            icon: 'fa-solid fa-check',
+            titleSize: '16',
+            messageSize: '14',
+            icon: 'fa-solid fa-warning',
             title  : "<?= $alert->getTitle() ?>",
             message: "<?= $alert->getMessage() ?>",
-            color: "#20b23a",
+            color: "#faaa38",
             iconColor: '#ffffff',
             titleColor: '#ffffff',
-            messageColor: '#ffffff',
+            messageColor: '#fff',
             balloon: false,
             close: true,
             pauseOnHover: true,

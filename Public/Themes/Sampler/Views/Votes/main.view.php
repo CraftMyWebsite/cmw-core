@@ -42,7 +42,7 @@ Website::setDescription("Votez dès maintenant pour le site " . Website::getWebs
                             <h3 class="text-center"><?= $site->getTitle() ?></h3>
                             <span>1 à 3 VotePoints</span>
                             <span><?= $site->getTimeFormatted() ?></span>
-                            <a onclick="sendVote('<?= $site->getSiteId() ?>')" class="p-2">Voter</a>
+                            <button onclick="sendVote('<?= $site->getSiteId() ?>', this)" class="p-2">Voter</button>
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
