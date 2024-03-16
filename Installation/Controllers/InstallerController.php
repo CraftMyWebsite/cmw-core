@@ -16,6 +16,7 @@ use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Router\LinkStorage;
 use CMW\Manager\Security\EncryptManager;
+use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Installer\InstallerModel;
@@ -289,8 +290,7 @@ class InstallerController extends AbstractController
         InstallerModel::initDatabase($host, $db, $username, $password, $port);
 
         // Install the Default Theme settings
-        (new ThemeController())->installThemeSettings(ThemeController::getCurrentTheme()->getName());
-
+        (new ThemeManager())->installThemeSettings(ThemeManager::getInstance()->getCurrentTheme()->name());
         //Init Default routes
         (new LinkStorage())->storeDefaultRoutes();
 

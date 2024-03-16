@@ -7,6 +7,7 @@ use CMW\Controller\Core\PackageController;
 use CMW\Controller\Core\ThemeController;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Users\UsersModel;
@@ -61,10 +62,10 @@ class HealthReport {
 
         #Themes
         $themes = "";
-        foreach (ThemeController::getInstalledThemes() as $theme) {
-            $isActiveTheme = ThemeController::getCurrentTheme()->getName() === $theme->getName();
+        foreach (ThemeManager::getInstance()->getInstalledThemes() as $theme) {
+            $isActiveTheme = ThemeManager::getInstance()->getCurrentTheme()->name() === $theme->name();
 
-            $themes .= "        - " . $theme->getName() . " @" . $theme->getVersion();
+            $themes .= "        - " . $theme->name() . " @" . $theme->version();
 
             $themes .= $isActiveTheme ? " [ACTIVE]" : '';
 

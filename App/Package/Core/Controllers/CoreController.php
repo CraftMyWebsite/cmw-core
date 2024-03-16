@@ -17,6 +17,7 @@ use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Router\RouterException;
+use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
@@ -168,7 +169,7 @@ class CoreController extends AbstractController
     #[Link("/:errorCode", Link::GET, ["errorCode" => ".*?"], "geterror")]
     private function errorView(Request $request, int $errorCode = 403): void
     {
-        $theme = ThemeController::getCurrentTheme()->getName();
+        $theme = ThemeManager::getInstance()->getCurrentTheme()->name();
 
         $errorToCall = (string)$errorCode;
         $errorFolder = "Public/Themes/$theme/Views/Errors";
