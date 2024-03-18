@@ -2,7 +2,6 @@
 
 namespace CMW\Controller\Installer;
 
-use CMW\Controller\Core\ThemeController;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Env\EnvManager;
@@ -358,7 +357,7 @@ class InstallerController extends AbstractController
             }
 
             if ($type === 'Theme') {
-                (new ThemeController())->installThemeSettings($resource['name']);
+                (new ThemeManager())->installThemeSettings($resource['name']);
                 CoreModel::updateOption("theme", $resource['name']);
             }
         }
@@ -412,7 +411,7 @@ class InstallerController extends AbstractController
             return;
         }
 
-        (new ThemeController())->installThemeSettings($theme['name']);
+        (new ThemeManager())->installThemeSettings($theme['name']);
         CoreModel::updateOption("theme", $theme['name']);
 
         EnvManager::getInstance()->editValue("installStep", 6);
