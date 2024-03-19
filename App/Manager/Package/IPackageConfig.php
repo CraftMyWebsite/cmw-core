@@ -18,4 +18,10 @@ interface IPackageConfig
      * @return \CMW\Manager\Package\PackageMenuType[]|null
      */
     public function menus(): ?array;
+
+    /**
+     * @return string[]
+     * @desc List all the required packages.
+     */
+    public function requiredPackages(): array;
 }
