@@ -4,13 +4,14 @@ use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Manager\Theme\ThemeManager;
+use CMW\Utils\Website;
 
 /* @var $currentTheme \CMW\Manager\Theme\IThemeConfig */
 /* @var $installedThemes \CMW\Manager\Theme\IThemeConfig[] */
 /* @var $themesList */
 
-$title = LangManager::translate("core.Theme.config.title");
-$description = LangManager::translate("core.Theme.config.description"); ?>
+Website::setTitle(LangManager::translate("core.Theme.config.title"));
+Website::setDescription(LangManager::translate("core.Theme.config.description")); ?>
 
 <div class="d-flex flex-wrap justify-content-between">
     <h3><i class="fa-solid fa-feather"></i> <span

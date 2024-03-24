@@ -77,8 +77,8 @@ class ThemeController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
-    #[NoReturn] #[Link("/market/regenerate", Link::POST, [], "/cmw-admin/theme")]
-    private function adminThemeConfigurationRegeneratePost(): void
+    #[NoReturn] #[Link("/market/regenerate", Link::GET, [], "/cmw-admin/theme")]
+    private function adminThemeConfigurationRegenerate(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
 
