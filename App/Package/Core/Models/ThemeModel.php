@@ -82,6 +82,37 @@ class ThemeModel extends AbstractModel
         return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Public/Uploads/' . $theme . '/Img/' . $value;
     }
 
+    /**
+     * @param string $configName
+     * @param string|null $theme
+     * <p>
+     * If empty, we take the current active Theme
+     * </p>
+     * @return string|null
+     * @desc Fetch config data
+     */
+    public function fetchVideoLink(string $configName, string $theme = null): ?string
+    {
+        if ($theme === null) {
+            $theme = ThemeManager::getInstance()->getCurrentTheme()->name();
+        }
+
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config 
+                                    WHERE theme_config_name = :config AND theme_config_theme = :theme');
+
+        $req->execute(["config" => $configName, "theme" => $theme]);
+
+        $value = $req->fetch()["theme_config_value"] ?? "";
+        $localValue = ThemeManager::getInstance()->getCurrentThemeConfigSetting($configName);
+
+        if ($value === $localValue) {
+            return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Public/Themes/' . $theme . '/' . $localValue;
+        }
+
+        return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Public/Uploads/' . $theme . '/Videos/' . $value;
+    }
+
     public function fetchThemeConfigs(string $theme): array
     {
         $db = DatabaseManager::getInstance();
