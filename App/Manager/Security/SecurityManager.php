@@ -31,10 +31,7 @@ class SecurityManager extends HoneyInput
 
     public function __construct($excludeUrl = null, &$post = null, &$session = null, &$server = null)
     {
-        $currentPath = $_SERVER['REQUEST_URI'];
-        $currentPathEncoded = base64_encode($currentPath);
-
-        $this->sessionTokenLabel = 'CSRF_TOKEN_SESS_ID_' . UsersModel::getCurrentUser()?->getId() . "_" . $currentPathEncoded;
+        $this->sessionTokenLabel = 'CSRF_TOKEN_SESS_ID_' . UsersModel::getCurrentUser()?->getId();
 
         if (!is_null($excludeUrl)) {
             $this->excludeUrl = $excludeUrl;
