@@ -83,13 +83,13 @@ class PageEntity
      */
     public function getContentPreview(int $length = 128, bool $useDoted = true): string
     {
-        $desc = trim(substr($this->pageContent, 0, $length));
+        $desc = trim(substr(preg_split('#\r?\n#', $this->pageContent)[0], 0, $length));
 
-        if ($useDoted){
+        if ($useDoted) {
             $desc .= "...";
         }
 
-        return $desc;
+        return strip_tags($desc);
     }
 
     /**
