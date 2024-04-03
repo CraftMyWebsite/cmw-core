@@ -62,7 +62,7 @@ use CMW\Manager\Lang\LangManager;
 
     <!-- Bundle -->
 
-    <?php foreach (PublicAPI::getData("resources/getBundles&lang=" . EnvManager::getInstance()->getValue("locale")) as $bundle): ?>
+    <?php foreach (PublicAPI::getData("market/resources/bundles") as $bundle): ?>
         <li class="lg:w-1/3 lg:px-2 mb-4 h-fit">
             <div class="font-bold text-lg bg-gray-700 rounded-t-2xl p-1">
                 <div class="flex flex-wrap">

@@ -40,7 +40,7 @@ use CMW\Manager\Lang\LangManager;
 
     <ul id="mySearch" class="lg:flex flex-wrap">
 
-        <?php foreach (PublicAPI::getData("resources/getResources&resource_type=0&Lang=" . EnvManager::getInstance()->getValue("locale")) as $theme): ?>
+        <?php foreach (PublicAPI::getData("market/resources/0") as $theme): ?>
 
             <li class="lg:w-1/2 lg:px-2 mb-4">
                 <input class="hidden" id="theme_<?= $theme['id'] ?>" type="radio" name="theme"

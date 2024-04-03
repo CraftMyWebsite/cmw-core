@@ -25,7 +25,7 @@ class UpdatesManager
      */
     public static function getCmwLatest(): mixed
     {
-        return PublicAPI::getData('/cms/getLatest', false, false);
+        return PublicAPI::getData('cms/latest');
     }
 
 

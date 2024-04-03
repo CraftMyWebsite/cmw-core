@@ -159,7 +159,7 @@ class ThemeManager extends AbstractManager
      */
     public function getMarketThemes(): array
     {
-        return PublicAPI::getData("resources/getResources&resource_type=0");
+        return PublicAPI::getData("market/resources/filtered/0");
     }
 
 }

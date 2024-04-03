@@ -20,7 +20,7 @@ class UpdatesController extends AbstractController
      * @desc Return the list of public changelog for previous version
      */
     public static function getPrevious(string $latestVersionName): array {
-        return PublicAPI::getData("cms/getPrevious&version=" . $latestVersionName);
+        return PublicAPI::getData("cms/previous/$latestVersionName");
     }
 
     /**

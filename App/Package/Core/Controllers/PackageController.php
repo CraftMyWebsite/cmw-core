@@ -101,7 +101,7 @@ class PackageController extends AbstractController
      */
     public static function getMarketPackages(): array
     {
-        return PublicAPI::getData("resources/getResources&resource_type=1");
+        return PublicAPI::getData("market/resources/filtered/1");
     }
 
     /**
@@ -161,7 +161,7 @@ class PackageController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.configuration");
 
-        $package = PublicAPI::getData("resources/installResource&id=$id");
+        $package = PublicAPI::putData("market/resources/install/$id");
 
         if (empty($package)) {
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
@@ -207,7 +207,7 @@ class PackageController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.configuration");
 
-        $updates = PublicAPI::getData("resources/getResourceUpdates&id=$id&actualVersion=$actualVersion");
+        $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion");
 
         if (isset($updates['error'])) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), $updates['error']['code']);

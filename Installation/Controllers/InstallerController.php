@@ -207,7 +207,7 @@ class InstallerController extends AbstractController
             'remote_address' => $remoteAddress
         ];
 
-        $apiReturn = PublicAPI::postData("websites/register", $data, false);
+        $apiReturn = PublicAPI::postData("websites/register", $data);
 
         if (array_key_exists('uuid', $apiReturn)) {
             EnvManager::getInstance()->setOrEditValue('CMW_KEY', $apiReturn['uuid']);
@@ -345,7 +345,7 @@ class InstallerController extends AbstractController
 
         $bundleId = $_POST['bundleId'];
 
-        $resources = PublicAPI::getData("resources/installBundle&id=$bundleId");
+        $resources = PublicAPI::putData("market/resources/bundle/install/$bundleId");
 
         foreach ($resources as $resource) {
             $type = $resource['type'] === 1 ? 'package' : 'Theme';
@@ -375,7 +375,7 @@ class InstallerController extends AbstractController
 
         foreach ($_POST['packages'] as $id) {
 
-            $package = PublicAPI::getData("resources/installResource&id=$id");
+            $package = PublicAPI::putData("market/resources/install/$id");
 
             $type = $package['type'] === 1 ? 'package' : 'Theme';
 
@@ -400,8 +400,7 @@ class InstallerController extends AbstractController
 
         $id = filter_input(INPUT_POST, "theme");
 
-        $theme = PublicAPI::getData("resources/installResource&id=$id");
-
+        $theme = PublicAPI::putData("market/resources/install/$id");
 
         if (!DownloadManager::installPackageWithLink($theme['file'], 'Theme', $theme['name'])) {
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),

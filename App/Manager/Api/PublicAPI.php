@@ -13,35 +13,45 @@ class PublicAPI
      */
     public static function getUrl(): string
     {
-        return EnvManager::getInstance()->getValue("APIURL");
+        return EnvManager::getInstance()->getValue("APIURL") . "/v" . self::$currentApiVersion . "/";
     }
 
-    private static function getWebsiteKey(): string
+    private static int $currentApiVersion = 1;
+
+    /**
+     * @return string|null
+     * @desc Can be null if installation not started.
+     */
+    private static function getWebsiteKeyEncoded(): ?string
     {
-        return EnvManager::getInstance()->getValue("CMW_KEY");
+        $key = EnvManager::getInstance()->getValue("CMW_KEY");
+        if (!is_null($key)) {
+            return base64_encode($key);
+        }
+        return null;
     }
 
     /**
      * @param string $url
      * @param array $data
-     * @param bool $useWebsiteKey
      * @return array
      * @desc Use Stream context to post data
      */
-    public static function postData(string $url, array $data = [], bool $useWebsiteKey = true): mixed
+    public static function postData(string $url, array $data = []): mixed
     {
-        $url = self::getUrl()  . '/' . $url;
+        $url = self::getUrl() . $url;
 
-        $data['website_key'] = $useWebsiteKey ? base64_encode(self::getWebsiteKey()) : [];
+        $url .= '&lang=' . EnvManager::getInstance()->getValue('LOCALE');
+        $url .= '&website_key=' . self::getWebsiteKeyEncoded();
 
-        $options = array(
-            'http' => array(
+        $options = [
+            'http' => [
                 'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-                'method' =>  "POST",
+                'method' => "POST",
                 'ignore_errors' => true,
-                'content' => http_build_query($data)
-            )
-        );
+                'content' => http_build_query($data),
+            ],
+        ];
 
         $context = stream_context_create($options);
 
@@ -54,29 +64,50 @@ class PublicAPI
 
     /**
      * @param string $url
-     * @param bool $useWebsiteKey
-     * @param bool $useLang
      * @return mixed
      * @desc Use Stream context to get data.
      */
-    public static function getData(string $url, bool $useWebsiteKey = true, bool $useLang = true): mixed
+    public static function getData(string $url): mixed
     {
-        $url = self::getUrl()  . '/' . $url;
+        $url = self::getUrl() . $url;
 
-        if ($useWebsiteKey){
-            $url .= '&website_key=' . base64_encode(self::getWebsiteKey());
-        }
+        $url .= '&website_key=' . self::getWebsiteKeyEncoded();
+        $url .= '&lang=' . EnvManager::getInstance()->getValue('LOCALE');
 
-        if ($useLang){
-            $url .='&Lang=' . EnvManager::getInstance()->getValue('LOCALE');
-        }
-
-        $options = array(
-            'http' => array(
-                'method' =>  "GET",
+        $options = [
+            'http' => [
+                'method' => "GET",
                 'ignore_errors' => true,
-            )
-        );
+            ],
+        ];
+
+        $context = stream_context_create($options);
+
+        try {
+            return json_decode(file_get_contents($url, false, $context), JSON_THROW_ON_ERROR, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException) {
+            return [];
+        }
+    }
+
+    /**
+     * @param string $url
+     * @return mixed
+     * @desc Use Stream context to put data.
+     */
+    public static function putData(string $url): mixed
+    {
+        $url = self::getUrl() . $url;
+
+        $url .= '&website_key=' . self::getWebsiteKeyEncoded();
+        $url .= '&lang=' . EnvManager::getInstance()->getValue('LOCALE');
+
+        $options = [
+            'http' => [
+                'method' => "PUT",
+                'ignore_errors' => true,
+            ],
+        ];
 
         $context = stream_context_create($options);
 

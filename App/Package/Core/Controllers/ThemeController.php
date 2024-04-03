@@ -100,7 +100,7 @@ class ThemeController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
 
-        $theme = PublicAPI::getData("resources/installResource&id=$id");
+        $theme = PublicAPI::putData("market/resources/install/$id");
 
         if (empty($theme)) {
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
@@ -195,7 +195,7 @@ class ThemeController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.configuration");
 
-        $updates = PublicAPI::getData("resources/getResourceUpdates&id=$id&actualVersion=$actualVersion");
+        $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion");
 
         Log::debug($updates);
 
