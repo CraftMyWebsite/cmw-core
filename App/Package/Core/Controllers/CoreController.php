@@ -4,7 +4,6 @@ namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Interface\Core\IDashboardElements;
-use CMW\Interface\Core\ISideBarElements;
 use CMW\Interface\Core\ITopBarElements;
 use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Env\EnvManager;
