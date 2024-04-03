@@ -68,15 +68,8 @@ Website::setDescription(LangManager::translate("core.Theme.config.description"))
                             <div class="d-flex justify-content-end mt-auto gap-3">
                                 <a href="manage"
                                    class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.configure") ?></a>
-                                <form action="market/regenerate" method="post">
-                                    <?php (new SecurityManager())->insertHiddenToken() ?>
-                                    <div class="button">
-                                        <button type="submit"
-                                                class="btn btn-warning btn-sm float-left">
-                                            <?= LangManager::translate("core.Theme.reset") ?>
-                                        </button>
-                                    </div>
-                                </form>
+                                <a href="market/regenerate"
+                                   class="btn btn-sm btn-warning"><?= LangManager::translate("core.Theme.reset") ?></a>
                             </div>
                         </div>
                         <div class="modal-body">
@@ -180,13 +173,8 @@ Website::setDescription(LangManager::translate("core.Theme.config.description"))
                                    class="btn btn-sm btn-primary"><?= LangManager::translate("core.Theme.configure") ?></a>
                                 <a href="install/<?= $theme['id'] ?>"
                                    class="btn btn-sm btn-danger"><?= LangManager::translate("core.Theme.reinstall") ?></a>
-                                <form action="market/regenerate" method="post">
-                                    <?php (new SecurityManager())->insertHiddenToken() ?>
-                                    <div class="button">
-                                        <button type="submit"
-                                                class="btn btn-warning btn-sm float-left"><?= LangManager::translate("core.Theme.reset") ?></button>
-                                    </div>
-                                </form>
+                                <a href="market/regenerate"
+                                   class="btn btn-sm btn-warning"><?= LangManager::translate("core.Theme.reset") ?></a>
                             </div>
                         </div>
                         <div class="modal-body">
