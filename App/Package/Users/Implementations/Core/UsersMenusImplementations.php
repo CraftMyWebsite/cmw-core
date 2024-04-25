@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Implementation\Users;
+namespace CMW\Implementation\Users\Core;
 
 use CMW\Interface\Core\IMenus;
 use CMW\Manager\Lang\LangManager;

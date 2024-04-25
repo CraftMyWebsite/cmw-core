@@ -48,24 +48,33 @@ class Loader
                 continue;
             }
 
-            $implementationsFiles = array_diff(scandir($implementationsFolder), ['..', '.']);
+            $implementationsFolders = array_diff(scandir($implementationsFolder), ['..', '.']);
 
-            foreach ($implementationsFiles as $implementationsFile) {
+            foreach ($implementationsFolders as $folder) {
+                $implementationPackageFolder = $implementationsFolder . '/' . $folder;
+                $implementationsFiles = array_diff(scandir($implementationPackageFolder), ['..', '.']);
 
-                $implementationsFilePath = EnvManager::getInstance()->getValue("dir") . "App/Package/" .
-                    $package->name() . "/Implementations/" . $implementationsFile;
+                foreach ($implementationsFiles as $implementationsFile) {
 
-                $className = pathinfo($implementationsFilePath, PATHINFO_FILENAME);
+                    $implementationsFilePath = EnvManager::getInstance()->getValue("dir") . "App/Package/" .
+                        $package->name() . "/Implementations/" . $implementationsFile;
 
-                $namespace = 'CMW\\Implementation\\' . $package->name() . '\\' . $className;
+                    $className = pathinfo($implementationsFilePath, PATHINFO_FILENAME);
 
-                $classInstance = new $namespace();
+                    $namespace = 'CMW\\Implementation\\' . $package->name() . '\\' . $folder . '\\' . $className;
 
-                if (!is_subclass_of($classInstance, $interface)) {
-                    continue;
+                    if (!class_exists($namespace)) {
+                        continue;
+                    }
+
+                    $classInstance = new $namespace();
+
+                    if (!is_subclass_of($classInstance, $interface)) {
+                        continue;
+                    }
+
+                    $toReturn[] = $classInstance;
                 }
-
-                $toReturn[] = $classInstance;
             }
         }
 
@@ -167,6 +176,10 @@ class Loader
         $className = PackageManager::getClassNamespaceFromPath($file);
 
         if (is_null($className)) {
+            return;
+        }
+
+        if (!class_exists($className)) {
             return;
         }
 

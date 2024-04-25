@@ -28,7 +28,7 @@ class PackageManager
             $elementPosition++;
         }
 
-        if($elementPosition >= count($fileParts)) {
+        if ($elementPosition >= count($fileParts)) {
             return [null, -1];
         }
 
@@ -44,16 +44,6 @@ class PackageManager
             "Implementations" => "Implementation",
             "Interfaces" => "Interface",
             default => null
-        };
-    }
-
-    private static function getStartDirFromElementName(string $elementName): ?string
-    {
-        return match ($elementName) {
-            "Controller", "Model", "Entity", "Implementation", "Interface", "Event", "PackageInfo" => "App/Package/",
-            "Manager" => "App/Manager/",
-            "Utils" => "App/Utils/",
-            default => null,
         };
     }
 

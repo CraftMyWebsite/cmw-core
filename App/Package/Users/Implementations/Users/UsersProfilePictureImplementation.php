@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Implementation\Users;
+namespace CMW\Implementation\Users\Users;
 
 use CMW\Controller\Users\UsersSettingsController;
 use CMW\Entity\Users\UserPictureEntity;

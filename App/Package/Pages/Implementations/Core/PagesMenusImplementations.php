@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Implementation\Pages;
+namespace CMW\Implementation\Pages\Core;
 
 use CMW\Interface\Core\IMenus;
 use CMW\Model\Pages\PagesModel;

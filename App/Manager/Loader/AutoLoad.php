@@ -3,6 +3,7 @@
 namespace CMW\Manager\Loader;
 
 use CMW\Controller\Core\CoreController;
+use CMW\Controller\Core\PackageController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Utils\Directory;
 use CMW\Utils\Website;
@@ -116,6 +117,7 @@ class AutoLoad
 
         return match ($elementName) {
             "Utils" => self::callCoreClass($namespace, $startDir($elementName)),
+            "Implementation" => self::callPackageImplementations($namespace, $startDir($elementName), "/{$folderPackage($elementName)}"),
             default => self::callPackage($namespace, $startDir($elementName), "/{$folderPackage($elementName)}")
         };
     }
@@ -138,6 +140,40 @@ class AutoLoad
 
         $dir = EnvManager::getInstance()->getValue("DIR");
         $filePath = $dir . $startDir . ($packageName === "installer" ? "" : ucfirst($packageName)) . $folderPackage . $subFolderFile . $fileName;
+
+        $filePath = str_replace('\\', DIRECTORY_SEPARATOR, $filePath);
+
+        if (!is_file($filePath)) {
+            return false;
+        }
+
+        self::$findNameSpace[str_replace('/', '\\', $filePath)] = $namespace;
+
+        require_once $filePath;
+        return true;
+    }
+
+    private static function callPackageImplementations(array $classPart, string $startDir, string $folderPackage = ""): bool
+    {
+        if (empty($startDir) || count($classPart) !== 5) {
+            return false;
+        }
+
+        $namespace = implode('\\', $classPart);
+        $packageName = strtolower($classPart[2]);
+        $fileName = $classPart[count($classPart) - 1] . ".php";
+
+        if (!PackageController::isInstalled($classPart[3])) {
+            return false;
+        }
+
+        $subFolderFile = '';
+        if (count($classPart) > 4) {
+            $subFolderFile = implode('\\', array_slice($classPart, 3, -1)) . '\\';
+        }
+
+        $dir = EnvManager::getInstance()->getValue("DIR");
+        $filePath = $dir . $startDir . ucfirst($packageName) . $folderPackage . $subFolderFile . $fileName;
 
         $filePath = str_replace('\\', DIRECTORY_SEPARATOR, $filePath);
 
