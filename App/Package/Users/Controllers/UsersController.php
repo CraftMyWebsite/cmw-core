@@ -558,12 +558,13 @@ class UsersController extends AbstractController
     private function registerPost(): void
     {
         if (SecurityController::checkCaptcha()) {
-            $encryptedMail = EncryptManager::encrypt(mb_strtolower(FilterManager::filterInputStringPost("register_email")));
+            $mail = FilterManager::filterInputStringPost("register_email");
+            $encryptedMail = EncryptManager::encrypt(mb_strtolower($mail));
             if (UsersModel::getInstance()->checkPseudo(FilterManager::filterInputStringPost("register_pseudo")) > 0) {
                 Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),
                     LangManager::translate("users.toaster.used_pseudo"));
                 Redirect::redirect('register');
-            } else if (UsersModel::getInstance()->checkEmail($encryptedMail) > 0) {
+            } else if (!FilterManager::isEmail($mail) || UsersModel::getInstance()->checkEmail($encryptedMail) > 0) {
                 Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),
                     LangManager::translate("users.toaster.used_mail"));
                 Redirect::redirect('register');
