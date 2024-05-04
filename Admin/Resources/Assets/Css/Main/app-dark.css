@@ -180,7 +180,7 @@ body.theme-dark address {
 }
 
 body.theme-dark ol, body.theme-dark ul {
-    padding-left: 2rem
+    padding-left: 0rem
 }
 
 body.theme-dark dl, body.theme-dark ol, body.theme-dark ul {
@@ -8125,7 +8125,7 @@ body.theme-dark .sidebar-wrapper {
     position: fixed;
     top: 0;
     transition: left .5s ease-out;
-    width: 250px;
+    width: 220px;
     z-index: 10
 }
 
@@ -8228,16 +8228,22 @@ body.theme-dark .sidebar-wrapper .menu .submenu {
     display: none;
     list-style: none;
     overflow: hidden;
-    transition: max-height 2s cubic-bezier(0, .55, .45, 1)
+    transition: max-height 2s cubic-bezier(0, .55, .45, 1);
+    background: #282839;
+    margin-top: 5px;
+    border-radius: 10px;
 }
 
 body.theme-dark .sidebar-wrapper .menu .submenu.active {
     display: block;
+    background: #282839;
+    margin-top: 5px;
+    border-radius: 10px;
     max-height: 999px
 }
 
 body.theme-dark .sidebar-wrapper .menu .submenu .submenu-item.active {
-    position: relative
+    position: relative;
 }
 
 body.theme-dark .sidebar-wrapper .menu .submenu .submenu-item.active > a {
@@ -8872,7 +8878,7 @@ body.theme-dark .burger-btn {
 }
 
 body.theme-dark #main {
-    margin-left: 250px;
+    margin-left: 220px;
     min-height: 100vh;
     padding: 2rem
 }

@@ -291,7 +291,7 @@ address {
 }
 
 ol, ul {
-    padding-left: 2rem
+    padding-left: 0rem
 }
 
 dl, ol, ul {
@@ -20645,7 +20645,7 @@ textarea.form-control-lg {
     position: fixed;
     top: 0;
     transition: left .5s ease-out;
-    width: 250px;
+    width: 220px;
     z-index: 10
 }
 
@@ -20748,16 +20748,22 @@ textarea.form-control-lg {
     display: none;
     list-style: none;
     overflow: hidden;
-    transition: max-height 2s cubic-bezier(0, .55, .45, 1)
+    transition: max-height 2s cubic-bezier(0, .55, .45, 1);
+    margin-top: 5px;
+    background: #f0f1f5;
+    border-radius: 10px;
 }
 
 .sidebar-wrapper .menu .submenu.active {
     display: block;
-    max-height: 999px
+    margin-top: 5px;
+    background: #f0f1f5;
+    border-radius: 10px;
+    max-height: 999px;
 }
 
 .sidebar-wrapper .menu .submenu .submenu-item.active {
-    position: relative
+    position: relative;
 }
 
 .sidebar-wrapper .menu .submenu .submenu-item.active > a {
@@ -21390,7 +21396,7 @@ textarea.form-control-lg {
 }
 
 #main {
-    margin-left: 250px;
+    margin-left: 220px;
     min-height: 100vh;
     padding: 2rem
 }
