@@ -3,11 +3,9 @@
 namespace CMW\Manager\Router;
 
 
-use CMW\Manager\Class\ClassManager;
 use CMW\Manager\Class\PackageManager;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
-use CMW\Manager\Package\AbstractModel;
 use CMW\Utils\Utils;
 use ReflectionClass;
 use ReflectionException;
@@ -67,12 +65,12 @@ class LinkStorage
         $toReturn = [];
 
         $packageFolder = 'App/Package';
-        $contentDirectory = array_diff(scandir("$packageFolder/"), array('..', '.'));
+        $contentDirectory = array_diff(scandir("$packageFolder/"), ['..', '.']);
         $dir = EnvManager::getInstance()->getValue("dir");
         foreach ($contentDirectory as $package) {
             $packageSubFolder = "$packageFolder/$package/Controllers";
             if (is_dir($packageSubFolder)) {
-                $contentSubDirectory = array_diff(scandir("$packageSubFolder/"), array('..', '.'));
+                $contentSubDirectory = array_diff(scandir("$packageSubFolder/"), ['..', '.']);
                 foreach ($contentSubDirectory as $packageFile) {
                     $file = "$dir$packageSubFolder/$packageFile";
                     if (is_file($file)) {
@@ -101,22 +99,24 @@ class LinkStorage
         $className = PackageManager::getClassNamespaceFromPath($file);
 
         try {
-            $classRef = new ReflectionClass($className);
-            foreach ($classRef->getMethods() as $method) {
+            if (!is_null($className)) {
+                $classRef = new ReflectionClass($className);
+                foreach ($classRef->getMethods() as $method) {
 
-                $isMethodClass = $method->getDeclaringClass()->getName() === $className;
+                    $isMethodClass = $method->getDeclaringClass()->getName() === $className;
 
-                if (!$isMethodClass) {
-                    continue;
+                    if (!$isMethodClass) {
+                        continue;
+                    }
+
+                    $linkAttributes = $method->getAttributes(Link::class);
+                    foreach ($linkAttributes as $attribute) {
+
+                        /** @var Link $linkInstance */
+                        $toReturn[] = $attribute->newInstance();
+                    }
+
                 }
-
-                $linkAttributes = $method->getAttributes(Link::class);
-                foreach ($linkAttributes as $attribute) {
-
-                    /** @var Link $linkInstance */
-                    $toReturn[] = $attribute->newInstance();
-                }
-
             }
             $this->fileLoaded[] = $file;
 
@@ -145,15 +145,15 @@ class LinkStorage
             $slug = "/" . $slug;
         }
 
-        $var = array(
+        $var = [
             "slug" => $slug,
             "package" => $package,
             "title" => $title,
             "method" => mb_strtoupper($method),
             "isAdmin" => !empty($isAdmin) ?: 0,
             "isDynamic" => !empty($isDynamic) ?: 0,
-            "weight" => $weight
-        );
+            "weight" => $weight,
+        ];
 
         $sql = "INSERT INTO cmw_core_routes (core_routes_slug, core_routes_package, core_routes_title, 
                              core_routes_method, core_routes_is_admin, core_routes_is_dynamic, core_routes_weight)
@@ -206,7 +206,7 @@ class LinkStorage
             $slug = "/" . $slug;
         }
 
-        $var = array(
+        $var = [
             "id" => $id,
             "slug" => $slug,
             "package" => $package,
@@ -214,8 +214,8 @@ class LinkStorage
             "method" => mb_strtoupper($method),
             "isAdmin" => !empty($isAdmin) ?: 0,
             "isDynamic" => !empty($isDynamic) ?: 0,
-            "weight" => $weight
-        );
+            "weight" => $weight,
+        ];
 
         $sql = "UPDATE cmw_core_routes SET core_routes_slug = :slug, core_routes_package = :package, 
                            core_routes_title = :title, core_routes_method = :method, core_routes_is_admin = :isAdmin,

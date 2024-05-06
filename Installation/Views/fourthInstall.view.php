@@ -44,7 +44,7 @@ use CMW\Manager\Lang\LangManager;
                 <div class="px-3 pb-3">
 
                     <!-- List packages -->
-                    <?php foreach (PublicAPI::getData("market/resources/1") as $package): ?>
+                    <?php foreach (PublicAPI::getData("market/resources/filtered/1") as $package): ?>
                         <?php
                         $tags = [];
 

@@ -68,7 +68,7 @@ class InstallerController extends AbstractController
             "https" => Website::getProtocol() === "https",
             "zip" => extension_loaded('zip'),
             "curl" => extension_loaded('curl'),
-            "pdo" => extension_loaded('pdo')
+            "pdo" => extension_loaded('pdo'),
         };
     }
 
@@ -204,7 +204,7 @@ class InstallerController extends AbstractController
         $data = [
             'domain' => $_SERVER['HTTP_HOST'],
             'cmw_version' => EnvManager::getInstance()->getValue('VERSION'),
-            'remote_address' => $remoteAddress
+            'remote_address' => $remoteAddress,
         ];
 
         $apiReturn = PublicAPI::postData("websites/register", $data);
@@ -318,7 +318,6 @@ class InstallerController extends AbstractController
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.toaster.db.missing_inputs"));
             Redirect::redirectPreviousRoute();
-            return;
         }
 
         $name = filter_input(INPUT_POST, "config_name");

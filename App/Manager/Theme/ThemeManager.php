@@ -3,6 +3,7 @@
 namespace CMW\Manager\Theme;
 
 use CMW\Manager\Api\PublicAPI;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Manager\AbstractManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\ThemeModel;
@@ -11,9 +12,13 @@ class ThemeManager extends AbstractManager
 {
     public function getCurrentTheme(): IThemeConfig
     {
-        $currentThemeName = CoreModel::getInstance()->fetchOption("Theme");
+        $isInstallation = EnvManager::getInstance()->getValue('INSTALLSTEP') !== "-1";
 
-        return $this->getTheme($currentThemeName);
+        if (!$isInstallation){
+            $currentThemeName = CoreModel::getInstance()->fetchOption("Theme");
+        }
+
+        return $this->getTheme($currentThemeName ?? 'Sampler');
     }
 
     /**
