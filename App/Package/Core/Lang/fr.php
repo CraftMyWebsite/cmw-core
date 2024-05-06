@@ -116,24 +116,24 @@ return [
             "success" => "Configuration modifiée avec succès !",
         ],
         "mail" => [
-            "test" => "Mail envoyé à l'adresse %mail%"
+            "test" => "Mail envoyé à l'adresse %mail%",
         ],
         "Theme" => [
             "regenerate" => "Configuration du thème regénérée",
-            "installed" => "%theme% viens d'être installé et activé."
+            "installed" => "%theme% viens d'être installé et activé.",
         ],
         "db" => [
             "config" => [
                 "success" => "Configuration fonctionnelle",
                 "error" => "Configuration invalide",
-                "alreadyInstalled" => "Base de données déjà installée !"
+                "alreadyInstalled" => "Base de données déjà installée !",
             ],
             "missing_inputs" => "Merci de remplir tous les champs !",
         ],
         "security" => [
             "healthReport" => [
                 "copied" => "Contenu copié !",
-                "delete" => "Health Reports supprimés"
+                "delete" => "Health Reports supprimés",
             ],
         ],
     ],
@@ -198,15 +198,15 @@ return [
                 "downloads" => "Nombre de téléchargements",
                 "download" => "Télécharger",
             ],
-            "regen_config" => "Regénérer la config du thème"
+            "regen_config" => "Regénérer la config du thème",
         ],
         "manage" => [
             "title" => "Gérez votre thème <b>%Theme%</b>",
-            "description" => "Gérez votre thème pour le personnaliser à votre guise !"
+            "description" => "Gérez votre thème pour le personnaliser à votre guise !",
         ],
         "toasters" => [
             "update" => [
-                "success" => "Thème %theme% mis à jour avec succès"
+                "success" => "Thème %theme% mis à jour avec succès",
             ],
         ],
     ],
@@ -234,17 +234,17 @@ return [
         "market" => "Market",
         "toasters" => [
             "install" => [
-                "success" => "Package %package% installé avec succès !"
+                "success" => "Package %package% installé avec succès !",
             ],
             "delete" => [
                 "success" => "Package %package% supprimé avec succès",
-                "error" => "Impossible de supprimer le package %package%"
+                "error" => "Impossible de supprimer le package %package%",
             ],
             "update" => [
-                "success" => "Package %package% mis à jour avec succès !"
+                "success" => "Package %package% mis à jour avec succès !",
             ],
         ],
-        "versionDistant" => "Dernière version en ligne"
+        "versionDistant" => "Dernière version en ligne",
     ],
     "mail" => [
         "config" => [
@@ -269,13 +269,13 @@ return [
                 "description" => "Vous pouvez tester votre configuration en envoyant un mail à votre adresse e-mail.",
                 "receiverMail" => "Adresse e-mail du destinataire",
                 "receiverMailPlaceholder" => "Entrez l'adresse mail",
-            ]
-        ]
+            ],
+        ],
     ],
     "downloads" => [
         "errors" => [
-            "internalError" => "Erreur interne avec la ressource %name% - %version%"
-        ]
+            "internalError" => "Erreur interne avec la ressource %name% - %version%",
+        ],
     ],
     "updates" => [
         "title" => "Mettez à jour votre site",
@@ -323,7 +323,7 @@ return [
                     <i>Il est <b>impératif</b> d'envoyer vos Health Report uniquement à <b>l'équipe CraftMyWebsite</b> si on vous le demande.</i>
                 </p>",
             "emplacement" => "Emplacement du Health Report",
-            "copy" => "Copier le contenu"
+            "copy" => "Copier le contenu",
         ],
     ],
     "maintenance" => [
@@ -343,16 +343,16 @@ return [
             ],
             "maintenanceTitle" => [
                 'label' => "Titre",
-                'placeholder' => 'Nous revenons très vite !'
+                'placeholder' => 'Nous revenons très vite !',
             ],
             "maintenanceDescription" => [
                 'label' => "Description",
-                'placeholder' => 'Nous faisons quelques modifications, nous revenons très vite !'
+                'placeholder' => 'Nous faisons quelques modifications, nous revenons très vite !',
             ],
             "toaster" => [
                 "enabled" => "Maintenance activée",
                 "disabled" => "Maintenance désactivée",
-                "error" => "Impossible de mettre à jour la maintenance"
+                "error" => "Impossible de mettre à jour la maintenance",
             ],
         ],
     ],
@@ -393,7 +393,7 @@ return [
         9 => "Septembre",
         10 => "Octobre",
         11 => "Novembre",
-        12 => "Décembre"
+        12 => "Décembre",
     ],
     "week" => "Semaine ",
     "errors" => [
@@ -406,8 +406,37 @@ return [
             'betweenLength' => 'Le champ %key% doit contenir entre %min% et %max% caractères',
             'dateTime' => 'Le champ %key% doit être une date valide (%format%)',
             'getValue' => 'Valeur introuvable %key%',
-            'type' => 'Type invalide pour %key%'
+            'type' => 'Type invalide pour %key%',
         ],
-        "editConfiguration" => "Impossible de modifier la configuration %config%"
-    ]
+        "editConfiguration" => "Impossible de modifier la configuration %config%",
+    ],
+    "permissions" => [
+        "core" => [
+            "dashboard" => "Accès au panel admin",
+            "configuration" => [
+                "show" => "Accès aux configurations de base du site",
+                "edit" => "Modification des configurations du base du site",
+            ],
+            "editor" => [
+                "edit" => "Modification de l'éditeur",
+            ],
+            "mail" => [
+                "configuration" => "Modification des paramètres des mails",
+            ],
+            "menus" => [
+                "configuration" => "Gestion des menus",
+            ],
+            "security" => [
+                "configuration" => "Gestion de la sécurité du site",
+            ],
+            "theme" => [
+                "configuration" => "Gestion des thèmes du site",
+            ],
+            "update" => "Mettez à jour votre site",
+            "maintenance" => [
+                "edit" => "Gérez les maintenance de votre site",
+                "bypass" => "Outrepassez les maintenances de votre",
+            ],
+        ],
+    ],
 ];

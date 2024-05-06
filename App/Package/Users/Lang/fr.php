@@ -15,12 +15,12 @@ return [
             "btn" => "Confirmation",
             "mail" => [
                 "object" => "Votre nouveau mot de passe %site_name%",
-                "body" => "Voici votre nouveau mot de passe à changer rapidement après votre connexion : <b> %password% </b>"
+                "body" => "Voici votre nouveau mot de passe à changer rapidement après votre connexion : <b> %password% </b>",
             ],
         ],
     ],
     "register" => [
-        "title" => "Inscription"
+        "title" => "Inscription",
     ],
     "files" => "Fichiers autorisés : png, jpg, jpeg, webp, svg, gif",
     "toaster" => [
@@ -57,7 +57,7 @@ return [
         "card_title_add" => "Ajouter un utilisateur",
         "edit" => [
             "title" => "Edition de ",
-            "about" => "A propos"
+            "about" => "A propos",
         ],
         "randomPasswordTooltip" => "Générez un mot de passe aléatoire et sécurisé en un clic. Le mot de passe sera copié dans votre presse papier",
     ],
@@ -69,7 +69,7 @@ return [
         "delete_account" => "Supprimer le compte",
         "toaster_success" => "Le compte a bien été mis à jour !",
         "toaster_pass_error" => "Une erreur est survenue dans la modification du mot de passe.<br>Les mots de passes ne correspondent pas.",
-        "reset_password" => "Réinitialiser le mot de passe"
+        "reset_password" => "Réinitialiser le mot de passe",
     ],
     "roles" => [
         "manage" => [
@@ -91,11 +91,11 @@ return [
             "weightTips" => "Plus le chiffre est haut plus le rôle est important",
             "delete" => [
                 "title" => "Vérification",
-                "content" => "Vous êtes sur le point de supprimer un rôle, êtes-vous sûr ?"
+                "content" => "Vous êtes sur le point de supprimer un rôle, êtes-vous sûr ?",
             ],
             "default" => [
                 "title" => "Rôle par défaut",
-                "tips" => "Définissez ce rôle parmi ceux par défaut. Lors de l'inscription, vos membres se les verront ajouter automatiquement."
+                "tips" => "Définissez ce rôle parmi ceux par défaut. Lors de l'inscription, vos membres se les verront ajouter automatiquement.",
             ],
         ],
     ],
@@ -140,7 +140,7 @@ return [
             "last_update" => "Dernière modification",
             "placeholder_input" => "Choisissez une image de profil",
             "image_alt" => "Image de profil de %username%",
-            "reset" => "Réinitialisez l'image"
+            "reset" => "Réinitialisez l'image",
         ],
         "link_profile" => "Accéder à mon profil",
     ],
@@ -154,7 +154,7 @@ return [
             "tips" => "Définissez la méthode de réinitialisation des mots de passes de vos utilisateurs",
             "options" => [
                 0 => "Mot de passe envoyé par mail (non recommandé)",
-                1 => "Lien unique envoyé par mail"
+                1 => "Lien unique envoyé par mail",
             ],
         ],
         "profile_view" => [
@@ -164,7 +164,7 @@ return [
             "options" => [
                 0 => "/profile",
                 1 => "/profile/VotrePseudo",
-                2 => "Désactiver la page profil"
+                2 => "Désactiver la page profil",
             ],
         ],
         "blacklisted" => [
@@ -192,10 +192,29 @@ return [
                     ],
                     "delete" => [
                         "success" => "Pseudo supprimé",
-                        "error" => "Impossible de supprimer le pseudo"
+                        "error" => "Impossible de supprimer le pseudo",
                     ],
                 ],
             ],
-        ]
+        ],
+    ],
+    "permissions" => [
+        "users" => [
+            "edit" => "Modifier un utilisateur",
+            "add" => "Ajouter un utilisateur",
+            "delete" => "Supprimer un utilisateur",
+            "settings" => [
+                "manage" => "Gérer les paramètres",
+                "blacklist" => [
+                    "pseudo" => "Gérer les blacklist de pseudos",
+                ],
+            ],
+            "roles" => [
+                "manage" => "Gérer les rôles",
+                "add" => "Ajouter un rôle",
+                "edit" => "Modifier un rôle",
+                "delete" => "Supprimer un rôle",
+            ],
+        ],
     ],
 ];

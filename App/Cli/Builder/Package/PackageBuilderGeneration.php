@@ -218,9 +218,10 @@ PHP;
                 DEFAULT CHARSET = utf8mb4;";
         $this->createFile("Init/init.sql", $data);
 
-        $this->createFile("Init/permissions.json",
-            json_encode(['demo.show'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR |
-                JSON_PRETTY_PRINT));
+        // TODO REWRITE THIS PART
+//        $this->createFile("Init/permissions.json",
+//            json_encode(['demo.show'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR |
+//                JSON_PRETTY_PRINT));
     }
 
     private function createLang(): void

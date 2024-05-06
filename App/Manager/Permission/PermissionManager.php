@@ -25,5 +25,42 @@ class PermissionManager
         }
     }
 
+    /**
+     * @return \CMW\Manager\Permission\IPermissionInit[]
+     */
+    public static function getPackagesPermissions(): array
+    {
+        $toReturn = [];
+        $packagesFolder = 'App/Package/';
+        $contentDirectory = array_diff(scandir("$packagesFolder/"), ['..', '.']);
+        foreach ($contentDirectory as $package) {
+            if (file_exists("$packagesFolder/$package/Init/Permissions.php")) {
+                $permissions = self::getPackagePermissions($package);
+                if (is_null($permissions)) {
+                    continue;
+                }
+                $toReturn[] = $permissions;
+            }
+        }
+
+        return $toReturn;
+    }
+
+    public static function getPackagePermissions(string $packageName): ?IPermissionInit
+    {
+        $namespace = 'CMW\\Package\\' . $packageName . "\\Permissions";
+
+        if (!class_exists($namespace)) {
+            return null;
+        }
+
+        $classInstance = new $namespace();
+
+        if (!is_subclass_of($classInstance, IPermissionInit::class)) {
+            return null;
+        }
+
+        return $classInstance;
+    }
 
 }

@@ -4,7 +4,7 @@ return [
     "add" => [
         "title" => "Create",
         "desc" => "Create a new page",
-        "create" => "Create to save"
+        "create" => "Create to save",
     ],
     "edit" => [
         "title" => "Editing",
@@ -27,8 +27,8 @@ return [
     "toaster" => [
         "deleted" => "The page no longer exists",
         "errors" => [
-            "emptyFields" => "Please, fill all fields"
-        ]
+            "emptyFields" => "Please, fill all fields",
+        ],
     ],
     "publish" => "Publishing the page",
     "draft" => "Draft",
@@ -46,8 +46,15 @@ return [
 
     "alert" => [
         "added" => "Page added",
-        "edited" => "Page edited"
+        "edited" => "Page edited",
     ],
 
-
+    "permissions" => [
+        "pages" => [
+            "show" => "Show pages",
+            "edit" => "Edit pages",
+            "add" => "Add a page",
+            "delete" => "Delete a page",
+        ],
+    ],
 ];

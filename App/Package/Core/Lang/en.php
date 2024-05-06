@@ -116,24 +116,24 @@ return [
             "success" => "Configuration edit with success !",
         ],
         "mail" => [
-            "test" => "Mail send to %mail%"
+            "test" => "Mail send to %mail%",
         ],
         "Theme" => [
             "regenerate" => "Theme configuration regenerate",
-            "installed" => "%theme% just installed and activated."
+            "installed" => "%theme% just installed and activated.",
         ],
         "db" => [
             "config" => [
                 "success" => "Good configuration",
                 "error" => "Configuration error",
-                "alreadyInstalled" => "Data base already installed !"
+                "alreadyInstalled" => "Data base already installed !",
             ],
             "missing_inputs" => "Please fill all inputs !",
         ],
         "security" => [
             "healthReport" => [
                 "copied" => "Content copied !",
-                "delete" => "Health Reports removed"
+                "delete" => "Health Reports removed",
             ],
         ],
     ],
@@ -198,15 +198,15 @@ return [
                 "downloads" => "Downloads",
                 "download" => "Download",
             ],
-            "regen_config" => "Re-generate Theme config"
+            "regen_config" => "Re-generate Theme config",
         ],
         "manage" => [
             "title" => "Manage your Theme <b>%Theme%</b>",
-            "description" => "Manage your Theme to have a Theme that suits you ! "
+            "description" => "Manage your Theme to have a Theme that suits you ! ",
         ],
         "toasters" => [
             "update" => [
-                "success" => "Theme %theme% update with success"
+                "success" => "Theme %theme% update with success",
             ],
         ],
     ],
@@ -234,17 +234,17 @@ return [
         "market" => "Market",
         "toasters" => [
             "install" => [
-                "success" => "Package %package% install with success !"
+                "success" => "Package %package% install with success !",
             ],
             "delete" => [
-              "success" => "Package %package% delete with success",
-              "error" => "Unable to delete package %package%"
+                "success" => "Package %package% delete with success",
+                "error" => "Unable to delete package %package%",
             ],
             "update" => [
-                "success" => "Package %package% update with success !"
+                "success" => "Package %package% update with success !",
             ],
         ],
-        "versionDistant" => "Last version"
+        "versionDistant" => "Last version",
     ],
     "mail" => [
         "config" => [
@@ -269,13 +269,13 @@ return [
                 "description" => "You can test your configuration by sending an email to your email address.",
                 "receiverMail" => "Recipient address",
                 "receiverMailPlaceholder" => "Enter your mail",
-            ]
-        ]
+            ],
+        ],
     ],
     "downloads" => [
         "errors" => [
-            "internalError" => "Internal error with resource %name% - %version%"
-        ]
+            "internalError" => "Internal error with resource %name% - %version%",
+        ],
     ],
     "updates" => [
         "title" => "Update your website",
@@ -321,7 +321,7 @@ return [
 
                 <p>
                     <i>It is <b>imperative</b> to send your Health Reports only to <b>the CraftMyWebsite team</b> if you are asked to do it.</i>
-                </p>"
+                </p>",
         ],
     ],
     "maintenance" => [
@@ -341,16 +341,16 @@ return [
             ],
             "maintenanceTitle" => [
                 'label' => "Title",
-                'placeholder' => 'We are coming soon !'
+                'placeholder' => 'We are coming soon !',
             ],
             "maintenanceDescription" => [
                 'label' => "Description",
-                'placeholder' => 'We are making some changes !'
+                'placeholder' => 'We are making some changes !',
             ],
             "toaster" => [
                 "enabled" => "Maintenance enabled",
                 "disabled" => "Maintenance disabled",
-                "error" => "Unable to update maintenance settings"
+                "error" => "Unable to update maintenance settings",
             ],
         ],
     ],
@@ -390,7 +390,7 @@ return [
         9 => "September",
         10 => "October",
         11 => "November",
-        12 => "December"
+        12 => "December",
     ],
     "week" => "Week ",
     "errors" => [
@@ -405,6 +405,35 @@ return [
             'getValue' => 'Missing value %key%',
             'type' => 'Invalide type for %key%',
         ],
-        "editConfiguration" => "Unable to edit configuration %config%"
+        "editConfiguration" => "Unable to edit configuration %config%",
+    ],
+    "permissions" => [
+        "core" => [
+            "dashboard" => "Access dashboard",
+            "configuration" => [
+                "show" => "Access the website configuration",
+                "edit" => "Edit the website configuration",
+            ],
+            "editor" => [
+                "edit" => "Edit editor",
+            ],
+            "mail" => [
+                "configuration" => "Edit mail settings",
+            ],
+            "menus" => [
+                "configuration" => "Manage menus",
+            ],
+            "security" => [
+                "configuration" => "Manage website security",
+            ],
+            "theme" => [
+                "configuration" => "Manage website themes",
+            ],
+            "update" => "Mettez à jour votre site",
+            "maintenance" => [
+                "edit" => "Manage website maintenance",
+                "bypass" => "Bypass website maintenance",
+            ],
+        ],
     ],
 ];

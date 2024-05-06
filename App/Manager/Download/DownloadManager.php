@@ -4,10 +4,10 @@ namespace CMW\Manager\Download;
 
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Permission\PermissionManager;
 use CMW\Model\Users\PermissionsModel;
 use CMW\Utils\Directory;
 use JetBrains\PhpStorm\ExpectedValues;
-use JsonException;
 use ZipArchive;
 
 class DownloadManager
@@ -72,20 +72,13 @@ class DownloadManager
             }
 
             // Load permissions files
-            $permissionFile = "$initFolder/permissions.json";
+            $packagePermissions = PermissionManager::getPackagePermissions($package);
 
-            if (file_exists($permissionFile)) {
-
-                try {
-                    $permissions = json_decode(file_get_contents($permissionFile), false, 512, JSON_THROW_ON_ERROR);
-
-                    foreach ($permissions as $permission) {
-                        PermissionsModel::getInstance()->addFullCodePermission($permission);
-                    }
-                } catch (JsonException) {
+            if (!is_null($packagePermissions)) {
+                foreach ($packagePermissions->permissions() as $permission) {
+                    PermissionsModel::getInstance()->addFullCodePermission($permission->getCode());
                 }
             }
-
 
             // Load sql files
             foreach ($initFiles as $sqlFile) {

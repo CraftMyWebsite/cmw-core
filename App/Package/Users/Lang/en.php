@@ -15,12 +15,12 @@ return [
             "btn" => "Request new password",
             "mail" => [
                 "object" => "This is your new password %site_name%",
-                "body" => "This is your new password, please change this password fast <b> %password% </b>"
+                "body" => "This is your new password, please change this password fast <b> %password% </b>",
             ],
         ],
     ],
     "register" => [
-        "title" => "Register"
+        "title" => "Register",
     ],
     "files" => "Files allowed : png, jpg, jpeg, webp, svg, gif",
     "toaster" => [
@@ -57,7 +57,7 @@ return [
         "card_title_add" => "Add a new user",
         "edit" => [
             "title" => "Editing of ",
-            "about" => "About  "
+            "about" => "About  ",
         ],
         "randomPasswordTooltip" => "Generate a secure random password. The password will be past on your clipboard",
     ],
@@ -69,7 +69,7 @@ return [
         "delete_account" => "Delete account",
         "toaster_success" => "The account has been updated !",
         "toaster_pass_error" => "An error occurred in changing the password.<br>The passwords do not match.",
-        "reset_password" => "Reset password"
+        "reset_password" => "Reset password",
     ],
     "role" => [
         "manage" => [
@@ -91,11 +91,11 @@ return [
             "weightTips" => "Increase the number for a more important role",
             "delete" => [
                 "title" => "Verification",
-                "content" => "Are you sure about that, sir ?"
+                "content" => "Are you sure about that, sir ?",
             ],
             "defaultRoles" => [
                 "title" => "Default roles",
-                "tips" => "Define your members role(s) when they sign up on your website."
+                "tips" => "Define your members role(s) when they sign up on your website.",
             ],
         ],
     ],
@@ -140,7 +140,7 @@ return [
             "last_update" => "Last update",
             "placeholder_input" => "Choose the profile picture",
             "image_alt" => "Profile picture of %username%",
-            "reset" => "Reset image"
+            "reset" => "Reset image",
         ],
         "link_profile" => "Go to my profile",
     ],
@@ -154,7 +154,7 @@ return [
             "label" => "Reinitialisation password method",
             "options" => [
                 0 => "New password sent by mail",
-                1 => "Unique link sent by mail"
+                1 => "Unique link sent by mail",
             ],
         ],
         "profileView" => [
@@ -164,7 +164,7 @@ return [
             "options" => [
                 0 => "/profile",
                 1 => "/profile/YourPseudo",
-                2 => "Disable the profile page"
+                2 => "Disable the profile page",
             ],
         ],
         "blacklisted" => [
@@ -177,7 +177,7 @@ return [
                 "edit" => [
                     "title" => "Edit blacklisted pseudo",
                     "description" => "Edit a blacklisted pseudo",
-                    "label" => "Editing pseudo %pseudo%"
+                    "label" => "Editing pseudo %pseudo%",
                 ],
                 "btn" => "Blacklist this pseudo",
                 "toasters" => [
@@ -191,10 +191,30 @@ return [
                     ],
                     "delete" => [
                         "success" => "Pseudo deleted",
-                        "error" => "Unable to delete this pseudo"
-                    ]
-                ]
-            ]
-        ]
+                        "error" => "Unable to delete this pseudo",
+                    ],
+                ],
+            ],
+        ],
+    ],
+
+    "permissions" => [
+        "users" => [
+            "edit" => "Edit an user",
+            "add" => "Add an user",
+            "delete" => "Delete an user",
+            "settings" => [
+                "manage" => "Manage settings",
+                "blacklist" => [
+                    "pseudo" => "Manage blacklisted pseudos",
+                ],
+            ],
+            "roles" => [
+                "manage" => "Manage roles",
+                "add" => "Add a role",
+                "edit" => "Edit a role",
+                "delete" => "Delete a role",
+            ],
+        ],
     ],
 ];

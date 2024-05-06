@@ -8,6 +8,7 @@ use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
+use CMW\Manager\Permission\PermissionManager;
 use CMW\Manager\Router\Link;
 use CMW\Model\Users\PermissionsModel;
 use CMW\Utils\Redirect;
@@ -35,7 +36,7 @@ class PermissionsController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.manage");
 
-        if ($this->loadPackagesPermissions()){
+        if ($this->loadPackagesPermissions()) {
             Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
                 LangManager::translate("users.toaster.load_permissions_success"));
         }
@@ -61,23 +62,19 @@ class PermissionsController extends AbstractController
                 continue;
             }
 
-            // Load permissions files
-            $permissionFile = "$initFolder/permissions.json";
+            // Load permissions file
+            $packagePermissions = PermissionManager::getPackagePermissions($packageName);
 
-            if (file_exists($permissionFile)) {
+            if (!is_null($packagePermissions)) {
+                foreach ($packagePermissions->permissions() as $permission) {
+                    $permEntity = PermissionsModel::getInstance()->addFullCodePermission($permission->getCode());
 
-                try {
-                    $permissions = json_decode(file_get_contents($permissionFile), false, 512, JSON_THROW_ON_ERROR);
-
-                    foreach ($permissions as $permission) {
-                        PermissionsModel::getInstance()->addFullCodePermission($permission);
+                    if (is_null($permEntity)) {
+                        Flash::send(Alert::WARNING, LangManager::translate("core.toaster.warning"),
+                            LangManager::translate("users.toaster.load_permissions_error", ['package' => $packageName]));
+                        return false;
                     }
-                } catch (JsonException $_) {
-                    Flash::send(Alert::WARNING, LangManager::translate("core.toaster.warning"),
-                        LangManager::translate("users.toaster.load_permissions_error", ['package' => $packageName]));
-                    return false;
                 }
-
             }
 
         endforeach;
