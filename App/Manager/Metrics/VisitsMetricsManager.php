@@ -2,10 +2,10 @@
 
 namespace CMW\Manager\Metrics;
 
-use Cassandra\Date;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Permission\PermissionManager;
 use CMW\Manager\Router\Route;
 use CMW\Utils\Website;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -13,11 +13,13 @@ use JetBrains\PhpStorm\ExpectedValues;
 class VisitsMetricsManager extends DatabaseManager
 {
     private int $maxLines = 50; // Variable data ?
-    private string $fileName;
+    private string $filePath;
+    private string $dirStorage;
 
     public function __construct()
     {
-        $this->fileName = EnvManager::getInstance()->getValue("DIR") . "App/Storage/Visits/history.log";
+        $this->dirStorage = EnvManager::getInstance()->getValue("DIR") . "App/Storage/Visits";
+        $this->filePath = "$this->dirStorage/history.log";
     }
 
     public function registerVisit(Route $route): void
@@ -28,7 +30,7 @@ class VisitsMetricsManager extends DatabaseManager
 
         $path = $route->getPath() === '' ? '/' : $route->getPath();
 
-        if ($this->isDuplicateVisit($path) || $this->isAdminVisit($path) || $this->isErrorPage($path)){
+        if ($this->isDuplicateVisit($path) || $this->isAdminVisit($path) || $this->isErrorPage($path)) {
             return;
         }
 
@@ -36,8 +38,13 @@ class VisitsMetricsManager extends DatabaseManager
 
         $data = Website::getClientIp() . "," . date('Y-m-d H:i:s') . "," . $path . "," . $package . "," . http_response_code() . "," . $isAdmin;
 
-        $this->saveLogFile($data);
+        //If we don't have file perms, we ignore temp file writing
+        if (!$this->checkPermissions()) {
+            $this->sendLogToDatabase();
+            return;
+        }
 
+        $this->saveLogFile($data);
         if ($this->isLogsAreFull()) {
             $this->sendLogToDatabase();
         }
@@ -45,7 +52,7 @@ class VisitsMetricsManager extends DatabaseManager
 
     private function isDuplicateVisit(string $currentPath): bool
     {
-        if (!isset($_SESSION['latestVisitPath'])){
+        if (!isset($_SESSION['latestVisitPath'])) {
             return false;
         }
         return $_SESSION['latestVisitPath'] === $currentPath;
@@ -63,10 +70,10 @@ class VisitsMetricsManager extends DatabaseManager
 
     private function saveLogFile(string $data): void
     {
-        if (stream_resolve_include_path($this->fileName)) {
-            file_put_contents($this->fileName, $data . PHP_EOL, FILE_APPEND | LOCK_EX | FILE_SKIP_EMPTY_LINES);
+        if (stream_resolve_include_path($this->filePath)) {
+            file_put_contents($this->filePath, $data . PHP_EOL, FILE_APPEND | LOCK_EX | FILE_SKIP_EMPTY_LINES);
         } else {
-            fopen($this->fileName, 'wb');
+            fopen($this->filePath, 'wb');
             $this->saveLogFile($data);
         }
     }
@@ -78,8 +85,8 @@ class VisitsMetricsManager extends DatabaseManager
 
     private function getFileLineNumber(): int
     {
-        if (stream_resolve_include_path($this->fileName)) {
-            return count(file($this->fileName));
+        if (stream_resolve_include_path($this->filePath)) {
+            return count(file($this->filePath));
         }
 
         return 0;
@@ -98,12 +105,12 @@ class VisitsMetricsManager extends DatabaseManager
         $db->query(mb_substr($sql, 0, -1));
 
         //Delete old file
-        unlink($this->fileName);
+        unlink($this->filePath);
     }
 
     private function getLogData(): array
     {
-        return file($this->fileName);
+        return file($this->filePath);
     }
 
     public function getVisitsNumber(#[ExpectedValues(["all", "monthly", "week", "day", "hour"])] $period): ?int
@@ -131,10 +138,10 @@ class VisitsMetricsManager extends DatabaseManager
                     break;
             endswitch;
 
-            $var = array(
+            $var = [
                 "range_start" => $rangeStart,
-                "range_finish" => $rangeFinish
-            );
+                "range_finish" => $rangeFinish,
+            ];
 
             $sql = "SELECT COUNT(DISTINCT visits_ip) AS `result` FROM cmw_visits WHERE visits_date BETWEEN (:range_start) AND (:range_finish)";
 
@@ -165,10 +172,10 @@ class VisitsMetricsManager extends DatabaseManager
      */
     public function getDataVisits(string $rangeStart, string $rangeFinish): int
     {
-        $var = array(
+        $var = [
             "range_start" => $rangeStart,
-            "range_finish" => $rangeFinish
-        );
+            "range_finish" => $rangeFinish,
+        ];
 
         $sql = "SELECT COUNT(DISTINCT visits_ip) AS `result` FROM cmw_visits WHERE visits_date BETWEEN (:range_start) AND (:range_finish)";
 
@@ -176,7 +183,7 @@ class VisitsMetricsManager extends DatabaseManager
         $req = $db->prepare($sql);
         $res = $req->execute($var);
 
-        if (!$res){
+        if (!$res) {
             return 0;
         }
 
@@ -196,7 +203,7 @@ class VisitsMetricsManager extends DatabaseManager
 
         $req = $db->query($sql);
 
-        if (!$req){
+        if (!$req) {
             return 0;
         }
 
@@ -223,7 +230,7 @@ class VisitsMetricsManager extends DatabaseManager
 
             $toReturn[$targetMonthTranslate] = $this->getDataVisits($rangeStart, $rangeFinish);
 
-            if ($targetMonth === $currentMonth){
+            if ($targetMonth === $currentMonth) {
                 $toReturn[$targetMonthTranslate] += $this->getFileLineNumber();
             }
 
@@ -279,11 +286,19 @@ class VisitsMetricsManager extends DatabaseManager
 
             $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish);
 
-            if ($targetWeek === $currentWeeks){
+            if ($targetWeek === $currentWeeks) {
                 $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish) + $this->getFileLineNumber();
             }
 
         }
         return array_reverse($toReturn);
+    }
+
+    /**
+     * @return bool
+     */
+    private function checkPermissions(): bool
+    {
+        return PermissionManager::canCreateFile($this->dirStorage);
     }
 }
