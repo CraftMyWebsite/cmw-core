@@ -162,38 +162,6 @@ class CoreController extends AbstractController
         $view->view();
     }
 
-    /**
-     * @throws \CMW\Manager\Router\RouterException
-     */
-    #[Link("/:errorCode", Link::GET, ["errorCode" => ".*?"], "geterror")]
-    private function errorView(Request $request, int $errorCode = 403): void
-    {
-        $theme = ThemeManager::getInstance()->getCurrentTheme()->name();
-
-        $errorToCall = (string)$errorCode;
-        $errorFolder = "Public/Themes/$theme/Views/Errors";
-        $errorFile = "$errorFolder/$errorCode.view.php";
-
-        if (!is_file($errorFile) && is_file("$errorFolder/Default.view.php")) {
-            $errorToCall = "Default";
-        }
-
-        $view = new View();
-        $view
-            ->setPackage("Errors")
-            ->setViewFile($errorToCall)
-            ->view();
-    }
-
-    /**
-     * @throws \CMW\Manager\Router\RouterException
-     */
-    #[Link("/:errorCode", Link::GET, ["errorCode" => ".*?"], "error")]
-    private function threwRouterError(Request $request, $errorCode): void
-    {
-        throw new RouterException('Trowed Error', $errorCode);
-    }
-
     /* //////////////////////////////////////////////////////////////////////////// */
     /* CMS FUNCTION */
 

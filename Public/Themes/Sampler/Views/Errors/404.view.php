@@ -9,6 +9,6 @@ Website::setDescription("Erreur, page introuvable.");
 <section class="page-section">
     <div class="container">
         <h1>404</h1>
-        Ho ! Page introuvable j'crois {errorCode}
+        Ho ! Page introuvable
     </div>
 </section>

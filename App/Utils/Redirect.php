@@ -84,22 +84,10 @@ class Redirect
      * @return void
      * @desc Redirect to errorPage
      */
-    #[NoReturn] public static function errorPage(int $code = 403): void
+    #[NoReturn] public static function errorPage(int $code): void
     {
         http_response_code($code);
-        header("Location: " . Website::getUrl() . $code);
-        die();
-    }
-
-    /**
-     * @return void
-     * @deprecated please prefer {@see CMW\Utils\Redirect::redirectPreviousRoute()}
-     */
-    #[NoReturn] public static function redirectToPreviousPage(): void
-    {
-        http_response_code(302);
-        // use self::redirect ??
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        header("Location: " . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $code);
         die();
     }
 

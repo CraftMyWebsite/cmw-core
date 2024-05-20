@@ -2,7 +2,6 @@
 
 namespace CMW\Manager\Error;
 
-use CMW\Controller\Core\ThemeController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Permission\PermissionManager;
 use CMW\Manager\Theme\ThemeManager;
@@ -48,7 +47,7 @@ class ErrorManager
     {
         $devMode = (int)(EnvManager::getInstance()->getValue("devMode") ?? 0);
 
-        if ($force){
+        if ($force) {
             $devMode = 1;
         }
 
@@ -189,23 +188,19 @@ class ErrorManager
 
         $currentTheme = ThemeManager::getInstance()->getCurrentTheme()->name();
         $defaultErrorFile = EnvManager::getInstance()->getValue("DIR") . "Public/Themes/$currentTheme/Views/Errors/default.view.php";
+        $errorFile = EnvManager::getInstance()->getValue("DIR") . "Public/Themes/$currentTheme/Views/Errors/$errorCode.view.php";
 
-        if(!file_exists($defaultErrorFile)){
-            self::getFallBackErrorPage($currentTheme);
+        if (file_exists($errorFile)) {
+            include $errorFile;
             return;
         }
 
-        // TODO Timeout OR try to make a real function to get data...
-        $data = file_get_contents($pathUrl . "geterror/$errorCode");
-
-        if (!$data) {
-            echo "Error $errorCode.";
+        if (file_exists($defaultErrorFile)) {
+            include $defaultErrorFile;
             return;
         }
 
-        $data = str_replace("{errorCode}", $errorCode, $data);
-        echo $data;
-
+        self::getFallBackErrorPage($currentTheme);
     }
 
     private static function getFallBackErrorPage(string $currentTheme): void

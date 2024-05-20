@@ -4,6 +4,7 @@ namespace CMW\Controller\Pages;
 
 use CMW\Controller\Core\EditorController;
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Error\ErrorManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
@@ -161,12 +162,14 @@ class PagesController extends AbstractController
             $view->addStyle("Admin/Resources/Vendors/Prismjs/Style/" . EditorController::getCurrentStyle());
             $view->addVariableList(["page" => $pageEntity]);
             $view->view();
+            return;
         }
 
-        if (is_null(Router::getInstance()->getRouteByUrl($slug))) {
-            Redirect::redirectToHome();
+        $route = Router::getInstance()->getRouteByUrl($slug);
+
+        if (is_null($route) || $route->getName() === "pages.publicShowPage") {
+            ErrorManager::showError(404);
+            die();
         }
     }
-
-
 }
