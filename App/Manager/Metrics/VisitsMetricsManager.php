@@ -7,6 +7,8 @@ use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Permission\PermissionManager;
 use CMW\Manager\Router\Route;
+use CMW\Utils\Directory;
+use CMW\Utils\File;
 use CMW\Utils\Website;
 use JetBrains\PhpStorm\ExpectedValues;
 
@@ -71,7 +73,7 @@ class VisitsMetricsManager extends DatabaseManager
     private function saveLogFile(string $data): void
     {
         if (stream_resolve_include_path($this->filePath)) {
-            file_put_contents($this->filePath, $data . PHP_EOL, FILE_APPEND | LOCK_EX | FILE_SKIP_EMPTY_LINES);
+            File::write($this->filePath, $data . PHP_EOL, FILE_APPEND | LOCK_EX | FILE_SKIP_EMPTY_LINES);
         } else {
             fopen($this->filePath, 'wb');
             $this->saveLogFile($data);
@@ -104,8 +106,8 @@ class VisitsMetricsManager extends DatabaseManager
         $db = self::getInstance();
         $db->query(mb_substr($sql, 0, -1));
 
-        //Delete old file
-        unlink($this->filePath);
+        //Clean old file
+        File::write($this->filePath, "");
     }
 
     private function getLogData(): array
