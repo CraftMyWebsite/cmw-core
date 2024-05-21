@@ -1,5 +1,7 @@
 <?php
 
+header("Cache-Control: max-age=2592000");
+
 use CMW\Controller\Core\CoreController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Uploads\ImagesManager;

@@ -1,5 +1,7 @@
 <?php
 
+header("Cache-Control: max-age=2592000");
+
 /** @var $title */
 
 /** @var $description */
