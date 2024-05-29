@@ -61,9 +61,9 @@ class CoreController extends AbstractController
 
         }
 
-        $monthlyVisits = (new VisitsMetricsManager())->getPastMonthsVisits(12);
-        $dailyVisits = (new VisitsMetricsManager())->getPastDaysVisits(17);
-        $weeklyVisits = (new VisitsMetricsManager())->getPastWeeksVisits(17);
+        $monthlyVisits = VisitsMetricsManager::getInstance()->getPastMonthsVisits(12);
+        $dailyVisits = VisitsMetricsManager::getInstance()->getPastDaysVisits(17);
+        $weeklyVisits = VisitsMetricsManager::getInstance()->getPastWeeksVisits(17);
         $registers = UsersMetricsModel::getInstance()->getPastMonthsRegisterNumbers(12);
 
         View::createAdminView("Core", "Dashboard/dashboard")

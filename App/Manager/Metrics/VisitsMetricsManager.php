@@ -5,14 +5,14 @@ namespace CMW\Manager\Metrics;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Manager\AbstractManager;
 use CMW\Manager\Permission\PermissionManager;
 use CMW\Manager\Router\Route;
-use CMW\Utils\Directory;
 use CMW\Utils\File;
 use CMW\Utils\Website;
 use JetBrains\PhpStorm\ExpectedValues;
 
-class VisitsMetricsManager extends DatabaseManager
+class VisitsMetricsManager extends AbstractManager
 {
     private int $maxLines = 50; // Variable data ?
     private string $filePath;
@@ -103,7 +103,7 @@ class VisitsMetricsManager extends DatabaseManager
             $sql .= "('$res[0]','$res[1]','$res[2]','$res[3]','$res[4]','$res[5]'),";
         }
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $db->query(mb_substr($sql, 0, -1));
 
         //Clean old file
@@ -147,14 +147,14 @@ class VisitsMetricsManager extends DatabaseManager
 
             $sql = "SELECT COUNT(DISTINCT visits_ip) AS `result` FROM cmw_visits WHERE visits_date BETWEEN (:range_start) AND (:range_finish)";
 
-            $db = self::getInstance();
+            $db = DatabaseManager::getInstance();
             $req = $db->prepare($sql);
             $res = $req->execute($var);
 
         else:
             $sql = "SELECT COUNT(DISTINCT visits_ip) AS `result` FROM cmw_visits";
 
-            $db = self::getInstance();
+            $db = DatabaseManager::getInstance();
             $req = $db->prepare($sql);
             $res = $req->execute();
 
@@ -181,7 +181,7 @@ class VisitsMetricsManager extends DatabaseManager
 
         $sql = "SELECT COUNT(DISTINCT visits_ip) AS `result` FROM cmw_visits WHERE visits_date BETWEEN (:range_start) AND (:range_finish)";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $res = $req->execute($var);
 
@@ -201,7 +201,7 @@ class VisitsMetricsManager extends DatabaseManager
                 FROM cmw_visits
                 GROUP BY DATE_FORMAT(`visits_date`, '%M') ORDER BY month DESC LIMIT 1";
 
-        $db = self::getInstance();
+        $db = DatabaseManager::getInstance();
 
         $req = $db->query($sql);
 

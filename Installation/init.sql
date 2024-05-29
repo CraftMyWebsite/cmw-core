@@ -44,6 +44,8 @@ CREATE TABLE IF NOT EXISTS `cmw_users`
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
+CREATE INDEX idx_registration_date ON cmw_users (user_created);
+
 CREATE TABLE IF NOT EXISTS `cmw_users_2fa`
 (
     `users_2fa_user_id`    INT(11)      NOT NULL,
@@ -223,6 +225,7 @@ CREATE TABLE IF NOT EXISTS `cmw_visits`
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
+CREATE INDEX idx_visits_date ON cmw_visits (visits_date);
 
 CREATE TABLE IF NOT EXISTS `cmw_maintenance`
 (
