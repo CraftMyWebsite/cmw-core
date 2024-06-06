@@ -115,7 +115,7 @@ class VisitsMetricsManager extends AbstractManager
         File::write($this->filePath, "");
     }
 
-    private function getLogData(): array
+    private function getLogData(): array|false
     {
         return File::readArray($this->filePath);
     }
