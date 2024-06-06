@@ -96,9 +96,14 @@ class VisitsMetricsManager extends AbstractManager
 
     private function sendLogToDatabase(): void
     {
+        $logs = $this->getLogData();
+
+        if (empty($logs)) {
+            return;
+        }
 
         $sql = "INSERT INTO cmw_visits (visits_ip, visits_date, visits_path, visits_package, visits_code, visits_is_admin) VALUES ";
-        foreach ($this->getLogData() as $line) {
+        foreach ($logs as $line) {
             $res = explode(",", $line);
             $sql .= "('$res[0]','$res[1]','$res[2]','$res[3]','$res[4]','$res[5]'),";
         }
