@@ -21,7 +21,7 @@ class File
             return false;
         }
 
-        if (is_null($flags)){
+        if (is_null($flags)) {
             return file_put_contents($path, $content) !== false;
         }
 
@@ -40,5 +40,19 @@ class File
         }
 
         return file_get_contents($path);
+    }
+
+    /**
+     * @param string $path
+     * @return string|false
+     * @desc Read the specified file with multiple checks. Return <b>false</b> if the file doesn't exist or if the file is not readable
+     */
+    public static function readArray(string $path): array|false
+    {
+        if (!is_readable($path)) {
+            return false;
+        }
+
+        return file($path);
     }
 }

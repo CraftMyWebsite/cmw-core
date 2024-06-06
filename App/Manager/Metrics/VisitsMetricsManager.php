@@ -112,7 +112,7 @@ class VisitsMetricsManager extends AbstractManager
 
     private function getLogData(): array
     {
-        return file($this->filePath);
+        return File::readArray($this->filePath);
     }
 
     public function getVisitsNumber(#[ExpectedValues(["all", "monthly", "week", "day", "hour"])] $period): ?int
