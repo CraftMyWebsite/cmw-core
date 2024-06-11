@@ -62,9 +62,18 @@ $description = LangManager::translate("core.config.desc");
                         </div>
                         <div class="col-md-6">
                             <h6><?= LangManager::translate("core.config.favicon") ?> :</h6>
-                            <input class="form-control form-control-lg" type="file" id="favicon" accept="image/x-icon"
-                                   name="favicon">
-                            <small><?= LangManager::translate("core.config.favicon_tips") ?></small>
+                            <div class="d-flex">
+                                <div class="me-4">
+                                    <img width="55px" src="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER")?>Public/Uploads/Favicon/favicon.ico">
+                                </div>
+                                <div>
+                                    <input class="form-control form-control-lg" type="file" id="favicon" accept="image/x-icon"
+                                           name="favicon">
+                                    <small><?= LangManager::translate("core.config.favicon_tips") ?></small>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
 
