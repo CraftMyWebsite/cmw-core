@@ -80,8 +80,9 @@ $description = LangManager::translate("users.settings.desc"); ?>
                 <div class="card-body">
                     <div class="row">
                         <h6>Obligatoire pour :</h6>
-                        <fieldset class="form-group">
+                        <fieldset class="form-group" disabled>
                             <select class="form-select" id="forceTo" name="forceTo"  required>
+                                <option value="0">Coming Soon</option>
                                 <option value="0">Personne</option>
                                 <option value="1">Tout le monde</option>
                                 <option value="2">Administrateurs</option>

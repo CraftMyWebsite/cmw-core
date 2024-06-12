@@ -82,9 +82,9 @@ Website::setDescription(LangManager::translate("core.Theme.config.description"))
                                         <i><b><?= $theme['version_cmw'] ?></b></i>
                                     </p>
                                     <div class="d-flex gap-3 align-items-center">
-                                        <?php if ($theme['demo']): ?>
+                                        <?php if ($theme['demo_link']): ?>
                                             <a class="btn btn-sm btn-primary"
-                                               href="<?= $theme['demo'] ?>" target="_blank"><i
+                                               href="<?= $theme['demo_link'] ?>" target="_blank"><i
                                                     class="fa-solid fa-arrow-up-right-from-square"></i> <?= LangManager::translate("core.Theme.demo") ?>
                                             </a>
                                         <?php endif; ?>

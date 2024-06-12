@@ -117,9 +117,9 @@ $description = LangManager::translate("core.Package.desc"); ?>
                                         <i><b><?= $apiPackages['version_cmw'] ?></b></i>
                                     </p>
                                     <div class="d-flex gap-3 align-items-center">
-                                        <?php if ($apiPackages['demo']): ?>
+                                        <?php if ($apiPackages['demo_link']): ?>
                                             <a class="btn btn-sm btn-primary"
-                                               href="<?= $apiPackages['demo'] ?>" target="_blank"><i
+                                               href="<?= $apiPackages['demo_link'] ?>" target="_blank"><i
                                                     class="fa-solid fa-arrow-up-right-from-square"></i> <?= LangManager::translate("core.Package.demo") ?>
                                             </a>
                                         <?php endif; ?>

@@ -1,6 +1,5 @@
 <?php
 
-use CMW\Controller\Core\CoreController;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 
@@ -13,7 +12,7 @@ $description = LangManager::translate("core.config.desc");
 
 <div class="d-flex flex-wrap justify-content-between">
     <h3><i class="fa-solid fa-gavel"></i> <span
-                class="m-lg-auto"><?= LangManager::translate("core.condition.title") ?></span></h3>
+            class="m-lg-auto"><?= LangManager::translate("core.condition.title") ?></span></h3>
 </div>
 
 <section class="row">
@@ -37,10 +36,10 @@ $description = LangManager::translate("core.config.desc");
                 <div class="card-body">
                     <h6><?= LangManager::translate("core.condition.content") ?></h6>
                     <textarea class="tinymce" name="conditionContent"><?= $cgv->getContent() ?></textarea>
-                    <p><?= LangManager::translate("core.condition.updateby", ['author' => $cgv->getLastEditor()?->getPseudo()]) ?>
-                        <?= $cgv->getLastEditor()?->getPseudo() ?>
+                    <p>
+                        <?= LangManager::translate("core.condition.updateby", ['author' => $cgv->getLastEditor()?->getPseudo()]) ?>
                         <?= LangManager::translate("core.condition.on", ['date' => $cgv->getUpdateFormatted()]) ?>
-                        <?= $cgv->getUpdateFormatted() ?></p>
+                    </p>
                     <div class="text-center mt-2">
                         <button type="submit" class="btn btn-primary float-right">
                             <?= LangManager::translate("core.btn.save") ?>
@@ -69,14 +68,14 @@ $description = LangManager::translate("core.config.desc");
                 <div class="card-body">
                     <h6><?= LangManager::translate("core.condition.content") ?></h6>
                     <textarea class="tinymce" name="conditionContent"><?= $cgu->getContent() ?></textarea>
-                    <p><?= LangManager::translate("core.condition.updateby", ['author' => $cgv->getLastEditor()?->getPseudo()]) ?>
-                        <?= $cgu->getLastEditor()?->getPseudo() ?>
-                        <?= LangManager::translate("core.condition.on") ?> <?= CoreController::formatDate($cgu->getUpdate()) ?></p>
+                    <p>
+                        <?= LangManager::translate("core.condition.updateby", ['author' => $cgv->getLastEditor()?->getPseudo()]) ?>
+                        <?= LangManager::translate("core.condition.on", ['date' => $cgv->getUpdateFormatted()]) ?>
+                    </p>
                     <div class="text-center mt-2">
                         <button type="submit" class="btn btn-primary float-right">
                             <?= LangManager::translate("core.btn.save") ?>
                         </button>
-
                     </div>
                 </div>
             </form>
