@@ -437,6 +437,9 @@ return [
                 "edit" => "Gérez les maintenance de votre site",
                 "bypass" => "Outrepassez les maintenances de votre",
             ],
+            "condition" => [
+                "edit" => "Gérez les conditions de votre site"
+            ],
         ],
     ],
 ];

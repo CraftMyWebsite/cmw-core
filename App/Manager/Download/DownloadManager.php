@@ -7,6 +7,7 @@ use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Permission\PermissionManager;
 use CMW\Model\Users\PermissionsModel;
 use CMW\Utils\Directory;
+use CMW\Utils\Log;
 use JetBrains\PhpStorm\ExpectedValues;
 use ZipArchive;
 
@@ -76,7 +77,7 @@ class DownloadManager
 
             if (!is_null($packagePermissions)) {
                 foreach ($packagePermissions->permissions() as $permission) {
-                    PermissionsModel::getInstance()->addFullCodePermission($permission->getCode());
+                    PermissionsModel::getInstance()->addFullCodePermission($permission);
                 }
             }
 

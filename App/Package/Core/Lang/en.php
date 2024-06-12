@@ -434,6 +434,9 @@ return [
                 "edit" => "Manage website maintenance",
                 "bypass" => "Bypass website maintenance",
             ],
+            "condition" => [
+                "edit" => "Manage website terms"
+            ],
         ],
     ],
 ];

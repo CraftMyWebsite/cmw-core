@@ -2,6 +2,7 @@
 
 namespace CMW\Model\Installer;
 
+use CMW\Controller\Core\PackageController;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Download\DownloadManager;
@@ -9,11 +10,14 @@ use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Permission\PermissionManager;
 use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Twofa\TwoFaManager;
 use CMW\Model\Users\Users2FaModel;
 use CMW\Model\Users\UsersModel;
+use CMW\Utils\Log;
 use CMW\Utils\Redirect;
+use CMW\Utils\Utils;
 use PDO;
 use PDOException;
 
@@ -86,7 +90,11 @@ class InstallerModel
     private static function loadDefaultPackages(): void
     {
         //Load packages files
-        DownloadManager::initPackages('Core', 'Users', 'Pages');
+        $packages = PackageController::getAllPackages();
+
+        foreach ($packages as $package) {
+            DownloadManager::initPackages($package->name());
+        }
     }
 
     public static function initAdmin(string $email, string $pseudo, string $password): void
@@ -95,21 +103,21 @@ class InstallerModel
         $db = self::loadDatabaseWithoutParams();
 
         $query = $db->prepare('INSERT INTO cmw_users (user_email, user_pseudo, user_password, user_state, user_key, user_created, user_updated) VALUES (:user_email, :user_pseudo, :user_password, :user_state, :user_key, NOW(), NOW())');
-        $query->execute(array(
+        $query->execute([
             'user_email' => $email,
             'user_pseudo' => $pseudo,
             'user_password' => $password,
             'user_state' => 1,
-            'user_key' => uniqid('', true)
-        ));
+            'user_key' => uniqid('', true),
+        ]);
 
         $userId = $db->lastInsertId();
 
         $query = $db->prepare("INSERT INTO cmw_users_roles (user_id, role_id) VALUES (:user_id, :role_id)");
-        $query->execute(array(
+        $query->execute([
             "user_id" => $userId,
-            "role_id" => 5 //Default administrator id is 5
-        ));
+            "role_id" => 5, //Default administrator id is 5
+        ]);
 
         self::initCondition($userId);
 
@@ -118,7 +126,7 @@ class InstallerModel
 
         $user = UsersModel::getInstance()->getUserById($userId);
 
-        if (is_null($user)){
+        if (is_null($user)) {
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                 LangManager::translate("core.toaster.internalError"));
             Redirect::redirectPreviousRoute();
@@ -144,15 +152,15 @@ class InstallerModel
 
         $query = $db->prepare("INSERT INTO cmw_core_options (option_name, option_value, option_updated) VALUES (:option_name, :option_value, NOW())");
 
-        $query->execute(array(
+        $query->execute([
             "option_name" => "name",
-            "option_value" => $name
-        ));
+            "option_value" => $name,
+        ]);
 
-        $query->execute(array(
+        $query->execute([
             "option_name" => "description",
-            "option_value" => $description
-        ));
+            "option_value" => $description,
+        ]);
     }
 
 }

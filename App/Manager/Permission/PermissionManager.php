@@ -48,7 +48,7 @@ class PermissionManager
 
     public static function getPackagePermissions(string $packageName): ?IPermissionInit
     {
-        $namespace = 'CMW\\Package\\' . $packageName . "\\Permissions";
+        $namespace = 'CMW\\Permissions\\' . $packageName . '\\Permissions';
 
         if (!class_exists($namespace)) {
             return null;

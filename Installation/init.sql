@@ -111,10 +111,11 @@ CREATE TABLE IF NOT EXISTS `cmw_users_roles`
 
 CREATE TABLE IF NOT EXISTS cmw_permissions
 (
-    permission_id        INT AUTO_INCREMENT
+    permission_id          INT AUTO_INCREMENT
         PRIMARY KEY,
-    permission_parent_id INT                         NULL,
-    permission_code      VARCHAR(50) CHARSET utf8mb4 NOT NULL,
+    permission_parent_id   INT                         NULL,
+    permission_code        VARCHAR(50) CHARSET utf8mb4 NOT NULL,
+    permission_description VARCHAR(255)                NULL,
     CONSTRAINT FK_PERMISSION_PARENT_ID
         FOREIGN KEY (permission_parent_id) REFERENCES cmw_permissions (permission_id)
             ON UPDATE CASCADE ON DELETE CASCADE

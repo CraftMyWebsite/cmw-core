@@ -67,7 +67,7 @@ class PermissionsController extends AbstractController
 
             if (!is_null($packagePermissions)) {
                 foreach ($packagePermissions->permissions() as $permission) {
-                    $permEntity = PermissionsModel::getInstance()->addFullCodePermission($permission->getCode());
+                    $permEntity = PermissionsModel::getInstance()->addFullCodePermission($permission);
 
                     if (is_null($permEntity)) {
                         Flash::send(Alert::WARNING, LangManager::translate("core.toaster.warning"),

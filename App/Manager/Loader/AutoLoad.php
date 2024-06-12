@@ -111,7 +111,8 @@ class AutoLoad
                 "Exception" => "Exception/",
                 "Type" => "Type/",
                 "PackageInfo", "Manager" => "",
-                "Package", "Permissions", "Theme" => "/",
+                "Package", "Theme" => "/",
+                "Permissions" => "Init/",
             };
         };
 

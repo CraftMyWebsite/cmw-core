@@ -13,7 +13,7 @@ function generateCheckBox(PermissionEntity $permission, string $codeValue, bool 
                 <li>
                     <div class="form-switch">
                         <input class="me-1 form-check-input" type="checkbox" id="{$permission->getId()}" name="perms[{$permission->getId()}]" value="{$permission->getId()}" $check>
-                        <label class="form-check-label" for="{$permission->getId()}">$codeValue</label>
+                        <label class="form-check-label" for="{$permission->getId()}">{$permission->getDescription()}</label>
                     </div>
                 </li>
             </ul>

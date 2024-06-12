@@ -289,11 +289,11 @@ class InstallerController extends AbstractController
         InstallerModel::initDatabase($host, $db, $username, $password, $port);
 
         // Install the Default Theme settings
-        (new ThemeManager())->installThemeSettings(ThemeManager::getInstance()->getCurrentTheme()->name());
+        ThemeManager::getInstance()->installThemeSettings(ThemeManager::getInstance()->getCurrentTheme()->name());
         //Init Default routes
         (new LinkStorage())->storeDefaultRoutes();
 
-        EnvManager::getInstance()->editValue("installStep", 2);
+       EnvManager::getInstance()->editValue("installStep", 2);
     }
 
     private function firstInstallSetDatabase(string $host, string $db, string $username, string $password, int $port): void

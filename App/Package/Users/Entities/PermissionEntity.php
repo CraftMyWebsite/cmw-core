@@ -10,17 +10,20 @@ class PermissionEntity
     private int $permissionId;
     private ?PermissionEntity $permissionParent;
     private string $permissionCode;
+    private ?string $permissionDescription;
 
     /**
      * @param int $permissionId
      * @param PermissionEntity|null $permissionParent
      * @param string $permissionCode
+     * @param string|null $permissionDescription
      */
-    public function __construct(int $permissionId, ?PermissionEntity $permissionParent, string $permissionCode)
+    public function __construct(int $permissionId, ?PermissionEntity $permissionParent, string $permissionCode, ?string $permissionDescription)
     {
         $this->permissionId = $permissionId;
         $this->permissionParent = $permissionParent;
         $this->permissionCode = $permissionCode;
+        $this->permissionDescription = $permissionDescription;
     }
 
 
@@ -65,6 +68,15 @@ class PermissionEntity
     {
         return $this->permissionCode;
     }
+
+    /**
+     * @return ?string
+     */
+    public function getDescription(): ?string
+    {
+        return $this->permissionDescription;
+    }
+
 
     public function hasParent(): bool
     {
