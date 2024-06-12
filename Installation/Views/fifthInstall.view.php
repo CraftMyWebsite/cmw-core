@@ -61,7 +61,7 @@ use CMW\Manager\Lang\LangManager;
                     <div><a class="text-gray-400 hover:text-cmw-pink" href="" target="_blank"><i class='fa-solid fa-at'></i><i> <?= $theme['author_pseudo'] ?></i></a></div>
                     <div><i class='fa-solid fa-download'></i> <?= $theme['downloads'] ?></div>
                     <div><?= LangManager::translate("Installation.packages.version") ?> : <?= $theme['version_name'] ?></div>
-                    <?= $theme['demo'] !== "" ?"<div><a class='text-gray-400 hover:text-cmw-pink' href='" . $theme['demo'] . "' target='_blank'> <i class='fa-solid fa-up-right-from-square'></i>" . " " . LangManager::translate('Installation.packages.demo') . "</a></div>" : "" ?>
+                    <?= $theme['demo_link'] !== "" ?"<div><a class='text-gray-400 hover:text-cmw-pink' href='" . $theme['demo_link'] . "' target='_blank'> <i class='fa-solid fa-up-right-from-square'></i>" . " " . LangManager::translate('Installation.packages.demo') . "</a></div>" : "" ?>
                     <?= $theme['code_link'] !== "" ? "<div><a class='text-gray-400 hover:text-cmw-pink' href='" . $theme['code_link'] . "' target='_blank'><i class='fa-brands fa-github'></i></a></div>" : "" ?>
                 </div>
             </li>

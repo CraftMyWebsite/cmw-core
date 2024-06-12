@@ -56,7 +56,7 @@ use CMW\Manager\Lang\LangManager;
                         ?>
                         <li onmouseenter="showInfoPackage('<?= $package['name'] ?>','<?= $package['description'] ?>', '<?= $tags ?>',
                             '<?= $package['author_pseudo'] ?>', '<?= $package['price'] ?>', '<?= $package['downloads'] ?>',
-                            '<?= $package['version_name'] ?>', '<?= $package['code_link'] ?>', '<?= $package['demo'] ?>')"
+                            '<?= $package['version_name'] ?>', '<?= $package['code_link'] ?>', '<?= $package['demo_link'] ?>')"
                             class="p-1 bg-cmw-gray-sec hover:bg-gray-800 mb-px">
                             <input class="hidden" id="package_<?= $package['id'] ?>" type="checkbox" name="packages[]"
                                    value="<?= $package['id'] ?>">

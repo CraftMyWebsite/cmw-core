@@ -49,8 +49,8 @@ use CMW\Manager\Lang\LangManager;
         <label class="label cursor-pointer">
             <input id="cgu" name="cgu" type="checkbox" class="checkbox checkbox-primary checkbox-xs"/>
             <span class=""><a
-                        class="text-gray-400 hover:text-primary" target="_blank"
-                        href="https://craftmywebsite.fr/cgu"><?= LangManager::translate("Installation.welcome.readaccept") ?> <i></a></i></span>
+                    class="text-gray-400 hover:text-primary" target="_blank"
+                    href="https://craftmywebsite.fr/cgu"><?= LangManager::translate("Installation.welcome.readaccept") ?> <i></a></i></span>
         </label>
     </div>
     <div class="card-actions justify-end">
