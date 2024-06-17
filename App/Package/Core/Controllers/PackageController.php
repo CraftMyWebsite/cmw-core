@@ -77,7 +77,7 @@ class PackageController extends AbstractController
     {
         $namespace = 'CMW\\Package\\' . $packageName . "\\Package";
 
-        if (!class_exists($namespace)){
+        if (!class_exists($namespace)) {
             return null;
         }
 
@@ -133,7 +133,7 @@ class PackageController extends AbstractController
     #[Link("/market", Link::GET, [], "/cmw-admin/packages")]
     private function adminPackageManage(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.local");
 
         $installedPackages = self::getInstalledPackages();
         $packagesList = self::getMarketPackages();
@@ -146,7 +146,7 @@ class PackageController extends AbstractController
     #[Link("/package", Link::GET, [], "/cmw-admin/packages")]
     private function adminMyPackage(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.market");
 
         $installedPackages = self::getInstalledPackages();
         $packagesList = self::getMarketPackages();
@@ -159,7 +159,7 @@ class PackageController extends AbstractController
     #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/packages")]
     #[NoReturn] private function adminPackageInstallation(Request $request, int $id): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.market");
 
         $package = PublicAPI::putData("market/resources/install/$id");
 
@@ -186,7 +186,7 @@ class PackageController extends AbstractController
     #[Link("/delete/:package", Link::GET, ["package" => ".*?"], "/cmw-admin/packages")]
     #[NoReturn] private function adminPackageDelete(Request $request, string $package): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.local");
 
         if (!DownloadManager::deletePackage($package)) {
             Flash::send(Alert::ERROR, LangManager::translate("core.package.error"),
@@ -205,7 +205,7 @@ class PackageController extends AbstractController
     #[Link("/update/:id/:actualVersion/:packageName", Link::GET, ["id" => "[0-9]+", "actualVersion" => ".*?", "packageName" => ".*?"], "/cmw-admin/packages")]
     #[NoReturn] private function adminPackageUpdate(Request $request, int $id, string $actualVersion, string $packageName): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.local");
 
         $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion");
 

@@ -15,7 +15,7 @@ class Package implements IPackageConfig
 
     public function version(): string
     {
-        return "1.0.0";
+        return "0.0.1";
     }
 
     public function authors(): array
@@ -127,12 +127,12 @@ class Package implements IPackageConfig
                 subMenus: [
                     new PackageSubMenuType(
                         title: 'Mes packages',
-                        permission: 'core.todo', //TODO PERMS
+                        permission: 'core.packages.local',
                         url: 'packages/package',
                     ),
                     new PackageSubMenuType(
                         title: 'Market',
-                        permission: 'core.todo', //TODO PERMS
+                        permission: 'core.packages.distant',
                         url: 'packages/market',
                     ),
                 ],
@@ -228,12 +228,12 @@ class Package implements IPackageConfig
                 subMenus: [
                     new PackageSubMenuType(
                         title: 'My packages',
-                        permission: 'core.todo', //TODO PERMS
+                        permission: 'core.packages.local',
                         url: 'packages/package',
                     ),
                     new PackageSubMenuType(
                         title: 'Market',
-                        permission: 'core.todo', //TODO PERMS
+                        permission: 'core.packages.market',
                         url: 'packages/market',
                     ),
                 ],

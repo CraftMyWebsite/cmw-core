@@ -429,13 +429,17 @@ return [
             "theme" => [
                 "configuration" => "Manage website themes",
             ],
-            "update" => "Mettez à jour votre site",
+            "update" => "Update your website",
             "maintenance" => [
                 "edit" => "Manage website maintenance",
                 "bypass" => "Bypass website maintenance",
             ],
             "condition" => [
-                "edit" => "Manage website terms"
+                "edit" => "Manage website terms",
+            ],
+            "packages" => [
+                "local" => "Manage local packages",
+                "market" => "Manage distant packages",
             ],
         ],
     ],

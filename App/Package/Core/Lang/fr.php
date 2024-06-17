@@ -438,7 +438,11 @@ return [
                 "bypass" => "Outrepassez les maintenances de votre",
             ],
             "condition" => [
-                "edit" => "Gérez les conditions de votre site"
+                "edit" => "Gérez les conditions de votre site",
+            ],
+            "packages" => [
+                "local" => "Gérez les packages installés",
+                "market" => "Gérez les packages distants",
             ],
         ],
     ],

@@ -55,6 +55,14 @@ class Permissions implements IPermissionInit
                 code: 'core.maintenance.bypass',
                 description: LangManager::translate('core.permissions.core.maintenance.bypass'),
             ),
+            new PermissionInitType(
+                code: 'core.packages.local',
+                description: LangManager::translate('core.permissions.core.packages.local'),
+            ),
+            new PermissionInitType(
+                code: 'core.packages.market',
+                description: LangManager::translate('core.permissions.core.packages.market'),
+            ),
         ];
     }
 
