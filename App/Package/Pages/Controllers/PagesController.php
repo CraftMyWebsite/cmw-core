@@ -38,8 +38,8 @@ class PagesController extends AbstractController
         $pagesList = PagesModel::getInstance()->getPages();
 
         View::createAdminView('Pages', 'page')
-            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css", "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
-            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js", "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
+            ->addStyle("Admin/Resources/Assets/Css/simple-datatables.css")
+            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js", "Admin/Resources/Vendors/Simple-datatables/config-datatables.js")
             ->addVariableList(["pagesList" => $pagesList])
             ->view();
     }

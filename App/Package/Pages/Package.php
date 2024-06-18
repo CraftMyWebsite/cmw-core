@@ -38,7 +38,7 @@ class Package implements IPackageConfig
         return [
             new PackageMenuType(
                 lang: "fr",
-                icon: "fas fa-copy",
+                icon: "fa-solid fa-file-lines",
                 title: "Pages",
                 url: "pages",
                 permission: 'pages.show',
@@ -46,7 +46,7 @@ class Package implements IPackageConfig
             ),
             new PackageMenuType(
                 lang: "en",
-                icon: "fas fa-copy",
+                icon: "fa-solid fa-file-lines",
                 title: "Pages",
                 url: 'pages',
                 permission: 'pages.show',

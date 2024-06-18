@@ -360,16 +360,32 @@ document.addEventListener('DOMContentLoaded', function() {
     const buttons = document.querySelectorAll('.loading-btn');
 
     buttons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function(event) {
             if (!button.classList.contains('loading')) {
                 button.classList.add('loading');
                 button.disabled = true;
                 button.dataset.originalText = button.textContent;
                 button.innerHTML = `${button.getAttribute('data-loading-btn')} <span class="loading-icon"></span>`;
+
+                // Get the form and submit it
+                const form = button.closest('form');
+                if (form) {
+                    form.submit();
+                }
             } else {
                 button.classList.remove('loading');
                 button.textContent = button.dataset.originalText;
             }
         });
+    });
+});
+
+/*
+* AUTO CHECKBOX
+* */
+document.addEventListener('DOMContentLoaded', (event) => {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.value = "1";
     });
 });

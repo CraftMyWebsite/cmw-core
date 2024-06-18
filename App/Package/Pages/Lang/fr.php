@@ -40,7 +40,7 @@ return [
     "creation" => [
         "date" => "Date de création",
         "update" => "Date de modification",
-        "add" => "Ajouter une page",
+        "add" => "Créer une page",
         "content" => "Contenu",
     ],
 
