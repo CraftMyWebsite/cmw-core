@@ -357,7 +357,7 @@ return [
         ],
     ],
     "footer" => [
-        "left" => "Copyright &copy; 2014 - " . date("Y") . " Tous droits réservés.",
+        "left" => "© 2014 - " . date("Y") . " CraftMyWebsite. Tous droits réservés.",
         "right" => "Merci d'utiliser <a target='_blank' href='https://craftmywebsite.fr/'>CraftMyWebsite</a>.",
         "used" => "Vous utilisez la version ",
         "upgrade" => "Veuillez mettre à jour vers la version",

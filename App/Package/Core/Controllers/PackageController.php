@@ -22,7 +22,7 @@ use JetBrains\PhpStorm\NoReturn;
 class PackageController extends AbstractController
 {
 
-    public static array $corePackages = ['Core', 'Pages', 'Users'];
+    public static array $corePackages = ['Core', 'Users'];
 
     /**
      * @return IPackageConfig[]

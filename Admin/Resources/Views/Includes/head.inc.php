@@ -18,73 +18,56 @@ use CMW\Utils\Website;
     <title><?= Website::getWebsiteName() ?> - Admin | <?= $title ?? Website::getTitle(useSiteName: false) ?></title>
     <meta name="description" content="<?= $description ?? Website::getDescription() ?>">
     <meta name="robots" content="NOINDEX, NOFOLLOW">
-
-    <script src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Js/darkMode.js"></script>
-
-    <!--IMPORT BASIQUE-->
-    <link rel="stylesheet"
-          href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Css/Main/app.css"/>
-    <link rel="stylesheet"
-          href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Css/Main/app-dark.css"/>
     <link rel="icon" type="image/x-icon"
-          href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Images/Logo/favicon.ico"/>
+          href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Img/favicon.ico"/>
     <link rel="stylesheet"
-          href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Vendors/Fontawesome-free/Css/fa-all.min.css"/>
+          href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Css/style.css"/>
     <link rel="stylesheet"
           href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Vendors/Choices.js/Public/Assets/Styles/choices.css"/>
+
+    <link rel="stylesheet"
+          href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Vendors/Fontawesome-free/Css/fa-all.min.css"/>
 
 </head>
 
 <style>
+    @font-face {  font-family: rubik;  src:url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Rubik-Light.ttf"); font-weight: 300;  }
+    @font-face {  font-family: rubik;  src:url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Rubik-Regular.ttf"); font-weight: 400;  }
+    @font-face {  font-family: rubik;  src:url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Rubik-Medium.ttf"); font-weight: 500;  }
+    @font-face {  font-family: rubik;  src:url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Rubik-SemiBold.ttf"); font-weight: 600;  }
+    @font-face {  font-family: rubik;  src:url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Rubik-Bold.ttf"); font-weight: 700;  }
+    @font-face {  font-family: rubik;  src:url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Rubik-ExtraBold.ttf"); font-weight: 800;  }
+</style>
 
-    @font-face {
-        font-family: Nunito;
-        src: url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Nunito/Nunito-Light.ttf");
-        font-weight: 300;
-    }
+<style>
+    :root {
+        --light-primary: #ffffff;
+        --light-secondary: #f5f5f6;
+        --light-third: #cbd5e1;
+        --light-fourth: #e2e8f0;
+        --light-text-primary: #334155;
+        --light-text-secondary: #9ca3af;
+        --light-input-bg: #f9fafb;
+        --light-scrollbar : #94a3b8;
+        --light-scrollbar-hover : #64748b;
+        --light-scrollbar-bg : #e2e8f0;
 
-    @font-face {
-        font-family: Nunito;
-        src: url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Nunito/Nunito-Regular.ttf");
-        font-weight: 400;
-    }
+        --dark-primary: #030712;
+        --dark-secondary: #111827;
+        --dark-third: #334155;
+        --dark-fourth: #1e293b;
+        --dark-text-primary: #e5e7eb;
+        --dark-text-secondary: #4b5563;
+        --dark-input-bg: #374151;
+        --dark-scrollbar : #334155;
+        --dark-scrollbar-hover : #1e293b;
+        --dark-scrollbar-bg : #94a3b8;
 
-    @font-face {
-        font-family: Nunito;
-        src: url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Nunito/Nunito-Medium.ttf");
-        font-weight: 500;
-    }
-
-    @font-face {
-        font-family: Nunito;
-        src: url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Nunito/Nunito-SemiBold.ttf");
-        font-weight: 600;
-    }
-
-    @font-face {
-        font-family: Nunito;
-        src: url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Nunito/Nunito-Bold.ttf");
-        font-weight: 700;
-    }
-
-    @font-face {
-        font-family: Nunito;
-        src: url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Nunito/Nunito-ExtraBold.ttf");
-        font-weight: 800;
-    }
-
-    @font-face {
-        font-family: "summernote";
-        font-style: normal;
-        font-weight: 400;
-        font-display: auto;
-        src: url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Vendors/Summernote/Font/summernote.eot?#iefix") format("embedded-opentype"), url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Vendors/Summernote/Font/summernote.woff2") format("woff2"), url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Vendors/Summernote/Font/summernote.woff") format("woff"), url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Vendors/Summernote/Font/summernote.ttf") format("truetype");
+        --nav-sky : #0284c7;
+        --nav-sky-light : #e0f2fe;
+        --nav-sky-dark : #0c4a6e;
+        --nav-sky-text-dark : #06b6d4;
     }
 </style>
 
 <body>
-<script>
-    const theme = localStorage.getItem('theme') || 'theme-dark';
-    document.body.className = theme;
-</script>
-<div id="app">

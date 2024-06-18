@@ -5,6 +5,7 @@ namespace CMW\Package\Core;
 use CMW\Manager\Package\IPackageConfig;
 use CMW\Manager\Package\PackageMenuType;
 use CMW\Manager\Package\PackageSubMenuType;
+use CMW\Manager\Theme\ThemeManager;
 
 class Package implements IPackageConfig
 {
@@ -38,18 +39,28 @@ class Package implements IPackageConfig
         return [
             new PackageMenuType(
                 lang: "fr",
-                icon: "fas fa-th",
-                title: "Général",
+                icon: "fas fa-gear",
+                title: "Paramètres",
                 url: null,
                 permission: null,
                 subMenus: [
                     new PackageSubMenuType(
-                        title: 'Configuration',
+                        title: 'Réglages du site',
                         permission: 'core.configuration',
                         url: 'configuration',
                     ),
                     new PackageSubMenuType(
-                        title: 'Configuration éditeur',
+                        title: 'Mode maintenance',
+                        permission: 'core.maintenance',
+                        url: 'maintenance/manage',
+                    ),
+                    new PackageSubMenuType(
+                        title: 'SMTP et mails',
+                        permission: 'core.mail.configuration',
+                        url: 'mail/configuration',
+                    ),
+                    new PackageSubMenuType(
+                        title: 'Éditeur',
                         permission: 'core.editor.edit',
                         url: 'editor/config',
                     ),
@@ -63,56 +74,43 @@ class Package implements IPackageConfig
                         permission: 'core.security.configuration',
                         url: 'security',
                     ),
-                    new PackageSubMenuType(
-                        title: 'Mises à jour',
-                        permission: 'core.update',
-                        url: 'updates/cms',
-                    ),
                 ],
             ),
             new PackageMenuType(
                 lang: "fr",
-                icon: "fas fa-helmet-safety",
-                title: "Maintenance",
-                url: "maintenance/manage",
-                permission: "core.maintenance",
-                subMenus: [],
-            ),
-            new PackageMenuType(
-                lang: "fr",
-                icon: "fas fa-envelope",
-                title: "Mails",
-                url: "mail/configuration",
-                permission: "core.mail.configuration",
-                subMenus: [],
-            ),
-            new PackageMenuType(
-                lang: "fr",
                 icon: "fas fa-bars",
-                title: "Menus",
+                title: "Navigations",
                 url: "menus",
                 permission: "core.menus.configuration",
                 subMenus: [],
             ),
             new PackageMenuType(
                 lang: "fr",
-                icon: "fas fa-paintbrush",
+                icon: "fas fa-cloud-arrow-down",
+                title: "Mises à jour",
+                url: "updates/cms",
+                permission: "core.update",
+                subMenus: [],
+            ),
+            new PackageMenuType(
+                lang: "fr",
+                icon: "fas fa-palette",
                 title: "Thèmes",
                 url: null,
                 permission: null,
                 subMenus: [
                     new PackageSubMenuType(
-                        title: 'Apparence',
+                        title: 'Modifier ' . ThemeManager::getInstance()->getCurrentTheme()->name(),
                         permission: 'core.theme.configuration',
                         url: 'theme/manage',
                     ),
                     new PackageSubMenuType(
-                        title: 'Mes thèmes',
+                        title: 'Thèmes installé',
                         permission: 'core.theme.configuration',
                         url: 'theme/theme',
                     ),
                     new PackageSubMenuType(
-                        title: 'Market',
+                        title: 'Parcourir le Market',
                         permission: 'core.theme.configuration',
                         url: 'theme/market',
                     ),
@@ -139,18 +137,28 @@ class Package implements IPackageConfig
             ),
             new PackageMenuType(
                 lang: "en",
-                icon: "fas fa-th",
-                title: "General",
+                icon: "fas fa-gear",
+                title: "Settings",
                 url: null,
                 permission: null,
                 subMenus: [
                     new PackageSubMenuType(
-                        title: 'Configuration',
+                        title: 'Site Settings',
                         permission: 'core.configuration',
                         url: 'configuration',
                     ),
                     new PackageSubMenuType(
-                        title: 'Configuration editor',
+                        title: 'Maintenance mode',
+                        permission: 'core.maintenance',
+                        url: 'maintenance/manage',
+                    ),
+                    new PackageSubMenuType(
+                        title: 'SMTP and emails',
+                        permission: 'core.mail.configuration',
+                        url: 'mail/configuration',
+                    ),
+                    new PackageSubMenuType(
+                        title: 'Editor',
                         permission: 'core.editor.edit',
                         url: 'editor/config',
                     ),
@@ -164,56 +172,43 @@ class Package implements IPackageConfig
                         permission: 'core.security.configuration',
                         url: 'security',
                     ),
-                    new PackageSubMenuType(
-                        title: 'Updates',
-                        permission: 'core.update',
-                        url: 'updates/cms',
-                    ),
                 ],
             ),
             new PackageMenuType(
                 lang: "en",
-                icon: "fas fa-helmet-safety",
-                title: "Maintenance",
-                url: "maintenance/manage",
-                permission: "core.maintenance",
-                subMenus: [],
-            ),
-            new PackageMenuType(
-                lang: "en",
-                icon: "fas fa-envelope",
-                title: "Mails",
-                url: "mail/configuration",
-                permission: "core.mail.configuration",
-                subMenus: [],
-            ),
-            new PackageMenuType(
-                lang: "en",
                 icon: "fas fa-bars",
-                title: "Menus",
+                title: "Navigations",
                 url: "menus",
                 permission: "core.menus.configuration",
                 subMenus: [],
             ),
             new PackageMenuType(
                 lang: "en",
-                icon: "fas fa-paintbrush",
+                icon: "fas fa-cloud-arrow-down",
+                title: "Updates",
+                url: "updates/cms",
+                permission: "core.update",
+                subMenus: [],
+            ),
+            new PackageMenuType(
+                lang: "en",
+                icon: "fas fa-palette",
                 title: "Themes",
                 url: null,
                 permission: null,
                 subMenus: [
                     new PackageSubMenuType(
-                        title: 'Appearance',
+                        title: 'Edit ' . ThemeManager::getInstance()->getCurrentTheme()->name(),
                         permission: 'core.theme.configuration',
                         url: 'theme/manage',
                     ),
                     new PackageSubMenuType(
-                        title: 'My themes',
+                        title: 'Themes installed',
                         permission: 'core.theme.configuration',
                         url: 'theme/theme',
                     ),
                     new PackageSubMenuType(
-                        title: 'Market',
+                        title: 'Browse the Market',
                         permission: 'core.theme.configuration',
                         url: 'theme/market',
                     ),
@@ -232,8 +227,8 @@ class Package implements IPackageConfig
                         url: 'packages/package',
                     ),
                     new PackageSubMenuType(
-                        title: 'Market',
-                        permission: 'core.packages.market',
+                        title: 'Browse the Market',
+                        permission: 'core.packages.distant',
                         url: 'packages/market',
                     ),
                 ],
