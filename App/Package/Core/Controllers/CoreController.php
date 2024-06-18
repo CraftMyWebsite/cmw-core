@@ -35,7 +35,7 @@ class CoreController extends AbstractController
 {
     public static string $themeName;
     public static array $availableLocales = ['fr' => 'Français', 'en' => 'English']; //todo remove that
-    public static array $exampleDateFormat = ["d-m-Y H:i:s", "d-m-Y Hh im ss", "d/m/Y H:i:s", "d/m/Y à H\h i\m s\s", "d/m/Y à H\h i\m", "d/m/Y at H\h i\m s\s"];
+    public static array $exampleDateFormat = ["d-m-Y H:i:s", "d-m-Y Hh im ss", "d/m/Y H:i:s", "d/m/Y à H\h i\m s\s", "d/m/Y à H\h i\m", "d/m/Y at H\h i\m s\s", "d F \à H\hi", "d F \at H\hi"];
 
     public static function getThemePath(): string
     {

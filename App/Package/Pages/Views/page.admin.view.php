@@ -37,7 +37,8 @@ $description = LangManager::translate("pages.list.desc"); ?>
                         <a href="<?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $page->getSlug() ?>"
                            target="_blank"><?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $page->getSlug() ?></a>
                     </td>
-                    <td>
+                    <td class="flex items-center gap-2">
+                        <img class="avatar-rounded w-6 h-6" src="<?= $page->getUser()->getUserPicture()->getImage() ?>" alt="user picture">
                         <?= $page->getUser()->getPseudo() ?>
                     </td>
                     <td>
