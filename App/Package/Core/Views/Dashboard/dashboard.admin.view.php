@@ -18,144 +18,88 @@ Website::setDescription(LangManager::translate("core.dashboard.desc"));
 /* @var array $weeklyVisits */
 /* @var array $registers */
 ?>
-<div class="alert alert-warning">Veuillez noter que CraftMyWebsite2 est actuellement en phase alpha et n'est pas encore achevé. <br>Son utilisation en environnement de production est fortement déconseillée. Des fonctionnalités clés peuvent manquer ou ne pas fonctionner comme prévu. <br><b>Pendant cette phase, des réinstallations complètes du système pourront être nécessaires.</b> <br>Nous vous remercions de votre compréhension et de votre patience pendant que nous travaillons sur CraftMyWebsite.</div>
-
-<div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fa-solid fa-table-columns"></i> <span
-                class="m-lg-auto"><?= LangManager::translate("core.dashboard.title") ?></span></h3>
+<div class="alert-warning">Veuillez noter que CraftMyWebsite2 est actuellement en phase alpha et n'est pas encore
+    achevé. <br>Son utilisation en environnement de production est fortement déconseillée. Des fonctionnalités clés
+    peuvent manquer ou ne pas fonctionner comme prévu. <br><b>Pendant cette phase, des réinstallations complètes du
+        système pourront être nécessaires.</b> <br>Nous vous remercions de votre compréhension et de votre patience
+    pendant que nous travaillons sur CraftMyWebsite.
 </div>
 
-<div class="page-content">
-    <section class="row">
-            <div class="row">
-                <div class="col-lg-9">
-                    <div class="card" >
-                        <div class="card-header">
-                            <h4><?= LangManager::translate("core.dashboard.numbers_views") ?></h4>
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link active" id="setting1-tab" data-bs-toggle="tab" href="#setting1"
-                                       role="tab"
-                                       aria-selected="true"><?= LangManager::translate("core.dashboard.days") ?></a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="setting2-tab" data-bs-toggle="tab" href="#setting2"
-                                       role="tab"
-                                       aria-selected="false"><?= LangManager::translate("core.dashboard.weeks") ?></a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="setting3-tab" data-bs-toggle="tab" href="#setting3"
-                                       role="tab"
-                                       aria-selected="false"><?= LangManager::translate("core.dashboard.months") ?></a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="card-body">
-                            <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active py-2" id="setting1" role="tabpanel"
-                                     aria-labelledby="setting1-tab">
-                                    <div id="daily-chart">
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade py-2" id="setting2" role="tabpanel"
-                                     aria-labelledby="setting2-tab">
-                                    <div id="weekly-chart">
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade py-2" id="setting3" role="tabpanel"
-                                     aria-labelledby="setting3-tab">
-                                    <div id="monthly-chart">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<h3><i class="fa-solid fa-chart-pie"></i> <?= LangManager::translate("core.dashboard.title") ?></h3>
 
-
-
-
-                <div class="col-sm-6 col-xl-3 text-center">
-                    <div class="card">
-                        <div class="card-body px-4">
-                            <div class="row">
-                                <div class="col-2 col-sm-4">
-                                    <div class="stats-icon purple mb-2">
-                                        <i class="fa-solid fa-users"></i>
-                                    </div>
-                                </div>
-                                <div class="col-10 col-sm-8">
-                                    <h6 class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.total_member") ?></h6>
-                                    <h6 class="font-extrabold mb-0"><?= UsersModel::getInstance()->countUsers() ?></h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body px-4">
-                            <div class="row">
-                                <div class="col-2 col-sm-4">
-                                    <div class="stats-icon blue mb-2">
-                                        <i class="fa-solid fa-calendar-day"></i>
-                                    </div>
-                                </div>
-                                <div class="col-10 col-sm-8">
-                                    <h6 class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.daily_visits") ?></h6>
-                                    <h6 class="font-extrabold mb-0"><?= (new VisitsMetricsManager())->getVisitsNumber("day") ?></h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body px-4">
-                            <div class="row">
-                                <div class="col-2 col-sm-4">
-                                    <div class="stats-icon green mb-2">
-                                        <i class="fa-solid fa-calendar-days"></i>
-                                    </div>
-                                </div>
-                                <div class="col-10 col-sm-8">
-                                    <h6 class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.monthly_visits") ?></h6>
-                                    <h6 class="font-extrabold mb-0"><?= (new VisitsMetricsManager())->getVisitsNumber("monthly") ?></h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body px-4">
-                            <div class="row">
-                                <div class="col-2 col-sm-4">
-                                    <div class="stats-icon red mb-2">
-                                        <i class="fa-regular fa-calendar"></i>
-                                    </div>
-                                </div>
-                                <div class="col-10 col-sm-8">
-                                    <h6 class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.total_visits") ?></h6>
-                                    <h6 class="font-extrabold mb-0"><?= (new VisitsMetricsManager())->getVisitsNumber("all") ?></h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xl-3 text-center">
-
-                </div>
-                <div class="col-sm-6 col-xl-3  text-center">
-
-                </div>
-                <div class="col-sm-6 col-xl-3 text-center">
-
-                </div>
-
-
-
-
+<div class="grid-4">
+    <div class="card col-span-3">
+        <h6><?= LangManager::translate("core.dashboard.numbers_views") ?></h6>
+        <div class="tab-menu">
+            <ul class="tab-horizontal" data-tabs-toggle="#tab-content-1">
+                <li>
+                    <button data-tabs-target="#tab1"
+                            role="tab"><?= LangManager::translate("core.dashboard.days") ?></button>
+                </li>
+                <li>
+                    <button data-tabs-target="#tab2"
+                            role="tab"><?= LangManager::translate("core.dashboard.weeks") ?></button>
+                </li>
+                <li>
+                    <button data-tabs-target="#tab3"
+                            role="tab"><?= LangManager::translate("core.dashboard.months") ?></button>
+                </li>
+            </ul>
+        </div>
+        <div id="tab-content-1">
+            <div class="tab-content" id="tab1">
+                <div id="daily-chart"></div>
             </div>
-
-        <?php CoreController::getInstance()->getPackagesDashboardElements(); ?>
-
-    </section>
+            <div class="tab-content" id="tab2">
+                <div id="weekly-chart"></div>
+            </div>
+            <div class="tab-content" id="tab3">
+                <div id="monthly-chart"></div>
+            </div>
+        </div>
+    </div>
+    <div class="space-y-2">
+        <div class="card text-center">
+            <div class="center-flex items-center gap-6 py-4">
+                <i class="w-24 text-3xl fa-solid fa-user rounded-lg p-3 text-white" style="background-color: #9694FF"></i>
+                <div class="w-1/2">
+                    <p class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.total_member") ?></p>
+                    <h6 class="font-extrabold mb-0"><?= UsersModel::getInstance()->countUsers() ?></h6>
+                </div>
+            </div>
+        </div>
+        <div class="card text-center">
+            <div class="center-flex items-center gap-6 py-4">
+                <i class="w-24 fa-solid fa-calendar-day text-3xl rounded-lg p-3 text-white" style="background-color: #57CAEB"></i>
+                <div class="w-1/2">
+                    <p class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.daily_visits") ?></p>
+                    <h6 class="font-extrabold mb-0"><?= (new VisitsMetricsManager())->getVisitsNumber("day") ?></h6>
+                </div>
+            </div>
+        </div>
+        <div class="card text-center">
+            <div class="center-flex items-center gap-6 py-4">
+                <i class="w-24 fa-solid fa-calendar-days text-3xl rounded-lg p-3 text-white" style="background-color: #5DDAB4"></i>
+                <div class="w-1/2">
+                    <p class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.monthly_visits") ?></p>
+                    <h6 class="font-extrabold mb-0"><?= (new VisitsMetricsManager())->getVisitsNumber("monthly") ?></h6>
+                </div>
+            </div>
+        </div>
+        <div class="card text-center">
+            <div class="center-flex items-center gap-6 py-4">
+                <i class="w-24  fa-regular fa-calendar text-3xl rounded-lg p-3 text-white" style="background-color: #FF7976"></i>
+                <div class="w-1/2">
+                    <p class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.total_visits") ?></p>
+                    <h6 class="font-extrabold mb-0"><?= (new VisitsMetricsManager())->getVisitsNumber("all") ?></h6>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<?php CoreController::getInstance()->getPackagesDashboardElements(); ?>
+
 
 <script>
     let daily_options = {

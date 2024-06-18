@@ -70,7 +70,6 @@ class CoreController extends AbstractController
             ->addVariableList(['monthlyVisits' => $monthlyVisits, 'dailyVisits' => $dailyVisits,
                 'weeklyVisits' => $weeklyVisits, 'registers' => $registers])
             ->addScriptBefore("Admin/Resources/Vendors/Apexcharts/Js/apexcharts.js")
-            ->addScriptAfter("App/Package/Core/Views/Resources/Js/dashboard.js")
             ->view();
     }
 

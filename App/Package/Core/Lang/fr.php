@@ -37,7 +37,7 @@ return [
         "desc" => "Bienvenue sur votre panneau d'administration !",
         "total_member" => "Membres totaux",
         "best_views" => "Record de visites",
-        "numbers_views" => "Nombres de visites et d'inscriptions",
+        "numbers_views" => "Visites",
         "daily_visits" => "Visites du jour",
         "monthly_visits" => "Visites du mois",
         "total_visits" => "Visites totales",

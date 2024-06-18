@@ -37,7 +37,7 @@ return [
         "desc" => "Welcome to your administration panel!",
         "total_member" => "Total Members",
         "best_views" => "Record of Visits",
-        "numbers_views" => "Number of Visits and inscriptions",
+        "numbers_views" => "Visits",
         "daily_visits" => "Daily visits",
         "monthly_visits" => "Monthly Visits",
         "total_visits" => "Total Visits",
