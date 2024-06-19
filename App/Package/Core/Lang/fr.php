@@ -82,11 +82,12 @@ return [
         "preview" => 'Vous pouvez prévisualiser le rendu des styles <a href="https://highlightjs.org/static/demo/" target="_blank">ici</a>',
     ],
     "config" => [
-        "title" => "Configuration",
+        "title" => "Réglages du site",
         "head" => "Réglages",
         "desc" => "Configurez votre site CMW !",
-        "favicon" => "Modifiez le favicon de votre site",
+        "favicon" => "Modifiez le favicon",
         "favicon_tips" => 'CraftMyWebsite accepte uniquement les images <a href="https://www.icoconverter.com" target="_blank">.ico</a> pour des soucis de performances.',
+        "alert_img" => "Faites CTRL + F5 pour afficher votre nouvel Icon",
         "dateFormat" => "Format des dates",
         "dateFormatTooltip" => "Vous pouvez personnaliser la façon dont vous affichez les dates",
         "custom" => "-- Personnalisez-moi --",
@@ -97,8 +98,8 @@ return [
         "change" => "Changez la langue du site",
     ],
     "website" => [
-        "name" => "Nom de votre site",
-        "description" => "Description de votre site",
+        "name" => "Nom du site",
+        "description" => "Description du site",
     ],
     "minecraft" => [
         "ip" => "Addresse IP de votre serveur",

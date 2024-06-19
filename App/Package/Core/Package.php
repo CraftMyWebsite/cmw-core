@@ -60,11 +60,6 @@ class Package implements IPackageConfig
                         url: 'mail/configuration',
                     ),
                     new PackageSubMenuType(
-                        title: 'Éditeur',
-                        permission: 'core.editor.edit',
-                        url: 'editor/config',
-                    ),
-                    new PackageSubMenuType(
                         title: 'Conditions générales',
                         permission: 'core.condition.edit',
                         url: 'condition',
@@ -156,11 +151,6 @@ class Package implements IPackageConfig
                         title: 'SMTP and emails',
                         permission: 'core.mail.configuration',
                         url: 'mail/configuration',
-                    ),
-                    new PackageSubMenuType(
-                        title: 'Editor',
-                        permission: 'core.editor.edit',
-                        url: 'editor/config',
                     ),
                     new PackageSubMenuType(
                         title: 'Terms and conditions',

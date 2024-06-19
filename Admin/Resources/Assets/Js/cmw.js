@@ -161,13 +161,14 @@ document.querySelectorAll('.drop-img-area').forEach(initDropArea);
 
 function initDropArea(dropArea) {
     const inputName = dropArea.getAttribute('data-input-name') || 'fileInput';
+    const imgAccept = dropArea.getAttribute('data-img-accept') || 'image/*';
 
     dropArea.classList.add('relative', 'border-4', 'border-dashed', 'border-gray-300', 'rounded-lg', 'py-4', 'px-2', 'flex', 'flex-col', 'items-center', 'justify-center', 'cursor-pointer');
 
     const fileInput = document.createElement('input');
     fileInput.id = 'fileElem';
     fileInput.type = 'file';
-    fileInput.accept = 'image/*';
+    fileInput.accept = imgAccept;
     fileInput.name = inputName;
     fileInput.hidden = true;
     dropArea.appendChild(fileInput);
@@ -178,7 +179,7 @@ function initDropArea(dropArea) {
 
     const errorMessage = document.createElement('div');
     errorMessage.id = 'error-message';
-    errorMessage.textContent = 'Seuls les images sont autorisée.';
+    errorMessage.textContent = 'Format non autorisées.';
     errorMessage.classList.add('text-red-600', 'hidden');
     dropArea.appendChild(errorMessage);
 
@@ -228,13 +229,19 @@ function initDropArea(dropArea) {
 
     function handleFiles(files) {
         if (files.length > 0) {
-            if (files[0].type.startsWith('image/')) {
+            if (files[0].type.startsWith('image/') && checkFileAccept(files[0], imgAccept)) {
                 errorMessage.classList.add('hidden');
                 previewFile(files[0]);
             } else {
                 errorMessage.classList.remove('hidden');
             }
         }
+    }
+
+    function checkFileAccept(file, accept) {
+        if (accept === 'image/*') return true;
+        const acceptedTypes = accept.split(',').map(type => type.trim());
+        return acceptedTypes.includes(file.type);
     }
 
     function previewFile(file) {
@@ -279,6 +286,7 @@ function initDropArea(dropArea) {
         }
     }
 }
+
 
 /*
 * DROPDOWN
