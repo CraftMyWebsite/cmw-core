@@ -30,6 +30,14 @@ use CMW\Utils\Website;
 
 </head>
 
+<script>
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark')
+    }
+</script>
+
 <style>
     @font-face {  font-family: rubik;  src:url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Rubik-Light.ttf"); font-weight: 300;  }
     @font-face {  font-family: rubik;  src:url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Rubik-Regular.ttf"); font-weight: 400;  }
