@@ -330,6 +330,7 @@ return [
     "maintenance" => [
         "title" => "Maintenance",
         "description" => "Gérez les maintenances de votre site",
+        "main_label" => "Mode maintenance",
         "settings" => [
             "title" => "Réglages",
             "targetDateTitle" => "Fin",

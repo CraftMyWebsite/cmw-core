@@ -328,6 +328,7 @@ return [
     "maintenance" => [
         "title" => "Maintenance",
         "description" => "Manage your website maintenance",
+        "main_label" => "Maintenance mode",
         "settings" => [
             "title" => "Settings",
             "targetDateTitle" => "Target date",
