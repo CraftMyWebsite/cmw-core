@@ -351,12 +351,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const elements = document.querySelectorAll('.choices');
     elements.forEach(element => {
         new Choices(element, {
-            removeItemButton: true,
+            removeItemButton: false,
             searchEnabled: true,
             placeholderValue: 'Choisissez en plusieurs !',
             loadingText: 'Chargement...',
             noResultsText: 'Aucun résultat trouvé',
             itemSelectText: 'Cliquez pour sélectionner',
+            shouldSort: false
         });
     });
 });
