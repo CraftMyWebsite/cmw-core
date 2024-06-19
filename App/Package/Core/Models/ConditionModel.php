@@ -43,17 +43,30 @@ class ConditionModel extends AbstractModel
      * @param int $conditionAuthor
      * @return \CMW\Entity\Core\ConditionEntity|null
      */
-    public function updateCondition(int $conditionId, ?string $conditionContent, int $conditionState, int $conditionAuthor): ?ConditionEntity
+    public function updateCondition(?string $cguContent, int $cguState, ?string $cgvContent, int $cgvState, int $author): ?ConditionEntity
     {
         $info = array(
-            "conditionId" => $conditionId,
-            "conditionContent" => $conditionContent,
-            "conditionState" => $conditionState,
-            "conditionAuthor" => $conditionAuthor,
+            "cguContent" => $cguContent,
+            "cguState" => $cguState,
+            "cgvContent" => $cgvContent,
+            "cgvState" => $cgvState,
+            "author" => $author,
         );
 
-        $sql = "UPDATE cmw_core_condition SET condition_content = :conditionContent, condition_state = :conditionState, 
-                         condition_last_editor = :conditionAuthor WHERE condition_id = :conditionId";
+        $sql = "UPDATE cmw_core_condition
+SET
+    condition_content = CASE
+        WHEN condition_id = 1 THEN :cgvContent
+        WHEN condition_id = 2 THEN :cguContent
+        ELSE condition_content
+    END,
+    condition_state = CASE
+        WHEN condition_id = 1 THEN :cgvState
+        WHEN condition_id = 2 THEN :cguState
+        ELSE condition_state
+    END,
+    condition_last_editor = :author
+WHERE condition_id IN (1, 2);";
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);

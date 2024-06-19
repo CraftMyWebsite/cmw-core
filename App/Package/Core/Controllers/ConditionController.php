@@ -41,8 +41,8 @@ class ConditionController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.condition.edit");
 
-        [$conditionId, $conditionContent, $conditionState] = Utils::filterInput("conditionId",
-            "conditionContent", "conditionState");
+        [$cguContent, $cguState, $cgvContent, $cgvState] = Utils::filterInput(
+            "cguContent", "cguState", "cgvContent", "cgvState");
 
          $user = UsersModel::getCurrentUser();
 
@@ -55,8 +55,10 @@ class ConditionController extends AbstractController
 
         $userId = UsersModel::getCurrentUser()?->getId();
 
-        ConditionModel::getInstance()->updateCondition($conditionId, $conditionContent,
-            $conditionState === NULL ? 0 : 1, $userId);
+        $cguState = $cguState === NULL ? 0 : 1;
+        $cgvState = $cgvState === NULL ? 0 : 1;
+
+        ConditionModel::getInstance()->updateCondition($cguContent, $cguState, $cgvContent, $cgvState, $userId);
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
