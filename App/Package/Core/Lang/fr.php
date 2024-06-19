@@ -312,7 +312,7 @@ return [
         "healthReport" => [
             "title" => "Health Report",
             "subtitle" => "Késako ?",
-            "content" => "<p>Notre health report permet à notre équipe de support de vous aider en envoyant un maximum
+            "content" => "<p>Le health report permet à notre équipe de support de vous aider en envoyant un maximum
                     d'informations (non sensibles) à propos de votre site.</p>
 
                 <p>
