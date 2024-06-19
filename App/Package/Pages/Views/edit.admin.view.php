@@ -15,35 +15,33 @@ $description = LangManager::translate("pages.edit.desc");
 
 <h3><i class="fa-solid fa-file-lines"></i> <?= LangManager::translate("pages.edit.title") ?> : <?= $page->getTitle() ?></h3>
 
-<div class="card">
-    <form action="" method="post">
-        <?php (new SecurityManager())->insertHiddenToken() ?>
-        <input type="hidden" id="page_id" name="id" value="<?= $page->getId() ?>">
-        <div class="grid-2">
+<form action="" method="post">
+    <?php (new SecurityManager())->insertHiddenToken() ?>
+    <div class="grid-5">
+        <div class="col-span-4">
+            <input type="hidden" id="page_id" name="id" value="<?= $page->getId() ?>">
+            <textarea id="content" class="tinymce" name="content" data-tiny-height="700"><?= $page->getContent() ?></textarea>
+        </div>
+        <div class="card space-y-4">
             <div>
                 <label for="title"><?= LangManager::translate("pages.title") ?> :</label>
-                <input type="text" id="title" name="title" required class="input"
+                <input type="text" id="title" name="title" required class="input-sm"
                        placeholder="<?= LangManager::translate("pages.title") ?>" value="<?= $page->getTitle() ?>">
             </div>
             <div>
-                <label for="slug"><?= LangManager::translate("pages.title") ?> :</label>
-                <div class="input-group">
+                <label for="slug">URL :</label>
+                <div class="input-group-sm">
                     <i><?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?></i>
-                    <input type="text" value="<?= $page->getSlug() ?>" id="slug" name="slug" disabled>
+                    <input type="text" value="<?= $page->getSlug() ?>" id="slug" name="slug" required disabled>
                 </div>
             </div>
-        </div>
-        <div>
             <label class="toggle">
                 <p class="toggle-label"><?= LangManager::translate("pages.draft") ?></p>
                 <input type="checkbox" class="toggle-input" name="state" <?= $page->getState() === 1 ? "checked" : "" ?>>
                 <div class="toggle-slider"></div>
             </label>
+            <button type="submit" class="btn-primary mt-4 loading-btn btn-center"
+                    data-loading-btn="Sauvegarde ..."><?= LangManager::translate("core.btn.save") ?></button>
         </div>
-        <div class="mt-2">
-            <label for="content"><?= LangManager::translate("pages.creation.content") ?> :</label>
-            <textarea id="content" class="tinymce" name="content"><?= $page->getContent() ?></textarea>
-        </div>
-        <button type="submit" class="btn-primary btn-center mt-4 loading-btn" data-loading-btn="Sauvegarde ..."><?= LangManager::translate("core.btn.edit") ?></button>
-    </form>
-</div>
+    </div>
+</form>

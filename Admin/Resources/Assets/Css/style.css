@@ -1073,6 +1073,23 @@ hr {
 ::-webkit-scrollbar-track {
         border-radius: 10px; /* Arrondi de l'arrière-plan de la scrollbar */
     }
+/* LINK */
+.link {
+  --tw-text-opacity: 1;
+  color: rgb(28 100 242 / var(--tw-text-opacity));
+}
+.link:hover {
+  --tw-text-opacity: 1;
+  color: rgb(26 86 219 / var(--tw-text-opacity));
+}
+.dark .link {
+  --tw-text-opacity: 1;
+  color: rgb(63 131 248 / var(--tw-text-opacity));
+}
+.dark .link:hover {
+  --tw-text-opacity: 1;
+  color: rgb(28 100 242 / var(--tw-text-opacity));
+}
 /* ANIM */
 .loading-icon {
         display: inline-block;

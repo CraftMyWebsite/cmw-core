@@ -34,11 +34,15 @@ $description = LangManager::translate("pages.list.desc"); ?>
                         <?= $page->getTitle() ?>
                     </td>
                     <td>
-                        <a href="<?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $page->getSlug() ?>"
-                           target="_blank"><?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $page->getSlug() ?></a>
+                        <a class="link"
+                           href="<?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $page->getSlug() ?>"
+                           target="_blank">
+                            <?= mb_strimwidth(Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $page->getSlug(), 0, 40, '...') ?>
+                        </a>
                     </td>
                     <td class="flex items-center gap-2">
-                        <img class="avatar-rounded w-6 h-6" src="<?= $page->getUser()->getUserPicture()->getImage() ?>" alt="user picture">
+                        <img class="avatar-rounded w-6 h-6" src="<?= $page->getUser()->getUserPicture()->getImage() ?>"
+                             alt="user picture">
                         <?= $page->getUser()->getPseudo() ?>
                     </td>
                     <td>
