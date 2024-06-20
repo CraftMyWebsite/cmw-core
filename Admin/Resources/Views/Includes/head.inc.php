@@ -72,8 +72,8 @@ use CMW\Utils\Website;
         --dark-scrollbar-bg : #94a3b8;
 
         --nav-sky : #0284c7;
-        --nav-sky-light : #e0f2fe;
-        --nav-sky-dark : #0c4a6e;
+        --nav-sky-light : #f2f2f3;
+        --nav-sky-dark : #1e293b;
         --nav-sky-text-dark : #06b6d4;
     }
 
