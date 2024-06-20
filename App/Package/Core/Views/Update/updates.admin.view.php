@@ -77,7 +77,7 @@ $description = LangManager::translate("core.updates.description"); ?>
                     <p><?= LangManager::translate("core.updates.publishAt") ?> <?= CoreController::formatDate($previousVersion['date_upload']) ?></p>
                     <?php foreach ($previousVersionChangelogGroup = UpdatesController::groupBy("type", $previousVersion['changelog']) as $previousGroupedType) : ?>
                         <?php if ($previousGroupedType[0]['content']): ?>
-                        <div class="border rounded-lg p-2 dark:border-gray-700">
+                        <div class="border rounded-lg p-2 dark:border-gray-700 mb-1">
                             <p class="font-bold"><?= $previousGroupedType[0]['type'] ?> :</p>
                                 <ul style="list-style: disc" class="pl-5">
                                     <?php foreach ($previousGroupedType as $previousChangelogInfos) : ?>
