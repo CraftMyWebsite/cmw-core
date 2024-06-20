@@ -76,7 +76,7 @@ $description = LangManager::translate("core.mail.config.description");
                 <div>
                     <label for="password"><?= LangManager::translate("core.mail.config.passwordSMTP") ?> :</label>
                     <div class="input-group">
-                        <i class="fa-solid fa-house"></i>
+                        <i class="fa-solid fa-lock"></i>
                         <input type="password" id="password" name="password"
                                value="<?= $config?->getPassword() ?>" placeholder="••••" required>
                     </div>
