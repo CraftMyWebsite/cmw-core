@@ -13,7 +13,7 @@ use CMW\Utils\Website;
 Website::setTitle(LangManager::translate("core.Theme.config.title"));
 Website::setDescription(LangManager::translate("core.Theme.config.description")); ?>
 
-<h3><i class="fa-solid fa-feather"></i> <?= LangManager::translate("core.Theme.myThemes") ?></h3>
+<h3><i class="fa-solid fa-palette"></i> <?= LangManager::translate("core.Theme.myThemes") ?></h3>
 
 <div class="grid-4 mb-24">
     <!------------------------------------
@@ -183,19 +183,19 @@ Website::setDescription(LangManager::translate("core.Theme.config.description"))
                                 <?= LangManager::translate("core.Theme.CMWVersion") ?>
                                 <i><b><?= $theme['version_cmw'] ?></b></i>
                             </p>
-                        </div>
-                        <div class="d-flex gap-3 align-items-center">
-                            <?php if ($theme['demo']): ?>
-                                <a class="btn btn-sm btn-primary"
-                                   href="<?= $theme['demo'] ?>" target="_blank"><i
-                                        class="fa-solid fa-arrow-up-right-from-square"></i> <?= LangManager::translate("core.Theme.demo") ?>
-                                </a>
-                            <?php endif; ?>
-                            <?php if ($theme['code_link']): ?>
-                                <a class="btn btn-sm btn-primary"
-                                   href="<?= $theme['code_link'] ?>" target="_blank"><i
-                                        class="fa-brands fa-github"></i> GitHub</a>
-                            <?php endif; ?>
+                            <div class="flex gap-3">
+                                <?php if ($theme['demo']): ?>
+                                    <a class="btn-primary-sm"
+                                       href="<?= $theme['demo'] ?>" target="_blank"><i
+                                            class="fa-solid fa-arrow-up-right-from-square"></i> <?= LangManager::translate("core.Theme.demo") ?>
+                                    </a>
+                                <?php endif; ?>
+                                <?php if ($theme['code_link']): ?>
+                                    <a class="btn-primary-sm"
+                                       href="<?= $theme['code_link'] ?>" target="_blank"><i
+                                            class="fa-brands fa-github"></i> GitHub</a>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -373,19 +373,19 @@ Website::setDescription(LangManager::translate("core.Theme.config.description"))
                                 <?= LangManager::translate("core.Theme.CMWVersion") ?>
                                 <i><b><?= $theme['version_cmw'] ?></b></i>
                             </p>
-                        </div>
-                        <div class="d-flex gap-3 align-items-center">
-                            <?php if ($theme['demo']): ?>
-                                <a class="btn btn-sm btn-primary"
-                                   href="<?= $theme['demo'] ?>" target="_blank"><i
-                                        class="fa-solid fa-arrow-up-right-from-square"></i> <?= LangManager::translate("core.Theme.demo") ?>
-                                </a>
-                            <?php endif; ?>
-                            <?php if ($theme['code_link']): ?>
-                                <a class="btn btn-sm btn-primary"
-                                   href="<?= $theme['code_link'] ?>" target="_blank"><i
-                                        class="fa-brands fa-github"></i> GitHub</a>
-                            <?php endif; ?>
+                            <div class="flex gap-3">
+                                <?php if ($theme['demo']): ?>
+                                    <a class="btn-primary-sm"
+                                       href="<?= $theme['demo'] ?>" target="_blank"><i
+                                            class="fa-solid fa-arrow-up-right-from-square"></i> <?= LangManager::translate("core.Theme.demo") ?>
+                                    </a>
+                                <?php endif; ?>
+                                <?php if ($theme['code_link']): ?>
+                                    <a class="btn-primary-sm"
+                                       href="<?= $theme['code_link'] ?>" target="_blank"><i
+                                            class="fa-brands fa-github"></i> GitHub</a>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
