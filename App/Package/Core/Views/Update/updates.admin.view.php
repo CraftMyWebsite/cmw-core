@@ -14,102 +14,88 @@ use CMW\Manager\Updater\UpdatesManager;
 $title = LangManager::translate("core.updates.title");
 $description = LangManager::translate("core.updates.description"); ?>
 
-<div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fas fa-arrows-rotate"></i> <span
-                class="m-lg-auto"><?= LangManager::translate("core.updates.pageTitle") ?></span></h3>
-</div>
+<h3><i class="fas fa-arrows-rotate"></i> <?= LangManager::translate("core.updates.pageTitle") ?></h3>
 
-<section class="row">
-    <div class="col-12 col-lg-6">
-        <div class="card">
-            <?php if (UpdatesManager::checkNewUpdateAvailable()): ?>
-                <div class="position-absolute end-0">
-                    <a href="cms/update" type="button"
-                       class="text-bg-primary rounded-2 py-1 px-2"><?= LangManager::translate("core.updates.updateButton") ?></a>
-                </div>
+<div class="grid-2">
+    <div class="card">
+        <div class="flex justify-between">
+            <?php if ($currentVersion !== $latestVersion['value']): ?>
+            <div>
+                <h3><span class="text-danger"><?= $currentVersion ?></span>
+                    <i
+                        data-bs-toggle="tooltip" data-bs-placement="top"
+                        title="<?= LangManager::translate("core.updates.warningUpdate") ?>"
+                        class="text-danger fa-solid fa-heart-crack fa-beat-fade"></i>
+                </h3>
+                <p><?= LangManager::translate("core.updates.updateTo") ?> <b
+                        class="text-success"><?= $latestVersion["value"] ?></b> !</p>
+            </div>
+            <?php else: ?>
+            <div>
+                <h3><span class="text-success"><?= $currentVersion ?></span>
+                    <i data-bs-toggle="tooltip"
+                       data-bs-placement="top"
+                       title="<?= LangManager::translate("core.updates.isUp") ?>"
+                       class="text-success fa-solid fa-heart-pulse fa-beat-fade"></i>
+                </h3>
+            </div>
             <?php endif; ?>
-            <div class="card-body">
-                <?php if ($currentVersion !== $latestVersion['value']): ?>
-                    <h5><span class="text-danger"><?= $currentVersion ?></span>
-                        <i
-                                data-bs-toggle="tooltip" data-bs-placement="top"
-                                title="<?= LangManager::translate("core.updates.warningUpdate") ?>"
-                                class="text-danger fa-solid fa-heart-crack fa-beat-fade"></i>
-                    </h5>
-                    <p><?= LangManager::translate("core.updates.updateTo") ?> <b
-                                class="text-success"><?= $latestVersion["value"] ?></b> !</p>
-                <?php else: ?>
-                    <h5><span class="text-success"><?= $currentVersion ?></span>
-                        <i data-bs-toggle="tooltip"
-                           data-bs-placement="top"
-                           title="<?= LangManager::translate("core.updates.isUp") ?>"
-                           class="text-success fa-solid fa-heart-pulse fa-beat-fade"></i>
-                    </h5>
-                <?php endif; ?>
-                <p>
-                    <?= LangManager::translate("core.updates.availableFrom") ?>
-                    <?= CoreController::formatDate($latestVersion["date_upload"]) ?>
-                </p>
-                <h6><?= LangManager::translate("core.updates.lastNote") ?></h6>
-                <div class="card">
-                    <?php foreach ($latestVersionChangelogGroup as $groupedType) : ?>
-                        <?php if ($groupedType[0]['content']): ?>
-                            <h6 class="text-center p-1 rounded bg-secondary"><?= $groupedType[0]['type'] ?></h6>
-                            <ul>
-                                <?php foreach ($groupedType as $changelogInfos) : ?>
-                                    <li><?= $changelogInfos['content'] ?>
-                                        <?php if ($changelogInfos['code_link']): ?>
-                                            <small><a class="text-bg-primary px-1 rounded-2"
-                                                      href="<?= $changelogInfos['code_link'] ?>" target="_blank"><i
-                                                            class="fa-solid fa-link fa-xs"></i> d534333</a></small>
-                                        <?php endif; ?>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
+            <?php if (UpdatesManager::checkNewUpdateAvailable()): ?>
+                <a href="cms/update" class="btn-success h-fit"><?= LangManager::translate("core.updates.updateButton") ?></a>
+            <?php endif; ?>
+        </div>
+        <p>
+            <?= LangManager::translate("core.updates.availableFrom") ?>
+            <?= CoreController::formatDate($latestVersion["date_upload"]) ?>
+        </p>
+        <h6><?= LangManager::translate("core.updates.lastNote") ?></h6>
+        <?php foreach ($latestVersionChangelogGroup as $groupedType) : ?>
+            <?php if ($groupedType[0]['content']): ?>
+            <div class="border rounded-lg p-2 dark:border-gray-700">
+                <p class="font-bold"><?= $groupedType[0]['type'] ?> :</p>
+                <ul style="list-style: disc" class="pl-5">
+                    <?php foreach ($groupedType as $changelogInfos) : ?>
+                        <li><?= $changelogInfos['content'] ?>
+                            <?php if ($changelogInfos['code_link']): ?>
+                                <small><a class="text-bg-primary px-1 rounded-2"
+                                          href="<?= $changelogInfos['code_link'] ?>" target="_blank"><i
+                                            class="fa-solid fa-link fa-xs"></i> d534333</a></small>
+                            <?php endif; ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
+    <div class="card">
+        <h6><?= LangManager::translate("core.updates.previousVersion") ?></h6>
+        <?php foreach ($previousVersions as $previousVersion) : ?>
+            <div class="accordion">
+                <button class="accordion-btn font-bold"><?= $previousVersion['value'] ?></button>
+                <div class="accordion-content">
+                    <p><?= LangManager::translate("core.updates.publishAt") ?> <?= CoreController::formatDate($previousVersion['date_upload']) ?></p>
+                    <?php foreach ($previousVersionChangelogGroup = UpdatesController::groupBy("type", $previousVersion['changelog']) as $previousGroupedType) : ?>
+                        <?php if ($previousGroupedType[0]['content']): ?>
+                        <div class="border rounded-lg p-2 dark:border-gray-700">
+                            <p class="font-bold"><?= $previousGroupedType[0]['type'] ?> :</p>
+                                <ul style="list-style: disc" class="pl-5">
+                                    <?php foreach ($previousGroupedType as $previousChangelogInfos) : ?>
+                                        <li><?= $previousChangelogInfos['content'] ?>
+                                            <?php if ($previousChangelogInfos['code_link']): ?>
+                                                <small><a class="link"
+                                                          href="<?= $previousChangelogInfos['code_link'] ?>"
+                                                          target="_blank"><i class="fa-solid fa-link fa-xs"></i>
+                                                        Code</a></small>
+                                            <?php endif; ?>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                        </div>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </div>
-
             </div>
-        </div>
+        <?php endforeach; ?>
     </div>
-    <div class="col-12 col-lg-6">
-        <div class="card">
-            <div class="card-body">
-                <h5><?= LangManager::translate("core.updates.previousVersion") ?></h5>
-                <?php foreach ($previousVersions as $previousVersion) : ?>
-                    <div class="card-in-card pt-2 px-2 mb-3">
-                        <div id="heading<?= $previousVersion['id'] ?>" data-bs-toggle="collapse"
-                             data-bs-target="#collapse<?= $previousVersion['id'] ?>" aria-expanded="false"
-                             aria-controls="collapse<?= $previousVersion['id'] ?>" role="button">
-                            <h6><i class="text-sm fa-solid fa-chevron-down"></i> <?= $previousVersion['value'] ?></h6>
-                        </div>
-                        <div id="collapse<?= $previousVersion['id'] ?>" class="collapse pt-1"
-                             aria-labelledby="heading<?= $previousVersion['id'] ?>" data-parent="#cardAccordion">
-                            <p><?= LangManager::translate("core.updates.publishAt") ?> <?= CoreController::formatDate($previousVersion['date_upload']) ?></p>
-                            <div class="card">
-                                <?php foreach ($previousVersionChangelogGroup = UpdatesController::groupBy("type", $previousVersion['changelog']) as $previousGroupedType) : ?>
-                                    <?php if ($previousGroupedType[0]['content']): ?>
-                                        <span class="badge bg-secondary"><?= $previousGroupedType[0]['type'] ?></span>
-                                        <ul>
-                                            <?php foreach ($previousGroupedType as $previousChangelogInfos) : ?>
-                                                <li><?= $previousChangelogInfos['content'] ?>
-                                                    <?php if ($previousChangelogInfos['code_link']): ?>
-                                                        <small><a class="text-bg-primary px-1 rounded-2"
-                                                                  href="<?= $previousChangelogInfos['code_link'] ?>"
-                                                                  target="_blank"><i class="fa-solid fa-link fa-xs"></i>
-                                                                d534333</a></small>
-                                                    <?php endif; ?>
-                                                </li>
-                                            <?php endforeach; ?>
-                                        </ul>
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        </div>
-    </div>
-</section>
+</div>
