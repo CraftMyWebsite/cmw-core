@@ -74,7 +74,7 @@ class Package implements IPackageConfig
             new PackageMenuType(
                 lang: "fr",
                 icon: "fas fa-bars",
-                title: "Navigations",
+                title: "Menus",
                 url: "menus",
                 permission: "core.menus.configuration",
                 subMenus: [],
@@ -167,7 +167,7 @@ class Package implements IPackageConfig
             new PackageMenuType(
                 lang: "en",
                 icon: "fas fa-bars",
-                title: "Navigations",
+                title: "Menus",
                 url: "menus",
                 permission: "core.menus.configuration",
                 subMenus: [],

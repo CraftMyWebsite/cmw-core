@@ -76,6 +76,15 @@ use CMW\Utils\Website;
         --nav-sky-dark : #0c4a6e;
         --nav-sky-text-dark : #06b6d4;
     }
+
+    .text-success {color: #0ab312}
+    .text-info {color: #1C64F2}
+    .text-danger {color: #f3182b}
+    .text-warning {color: #f3b518}
+    .bg-success {background-color: #0ab312}
+    .bg-info {background-color: #1C64F2}
+    .bg-danger {background-color: #f3182b}
+    .bg-warning {background-color: #f3b518}
 </style>
 
 <body>

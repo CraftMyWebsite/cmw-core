@@ -249,8 +249,6 @@ class MenusController extends AbstractController
     {
         menusModel::getInstance()->upPositionMenu($id, $currentOrder);
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"), $currentOrder);
-
         Redirect::redirect("cmw-admin/menus");
     }
 
@@ -258,8 +256,6 @@ class MenusController extends AbstractController
     public function adminMenuDown(Request $request, int $id, int $currentOrder): void
     {
         menusModel::getInstance()->downPositionMenu($id, $currentOrder);
-
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"), $currentOrder);
 
         Redirect::redirect("cmw-admin/menus");
     }
@@ -269,8 +265,6 @@ class MenusController extends AbstractController
     {
         menusModel::getInstance()->upPositionSubMenu($id, $currentOrder, $parentId);
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"), $currentOrder);
-
         Redirect::redirect("cmw-admin/menus");
     }
 
@@ -278,8 +272,6 @@ class MenusController extends AbstractController
     public function adminSubMenuDown(Request $request, int $id, int $currentOrder, int $parentId): void
     {
         menusModel::getInstance()->downPositionSubMenu($id, $currentOrder, $parentId);
-
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"), $currentOrder);
 
         Redirect::redirect("cmw-admin/menus");
     }

@@ -60,6 +60,7 @@ return [
         "send_to" => "Renvoie vers : %url%",
         "add_sub_menu" => "Ajout d'un sous-menu dans %menu%",
         "add" => [
+            "sub_menu" => "Ajout d'un sous-menu dans",
             "name" => "Nom du menu",
             "name_hint" => "Votes",
             "targetBlank" => "Ouvrir la page dans un nouvel onglet",
@@ -73,6 +74,9 @@ return [
             "toaster" => [
                 "success" => "Menu ajouté avec succès !",
             ],
+        ],
+        "edit" => [
+            "name" => "Édition du menu",
         ],
     ],
     "editor" => [

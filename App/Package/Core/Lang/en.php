@@ -60,6 +60,7 @@ return [
         "send_to" => "Send to : %url%",
         "add_sub_menu" => "Add sub menu to %menu%",
         "add" => [
+            "sub_menu" => "Add sub menu in",
             "name" => "Name of the menu",
             "name_hint" => "Votes",
             "targetBlank" => "Open link in new tab",
@@ -73,6 +74,9 @@ return [
             "toaster" => [
                 "success" => "Menu added with success",
             ],
+        ],
+        "edit" => [
+            "name" => "Edit menu",
         ],
     ],
     "editor" => [

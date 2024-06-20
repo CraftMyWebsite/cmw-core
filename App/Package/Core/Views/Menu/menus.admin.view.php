@@ -127,13 +127,13 @@ $description = LangManager::translate("core.menus.desc");
                                     <?php endif; ?>
                                 </th>
                                 <th class="space-x-2">
-                                    <a style="color: #0ab312" href="menus/add-submenu/<?= $menu->getId() ?>">
+                                    <a class="text-success" href="menus/add-submenu/<?= $menu->getId() ?>">
                                         <i class="fa-solid fa-circle-plus"></i>
                                     </a>
-                                    <a style="color: #1C64F2" href="menus/edit/<?= $menu->getId() ?>">
+                                    <a class="text-info" href="menus/edit/<?= $menu->getId() ?>">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
-                                    <button style="color: #f3182b" data-modal-toggle="delete-<?= $menu->getId() ?>" type="button"><i class="fas fa-trash-alt"></i></button>
+                                    <button class="text-danger" data-modal-toggle="delete-<?= $menu->getId() ?>" type="button"><i class="fas fa-trash-alt"></i></button>
                                 </th>
                             </tr>
                             </thead>
@@ -165,13 +165,13 @@ $description = LangManager::translate("core.menus.desc");
                                                                          href="menus/submenuUp/<?= $subMenu->getId() ?>/<?= $subMenu->getOrder() ?>/<?= $menu->getId() ?>"><i
                                                         class="fa-xs fa-solid fa-chevron-down"></i></a></span>
                                         <?php endif; ?>
-                                        <a style="color: #0ab312" href="menus/add-submenu/<?= $subMenu->getId() ?>">
+                                        <a class="text-success" href="menus/add-submenu/<?= $subMenu->getId() ?>">
                                             <i class="fa-solid fa-circle-plus"></i>
                                         </a>
-                                        <a style="color: #1C64F2" href="menus/edit/<?= $subMenu->getId() ?>">
+                                        <a class="text-info" href="menus/edit/<?= $subMenu->getId() ?>">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
-                                        <button style="color: #f3182b" data-modal-toggle="delete-<?= $subMenu->getId() ?>" type="button"><i class="fas fa-trash-alt"></i></button>
+                                        <button class="text-danger" data-modal-toggle="delete-<?= $subMenu->getId() ?>" type="button"><i class="fas fa-trash-alt"></i></button>
                                     </td>
                                 </tr>
 
@@ -203,10 +203,10 @@ $description = LangManager::translate("core.menus.desc");
                                                                              href="menus/submenuUp/<?= $subSubMenu->getId() ?>/<?= $subSubMenu->getOrder() ?>/<?= $subMenu->getId() ?>"><i
                                                             class="fa-xs fa-solid fa-chevron-down"></i></a></span>
                                             <?php endif; ?>
-                                            <a style="color: #1C64F2" href="menus/edit/<?= $subSubMenu->getId() ?>">
+                                            <a class="text-info" href="menus/edit/<?= $subSubMenu->getId() ?>">
                                                 <i class="text-primary me-3 fa-solid fa-pen-to-square"></i>
                                             </a>
-                                            <button style="color: #f3182b" data-modal-toggle="delete-<?= $subSubMenu->getId() ?>" type="button"><i class="text-danger fas fa-trash-alt"></i></button>
+                                            <button data-modal-toggle="delete-<?= $subSubMenu->getId() ?>" type="button"><i class="text-danger fas fa-trash-alt"></i></button>
                                         </td>
                                     </tr>
                                     <!--
