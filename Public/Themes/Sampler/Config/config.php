@@ -1,28 +1,35 @@
 <?php use CMW\Controller\Core\ThemeController;
-use CMW\Manager\Lang\LangManager;use CMW\Model\Core\ThemeModel;use CMW\Manager\Security\SecurityManager;?>
+use CMW\Manager\Lang\LangManager;
+use CMW\Model\Core\ThemeModel;
+use CMW\Manager\Security\SecurityManager; ?>
 <!-------------->
 <!--Navigation-->
 <!-------------->
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-    <li class="nav-item" role="presentation">
-        <a class="nav-link active" id="setting1-tab" data-bs-toggle="tab" href="#setting1" role="tab" aria-selected="true">Réglages</a>
-    </li>
-</ul>
+<div class="tab-menu">
+    <ul class="tab-horizontal" data-tabs-toggle="#tab-content-config">
+        <li>
+            <button type="button" data-tabs-target="#tab1" role="tab">Réglages</button>
+        </li>
+    </ul>
+</div>
 
 <!--------------->
 <!----CONTENT---->
 <!--------------->
-<div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade show active py-2" id="setting1" role="tabpanel" aria-labelledby="setting1-tab">
-        <div class="form-group">
+<div id="tab-content-1">
+    <div class="tab-content" id="tab1">
+        <div>
             <label for="buttonColor">Couleur des boutons :</label>
-            <input type="color" id="buttonColor" name="buttonColor" value="<?= ThemeModel::getInstance()->fetchConfigValue('buttonColor') ?>">
+            <input type="color" id="buttonColor" name="buttonColor"
+                   value="<?= ThemeModel::getInstance()->fetchConfigValue('buttonColor') ?>">
         </div>
-        <hr>
-        <div class="form-group">
-            <h4 for="backgroundColor">Image de fond :</h4>
-            <input type="file" id="background" name="background" value="<?= ThemeModel::getInstance()->fetchConfigValue('background') ?>">
-            <img width="100%" src='<?= ThemeModel::getInstance()->fetchImageLink("background") ?>'>
+        <div>
+            <label for="backgroundColor">Image de fond :</label>
+            <div class="grid-3">
+                <img width="100%" class="col-span-2"
+                     src='<?= ThemeModel::getInstance()->fetchImageLink("background") ?>'>
+                <div class="drop-img-area" data-input-name="background"></div>
+            </div>
         </div>
     </div>
 </div>

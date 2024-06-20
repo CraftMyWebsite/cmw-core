@@ -8,31 +8,25 @@ use CMW\Utils\Website;
 Website::setTitle(LangManager::translate("core.Theme.manage.title", ["Theme" => ThemeManager::getInstance()->getCurrentTheme()->name()]));
 Website::setDescription(LangManager::translate("core.Theme.manage.description")); ?>
 
-<div class="d-flex flex-wrap justify-content-between" style="width: 100%">
-    <h3><i class="fa-solid fa-pen-nib"></i> <span
-            class="m-lg-auto"><?= LangManager::translate("core.Theme.appearance") ?><b><?= ThemeManager::getInstance()->getCurrentTheme()->name() ?></b></span>
-    </h3>
-    <div class="d-flex flex-wrap justify-content-end">
-        <a href="market/regenerate" type="submit" class="btn btn-warning">
+<div class="page-title">
+    <h3><i class="fa-solid fa-palette"></i> <?= LangManager::translate("core.Theme.appearance") ?><b><?= ThemeManager::getInstance()->getCurrentTheme()->name() ?></b></h3>
+    <div class="flex gap-2">
+        <a href="market/regenerate" type="submit" class="btn-warning">
             <?= LangManager::translate("core.Theme.reset") ?>
         </a>
         <div>
-            <button form="ThemeSettings" type="submit" class="btn btn-primary">
+            <button form="ThemeSettings" type="submit" class="btn-primary">
                 <?= LangManager::translate("core.btn.save") ?>
             </button>
         </div>
     </div>
 </div>
 
-<!-- THEME CONFIG FILE -->
-
-<form id="ThemeSettings" action="" method="post" enctype="multipart/form-data">
-    <?php (new SecurityManager())->insertHiddenToken() ?>
-    <div class="row">
+<div class="page-loader">
+    <form id="ThemeSettings" action="" method="post" enctype="multipart/form-data">
+        <?php (new SecurityManager())->insertHiddenToken() ?>
         <div class="card">
-            <div class="card-body">
-                <?php ThemeManager::getInstance()->getCurrentThemeConfigFile(); ?>
-            </div>
+            <?php ThemeManager::getInstance()->getCurrentThemeConfigFile(); ?>
         </div>
-    </div>
-</form>
+    </form>
+</div>
