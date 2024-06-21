@@ -8,8 +8,8 @@ for (let i = 1; i < 20; i++) {
   let perPageValue = tableElement.getAttribute('data-load-per-page') || 5;
 
   let dataTable = new simpleDatatables.DataTable(tableElement, {
-    perPage: parseInt(perPageValue),
-    // Ajoutez d'autres options de configuration ici si nécessaire
+        perPage: parseInt(perPageValue),
+        deferRender: false,
   });
 
   // Move "per page dropdown" selector element out of label

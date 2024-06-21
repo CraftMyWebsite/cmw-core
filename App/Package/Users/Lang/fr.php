@@ -173,14 +173,14 @@ return [
                 "hint" => "Vous pouvez facilement interdire des pseudos que vous ne souhaitez pas avoir lors de
                            l'inscription ou lors de la modification d'un pseudo.",
                 "goBtn" => "Gérer les pseudos interdits",
-                "title" => "Ajoutez des pseudos à votre liste",
+                "title" => "Ajouter des pseudos à la liste noire",
                 "description" => "Ajouter des pseudos à la liste noire",
                 "edit" => [
                     "title" => "Modifiez un pseudo de la liste noire",
                     "description" => "Édition d'un pseudo de la liste noire",
                     "label" => "Modification du pseudo %pseudo%",
                 ],
-                "btn" => "Ajouter ce pseudo à la liste noire",
+                "btn" => "Ajouter à la liste noire",
                 "toasters" => [
                     "add" => [
                         "success" => "Pseudo %pseudo% ajouté à la liste",

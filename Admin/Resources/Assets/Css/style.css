@@ -2703,13 +2703,14 @@ select:focus {
 }
 /* Striped table */
 .table-container-striped tbody tr:nth-child(odd) {
-  background-color: var(--light-secondary);
+
+    background-color: var(--light-primary);
 }
 .dark .table-container-striped tbody tr:nth-child(odd) {
   background-color: var(--dark-secondary);
 }
 .table-container-striped tbody tr:nth-child(even) {
-  background-color: var(--light-primary);
+    background-color: var(--light-secondary);
 }
 .dark .table-container-striped tbody tr:nth-child(even) {
   background-color: var(--dark-third);

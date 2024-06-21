@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
             thMassSelector.style.cssText = '';
             thMassSelector.innerHTML = `
                 <div class="checkbox">
-                    <input id="checkbox-all-${index + 1}" type="checkbox" value="">
+                    <input id="checkbox-all-${index + 1}" type="checkbox" value="1">
                 </div>
             `;
         }
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Event listener for the delete buttons
-    const deleteButtons = document.querySelectorAll('.btn-danger-xl.loading-btn');
+    const deleteButtons = document.querySelectorAll('.btn-danger');
     deleteButtons.forEach(button => {
         button.addEventListener('click', () => {
             const targetTableIndex = button.getAttribute('data-target-table');
@@ -62,13 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Get the selected checkboxes
             const selectedItems = formData.getAll('selectedIds[]');
 
-            if (selectedItems.length > 0) {
-                console.log('Selected items:', selectedItems);
-                // Submit the form
-                form.submit();
-            } else {
-                alert('Aucun objet sélectionner');
-            }
+            form.submit();
+
         });
     });
 });
