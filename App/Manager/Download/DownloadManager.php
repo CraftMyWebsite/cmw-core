@@ -6,8 +6,6 @@ use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Permission\PermissionManager;
 use CMW\Model\Users\PermissionsModel;
-use CMW\Utils\Directory;
-use CMW\Utils\Log;
 use JetBrains\PhpStorm\ExpectedValues;
 use ZipArchive;
 
@@ -81,29 +79,21 @@ class DownloadManager
                 }
             }
 
-            // Load sql files
-            foreach ($initFiles as $sqlFile) {
+            // Load sql file
+            $sqlFile = "$initFolder/init.sql";
+            if (file_exists($sqlFile)) {
+                $db = DatabaseManager::getLiteInstance();
+                $devMode = EnvManager::getInstance()->getValue("DEVMODE");
 
-                $packageSqlFile = "$initFolder/$sqlFile";
+                $querySqlFile = file_get_contents($sqlFile);
+                $req = $db->query($querySqlFile);
+                $req->closeCursor();
 
-                if (!is_file($packageSqlFile) || pathinfo($packageSqlFile, PATHINFO_EXTENSION) !== "sql") {
-                    continue;
+                if ($devMode === '0') {
+                    unlink($sqlFile);
                 }
-
-                if (file_exists($packageSqlFile)) {
-                    $db = DatabaseManager::getLiteInstance();
-                    $devMode = EnvManager::getInstance()->getValue("DEVMODE");
-
-                    $querySqlFile = file_get_contents($packageSqlFile);
-                    $req = $db->query($querySqlFile);
-                    $req->closeCursor();
-
-                    if ($devMode === '0') {
-                        unlink($packageSqlFile);
-                    }
-                }
-
             }
+
         endforeach;
     }
 
