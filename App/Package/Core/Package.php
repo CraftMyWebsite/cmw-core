@@ -245,4 +245,14 @@ class Package implements IPackageConfig
     {
         return [];
     }
+
+    /**
+     * @return bool
+     * @desc <p>Core Package can't be delete.</p>
+     */
+    public function uninstall(): bool
+    {
+        //Return true, we don't need other operations for uninstall.
+        return false;
+    }
 }

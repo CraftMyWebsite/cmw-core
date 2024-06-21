@@ -107,17 +107,4 @@ class DownloadManager
         endforeach;
     }
 
-    /**
-     * @param string $packageName
-     * @return bool
-     */
-    public static function deletePackage(string $packageName): bool
-    {
-        $path = EnvManager::getInstance()->getValue('DIR') . "App/Package/$packageName";
-
-        //TODO Delete database with a new file 'uninstall.sql' ??
-
-        return Directory::delete($path);
-    }
-
 }

@@ -16,6 +16,7 @@ use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Utils\Directory;
+use CMW\Utils\Log;
 use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
 
@@ -188,7 +189,7 @@ class PackageController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.local");
 
-        if (!DownloadManager::deletePackage($package)) {
+        if (!$this->uninstallPackage($package)) {
             Flash::send(Alert::ERROR, LangManager::translate("core.package.error"),
                 LangManager::translate("core.Package.toasters.delete.error",
                     ['package' => $package]));
@@ -233,6 +234,46 @@ class PackageController extends AbstractController
             LangManager::translate('core.Package.toasters.update.success', ['package' => $packageName]));
 
         Redirect::redirectPreviousRoute();
+    }
+
+    /**
+     * @param string $packageName
+     * @return bool
+     * @desc
+     * <p>Uninstall package (sql and override methods)</p>
+     */
+    private function uninstallPackage(string $packageName): bool
+    {
+        $package = self::getPackage($packageName);
+
+        if (is_null($package)) {
+            return false;
+        }
+
+        //We can't delete core packages
+        if (in_array($package, self::$corePackages, true)) {
+            return false;
+        }
+
+        //First we uninstall DB
+        $uninstallSqlFile = EnvManager::getInstance()->getValue('DIR') . "App/Package/$packageName/Init/uninstall.sql";
+
+        if (file_exists($uninstallSqlFile)) {
+            $sql = file_get_contents($uninstallSqlFile);
+            $db = DatabaseManager::getInstance();
+
+            if (!$db->query($sql)) {
+                return false;
+            }
+        }
+
+        //Check Package uninstall override
+        if (!$package->uninstall()) {
+            return false;
+        }
+
+        //Uninstall package:
+        return Directory::delete(EnvManager::getInstance()->getValue('DIR') . "App/Package/$packageName");
     }
 
 }

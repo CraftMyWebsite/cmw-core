@@ -24,4 +24,12 @@ interface IPackageConfig
      * @desc List all the required packages.
      */
     public function requiredPackages(): array;
+
+    /**
+     * @return bool
+     * @desc
+     * <p>Uninstall package (PHP Requests, clean etc...)</p>
+     * <p><b>PLEASE USE Package/$package/Init/uninstall.sql FOR SQL OPERATIONS !!</b></p>
+     */
+    public function uninstall(): bool;
 }

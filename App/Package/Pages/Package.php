@@ -59,4 +59,14 @@ class Package implements IPackageConfig
     {
         return ["Core"];
     }
+
+    /**
+     * @return bool
+     * @desc <p>Page Package can't be delete.</p>
+     */
+    public function uninstall(): bool
+    {
+        //Return true, we don't need other operations for uninstall.
+        return false;
+    }
 }
