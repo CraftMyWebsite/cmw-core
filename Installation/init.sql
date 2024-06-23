@@ -130,9 +130,9 @@ CREATE TABLE IF NOT EXISTS cmw_roles_permissions
     PRIMARY KEY (role_id, permission_id),
     INDEX (role_id),
     CONSTRAINT FK_ROLE_PERMISSION_PERMISSION_ID
-        FOREIGN KEY (permission_id) REFERENCES cmw_permissions (permission_id),
+        FOREIGN KEY (permission_id) REFERENCES cmw_permissions (permission_id) ON DELETE CASCADE,
     CONSTRAINT FK_ROLE_PERMISSION_ROLE_ID
-        FOREIGN KEY (role_id) REFERENCES cmw_roles (role_id)
+        FOREIGN KEY (role_id) REFERENCES cmw_roles (role_id) ON DELETE CASCADE
 ) ENGINE = InnoDB
   CHARSET = utf8mb4;
 

@@ -41,12 +41,8 @@ class RolesController extends AbstractController
 
 
         View::createAdminView("Users", "roles")
-            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css",
-                "Admin/Resources/Assets/Css/Pages/simple-datatables.css",
-                "Admin/Resources/Vendors/Izitoast/iziToast.min.css")
-            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
-                "Admin/Resources/Assets/Js/Pages/simple-datatables.js",
-                "App/Package/Users/Views/Assets/Js/rolesWeights.js",
+            ->addStyle("Admin/Resources/Vendors/Izitoast/iziToast.min.css")
+            ->addScriptAfter("App/Package/Users/Views/Assets/Js/rolesWeights.js",
                 "Admin/Resources/Vendors/Izitoast/iziToast.min.js")
             ->addVariableList(["rolesList" => $rolesList, "permissionController" => $permissionController,
                 "permissionModel" => $permissionModel, "rolesModel" => $rolesModel])

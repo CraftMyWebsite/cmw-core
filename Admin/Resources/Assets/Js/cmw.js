@@ -395,6 +395,8 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', (event) => {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(checkbox => {
-        checkbox.value = "1";
+        if (checkbox.value === "" || checkbox.getAttribute('value') === null) {
+            checkbox.value = "1";
+        }
     });
 });
