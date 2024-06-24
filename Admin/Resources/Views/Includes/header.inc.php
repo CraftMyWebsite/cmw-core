@@ -121,7 +121,17 @@ $sideBarImplementations = Loader::loadImplementations(ISideBarElements::class);
             foreach (PackageController::getCorePackages() as $package):
                 foreach ($package->menus() as $menu):
                     if ($menu->getLang() === EnvManager::getInstance()->getValue('LOCALE')):
-                        if (is_null($menu->getUrl())):?>
+                        // Vérifier si le menu a des sous-menus visibles
+                        $hasVisibleSubMenu = false;
+                        foreach ($menu->getSubMenus() as $submenu) {
+                            if (UsersModel::hasPermission($currentUser, $submenu->getPermission())) {
+                                $hasVisibleSubMenu = true;
+                                break;
+                            }
+                        }
+
+                        // Si le menu n'a pas d'URL et a des sous-menus visibles
+                        if (is_null($menu->getUrl()) && $hasVisibleSubMenu): ?>
                             <li>
                                 <button type="button"
                                         class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active" aria-expanded="true"' : '"' ?>"
@@ -134,8 +144,7 @@ $sideBarImplementations = Loader::loadImplementations(ISideBarElements::class);
                                 <ul id="dropdown-<?= $menu->getTitle() ?>"
                                     class="a-side-nav-dropdown <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? '' : 'hidden' ?>">
                                     <?php foreach ($menu->getSubMenus() as $submenu):
-
-                                        if (UsersModel::hasPermission($currentUser, $submenu->getPermission())):?>
+                                        if (UsersModel::hasPermission($currentUser, $submenu->getPermission())): ?>
                                             <li>
                                                 <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $submenu->getUrl() ?>"
                                                    class="a-side-nav-drop <?= MenusController::getInstance()->isActiveNavbarItem($submenu->getUrl()) ? 'side-nav-drop-active' : '' ?>">
@@ -146,16 +155,16 @@ $sideBarImplementations = Loader::loadImplementations(ISideBarElements::class);
                                     <?php endforeach; ?>
                                 </ul>
                             </li>
-                        <?php else:
-                            if (UsersModel::hasPermission($currentUser, $menu->getPermission())):?>
-                                <li>
-                                    <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $menu->getUrl() ?>"
-                                       class="a-side-nav <?= MenusController::getInstance()->isActiveNavbarItem($menu->getUrl()) ? 'side-nav-active' : '' ?>">
-                                        <i class="<?= $menu->getIcon() ?>"></i>
-                                        <span class="span-side-nav"><?= $menu->getTitle() ?></span>
-                                    </a>
-                                </li>
-                            <?php endif; ?>
+                        <?php
+                        // Si le menu a une URL et l'utilisateur a la permission
+                        elseif (!is_null($menu->getUrl()) && UsersModel::hasPermission($currentUser, $menu->getPermission())): ?>
+                            <li>
+                                <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $menu->getUrl() ?>"
+                                   class="a-side-nav <?= MenusController::getInstance()->isActiveNavbarItem($menu->getUrl()) ? 'side-nav-active' : '' ?>">
+                                    <i class="<?= $menu->getIcon() ?>"></i>
+                                    <span class="span-side-nav"><?= $menu->getTitle() ?></span>
+                                </a>
+                            </li>
                         <?php endif; ?>
                     <?php endif; ?>
                 <?php endforeach; ?>
@@ -174,7 +183,17 @@ $sideBarImplementations = Loader::loadImplementations(ISideBarElements::class);
             <?php foreach (PackageController::getInstalledPackages() as $package):
                 foreach ($package->menus() as $menu):
                     if ($menu->getLang() === EnvManager::getInstance()->getValue('LOCALE')):
-                        if (is_null($menu->getUrl())):?>
+
+                        // Vérifier si le menu a des sous-menus visibles
+                        $hasVisibleSubMenu = false;
+                        foreach ($menu->getSubMenus() as $submenu) {
+                            if (UsersModel::hasPermission($currentUser, $submenu->getPermission())) {
+                                $hasVisibleSubMenu = true;
+                                break;
+                            }
+                        }
+
+                        if (is_null($menu->getUrl()) && $hasVisibleSubMenu):?>
                             <li>
                                 <button type="button"
                                         class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active" aria-expanded="true"' : '"' ?>"
@@ -200,7 +219,7 @@ $sideBarImplementations = Loader::loadImplementations(ISideBarElements::class);
                                 </ul>
                             </li>
                         <?php else:
-                            if (UsersModel::hasPermission($currentUser, $menu->getPermission())):?>
+                            if (!is_null($menu->getUrl()) && UsersModel::hasPermission($currentUser, $menu->getPermission())):?>
                                 <li>
                                     <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $menu->getUrl() ?>"
                                        class="a-side-nav <?= MenusController::getInstance()->isActiveNavbarItem($menu->getUrl()) ? 'side-nav-active' : '' ?>">
