@@ -30,7 +30,7 @@ class ThemeController extends AbstractController
     #[Link("/market", Link::GET, [], "/cmw-admin/theme")]
     private function adminThemeMarket(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.market");
 
         $currentTheme = ThemeManager::getInstance()->getCurrentTheme();
         $installedThemes = ThemeManager::getInstance()->getInstalledThemes();
@@ -48,7 +48,7 @@ class ThemeController extends AbstractController
     #[Link("/theme", Link::GET, [], "/cmw-admin/theme")]
     private function adminThemeConfiguration(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.manage");
 
         $currentTheme = ThemeManager::getInstance()->getCurrentTheme();
         $installedThemes = ThemeManager::getInstance()->getInstalledThemes();
@@ -65,7 +65,7 @@ class ThemeController extends AbstractController
     #[NoReturn] #[Link("/theme", Link::POST, [], "/cmw-admin/theme")]
     private function adminThemeConfigurationPost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.edit");
 
         $theme = filter_input(INPUT_POST, "theme");
 
@@ -80,7 +80,7 @@ class ThemeController extends AbstractController
     #[NoReturn] #[Link("/market/regenerate", Link::GET, [], "/cmw-admin/theme")]
     private function adminThemeConfigurationRegenerate(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.edit");
 
         $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
         ThemeModel::getInstance()->getInstance()->deleteThemeConfig($themeName);
@@ -98,7 +98,7 @@ class ThemeController extends AbstractController
     #[NoReturn] #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/theme")]
     private function adminThemeInstallation(Request $request, int $id): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.manage");
 
         $theme = PublicAPI::putData("market/resources/install/$id");
 
@@ -132,7 +132,7 @@ class ThemeController extends AbstractController
     #[Link("/manage", Link::GET, [], "/cmw-admin/theme")]
     private function adminThemeManage(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.theme.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.edit");
         View::createAdminView("Core", "Theme/themeManage")
             ->addScriptBefore("Admin/Resources/Vendors/Tinymce/tinymce.min.js", "Admin/Resources/Vendors/Tinymce/Config/full.js" , "Admin/Resources/Vendors/PageLoader/main.js")
             ->view();
@@ -141,7 +141,7 @@ class ThemeController extends AbstractController
     #[NoReturn] #[Link("/manage", Link::POST, [], "/cmw-admin/theme")]
     private function adminThemeManagePost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.Theme.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.edit");
 
         $aresFiles = [];
 
@@ -193,7 +193,7 @@ class ThemeController extends AbstractController
     #[Link("/update/:id/:actualVersion/:themeName", Link::GET, ["id" => "[0-9]+", "actualVersion" => ".*?", "themeName" => ".*?"], "/cmw-admin/theme")]
     #[NoReturn] private function adminThemeUpdate(Request $request, int $id, string $actualVersion, string $themeName): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.manage");
 
         $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion");
 

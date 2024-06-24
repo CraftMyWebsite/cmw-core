@@ -151,7 +151,7 @@ class UsersController extends AbstractController
     #[Link("/manage", Link::GET, [], "/cmw-admin/users")]
     private function adminUsersList(): void
     {
-        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.manage");
 
         $userList = UsersModel::getInstance()->getUsers();
         $roles = RolesModel::getInstance()->getRoles();
@@ -176,7 +176,7 @@ class UsersController extends AbstractController
     #[Link("/getUser/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
     private function adminGetUser(Request $request, int $id): void
     {
-        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.manage.edit");
 
         $user = (UsersModel::getInstance())->getUserById($id);
 
@@ -213,7 +213,7 @@ class UsersController extends AbstractController
     #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users/manage")]
     private function adminUsersEdit(Request $request, int $id): void
     {
-        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.manage.edit");
 
         $userEntity = UsersModel::getInstance()->getUserById($id);
 
@@ -229,7 +229,7 @@ class UsersController extends AbstractController
     #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users/manage")]
     #[NoReturn] private function adminUsersEditPost(Request $request, int $id): void
     {
-        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.manage.edit");
 
         [$pass, $passVerif] = Utils::filterInput("pass", "passVerif");
         [$mail, $username, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "name", "lastname");
@@ -257,7 +257,7 @@ class UsersController extends AbstractController
     #[NoReturn] #[Link("/add", Link::POST, [], "/cmw-admin/users")]
     private function adminUsersAddPost(): void
     {
-        self::redirectIfNotHavePermissions("core.dashboard", "users.add");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.manage.add");
 
         [$mail, $pseudo, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "firstname", "surname");
 
@@ -286,7 +286,7 @@ class UsersController extends AbstractController
     #[Link("/manage/state/:id/:state", Link::GET, ["id" => "[0-9]+", "state" => "[0-9]+"], "/cmw-admin/users")]
     #[NoReturn] private function adminUserState(Request $request, int $id, int $state): void
     {
-        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.manage.edit");
 
         if (UsersModel::getCurrentUser()?->getId() === $id) {
             Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),
@@ -307,7 +307,7 @@ class UsersController extends AbstractController
     #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
     #[NoReturn] private function adminUsersDelete(Request $request, int $id): void
     {
-        self::redirectIfNotHavePermissions("core.dashboard", "users.delete");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.manage.delete");
 
         if (UsersModel::getCurrentUser()?->getId() === $id) {
 
@@ -332,7 +332,7 @@ class UsersController extends AbstractController
     #[Link("/picture/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users/manage")]
     #[NoReturn] private function adminUsersEditPicturePost(Request $request, int $id): void
     {
-        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.manage.edit");
 
         $image = $_FILES['profilePicture'];
         $this->getHighestImplementation(IUsersProfilePicture::class)->changeMethod($image, $id);

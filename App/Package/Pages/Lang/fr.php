@@ -51,10 +51,10 @@ return [
 
     "permissions" => [
         "pages" => [
-            "show" => "Afficher les pages",
-            "edit" => "Modifier les pages",
-            "add" => "Créer une page",
-            "delete" => "Supprimer une page",
+            "show" => "Afficher / Lister",
+            "edit" => "Éditer",
+            "add" => "Ajouter",
+            "delete" => "Supprimer",
         ],
     ],
 ];

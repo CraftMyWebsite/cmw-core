@@ -415,39 +415,29 @@ return [
         "editConfiguration" => "Unable to edit configuration %config%",
     ],
     "permissions" => [
-        "core" => [
-            "dashboard" => "Access dashboard",
-            "configuration" => [
-                "show" => "Access the website configuration",
-                "edit" => "Edit the website configuration",
-            ],
-            "editor" => [
-                "edit" => "Edit editor",
-            ],
-            "mail" => [
-                "configuration" => "Edit mail settings",
-            ],
-            "menus" => [
-                "configuration" => "Manage menus",
-            ],
-            "security" => [
-                "configuration" => "Manage website security",
-            ],
-            "theme" => [
-                "configuration" => "Manage website themes",
-            ],
-            "update" => "Update your website",
-            "maintenance" => [
-                "edit" => "Manage website maintenance",
-                "bypass" => "Bypass website maintenance",
-            ],
-            "condition" => [
-                "edit" => "Manage website terms",
-            ],
-            "packages" => [
-                "local" => "Manage local packages",
-                "market" => "Manage distant packages",
-            ],
+        "dashboard" => "Access to the administration panel",
+        "settings" => [
+            "title" => "Settings",
+            "website" => "Site Settings",
+            "maintenance" => "Maintenance",
+            "maintenance_bypass" => "Bypass access",
+            "mails" => "SMTP and emails",
+            "conditions" => "General conditions",
+            "security" => "Security",
+            "security_healthReport" => "Generate a report",
+        ],
+        "menu" => "Menus",
+        "update" => "CORE Updates",
+        "themes" => [
+            "title" => "Themes",
+            "edit" => "Edit active",
+            "manage" => "Manage facilities",
+            "market" => "Install from the market",
+        ],
+        "packages" => [
+            "title" => "Packages",
+            "manage" => "Manage facilities",
+            "market" => "Install from the market",
         ],
     ],
 ];

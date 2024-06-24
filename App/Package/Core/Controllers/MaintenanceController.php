@@ -29,7 +29,7 @@ class MaintenanceController extends AbstractController
     #[Link(path: "/manage", method: Link::GET, scope: "/cmw-admin/maintenance")]
     private function adminConfiguration(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.maintenance");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.maintenance");
 
         $maintenance = MaintenanceModel::getInstance()->getMaintenance();
 
@@ -44,7 +44,7 @@ class MaintenanceController extends AbstractController
     #[NoReturn] #[Link(path: "/manage", method: Link::POST, scope: "/cmw-admin/maintenance")]
     private function adminConfigurationPost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.maintenance");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.maintenance");
 
         [$title, $description, $targetDate, $type, $overrideThemeCode] = Utils::filterInput('title', 'description', 'target-date', 'type', 'overrideThemeCode');
 
@@ -99,7 +99,7 @@ class MaintenanceController extends AbstractController
             $this->redirectMaintenance();
         }
 
-        $userCanByPass = UsersController::isAdminLogged() && UsersController::hasPermission('core.maintenance.bypass');
+        $userCanByPass = UsersController::isAdminLogged() && UsersController::hasPermission('core.settings.maintenance.bypass');
 
         if ($userCanByPass) {
             return;

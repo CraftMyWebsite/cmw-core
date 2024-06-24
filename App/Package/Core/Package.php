@@ -46,27 +46,27 @@ class Package implements IPackageConfig
                 subMenus: [
                     new PackageSubMenuType(
                         title: 'Réglages du site',
-                        permission: 'core.configuration',
+                        permission: 'core.settings.website',
                         url: 'configuration',
                     ),
                     new PackageSubMenuType(
                         title: 'Mode maintenance',
-                        permission: 'core.maintenance',
+                        permission: 'core.settings.maintenance',
                         url: 'maintenance/manage',
                     ),
                     new PackageSubMenuType(
                         title: 'SMTP et mails',
-                        permission: 'core.mail.configuration',
+                        permission: 'core.settings.mails',
                         url: 'mail/configuration',
                     ),
                     new PackageSubMenuType(
                         title: 'Conditions générales',
-                        permission: 'core.condition.edit',
+                        permission: 'core.settings.conditions',
                         url: 'condition',
                     ),
                     new PackageSubMenuType(
                         title: 'Sécurité',
-                        permission: 'core.security.configuration',
+                        permission: 'core.settings.security',
                         url: 'security',
                     ),
                 ],
@@ -76,7 +76,7 @@ class Package implements IPackageConfig
                 icon: "fas fa-bars",
                 title: "Menus",
                 url: "menus",
-                permission: "core.menus.configuration",
+                permission: "core.menu",
                 subMenus: [],
             ),
             new PackageMenuType(
@@ -92,21 +92,21 @@ class Package implements IPackageConfig
                 icon: "fas fa-palette",
                 title: "Thèmes",
                 url: null,
-                permission: "core.theme.configuration",
+                permission: null,
                 subMenus: [
                     new PackageSubMenuType(
                         title: 'Modifier ' . ThemeManager::getInstance()->getCurrentTheme()->name(),
-                        permission: 'core.theme.configuration',
+                        permission: 'core.themes.edit',
                         url: 'theme/manage',
                     ),
                     new PackageSubMenuType(
                         title: 'Thèmes installé',
-                        permission: 'core.theme.configuration',
+                        permission: 'core.themes.manage',
                         url: 'theme/theme',
                     ),
                     new PackageSubMenuType(
                         title: 'Parcourir le Market',
-                        permission: 'core.theme.configuration',
+                        permission: 'core.themes.market',
                         url: 'theme/market',
                     ),
                 ],
@@ -120,12 +120,12 @@ class Package implements IPackageConfig
                 subMenus: [
                     new PackageSubMenuType(
                         title: 'Mes packages',
-                        permission: 'core.packages.local',
+                        permission: 'core.packages.manage',
                         url: 'packages/package',
                     ),
                     new PackageSubMenuType(
                         title: 'Market',
-                        permission: 'core.packages.distant',
+                        permission: 'core.packages.market',
                         url: 'packages/market',
                     ),
                 ],
@@ -139,27 +139,27 @@ class Package implements IPackageConfig
                 subMenus: [
                     new PackageSubMenuType(
                         title: 'Site Settings',
-                        permission: 'core.configuration',
+                        permission: 'core.settings.website',
                         url: 'configuration',
                     ),
                     new PackageSubMenuType(
                         title: 'Maintenance mode',
-                        permission: 'core.maintenance',
+                        permission: 'core.settings.maintenance',
                         url: 'maintenance/manage',
                     ),
                     new PackageSubMenuType(
                         title: 'SMTP and emails',
-                        permission: 'core.mail.configuration',
+                        permission: 'core.settings.mails',
                         url: 'mail/configuration',
                     ),
                     new PackageSubMenuType(
                         title: 'Terms and conditions',
-                        permission: 'core.condition.edit',
+                        permission: 'core.settings.conditions',
                         url: 'condition',
                     ),
                     new PackageSubMenuType(
                         title: 'Security',
-                        permission: 'core.security.configuration',
+                        permission: 'core.settings.security',
                         url: 'security',
                     ),
                 ],
@@ -169,7 +169,7 @@ class Package implements IPackageConfig
                 icon: "fas fa-bars",
                 title: "Menus",
                 url: "menus",
-                permission: "core.menus.configuration",
+                permission: "core.menu",
                 subMenus: [],
             ),
             new PackageMenuType(
@@ -189,17 +189,17 @@ class Package implements IPackageConfig
                 subMenus: [
                     new PackageSubMenuType(
                         title: 'Edit ' . ThemeManager::getInstance()->getCurrentTheme()->name(),
-                        permission: 'core.theme.configuration',
+                        permission: 'core.themes.edit',
                         url: 'theme/manage',
                     ),
                     new PackageSubMenuType(
                         title: 'Themes installed',
-                        permission: 'core.theme.configuration',
+                        permission: 'core.themes.manage',
                         url: 'theme/theme',
                     ),
                     new PackageSubMenuType(
                         title: 'Browse the Market',
-                        permission: 'core.theme.configuration',
+                        permission: 'core.themes.market',
                         url: 'theme/market',
                     ),
                 ],
@@ -213,12 +213,12 @@ class Package implements IPackageConfig
                 subMenus: [
                     new PackageSubMenuType(
                         title: 'My packages',
-                        permission: 'core.packages.local',
+                        permission: 'core.packages.manage',
                         url: 'packages/package',
                     ),
                     new PackageSubMenuType(
                         title: 'Browse the Market',
-                        permission: 'core.packages.distant',
+                        permission: 'core.packages.market',
                         url: 'packages/market',
                     ),
                 ],

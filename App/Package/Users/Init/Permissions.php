@@ -12,27 +12,39 @@ class Permissions implements IPermissionInit
     {
         return [
             new PermissionInitType(
-                code: 'users.edit',
-                description: LangManager::translate('users.permissions.users.edit'),
+                code: 'users.settings',
+                description: LangManager::translate('users.permissions.settings.manage'),
             ),
             new PermissionInitType(
-                code: 'users.add',
+                code: 'users.settings.blacklist.add',
+                description: LangManager::translate('users.permissions.settings.blacklist.add'),
+            ),
+            new PermissionInitType(
+                code: 'users.settings.blacklist.edit',
+                description: LangManager::translate('users.permissions.settings.blacklist.edit'),
+            ),
+            new PermissionInitType(
+                code: 'users.settings.blacklist.delete',
+                description: LangManager::translate('users.permissions.settings.blacklist.delete'),
+            ),
+            new PermissionInitType(
+                code: 'users.manage',
+                description: LangManager::translate('users.permissions.users.manage'),
+            ),
+            new PermissionInitType(
+                code: 'users.manage.add',
                 description: LangManager::translate('users.permissions.users.add'),
             ),
             new PermissionInitType(
-                code: 'users.delete',
+                code: 'users.manage.edit',
+                description: LangManager::translate('users.permissions.users.edit'),
+            ),
+            new PermissionInitType(
+                code: 'users.manage.delete',
                 description: LangManager::translate('users.permissions.users.delete'),
             ),
             new PermissionInitType(
-                code: 'users.settings',
-                description: LangManager::translate('users.permissions.users.settings.manage'),
-            ),
-            new PermissionInitType(
-                code: 'users.settings.blacklist.pseudo',
-                description: LangManager::translate('users.permissions.users.settings.blacklist.pseudo'),
-            ),
-            new PermissionInitType(
-                code: 'users.roles.manage',
+                code: 'users.roles',
                 description: LangManager::translate('users.permissions.users.roles.manage'),
             ),
             new PermissionInitType(

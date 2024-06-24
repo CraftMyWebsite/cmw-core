@@ -140,7 +140,7 @@ class MailController extends AbstractController
     #[Link("/configuration", Link::GET, [], "/cmw-admin/mail")]
     private function mailConfiguration(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.mail.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.mails");
 
         $config = MailModel::getInstance()->getConfig();
 
@@ -155,7 +155,7 @@ class MailController extends AbstractController
     #[Link("/configuration", Link::POST, [], "/cmw-admin/mail")]
     private function mailConfigurationPost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.mail.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.mails");
 
         [$mail, $mailReply, $addressSMTP, $user, $password, $port, $protocol, $footer, $enableSMTP] = Utils::filterInput(
             "mail", "mailReply", "addressSMTP", "user", "password", "port", "protocol", "footer", "enableSMTP");

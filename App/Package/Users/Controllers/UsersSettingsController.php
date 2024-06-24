@@ -88,7 +88,7 @@ class UsersSettingsController extends AbstractController
     #[NoReturn] #[Link("/settings/blacklist/pseudo", Link::POST, [], "/cmw-admin/users")]
     private function pseudoBlacklistPost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings.blacklist.pseudo");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings.blacklist.add");
 
         if (empty($_POST['pseudo'])) {
             Redirect::redirectPreviousRoute();
@@ -110,7 +110,7 @@ class UsersSettingsController extends AbstractController
     #[NoReturn] #[Link("/settings/blacklist/pseudo/edit/:id", Link::POST, ['id' => "[0-9]+"], "/cmw-admin/users")]
     private function editPseudoBlacklistPost(Request $request, int $id): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings.blacklist.pseudo");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings.blacklist.edit");
 
         if (empty($_POST['pseudo'])) {
             Redirect::redirectPreviousRoute();
@@ -132,7 +132,7 @@ class UsersSettingsController extends AbstractController
     #[NoReturn] #[Link("/settings/blacklist/pseudo/delete/:id", Link::GET, ['id' => "[0-9]+"], "/cmw-admin/users")]
     private function deletePseudoBlacklisted(Request $request, int $id): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings.blacklist.pseudo");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings.blacklist.delete");
 
         if (UsersSettingsModel::getInstance()->removeBlacklistedPseudo($id)) {
             Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
@@ -148,7 +148,7 @@ class UsersSettingsController extends AbstractController
     #[NoReturn] #[Link("/settings/blacklist/pseudo/deleteSelected", Link::POST, [], "/cmw-admin/users", secure: false)]
     private function adminDeleteSelectedPost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings.blacklist.pseudo");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings.blacklist.delete");
 
         $selectedIds = $_POST['selectedIds'];
 

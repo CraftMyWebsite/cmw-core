@@ -29,7 +29,7 @@ class SecurityController extends AbstractController
     #[Link("/security", Link::GET, [], "/cmw-admin")]
     private function adminSecurity(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.security.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.security");
 
         View::createAdminView("Core", "Security/security")
             ->addScriptAfter("App/Package/Core/Views/Resources/Js/security.js")
@@ -40,7 +40,7 @@ class SecurityController extends AbstractController
     #[Link("/security/edit/captcha", Link::POST, [], "/cmw-admin")]
     private function adminSecurityEditCaptchaPost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.security.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.security");
 
         $captcha = filter_input(INPUT_POST, "captcha");
 
@@ -69,7 +69,7 @@ class SecurityController extends AbstractController
     #[NoReturn] #[Link("/security/generate/report/health", Link::GET, [], "/cmw-admin")]
     private function adminGenerateReportHealth(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.security.generate.report.health");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.security.healthReport");
 
         $healthReport = new HealthReport();
 
@@ -87,7 +87,7 @@ class SecurityController extends AbstractController
     #[NoReturn] #[Link("/security/delete/report/health", Link::GET, [], "/cmw-admin")]
     private function adminDeleteReportHealth(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.security.generate.report.health");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.security.healthReport");
 
         $healthReport = new HealthReport();
 

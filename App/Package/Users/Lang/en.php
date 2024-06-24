@@ -217,21 +217,24 @@ return [
     ],
 
     "permissions" => [
-        "users" => [
-            "edit" => "Edit an user",
-            "add" => "Add an user",
-            "delete" => "Delete an user",
-            "settings" => [
-                "manage" => "Manage settings",
-                "blacklist" => [
-                    "pseudo" => "Manage blacklisted pseudos",
-                ],
+        "settings" => [
+            "manage" => "Manage settings",
+            "blacklist" => [
+                "add" => "Add",
+                "edit" => "Edit",
+                "delete" => "Delete",
             ],
+        ],
+        "users" => [
+            "manage" => "Manage users",
+            "edit" => "Edit",
+            "add" => "Add",
+            "delete" => "Delete",
             "roles" => [
                 "manage" => "Manage roles",
-                "add" => "Add a role",
-                "edit" => "Edit a role",
-                "delete" => "Delete a role",
+                "add" => "Add",
+                "edit" => "Edit",
+                "delete" => "Delete",
             ],
         ],
     ],

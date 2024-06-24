@@ -25,7 +25,7 @@ class ConditionController extends AbstractController
     #[Link("/condition", Link::GET, [], "/cmw-admin")]
     private function conditionDashboard(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.condition.edit");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.conditions");
 
         $cgv = ConditionModel::getInstance()->getCGV();
         $cgu = ConditionModel::getInstance()->getCGU();
@@ -39,7 +39,7 @@ class ConditionController extends AbstractController
     #[Link("/condition", Link::POST, [], "/cmw-admin")]
     private function conditionDashboardPost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.condition.edit");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.conditions");
 
         [$cguContent, $cguState, $cgvContent, $cgvState] = Utils::filterInput(
             "cguContent", "cguState", "cgvContent", "cgvState");

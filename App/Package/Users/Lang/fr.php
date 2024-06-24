@@ -217,21 +217,24 @@ return [
         ],
     ],
     "permissions" => [
-        "users" => [
-            "edit" => "Modifier un utilisateur",
-            "add" => "Ajouter un utilisateur",
-            "delete" => "Supprimer un utilisateur",
-            "settings" => [
-                "manage" => "Gérer les paramètres",
-                "blacklist" => [
-                    "pseudo" => "Gérer les blacklist de pseudos",
-                ],
+        "settings" => [
+            "manage" => "Gérer les paramètres",
+            "blacklist" => [
+                "add" => "Ajouter",
+                "edit" => "Éditer",
+                "delete" => "Supprimer",
             ],
+        ],
+        "users" => [
+            "manage" => "Gérer les utilisateurs",
+            "edit" => "Éditer",
+            "add" => "Ajouter",
+            "delete" => "Supprimer",
             "roles" => [
                 "manage" => "Gérer les rôles",
-                "add" => "Ajouter un rôle",
-                "edit" => "Modifier un rôle",
-                "delete" => "Supprimer un rôle",
+                "add" => "Ajouter",
+                "edit" => "Éditer",
+                "delete" => "Supprimer",
             ],
         ],
     ],

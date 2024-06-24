@@ -102,7 +102,7 @@ class CoreController extends AbstractController
     #[Link(path: "/configuration", method: Link::GET, scope: "/cmw-admin")]
     private function adminConfiguration(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.website");
 
         View::createAdminView("Core", "Configuration/configuration")
             ->view();
@@ -111,7 +111,7 @@ class CoreController extends AbstractController
     #[NoReturn] #[Link(path: "/configuration", method: Link::POST, scope: "/cmw-admin")]
     private function adminConfigurationPost(Request $request): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.website");
 
         foreach ($_POST as $option_name => $option_value):
             if ($option_name === "locale") {

@@ -50,12 +50,12 @@ class Package implements IPackageConfig
                     ),
                     new PackageSubMenuType(
                         title: 'Gestion',
-                        permission: 'users.settings',
+                        permission: 'users.manage',
                         url: 'users/manage',
                     ),
                     new PackageSubMenuType(
                         title: 'Rôles',
-                        permission: 'users.roles.manage',
+                        permission: 'users.roles',
                         url: 'roles/manage',
                     ),
                 ],

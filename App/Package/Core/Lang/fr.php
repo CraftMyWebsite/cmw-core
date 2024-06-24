@@ -418,39 +418,29 @@ return [
         "editConfiguration" => "Impossible de modifier la configuration %config%",
     ],
     "permissions" => [
-        "core" => [
-            "dashboard" => "Accès au panel admin",
-            "configuration" => [
-                "show" => "Accès aux configurations de base du site",
-                "edit" => "Modification des configurations du base du site",
-            ],
-            "editor" => [
-                "edit" => "Modification de l'éditeur",
-            ],
-            "mail" => [
-                "configuration" => "Modification des paramètres des mails",
-            ],
-            "menus" => [
-                "configuration" => "Gestion des menus",
-            ],
-            "security" => [
-                "configuration" => "Gestion de la sécurité du site",
-            ],
-            "theme" => [
-                "configuration" => "Gestion des thèmes du site",
-            ],
-            "update" => "Mettez à jour votre site",
-            "maintenance" => [
-                "edit" => "Gérez les maintenance de votre site",
-                "bypass" => "Outrepassez les maintenances de votre",
-            ],
-            "condition" => [
-                "edit" => "Gérez les conditions de votre site",
-            ],
-            "packages" => [
-                "local" => "Gérez les packages installés",
-                "market" => "Gérez les packages distants",
-            ],
+        "dashboard" => "Accès au panel d'administration",
+        "settings" => [
+            "title" => "Paramètres",
+            "website" => "Réglages du site",
+            "maintenance" => "Maintenance",
+            "maintenance_bypass" => "Outrepasser le blocage",
+            "mails" => "SMTP et mails",
+            "conditions" => "Conditions général",
+            "security" => "Sécurité",
+            "security_healthReport" => "Générer un rapport",
+        ],
+        "menu" => "Menus",
+        "update" => "Mises à jour du CORE",
+        "themes" => [
+            "title" => "Thèmes",
+            "edit" => "Éditer l'actif",
+            "manage" => "Gérer les installations",
+            "market" => "Installer depuis le market",
+        ],
+        "packages" => [
+            "title" => "Packages",
+            "manage" => "Gérer les installations",
+            "market" => "Installer depuis le market",
         ],
     ],
 ];

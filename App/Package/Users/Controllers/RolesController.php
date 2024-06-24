@@ -29,7 +29,7 @@ class RolesController extends AbstractController
     #[Link("/manage", Link::GET, [], "/cmw-admin/roles")]
     private function adminRolesManage(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.manage");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
         $rolesList = RolesModel::getInstance()->getRoles();
         $permissionController = PermissionsController::getInstance();
@@ -148,7 +148,7 @@ class RolesController extends AbstractController
     #[Link("/getRole/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
     private function adminGetRole(Request $request, int $id): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.manage");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
         $_SESSION['editRoleId'] = $id;
 
@@ -181,7 +181,7 @@ class RolesController extends AbstractController
     #[Link("/getRoles", Link::GET, [], "/cmw-admin/roles")]
     private function adminGetRoles(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.manage");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
         $roles = RolesModel::getInstance()->getRoles();
 
