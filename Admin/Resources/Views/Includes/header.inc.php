@@ -16,6 +16,23 @@ $sideBarImplementations = Loader::loadImplementations(ISideBarElements::class);
 
 /* @var UserEntity $userAdmin */
 /* @var CoreController $coreAdmin */
+
+$installedPackages = PackageController::getInstalledPackages();
+
+$hasGamePackage = false;
+
+foreach ($installedPackages as $package) {
+    if ($package->isGame()) {
+        $hasGamePackage = true;
+        break; // Pas besoin de continuer à vérifier les autres paquets
+    }
+}
+
+if ($hasGamePackage) {
+    echo "Il y a au moins un paquet de jeu installé.";
+} else {
+    echo "Il n'y a aucun paquet de jeu installé.";
+}
 ?>
 
 
@@ -172,68 +189,137 @@ $sideBarImplementations = Loader::loadImplementations(ISideBarElements::class);
         </ul>
 
         <?php if (!empty(PackageController::getInstalledPackages())): ?>
-        <div class="flex flex-no-wrap justify-center items-center py-3 px-2">
-            <div class="flex-grow h-px border-b"></div>
-            <div class="px-2 w-auto">
-                <p class="text-sm"><?= LangManager::translate('core.packages') ?></p>
+            <div class="flex flex-no-wrap justify-center items-center py-3 px-2">
+                <div class="flex-grow h-px border-b"></div>
+                <div class="px-2 w-auto">
+                    <p class="text-sm"><?= LangManager::translate('core.packages') ?></p>
+                </div>
+                <div class="flex-grow h-px border-b"></div>
             </div>
-            <div class="flex-grow h-px border-b"></div>
-        </div>
-        <ul class="space-y-1">
-            <?php foreach (PackageController::getInstalledPackages() as $package):
-                foreach ($package->menus() as $menu):
-                    if ($menu->getLang() === EnvManager::getInstance()->getValue('LOCALE')):
+            <ul class="space-y-1">
+                <?php foreach (PackageController::getInstalledPackages() as $package):
+                    if (!$package->isGame()) :
+                        foreach ($package->menus() as $menu):
+                            if ($menu->getLang() === EnvManager::getInstance()->getValue('LOCALE')):
 
-                        // Vérifier si le menu a des sous-menus visibles
-                        $hasVisibleSubMenu = false;
-                        foreach ($menu->getSubMenus() as $submenu) {
-                            if (UsersModel::hasPermission($currentUser, $submenu->getPermission())) {
-                                $hasVisibleSubMenu = true;
-                                break;
-                            }
-                        }
+                                // Vérifier si le menu a des sous-menus visibles
+                                $hasVisibleSubMenu = false;
+                                foreach ($menu->getSubMenus() as $submenu) {
+                                    if (UsersModel::hasPermission($currentUser, $submenu->getPermission())) {
+                                        $hasVisibleSubMenu = true;
+                                        break;
+                                    }
+                                }
 
-                        if (is_null($menu->getUrl()) && $hasVisibleSubMenu):?>
-                            <li>
-                                <button type="button"
-                                        class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active" aria-expanded="true"' : '"' ?>"
-                                        aria-controls="dropdown-<?= $menu->getTitle() ?>"
-                                        data-collapse-toggle="dropdown-<?= $menu->getTitle() ?>">
-                                    <i class="<?= $menu->getIcon() ?>"></i>
-                                    <span class="span-side-nav"><?= $menu->getTitle() ?></span>
-                                    <i class="fa-xs fa-solid fa-chevron-down"></i>
-                                </button>
-                                <ul id="dropdown-<?= $menu->getTitle() ?>"
-                                    class="a-side-nav-dropdown <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? '' : 'hidden' ?>">
-                                    <?php foreach ($menu->getSubMenus() as $submenu):
+                                if (is_null($menu->getUrl()) && $hasVisibleSubMenu):?>
+                                    <li>
+                                        <button type="button"
+                                                class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active" aria-expanded="true"' : '"' ?>"
+                                                aria-controls="dropdown-<?= $menu->getTitle() ?>"
+                                                data-collapse-toggle="dropdown-<?= $menu->getTitle() ?>">
+                                            <i class="<?= $menu->getIcon() ?>"></i>
+                                            <span class="span-side-nav"><?= $menu->getTitle() ?></span>
+                                            <i class="fa-xs fa-solid fa-chevron-down"></i>
+                                        </button>
+                                        <ul id="dropdown-<?= $menu->getTitle() ?>"
+                                            class="a-side-nav-dropdown <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? '' : 'hidden' ?>">
+                                            <?php foreach ($menu->getSubMenus() as $submenu):
 
-                                        if (UsersModel::hasPermission($currentUser, $submenu->getPermission())):?>
-                                            <li>
-                                                <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $submenu->getUrl() ?>"
-                                                   class="a-side-nav-drop <?= MenusController::getInstance()->isActiveNavbarItem($submenu->getUrl()) ? 'side-nav-drop-active' : '' ?>">
-                                                    <?= $submenu->getTitle() ?>
-                                                </a>
-                                            </li>
-                                        <?php endif; ?>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </li>
-                        <?php else:
-                            if (!is_null($menu->getUrl()) && UsersModel::hasPermission($currentUser, $menu->getPermission())):?>
-                                <li>
-                                    <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $menu->getUrl() ?>"
-                                       class="a-side-nav <?= MenusController::getInstance()->isActiveNavbarItem($menu->getUrl()) ? 'side-nav-active' : '' ?>">
-                                        <i class="<?= $menu->getIcon() ?>"></i>
-                                        <span class="span-side-nav"><?= $menu->getTitle() ?></span>
-                                    </a>
-                                </li>
+                                                if (UsersModel::hasPermission($currentUser, $submenu->getPermission())):?>
+                                                    <li>
+                                                        <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $submenu->getUrl() ?>"
+                                                           class="a-side-nav-drop <?= MenusController::getInstance()->isActiveNavbarItem($submenu->getUrl()) ? 'side-nav-drop-active' : '' ?>">
+                                                            <?= $submenu->getTitle() ?>
+                                                        </a>
+                                                    </li>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </li>
+                                <?php else:
+                                    if (!is_null($menu->getUrl()) && UsersModel::hasPermission($currentUser, $menu->getPermission())):?>
+                                        <li>
+                                            <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $menu->getUrl() ?>"
+                                               class="a-side-nav <?= MenusController::getInstance()->isActiveNavbarItem($menu->getUrl()) ? 'side-nav-active' : '' ?>">
+                                                <i class="<?= $menu->getIcon() ?>"></i>
+                                                <span class="span-side-nav"><?= $menu->getTitle() ?></span>
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
+                                <?php endif; ?>
                             <?php endif; ?>
-                        <?php endif; ?>
+                        <?php endforeach; ?>
                     <?php endif; ?>
                 <?php endforeach; ?>
-            <?php endforeach; ?>
-            <?php endif; ?>
-        </ul>
+            </ul>
+        <?php endif; ?>
+
+        <?php if (!empty(PackageController::getInstalledPackages()) && $hasGamePackage): ?>
+            <div class="flex flex-no-wrap justify-center items-center py-3 px-2">
+                <div class="flex-grow h-px border-b"></div>
+                <div class="px-2 w-auto">
+                    <p class="text-sm"><?= LangManager::translate('core.games') ?></p>
+                </div>
+                <div class="flex-grow h-px border-b"></div>
+            </div>
+            <ul class="space-y-1">
+                <?php foreach (PackageController::getInstalledPackages() as $package):
+                    if ($package->isGame()) :
+                        foreach ($package->menus() as $menu):
+                            if ($menu->getLang() === EnvManager::getInstance()->getValue('LOCALE')):
+
+                                // Vérifier si le menu a des sous-menus visibles
+                                $hasVisibleSubMenu = false;
+                                foreach ($menu->getSubMenus() as $submenu) {
+                                    if (UsersModel::hasPermission($currentUser, $submenu->getPermission())) {
+                                        $hasVisibleSubMenu = true;
+                                        break;
+                                    }
+                                }
+
+                                if (is_null($menu->getUrl()) && $hasVisibleSubMenu):?>
+                                    <li>
+                                        <button type="button"
+                                                class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active" aria-expanded="true"' : '"' ?>"
+                                                aria-controls="dropdown-<?= $menu->getTitle() ?>"
+                                                data-collapse-toggle="dropdown-<?= $menu->getTitle() ?>">
+                                            <i class="<?= $menu->getIcon() ?>"></i>
+                                            <span class="span-side-nav"><?= $menu->getTitle() ?></span>
+                                            <i class="fa-xs fa-solid fa-chevron-down"></i>
+                                        </button>
+                                        <ul id="dropdown-<?= $menu->getTitle() ?>"
+                                            class="a-side-nav-dropdown <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? '' : 'hidden' ?>">
+                                            <?php foreach ($menu->getSubMenus() as $submenu):
+
+                                                if (UsersModel::hasPermission($currentUser, $submenu->getPermission())):?>
+                                                    <li>
+                                                        <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $submenu->getUrl() ?>"
+                                                           class="a-side-nav-drop <?= MenusController::getInstance()->isActiveNavbarItem($submenu->getUrl()) ? 'side-nav-drop-active' : '' ?>">
+                                                            <?= $submenu->getTitle() ?>
+                                                        </a>
+                                                    </li>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </li>
+                                <?php else:
+                                    if (!is_null($menu->getUrl()) && UsersModel::hasPermission($currentUser, $menu->getPermission())):?>
+                                        <li>
+                                            <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $menu->getUrl() ?>"
+                                               class="a-side-nav <?= MenusController::getInstance()->isActiveNavbarItem($menu->getUrl()) ? 'side-nav-active' : '' ?>">
+                                                <i class="<?= $menu->getIcon() ?>"></i>
+                                                <span class="span-side-nav"><?= $menu->getTitle() ?></span>
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+
         <?php foreach ($sideBarImplementations as $package):
             $package->afterWidgets();
         endforeach; ?>

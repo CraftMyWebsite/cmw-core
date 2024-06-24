@@ -26,7 +26,7 @@ class PackageController extends AbstractController
 
     /**
      * @return IPackageConfig[]
-     * @desc Return packages they are not natives, like Core, Pages and Users
+     * @desc Return packages they are not natives, like Core and Users
      */
     public static function getInstalledPackages(): array
     {
@@ -49,7 +49,7 @@ class PackageController extends AbstractController
 
     /**
      * @return IPackageConfig[]
-     * @desc Return natives packages (core, users, pages) => self::$corePackages
+     * @desc Return natives packages (core, users) => self::$corePackages
      */
     public static function getCorePackages(): array
     {

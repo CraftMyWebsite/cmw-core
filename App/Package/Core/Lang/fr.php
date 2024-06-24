@@ -8,6 +8,7 @@ return [
     "general" => "Général",
     "package" => "Package",
     "packages" => "Packages",
+    "games" => "Jeux",
     "themes" => "Themes",
     "alt" => [
         "logo" => "Logo CMW",
