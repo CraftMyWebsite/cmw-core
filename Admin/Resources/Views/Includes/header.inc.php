@@ -27,12 +27,6 @@ foreach ($installedPackages as $package) {
         break; // Pas besoin de continuer à vérifier les autres paquets
     }
 }
-
-if ($hasGamePackage) {
-    echo "Il y a au moins un paquet de jeu installé.";
-} else {
-    echo "Il n'y a aucun paquet de jeu installé.";
-}
 ?>
 
 
@@ -188,7 +182,7 @@ if ($hasGamePackage) {
             <?php endforeach; ?>
         </ul>
 
-        <?php if (!empty(PackageController::getInstalledPackages())): ?>
+        <?php if (!empty($installedPackages)): ?>
             <div class="flex flex-no-wrap justify-center items-center py-3 px-2">
                 <div class="flex-grow h-px border-b"></div>
                 <div class="px-2 w-auto">
@@ -197,7 +191,7 @@ if ($hasGamePackage) {
                 <div class="flex-grow h-px border-b"></div>
             </div>
             <ul class="space-y-1">
-                <?php foreach (PackageController::getInstalledPackages() as $package):
+                <?php foreach ($installedPackages as $package):
                     if (!$package->isGame()) :
                         foreach ($package->menus() as $menu):
                             if ($menu->getLang() === EnvManager::getInstance()->getValue('LOCALE')):
@@ -254,7 +248,7 @@ if ($hasGamePackage) {
             </ul>
         <?php endif; ?>
 
-        <?php if (!empty(PackageController::getInstalledPackages()) && $hasGamePackage): ?>
+        <?php if (!empty($installedPackages) && $hasGamePackage): ?>
             <div class="flex flex-no-wrap justify-center items-center py-3 px-2">
                 <div class="flex-grow h-px border-b"></div>
                 <div class="px-2 w-auto">
@@ -263,7 +257,7 @@ if ($hasGamePackage) {
                 <div class="flex-grow h-px border-b"></div>
             </div>
             <ul class="space-y-1">
-                <?php foreach (PackageController::getInstalledPackages() as $package):
+                <?php foreach ($installedPackages as $package):
                     if ($package->isGame()) :
                         foreach ($package->menus() as $menu):
                             if ($menu->getLang() === EnvManager::getInstance()->getValue('LOCALE')):
