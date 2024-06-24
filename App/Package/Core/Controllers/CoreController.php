@@ -116,6 +116,7 @@ class CoreController extends AbstractController
         foreach ($_POST as $option_name => $option_value):
             if ($option_name === "locale") {
                 EnvManager::getInstance()->editValue("LOCALE", $option_value);
+                //TODO rename perms desc DB
             }
             CoreModel::updateOption($option_name, $option_value);
         endforeach;

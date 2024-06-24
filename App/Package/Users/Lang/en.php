@@ -86,7 +86,7 @@ return [
             "title" => "Editing username ",
         ],
     ],
-    "role" => [
+    "roles" => [
         "manage" => [
             "title" => "Manage your roles",
             "desc" => "Manage your website roles",
@@ -107,14 +107,14 @@ return [
                 "title" => "Delete ",
                 "content" => "The deletion of this role is permanent!<br>No return possible!",
             ],
-            "defaultRoles" => [
+            "default" => [
                 "title" => "Default roles",
                 "tips" => "Define your members role(s) when they sign up on your website.",
             ],
-            "perms" => [
-                "admin_warning" => " This role is the most important. Therefore, you cannot delete it or modify its permissions!",
-                "operator" => "This permission is the most important and gives all access without exception.",
-            ],
+        ],
+        "perms" => [
+            "admin_warning" => " This role is the most important. Therefore, you cannot delete it or modify its permissions!",
+            "operator" => "This permission is the most important and gives all access without exception.",
         ],
     ],
     "modal" => [
@@ -215,7 +215,12 @@ return [
             ],
         ],
     ],
-
+    "flush" => [
+        "modal" => [
+            "warning" => "This will reset all your roles! (except Administrator)",
+            "text" => "Flushing Permissions is a debugging tool often used by developers who want to force the manual addition of permissions to their Permissions.php files located in the Init folder."
+        ],
+    ],
     "permissions" => [
         "settings" => [
             "manage" => "Manage settings",

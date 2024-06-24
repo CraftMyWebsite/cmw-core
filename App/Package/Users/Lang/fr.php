@@ -216,6 +216,12 @@ return [
             ],
         ],
     ],
+    "flush" => [
+        "modal" => [
+            "warning" => "Ceci va réinitialiser tous vos rôles ! (sauf Administrateur)",
+            "text" => "Flusher les permissions est un outil de débogage souvent utilisé par les développeurs qui souhaitent forcer l'ajout manuel des permissions de leurs fichiers Permissions.php se trouvant dans le dossier Init."
+        ],
+    ],
     "permissions" => [
         "settings" => [
             "manage" => "Gérer les paramètres",

@@ -33,15 +33,13 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
         </div>
         <div class="modal-body">
             <div class="alert-danger">
-                <p><i class="fa-solid fa-circle-info"></i> Ceci va réinitialiser tous vos rôles ! (sauf Administrateur)</p>
+                <p><i class="fa-solid fa-circle-info"></i> <?= LangManager::translate("users.flush.modal.warning") ?></p>
             </div>
-            <p>Flusher les permissions est un outil de débogage souvent utilisé par les développeurs qui souhaitent
-                forcer l'ajout manuel des permissions de leurs fichiers Permissions.php se trouvant dans le dossier
-                Init.</p>
+            <p><?= LangManager::translate("users.flush.modal.text") ?></p>
         </div>
         <div class="modal-footer">
             <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/roles/permissions/import' ?>"
-               class="btn-danger">FLUSHER</a>
+               class="btn-danger">FLUSH</a>
         </div>
     </div>
 </div>
