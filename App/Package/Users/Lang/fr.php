@@ -71,17 +71,31 @@ return [
         "toaster_pass_error" => "Une erreur est survenue dans la modification du mot de passe.<br>Les mots de passes ne correspondent pas.",
         "reset_password" => "Réinitialiser le mot de passe",
     ],
+    "blacklist" => [
+        "title" => "Pseudo blacklisté",
+        "table" => [
+            "pseudo" => "Pseudo / Nom",
+            "date" => "Date",
+            "action" => "Actions",
+        ],
+        "delete" => [
+            "title" => "Suppression du pseudo ",
+            "content" => "Ceci permettra à nouveau à vos utilisateurs d'utiliser ce pseudo.",
+        ],
+        "edit" => [
+            "title" => "Édition du pseudo ",
+        ],
+    ],
     "roles" => [
         "manage" => [
             "title" => "Gestion des rôles",
             "desc" => "Gérez les rôles de votre site",
-
             "add" => "Ajouter un rôle",
             "add_title" => "Rôles | Ajouter",
             "edit_title" => "Edition du rôle ",
             "add_desc" => "Créer un nouveau rôle",
             "edit_desc" => "Modifiez un nouveau rôle",
-            "permissions_list" => "Liste des permissions",
+            "permissions_list" => "Autorisations",
             "add_toaster_success" => "Rôle créé avec succès !",
             "edit_toaster_success" => "Rôle modifié avec succès !",
             "delete_toaster_success" => "Rôle supprimé avec succès ",
@@ -90,13 +104,17 @@ return [
             "name" => "Nom du rôle",
             "weightTips" => "Plus le chiffre est haut plus le rôle est important",
             "delete" => [
-                "title" => "Vérification",
-                "content" => "Vous êtes sur le point de supprimer un rôle, êtes-vous sûr ?",
+                "title" => "Supprimer ",
+                "content" => "La suppression de ce rôle est définitive !<br>Aucun retour possible !",
             ],
             "default" => [
                 "title" => "Rôle par défaut",
                 "tips" => "Définissez ce rôle parmi ceux par défaut. Lors de l'inscription, vos membres se les verront ajouter automatiquement.",
             ],
+        ],
+        "perms" => [
+            "admin_warning" => " Ce rôle est le plus important. Par conséquent, vous ne pouvez pas le supprimer ou modifier ses permissions !",
+            "operator" => "Cette permission est la plus importante et donne tous les accès sans exception.",
         ],
     ],
     "modal" => [

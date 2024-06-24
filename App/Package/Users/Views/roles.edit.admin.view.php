@@ -15,85 +15,56 @@ use CMW\Model\Users\RolesModel;
 
 $title = LangManager::translate("users.roles.manage.title");
 $description = LangManager::translate("users.roles.manage.desc"); ?>
-<section>
-    <div class="card">
-        <div class="card-header">
-            <h4><?= LangManager::translate('users.roles.manage.edit_title') ?>
-                <?= $role->getName() ?></h4>
+<div class="page-title">
+    <h3><?= LangManager::translate('users.roles.manage.edit_title') ?>
+        <?= $role->getName() ?></h3>
+    <button form="editRole" type="submit" class="btn-primary"><?= LangManager::translate("core.btn.edit") ?></button>
+</div>
+
+<form id="editRole" method="post" action="">
+    <?php (new SecurityManager())->insertHiddenToken() ?>
+<div class="card">
+
+        <div class="grid-3">
+            <div>
+                <label for="name"><?= LangManager::translate("users.users.role") ?> :</label>
+                <div class="input-group">
+                    <i class="fa-solid fa-id-card-clip"></i>
+                    <input type="text" id="name" name="name"
+                           value="<?= $role->getName() ?>"
+                           placeholder="<?= LangManager::translate("users.users.role") ?>" required>
+                </div>
+            </div>
+            <div>
+                <label for="weight"><?= LangManager::translate('users.users.weight') ?> :</label>
+                <div class="input-group">
+                    <i class="fa-solid fa-weight-hanging"></i>
+                    <input type="number" id="weight" name="weight" class="form-control"
+                           value="<?= $role->getWeight() ?>"
+                           placeholder="1"
+                           required>
+                </div>
+            </div>
+            <div>
+                <label for="description"><?= LangManager::translate("users.users.role_description") ?> :</label>
+                <div class="input-group">
+                    <i class="fa-solid fa-house"></i>
+                    <input type="text" id="description" name="description"
+                           placeholder="<?= LangManager::translate("users.users.role_description") ?>"
+                           value="<?= $role->getDescription() ?>"
+                           required>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <form method="post" action="">
-                <?php (new SecurityManager())->insertHiddenToken() ?>
-                <div class="row">
-                    <div class="col-12 col-lg-6">
-                        <h6><?= LangManager::translate("users.users.role") ?> :</h6>
-                        <div class="form-group position-relative has-icon-left">
-                            <input type="text" class="form-control" name="name"
-                                   value="<?= $role->getName() ?>"
-                                   placeholder="<?= LangManager::translate("users.users.role") ?>" required>
-                            <div class="form-control-icon">
-                                <i class="fa-solid fa-id-card-clip"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-6">
-                        <h6><?= LangManager::translate('users.users.weight') ?> :
-                            <i data-bs-toggle="tooltip"
-                               title="<?= LangManager::translate('users.roles.manage.weightTips') ?>"
-                               class="fa-sharp fa-solid fa-circle-question"></i>
-                        </h6>
-                        <div class="form-group position-relative has-icon-left">
-                            <input type="number" name="weight" class="form-control" value="<?= $role->getWeight() ?>"
-                                   placeholder="1"
-                                   required>
-                            <div class="form-control-icon">
-                                <i class="fa-solid fa-weight-hanging"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-lg-9">
-                        <h6><?= LangManager::translate("users.users.role_description") ?> :</h6>
-                        <div class="form-group position-relative has-icon-left">
-                            <input type="text" class="form-control" name="description"
-                                   placeholder="<?= LangManager::translate("users.users.role_description") ?>"
-                                   value="<?= $role->getDescription() ?>"
-                                   required>
-                            <div class="form-control-icon">
-                                <i class="fa-solid fa-circle-info"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <h6><?= LangManager::translate("users.roles.manage.permissions_list") ?> :</h6>
-                <div class="row mx-auto">
-                    <?php showPermission($permissionModel, $permissionController->getParents(), $roleModel, $role); ?>
-                </div>
 
 
-                <div class="text-end ">
-                    <button type="submit"
-                            class="btn btn-primary"><?= LangManager::translate("core.btn.edit") ?></button>
-                </div>
-            </form>
-        </div>
+</div>
+
+<div class="center-flex mt-4">
+    <div class="card space-y-4 flex-content-lg">
+        <h6><?= LangManager::translate("users.roles.manage.permissions_list") ?> :</h6>
+        <?php showPermission($permissionModel, $permissionController->getParents(), $roleModel, $role); ?>
     </div>
-</section>
+</div>
+</form>
 
-<!-- Trigger perm * and disabled all others perms checkbox -->
-<script>
-    const inputs = document.getElementsByClassName("permission-input")
-
-    const checkChild = (parentElement) => {
-        parentElement.parentElement.parentElement.children.item(1).classList.toggle("d-none")
-    }
-
-    for (const inp of inputs) {
-
-        inp.onchange = () => checkChild(inp);
-
-    }
-
-</script>

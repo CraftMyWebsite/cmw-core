@@ -72,7 +72,7 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                 <td class="text-center">
                     <?php if ($role->isDefault()): ?>
                         <i class="text-success fa-regular fa-circle-dot fa-beat-fade"></i>
-                    <?php else: ?>
+                    <?php elseif ($role->getId() !== 5): ?>
                         <a href="set_default/<?= $role->getId() ?>"><i
                                 class="fa-regular fa-circle fa-2xs"><span hidden>a</span></i></a>
                     <?php endif; ?>
@@ -81,21 +81,23 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                     <a href="manage/edit/<?= $role->getId() ?>">
                         <i class="text-info fa-solid fa-gears"></i>
                     </a>
+                    <?php if ($role->getId() !== 5): ?>
                     <button data-modal-toggle="modal-delete-<?= $role->getId() ?>" class="text-danger" type="button"><i
                             class="text-danger fas fa-trash-alt"></i></button>
+                    <?php endif; ?>
                 </td>
             </tr>
             <!-- MODAL DELETE ROLE -->
+        <?php if ($role->getId() !== 5): ?>
             <div id="modal-delete-<?= $role->getId() ?>" class="modal-container">
                 <div class="modal">
                     <div class="modal-header-danger">
-                        <h6>Supprimer <?= $role->getName() ?> ?</h6>
+                        <h6><?= LangManager::translate("users.roles.manage.delete.title") ?> <?= $role->getName() ?> ?</h6>
                         <button type="button" data-modal-hide="modal-delete-<?= $role->getId() ?>"><i
                                 class="fa-solid fa-xmark"></i></button>
                     </div>
                     <div class="modal-body">
-                        La suppression de ce rôle est définitive !<br>
-                        Aucun retour possible !
+                        <?= LangManager::translate("users.roles.manage.delete.content") ?>
                     </div>
                     <div class="modal-footer">
                         <a href="/cmw-admin/roles/delete/<?= $role->getId() ?>"
@@ -105,6 +107,7 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                     </div>
                 </div>
             </div>
+            <?php endif; ?>
         <?php endforeach; ?>
         </tbody>
     </table>
@@ -158,14 +161,9 @@ $description = LangManager::translate("users.roles.manage.desc"); ?>
                     </div>
                 </div>
                 <h6><?= LangManager::translate("users.roles.manage.permissions_list") ?> :</h6>
-
-
-                    <div class="flex-col flex-wrap mx-auto mt-16 space-y-4">
+                    <div class="flex-col flex-wrap mx-auto space-y-4">
                         <?php showPermission($permissionModel, $permissionController->getParents()) ?>
                     </div>
-
-
-
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn-primary"><?= LangManager::translate("core.btn.add") ?></button>

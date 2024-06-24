@@ -20,9 +20,9 @@ $description = LangManager::translate("users.settings.desc"); ?>
     <div class="space-y-4">
         <div class="card">
             <div class="card-title">
-                <h6>Pseudo blacklisté</h6>
+                <h6><?= LangManager::translate("users.blacklist.title") ?></h6>
                 <button type="button" class="btn-danger loading-btn" data-loading-btn="Chargement"
-                        data-target-table="1">Suppression de masse
+                        data-target-table="1"><?= LangManager::translate("core.btn.mass_delete") ?>
                 </button>
             </div>
             <div class="table-container">
@@ -30,9 +30,9 @@ $description = LangManager::translate("users.settings.desc"); ?>
                     <thead>
                     <tr>
                         <th class="mass-selector"></th>
-                        <th>Pseudo / Nom</th>
-                        <th>Date</th>
-                        <th class="text-center">Actions</th>
+                        <th><?= LangManager::translate("users.blacklist.table.pseudo") ?></th>
+                        <th><?= LangManager::translate("users.blacklist.table.date") ?></th>
+                        <th class="text-center"><?= LangManager::translate("users.blacklist.table.action") ?></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -50,11 +50,11 @@ $description = LangManager::translate("users.settings.desc"); ?>
                             <div id="modal-<?= $pseudo->getId() ?>" class="modal-container">
                                 <div class="modal">
                                     <div class="modal-header-danger">
-                                        <h6>Suppression du pseudo <?= $pseudo->getPseudo() ?></h6>
+                                        <h6><?= LangManager::translate("users.blacklist.delete.title") ?><?= $pseudo->getPseudo() ?></h6>
                                         <button type="button" data-modal-hide="modal-<?= $pseudo->getId() ?>"><i class="fa-solid fa-xmark"></i></button>
                                     </div>
                                     <div class="modal-body">
-                                        Ceci permettra à nouveau à vos utilisateurs d'utiliser ce pseudo.
+                                        <?= LangManager::translate("users.blacklist.delete.content") ?>
                                     </div>
                                     <div class="modal-footer">
                                         <a href="settings/blacklist/pseudo/delete/<?= $pseudo->getId() ?>" type="button" class="btn-danger"><?= LangManager::translate("core.btn.delete") ?></a>
@@ -65,7 +65,7 @@ $description = LangManager::translate("users.settings.desc"); ?>
                             <div id="modal-edit-<?= $pseudo->getId() ?>" class="modal-container">
                                 <div class="modal">
                                     <div class="modal-header">
-                                        <h6>Édition du pseudo <?= $pseudo->getPseudo() ?></h6>
+                                        <h6><?= LangManager::translate("users.blacklist.edit.title") ?><?= $pseudo->getPseudo() ?></h6>
                                         <button type="button" data-modal-hide="modal-edit-<?= $pseudo->getId() ?>"><i class="fa-solid fa-xmark"></i></button>
                                     </div>
                                     <form action="settings/blacklist/pseudo/edit/<?= $pseudo->getId() ?>" method="post">
@@ -73,7 +73,7 @@ $description = LangManager::translate("users.settings.desc"); ?>
                                     <div class="modal-body">
                                         <div class="input-group">
                                             <i class="fas fa-user"></i>
-                                            <input type="text" id="pseudo" name="pseudo" value="<?= $pseudo->getPseudo() ?>" placeholder="Teyir" required>
+                                            <input type="text" id="pseudo" name="pseudo" value="<?= $pseudo->getPseudo() ?>" placeholder="BadUserName" required>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -95,7 +95,7 @@ $description = LangManager::translate("users.settings.desc"); ?>
                     <?php (new SecurityManager())->insertHiddenToken() ?>
                     <div class="input-group">
                         <i class="fas fa-user"></i>
-                        <input type="text" id="pseudo" name="pseudo" placeholder="Teyir" required>
+                        <input type="text" id="pseudo" name="pseudo" placeholder="BadUserName" required>
                     </div>
                         <button type="submit" class="btn-primary btn-center">
                             <?= LangManager::translate('users.settings.blacklisted.pseudo.btn') ?>

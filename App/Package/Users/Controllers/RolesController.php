@@ -36,35 +36,15 @@ class RolesController extends AbstractController
         $permissionModel = PermissionsModel::getInstance();
         $rolesModel = RolesModel::getInstance();
 
-        //Todo Try to improve that ?
         require_once(EnvManager::getInstance()->getValue("DIR") . "App/Package/Users/Functions/loadPermissions.php");
-
 
         View::createAdminView("Users", "roles")
             ->addStyle("Admin/Resources/Vendors/Izitoast/iziToast.min.css")
+            ->addScriptBefore("App/Package/Users/Views/Assets/Js/autoPermsChecker.js")
             ->addScriptAfter("App/Package/Users/Views/Assets/Js/rolesWeights.js",
                 "Admin/Resources/Vendors/Izitoast/iziToast.min.js")
             ->addVariableList(["rolesList" => $rolesList, "permissionController" => $permissionController,
                 "permissionModel" => $permissionModel, "rolesModel" => $rolesModel])
-            ->view();
-    }
-
-    #[Link("/add", Link::GET, [], "/cmw-admin/roles")]
-    private function adminRolesAdd(): void
-    {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.add");
-
-        $permissionController = PermissionsController::getInstance();
-        $permissionModel = PermissionsModel::getInstance();
-
-        //Todo Try to improve that ?
-        require_once(EnvManager::getInstance()->getValue("DIR") . "App/Package/users/functions/loadPermissions.php");
-
-
-        View::createAdminView("Users", "roles.add")->addVariableList(array(
-            "permissionController" => $permissionController,
-            "permissionModel" => $permissionModel
-        ))
             ->view();
     }
 
@@ -100,7 +80,9 @@ class RolesController extends AbstractController
         //Todo Try to improve that ?
         require_once(EnvManager::getInstance()->getValue("DIR") . "App/Package/Users/Functions/loadPermissions.php");
 
-        View::createAdminView("Users", "roles.edit")->addVariableList(array(
+        View::createAdminView("Users", "roles.edit")
+            ->addScriptBefore("App/Package/Users/Views/Assets/Js/autoPermsChecker.js")
+            ->addVariableList(array(
             "permissionController" => $permissionController,
             "permissionModel" => $permissionModel,
             "roleModel" => $roleModel,

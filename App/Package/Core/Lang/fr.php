@@ -372,6 +372,7 @@ return [
         "save" => "Sauvegarder",
         "delete" => "Supprimer",
         "delete_forever" => "Supprimer définitivement",
+        "mass_delete" => "Suppression de masse",
         "close" => "Fermer",
         "send" => "Envoyer",
         "download" => "Télécharger",

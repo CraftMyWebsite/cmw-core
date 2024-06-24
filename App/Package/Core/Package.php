@@ -92,7 +92,7 @@ class Package implements IPackageConfig
                 icon: "fas fa-palette",
                 title: "Thèmes",
                 url: null,
-                permission: null,
+                permission: "core.theme.configuration",
                 subMenus: [
                     new PackageSubMenuType(
                         title: 'Modifier ' . ThemeManager::getInstance()->getCurrentTheme()->name(),

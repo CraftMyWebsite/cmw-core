@@ -71,17 +71,31 @@ return [
         "toaster_pass_error" => "An error occurred in changing the password.<br>The passwords do not match.",
         "reset_password" => "Reset password",
     ],
+    "blacklist" => [
+        "title" => "Blacklisted username",
+        "table" => [
+            "pseudo" => "Username/Name",
+            "date" => "Date",
+            "action" => "Actions",
+        ],
+        "delete" => [
+            "title" => "Removal of username ",
+            "content" => "This will allow your users to use this username again.",
+        ],
+        "edit" => [
+            "title" => "Editing username ",
+        ],
+    ],
     "role" => [
         "manage" => [
             "title" => "Manage your roles",
             "desc" => "Manage your website roles",
-
             "add" => "Add a role",
             "add_title" => "Roles | Add",
             "edit_title" => "Editing role ",
             "add_desc" => "Create a new role on the site",
             "edit_desc" => "Edit a role on the site",
-            "permissions_list" => "List of all permissions",
+            "permissions_list" => "Permissions",
             "add_toaster_success" => "The role has been created !",
             "edit_toaster_success" => "The role has been edited !",
             "delete_toaster_success" => "The role has been deleted !",
@@ -90,12 +104,16 @@ return [
             "name" => "Role name",
             "weightTips" => "Increase the number for a more important role",
             "delete" => [
-                "title" => "Verification",
-                "content" => "Are you sure about that, sir ?",
+                "title" => "Delete ",
+                "content" => "The deletion of this role is permanent!<br>No return possible!",
             ],
             "defaultRoles" => [
                 "title" => "Default roles",
                 "tips" => "Define your members role(s) when they sign up on your website.",
+            ],
+            "perms" => [
+                "admin_warning" => " This role is the most important. Therefore, you cannot delete it or modify its permissions!",
+                "operator" => "This permission is the most important and gives all access without exception.",
             ],
         ],
     ],
