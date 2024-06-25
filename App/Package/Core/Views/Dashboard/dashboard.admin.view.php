@@ -98,7 +98,10 @@ Website::setDescription(LangManager::translate("core.dashboard.desc"));
     </div>
 </div>
 
-<?php CoreController::getInstance()->getPackagesDashboardElements(); ?>
+<div class="space-y-4 mt-4">
+    <?php CoreController::getInstance()->getPackagesDashboardElements(); ?>
+</div>
+
 
 
 <script>

@@ -682,7 +682,7 @@
                 searchable: !0,
                 paging: !0,
                 perPage: 5,
-                perPageSelect: [5, 10, 20, 50],
+                perPageSelect: [5, 10, 15, 20, 25, 30, 50, 100, 200],
                 nextPrev: !0,
                 firstLast: !1,
                 prevText: "&lsaquo;",

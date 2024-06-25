@@ -21,7 +21,7 @@ $description = LangManager::translate("users.settings.desc"); ?>
         <div class="card">
             <div class="card-title">
                 <h6><?= LangManager::translate("users.blacklist.title") ?></h6>
-                <button type="button" class="btn-danger loading-btn" data-loading-btn="Chargement"
+                <button type="button" class="btn-danger btn-mass-delete loading-btn" data-loading-btn="Chargement"
                         data-target-table="1"><?= LangManager::translate("core.btn.mass_delete") ?>
                 </button>
             </div>

@@ -50,8 +50,7 @@ class UsersSettingsController extends AbstractController
             ->addStyle("Admin/Resources/Assets/Css/simple-datatables.css")
             ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
                 "Admin/Resources/Vendors/Simple-datatables/config-datatables.js",
-                "App/Package/Users/Views/Assets/Js/rolesWeights.js",
-                "Admin/Resources/Vendors/TableCheckeable/main.js")
+                "App/Package/Users/Views/Assets/Js/rolesWeights.js")
             ->addVariableList(["settings" => new UserSettingsEntity(), "roles" => $roles, "pseudos" => $blacklistedPseudo])
             ->view();
     }

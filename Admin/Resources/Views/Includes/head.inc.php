@@ -24,7 +24,8 @@ use CMW\Utils\Website;
           href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Css/style.css"/>
     <link rel="stylesheet"
           href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Vendors/Choices.js/Public/Assets/Styles/choices.css"/>
-
+    <link rel="stylesheet"
+          href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Vendors/Izitoast/iziToast.min.css"/>
     <link rel="stylesheet"
           href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Vendors/Fontawesome-free/Css/fa-all.min.css"/>
 
