@@ -3367,6 +3367,27 @@ kbd {
     padding: 1.25rem;
   }
 }
+.modal-header-warning {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border-bottom-width: 1px;
+    --tw-bg-opacity: 1;
+    background-color: rgb(245 158 11 / var(--tw-bg-opacity));
+    padding: 1rem;
+    color: var(--light-primary);
+}
+.dark .modal-header-warning {
+    border-color: var(--dark-text-secondary);
+}
+@media (min-width: 768px) {
+
+    .modal-header-warning {
+        padding: 1.25rem;
+    }
+}
 .modal-footer {
   display: flex;
   justify-content: flex-end;
