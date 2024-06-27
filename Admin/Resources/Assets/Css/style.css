@@ -2543,7 +2543,7 @@ select:focus {
 /* ICON PICKER */
 .icon-picker {
   position: relative;
-    z-index: 12000;
+    z-index: 30;
 }
 .icon-picker i {
   --tw-text-opacity: 1;
@@ -3230,7 +3230,7 @@ kbd {
   top: 8%;
   right: 0px;
   left: 0px;
-  z-index: 5000;
+  z-index: 600000;
   display: none;
   height: calc(100% - 1rem);
   width: 100%;
