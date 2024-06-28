@@ -33,6 +33,8 @@ return [
         "not_same_pass" => "Les mots de passes ne correspondent pas.",
         "welcome" => "Bienvenue !",
         "user_edited" => "Utilisateur modifié",
+        "user_edited_self" => "Modification appliqué.",
+        "user_edited_self_nope" => "Impossible d'apporter les modifications",
         "pass_change_faild" => "Impossible d'éditer le mot de passe",
         "impossible" => "Impossible de faire ceci",
         "impossible_user" => "Impossible de supprimer cet utilisateur",

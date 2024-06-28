@@ -33,6 +33,8 @@ return [
         "not_same_pass" => "non-identical passwords",
         "welcome" => "Welcome !",
         "user_edited" => "User just edited",
+        "user_edited_self" => "Modification applied.",
+        "user_edited_self_nope" => "Unable to apply modification now",
         "pass_change_faild" => "Unable to edit password",
         "impossible" => "Can't do this",
         "impossible_user" => "Unable to delete this user",
