@@ -78,6 +78,34 @@ class UsersSettingsController extends AbstractController
         UsersSettingsModel::updateSetting("resetPasswordMethod", $resetPasswordMethod);
         UsersSettingsModel::updateSetting("profilePage", $profilePage);
 
+        [$listEnforcedToggle] = Utils::filterInput('listEnforcedToggle');
+
+        if ($listEnforcedToggle === "1") {
+            if (empty($_POST['enforcedRoles'])) {
+                $listEnforcedToggle = 0;
+                if (!UsersSettingsModel::getInstance()->clearEnforcedRoles()) {
+                    Flash::send(Alert::ERROR, "Erreur", "Impossible de mettre à jour les rôles imposer en 2fa !");
+                    Redirect::redirectPreviousRoute();
+                }
+            } else {
+                if (UsersSettingsModel::getInstance()->clearEnforcedRoles()) {
+                    foreach ($_POST['enforcedRoles'] as $roleId) {
+                        UsersSettingsModel::getInstance()->updateEnforcedRoles($roleId);
+                    }
+                } else {
+                    Flash::send(Alert::ERROR,"Erreur", "Impossible de mettre à jour les rôles imposer en 2fa !");
+                    Redirect::redirectPreviousRoute();
+                }
+            }
+        } else {
+            if (!UsersSettingsModel::getInstance()->clearEnforcedRoles()) {
+                Flash::send(Alert::ERROR, "Erreur", "Impossible de mettre à jour les rôles imposer en 2fa !");
+                Redirect::redirectPreviousRoute();
+            }
+        }
+
+        UsersSettingsModel::updateSetting("listEnforcedToggle", $listEnforcedToggle);
+
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 

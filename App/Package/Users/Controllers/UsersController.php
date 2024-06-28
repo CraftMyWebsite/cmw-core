@@ -108,7 +108,12 @@ class UsersController extends AbstractController
             return LoginStatus::INTERNAL_ERROR;
         }
 
-        return $user->get2Fa()->isEnabled() ? LoginStatus::OK_NEED_2FA : LoginStatus::OK;
+
+        if ($user->get2Fa()->isEnforced()) {
+            return $user->get2Fa()->isEnabled() ? LoginStatus::OK_NEED_2FA : LoginStatus::OK_ENFORCE_2FA;
+        } else {
+            return $user->get2Fa()->isEnabled() ? LoginStatus::OK_NEED_2FA : LoginStatus::OK;
+        }
     }
 
     /**
@@ -410,6 +415,18 @@ class UsersController extends AbstractController
                 $_SESSION['cmw_temp_use_cookies'] = $cookie;
 
                 $this->showLogin2Fa();
+            case LoginStatus::OK_ENFORCE_2FA:
+                $user = UsersModel::getInstance()->getUserWithMail($encryptedMail);
+                if (is_null($user)) {
+                    Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                        LangManager::translate("core.toaster.internalError"));
+                    Redirect::redirectPreviousRoute();
+                }
+
+                $_SESSION['cmw_temp_user_id'] = $user->getId();
+                $_SESSION['cmw_temp_use_cookies'] = $cookie;
+
+                $this->enforceLogin2Fa($user);
         }
     }
 
@@ -431,6 +448,13 @@ class UsersController extends AbstractController
     private function showLogin2Fa(): void
     {
         $view = new View("Users", "2fa");
+        $view->view();
+    }
+
+    private function enforceLogin2Fa(UserEntity $user): void
+    {
+        $view = new View("Users", "enforce2fa");
+        $view->addVariableList(["user" => $user]);
         $view->view();
     }
 
@@ -779,8 +803,16 @@ class UsersController extends AbstractController
     #[NoReturn] #[Link('/profile/2fa/toggle', Link::POST)]
     private function publicProfile2FaToggle(): void
     {
+        [$enforceMail] = Utils::filterInput("enforce_mail");
 
-        $user = UsersModel::getCurrentUser();
+        if (!empty($enforceMail)) {
+            $encryptedMail = EncryptManager::encrypt(mb_strtolower($enforceMail));
+            $user = UsersModel::getInstance()->getUserWithMail($encryptedMail);
+            $enforced = true;
+        } else {
+            $user = UsersModel::getCurrentUser();
+            $enforced = false;
+        }
 
         if (is_null($user)) {
             Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),
@@ -811,13 +843,22 @@ class UsersController extends AbstractController
 
         $status = $user->get2Fa()->isEnabled() ? 0 : 1;
 
-        if (Users2FaModel::getInstance()->toggle2Fa($user->getId(), $status)) {
-            UsersModel::updateStoredUser($user->getId());
-            Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-                $status ? '2fa activée' : '2fa désactivée');
+        if ($user->get2Fa()->isEnforced() && $user->get2Fa()->isEnabled()) {
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), "Vous ne pouvez pas désactiver le double facteur sur ce compte !");
         } else {
-            Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-                LangManager::translate("core.toaster.internalError"));
+            if (Users2FaModel::getInstance()->toggle2Fa($user->getId(), $status)) {
+                UsersModel::updateStoredUser($user->getId());
+                if ($enforced) {
+                    Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+                        "2fa activée, veuillez vous reconnecter.");
+                } else {
+                    Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+                        $status ? '2fa activée' : '2fa désactivée');
+                }
+            } else {
+                Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+                    LangManager::translate("core.toaster.internalError"));
+            }
         }
 
         Redirect::redirectPreviousRoute();
@@ -832,4 +873,5 @@ enum LoginStatus
     case INTERNAL_ERROR;
     case OK;
     case OK_NEED_2FA;
+    case OK_ENFORCE_2FA;
 }

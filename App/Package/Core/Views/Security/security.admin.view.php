@@ -38,15 +38,7 @@ $description = LangManager::translate("core.security.description");
         </div>
         <div class="card">
             <h6>Double authentification</h6>
-            <form>
-                <div class="row">
-                    <select id="basicSelect" disabled>
-                        <option>Aucune</option>
-                        <option>Pour le staff</option>
-                        <option>Pour tout les utilisateurs</option>
-                    </select>
-                </div>
-            </form>
+            <p>Pour gérer la double authentification obligatoire rendez-vous dans les <a class="link" href="users/settings">paramètres utilisateur.</a></p>
         </div>
         <div class="card">
             <h6><?= LangManager::translate('core.security.healthReport.title') ?></h6>

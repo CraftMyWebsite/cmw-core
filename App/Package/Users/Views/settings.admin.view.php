@@ -3,6 +3,7 @@
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
+use CMW\Model\Users\UsersSettingsModel;
 
 /* @var \CMW\Entity\Users\UserSettingsEntity $settings */
 /* @var RoleEntity[] $roles */
@@ -103,29 +104,6 @@ $description = LangManager::translate("users.settings.desc"); ?>
                 </form>
         </div>
 
-        <div class="card mb-4">
-            <h6>Double facteur obligatoire</h6>
-            <fieldset class="form-group" disabled>
-                <select class="form-select" id="forceTo" name="forceTo" required>
-                    <option value="0">Coming Soon</option>
-                    <option value="0">Personne</option>
-                    <option value="1">Tout le monde</option>
-                    <option value="2">Administrateurs</option>
-                    <option value="3">Ayant le rôle :</option>
-                </select>
-            </fieldset>
-            <div class="mt-2" id="listAllowedGroups">
-                <h6><?= LangManager::translate("core.menus.add.group_select") ?> :</h6>
-                <div class="form-group">
-                    <select class="choices form-select" name="allowedGroups[]" multiple>
-                        <?php foreach ($roles as $role): ?>
-                            <option
-                                value="<?= $role->getId() ?>"><?= $role->getName() ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-            </div>
-        </div>
     </div>
 
     <form action="" id="setting" method="post" enctype="multipart/form-data">
@@ -140,6 +118,32 @@ $description = LangManager::translate("users.settings.desc"); ?>
                 <div class="drop-img-area" data-input-name="defaultPicture"></div>
             </div>
         </div>
+
+
+        <div class="card mb-4">
+            <h6>Double facteur obligatoire</h6>
+            <fieldset class="form-group">
+                <select class="form-select" id="listEnforcedToggle" name="listEnforcedToggle" required>
+                    <option value="0" <?php if (!UsersSettingsModel::getSetting("listEnforcedToggle")) { echo "selected";} ?>>Pas d'obligation</option>
+                    <option value="1" <?php if (UsersSettingsModel::getSetting("listEnforcedToggle")) { echo "selected";} ?>>Ayant le rôle :</option>
+                </select>
+            </fieldset>
+            <div class="mt-2" id="listEnforcedRoles">
+                <h6><?= LangManager::translate("core.menus.add.group_select") ?> :</h6>
+                <div class="form-group">
+                    <select class="choices form-select" name="enforcedRoles[]" multiple>
+                        <?php foreach ($roles as $role): ?>
+                            <option
+                                <?php foreach (UsersSettingsModel::getInstance()->getEnforcedRoles() as $allowedRoles): ?>
+                                    <?= $allowedRoles->getRole()->getId() === $role->getId() ? 'selected' : '' ?>
+                                <?php endforeach ?>
+                                value="<?= $role->getId() ?>"><?= $role->getName() ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+        </div>
+
         <div class="card mb-4">
             <h6><?= LangManager::translate('users.settings.resetPasswordMethod.label') ?></h6>
             <select id="basicSelect" name="reset_password_method" required>
@@ -173,18 +177,18 @@ $description = LangManager::translate("users.settings.desc"); ?>
 
 
 <script>
-    var basicSelect = document.getElementById('forceTo');
-    var listAllowedGroups = document.getElementById('listAllowedGroups');
+    var basicSelect = document.getElementById('listEnforcedToggle');
+    var listAllowedGroups = document.getElementById('listEnforcedRoles');
 
     basicSelect.addEventListener('change', function () {
-        if (basicSelect.value === "3") {
+        if (basicSelect.value === "1") {
             listAllowedGroups.style.display = 'block';
         } else {
             listAllowedGroups.style.display = 'none';
         }
     });
 
-    if (basicSelect.value === "3") {
+    if (basicSelect.value === "1") {
         listAllowedGroups.style.display = 'block';
     } else {
         listAllowedGroups.style.display = 'none';

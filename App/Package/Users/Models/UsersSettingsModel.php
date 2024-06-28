@@ -4,7 +4,10 @@ namespace CMW\Model\Users;
 
 
 use CMW\Entity\Users\BlacklistedPseudoEntity;
+use CMW\Entity\Users\UserEnforced2FaEntity;
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Manager\Flash\Alert;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Package\AbstractModel;
 
 
@@ -96,8 +99,8 @@ class UsersSettingsModel extends AbstractModel
     }
 
     /**
-     * @return \CMW\Entity\Users\BlacklistedPseudoEntity[]
-     */
+ * @return \CMW\Entity\Users\BlacklistedPseudoEntity[]
+ */
     public function getBlacklistedPseudos(): array
     {
         $sql = "SELECT * FROM cmw_users_blacklist_pseudo";
@@ -172,5 +175,67 @@ class UsersSettingsModel extends AbstractModel
         }
 
         return count($res) >= 1;
+    }
+
+    /**
+     * @return \CMW\Entity\Users\UserEnforced2FaEntity[]
+     */
+    public function getEnforcedRoles(): array
+    {
+        $sql = "SELECT * FROM cmw_users_enforced2fa_roles";
+        $db = DatabaseManager::getInstance();
+        $req = $db->query($sql);
+
+        $res = $req->fetchAll();
+
+        if (!$res){
+            return [];
+        }
+
+        $toReturn = [];
+
+        foreach ($res as $enforcedRole) {
+            $toReturn[] = new UserEnforced2FaEntity(
+                RolesModel::getInstance()->getRoleById($enforcedRole['enforced2fa_roles'])
+            );
+        }
+        return $toReturn;
+    }
+
+    public function updateEnforcedRoles($roleId):bool {
+        foreach (RolesModel::getInstance()->getRoles() as $role) {
+            if ($role->getId() == $roleId) {
+                if ($this->addEnforcedRoles($roleId)) {
+                    foreach (UsersModel::getInstance()->getUsers() as $user) {
+                        foreach ($user->getRoles() as $userRole) {
+                            if ($userRole->getId() === $role->getId()) {
+                                Users2FaModel::getInstance()->enforce2Fa($user->getId());
+                            }
+                        }
+                    }
+                } else {
+                    Flash::send(Alert::ERROR, "Erreur", "Impossible d'ajouter les rôles à l'imposition du 2fa");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public function clearEnforcedRoles():bool {
+        Users2FaModel::getInstance()->clearEnforce2Fa();
+
+        $sql = "DELETE FROM cmw_users_enforced2fa_roles";
+
+        $db = DatabaseManager::getInstance();
+
+        return $db->prepare($sql)->execute();
+    }
+
+    private function addEnforcedRoles($roleId):bool {
+        $sql = "INSERT INTO cmw_users_enforced2fa_roles (enforced2fa_roles) 
+                VALUES (:enforced2fa_roles)";
+        $db = DatabaseManager::getInstance();
+        return $db->prepare($sql)->execute(['enforced2fa_roles' => $roleId]);
     }
 }

@@ -43,6 +43,27 @@ class Users2FaModel extends AbstractModel
 
     /**
      * @param int $userId
+     * @return bool
+     */
+    public function enforce2Fa(int $userId): bool
+    {
+        $sql = "UPDATE cmw_users_2fa SET users_2fa_is_enforced = 1 WHERE users_2fa_user_id = :userId";
+        $db = DatabaseManager::getInstance();
+        return $db->prepare($sql)->execute(['userId' => $userId]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function clearEnforce2Fa(): bool
+    {
+        $sql = "UPDATE cmw_users_2fa SET users_2fa_is_enforced = 0;";
+        $db = DatabaseManager::getInstance();
+        return $db->prepare($sql)->execute();
+    }
+
+    /**
+     * @param int $userId
      * @param string $secret
      * @return bool
      */
