@@ -102,6 +102,30 @@ $description = LangManager::translate("users.settings.desc"); ?>
                         </button>
                 </form>
         </div>
+
+        <div class="card mb-4">
+            <h6>Double facteur obligatoire</h6>
+            <fieldset class="form-group" disabled>
+                <select class="form-select" id="forceTo" name="forceTo" required>
+                    <option value="0">Coming Soon</option>
+                    <option value="0">Personne</option>
+                    <option value="1">Tout le monde</option>
+                    <option value="2">Administrateurs</option>
+                    <option value="3">Ayant le rôle :</option>
+                </select>
+            </fieldset>
+            <div class="mt-2" id="listAllowedGroups">
+                <h6><?= LangManager::translate("core.menus.add.group_select") ?> :</h6>
+                <div class="form-group">
+                    <select class="choices form-select" name="allowedGroups[]" multiple>
+                        <?php foreach ($roles as $role): ?>
+                            <option
+                                value="<?= $role->getId() ?>"><?= $role->getName() ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+        </div>
     </div>
 
     <form action="" id="setting" method="post" enctype="multipart/form-data">
@@ -126,30 +150,6 @@ $description = LangManager::translate("users.settings.desc"); ?>
                     <?= LangManager::translate("users.settings.resetPasswordMethod.options.1") ?>
                 </option>-->
             </select>
-        </div>
-
-        <div class="card mb-4">
-            <h6>Double facteur obligatoire</h6>
-            <fieldset class="form-group" disabled>
-                <select class="form-select" id="forceTo" name="forceTo" required>
-                    <option value="0">Coming Soon</option>
-                    <option value="0">Personne</option>
-                    <option value="1">Tout le monde</option>
-                    <option value="2">Administrateurs</option>
-                    <option value="3">Ayant le rôle :</option>
-                </select>
-            </fieldset>
-            <div class="mt-2" id="listAllowedGroups">
-                <h6><?= LangManager::translate("core.menus.add.group_select") ?> :</h6>
-                <div class="form-group">
-                    <select class="choices form-select" name="allowedGroups[]" multiple>
-                        <?php foreach ($roles as $role): ?>
-                            <option
-                                value="<?= $role->getId() ?>"><?= $role->getName() ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-            </div>
         </div>
 
         <div class="card">

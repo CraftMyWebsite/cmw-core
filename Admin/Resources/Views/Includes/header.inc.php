@@ -256,7 +256,7 @@ foreach ($installedPackages as $package) {
                 </div>
                 <div class="flex-grow h-px border-b"></div>
             </div>
-            <ul class="space-y-1">
+            <ul class="space-y-1 mb-8">
                 <?php foreach ($installedPackages as $package):
                     if ($package->isGame()) :
                         foreach ($package->menus() as $menu):
