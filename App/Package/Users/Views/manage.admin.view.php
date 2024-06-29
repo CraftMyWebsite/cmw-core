@@ -66,6 +66,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
                 <th><?= LangManager::translate("users.users.role") ?></th>
                 <th><?= LangManager::translate("users.users.creation") ?></th>
                 <th><?= LangManager::translate("users.users.last_connection") ?></th>
+                <th class="text-center">2fa</th>
                 <th class="text-center"><?= LangManager::translate("core.btn.edit") ?></th>
             </tr>
             </thead>
@@ -77,6 +78,7 @@ $description = LangManager::translate("users.manage.desc"); ?>
                     <td><?= $user->getHighestRole()?->getName() ?></td>
                     <td><?= $user->getCreated() ?></td>
                     <td><?= $user->getLastConnection() ?></td>
+                    <td class="text-center"><?php if ($user->get2Fa()->isEnabled()): ?> <i class="text-success fa-solid fa-check fa-lg"></i> <?php else: ?> <i class="text-danger fa-solid fa-xmark fa-lg"></i> <?php endif; ?></td>
                     <td class="text-center space-x-2">
                         <a class=""
                            href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/users/manage/edit/<?= $user->getId() ?>">

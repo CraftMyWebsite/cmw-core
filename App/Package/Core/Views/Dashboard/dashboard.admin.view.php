@@ -116,9 +116,6 @@ Website::setDescription(LangManager::translate("core.dashboard.desc"));
             height: 350,
             type: 'area'
         },
-        dataLabels: {
-            enabled: false
-        },
         stroke: {
             curve: 'smooth'
         },
@@ -142,9 +139,6 @@ Website::setDescription(LangManager::translate("core.dashboard.desc"));
             height: 350,
             type: 'area'
         },
-        dataLabels: {
-            enabled: false
-        },
         stroke: {
             curve: 'smooth'
         },
@@ -167,9 +161,6 @@ Website::setDescription(LangManager::translate("core.dashboard.desc"));
         chart: {
             height: 350,
             type: 'area'
-        },
-        dataLabels: {
-            enabled: false
         },
         stroke: {
             curve: 'smooth'
