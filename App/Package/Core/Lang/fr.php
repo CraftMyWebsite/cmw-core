@@ -190,7 +190,7 @@ return [
         "close" => "Fermer",
         "appearance" => "Apparence de ",
         "verification" => "Vérification",
-        "verificationText" => "Attention, ceci va réinitialiser tout les paramètres par defaut de votre thème, êtes-vous sûr de vouloir continuer ?",
+        "verificationText" => "Attention, ceci va réinitialiser tout les paramètres par défaut de votre thème, êtes-vous sûr de vouloir continuer ?",
         "config" => [
             "title" => "Gestion",
             "description" => "Gérez les thèmes de votre site",
