@@ -10,17 +10,20 @@ class User2FaEntity
     private int $userId;
     private bool $isEnabled;
     private string $secret;
+    private bool $isEnforced;
 
     /**
      * @param int $userId
      * @param bool $isEnabled
      * @param string $secret
+     * @param bool $isEnforced
      */
-    public function __construct(int $userId, bool $isEnabled, string $secret)
+    public function __construct(int $userId, bool $isEnabled, string $secret, bool $isEnforced)
     {
         $this->userId = $userId;
         $this->isEnabled = $isEnabled;
         $this->secret = $secret;
+        $this->isEnforced = $isEnforced;
     }
 
     /**
@@ -64,5 +67,13 @@ class User2FaEntity
     public function getQrCode(int $size): string
     {
         return (new TwoFaManager())->getQrCode(EncryptManager::decrypt($this->secret), $size);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnforced(): bool
+    {
+        return $this->isEnforced;
     }
 }

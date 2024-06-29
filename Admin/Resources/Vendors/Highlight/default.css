@@ -1,0 +1,249 @@
+code {
+    padding: 2px 4px;
+    font-size: 90%;
+    color: #c7254e;
+    background-color: #f9f2f4;
+    border-radius: 4px;
+}
+
+.dark code {
+    padding: 2px 4px;
+    font-size: 90%;
+    color: #b0abab;
+    background-color: #252734;
+    border-radius: 4px;
+}
+
+.dark pre code {
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+    white-space: pre-wrap;
+    background-color: transparent;
+    border-radius: 0;
+}
+
+pre code {
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+    white-space: pre-wrap;
+    background-color: transparent;
+    border-radius: 0;
+}
+
+pre {
+    display: block;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 1.42857143;
+    color: #333;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.dark pre {
+    display: block;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 1.42857143;
+    color: #b0abab;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #0D0D0D;
+    border: 1px solid #2F2F2F;
+    border-radius: 4px;
+}
+
+.copy-container {
+    position: relative;
+    display: block;
+}
+.copy-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 0.7em;
+}
+
+.code-container {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.code-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 9.5px;
+    background-color: #e8e8e8;
+    border-bottom: 1px solid #ccc;
+    border-radius: 4px 4px 0 0;
+}
+
+.dark .code-top-bar {
+    background-color: #2F2F2F;
+    border-bottom: 1px solid #2F2F2F;
+}
+
+.code-type {
+    font-family: monospace;
+    font-size: 0.9em;
+    color: #333;
+}
+
+.dark .code-type {
+    color: #b0abab;
+}
+
+pre {
+    margin: 0;
+    border-radius: 0 0 4px 4px;
+}
+
+.dark pre {
+    margin: 0;
+    border-radius: 0 0 4px 4px;
+}
+
+/*
+LIGHT
+*/
+
+.hljs {
+    color: #383a42;
+    background: #f5f5f5
+}
+.hljs-comment,
+.hljs-quote {
+    color: #a0a1a7;
+    font-style: italic
+}
+.hljs-doctag,
+.hljs-keyword,
+.hljs-formula {
+    color: #a626a4
+}
+.hljs-section,
+.hljs-name,
+.hljs-selector-tag,
+.hljs-deletion,
+.hljs-subst {
+    color: #e45649
+}
+.hljs-literal {
+    color: #0184bb
+}
+.hljs-string,
+.hljs-regexp,
+.hljs-addition,
+.hljs-attribute,
+.hljs-meta .hljs-string {
+    color: #50a14f
+}
+.hljs-attr,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-type,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-number {
+    color: #986801
+}
+.hljs-symbol,
+.hljs-bullet,
+.hljs-link,
+.hljs-meta,
+.hljs-selector-id,
+.hljs-title {
+    color: #4078f2
+}
+.hljs-built_in,
+.hljs-title.class_,
+.hljs-class .hljs-title {
+    color: #c18401
+}
+.hljs-emphasis {
+    font-style: italic
+}
+.hljs-strong {
+    font-weight: bold
+}
+.hljs-link {
+    text-decoration: underline
+}
+
+
+/*
+DARK
+*/
+.dark .hljs {
+    color: #abb2bf;
+    background: #0D0D0D
+}
+.dark .hljs-comment,
+.dark .hljs-quote {
+    color: #5c6370;
+    font-style: italic
+}
+.dark .hljs-doctag,
+.dark .hljs-keyword,
+.dark .hljs-formula {
+    color: #c678dd
+}
+.dark .hljs-section,
+.dark .hljs-name,
+.dark .hljs-selector-tag,
+.dark .hljs-deletion,
+.dark .hljs-subst {
+    color: #e06c75
+}
+.dark .hljs-literal {
+    color: #56b6c2
+}
+.dark .hljs-string,
+.dark .hljs-regexp,
+.dark .hljs-addition,
+.dark .hljs-attribute,
+.dark .hljs-meta .hljs-string {
+    color: #98c379
+}
+.dark .hljs-attr,
+.dark .hljs-variable,
+.dark .hljs-template-variable,
+.dark .hljs-type,
+.dark .hljs-selector-class,
+.dark .hljs-selector-attr,
+.dark .hljs-selector-pseudo,
+.dark .hljs-number {
+    color: #d19a66
+}
+.dark .hljs-symbol,
+.dark .hljs-bullet,
+.dark .hljs-link,
+.dark .hljs-meta,
+.dark .hljs-selector-id,
+.dark .hljs-title {
+    color: #61aeee
+}
+.dark .hljs-built_in,
+.dark .hljs-title.class_,
+.dark .hljs-class .hljs-title {
+    color: #e6c07b
+}
+.dark .hljs-emphasis {
+    font-style: italic
+}
+.dark .hljs-strong {
+    font-weight: bold
+}
+.dark .hljs-link {
+    text-decoration: underline
+}

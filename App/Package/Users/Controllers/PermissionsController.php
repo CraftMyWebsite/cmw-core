@@ -36,51 +36,47 @@ class PermissionsController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.manage");
 
-        if ($this->loadPackagesPermissions()) {
+        if ($this->reloadPackagesPermissions()) {
             Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
                 LangManager::translate("users.toaster.load_permissions_success"));
         }
         Redirect::redirectPreviousRoute();
     }
 
-    public function loadPackagesPermissions(): bool
+    public function reloadPackagesPermissions(): bool
     {
         $packages = PackageController::getAllPackages();
 
-        foreach ($packages as $package):
-            $packageName = $package->name();
+        if (PermissionsModel::getInstance()->clearPermissions()) {
+            foreach ($packages as $package) {
+                $packageName = $package->name();
 
-            $initFolder = EnvManager::getInstance()->getValue("dir") . "App/Package/$packageName/Init";
+                $initFolder = EnvManager::getInstance()->getValue("dir") . "App/Package/$packageName/Init";
 
-            if (!is_dir($initFolder)) {
-                continue;
-            }
+                if (!is_dir($initFolder)) {
+                    continue;
+                }
 
-            $initFiles = array_diff(scandir($initFolder), ['..', '.']);
+                $initFiles = array_diff(scandir($initFolder), ['..', '.']);
 
-            if (empty($initFiles)) {
-                continue;
-            }
+                if (empty($initFiles)) {
+                    continue;
+                }
 
-            // Load permissions file
-            $packagePermissions = PermissionManager::getPackagePermissions($packageName);
+                // Load permissions file
+                $packagePermissions = PermissionManager::getPackagePermissions($packageName);
 
-            if (!is_null($packagePermissions)) {
-                foreach ($packagePermissions->permissions() as $permission) {
-                    $permEntity = PermissionsModel::getInstance()->addFullCodePermission($permission);
-
-                    if (is_null($permEntity)) {
-                        Flash::send(Alert::WARNING, LangManager::translate("core.toaster.warning"),
-                            LangManager::translate("users.toaster.load_permissions_error", ['package' => $packageName]));
-                        return false;
+                if (!is_null($packagePermissions)) {
+                    foreach ($packagePermissions->permissions() as $permission) {
+                        PermissionsModel::getInstance()->addFullCodePermission($permission);
                     }
                 }
             }
+            return true;
+        } else {
+            return false;
+        }
 
-        endforeach;
-
-        return true;
     }
-
 
 }

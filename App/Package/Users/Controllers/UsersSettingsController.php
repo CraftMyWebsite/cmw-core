@@ -4,6 +4,7 @@ namespace CMW\Controller\Users;
 
 use CMW\Entity\Users\UserSettingsEntity;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Filter\FilterManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
@@ -43,9 +44,14 @@ class UsersSettingsController extends AbstractController
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings");
 
         $roles = RolesModel::getInstance()->getRoles();
+        $blacklistedPseudo = UsersSettingsModel::getInstance()->getBlacklistedPseudos();
 
         View::createAdminView("Users", "settings")
-            ->addVariableList(["settings" => new UserSettingsEntity(), "roles" => $roles])
+            ->addStyle("Admin/Resources/Assets/Css/simple-datatables.css")
+            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
+                "Admin/Resources/Vendors/Simple-datatables/config-datatables.js",
+                "App/Package/Users/Views/Assets/Js/rolesWeights.js")
+            ->addVariableList(["settings" => new UserSettingsEntity(), "roles" => $roles, "pseudos" => $blacklistedPseudo])
             ->view();
     }
 
@@ -72,28 +78,44 @@ class UsersSettingsController extends AbstractController
         UsersSettingsModel::updateSetting("resetPasswordMethod", $resetPasswordMethod);
         UsersSettingsModel::updateSetting("profilePage", $profilePage);
 
+        [$listEnforcedToggle] = Utils::filterInput('listEnforcedToggle');
+
+        if ($listEnforcedToggle === "1") {
+            if (empty($_POST['enforcedRoles'])) {
+                $listEnforcedToggle = 0;
+                if (!UsersSettingsModel::getInstance()->clearEnforcedRoles()) {
+                    Flash::send(Alert::ERROR, "Erreur", "Impossible de mettre à jour les rôles imposer en 2fa !");
+                    Redirect::redirectPreviousRoute();
+                }
+            } else {
+                if (UsersSettingsModel::getInstance()->clearEnforcedRoles()) {
+                    foreach ($_POST['enforcedRoles'] as $roleId) {
+                        UsersSettingsModel::getInstance()->updateEnforcedRoles($roleId);
+                    }
+                } else {
+                    Flash::send(Alert::ERROR,"Erreur", "Impossible de mettre à jour les rôles imposer en 2fa !");
+                    Redirect::redirectPreviousRoute();
+                }
+            }
+        } else {
+            if (!UsersSettingsModel::getInstance()->clearEnforcedRoles()) {
+                Flash::send(Alert::ERROR, "Erreur", "Impossible de mettre à jour les rôles imposer en 2fa !");
+                Redirect::redirectPreviousRoute();
+            }
+        }
+
+        UsersSettingsModel::updateSetting("listEnforcedToggle", $listEnforcedToggle);
+
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
 
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link("/settings/blacklist/pseudo", Link::GET, [], "/cmw-admin/users")]
-    private function pseudoBlacklist(): void
-    {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings.blacklist.pseudo");
-
-        $blacklistedPseudo = UsersSettingsModel::getInstance()->getBlacklistedPseudos();
-
-        View::createAdminView("Users", "Settings/blacklistPseudo")
-            ->addVariableList(["pseudos" => $blacklistedPseudo])
-            ->view();
-    }
-
     #[NoReturn] #[Link("/settings/blacklist/pseudo", Link::POST, [], "/cmw-admin/users")]
     private function pseudoBlacklistPost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings.blacklist.pseudo");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings.blacklist.add");
 
         if (empty($_POST['pseudo'])) {
             Redirect::redirectPreviousRoute();
@@ -112,22 +134,10 @@ class UsersSettingsController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link("/settings/blacklist/pseudo/edit/:id", Link::GET, ['id' => "[0-9]+"], "/cmw-admin/users")]
-    private function editPseudoBlacklist(Request $request, int $id): void
-    {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings.blacklist.pseudo");
-
-        $blacklistedPseudo = UsersSettingsModel::getInstance()->getBlacklistedPseudo($id);
-
-        View::createAdminView("Users", "Settings/blacklistPseudoEdit")
-            ->addVariableList(["pseudo" => $blacklistedPseudo])
-            ->view();
-    }
-
     #[NoReturn] #[Link("/settings/blacklist/pseudo/edit/:id", Link::POST, ['id' => "[0-9]+"], "/cmw-admin/users")]
     private function editPseudoBlacklistPost(Request $request, int $id): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings.blacklist.pseudo");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings.blacklist.edit");
 
         if (empty($_POST['pseudo'])) {
             Redirect::redirectPreviousRoute();
@@ -143,13 +153,13 @@ class UsersSettingsController extends AbstractController
                 LangManager::translate('users.settings.blacklisted.pseudo.toasters.edit.error', ['pseudo' => $pseudo]));
         }
 
-        Redirect::redirect('cmw-admin/users/settings/blacklist/pseudo');
+        Redirect::redirectPreviousRoute();
     }
 
     #[NoReturn] #[Link("/settings/blacklist/pseudo/delete/:id", Link::GET, ['id' => "[0-9]+"], "/cmw-admin/users")]
     private function deletePseudoBlacklisted(Request $request, int $id): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings.blacklist.pseudo");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings.blacklist.delete");
 
         if (UsersSettingsModel::getInstance()->removeBlacklistedPseudo($id)) {
             Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
@@ -158,6 +168,29 @@ class UsersSettingsController extends AbstractController
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                 LangManager::translate('users.settings.blacklisted.pseudo.toasters.delete.error'));
         }
+
+        Redirect::redirectPreviousRoute();
+    }
+
+    #[NoReturn] #[Link("/settings/blacklist/pseudo/deleteSelected", Link::POST, [], "/cmw-admin/users", secure: false)]
+    private function adminDeleteSelectedPost(): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings.blacklist.delete");
+
+        $selectedIds = $_POST['selectedIds'];
+
+        if (empty($selectedIds)) {
+            Flash::send(Alert::ERROR, "Blacklist", "Aucun pseudo sélectionné");
+            Redirect::redirectPreviousRoute();
+        }
+
+        $i = 0;
+        foreach ($selectedIds as $selectedId) {
+            $selectedId = FilterManager::filterData($selectedId, 11, FILTER_SANITIZE_NUMBER_INT);
+            UsersSettingsModel::getInstance()->removeBlacklistedPseudo($selectedId);
+            $i++;
+        }
+        Flash::send(Alert::SUCCESS, "Blacklist", "$i pseudos supprimé !");
 
         Redirect::redirectPreviousRoute();
     }

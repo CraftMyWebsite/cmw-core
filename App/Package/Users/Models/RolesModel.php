@@ -62,7 +62,7 @@ class RolesModel extends AbstractModel
      */
     public function getRoles(): array
     {
-        $sql = "SELECT role_id FROM cmw_roles";
+        $sql = "SELECT role_id FROM cmw_roles ORDER BY role_weight DESC";
         $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 

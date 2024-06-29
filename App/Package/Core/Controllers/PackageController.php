@@ -23,11 +23,11 @@ use JetBrains\PhpStorm\NoReturn;
 class PackageController extends AbstractController
 {
 
-    public static array $corePackages = ['Core', 'Pages', 'Users'];
+    public static array $corePackages = ['Core', 'Users'];
 
     /**
      * @return IPackageConfig[]
-     * @desc Return packages they are not natives, like Core, Pages and Users
+     * @desc Return packages they are not natives, like Core and Users
      */
     public static function getInstalledPackages(): array
     {
@@ -50,7 +50,7 @@ class PackageController extends AbstractController
 
     /**
      * @return IPackageConfig[]
-     * @desc Return natives packages (core, users, pages) => self::$corePackages
+     * @desc Return natives packages (core, users) => self::$corePackages
      */
     public static function getCorePackages(): array
     {
@@ -134,7 +134,7 @@ class PackageController extends AbstractController
     #[Link("/market", Link::GET, [], "/cmw-admin/packages")]
     private function adminPackageManage(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.local");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.market");
 
         $installedPackages = self::getInstalledPackages();
         $packagesList = self::getMarketPackages();
@@ -147,7 +147,7 @@ class PackageController extends AbstractController
     #[Link("/package", Link::GET, [], "/cmw-admin/packages")]
     private function adminMyPackage(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.market");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.manage");
 
         $installedPackages = self::getInstalledPackages();
         $packagesList = self::getMarketPackages();
@@ -187,7 +187,7 @@ class PackageController extends AbstractController
     #[Link("/delete/:package", Link::GET, ["package" => ".*?"], "/cmw-admin/packages")]
     #[NoReturn] private function adminPackageDelete(Request $request, string $package): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.local");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.manage");
 
         if (!$this->uninstallPackage($package)) {
             Flash::send(Alert::ERROR, LangManager::translate("core.package.error"),
@@ -206,7 +206,7 @@ class PackageController extends AbstractController
     #[Link("/update/:id/:actualVersion/:packageName", Link::GET, ["id" => "[0-9]+", "actualVersion" => ".*?", "packageName" => ".*?"], "/cmw-admin/packages")]
     #[NoReturn] private function adminPackageUpdate(Request $request, int $id, string $actualVersion, string $packageName): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.local");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.manage");
 
         $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion");
 

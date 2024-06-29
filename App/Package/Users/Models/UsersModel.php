@@ -32,7 +32,7 @@ class UsersModel extends AbstractModel
     public function getUserById(int $id): ?UserEntity
     {
 
-        $sql = "SELECT cmw_users.*, 2fa.users_2fa_is_enabled, users_2fa_secret FROM cmw_users 
+        $sql = "SELECT cmw_users.*, 2fa.users_2fa_is_enabled, users_2fa_secret,users_2fa_is_enforced  FROM cmw_users 
                 JOIN cmw_users_2fa 2fa ON cmw_users.user_id = 2fa.users_2fa_user_id
                 WHERE user_id = :user_id";
 
@@ -107,6 +107,7 @@ class UsersModel extends AbstractModel
                 $res['user_id'],
                 $res['users_2fa_is_enabled'],
                 $res['users_2fa_secret'],
+                $res['users_2fa_is_enforced']
             ),
             $res["user_logged"],
             $roles,
@@ -220,6 +221,9 @@ class UsersModel extends AbstractModel
     }
 
 
+    /**
+     * @return UserEntity[]
+     */
     public function getUsers(): array
     {
         $sql = "SELECT user_id FROM cmw_users";

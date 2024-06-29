@@ -681,8 +681,8 @@
                 sortable: !0,
                 searchable: !0,
                 paging: !0,
-                perPage: 20,
-                perPageSelect: [20, 50, 100, 500, 1000],
+                perPage: 5,
+                perPageSelect: [5, 10, 15, 20, 25, 30, 50, 100, 200],
                 nextPrev: !0,
                 firstLast: !1,
                 prevText: "&lsaquo;",
@@ -703,7 +703,7 @@
                 labels: {
                     placeholder: "Rechercher ...",
                     perPage: "{select} éléments par pages",
-                    noRows: "No entries found",
+                    noRows: "Aucun résultat",
                     info: "Affiche {start} à {end} sur {rows} éléments"
                 },
                 layout: {top: "{select}{search}", bottom: "{info}{pager}"}

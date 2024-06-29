@@ -1,216 +1,323 @@
 <?php
 
 use CMW\Controller\Core\CoreController;
+use CMW\Controller\Core\MenusController;
+use CMW\Controller\Core\PackageController;
+use CMW\Entity\Users\UserEntity;
+use CMW\Interface\Core\ISideBarElements;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
-use CMW\Manager\Theme\ThemeManager;
+use CMW\Manager\Loader\Loader;
 use CMW\Model\Users\UsersModel;
 
-//$packagesList = PublicAPI::getData("resources/getResources&resource_type=1");
-//$themesList = PublicAPI::getData("resources/getResources&resource_type=0");
-$currentTheme = ThemeManager::getInstance()->getCurrentTheme()->name();
-$notificationNumber = 0;
-
 $user = UsersModel::getCurrentUser();
+$currentUser = UsersModel::getCurrentUser();
+$sideBarImplementations = Loader::loadImplementations(ISideBarElements::class);
+
+/* @var UserEntity $userAdmin */
+/* @var CoreController $coreAdmin */
+
+$installedPackages = PackageController::getInstalledPackages();
+
+$hasGamePackage = false;
+
+foreach ($installedPackages as $package) {
+    if ($package->isGame()) {
+        $hasGamePackage = true;
+        break; // Pas besoin de continuer à vérifier les autres paquets
+    }
+}
 ?>
-<div id="main" class="layout-navbar">
 
-    <nav class="navbar navbar-expand navbar-light navbar-top">
-        <div class="container-fluid">
-            <a href="#" class="burger-btn d-block">
-                <i style="font-size: 1.5rem" class="fa-solid fa-bars"></i>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a href="<?= EnvManager::getInstance()->getValue('PATH_URL') ?>" target="_blank" class="ms-4">
-                <i style="font-size: 1.5rem" class="fa-solid fa-up-right-from-square"></i>
-            </a>
 
-            <?php CoreController::getInstance()->getPackagesTopBarElements(); ?>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <div class="dropdown navbar-nav ms-auto mb-lg-0">
-
-                    <div class="theme-toggle d-flex gap-2 align-items-center me-4">
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                             aria-hidden="true" role="img" class="iconify iconify--system-uicons" width="20" height="20"
-                             preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
-                            <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round"
-                               stroke-linejoin="round">
-                                <path
-                                    d="M10.5 14.5c2.219 0 4-1.763 4-3.982a4.003 4.003 0 0 0-4-4.018c-2.219 0-4 1.781-4 4c0 2.219 1.781 4 4 4zM4.136 4.136L5.55 5.55m9.9 9.9l1.414 1.414M1.5 10.5h2m14 0h2M4.135 16.863L5.55 15.45m9.899-9.9l1.414-1.415M10.5 19.5v-2m0-14v-2"
-                                    opacity=".3"></path>
-                                <g transform="translate(-210 -1)">
-                                    <path d="M220.5 2.5v2m6.5.5l-1.5 1.5"></path>
-                                    <circle cx="220.5" cy="11.5" r="4"></circle>
-                                    <path
-                                        d="m214 5l1.5 1.5m5 14v-2m6.5-.5l-1.5-1.5M214 18l1.5-1.5m-4-5h2m14 0h2"></path>
-                                </g>
-                            </g>
-                        </svg>
-                        <div class="form-check form-switch fs-6">
-                            <input class="form-check-input me-0" type="checkbox" id="toggle-dark"
-                                   style="cursor: pointer"/>
-                            <label class="form-check-label"></label>
-                        </div>
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                             aria-hidden="true" role="img" class="iconify iconify--mdi" width="20" height="20"
-                             preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-                            <path fill="currentColor"
-                                  d="m17.75 4.09l-2.53 1.94l.91 3.06l-2.63-1.81l-2.63 1.81l.91-3.06l-2.53-1.94L12.44 4l1.06-3l1.06 3l3.19.09m3.5 6.91l-1.64 1.25l.59 1.98l-1.7-1.17l-1.7 1.17l.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95l2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85c-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14c.4-.4.82-.76 1.27-1.08c.75-.53 1.93.36 1.85 1.19c-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82c-2.81 3.14-2.7 7.96.31 10.98c3.02 3.01 7.84 3.12 10.98.31Z"></path>
-                        </svg>
+<nav class="nav">
+    <div class="px-3 py-[.1rem] lg:px-5 lg:pl-3">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center justify-start rtl:justify-end">
+                <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar"
+                        type="button" class="sm:hidden">
+                    <i class="fa-solid fa-bars fa-lg"></i>
+                </button>
+                <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/"
+                   class="w-48 hidden sm:flex">
+                    <img
+                        src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Img/logo_dark.png"
+                        class="bg-contain dark:hidden" alt="Logo"/>
+                    <img
+                        src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Img/logo.png"
+                        class="bg-contain hidden dark:block" alt="Logo"/>
+                </a>
+                <div class="ml-2 sm:ml-11">
+                    <div class="px-3">
+                        <a href="<?= EnvManager::getInstance()->getValue('PATH_URL') ?>" target="_blank"><i
+                                class="fa-solid fa-arrow-up-right-from-square"></i></a>
                     </div>
-
-                    <ul class="navbar-nav ms-auto mb-lg-0">
-                        <li class="nav-item dropdown me-3">
-                            <!--                            <a class="nav-link active  text-gray-600" href="#" data-bs-toggle="dropdown"-->
-                            <!--                               data-bs-display="static" aria-expanded="false">-->
-                            <!--                                <div><i class="fa-solid fa-bell fa-xl"></i></div>-->
-                            <!--                            </a>-->
-                            <!--                            <ul class="dropdown-menu dropdown-menu-end notification-dropdown"-->
-                            <!--                                aria-labelledby="dropdownMenuButton">-->
-                            <!--                                <li class="dropdown-header">-->
-                            <!--                                    <h6>-->
-                            <?php //= LangManager::translate("core.header.notification") ?><!--</h6>-->
-                            <!--                                </li>-->
-                            <!--                                --><?php //if (UpdatesManager::checkNewUpdateAvailable()): ?>
-                            <!--                                    <li class="dropdown-item notification-item">-->
-                            <!--                                        <a class="d-flex align-items-center"-->
-                            <!--                                           href="-->
-                            <?php //= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?><!--cmw-admin/updates/cms">-->
-                            <!--                                            <div class="d-flex align-items-center justify-content-center">-->
-                            <!--                                                <i class="fa-solid fa-cubes text-warning fa-lg"></i>-->
-                            <!--                                            </div>-->
-                            <!--                                            <div class="notification-text ms-4">-->
-                            <!--                                                <p class="notification-title font-bold">-->
-                            <?php //= LangManager::translate("core.header.cms_ver") ?><!--</p>-->
-                            <!--                                                <p class="notification-subtitle font-thin text-sm">-->
-                            <?php //= LangManager::translate("core.header.cms_update") ?><!--</p>-->
-                            <!--                                            </div>-->
-                            <!--                                        </a>-->
-                            <!--                                    </li>-->
-                            <!--                                    --><?php //$notificationNumber++; endif; ?>
-                            <!--                                --><?php //foreach ($packagesList as $packages): ?>
-                            <!--                                    --><?php //if (PackageController::isInstalled($packages['name'])): ?>
-                            <!--                                        --><?php //$localPackage = PackageController::getPackage($packages['name']); ?>
-                            <!--                                        --><?php //if ($localPackage->getVersion() !== $packages['version_name']): ?>
-                            <!--                                            <li class="dropdown-item notification-item">-->
-                            <!--                                                <a class="d-flex align-items-center"-->
-                            <!--                                                   href="-->
-                            <?php //= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?><!--cmw-admin/packages/my_package">-->
-                            <!--                                                    <div class="d-flex align-items-center justify-content-center">-->
-                            <!--                                                        <i class="fa-solid fa-puzzle-piece text-warning fa-lg"></i>-->
-                            <!--                                                    </div>-->
-                            <!--                                                    <div class="notification-text ms-4">-->
-                            <!--                                                        <p class="notification-title font-bold">--><?php //= LangManager::translate("core.header.package") ?>
-                            <!--                                                            : -->
-                            <?php //= $packages['name'] ?><!--</p>-->
-                            <!--                                                        <p class="notification-subtitle font-thin text-sm">-->
-                            <?php //= LangManager::translate("core.header.update_to") ?><!-- -->
-                            <?php //= $packages['version_name'] ?><!--</p>-->
-                            <!--                                                    </div>-->
-                            <!--                                                </a>-->
-                            <!--                                            </li>-->
-                            <!--                                            --><?php //$notificationNumber++; endif; ?>
-                            <!--                                    --><?php //endif; ?>
-                            <!--                                --><?php //endforeach; ?>
-                            <!--                                --><?php //foreach ($themesList as $theme): ?>
-                            <!--                                    --><?php //if ($theme['name'] === $currentTheme): ?>
-                            <!--                                        --><?php //$localTheme = ThemeController::getTheme($theme['name']); ?>
-                            <!--                                        --><?php //if ($localTheme->getVersion() !== $theme['version_name']): ?>
-                            <!--                                            <li class="dropdown-item notification-item">-->
-                            <!--                                                <a class="d-flex align-items-center"-->
-                            <!--                                                   href="-->
-                            <?php //= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?><!--cmw-admin/packages/my_package">-->
-                            <!--                                                    <div class="d-flex align-items-center justify-content-center">-->
-                            <!--                                                        <i class="fa-solid fa-feather text-warning fa-lg"></i>-->
-                            <!--                                                    </div>-->
-                            <!--                                                    <div class="notification-text ms-4">-->
-                            <!--                                                        <p class="notification-title font-bold">--><?php //= LangManager::translate("core.header.theme") ?>
-                            <!--                                                            : -->
-                            <?php //= $theme['name'] ?><!--</p>-->
-                            <!--                                                        <p class="notification-subtitle font-thin text-sm">-->
-                            <?php //= LangManager::translate("core.header.update_to") ?><!-- -->
-                            <?php //= $theme['version_name'] ?><!--</p>-->
-                            <!--                                                    </div>-->
-                            <!--                                                </a>-->
-                            <!--                                            </li>-->
-                            <!--                                            --><?php //$notificationNumber++; endif; ?>
-                            <!--                                    --><?php //endif; ?>
-                            <!--                                --><?php //endforeach; ?>
-                            <!--                                --><?php //if ($notificationNumber === 0): ?>
-                            <!--                                    <li class="dropdown-item notification-item">-->
-                            <!--                                        <a class="d-flex align-items-center"-->
-                            <!--                                           href="#">-->
-                            <!--                                            <div class="d-flex align-items-center justify-content-center">-->
-                            <!--                                                <i class="fa-regular fa-thumbs-up text-success fa-lg"></i>-->
-                            <!--                                            </div>-->
-                            <!--                                            <div class="notification-text ms-4">-->
-                            <!--                                                <p class="notification-title font-bold">-->
-                            <?php //= LangManager::translate("core.header.all_is_fine") ?><!--</p>-->
-                            <!--                                                <p class="notification-subtitle font-thin text-sm">-->
-                            <?php //= LangManager::translate("core.header.is_up") ?><!--</p>-->
-                            <!--                                            </div>-->
-                            <!--                                        </a>-->
-                            <!--                                    </li>-->
-                            <!--                                --><?php //endif; ?>
-                            <!--                            </ul>-->
-                            <!--                            --><?php //if ($notificationNumber !== 0): ?>
-                            <!--                                <span class="position-absolute bg-danger text-white rounded"-->
-                            <!--                                      style="font-size: small; top: -0.4rem; left: 1.3rem; padding: 0 4px 0 4px">-->
-                            <?php //= $notificationNumber ?><!--</span>-->
-                            <!--                            --><?php //else: ?>
-                            <!--                                <span class="position-absolute bg-success text-white rounded"-->
-                            <!--                                      style="font-size: small; top: -0.4rem; left: 1.3rem; padding: 0 4px 0 4px">0</span>-->
-                            <!--                            --><?php //endif; ?>
-                        </li>
-                    </ul>
-                    <div class="dropdown">
-                        <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                            <div class="user-menu d-flex">
-                                <div class="user-name text-end me-3">
-                                    <h6 class="mb-0"><?= $user->getPseudo() ?></h6>
-                                    <p class="mb-0 text-sm text-gray-600"><?= $user->getHighestRole()->getName() ?></p>
-                                </div>
-                                <div class="user-img d-none d-lg-flex align-items-center">
-                                    <div class="avatar avatar-md">
-                                        <img src="<?= $user->getUserPicture()->getImage() ?>"
-                                             alt="<?= LangManager::translate("users.users.image.image_alt", ['username' => $user->getPseudo()]) ?>">
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton"
-                            style="min-width: 11rem">
-
+                </div>
+                <div class="ml-2">
+                    <?php CoreController::getInstance()->getPackagesTopBarElements(); ?>
+                </div>
+            </div>
+            <div class="flex items-center">
+                <div>
+                    <button id="theme-toggle" type="button" class="p-2.5">
+                        <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-gray-800" fill="currentColor"
+                             viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-yellow-500" fill="currentColor"
+                             viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+                                fill-rule="evenodd" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex items-center ml-2">
+                    <div>
+                        <button type="button" class="flex rounded-full" data-dropdown-toggle="dropdown-user">
+                            <img class="w-8 h-8 rounded-full" src="<?= $user->getUserPicture()->getImage() ?>"
+                                 alt="user">
+                        </button>
+                    </div>
+                    <div
+                        class="min-w-[10rem] z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
+                        id="dropdown-user">
+                        <div class="px-4 py-3" role="none">
+                            <p class="text-sm text-gray-900 dark:text-white" role="none">
+                                <?= $user->getPseudo() ?>
+                            </p>
+                            <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                                <?= $user->getHighestRole()->getName() ?>
+                            </p>
+                        </div>
+                        <ul class="py-1" role="none">
                             <li>
-                                <a class="dropdown-item"
+                                <a class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-600"
+                                   role="menuitem"
                                    href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/users/manage/edit/' . $user->getId() ?>">
                                     <i class="fa-solid fa-user"></i>
                                     <?= LangManager::translate("users.users.link_profile") ?>
                                 </a>
                             </li>
                             <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-danger"
-                                   href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>logout">
-                                    <i class="fa-solid fa-right-from-bracket"></i>
-                                    <span><?= LangManager::translate("users.users.logout") ?></span>
+                                <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>logout"
+                                   class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-600"
+                                   role="menuitem"><i
+                                        class="fa-solid fa-right-from-bracket"></i> <?= LangManager::translate("users.users.logout") ?>
                                 </a>
                             </li>
                         </ul>
                     </div>
-
-
                 </div>
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <div id="main-content">
-        <div class="page-heading">
+<aside id="logo-sidebar" class="aside-nav" aria-label="Sidebar">
+    <div class="h-full overflow-y-auto overflow-x-hidden">
+        <?php foreach ($sideBarImplementations as $package):
+            $package->beforeWidgets();
+        endforeach; ?>
+
+        <ul class="space-y-1">
+            <li>
+                <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/dashboard"
+                   class="a-side-nav <?= MenusController::getInstance()->isActiveNavbarItem('dashboard') ? 'side-nav-active' : '' ?>">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span class="span-side-nav"><?= LangManager::translate("core.dashboard.title") ?></span>
+                </a>
+            </li>
+            <?php
+            foreach (PackageController::getCorePackages() as $package):
+                foreach ($package->menus() as $menu):
+                    if ($menu->getLang() === EnvManager::getInstance()->getValue('LOCALE')):
+                        // Vérifier si le menu a des sous-menus visibles
+                        $hasVisibleSubMenu = false;
+                        foreach ($menu->getSubMenus() as $submenu) {
+                            if (UsersModel::hasPermission($currentUser, $submenu->getPermission())) {
+                                $hasVisibleSubMenu = true;
+                                break;
+                            }
+                        }
+
+                        // Si le menu n'a pas d'URL et a des sous-menus visibles
+                        if (is_null($menu->getUrl()) && $hasVisibleSubMenu): ?>
+                            <li>
+                                <button type="button"
+                                        class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active" aria-expanded="true"' : '"' ?>"
+                                        aria-controls="dropdown-<?= $menu->getTitle() ?>"
+                                        data-collapse-toggle="dropdown-<?= $menu->getTitle() ?>">
+                                    <i class="<?= $menu->getIcon() ?>"></i>
+                                    <span class="span-side-nav"><?= $menu->getTitle() ?></span>
+                                    <i class="fa-xs fa-solid fa-chevron-down"></i>
+                                </button>
+                                <ul id="dropdown-<?= $menu->getTitle() ?>"
+                                    class="a-side-nav-dropdown <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? '' : 'hidden' ?>">
+                                    <?php foreach ($menu->getSubMenus() as $submenu):
+                                        if (UsersModel::hasPermission($currentUser, $submenu->getPermission())): ?>
+                                            <li>
+                                                <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $submenu->getUrl() ?>"
+                                                   class="a-side-nav-drop <?= MenusController::getInstance()->isActiveNavbarItem($submenu->getUrl()) ? 'side-nav-drop-active' : '' ?>">
+                                                    <?= $submenu->getTitle() ?>
+                                                </a>
+                                            </li>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </li>
+                        <?php
+                        // Si le menu a une URL et l'utilisateur a la permission
+                        elseif (!is_null($menu->getUrl()) && UsersModel::hasPermission($currentUser, $menu->getPermission())): ?>
+                            <li>
+                                <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $menu->getUrl() ?>"
+                                   class="a-side-nav <?= MenusController::getInstance()->isActiveNavbarItem($menu->getUrl()) ? 'side-nav-active' : '' ?>">
+                                    <i class="<?= $menu->getIcon() ?>"></i>
+                                    <span class="span-side-nav"><?= $menu->getTitle() ?></span>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+        </ul>
+
+        <?php if (!empty($installedPackages)): ?>
+            <div class="flex flex-no-wrap justify-center items-center py-3 px-2">
+                <div class="flex-grow h-px border-b"></div>
+                <div class="px-2 w-auto">
+                    <p class="text-sm"><?= LangManager::translate('core.packages') ?></p>
+                </div>
+                <div class="flex-grow h-px border-b"></div>
+            </div>
+            <ul class="space-y-1">
+                <?php foreach ($installedPackages as $package):
+                    if (!$package->isGame()) :
+                        foreach ($package->menus() as $menu):
+                            if ($menu->getLang() === EnvManager::getInstance()->getValue('LOCALE')):
+
+                                // Vérifier si le menu a des sous-menus visibles
+                                $hasVisibleSubMenu = false;
+                                foreach ($menu->getSubMenus() as $submenu) {
+                                    if (UsersModel::hasPermission($currentUser, $submenu->getPermission())) {
+                                        $hasVisibleSubMenu = true;
+                                        break;
+                                    }
+                                }
+
+                                if (is_null($menu->getUrl()) && $hasVisibleSubMenu):?>
+                                    <li>
+                                        <button type="button"
+                                                class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active" aria-expanded="true"' : '"' ?>"
+                                                aria-controls="dropdown-<?= $menu->getTitle() ?>"
+                                                data-collapse-toggle="dropdown-<?= $menu->getTitle() ?>">
+                                            <i class="<?= $menu->getIcon() ?>"></i>
+                                            <span class="span-side-nav"><?= $menu->getTitle() ?></span>
+                                            <i class="fa-xs fa-solid fa-chevron-down"></i>
+                                        </button>
+                                        <ul id="dropdown-<?= $menu->getTitle() ?>"
+                                            class="a-side-nav-dropdown <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? '' : 'hidden' ?>">
+                                            <?php foreach ($menu->getSubMenus() as $submenu):
+
+                                                if (UsersModel::hasPermission($currentUser, $submenu->getPermission())):?>
+                                                    <li>
+                                                        <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $submenu->getUrl() ?>"
+                                                           class="a-side-nav-drop <?= MenusController::getInstance()->isActiveNavbarItem($submenu->getUrl()) ? 'side-nav-drop-active' : '' ?>">
+                                                            <?= $submenu->getTitle() ?>
+                                                        </a>
+                                                    </li>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </li>
+                                <?php else:
+                                    if (!is_null($menu->getUrl()) && UsersModel::hasPermission($currentUser, $menu->getPermission())):?>
+                                        <li>
+                                            <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $menu->getUrl() ?>"
+                                               class="a-side-nav <?= MenusController::getInstance()->isActiveNavbarItem($menu->getUrl()) ? 'side-nav-active' : '' ?>">
+                                                <i class="<?= $menu->getIcon() ?>"></i>
+                                                <span class="span-side-nav"><?= $menu->getTitle() ?></span>
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+
+        <?php if (!empty($installedPackages) && $hasGamePackage): ?>
+            <div class="flex flex-no-wrap justify-center items-center py-3 px-2">
+                <div class="flex-grow h-px border-b"></div>
+                <div class="px-2 w-auto">
+                    <p class="text-sm"><?= LangManager::translate('core.games') ?></p>
+                </div>
+                <div class="flex-grow h-px border-b"></div>
+            </div>
+            <ul class="space-y-1 mb-8">
+                <?php foreach ($installedPackages as $package):
+                    if ($package->isGame()) :
+                        foreach ($package->menus() as $menu):
+                            if ($menu->getLang() === EnvManager::getInstance()->getValue('LOCALE')):
+
+                                // Vérifier si le menu a des sous-menus visibles
+                                $hasVisibleSubMenu = false;
+                                foreach ($menu->getSubMenus() as $submenu) {
+                                    if (UsersModel::hasPermission($currentUser, $submenu->getPermission())) {
+                                        $hasVisibleSubMenu = true;
+                                        break;
+                                    }
+                                }
+
+                                if (is_null($menu->getUrl()) && $hasVisibleSubMenu):?>
+                                    <li>
+                                        <button type="button"
+                                                class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active" aria-expanded="true"' : '"' ?>"
+                                                aria-controls="dropdown-<?= $menu->getTitle() ?>"
+                                                data-collapse-toggle="dropdown-<?= $menu->getTitle() ?>">
+                                            <i class="<?= $menu->getIcon() ?>"></i>
+                                            <span class="span-side-nav"><?= $menu->getTitle() ?></span>
+                                            <i class="fa-xs fa-solid fa-chevron-down"></i>
+                                        </button>
+                                        <ul id="dropdown-<?= $menu->getTitle() ?>"
+                                            class="a-side-nav-dropdown <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? '' : 'hidden' ?>">
+                                            <?php foreach ($menu->getSubMenus() as $submenu):
+
+                                                if (UsersModel::hasPermission($currentUser, $submenu->getPermission())):?>
+                                                    <li>
+                                                        <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $submenu->getUrl() ?>"
+                                                           class="a-side-nav-drop <?= MenusController::getInstance()->isActiveNavbarItem($submenu->getUrl()) ? 'side-nav-drop-active' : '' ?>">
+                                                            <?= $submenu->getTitle() ?>
+                                                        </a>
+                                                    </li>
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </li>
+                                <?php else:
+                                    if (!is_null($menu->getUrl()) && UsersModel::hasPermission($currentUser, $menu->getPermission())):?>
+                                        <li>
+                                            <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/<?= $menu->getUrl() ?>"
+                                               class="a-side-nav <?= MenusController::getInstance()->isActiveNavbarItem($menu->getUrl()) ? 'side-nav-active' : '' ?>">
+                                                <i class="<?= $menu->getIcon() ?>"></i>
+                                                <span class="span-side-nav"><?= $menu->getTitle() ?></span>
+                                            </a>
+                                        </li>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+
+        <?php foreach ($sideBarImplementations as $package):
+            $package->afterWidgets();
+        endforeach; ?>
+    </div>
+</aside>
+
+<section class="main-content">

@@ -243,7 +243,7 @@ class PermissionsModel extends AbstractModel
 
         foreach ($values as $key => $value) {
             //Add description only for last child
-            $description = $value === end($values) ? $permission->getDescription() : null;
+            $description = $value === end($values) ? $permission->getDescription() : ucfirst($value);
 
             //Add permissions
             $actualPermission = ($key === 0)
@@ -252,6 +252,18 @@ class PermissionsModel extends AbstractModel
         }
 
         return $actualPermission;
+    }
+
+    /**
+     * @des NEVER USE !
+     */
+    public function clearPermissions(): bool
+    {
+        $sql = "DELETE FROM cmw_permissions WHERE permission_code != 'operator'";
+
+        $db = DatabaseManager::getInstance();
+
+        return $db->prepare($sql)->execute();
     }
 
     /**==> UTILS */

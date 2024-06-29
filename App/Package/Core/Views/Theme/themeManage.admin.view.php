@@ -8,31 +8,42 @@ use CMW\Utils\Website;
 Website::setTitle(LangManager::translate("core.Theme.manage.title", ["Theme" => ThemeManager::getInstance()->getCurrentTheme()->name()]));
 Website::setDescription(LangManager::translate("core.Theme.manage.description")); ?>
 
-<div class="d-flex flex-wrap justify-content-between" style="width: 100%">
-    <h3><i class="fa-solid fa-pen-nib"></i> <span
-            class="m-lg-auto"><?= LangManager::translate("core.Theme.appearance") ?><b><?= ThemeManager::getInstance()->getCurrentTheme()->name() ?></b></span>
-    </h3>
-    <div class="d-flex flex-wrap justify-content-end">
-        <a href="market/regenerate" type="submit" class="btn btn-warning">
-            <?= LangManager::translate("core.Theme.reset") ?>
-        </a>
+<div class="page-title">
+    <h3><i class="fa-solid fa-palette"></i> <?= LangManager::translate("core.Theme.appearance") ?><b><?= ThemeManager::getInstance()->getCurrentTheme()->name() ?></b></h3>
+    <div class="flex gap-2">
+        <button data-modal-toggle="modal-danger" class="btn-warning" type="button"><?= LangManager::translate("core.Theme.reset") ?></button>
         <div>
-            <button form="ThemeSettings" type="submit" class="btn btn-primary">
+            <button form="ThemeSettings" type="submit" class="btn-primary">
                 <?= LangManager::translate("core.btn.save") ?>
             </button>
         </div>
     </div>
 </div>
 
-<!-- THEME CONFIG FILE -->
-
-<form id="ThemeSettings" action="" method="post" enctype="multipart/form-data">
-    <?php (new SecurityManager())->insertHiddenToken() ?>
-    <div class="row">
+<div class="page-loader">
+    <form id="ThemeSettings" action="" method="post" enctype="multipart/form-data">
+        <?php (new SecurityManager())->insertHiddenToken() ?>
         <div class="card">
-            <div class="card-body">
-                <?php ThemeManager::getInstance()->getCurrentThemeConfigFile(); ?>
-            </div>
+            <?php ThemeManager::getInstance()->getCurrentThemeConfigFile(); ?>
+        </div>
+    </form>
+</div>
+
+
+<!--MODAL DANGER-->
+<div id="modal-danger" class="modal-container">
+    <div class="modal">
+        <div class="modal-header-warning">
+            <h6><?= LangManager::translate("core.Theme.reset") ?> ?</h6>
+            <button type="button" data-modal-hide="modal-danger"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+            <?= LangManager::translate("core.Theme.verificationText") ?>
+        </div>
+        <div class="modal-footer">
+            <a href="market/regenerate" type="submit" class="btn-warning">
+                <?= LangManager::translate("core.Theme.reset") ?>
+            </a>
         </div>
     </div>
-</form>
+</div>

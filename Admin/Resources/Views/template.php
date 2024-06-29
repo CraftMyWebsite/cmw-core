@@ -10,7 +10,6 @@ include_once("Includes/head.inc.php");
 View::loadInclude($includes, "beforeScript");
 View::loadInclude($includes, "styles");
 
-include_once("Includes/sidebar.inc.php");
 include_once("Includes/header.inc.php");
 
 echo $content;

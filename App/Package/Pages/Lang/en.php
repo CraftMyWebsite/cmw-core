@@ -40,7 +40,7 @@ return [
     "creation" => [
         "date" => "Creation date",
         "update" => "Modification date",
-        "add" => "Add Page",
+        "add" => "Create Page",
         "content" => "Content",
     ],
 
@@ -51,10 +51,10 @@ return [
 
     "permissions" => [
         "pages" => [
-            "show" => "Show pages",
-            "edit" => "Edit pages",
-            "add" => "Add a page",
-            "delete" => "Delete a page",
+            "show" => "Show / List",
+            "edit" => "Edit",
+            "add" => "Add",
+            "delete" => "Delete",
         ],
     ],
 ];

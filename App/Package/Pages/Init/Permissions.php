@@ -16,15 +16,15 @@ class Permissions implements IPermissionInit
                 description: LangManager::translate('pages.permissions.pages.show'),
             ),
             new PermissionInitType(
-                code: 'pages.edit',
-                description: LangManager::translate('pages.permissions.pages.edit'),
-            ),
-            new PermissionInitType(
-                code: 'pages.add',
+                code: 'pages.show.add',
                 description: LangManager::translate('pages.permissions.pages.add'),
             ),
             new PermissionInitType(
-                code: 'pages.delete',
+                code: 'pages.show.edit',
+                description: LangManager::translate('pages.permissions.pages.edit'),
+            ),
+            new PermissionInitType(
+                code: 'pages.show.delete',
                 description: LangManager::translate('pages.permissions.pages.delete'),
             ),
         ];

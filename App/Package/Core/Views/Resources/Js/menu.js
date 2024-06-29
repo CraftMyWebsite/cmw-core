@@ -44,7 +44,7 @@ allowedGroupsToggleCheckbox.addEventListener("change", function () {
 
 //loader
 function load() {
-    let loader = document.getElementsByClassName("loader");
+    let loader = document.getElementsByClassName("menu-loader");
     for (let f = 0; f < loader.length; f++) {
         loader[f].style.display = "inline";
     }

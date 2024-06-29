@@ -33,6 +33,8 @@ return [
         "not_same_pass" => "Les mots de passes ne correspondent pas.",
         "welcome" => "Bienvenue !",
         "user_edited" => "Utilisateur modifié",
+        "user_edited_self" => "Modification appliqué.",
+        "user_edited_self_nope" => "Impossible d'apporter les modifications",
         "pass_change_faild" => "Impossible d'éditer le mot de passe",
         "impossible" => "Impossible de faire ceci",
         "impossible_user" => "Impossible de supprimer cet utilisateur",
@@ -71,17 +73,31 @@ return [
         "toaster_pass_error" => "Une erreur est survenue dans la modification du mot de passe.<br>Les mots de passes ne correspondent pas.",
         "reset_password" => "Réinitialiser le mot de passe",
     ],
+    "blacklist" => [
+        "title" => "Pseudo blacklisté",
+        "table" => [
+            "pseudo" => "Pseudo / Nom",
+            "date" => "Date",
+            "action" => "Actions",
+        ],
+        "delete" => [
+            "title" => "Suppression du pseudo ",
+            "content" => "Ceci permettra à nouveau à vos utilisateurs d'utiliser ce pseudo.",
+        ],
+        "edit" => [
+            "title" => "Édition du pseudo ",
+        ],
+    ],
     "roles" => [
         "manage" => [
             "title" => "Gestion des rôles",
             "desc" => "Gérez les rôles de votre site",
-
             "add" => "Ajouter un rôle",
             "add_title" => "Rôles | Ajouter",
             "edit_title" => "Edition du rôle ",
             "add_desc" => "Créer un nouveau rôle",
             "edit_desc" => "Modifiez un nouveau rôle",
-            "permissions_list" => "Liste des permissions",
+            "permissions_list" => "Autorisations",
             "add_toaster_success" => "Rôle créé avec succès !",
             "edit_toaster_success" => "Rôle modifié avec succès !",
             "delete_toaster_success" => "Rôle supprimé avec succès ",
@@ -90,13 +106,17 @@ return [
             "name" => "Nom du rôle",
             "weightTips" => "Plus le chiffre est haut plus le rôle est important",
             "delete" => [
-                "title" => "Vérification",
-                "content" => "Vous êtes sur le point de supprimer un rôle, êtes-vous sûr ?",
+                "title" => "Supprimer ",
+                "content" => "La suppression de ce rôle est définitive !<br>Aucun retour possible !",
             ],
             "default" => [
                 "title" => "Rôle par défaut",
                 "tips" => "Définissez ce rôle parmi ceux par défaut. Lors de l'inscription, vos membres se les verront ajouter automatiquement.",
             ],
+        ],
+        "perms" => [
+            "admin_warning" => " Ce rôle est le plus important. Par conséquent, vous ne pouvez pas le supprimer ou modifier ses permissions !",
+            "operator" => "Cette permission est la plus importante et donne tous les accès sans exception.",
         ],
     ],
     "modal" => [
@@ -173,14 +193,14 @@ return [
                 "hint" => "Vous pouvez facilement interdire des pseudos que vous ne souhaitez pas avoir lors de
                            l'inscription ou lors de la modification d'un pseudo.",
                 "goBtn" => "Gérer les pseudos interdits",
-                "title" => "Ajoutez des pseudos à votre liste",
+                "title" => "Ajouter des pseudos à la liste noire",
                 "description" => "Ajouter des pseudos à la liste noire",
                 "edit" => [
                     "title" => "Modifiez un pseudo de la liste noire",
                     "description" => "Édition d'un pseudo de la liste noire",
                     "label" => "Modification du pseudo %pseudo%",
                 ],
-                "btn" => "Ajouter ce pseudo à la liste noire",
+                "btn" => "Ajouter à la liste noire",
                 "toasters" => [
                     "add" => [
                         "success" => "Pseudo %pseudo% ajouté à la liste",
@@ -198,22 +218,31 @@ return [
             ],
         ],
     ],
+    "flush" => [
+        "modal" => [
+            "warning" => "Ceci va réinitialiser tous vos rôles ! (sauf Administrateur)",
+            "text" => "Flusher les permissions est un outil de débogage souvent utilisé par les développeurs qui souhaitent forcer l'ajout manuel des permissions de leurs fichiers Permissions.php se trouvant dans le dossier Init."
+        ],
+    ],
     "permissions" => [
-        "users" => [
-            "edit" => "Modifier un utilisateur",
-            "add" => "Ajouter un utilisateur",
-            "delete" => "Supprimer un utilisateur",
-            "settings" => [
-                "manage" => "Gérer les paramètres",
-                "blacklist" => [
-                    "pseudo" => "Gérer les blacklist de pseudos",
-                ],
+        "settings" => [
+            "manage" => "Gérer les paramètres",
+            "blacklist" => [
+                "add" => "Ajouter",
+                "edit" => "Éditer",
+                "delete" => "Supprimer",
             ],
+        ],
+        "users" => [
+            "manage" => "Gérer les utilisateurs",
+            "edit" => "Éditer",
+            "add" => "Ajouter",
+            "delete" => "Supprimer",
             "roles" => [
                 "manage" => "Gérer les rôles",
-                "add" => "Ajouter un rôle",
-                "edit" => "Modifier un rôle",
-                "delete" => "Supprimer un rôle",
+                "add" => "Ajouter",
+                "edit" => "Éditer",
+                "delete" => "Supprimer",
             ],
         ],
     ],

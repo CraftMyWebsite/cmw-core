@@ -8,6 +8,7 @@ return [
     "general" => "Général",
     "package" => "Package",
     "packages" => "Packages",
+    "games" => "Jeux",
     "themes" => "Themes",
     "alt" => [
         "logo" => "Logo CMW",
@@ -37,7 +38,7 @@ return [
         "desc" => "Bienvenue sur votre panneau d'administration !",
         "total_member" => "Membres totaux",
         "best_views" => "Record de visites",
-        "numbers_views" => "Nombres de visites et d'inscriptions",
+        "numbers_views" => "Visites",
         "daily_visits" => "Visites du jour",
         "monthly_visits" => "Visites du mois",
         "total_visits" => "Visites totales",
@@ -60,6 +61,7 @@ return [
         "send_to" => "Renvoie vers : %url%",
         "add_sub_menu" => "Ajout d'un sous-menu dans %menu%",
         "add" => [
+            "sub_menu" => "Ajout d'un sous-menu dans",
             "name" => "Nom du menu",
             "name_hint" => "Votes",
             "targetBlank" => "Ouvrir la page dans un nouvel onglet",
@@ -74,6 +76,9 @@ return [
                 "success" => "Menu ajouté avec succès !",
             ],
         ],
+        "edit" => [
+            "name" => "Édition du menu",
+        ],
     ],
     "editor" => [
         "title" => "Configuration Editeur",
@@ -82,11 +87,12 @@ return [
         "preview" => 'Vous pouvez prévisualiser le rendu des styles <a href="https://highlightjs.org/static/demo/" target="_blank">ici</a>',
     ],
     "config" => [
-        "title" => "Configuration",
+        "title" => "Réglages du site",
         "head" => "Réglages",
         "desc" => "Configurez votre site CMW !",
-        "favicon" => "Modifiez le favicon de votre site",
+        "favicon" => "Modifiez le favicon",
         "favicon_tips" => 'CraftMyWebsite accepte uniquement les images <a href="https://www.icoconverter.com" target="_blank">.ico</a> pour des soucis de performances.',
+        "alert_img" => "Faites CTRL + F5 pour afficher votre nouvel Icon",
         "dateFormat" => "Format des dates",
         "dateFormatTooltip" => "Vous pouvez personnaliser la façon dont vous affichez les dates",
         "custom" => "-- Personnalisez-moi --",
@@ -97,8 +103,8 @@ return [
         "change" => "Changez la langue du site",
     ],
     "website" => [
-        "name" => "Nom de votre site",
-        "description" => "Description de votre site",
+        "name" => "Nom du site",
+        "description" => "Description du site",
     ],
     "minecraft" => [
         "ip" => "Addresse IP de votre serveur",
@@ -184,7 +190,7 @@ return [
         "close" => "Fermer",
         "appearance" => "Apparence de ",
         "verification" => "Vérification",
-        "verificationText" => "Attention, ceci va réinitialiser tout les paramètres par defaut de votre thème, êtes-vous sûr de vouloir continuer ?",
+        "verificationText" => "Attention, ceci va réinitialiser tout les paramètres par défaut de votre thème, êtes-vous sûr de vouloir continuer ?",
         "config" => [
             "title" => "Gestion",
             "description" => "Gérez les thèmes de votre site",
@@ -311,7 +317,7 @@ return [
         "healthReport" => [
             "title" => "Health Report",
             "subtitle" => "Késako ?",
-            "content" => "<p>Notre health report permet à notre équipe de support de vous aider en envoyant un maximum
+            "content" => "<p>Le health report permet à notre équipe de support de vous aider en envoyant un maximum
                     d'informations (non sensibles) à propos de votre site.</p>
 
                 <p>
@@ -329,6 +335,7 @@ return [
     "maintenance" => [
         "title" => "Maintenance",
         "description" => "Gérez les maintenances de votre site",
+        "main_label" => "Mode maintenance",
         "settings" => [
             "title" => "Réglages",
             "targetDateTitle" => "Fin",
@@ -357,7 +364,7 @@ return [
         ],
     ],
     "footer" => [
-        "left" => "Copyright &copy; 2014 - " . date("Y") . " Tous droits réservés.",
+        "left" => "© 2014 - " . date("Y") . " CraftMyWebsite. Tous droits réservés.",
         "right" => "Merci d'utiliser <a target='_blank' href='https://craftmywebsite.fr/'>CraftMyWebsite</a>.",
         "used" => "Vous utilisez la version ",
         "upgrade" => "Veuillez mettre à jour vers la version",
@@ -366,6 +373,7 @@ return [
         "save" => "Sauvegarder",
         "delete" => "Supprimer",
         "delete_forever" => "Supprimer définitivement",
+        "mass_delete" => "Suppression de masse",
         "close" => "Fermer",
         "send" => "Envoyer",
         "download" => "Télécharger",
@@ -411,39 +419,29 @@ return [
         "editConfiguration" => "Impossible de modifier la configuration %config%",
     ],
     "permissions" => [
-        "core" => [
-            "dashboard" => "Accès au panel admin",
-            "configuration" => [
-                "show" => "Accès aux configurations de base du site",
-                "edit" => "Modification des configurations du base du site",
-            ],
-            "editor" => [
-                "edit" => "Modification de l'éditeur",
-            ],
-            "mail" => [
-                "configuration" => "Modification des paramètres des mails",
-            ],
-            "menus" => [
-                "configuration" => "Gestion des menus",
-            ],
-            "security" => [
-                "configuration" => "Gestion de la sécurité du site",
-            ],
-            "theme" => [
-                "configuration" => "Gestion des thèmes du site",
-            ],
-            "update" => "Mettez à jour votre site",
-            "maintenance" => [
-                "edit" => "Gérez les maintenance de votre site",
-                "bypass" => "Outrepassez les maintenances de votre",
-            ],
-            "condition" => [
-                "edit" => "Gérez les conditions de votre site",
-            ],
-            "packages" => [
-                "local" => "Gérez les packages installés",
-                "market" => "Gérez les packages distants",
-            ],
+        "dashboard" => "Accès au panel d'administration",
+        "settings" => [
+            "title" => "Paramètres",
+            "website" => "Réglages du site",
+            "maintenance" => "Maintenance",
+            "maintenance_bypass" => "Outrepasser le blocage",
+            "mails" => "SMTP et mails",
+            "conditions" => "Conditions général",
+            "security" => "Sécurité",
+            "security_healthReport" => "Générer un rapport",
+        ],
+        "menu" => "Menus",
+        "update" => "Mises à jour du CORE",
+        "themes" => [
+            "title" => "Thèmes",
+            "edit" => "Éditer l'actif",
+            "manage" => "Gérer les installations",
+            "market" => "Installer depuis le market",
+        ],
+        "packages" => [
+            "title" => "Packages",
+            "manage" => "Gérer les installations",
+            "market" => "Installer depuis le market",
         ],
     ],
 ];

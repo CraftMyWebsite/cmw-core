@@ -4,7 +4,7 @@ document.getElementById("sendMail").addEventListener("submit", function(event) {
     const button = document.getElementById("testButton");
     button.disabled = true;
     const originalText = button.innerHTML;
-    button.innerHTML = originalText + '<i class="fa-solid fa-spinner fa-spin"></i>';
+    button.innerHTML = originalText + ' <i class="fa-solid fa-spinner fa-spin"></i>';
 
     // Récupérez l'adresse e-mail du formulaire
     const receiver = document.getElementById("receiver").value;

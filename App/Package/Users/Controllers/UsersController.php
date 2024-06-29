@@ -108,7 +108,12 @@ class UsersController extends AbstractController
             return LoginStatus::INTERNAL_ERROR;
         }
 
-        return $user->get2Fa()->isEnabled() ? LoginStatus::OK_NEED_2FA : LoginStatus::OK;
+
+        if ($user->get2Fa()->isEnforced()) {
+            return $user->get2Fa()->isEnabled() ? LoginStatus::OK_NEED_2FA : LoginStatus::OK_ENFORCE_2FA;
+        } else {
+            return $user->get2Fa()->isEnabled() ? LoginStatus::OK_NEED_2FA : LoginStatus::OK;
+        }
     }
 
     /**
@@ -151,7 +156,7 @@ class UsersController extends AbstractController
     #[Link("/manage", Link::GET, [], "/cmw-admin/users")]
     private function adminUsersList(): void
     {
-        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.manage");
 
         $userList = UsersModel::getInstance()->getUsers();
         $roles = RolesModel::getInstance()->getRoles();
@@ -159,11 +164,10 @@ class UsersController extends AbstractController
 
         View::createAdminView("Users", "manage")
             ->addVariableList(["userList" => $userList, "roles" => $roles])
-            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css",
-                "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
+            ->addStyle("Admin/Resources/Assets/Css/simple-datatables.css")
             ->addScriptBefore("App/Package/Users/Views/Assets/Js/edit.js")
             ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
-                "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
+                "Admin/Resources/Vendors/Simple-datatables/config-datatables.js")
             ->view();
     }
 
@@ -177,7 +181,7 @@ class UsersController extends AbstractController
     #[Link("/getUser/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
     private function adminGetUser(Request $request, int $id): void
     {
-        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.manage.edit");
 
         $user = (UsersModel::getInstance())->getUserById($id);
 
@@ -214,7 +218,7 @@ class UsersController extends AbstractController
     #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users/manage")]
     private function adminUsersEdit(Request $request, int $id): void
     {
-        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.manage.edit");
 
         $userEntity = UsersModel::getInstance()->getUserById($id);
 
@@ -230,7 +234,7 @@ class UsersController extends AbstractController
     #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users/manage")]
     #[NoReturn] private function adminUsersEditPost(Request $request, int $id): void
     {
-        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.manage.edit");
 
         [$pass, $passVerif] = Utils::filterInput("pass", "passVerif");
         [$mail, $username, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "name", "lastname");
@@ -258,7 +262,7 @@ class UsersController extends AbstractController
     #[NoReturn] #[Link("/add", Link::POST, [], "/cmw-admin/users")]
     private function adminUsersAddPost(): void
     {
-        self::redirectIfNotHavePermissions("core.dashboard", "users.add");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.manage.add");
 
         [$mail, $pseudo, $firstname, $lastname] = Utils::filterInput("email", "pseudo", "firstname", "surname");
 
@@ -287,7 +291,7 @@ class UsersController extends AbstractController
     #[Link("/manage/state/:id/:state", Link::GET, ["id" => "[0-9]+", "state" => "[0-9]+"], "/cmw-admin/users")]
     #[NoReturn] private function adminUserState(Request $request, int $id, int $state): void
     {
-        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.manage.edit");
 
         if (UsersModel::getCurrentUser()?->getId() === $id) {
             Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),
@@ -308,7 +312,7 @@ class UsersController extends AbstractController
     #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
     #[NoReturn] private function adminUsersDelete(Request $request, int $id): void
     {
-        self::redirectIfNotHavePermissions("core.dashboard", "users.delete");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.manage.delete");
 
         if (UsersModel::getCurrentUser()?->getId() === $id) {
 
@@ -333,7 +337,7 @@ class UsersController extends AbstractController
     #[Link("/picture/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users/manage")]
     #[NoReturn] private function adminUsersEditPicturePost(Request $request, int $id): void
     {
-        self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
+        self::redirectIfNotHavePermissions("core.dashboard", "users.manage.edit");
 
         $image = $_FILES['profilePicture'];
         $this->getHighestImplementation(IUsersProfilePicture::class)->changeMethod($image, $id);
@@ -411,6 +415,18 @@ class UsersController extends AbstractController
                 $_SESSION['cmw_temp_use_cookies'] = $cookie;
 
                 $this->showLogin2Fa();
+            case LoginStatus::OK_ENFORCE_2FA:
+                $user = UsersModel::getInstance()->getUserWithMail($encryptedMail);
+                if (is_null($user)) {
+                    Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                        LangManager::translate("core.toaster.internalError"));
+                    Redirect::redirectPreviousRoute();
+                }
+
+                $_SESSION['cmw_temp_user_id'] = $user->getId();
+                $_SESSION['cmw_temp_use_cookies'] = $cookie;
+
+                $this->enforceLogin2Fa($user);
         }
     }
 
@@ -432,6 +448,13 @@ class UsersController extends AbstractController
     private function showLogin2Fa(): void
     {
         $view = new View("Users", "2fa");
+        $view->view();
+    }
+
+    private function enforceLogin2Fa(UserEntity $user): void
+    {
+        $view = new View("Users", "enforce2fa");
+        $view->addVariableList(["user" => $user]);
         $view->view();
     }
 
@@ -754,8 +777,14 @@ class UsersController extends AbstractController
             $rolesId[] = $role->getId();
         }
 
-        UsersModel::getInstance()->update($user?->getId(), $mail, $pseudo, $firstname, $lastname, $rolesId);
+        $encryptedMail = EncryptManager::encrypt($mail);
 
+
+        if (UsersModel::getInstance()->update($user?->getId(), $encryptedMail, $pseudo, $firstname, $lastname, $rolesId)) {
+            Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"), LangManager::translate("users.toaster.user_edited_self"));
+        } else {
+            Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"), LangManager::translate("users.toaster.user_edited_self_nop") );
+        }
 
         [$pass, $passVerif] = Utils::filterInput("password", "passwordVerif");
 
@@ -774,8 +803,16 @@ class UsersController extends AbstractController
     #[NoReturn] #[Link('/profile/2fa/toggle', Link::POST)]
     private function publicProfile2FaToggle(): void
     {
+        [$enforceMail] = Utils::filterInput("enforce_mail");
 
-        $user = UsersModel::getCurrentUser();
+        if (!empty($enforceMail)) {
+            $encryptedMail = EncryptManager::encrypt(mb_strtolower($enforceMail));
+            $user = UsersModel::getInstance()->getUserWithMail($encryptedMail);
+            $enforced = true;
+        } else {
+            $user = UsersModel::getCurrentUser();
+            $enforced = false;
+        }
 
         if (is_null($user)) {
             Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"),
@@ -806,13 +843,22 @@ class UsersController extends AbstractController
 
         $status = $user->get2Fa()->isEnabled() ? 0 : 1;
 
-        if (Users2FaModel::getInstance()->toggle2Fa($user->getId(), $status)) {
-            UsersModel::updateStoredUser($user->getId());
-            Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-                $status ? '2fa activée' : '2fa désactivée');
+        if ($user->get2Fa()->isEnforced() && $user->get2Fa()->isEnabled()) {
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), "Vous ne pouvez pas désactiver le double facteur sur ce compte !");
         } else {
-            Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-                LangManager::translate("core.toaster.internalError"));
+            if (Users2FaModel::getInstance()->toggle2Fa($user->getId(), $status)) {
+                UsersModel::updateStoredUser($user->getId());
+                if ($enforced) {
+                    Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+                        "2fa activée, veuillez vous reconnecter.");
+                } else {
+                    Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+                        $status ? '2fa activée' : '2fa désactivée');
+                }
+            } else {
+                Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+                    LangManager::translate("core.toaster.internalError"));
+            }
         }
 
         Redirect::redirectPreviousRoute();
@@ -827,4 +873,5 @@ enum LoginStatus
     case INTERNAL_ERROR;
     case OK;
     case OK_NEED_2FA;
+    case OK_ENFORCE_2FA;
 }

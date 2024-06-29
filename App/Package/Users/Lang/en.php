@@ -33,6 +33,8 @@ return [
         "not_same_pass" => "non-identical passwords",
         "welcome" => "Welcome !",
         "user_edited" => "User just edited",
+        "user_edited_self" => "Modification applied.",
+        "user_edited_self_nope" => "Unable to apply modification now",
         "pass_change_faild" => "Unable to edit password",
         "impossible" => "Can't do this",
         "impossible_user" => "Unable to delete this user",
@@ -71,17 +73,31 @@ return [
         "toaster_pass_error" => "An error occurred in changing the password.<br>The passwords do not match.",
         "reset_password" => "Reset password",
     ],
-    "role" => [
+    "blacklist" => [
+        "title" => "Blacklisted username",
+        "table" => [
+            "pseudo" => "Username/Name",
+            "date" => "Date",
+            "action" => "Actions",
+        ],
+        "delete" => [
+            "title" => "Removal of username ",
+            "content" => "This will allow your users to use this username again.",
+        ],
+        "edit" => [
+            "title" => "Editing username ",
+        ],
+    ],
+    "roles" => [
         "manage" => [
             "title" => "Manage your roles",
             "desc" => "Manage your website roles",
-
             "add" => "Add a role",
             "add_title" => "Roles | Add",
             "edit_title" => "Editing role ",
             "add_desc" => "Create a new role on the site",
             "edit_desc" => "Edit a role on the site",
-            "permissions_list" => "List of all permissions",
+            "permissions_list" => "Permissions",
             "add_toaster_success" => "The role has been created !",
             "edit_toaster_success" => "The role has been edited !",
             "delete_toaster_success" => "The role has been deleted !",
@@ -90,13 +106,17 @@ return [
             "name" => "Role name",
             "weightTips" => "Increase the number for a more important role",
             "delete" => [
-                "title" => "Verification",
-                "content" => "Are you sure about that, sir ?",
+                "title" => "Delete ",
+                "content" => "The deletion of this role is permanent!<br>No return possible!",
             ],
-            "defaultRoles" => [
+            "default" => [
                 "title" => "Default roles",
                 "tips" => "Define your members role(s) when they sign up on your website.",
             ],
+        ],
+        "perms" => [
+            "admin_warning" => " This role is the most important. Therefore, you cannot delete it or modify its permissions!",
+            "operator" => "This permission is the most important and gives all access without exception.",
         ],
     ],
     "modal" => [
@@ -197,23 +217,31 @@ return [
             ],
         ],
     ],
-
+    "flush" => [
+        "modal" => [
+            "warning" => "This will reset all your roles! (except Administrator)",
+            "text" => "Flushing Permissions is a debugging tool often used by developers who want to force the manual addition of permissions to their Permissions.php files located in the Init folder."
+        ],
+    ],
     "permissions" => [
-        "users" => [
-            "edit" => "Edit an user",
-            "add" => "Add an user",
-            "delete" => "Delete an user",
-            "settings" => [
-                "manage" => "Manage settings",
-                "blacklist" => [
-                    "pseudo" => "Manage blacklisted pseudos",
-                ],
+        "settings" => [
+            "manage" => "Manage settings",
+            "blacklist" => [
+                "add" => "Add",
+                "edit" => "Edit",
+                "delete" => "Delete",
             ],
+        ],
+        "users" => [
+            "manage" => "Manage users",
+            "edit" => "Edit",
+            "add" => "Add",
+            "delete" => "Delete",
             "roles" => [
                 "manage" => "Manage roles",
-                "add" => "Add a role",
-                "edit" => "Edit a role",
-                "delete" => "Delete a role",
+                "add" => "Add",
+                "edit" => "Edit",
+                "delete" => "Delete",
             ],
         ],
     ],

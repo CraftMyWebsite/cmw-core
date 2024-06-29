@@ -38,8 +38,8 @@ class PagesController extends AbstractController
         $pagesList = PagesModel::getInstance()->getPages();
 
         View::createAdminView('Pages', 'page')
-            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css", "Admin/Resources/Assets/Css/Pages/simple-datatables.css")
-            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js", "Admin/Resources/Assets/Js/Pages/simple-datatables.js")
+            ->addStyle("Admin/Resources/Assets/Css/simple-datatables.css")
+            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js", "Admin/Resources/Vendors/Simple-datatables/config-datatables.js")
             ->addVariableList(["pagesList" => $pagesList])
             ->view();
     }
@@ -47,7 +47,7 @@ class PagesController extends AbstractController
     #[Link("/add", Link::GET, [], "/cmw-admin/pages")]
     private function adminPagesAdd(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.add");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.show.add");
 
         //Todo "pack script" to avoid that
 
@@ -60,7 +60,7 @@ class PagesController extends AbstractController
     #[Link("/add", Link::POST, [], "/cmw-admin/pages", secure: false)]
     private function adminPagesAddPost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.add");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.show.add");
 
         $userId = UsersModel::getCurrentUser()?->getId();
         $slug = Utils::normalizeForSlug(filter_input(INPUT_POST, "page_slug"));
@@ -81,7 +81,7 @@ class PagesController extends AbstractController
     #[Link("/edit/:slug", Link::GET, ["slug" => ".*?"], "/cmw-admin/pages")]
     private function adminPagesEdit(Request $request, string $slug): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.edit");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.show.edit");
 
         $page = PagesModel::getInstance()->getPageBySlug($slug);
 
@@ -96,7 +96,7 @@ class PagesController extends AbstractController
     #[Link("/edit/:slug", Link::POST, [], "/cmw-admin/pages")]
     private function adminPagesEditPost(Request $request, string $slug): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.edit");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.show.edit");
 
         [$id, $title, $content, $state] = Utils::filterInput('id', 'title', 'content', 'state');
 
@@ -116,7 +116,7 @@ class PagesController extends AbstractController
     #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/pages")]
     #[NoReturn] private function adminPagesDelete(Request $request, int $id): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.delete");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.show.delete");
 
         PagesModel::getInstance()->deletePage($id);
 
@@ -134,7 +134,7 @@ class PagesController extends AbstractController
     #[Link("/uploadImage/:type", Link::POST, ["type" => ".*?"], "/cmw-admin/pages", secure: false)]
     private function adminPagesUploadImagePost(Request $request, string $type): void
     {
-        UsersController::hasPermission("core.dashboard", "pages." . (($type === "add") ? "add" : "edit"));
+        UsersController::hasPermission("core.dashboard", "pages.show." . (($type === "add") ? "add" : "edit"));
 
         try {
             print(json_encode(ImagesManager::upload($_FILES['image'], "Editor"), JSON_THROW_ON_ERROR));

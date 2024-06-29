@@ -29,46 +29,22 @@ class RolesController extends AbstractController
     #[Link("/manage", Link::GET, [], "/cmw-admin/roles")]
     private function adminRolesManage(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.manage");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
         $rolesList = RolesModel::getInstance()->getRoles();
         $permissionController = PermissionsController::getInstance();
         $permissionModel = PermissionsModel::getInstance();
         $rolesModel = RolesModel::getInstance();
 
-        //Todo Try to improve that ?
         require_once(EnvManager::getInstance()->getValue("DIR") . "App/Package/Users/Functions/loadPermissions.php");
 
-
         View::createAdminView("Users", "roles")
-            ->addStyle("Admin/Resources/Vendors/Simple-datatables/style.css",
-                "Admin/Resources/Assets/Css/Pages/simple-datatables.css",
-                "Admin/Resources/Vendors/Izitoast/iziToast.min.css")
-            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
-                "Admin/Resources/Assets/Js/Pages/simple-datatables.js",
-                "App/Package/Users/Views/Assets/Js/rolesWeights.js",
+            ->addStyle("Admin/Resources/Vendors/Izitoast/iziToast.min.css")
+            ->addScriptBefore("App/Package/Users/Views/Assets/Js/autoPermsChecker.js")
+            ->addScriptAfter("App/Package/Users/Views/Assets/Js/rolesWeights.js",
                 "Admin/Resources/Vendors/Izitoast/iziToast.min.js")
             ->addVariableList(["rolesList" => $rolesList, "permissionController" => $permissionController,
                 "permissionModel" => $permissionModel, "rolesModel" => $rolesModel])
-            ->view();
-    }
-
-    #[Link("/add", Link::GET, [], "/cmw-admin/roles")]
-    private function adminRolesAdd(): void
-    {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.add");
-
-        $permissionController = PermissionsController::getInstance();
-        $permissionModel = PermissionsModel::getInstance();
-
-        //Todo Try to improve that ?
-        require_once(EnvManager::getInstance()->getValue("DIR") . "App/Package/users/functions/loadPermissions.php");
-
-
-        View::createAdminView("Users", "roles.add")->addVariableList(array(
-            "permissionController" => $permissionController,
-            "permissionModel" => $permissionModel
-        ))
             ->view();
     }
 
@@ -104,7 +80,9 @@ class RolesController extends AbstractController
         //Todo Try to improve that ?
         require_once(EnvManager::getInstance()->getValue("DIR") . "App/Package/Users/Functions/loadPermissions.php");
 
-        View::createAdminView("Users", "roles.edit")->addVariableList(array(
+        View::createAdminView("Users", "roles.edit")
+            ->addScriptBefore("App/Package/Users/Views/Assets/Js/autoPermsChecker.js")
+            ->addVariableList(array(
             "permissionController" => $permissionController,
             "permissionModel" => $permissionModel,
             "roleModel" => $roleModel,
@@ -170,7 +148,7 @@ class RolesController extends AbstractController
     #[Link("/getRole/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
     private function adminGetRole(Request $request, int $id): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.manage");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
         $_SESSION['editRoleId'] = $id;
 
@@ -203,7 +181,7 @@ class RolesController extends AbstractController
     #[Link("/getRoles", Link::GET, [], "/cmw-admin/roles")]
     private function adminGetRoles(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.manage");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
         $roles = RolesModel::getInstance()->getRoles();
 

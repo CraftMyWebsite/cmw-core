@@ -35,7 +35,7 @@ class CoreController extends AbstractController
 {
     public static string $themeName;
     public static array $availableLocales = ['fr' => 'Français', 'en' => 'English']; //todo remove that
-    public static array $exampleDateFormat = ["d-m-Y H:i:s", "d-m-Y Hh im ss", "d/m/Y H:i:s", "d/m/Y à H\h i\m s\s", "d/m/Y à H\h i\m", "d/m/Y at H\h i\m s\s"];
+    public static array $exampleDateFormat = ["d-m-Y H:i:s", "d-m-Y Hh im ss", "d/m/Y H:i:s", "d/m/Y à H\h i\m s\s", "d/m/Y à H\h i\m", "d/m/Y at H\h i\m s\s", "d F \à H\hi", "d F \at H\hi"];
 
     public static function getThemePath(): string
     {
@@ -70,7 +70,6 @@ class CoreController extends AbstractController
             ->addVariableList(['monthlyVisits' => $monthlyVisits, 'dailyVisits' => $dailyVisits,
                 'weeklyVisits' => $weeklyVisits, 'registers' => $registers])
             ->addScriptBefore("Admin/Resources/Vendors/Apexcharts/Js/apexcharts.js")
-            ->addScriptAfter("App/Package/Core/Views/Resources/Js/dashboard.js")
             ->view();
     }
 
@@ -103,7 +102,7 @@ class CoreController extends AbstractController
     #[Link(path: "/configuration", method: Link::GET, scope: "/cmw-admin")]
     private function adminConfiguration(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.website");
 
         View::createAdminView("Core", "Configuration/configuration")
             ->view();
@@ -112,11 +111,12 @@ class CoreController extends AbstractController
     #[NoReturn] #[Link(path: "/configuration", method: Link::POST, scope: "/cmw-admin")]
     private function adminConfigurationPost(Request $request): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.configuration");
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.website");
 
         foreach ($_POST as $option_name => $option_value):
             if ($option_name === "locale") {
                 EnvManager::getInstance()->editValue("LOCALE", $option_value);
+                //TODO rename perms desc DB
             }
             CoreModel::updateOption($option_name, $option_value);
         endforeach;
@@ -129,6 +129,8 @@ class CoreController extends AbstractController
                 if ($imgStatus !== 'favicon.ico') {
                     Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                         LangManager::translate($imgStatus));
+                } else {
+                    Flash::send(Alert::SUCCESS, "Icon", LangManager::translate("core.config.alert_img"));
                 }
             } catch (JsonException) {
                 Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),

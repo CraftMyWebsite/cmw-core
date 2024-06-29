@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS `cmw_users_2fa`
     `users_2fa_user_id`    INT(11)      NOT NULL,
     `users_2fa_is_enabled` TINYINT(1)   NOT NULL DEFAULT 0,
     `users_2fa_secret`     VARCHAR(255) NOT NULL,
+    `users_2fa_is_enforced` TINYINT(1)   NOT NULL DEFAULT 0,
     PRIMARY KEY (`users_2fa_user_id`),
     CONSTRAINT `cmw_users_2fa_ibfk_1` FOREIGN KEY (`users_2fa_user_id`)
         REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -130,9 +131,9 @@ CREATE TABLE IF NOT EXISTS cmw_roles_permissions
     PRIMARY KEY (role_id, permission_id),
     INDEX (role_id),
     CONSTRAINT FK_ROLE_PERMISSION_PERMISSION_ID
-        FOREIGN KEY (permission_id) REFERENCES cmw_permissions (permission_id),
+        FOREIGN KEY (permission_id) REFERENCES cmw_permissions (permission_id) ON DELETE CASCADE,
     CONSTRAINT FK_ROLE_PERMISSION_ROLE_ID
-        FOREIGN KEY (role_id) REFERENCES cmw_roles (role_id)
+        FOREIGN KEY (role_id) REFERENCES cmw_roles (role_id) ON DELETE CASCADE
 ) ENGINE = InnoDB
   CHARSET = utf8mb4;
 
@@ -255,6 +256,14 @@ CREATE TABLE IF NOT EXISTS `cmw_users_blacklist_pseudo`
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS cmw_users_enforced2fa_roles
+(
+    enforced2fa_roles      INT PRIMARY KEY,
+    CONSTRAINT fk_enforced2fa_roles FOREIGN KEY (enforced2fa_roles)
+    REFERENCES `cmw_roles` (`role_id`) ON UPDATE CASCADE ON DELETE CASCADE
+    ) ENGINE = InnoDB
+    CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_unicode_ci;
 
 /* INSERT AREA */
 
@@ -287,6 +296,7 @@ VALUES ('1', '5');
 INSERT INTO `cmw_users_settings` (users_settings_name, users_settings_value)
 VALUES ('defaultImage', 'defaultImage.jpg'),
        ('resetPasswordMethod', '0'),
+       ('listEnforcedToggle', '0'),
        ('profilePage', '1');
 
 INSERT INTO `cmw_maintenance` (maintenance_is_enable, maintenance_title, maintenance_description, maintenance_type,

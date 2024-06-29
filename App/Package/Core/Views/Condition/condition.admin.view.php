@@ -10,75 +10,47 @@ $description = LangManager::translate("core.config.desc");
 /* @var CMW\Entity\Core\ConditionEntity $cgu */
 ?>
 
-<div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fa-solid fa-gavel"></i> <span
-            class="m-lg-auto"><?= LangManager::translate("core.condition.title") ?></span></h3>
+<div class="page-title">
+    <h3><i class="fa-solid fa-gavel"></i> <?= LangManager::translate("core.condition.title") ?></h3>
+    <button form="condition" type="submit" class="btn-primary"><?= LangManager::translate("core.btn.save") ?></button>
 </div>
 
-<section class="row">
-    <div class="col-12 col-lg-6">
-        <div class="card">
-            <form action="" method="post" enctype="multipart/form-data">
-                <?php (new SecurityManager())->insertHiddenToken() ?>
-                <div class="card-header">
-                    <div class="d-flex flex-wrap justify-content-between">
-                        <h4><?= LangManager::translate("core.condition.cgv") ?></h4>
+<form id="condition" action="" method="post" enctype="multipart/form-data">
+    <?php (new SecurityManager())->insertHiddenToken() ?>
+    <div class="grid-2">
 
-                        <input type="text" name="conditionId" value="<?= $cgv->getId() ?>" hidden>
-                        <div class="form-check-reverse form-switch">
-                            <label class="form-check-label"
-                                   for="conditionState"><?= LangManager::translate("core.condition.activecgv") ?></label>
-                            <input class="form-check-input" type="checkbox" id="conditionState"
-                                   name="conditionState" <?= $cgv->isState() ? 'checked' : '' ?>>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h6><?= LangManager::translate("core.condition.content") ?></h6>
-                    <textarea class="tinymce" name="conditionContent"><?= $cgv->getContent() ?></textarea>
-                    <p>
-                        <?= LangManager::translate("core.condition.updateby", ['author' => $cgv->getLastEditor()?->getPseudo()]) ?>
-                        <?= LangManager::translate("core.condition.on", ['date' => $cgv->getUpdateFormatted()]) ?>
-                    </p>
-                    <div class="text-center mt-2">
-                        <button type="submit" class="btn btn-primary float-right">
-                            <?= LangManager::translate("core.btn.save") ?>
-                        </button>
-                    </div>
-            </form>
-        </div>
-    </div>
-    </div>
-    <div class="col-12 col-lg-6">
         <div class="card">
-            <form action="" method="post" enctype="multipart/form-data">
-                <?php (new SecurityManager())->insertHiddenToken() ?>
-                <div class="card-header">
-                    <div class="d-flex flex-wrap justify-content-between">
-                        <h4><?= LangManager::translate("core.condition.cgu") ?></h4>
-                        <input type="text" name="conditionId" value="<?= $cgu->getId() ?>" hidden>
-                        <div class="form-check-reverse form-switch">
-                            <label class="form-check-label"
-                                   for="conditionState"><?= LangManager::translate("core.condition.activecgu") ?></label>
-                            <input class="form-check-input" type="checkbox" id="conditionState"
-                                   name="conditionState" <?= $cgu->isState() ? 'checked' : '' ?>>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h6><?= LangManager::translate("core.condition.content") ?></h6>
-                    <textarea class="tinymce" name="conditionContent"><?= $cgu->getContent() ?></textarea>
-                    <p>
-                        <?= LangManager::translate("core.condition.updateby", ['author' => $cgv->getLastEditor()?->getPseudo()]) ?>
-                        <?= LangManager::translate("core.condition.on", ['date' => $cgv->getUpdateFormatted()]) ?>
-                    </p>
-                    <div class="text-center mt-2">
-                        <button type="submit" class="btn btn-primary float-right">
-                            <?= LangManager::translate("core.btn.save") ?>
-                        </button>
-                    </div>
-                </div>
-            </form>
+            <h6><?= LangManager::translate("core.condition.cgv") ?></h6>
+            <div>
+                <label class="toggle">
+                    <p class="toggle-label"><?= LangManager::translate("core.condition.activecgv") ?></p>
+                    <input class="toggle-input" type="checkbox" id="conditionState"
+                           name="cgvState" <?= $cgv->isState() ? 'checked' : '' ?>>
+                    <div class="toggle-slider"></div>
+                </label>
+            </div>
+            <textarea id="conditionContent" class="tinymce" name="cgvContent"
+                      data-tiny-height="600"><?= $cgv->getContent() ?></textarea>
+            <p>
+                <?= LangManager::translate("core.condition.updateby", ['author' => $cgv->getLastEditor()?->getPseudo()]) ?>
+                <?= LangManager::translate("core.condition.on", ['date' => $cgv->getUpdateFormatted()]) ?>
+            </p>
+        </div>
+        <div class="card">
+            <h6><?= LangManager::translate("core.condition.cgu") ?></h6>
+            <div>
+                <label class="toggle">
+                    <p class="toggle-label"><?= LangManager::translate("core.condition.activecgu") ?></p>
+                    <input class="toggle-input" type="checkbox" id="conditionState"
+                           name="cguState" <?= $cgu->isState() ? 'checked' : '' ?>>
+                    <div class="toggle-slider"></div>
+                </label>
+            </div>
+            <textarea id="conditionContent2" class="tinymce" name="cguContent"><?= $cgu->getContent() ?></textarea>
+            <p>
+                <?= LangManager::translate("core.condition.updateby", ['author' => $cgu->getLastEditor()?->getPseudo()]) ?>
+                <?= LangManager::translate("core.condition.on", ['date' => $cgu->getUpdateFormatted()]) ?>
+            </p>
         </div>
     </div>
-</section>
+</form>

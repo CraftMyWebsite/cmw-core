@@ -12,58 +12,36 @@ $description = LangManager::translate("pages.edit.desc");
  */
 
 ?>
-<div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fa-solid fa-file-lines"></i> <span
-                class="m-lg-auto"><?= LangManager::translate("pages.edit.title") ?> : <?= $page->getTitle() ?></span>
-    </h3>
-</div>
 
-<section>
-    <div class="card">
-        <div class="card-body">
-            <form action="" method="post">
-                <?php (new SecurityManager())->insertHiddenToken() ?>
-                <div class="row">
-                    <div class="col-12 col-lg-6">
-                        <h6><?= LangManager::translate("pages.title") ?> :</h6>
-                        <div class="form-group position-relative has-icon-left">
-                            <input type="hidden" id="page_id" name="id" value="<?= $page->getId() ?>">
-                            <input type="text" class="form-control" id="title" name="title" required
-                                   placeholder="<?= LangManager::translate("pages.title") ?>" maxlength="255"
-                                   value="<?= $page->getTitle() ?>">
-                            <div class="form-control-icon">
-                                <i class="fas fa-heading"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-lg-6">
-                        <h6>URL :</h6>
-                        <div class="input-group mb-3">
-                        <span class="input-group-text"
-                              id="inputGroup-sizing-default"><?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?></span>
-                            <input type="text" value="<?= $page->getSlug() ?>" id="slug" name="slug" class="form-control"
-                                   aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
-                                   disabled>
-                        </div>
+<h3><i class="fa-solid fa-file-lines"></i> <?= LangManager::translate("pages.edit.title") ?> : <?= $page->getTitle() ?></h3>
 
-                    </div>
+<form action="" method="post">
+    <?php (new SecurityManager())->insertHiddenToken() ?>
+    <div class="grid-5">
+        <div class="col-span-4">
+            <input type="hidden" id="page_id" name="id" value="<?= $page->getId() ?>">
+            <textarea id="content" class="tinymce" name="content" data-tiny-height="700"><?= $page->getContent() ?></textarea>
+        </div>
+        <div class="card space-y-4">
+            <div>
+                <label for="title"><?= LangManager::translate("pages.title") ?> :</label>
+                <input type="text" id="title" name="title" required class="input-sm"
+                       placeholder="<?= LangManager::translate("pages.title") ?>" value="<?= $page->getTitle() ?>">
+            </div>
+            <div>
+                <label for="slug">URL :</label>
+                <div class="input-group-sm">
+                    <i><?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?></i>
+                    <input type="text" value="<?= $page->getSlug() ?>" id="slug" name="slug" required disabled>
                 </div>
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="draft"
-                           name="state" <?= $page->getState() === 2 ? "checked" : "" ?>>
-                    <label class="form-check-label" for="draft"><h6><?= LangManager::translate("pages.draft") ?></h6>
-                    </label>
-                </div>
-                <h6><?= LangManager::translate("pages.creation.content") ?> :</h6>
-
-                <textarea class="tinymce" name="content"><?= $page->getContentNotTranslate() ?></textarea>
-
-                <div class="text-center mt-2">
-
-                    <button id="saveButton" type="submit"
-                            class="btn btn-primary"><?= LangManager::translate("core.btn.edit") ?></button>
-                </div>
-            </form>
+            </div>
+            <label class="toggle">
+                <p class="toggle-label"><?= LangManager::translate("pages.draft") ?></p>
+                <input type="checkbox" class="toggle-input" name="state" <?= $page->getState() === 1 ? "checked" : "" ?>>
+                <div class="toggle-slider"></div>
+            </label>
+            <button type="submit" class="btn-primary mt-4 loading-btn btn-center"
+                    data-loading-btn="Sauvegarde ..."><?= LangManager::translate("core.btn.save") ?></button>
         </div>
     </div>
-</section>
+</form>
