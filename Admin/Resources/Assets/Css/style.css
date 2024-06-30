@@ -6913,6 +6913,9 @@ kbd {
 .border-4 {
   border-width: 4px;
 }
+.border-2 {
+    border-width: 2px;
+}
 .border {
   border-width: 1px;
 }
@@ -6940,6 +6943,10 @@ kbd {
 .border-gray-100 {
   --tw-border-opacity: 1;
   border-color: rgb(243 244 246 / var(--tw-border-opacity));
+}
+.border-white {
+    --tw-border-opacity: 1;
+    border-color: rgb(255 255 255 / var(--tw-border-opacity));
 }
 .border-blue-700 {
   --tw-border-opacity: 1;
@@ -6975,6 +6982,10 @@ kbd {
 .bg-gray-900 {
   --tw-bg-opacity: 1;
   background-color: rgb(17 24 39 / var(--tw-bg-opacity));
+}
+.bg-red-500 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(240 82 82 / var(--tw-bg-opacity));
 }
 .bg-black {
   --tw-bg-opacity: 1;
@@ -8067,6 +8078,10 @@ kbd {
   --tw-bg-opacity: 1;
   background-color: rgb(30 66 159 / var(--tw-bg-opacity));
 }
+.hover\:bg-gray-100:hover {
+    --tw-bg-opacity: 1;
+    background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+}
 .hover\:text-blue-600:hover {
   --tw-text-opacity: 1;
   color: rgb(28 100 242 / var(--tw-text-opacity));
@@ -8142,6 +8157,10 @@ kbd {
 }
 .dark .dark\:bg-gray-800\/50 {
   background-color: rgb(31 41 55 / 0.5);
+}
+.dark .dark\:border-gray-900 {
+    --tw-border-opacity: 1;
+    border-color: rgb(17 24 39 / var(--tw-border-opacity));
 }
 .dark .dark\:bg-gray-700 {
   --tw-bg-opacity: 1;

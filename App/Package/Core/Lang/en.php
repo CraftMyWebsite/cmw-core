@@ -427,6 +427,11 @@ return [
             "security" => "Security",
             "security_healthReport" => "Generate a report",
         ],
+        "notification" => [
+            "notification" => "View notifications",
+            "read" => "Marked as read",
+            "settings" => "Settings",
+        ],
         "menu" => "Menus",
         "update" => "CORE Updates",
         "themes" => [

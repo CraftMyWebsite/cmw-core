@@ -420,6 +420,11 @@ return [
     ],
     "permissions" => [
         "dashboard" => "Accès au panel d'administration",
+        "notification" => [
+            "notification" => "Voir les notifications",
+            "read" => "Marqué comme lue",
+            "settings" => "Paramètres",
+        ],
         "settings" => [
             "title" => "Paramètres",
             "website" => "Réglages du site",

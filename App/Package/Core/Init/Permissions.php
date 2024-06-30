@@ -89,6 +89,19 @@ class Permissions implements IPermissionInit
                 code: 'core.packages.market',
                 description: LangManager::translate('core.permissions.packages.market'),
             ),
+            /*NOTIFICATION*/
+            new PermissionInitType(
+                code: 'core.notification',
+                description: LangManager::translate('core.permissions.notification.notification'),
+            ),
+            new PermissionInitType(
+                code: 'core.notification.read',
+                description: LangManager::translate('core.permissions.notification.read'),
+            ),
+            new PermissionInitType(
+                code: 'core.notification.settings',
+                description: LangManager::translate('core.permissions.notification.settings'),
+            ),
         ];
     }
 

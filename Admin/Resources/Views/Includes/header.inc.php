@@ -8,11 +8,14 @@ use CMW\Interface\Core\ISideBarElements;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Loader\Loader;
+use CMW\Manager\Notification\NotificationModel;
 use CMW\Model\Users\UsersModel;
 
 $user = UsersModel::getCurrentUser();
 $currentUser = UsersModel::getCurrentUser();
 $sideBarImplementations = Loader::loadImplementations(ISideBarElements::class);
+$notificationNumber = NotificationModel::getInstance()->countUnreadNotification();
+$notifications = NotificationModel::getInstance()->getUnreadNotification();
 
 /* @var UserEntity $userAdmin */
 /* @var CoreController $coreAdmin */
@@ -58,6 +61,63 @@ foreach ($installedPackages as $package) {
                 </div>
             </div>
             <div class="flex items-center">
+
+
+
+                <div>
+                    <button type="button" class="relative  p-2.5"  data-dropdown-toggle="dropdown-notification">
+                        <i class="fa-solid fa-bell fa-lg"></i>
+                        <?php if ($notificationNumber): ?>
+                        <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full top-0 dark:border-gray-900" style="right: -0.3rem;"><?= $notificationNumber ?></div>
+                        <?php endif; ?>
+                    </button>
+                </div>
+
+                <div style="width: 20rem; padding-right: 16px; max-height: 800px" class="z-50 hidden space-y-2 overflow-x-auto" id="dropdown-notification">
+                    <?php
+                    $max_notifications = 3;
+                    $notification_count = 0;
+                    foreach ($notifications as $notification) :
+                        if ($notification_count >= $max_notifications) {
+                            break;
+                        }
+                        $notification_count++;
+                        ?>
+                        <div>
+                            <div class="rounded-lg border bg-white dark:bg-gray-700 dark:border-gray-700">
+                                <div class="flex justify-between p-3">
+                                    <p><b><?= $notification->getPackage() ?></b><small> - <?= mb_strimwidth($notification->getTitle() , 0, 30, '...') ?></small></p>
+                                    <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/notification/read/<?= $notification->getId() ?>" type="button" class="ms-auto -mx-1.5 -my-1.5 bg-white justify-center items-center flex-shrink-0 text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" data-dismiss-target="#toast-message-cta" aria-label="Close">
+                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                                <div class="border-t p-3">
+                                    <p><?= mb_strimwidth($notification->getMessage(), 0, 70, '...') ?></p>
+                                </div>
+                                <?php if ($notification->getSlug()): ?>
+                                <div class="border-t p-2 flex justify-end">
+                                    <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/notification/goTo/<?= $notification->getId() ?>" class="btn-primary-sm">S'y rendre</a>
+                                </div>
+                                <?php endif;?>
+                            </div>
+                        </div>
+                    <?php
+                    endforeach;
+                    ?>
+
+                        <div class="rounded-lg border bg-white dark:bg-gray-700 dark:border-gray-700 text-center p-2">
+                            <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/notifications" class="link">
+                                Voir toutes les notifications
+                            </a>
+                        </div>
+
+
+                </div>
+
+
+
                 <div>
                     <button id="theme-toggle" type="button" class="p-2.5">
                         <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-gray-800" fill="currentColor"

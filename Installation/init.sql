@@ -265,6 +265,37 @@ CREATE TABLE IF NOT EXISTS cmw_users_enforced2fa_roles
     CHARACTER SET = utf8mb4
     COLLATE = utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS cmw_notification
+(
+    notification_id                 INT             AUTO_INCREMENT PRIMARY KEY,
+    notification_package_name       VARCHAR(50)     NOT NULL,
+    notification_title              VARCHAR(255)     NOT NULL,
+    notification_message            VARCHAR(255)    NOT NULL,
+    notification_slug               VARCHAR(255)    NULL,
+    notification_readed             TINYINT(1)      NOT NULL DEFAULT 0,
+    notification_readed_silence     TINYINT(1)      NOT NULL DEFAULT 0,
+    notification_created_at         TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    notification_updated_at         TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    ) ENGINE = InnoDB
+    CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS cmw_notification_settings
+(
+    notification_settings_id                 INT             AUTO_INCREMENT PRIMARY KEY,
+    notification_settings_name       VARCHAR(50)     NOT NULL,
+    notification_settings_key              VARCHAR(255)     NOT NULL
+    ) ENGINE = InnoDB
+    CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS cmw_notification_refused_package
+(
+    notification_package_name       VARCHAR(50)     NOT NULL
+    ) ENGINE = InnoDB
+    CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_unicode_ci;
+
 /* INSERT AREA */
 
 INSERT INTO `cmw_core_condition` (`condition_content`)
@@ -310,3 +341,9 @@ VALUES (1, 'Accueil', 'home', NULL, 0, 1, 0),
 
 INSERT INTO `cmw_menus_groups_allowed` (menus_groups_id, menus_groups_group_id, menus_groups_menu_id)
 VALUES (1, 5, 2)
+
+INSERT INTO `cmw_notification_settings` (`notification_settings_name`, `notification_settings_key`)
+VALUES ('showOnDiscord', '0'),
+    ('webhookDiscord', ''),
+    ('sendMail', '0'),
+    ('mailReceiver', '');
