@@ -166,7 +166,7 @@ class UsersController extends AbstractController
             ->addVariableList(["userList" => $userList, "roles" => $roles])
             ->addStyle("Admin/Resources/Assets/Css/simple-datatables.css")
             ->addScriptBefore("App/Package/Users/Views/Assets/Js/edit.js")
-            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
+            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/simple-datatables.js",
                 "Admin/Resources/Vendors/Simple-datatables/config-datatables.js")
             ->view();
     }

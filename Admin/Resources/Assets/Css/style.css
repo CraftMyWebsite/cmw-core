@@ -3531,6 +3531,19 @@ kbd {
   display: flex;
   flex-direction: column;
 }
+.tab-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid #ddd; /* Ajoute une bordure pour les boutons */
+    background-color: #f9f9f9; /* Couleur de fond des boutons */
+    cursor: pointer;
+}
 .tab-vertical > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
