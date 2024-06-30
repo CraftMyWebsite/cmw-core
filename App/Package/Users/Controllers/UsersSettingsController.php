@@ -48,7 +48,7 @@ class UsersSettingsController extends AbstractController
 
         View::createAdminView("Users", "settings")
             ->addStyle("Admin/Resources/Assets/Css/simple-datatables.css")
-            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/Umd/simple-datatables.js",
+            ->addScriptAfter("Admin/Resources/Vendors/Simple-datatables/simple-datatables.js",
                 "Admin/Resources/Vendors/Simple-datatables/config-datatables.js",
                 "App/Package/Users/Views/Assets/Js/rolesWeights.js")
             ->addVariableList(["settings" => new UserSettingsEntity(), "roles" => $roles, "pseudos" => $blacklistedPseudo])
