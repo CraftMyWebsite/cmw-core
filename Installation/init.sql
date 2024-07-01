@@ -340,7 +340,7 @@ VALUES (1, 'Accueil', 'home', NULL, 0, 1, 0),
        (2, 'CraftMyWebsite', 'https://craftmywebsite.fr', NULL, 1, 2, 1);
 
 INSERT INTO `cmw_menus_groups_allowed` (menus_groups_id, menus_groups_group_id, menus_groups_menu_id)
-VALUES (1, 5, 2)
+VALUES (1, 5, 2);
 
 INSERT INTO `cmw_notification_settings` (`notification_settings_name`, `notification_settings_key`)
 VALUES ('showOnDiscord', '0'),
