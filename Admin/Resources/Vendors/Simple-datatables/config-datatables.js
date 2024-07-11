@@ -294,9 +294,6 @@ function initializeTableCheckable() {
                             transitionIn: 'fadeInLeft',
                             transitionOut: 'fadeOutRight',
                         });
-                    setTimeout(function() {
-                        location.reload();
-                    }, 5000);
                 }
             } else {
                 iziToast.show(

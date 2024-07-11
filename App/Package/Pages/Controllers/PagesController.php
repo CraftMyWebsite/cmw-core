@@ -13,6 +13,7 @@ use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Router\LinkStorage;
 use CMW\Manager\Router\Router;
+use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Pages\PagesModel;
@@ -50,7 +51,6 @@ class PagesController extends AbstractController
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.show.add");
 
         //Todo "pack script" to avoid that
-
         View::createAdminView('Pages', 'add')
             ->addScriptBefore("Admin/Resources/Vendors/Tinymce/tinymce.min.js",
                 "Admin/Resources/Vendors/Tinymce/Config/full.js")
