@@ -17,6 +17,7 @@ use CMW\Manager\Router\LinkStorage;
 use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Views\View;
+use CMW\Manager\Xml\SitemapManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Installer\InstallerModel;
 use CMW\Utils\Directory;
@@ -444,6 +445,9 @@ class InstallerController extends AbstractController
         if (EnvManager::getInstance()->getValue('DEVMODE') === '0') {
             Directory::delete(EnvManager::getInstance()->getValue('DIR') . 'Installation');
         }
+
+        //Init sitemap
+        SitemapManager::getInstance()->init();
 
         Redirect::redirectToHome();
     }
