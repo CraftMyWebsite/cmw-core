@@ -72,10 +72,10 @@ use CMW\Utils\Website;
         --dark-scrollbar-hover : #1e293b;
         --dark-scrollbar-bg : #94a3b8;
 
-        --nav-sky : #0284c7;
+        --nav-sky : #435EBE;
         --nav-sky-light : #f2f2f3;
         --nav-sky-dark : #1e293b;
-        --nav-sky-text-dark : #06b6d4;
+        --nav-sky-text-dark : #435EBE;
     }
 
     .text-success {color: #0ab312}

@@ -61,9 +61,6 @@ foreach ($installedPackages as $package) {
                 </div>
             </div>
             <div class="flex items-center">
-
-
-
                 <div>
                     <button type="button" class="relative  p-2.5"  data-dropdown-toggle="dropdown-notification">
                         <i class="fa-solid fa-bell fa-lg"></i>
@@ -72,7 +69,6 @@ foreach ($installedPackages as $package) {
                         <?php endif; ?>
                     </button>
                 </div>
-
                 <div style="width: 20rem; padding-right: 16px; max-height: 800px" class="z-50 hidden space-y-2 overflow-x-auto" id="dropdown-notification">
                     <?php
                     $max_notifications = 3;
@@ -106,18 +102,12 @@ foreach ($installedPackages as $package) {
                     <?php
                     endforeach;
                     ?>
-
                         <div class="rounded-lg border bg-white dark:bg-gray-700 dark:border-gray-700 text-center p-2">
                             <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/notifications" class="link">
                                 Voir toutes les notifications
                             </a>
                         </div>
-
-
                 </div>
-
-
-
                 <div>
                     <button id="theme-toggle" type="button" class="p-2.5">
                         <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-gray-800" fill="currentColor"
@@ -181,7 +171,7 @@ foreach ($installedPackages as $package) {
         endforeach; ?>
 
         <ul class="space-y-1">
-            <li>
+            <li class="mt-4">
                 <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/dashboard"
                    class="a-side-nav <?= MenusController::getInstance()->isActiveNavbarItem('dashboard') ? 'side-nav-active' : '' ?>">
                     <i class="fa-solid fa-chart-pie"></i>

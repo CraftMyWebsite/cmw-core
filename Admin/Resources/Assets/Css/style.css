@@ -1129,7 +1129,7 @@ hr {
   left: 0px;
   z-index: 40;
   height: 100vh;
-  width: 14rem;
+  width: 15rem;
   --tw-translate-x: -100%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
   border-right-width: 1px;
@@ -1153,7 +1153,9 @@ hr {
 }
 .a-side-nav {
   display: flex;
-  width: 100%;
+  width: 90%;
+    margin: auto;
+    border-radius: 0.6rem;
   align-items: center;
   padding-left: 0.75rem;
   padding-right: 0.75rem;
@@ -1204,8 +1206,14 @@ hr {
 }
 .a-side-nav-dropdown {
   background-color: var(--nav-sky-light);
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 0.6rem;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
 }
 .dark .a-side-nav-dropdown {
   background-color: var(--nav-sky-dark);
@@ -1218,7 +1226,7 @@ hr {
         padding-left: 1rem;
         padding-right: 0.25rem;
         padding-top: 0.25rem;
-        font-size: 0.875rem;
+        font-size: 0.9rem;
         line-height: 1.25rem;
     }
 .a-side-nav-drop:hover {
