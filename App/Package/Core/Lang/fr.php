@@ -124,9 +124,10 @@ return [
         "mail" => [
             "test" => "Mail envoyé à l'adresse %mail%",
         ],
-        "Theme" => [
+        "theme" => [
             "regenerate" => "Configuration du thème regénérée",
             "installed" => "%theme% viens d'être installé et activé.",
+            "reset" => "Configuration du thème réinitialisée",
         ],
         "db" => [
             "config" => [

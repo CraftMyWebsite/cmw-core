@@ -7,6 +7,7 @@ use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Filter\FilterManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
@@ -67,9 +68,9 @@ class ThemeController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.edit");
 
-        $theme = filter_input(INPUT_POST, "theme");
+        $theme = FilterManager::filterInputStringPost('theme', 50);
 
-        CoreModel::updateOption("theme", $theme);
+        CoreModel::getInstance()->updateOption("theme", $theme);
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
             LangManager::translate("core.toaster.config.success"));
@@ -117,7 +118,7 @@ class ThemeController extends AbstractController
 
         //Install Theme settings
         ThemeManager::getInstance()->installThemeSettings($theme['name']);
-        CoreModel::updateOption("theme", $theme['name']);
+        CoreModel::getInstance()->updateOption("theme", $theme['name']);
 
         $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs($theme['name']);
         SimpleCacheManager::storeCache($themeConfigs, 'config', "Themes/" . $theme['name']);
@@ -134,7 +135,7 @@ class ThemeController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.edit");
         View::createAdminView("Core", "Theme/themeManage")
-            ->addScriptBefore("Admin/Resources/Vendors/Tinymce/tinymce.min.js", "Admin/Resources/Vendors/Tinymce/Config/full.js" , "Admin/Resources/Vendors/PageLoader/main.js")
+            ->addScriptBefore("Admin/Resources/Vendors/Tinymce/tinymce.min.js", "Admin/Resources/Vendors/Tinymce/Config/full.js", "Admin/Resources/Vendors/PageLoader/main.js")
             ->view();
     }
 
@@ -211,9 +212,25 @@ class ThemeController extends AbstractController
         }
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate('core.Theme.toasters.update.success', ['theme' => $themeName]));
+            LangManager::translate('core.theme.toasters.update.success', ['theme' => $themeName]));
 
         Redirect::redirectPreviousRoute();
+    }
+
+    #[NoReturn] #[Link("/force/reset", Link::POST, [], "/cmw-admin/theme")]
+    private function themeReset(): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.manage");
+
+        if (!CoreModel::getInstance()->updateOption("theme", 'Sampler')) {
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                LangManager::translate("core.toaster.internalError"));
+            Redirect::redirectPreviousRoute();
+        }
+
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
+            LangManager::translate("core.toaster.theme.reset"));
+        Redirect::redirectToHome();
     }
 
 }

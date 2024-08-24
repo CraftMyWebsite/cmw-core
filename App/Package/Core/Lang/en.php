@@ -127,6 +127,7 @@ return [
         "Theme" => [
             "regenerate" => "Theme configuration regenerate",
             "installed" => "%theme% just installed and activated.",
+            "reset" => "Theme configuration reset",
         ],
         "db" => [
             "config" => [

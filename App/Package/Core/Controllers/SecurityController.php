@@ -46,17 +46,17 @@ class SecurityController extends AbstractController
 
         switch ($captcha){
             case "captcha-hcaptcha":
-                CoreModel::updateOption("captcha", "hcaptcha");
+                 CoreModel::getInstance()->updateOption("captcha", "hcaptcha");
                 EnvManager::getInstance()->setOrEditValue("HCAPTCHA_SITE_KEY", filter_input(INPUT_POST, "captcha_hcaptcha_site_key"));
                 EnvManager::getInstance()->setOrEditValue("HCAPTCHA_SECRET_KEY", filter_input(INPUT_POST, "captcha_hcaptcha_secret_key"));
                 break;
             case "captcha-recaptcha":
-                CoreModel::updateOption("captcha", "recaptcha");
+                 CoreModel::getInstance()->updateOption("captcha", "recaptcha");
                 EnvManager::getInstance()->setOrEditValue("RECAPTCHA_SITE_KEY", filter_input(INPUT_POST, "captcha_recaptcha_site_key"));
                 EnvManager::getInstance()->setOrEditValue("RECAPTCHA_SECRET_KEY", filter_input(INPUT_POST, "captcha_recaptcha_secret_key"));
                 break;
             default:
-                CoreModel::updateOption("captcha", "none");
+                 CoreModel::getInstance()->updateOption("captcha", "none");
                 break;
         }
 

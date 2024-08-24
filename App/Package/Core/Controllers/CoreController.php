@@ -118,7 +118,7 @@ class CoreController extends AbstractController
                 EnvManager::getInstance()->editValue("LOCALE", $option_value);
                 //TODO rename perms desc DB
             }
-            CoreModel::updateOption($option_name, $option_value);
+            CoreModel::getInstance()->updateOption($option_name, $option_value);
         endforeach;
 
         //update favicon

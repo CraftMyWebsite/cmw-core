@@ -5,6 +5,7 @@ namespace CMW\Manager\Theme;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Manager\AbstractManager;
+use CMW\Manager\Theme\Exceptions\ThemeNotFoundException;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\ThemeModel;
 
@@ -12,13 +13,18 @@ class ThemeManager extends AbstractManager
 {
     public function getCurrentTheme(): IThemeConfig
     {
+        $currentThemeName = 'Sampler';
         $isInstallation = EnvManager::getInstance()->getValue('INSTALLSTEP') !== "-1";
 
-        if (!$isInstallation){
+        if (!$isInstallation) {
             $currentThemeName = CoreModel::getInstance()->fetchOption("Theme");
         }
 
-        return $this->getTheme($currentThemeName ?? 'Sampler');
+        if (!$this->isLocalThemeExist($currentThemeName)) {
+            (new ThemeNotFoundException($currentThemeName))->invokeErrorPage();
+        }
+
+        return $this->getTheme($currentThemeName);
     }
 
     /**
@@ -167,4 +173,12 @@ class ThemeManager extends AbstractManager
         return PublicAPI::getData("market/resources/filtered/0");
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function isLocalThemeExist(string $name): bool
+    {
+        return file_exists("Public/Themes/$name/Theme.php");
+    }
 }

@@ -61,11 +61,11 @@ class CoreModel extends AbstractModel
         return ($req->execute()) ? $req->fetchAll() : [];
     }
 
-    public static function updateOption(string $option_name, string $option_value): void //Todo remove Static method...
+    public function updateOption(string $option_name, string $option_value): bool
     {
         $db = DatabaseManager::getInstance();
-        $req = $db->prepare('UPDATE cmw_core_options SET option_value=:option_value, option_updated=now() WHERE option_name=:option_name');
-        $req->execute(array("option_name" => $option_name, "option_value" => $option_value));
+        $req = $db->prepare('UPDATE cmw_core_options SET option_value=:option_value, option_updated=NOW() WHERE option_name=:option_name');
+        return $req->execute(array("option_name" => $option_name, "option_value" => $option_value));
     }
 
     public static function getLanguages(string $prefix): array|string

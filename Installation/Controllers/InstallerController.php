@@ -358,7 +358,7 @@ class InstallerController extends AbstractController
 
             if ($type === 'Theme') {
                 (new ThemeManager())->installThemeSettings($resource['name']);
-                CoreModel::updateOption("theme", $resource['name']);
+                 CoreModel::getInstance()->updateOption("theme", $resource['name']);
             }
         }
 
@@ -411,7 +411,7 @@ class InstallerController extends AbstractController
         }
 
         (new ThemeManager())->installThemeSettings($theme['name']);
-        CoreModel::updateOption("theme", $theme['name']);
+         CoreModel::getInstance()->updateOption("theme", $theme['name']);
 
         EnvManager::getInstance()->editValue("installStep", 6);
     }
