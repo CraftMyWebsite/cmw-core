@@ -13,7 +13,6 @@ use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Router\LinkStorage;
 use CMW\Manager\Router\Router;
-use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Pages\PagesModel;
@@ -159,7 +158,6 @@ class PagesController extends AbstractController
             //Include the Public view file ("Public/Themes/$themePath/Views/Pages/main.view.php")
             $view = new View('Pages', 'main');
             $view->addScriptBefore("Admin/Resources/Vendors/Prismjs/prism.js");
-            $view->addStyle("Admin/Resources/Vendors/Prismjs/Style/" . EditorController::getCurrentStyle());
             $view->addVariableList(["page" => $pageEntity]);
             $view->view();
             return;
