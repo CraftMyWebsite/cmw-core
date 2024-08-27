@@ -17,7 +17,7 @@ use CMW\Manager\Lang\LangManager;
     <meta name="description" content="<?= LangManager::translate("Installation.desc") ?>">
 
     <link rel="icon" type="image/png"
-          href="Admin/Resources/Assets/Images/Logo/logo_compact.png">
+          href="Admin/Resources/Assets/Img/logo_compact.png">
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="Admin/Resources/Vendors/Fontawesome-free/Css/fa-all.min.css">
@@ -28,7 +28,7 @@ use CMW\Manager\Lang\LangManager;
 
 
 <body class="bg-cmw-gray flex flex-col min-h-screen">
-<img class="w-48 mx-auto py-8" src="Admin/Resources/Assets/Images/Logo/logo_compact.png" alt="Image introuvable !">
+<img class="w-48 mx-auto py-8" src="Admin/Resources/Assets/Img/logo_compact.png" alt="Image introuvable !">
 
 <div class="lg:hidden text-center p-4 bg-primary text-xl"><span class="font-bold">
         <?= InstallerController::getInstallationStep() ?></span>
