@@ -17,7 +17,7 @@ use CMW\Manager\Lang\LangManager;
     <meta name="description" content="<?= LangManager::translate("Installation.desc") ?>">
 
     <link rel="icon" type="image/png"
-          href="Admin/Resources/Assets/Img/logo_compact.png">
+          href="Admin/Resources/Assets/Img/favicon.ico">
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="Admin/Resources/Vendors/Fontawesome-free/Css/fa-all.min.css">
