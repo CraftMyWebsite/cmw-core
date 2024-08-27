@@ -9,7 +9,7 @@ return [
         "config" => [
             "title" => "Faisons le point sur votre configuration",
         ],
-        "content" => "<p>Si votre configuration n'est pas suffisante merci de vous référer aux <a class='text-primary' href='' target='_blank'>prérequis</a>
+        "content" => "<p>Si votre configuration n'est pas suffisante merci de vous référer aux <a class='text-primary' href='https://craftmywebsite.fr/docs/fr/users/commencer/prerequis' target='_blank'>prérequis</a>
                       avant de continuer l'Installation.</p>
                       <p>En cas de demande de support auprès de CraftMyWebsite ces informations peuvent nous être utiles pour déterminer
                       l'environnement dans lequel vous êtes. Merci de bien vouloir noter les informations que vous ne connaissez pas.</p>

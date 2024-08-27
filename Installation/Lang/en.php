@@ -9,7 +9,7 @@ return [
         "config" => [
             "title" => "Let's take a tour of your configuration",
         ],
-        "content" => "<p>If your configuration is not correct, please refer to the <a class='text-primary' href='' target='_blank'>prerequisites</a>
+        "content" => "<p>If your configuration is not correct, please refer to the <a class='text-primary' href='https://craftmywebsite.fr/docs/en/users/get-started/requirements' target='_blank'>prerequisites</a>
                         before continuing with the Installation.</p>
                         <p>If you request support from CMW, these informations may be useful to determine your environment. Please write down any information that you do not know.</p>
                         <p>Now let's move on to setting up your new site ...</p>",
