@@ -25,6 +25,8 @@ use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use CMW\Utils\Website;
 use JetBrains\PhpStorm\NoReturn;
+use function base64_decode;
+use function json_encode;
 
 /**
  * Class: @installerController
@@ -228,7 +230,9 @@ class InstallerController extends AbstractController
     #[Link(path: "/test/db", method: Link::POST, scope: "/installer", secure: false)]
     public function testDbConnection(): void
     {
-        [$host, $username, $password, $port] = Utils::filterInput("bdd_address", "bdd_login", "bdd_pass", "bdd_port");
+        [$host, $username, $passwordEncoded, $port] = Utils::filterInput("bdd_address", "bdd_login", "bdd_pass", "bdd_port");
+
+        $password = base64_decode($passwordEncoded);
 
         $db = isset($_POST['bdd_name']) ? filter_input(INPUT_POST, "bdd_name") : "cmw";
 

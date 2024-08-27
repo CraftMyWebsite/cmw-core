@@ -10,7 +10,7 @@ const testDb = async () => {
     'bdd_name': name,
     'bdd_login': login,
     'bdd_port': port,
-    'bdd_pass': pass
+    'bdd_pass': btoa(pass)
   }
 
   let request = await fetch('installer/test/db', {

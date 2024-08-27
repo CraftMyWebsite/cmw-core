@@ -10,14 +10,11 @@ use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
-use CMW\Manager\Permission\PermissionManager;
 use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Twofa\TwoFaManager;
 use CMW\Model\Users\Users2FaModel;
 use CMW\Model\Users\UsersModel;
-use CMW\Utils\Log;
 use CMW\Utils\Redirect;
-use CMW\Utils\Utils;
 use PDO;
 use PDOException;
 
