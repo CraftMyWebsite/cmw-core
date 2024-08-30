@@ -7,7 +7,6 @@ use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Package\AbstractModel;
 use CMW\Manager\Uploads\ImagesManager;
-use Exception;
 
 
 /**
@@ -22,20 +21,15 @@ class UserPictureModel extends AbstractModel
 
     /**
      * @param int $userId
-     * @param array $image
+     * @param string $imageName
      * @return UserPictureEntity|null
-     * @throws Exception
      */
-    public function uploadImage(int $userId, array $image): ?UserPictureEntity
+    public function uploadImage(int $userId, string $imageName): ?UserPictureEntity
     {
         //First check if the user has an image
         if ($this->userHasImage($userId)) {
-            return $this->updateUserImage($userId, $image);
+            return $this->updateUserImage($userId, $imageName);
         }
-
-
-        //Upload image on the server
-        $imageName = ImagesManager::upload($image, 'Users');
 
         $sql = "INSERT INTO cmw_users_pictures (users_pictures_user_id, users_pictures_image_name) VALUES (:userId, :imageName)";
         $db = DatabaseManager::getInstance();
@@ -71,16 +65,14 @@ class UserPictureModel extends AbstractModel
 
     /**
      * @param int $userId
-     * @param array $image
+     * @param string $imageName
      * @return UserPictureEntity|null
-     * @throws Exception
      */
-    public function updateUserImage(int $userId, array $image): ?UserPictureEntity
+    public function updateUserImage(int $userId, string $imageName): ?UserPictureEntity
     {
 
         //Get older imageName
         $userPictureEntity = $this->getImageByUserId($userId);
-
 
         $olderImageName = $userPictureEntity?->getImage();
 
@@ -88,10 +80,6 @@ class UserPictureModel extends AbstractModel
         if (!$this->userHasDefaultImage($userId)) {
             ImagesManager::deleteImage($olderImageName, 'Users');
         }
-
-        //Upload image on the server
-        $imageName = ImagesManager::upload($image, 'Users');
-
 
         $sql = "UPDATE cmw_users_pictures SET users_pictures_image_name = :imageName, 
                                             users_pictures_last_update = CURRENT_TIMESTAMP() 

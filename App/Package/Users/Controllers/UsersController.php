@@ -23,6 +23,8 @@ use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Twofa\TwoFaManager;
+use CMW\Manager\Uploads\ImagesException;
+use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UserPictureModel;
@@ -31,7 +33,6 @@ use CMW\Model\Users\UsersModel;
 use CMW\Model\Users\UsersSettingsModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
-use Exception;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
@@ -659,7 +660,7 @@ class UsersController extends AbstractController
         $user = UsersModel::getCurrentUser();
 
         if (UsersModel::getCurrentUser()?->getId() !== $user->getId()) {
-            Flash::send(Alert::ERROR,LangManager::translate("core.toaster.error"),"Vous ne pouvez pas éditer le profile de quelqu'un d'autre !" );
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"), "Vous ne pouvez pas éditer le profile de quelqu'un d'autre !");
             Redirect::redirectToHome();
         }
 
@@ -686,11 +687,16 @@ class UsersController extends AbstractController
         $image = $_FILES['pictureProfile'];
 
         try {
-            UserPictureModel::getInstance()->uploadImage(UsersModel::getCurrentUser()?->getId(), $image);
-        } catch (Exception $e) {
+            //Upload image on the server
+            $imageName = ImagesManager::upload($image, 'Users');
+
+        } catch (ImagesException $e) {
             Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                LangManager::translate("core.toaster.internalError") . " => $e");
+                LangManager::translate("core.errors.upload.image") . " => $e");
+            Redirect::redirectPreviousRoute();
         }
+
+        UserPictureModel::getInstance()->uploadImage(UsersModel::getCurrentUser()?->getId(), $imageName);
 
         Redirect::redirect('profile');
     }
@@ -713,7 +719,7 @@ class UsersController extends AbstractController
         $user = UsersModel::getInstance()->getUserWithPseudo($pseudo);
 
         if (UsersModel::getCurrentUser()?->getId() !== $user->getId()) {
-            Flash::send(Alert::ERROR,LangManager::translate("core.toaster.error"),"Vous ne pouvez pas éditer le profile de quelqu'un d'autre !" );
+            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"), "Vous ne pouvez pas éditer le profile de quelqu'un d'autre !");
             Redirect::redirectToHome();
         }
 
@@ -783,7 +789,7 @@ class UsersController extends AbstractController
         if (UsersModel::getInstance()->update($user?->getId(), $encryptedMail, $pseudo, $firstname, $lastname, $rolesId)) {
             Flash::send(Alert::SUCCESS, LangManager::translate("users.toaster.success"), LangManager::translate("users.toaster.user_edited_self"));
         } else {
-            Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"), LangManager::translate("users.toaster.user_edited_self_nop") );
+            Flash::send(Alert::ERROR, LangManager::translate("users.toaster.error"), LangManager::translate("users.toaster.user_edited_self_nop"));
         }
 
         [$pass, $passVerif] = Utils::filterInput("password", "passwordVerif");

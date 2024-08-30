@@ -15,15 +15,13 @@ use CMW\Manager\Metrics\VisitsMetricsManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
-use CMW\Manager\Router\RouterException;
-use CMW\Manager\Theme\ThemeManager;
+use CMW\Manager\Uploads\ImagesException;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Users\UsersMetricsModel;
 use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
-use JsonException;
 
 /**
  * Class: @coreController
@@ -132,7 +130,7 @@ class CoreController extends AbstractController
                 } else {
                     Flash::send(Alert::SUCCESS, "Icon", LangManager::translate("core.config.alert_img"));
                 }
-            } catch (JsonException) {
+            } catch (ImagesException) {
                 Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
                     LangManager::translate("core.errors.editConfiguration", ['config' => 'Favicon']));
             }

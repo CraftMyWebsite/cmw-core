@@ -415,6 +415,9 @@ return [
             'type' => 'Invalide type for %key%',
         ],
         "editConfiguration" => "Unable to edit configuration %config%",
+        "upload" => [
+            "image" => "An error occur when uploading image.",
+        ],
     ],
     "permissions" => [
         "dashboard" => "Access to the administration panel",
