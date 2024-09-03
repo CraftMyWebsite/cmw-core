@@ -31,7 +31,8 @@ class UsersSettingsController extends AbstractController
 
     public static function getDefaultImageLink(): string
     {
-        return EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "Public/Uploads/Users/Default/defaultImage.jpg";
+        $defaultImg = UsersSettingsModel::getSetting("defaultImage");
+        return EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "Public/Uploads/Users/Default/" . $defaultImg;
     }
 
     /**
@@ -53,6 +54,19 @@ class UsersSettingsController extends AbstractController
                 "App/Package/Users/Views/Assets/Js/rolesWeights.js")
             ->addVariableList(["settings" => new UserSettingsEntity(), "roles" => $roles, "pseudos" => $blacklistedPseudo])
             ->view();
+    }
+
+    #[Link("/settings/resetImg", Link::GET, [], "/cmw-admin/users")]
+    private function resetDefaultImg(): void
+    {
+        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings");
+
+        UsersSettingsModel::updateSetting("defaultImage","defaultImage.jpg");
+
+        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
+            LangManager::translate("core.toaster.config.success"));
+
+        Redirect::redirectPreviousRoute();
     }
 
     #[Link("/settings", Link::POST, [], "/cmw-admin/users")]
