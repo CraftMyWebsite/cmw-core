@@ -110,7 +110,10 @@ $description = LangManager::translate("users.settings.desc"); ?>
         <?php (new SecurityManager())->insertHiddenToken() ?>
 
         <div class="card mb-4">
-            <h6><?= LangManager::translate("users.settings.default_picture") ?></h6>
+            <div class="card-title">
+                <h6><?= LangManager::translate("users.settings.default_picture") ?></h6>
+                <a href="settings/resetImg" class="btn-warning">Reset</a>
+            </div>
             <div class="grid-2">
                 <img class="rounded-lg"
                      src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Public/Uploads/Users/Default/<?= $settings->getDefaultImage() ?>"
