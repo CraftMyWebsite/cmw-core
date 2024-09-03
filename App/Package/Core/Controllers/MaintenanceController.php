@@ -107,12 +107,12 @@ class MaintenanceController extends AbstractController
 
         ///// Login checks
         if ($maintenance->getType() === 1 &&
-            (Website::isCurrentPage('login') || Website::isCurrentPage('register'))) {
+            (Website::isCurrentPage('login') || Website::isCurrentPage('register') || Website::isCurrentPage('login/forgot') || Website::isCurrentPage('login/validate/tfa'))) {
             return;
         }
 
         if ($maintenance->getType() === 2 &&
-            (Website::isCurrentPage('login'))) {
+            (Website::isCurrentPage('login') || Website::isCurrentPage('login/forgot') || Website::isCurrentPage('login/validate/tfa'))) {
             return;
         }
 
