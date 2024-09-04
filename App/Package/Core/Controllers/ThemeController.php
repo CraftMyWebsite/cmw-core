@@ -92,7 +92,7 @@ class ThemeController extends AbstractController
         SimpleCacheManager::storeCache($themeConfigs, 'config', "Themes/" . $themeName);
 
         Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate("core.toaster.Theme.regenerate"));
+            LangManager::translate("core.toaster.theme.regenerate"));
 
         Redirect::redirectPreviousRoute();
     }
