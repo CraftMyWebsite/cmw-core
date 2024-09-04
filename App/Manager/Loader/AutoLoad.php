@@ -15,6 +15,7 @@ class AutoLoad
 
     private static function isEnvValid(): bool
     {
+        require_once("App/Manager/Error/ErrorManager.php");
         require_once("App/Manager/Env/EnvManager.php");
         require_once("App/Manager/Class/PackageManager.php");
         return is_file(EnvManager::getInstance()->getValue("DIR") . "index.php");

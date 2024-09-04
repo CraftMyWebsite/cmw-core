@@ -28,6 +28,10 @@ interface ICaptcha
      */
     public function validate(): bool;
 
+    /**
+     * @return mixed
+     * @desc Generate admin form inputs. Create a function with your captcha code (same as @getCode())
+     */
     public function adminForm();
 
     /**

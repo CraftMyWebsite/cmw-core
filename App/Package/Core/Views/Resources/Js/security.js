@@ -1,21 +1,15 @@
 const generateCaptchaInputs = () => {
-  let select = document.getElementById("captcha");
+    let select = document.getElementById("captcha");
+    let methodName = select.value
 
-  switch (select.value){
-      case 'captcha-none':
-          cleanContentWrapper();
-          break;
-      case 'captcha-hcaptcha':
-          cleanContentWrapper();
-          generateHcaptchaInputs();
-          break;
-      case 'captcha-recaptcha':
-          cleanContentWrapper();
-          generateRecaptchaInputs();
-          break;
+    cleanContentWrapper();
 
+    if (select.value === 'none') {
+        return
+    }
 
-  }
+   const fn = new Function(`return ${methodName}()`);
+    fn()
 }
 
 generateCaptchaInputs()

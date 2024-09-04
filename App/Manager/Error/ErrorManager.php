@@ -7,11 +7,11 @@ use CMW\Manager\Permission\PermissionManager;
 use CMW\Manager\Theme\ThemeManager;
 use DateTime;
 use ErrorException;
+use JetBrains\PhpStorm\NoReturn;
 use Throwable;
 
 class ErrorManager
 {
-
     private string $dirStorage = "App/Storage/Logs";
 
     public function __invoke(): void
@@ -212,6 +212,23 @@ class ErrorManager
                         Files missing : <pre>Public/Themes/$currentTheme/Views/Errors/default.view.php</pre>
                     </div>
                     HTML;
+    }
+
+    /**
+     * @param string $title
+     * @param string $content
+     * @return void
+     * @desc Display a custom error page.
+     */
+    #[NoReturn] public static function showCustomErrorPage(string $title, string $content): void
+    {
+        echo <<<HTML
+        <div>
+            <h1>$title</h1>
+            <p>$content</p>
+        </div>
+HTML;
+        die();
     }
 
 }
