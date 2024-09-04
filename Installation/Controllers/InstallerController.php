@@ -25,8 +25,27 @@ use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use CMW\Utils\Website;
 use JetBrains\PhpStorm\NoReturn;
+use function array_key_exists;
 use function base64_decode;
+use function date_default_timezone_get;
+use function explode;
+use function extension_loaded;
+use function filter_input;
+use function filter_var;
+use function header;
+use function in_array;
+use function is_array;
+use function is_file;
 use function json_encode;
+use function mb_strtolower;
+use function ob_start;
+use function password_hash;
+use const FILTER_VALIDATE_EMAIL;
+use const FILTER_VALIDATE_IP;
+use const INPUT_POST;
+use const JSON_THROW_ON_ERROR;
+use const PASSWORD_BCRYPT;
+use const PHP_VERSION_ID;
 
 /**
  * Class: @installerController
@@ -172,7 +191,7 @@ class InstallerController extends AbstractController
     }
 
     #[NoReturn] #[Link(path: "/submit", method: Link::POST, scope: "/installer", secure: false)]
-    public function postInstallPage(): void
+    private function postInstallPage(): void
     {
         $value = match (self::getInstallationStep()) {
             1 => "firstInstallPost",
@@ -228,7 +247,7 @@ class InstallerController extends AbstractController
      * @throws \JsonException
      */
     #[Link(path: "/test/db", method: Link::POST, scope: "/installer", secure: false)]
-    public function testDbConnection(): void
+    private function testDbConnection(): void
     {
         [$host, $username, $passwordEncoded, $port] = Utils::filterInput("bdd_address", "bdd_login", "bdd_pass", "bdd_port");
 
@@ -298,7 +317,7 @@ class InstallerController extends AbstractController
         //Init Default routes
         (new LinkStorage())->storeDefaultRoutes();
 
-       EnvManager::getInstance()->editValue("installStep", 2);
+        EnvManager::getInstance()->editValue("installStep", 2);
     }
 
     private function firstInstallSetDatabase(string $host, string $db, string $username, string $password, int $port): void
@@ -362,7 +381,7 @@ class InstallerController extends AbstractController
 
             if ($type === 'Theme') {
                 (new ThemeManager())->installThemeSettings($resource['name']);
-                 CoreModel::getInstance()->updateOption("theme", $resource['name']);
+                CoreModel::getInstance()->updateOption("theme", $resource['name']);
             }
         }
 
@@ -415,7 +434,7 @@ class InstallerController extends AbstractController
         }
 
         (new ThemeManager())->installThemeSettings($theme['name']);
-         CoreModel::getInstance()->updateOption("theme", $theme['name']);
+        CoreModel::getInstance()->updateOption("theme", $theme['name']);
 
         EnvManager::getInstance()->editValue("installStep", 6);
     }
