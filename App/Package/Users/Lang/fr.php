@@ -33,7 +33,7 @@ return [
         "not_same_pass" => "Les mots de passes ne correspondent pas.",
         "welcome" => "Bienvenue !",
         "user_edited" => "Utilisateur modifié",
-        "user_edited_self" => "Modification appliqué.",
+        "user_edited_self" => "Modification appliquée.",
         "user_edited_self_nope" => "Impossible d'apporter les modifications",
         "pass_change_faild" => "Impossible d'éditer le mot de passe",
         "impossible" => "Impossible de faire ceci",
@@ -47,8 +47,8 @@ return [
         "status" => "Status de l'utilisateur changé !",
         "error_add" => "Impossible d'ajouter cet utilisateur",
         "success_add" => "Utilisateur %pseudo% ajouté",
-        "edited_not_pass_change" => "Utilisateur modifié (mot de passe non modifié)",
-        "edited_pass_change" => "Utilisateur édité (mot de passe modifié)",
+        "edited_not_pass_change" => "Utilisateur mis à jour (mot de passe non modifié)",
+        "edited_pass_change" => "Utilisateur mis à jour (mot de passe modifié)",
         "load_permissions_error" => "Impossible de charger les permissions du package %package%",
         "load_permissions_success" => "Permissions chargées avec succès !",
     ],
@@ -107,11 +107,11 @@ return [
             "weightTips" => "Plus le chiffre est haut plus le rôle est important",
             "delete" => [
                 "title" => "Supprimer ",
-                "content" => "La suppression de ce rôle est définitive !<br>Aucun retour possible !",
+                "content" => "La suppression d'un rôle est définitif !<br>Aucun retour possible !",
             ],
             "default" => [
                 "title" => "Rôle par défaut",
-                "tips" => "Définissez ce rôle parmi ceux par défaut. Lors de l'inscription, vos membres se les verront ajouter automatiquement.",
+                "tips" => "Définissez ce rôle parmi ceux par défaut. Lors de l'inscription, vos membres se les verront ajouté automatiquement.",
             ],
         ],
         "perms" => [
@@ -121,7 +121,7 @@ return [
     ],
     "modal" => [
         "delete" => "Supprimer",
-        "delete_message" => "La suppression de cet utilisateur est permanente !<br>Aucun retour en arrière n'est possible !",
+        "delete_message" => "La suppression d'un utilisateur est permanente !<br>Aucun retour en arrière n'est possible !",
     ],
     "delete" => [
         "toaster_error" => "Vous ne pouvez pas supprimer le compte avec lequel vous êtes connecté.",
@@ -148,7 +148,7 @@ return [
         "role_description" => "Description",
         "role_name" => "Nom",
         "password" => "Mot de passe",
-        "password_confirm" => "Confirmation mot de passe",
+        "password_confirm" => "Confirmation du mot de passe",
         "pass" => "••••••••", //TODO METTRE UN VRAI PLACEHOLDER
         "new_password" => "Modifier le mot de passe",
         "repeat_pass" => "Confirmer le mot de passe",

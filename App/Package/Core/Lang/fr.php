@@ -92,7 +92,7 @@ return [
         "desc" => "Configurez votre site CMW !",
         "favicon" => "Modifiez le favicon",
         "favicon_tips" => 'CraftMyWebsite accepte uniquement les images <a href="https://www.icoconverter.com" target="_blank">.ico</a> pour des soucis de performances.',
-        "alert_img" => "Faites CTRL + F5 pour afficher votre nouvel Icon",
+        "alert_img" => "Faites CTRL + F5 pour afficher votre nouvelle icône",
         "dateFormat" => "Format des dates",
         "dateFormatTooltip" => "Vous pouvez personnaliser la façon dont vous affichez les dates",
         "custom" => "-- Personnalisez-moi --",
@@ -108,7 +108,7 @@ return [
     ],
     "minecraft" => [
         "ip" => "Addresse IP de votre serveur",
-        "register" => "Autorisez uniquement les comptes Minecraft PREMIUM à s'inscrire sur votre site",
+        "register" => "Autorisez uniquement les comptes Minecraft officiels à s'inscrire sur votre site",
     ],
     "database" => [
         "error" => "Erreur de base de données : ",
@@ -191,7 +191,7 @@ return [
         "close" => "Fermer",
         "appearance" => "Apparence de ",
         "verification" => "Vérification",
-        "verificationText" => "Attention, ceci va réinitialiser tout les paramètres par défaut de votre thème, êtes-vous sûr de vouloir continuer ?",
+        "verificationText" => "Attention, cela va remettre tous les paramètres par défaut de votre thème. Êtes-vous certain de vouloir poursuivre ?",
         "config" => [
             "title" => "Gestion",
             "description" => "Gérez les thèmes de votre site",
@@ -205,7 +205,7 @@ return [
                 "downloads" => "Nombre de téléchargements",
                 "download" => "Télécharger",
             ],
-            "regen_config" => "Regénérer la config du thème",
+            "regen_config" => "Regénérer la configuration du thème",
         ],
         "manage" => [
             "title" => "Gérez votre thème <b>%Theme%</b>",
@@ -226,7 +226,7 @@ return [
         "demo" => "Démo",
         "close" => "Fermer",
         "removeTitle" => "Voulez-vous supprimer %package% ?",
-        "removeText" => "La suppression de ce package est définitive.<br>Voulez-vous continuer ?",
+        "removeText" => "La suppression d'un package est définitive.<br>Voulez-vous continuer ?",
         "description" => "Description: ",
         "descriptionNotAvailable" => "Ce package est installé manuellement, il n'est pas enregistré auprès de CraftMyWebsite.<br>Utilisez ce package en connaissance de cause.<br>Si vous développez ce package pour le publier ensuite sur le Market de CraftMyWebsite, ne tenez pas compte de ce message.",
         "details" => "Détails",
@@ -426,7 +426,7 @@ return [
         "dashboard" => "Accès au panel d'administration",
         "notification" => [
             "notification" => "Voir les notifications",
-            "read" => "Marqué comme lue",
+            "read" => "Marquer comme lue",
             "settings" => "Paramètres",
         ],
         "settings" => [
@@ -435,7 +435,7 @@ return [
             "maintenance" => "Maintenance",
             "maintenance_bypass" => "Outrepasser le blocage",
             "mails" => "SMTP et mails",
-            "conditions" => "Conditions général",
+            "conditions" => "Conditions générales",
             "security" => "Sécurité",
             "security_healthReport" => "Générer un rapport",
         ],

@@ -10,20 +10,20 @@ return [
             "title" => "Faisons le point sur votre configuration",
         ],
         "content" => "<p>Si votre configuration n'est pas suffisante merci de vous référer aux <a class='text-primary' href='https://craftmywebsite.fr/docs/fr/users/commencer/prerequis' target='_blank'>prérequis</a>
-                      avant de continuer l'Installation.</p>
+                      avant de continuer l'installation.</p>
                       <p>En cas de demande de support auprès de CraftMyWebsite ces informations peuvent nous être utiles pour déterminer
                       l'environnement dans lequel vous êtes. Merci de bien vouloir noter les informations que vous ne connaissez pas.</p>
-                      <p>Passons maintenant à l'Installation de votre nouveau site ...</p>",
+                      <p>Passons maintenant à l'installation de votre nouveau site ...</p>",
         "readaccept" => "J'ai lu et j'accepte les conditions générales d'utilisations",
         "cgu" => "Conditions Générales d'Utilisation",
         "error" => [
-            "cgu" => "Merci d'accepter les CGU avant de procéder à l'Installation de votre site CraftMyWebsite"
+            "cgu" => "Merci d'accepter les CGU avant de procéder à l'installation de votre site CraftMyWebsite"
         ]
     ],
     "bundle" => [
         "custom" => "Personnalisé",
         "includes" => "Ce bundle inclut les packages :",
-        "customText" => "<p>Personnaliser votre Installation vous-même.</p><p>Ceci ne veut pas dire qu'il n'est pas possible de le personnaliser avec d'autres bundle.</p>",
+        "customText" => "<p>Personnalisez votre installation vous-même.</p><p>Ceci ne veut pas dire qu'il n'est pas possible de le personnaliser avec d'autres bundle.</p>",
     ],
     "password" => [
         "strenght" => "Force du mot de passe :",
@@ -44,7 +44,7 @@ return [
         "settings" => [
             "settings" => "Réglages",
             "devmode" => "Activer le mode développeur",
-            "devmode_about" => "ATTENTION ! À n'utiliser qu'en connaissance de cause.<br>L'activer inutilement peut engendrer des failles sur votre site internet. Il est fortement déconseillé de l'activer pour un site en production.",
+            "devmode_about" => "ATTENTION ! À n'utiliser qu'en connaissance de cause.<br>L'activer inutilement peut exposer votre site à des vulnérabilités. Il est fortement déconseillé de l'activer pour un site en production.",
             "site_folder" => "Dossier d'installation",
             "site_folder_about" => "Généralement <code>/</code>. Si CraftMyWebsite se trouve dans un dossier, veuillez indiquer <code>/dossier/</code>."
         ]
@@ -69,12 +69,12 @@ return [
         "search" => "Rechercher",
         "tags" => "Tags",
         "help" => [
-            "title" => "Personnalisez votre Installation",
+            "title" => "Personnalisez votre installation",
             "content" => "<b>Informations :</b> Cette étape vous permet en quelques clique d'installer les packages dont vous aurez
                 besoin pour bien commencer votre site.<br>
                 Cette configuration n'est pas définitive, il est possible d'en ajouter ou d'en retirer par la suite via votre panel
                 d'administration.<br><br>
-                <b>Presets : </b>Les presets vous présélectionne les packages les plus adaptés à vos besoins, vous pouvez tout de même en ajouter d'autres ou en retirer en fonction de vos besoin.<br>",
+                <b>Presets : </b>Les presets sélectionnent pour vous les packages les mieux adaptés à vos besoins, tout en vous offrant la possibilité d'ajouter ou de retirer des options selon vos exigences.<br>",
             "footer" => "**Survolez un package pour en savoir plus"
         ]
     ],

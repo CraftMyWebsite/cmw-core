@@ -11,7 +11,7 @@ return [
         "desc" => "Modifiez votre page",
     ],
     "delete" => [
-        "message" => "La suppression de cette page est définitive !<br>Aucun retour possible !",
+        "message" => "La suppression d'une page est définitive !<br>Aucun retour possible !",
         "button" => "Supprimer",
     ],
     "editor" => [
@@ -45,8 +45,8 @@ return [
     ],
 
     "alert" => [
-        "added" => "Page ajouté",
-        "edited" => "Page modifié",
+        "added" => "Page ajoutée",
+        "edited" => "Page modifiée",
     ],
 
     "permissions" => [
