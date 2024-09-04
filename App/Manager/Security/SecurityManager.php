@@ -3,36 +3,25 @@
 namespace CMW\Manager\Security;
 
 
-use CMW\Model\Users\UsersModel;
 use Error;
 use Exception;
 
 class SecurityManager extends HoneyInput
 {
-
     private string $formTokenLabel = 'security-csrf-token';
-
-    private string $sessionTokenLabel;
-
+    private string $formTokenIdLabel = 'security-csrf-token-id';
+    private string $sessionTokenPrefix = 'CSRF_TOKEN_SESS_ID_';
     private array $post = [];
-
     private array $session = [];
-
     private array $server = [];
-
     private mixed $excludeUrl = [];
-
     private string $hashAlgo = 'sha256';
-
     private bool $hmac_ip = true;
-
     private string $hmacData = 'ABCeNBHVe3kmAqvU2s7yyuJSF2gpxKLC';
 
 
     public function __construct($excludeUrl = null, &$post = null, &$session = null, &$server = null)
     {
-        $this->sessionTokenLabel = 'CSRF_TOKEN_SESS_ID_' . UsersModel::getCurrentUser()?->getId();
-
         if (!is_null($excludeUrl)) {
             $this->excludeUrl = $excludeUrl;
         }
@@ -59,28 +48,33 @@ class SecurityManager extends HoneyInput
 
     public function insertHiddenToken(): void
     {
-        $csrfToken = $this->getCSRFToken();
+        $csrfTokenId = bin2hex(random_bytes(8));
+        $csrfToken = $this->getCSRFToken($csrfTokenId);
 
-        echo "<input type=\"hidden\"" . " name=\"" . $this->xssafe($this->formTokenLabel) . "\"" . " value=\"" . $this->xssafe($csrfToken) . "\"" . " />";
+        echo "<input type=\"hidden\" name=\"" . $this->xssafe($this->formTokenLabel) . "\" value=\"" . $this->xssafe($csrfToken) . "\" />";
+        echo "<input type=\"hidden\" name=\"" . $this->xssafe($this->formTokenIdLabel) . "\" value=\"" . $this->xssafe($csrfTokenId) . "\" />";
 
         $this->generateHoneyInput();
     }
 
-    public function getCSRFToken()
+    public function getCSRFToken(string $tokenId): string
     {
-        if (empty($this->session[$this->sessionTokenLabel])) {
+        $sessionTokenLabel = $this->sessionTokenPrefix . $tokenId;
+
+        if (empty($this->session[$sessionTokenLabel])) {
             try {
-                $this->session[$this->sessionTokenLabel] = bin2hex(random_bytes(32));
+                $this->session[$sessionTokenLabel] = bin2hex(random_bytes(32));
             } catch (Exception $e) {
-                $this->session[$this->sessionTokenLabel] = bin2hex(microtime() + $e);
+                $this->session[$sessionTokenLabel] = bin2hex(microtime() + $e);
             }
         }
 
         if ($this->hmac_ip !== false) {
-            $token = $this->hMacWithIp($this->session[$this->sessionTokenLabel]);
+            $token = $this->hMacWithIp($this->session[$sessionTokenLabel]);
         } else {
-            $token = $this->session[$this->sessionTokenLabel];
+            $token = $this->session[$sessionTokenLabel];
         }
+
         return $token;
     }
 
@@ -89,9 +83,9 @@ class SecurityManager extends HoneyInput
         return hash_hmac($this->hashAlgo, $this->hmacData, $token);
     }
 
-    public function xssafe($data, $encoding = 'UTF-8'): string
+    private function xssafe($data): string
     {
-        return htmlspecialchars($data, ENT_QUOTES | ENT_HTML401, $encoding);
+        return htmlspecialchars($data, ENT_QUOTES | ENT_HTML401, 'UTF-8');
     }
 
     public function validate(): bool
@@ -120,36 +114,30 @@ class SecurityManager extends HoneyInput
 
     public function validateRequest(): bool
     {
-        if (!isset($this->session[$this->sessionTokenLabel])) {
-            // CSRF Token not found
+        if (!isset($this->post[$this->formTokenIdLabel])) {
+            return false;
+        }
+
+        $tokenId = $this->post[$this->formTokenIdLabel];
+        $sessionTokenLabel = $this->sessionTokenPrefix . $tokenId;
+
+        if (!isset($this->session[$sessionTokenLabel])) {
             return false;
         }
 
         if (!empty($this->post[$this->formTokenLabel])) {
-            // Let's pull the POST data
             $token = $this->post[$this->formTokenLabel];
         } else {
             return false;
         }
 
-        // Grab the stored token
         if ($this->hmac_ip !== false) {
-            $expected = $this->hMacWithIp($this->session[$this->sessionTokenLabel]);
+            $expected = $this->hMacWithIp($this->session[$sessionTokenLabel]);
         } else {
-            $expected = $this->session[$this->sessionTokenLabel];
+            $expected = $this->session[$sessionTokenLabel];
         }
 
         return hash_equals($token, $expected);
-    }
-
-    public function isValidRequest(): bool
-    {
-        $isValid = false;
-        $currentUrl = $this->getCurrentRequestUrl();
-        if (!empty($this->post) && !in_array($currentUrl, $this->excludeUrl, true)) {
-            $isValid = $this->validateRequest();
-        }
-        return $isValid;
     }
 
     /**
@@ -157,8 +145,10 @@ class SecurityManager extends HoneyInput
      */
     public function unsetToken(): void
     {
-        if (!empty($this->session[$this->sessionTokenLabel])) {
-            unset($this->session[$this->sessionTokenLabel]);
+        if (isset($this->post[$this->formTokenIdLabel])) {
+            $tokenId = $this->post[$this->formTokenIdLabel];
+            $sessionTokenLabel = $this->sessionTokenPrefix . $tokenId;
+            unset($this->session[$sessionTokenLabel]);
         }
     }
 }
