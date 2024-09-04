@@ -10,4 +10,7 @@
 
 use CMW\Manager\Loader\Loader;
 
-Loader::createSimpleRoute("/launcher", "pagedeFou.view.php", "minecraft");
+/**
+ * @desc Create a simple route "/hello" with the file "hello.view.php" in the package folder "Core"
+ */
+Loader::createSimpleRoute("/hello", "hello", "Core");

@@ -5,8 +5,8 @@ namespace CMW\Manager\Loader;
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\PackageController;
 use CMW\Manager\Env\EnvManager;
-use CMW\Utils\Directory;
 use CMW\Utils\Website;
+use function is_file;
 
 class AutoLoad
 {
@@ -52,30 +52,25 @@ class AutoLoad
         });
     }
 
-    private static function loadThemeRoutes(): void
+    /**
+     * @return void
+     * @desc Load theme router
+     */
+    private static function loadThemeRouter(): void
     {
         if (EnvManager::getInstance()->getValue("INSTALLSTEP") === '-1') {
             $theme = CoreController::getThemePath();
-            if ($theme) {
-
-                $viewsPath = "$theme/Views/";
-                $dirList = Directory::getFolders($viewsPath);
-
-                foreach ($dirList as $package) {
-                    $packagePath = $viewsPath . $package . "/";
-
-                    $packageDir = Directory::getFiles($packagePath);
-
-                    foreach ($packageDir as $file) {
-                        $packageFile = $packagePath . $file;
-                        if ($file === "router.php" && is_file($packageFile)) {
-                            require_once($packageFile);
-                        }
-                    }
-
-                }
-
+            if (!$theme) {
+                return;
             }
+
+            $routerPath = "$theme/router.php";
+
+            if (!is_file($routerPath)) {
+                return;
+            }
+
+            require_once $routerPath;
         }
     }
 
@@ -224,7 +219,7 @@ class AutoLoad
 
         self::register();
 
-        self::loadThemeRoutes();
+        self::loadThemeRouter();
 
         self::setupSession();
     }

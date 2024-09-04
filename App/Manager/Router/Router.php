@@ -3,13 +3,12 @@
 namespace CMW\Manager\Router;
 
 use Closure;
+use CMW\Manager\Error\ErrorManager;
 use CMW\Manager\Metrics\VisitsMetricsManager;
 use CMW\Manager\Requests\HttpMethodsType;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Security\RateLimiter;
 use CMW\Manager\Security\SecurityManager;
-use CMW\Model\Core\MaintenanceModel;
-use CMW\Utils\Redirect;
 use CMW\Utils\Website;
 use ReflectionMethod;
 
@@ -70,10 +69,13 @@ class Router
                 }
             }
 
-            $request = new Request(url: $this->url, method: 'POST',
+            $request = new Request(
+                url: $this->url,
+                method: 'POST',
                 params: $this->getRouteByUrl($this->url)?->getParams() ?? [],
                 data: $_POST ?? [],
-                emitUrl: $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+                emitUrl: $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],
+            );
 
             $this->callRegisteredRoute($method, $request, ...$values);
         }, name: $link->getName(), weight: $link->getWeight());
@@ -85,8 +87,8 @@ class Router
     private function callRegisteredRoute(ReflectionMethod $method, Request $request, string ...$values): void
     {
         $classInstance = $method->getDeclaringClass()->getMethod("getInstance")->invoke(null);
-        if(!$method->isPrivate()) {
-            //todo warning, method Link must be private !
+        if (!$method->isPrivate()) {
+            ErrorManager::showCustomWarning("Warning", "You can't call a public method in a route.");
         }
         new RateLimiter();
         $method->invoke($classInstance, $request, ...$values);
@@ -238,7 +240,7 @@ class Router
 
         $router = match ($link->getMethod()) {
             Link::GET => $this->registerGetRoute($link, $method),
-            Link::POST => $this->registerPostRoute($link, $method)
+            Link::POST => $this->registerPostRoute($link, $method),
         };
 
         $regexValues = $link->getVariables();

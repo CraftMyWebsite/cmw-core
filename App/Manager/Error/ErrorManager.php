@@ -231,4 +231,27 @@ HTML;
         die();
     }
 
+    /**
+     * @param string $title
+     * @param string $content
+     * @return void
+     * @desc Display a custom error page.
+     */
+    public static function showCustomWarning(string $title, string $content): void
+    {
+        echo <<<HTML
+            <div style="display: flex;
+                        flex-wrap: nowrap;
+                        flex-direction: row;
+                        justify-content: center;
+                        align-items: center;
+                        margin-top: 50px;">
+                <div class="alert-warning">
+                    <b>$title</b>
+                    <br>
+                    $content
+                </div>
+            </div>
+HTML;
+    }
 }
