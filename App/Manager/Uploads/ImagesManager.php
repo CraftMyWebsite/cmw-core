@@ -19,7 +19,7 @@ class ImagesManager
         'image/x-icon' => 'ico',
         'image/vnd.microsoft.icon' => 'ico',
         'image/x-tga' => 'ico',
-        'image/svg+xml' => 'svg'
+        'image/svg+xml' => 'svg',
     ];
 
     /**
@@ -32,7 +32,7 @@ class ImagesManager
      */
     public static function uploadMultiple(array $files, string $dirName = ""): array
     {
-        $toReturn = array();
+        $toReturn = [];
 
         foreach ($files as $file) {
             self::upload($file, $dirName);
@@ -49,15 +49,14 @@ class ImagesManager
      * @param string $customName
      * @return string fileName
      *
-     * @throws \JsonException
+     * @throws \CMW\Manager\Uploads\ImagesException
      * @desc Upload image on the uploads' folder. Files accepted [png, jpeg, jpg, gif, webp, ico, svg].
      */
     public static function upload(array $file, string $dirName = "", bool $keepName = false, string $customName = ""): string
     {
 
-        if (is_uploaded_file($file['tmp_name']) === false) //TODO implements error managements
-        {
-            return "ERROR_INVALID_FILE_DEFINITION";
+        if (is_uploaded_file($file['tmp_name']) === false) {
+            throw new ImagesException("ERROR_INVALID_FILE_DEFINITION");
         }
 
 
@@ -73,7 +72,7 @@ class ImagesManager
 
 
         if (!empty($dirName) && $dirName !== "/" && !is_dir($path)) {
-            return "ERROR_FOLDER_DONT_EXIST";
+            throw new ImagesException("ERROR_FOLDER_DONT_EXIST");
         }
 
         $filePath = $file['tmp_name'];
@@ -86,19 +85,16 @@ class ImagesManager
         $maxFileSize = self::getUploadMaxSizeFileSize();
 
 
-        if (empty($fileSize2) || ($fileSize2[0] === 0) || ($fileSize2[1] === 0 || filesize($filePath) <= 0)) //TODO implements error managements
-        {
-            return "ERROR_EMPTY_FILE";
+        if (empty($fileSize2) || ($fileSize2[0] === 0) || ($fileSize2[1] === 0 || filesize($filePath) <= 0)) {
+            throw new ImagesException("ERROR_EMPTY_FILE");
         }
 
-        if ($fileSize > $maxFileSize) //TODO implements error managements
-        {
-            return "ERROR_FILE_TOO_LARGE";
+        if ($fileSize > $maxFileSize) {
+            throw new ImagesException("ERROR_FILE_TOO_LARGE");
         }
 
-        if (!array_key_exists($fileType, self::$allowedTypes)) //TODO implements error managements
-        {
-            return "ERROR_FILE_NOT_ALLOWED";
+        if (!array_key_exists($fileType, self::$allowedTypes)) {
+            throw new ImagesException("ERROR_FILE_NOT_ALLOWED");
         }
 
         //If $keepName is false, we generate a random name
@@ -117,9 +113,8 @@ class ImagesManager
         $newFilePath = $path . self::$returnName;
 
 
-        if (!copy($filePath, $newFilePath)) //TODO implements error managements
-        {
-            return "ERROR_CANT_MOVE_FILE";
+        if (!copy($filePath, $newFilePath)) {
+            throw new ImagesException("ERROR_CANT_MOVE_FILE");
         }
 
         //Clear image metadata
@@ -137,7 +132,7 @@ class ImagesManager
      */
     private static function createDirectory(string $dirName): void
     {
-        if (!file_exists( EnvManager::getInstance()->getValue('DIR') . "Public/Uploads/" . $dirName) && !mkdir($concurrentDirectory = EnvManager::getInstance()->getValue('DIR') . "Public/Uploads/" . $dirName, 0777, true) && !is_dir($concurrentDirectory)) {
+        if (!file_exists(EnvManager::getInstance()->getValue('DIR') . "Public/Uploads/" . $dirName) && !mkdir($concurrentDirectory = EnvManager::getInstance()->getValue('DIR') . "Public/Uploads/" . $dirName, 0777, true) && !is_dir($concurrentDirectory)) {
             throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
     }

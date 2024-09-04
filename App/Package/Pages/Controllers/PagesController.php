@@ -13,6 +13,7 @@ use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Router\LinkStorage;
 use CMW\Manager\Router\Router;
+use CMW\Manager\Uploads\ImagesException;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Pages\PagesModel;
@@ -129,6 +130,7 @@ class PagesController extends AbstractController
      * @param \CMW\Manager\Requests\Request $request
      * @param string $type => add, edit
      * @return void
+     * @throws \JsonException
      */
     #[Link("/uploadImage/:type", Link::POST, ["type" => ".*?"], "/cmw-admin/pages", secure: false)]
     private function adminPagesUploadImagePost(Request $request, string $type): void
@@ -138,7 +140,7 @@ class PagesController extends AbstractController
         try {
             print(json_encode(ImagesManager::upload($_FILES['image'], "Editor"), JSON_THROW_ON_ERROR));
 
-        } catch (JsonException $e) {
+        } catch (ImagesException $e) {
             echo $e; //todo error
         }
     }

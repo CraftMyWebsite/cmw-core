@@ -3,8 +3,11 @@
 namespace CMW\Manager\Env;
 
 use Closure;
+use CMW\Manager\Error\ErrorManager;
 use CMW\Utils\Utils;
 use Exception;
+use function is_readable;
+use function is_writable;
 
 /**
  * Class: @EnvManager
@@ -22,15 +25,25 @@ class EnvManager
     private string $absPath;
     private string $apiURL;
 
+    /**
+     * @throws \Exception
+     */
     public function __construct()
     {
         $this->absPath = dirname(__DIR__, 3) . "/";
         $this->envPath = $this->absPath;
         $this->path = $this->envPath . $this->envFileName;
-        $this->apiURL = "https://apiv2.craftmywebsite.fr"; //TODO En production mettre la vraie URL de l'API
+        $this->apiURL = "https://apiv2.craftmywebsite.fr";
 
         if (!$this->checkForFile()) {
             $this->createFile();
+        }
+
+        if (!$this->hasReadPerms()) {
+            ErrorManager::showCustomErrorPage(
+                "Permission error:",
+                "The file .env is not readable. Please check the permissions of the file.",
+            );
         }
 
         $this->setDefaultValues();
@@ -153,6 +166,13 @@ class EnvManager
 
     public function addValue(string $key, ?string $value): void
     {
+        if (!$this->hasWritePerms()) {
+            ErrorManager::showCustomErrorPage(
+                "Permission error.",
+                "The file .env is not writable. Please check the permissions of the file.",
+            );
+        }
+
         $key = mb_strtoupper(trim($key));
 
         if (!$this->valueExistInFile($key)) {
@@ -186,6 +206,16 @@ class EnvManager
         return is_file($this->envPath . $this->envFileName);
     }
 
+    private function hasReadPerms(): bool
+    {
+        return is_readable($this->path);
+    }
+
+    private function hasWritePerms(): bool
+    {
+        return is_writable($this->path);
+    }
+
     private function createFile(): void
     {
         fclose(fopen($this->envPath . $this->envFileName, "wb"));
@@ -205,7 +235,7 @@ class EnvManager
      */
     private function generateSalt(): void
     {
-        if ($this->valueExist('SALT') && $this->valueExist('SALT_PASS') && $this->valueExist('SALT_IV')){
+        if ($this->valueExist('SALT') && $this->valueExist('SALT_PASS') && $this->valueExist('SALT_IV')) {
             return;
         }
 
@@ -230,7 +260,7 @@ class EnvManager
 
     private function oneShotCmwVersionFile(): void
     {
-        if ($this->getValue('VERSION') !== null || !file_exists('.cmw-version')){
+        if ($this->getValue('VERSION') !== null || !file_exists('.cmw-version')) {
             return;
         }
 

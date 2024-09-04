@@ -11,6 +11,7 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
+use CMW\Manager\Uploads\ImagesException;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Users\RolesModel;
@@ -80,9 +81,10 @@ class UsersSettingsController extends AbstractController
             try {
                 $newDefaultImage = ImagesManager::upload($defaultPicture, "Users/Default");
                 UsersSettingsModel::updateSetting("defaultImage", $newDefaultImage);
-            } catch (JsonException $e) {
+            } catch (ImagesException $e) {
                 Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                    LangManager::translate("core.toaster.internalError") . " => $e");
+                    LangManager::translate("core.errors.upload.image") . " => " . $e->getMessage());
+                Redirect::redirectPreviousRoute();
             }
 
         }

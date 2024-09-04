@@ -100,7 +100,7 @@ class Package implements IPackageConfig
                         url: 'theme/manage',
                     ),
                     new PackageSubMenuType(
-                        title: 'Thèmes installé',
+                        title: 'Thèmes installés',
                         permission: 'core.themes.manage',
                         url: 'theme/theme',
                     ),

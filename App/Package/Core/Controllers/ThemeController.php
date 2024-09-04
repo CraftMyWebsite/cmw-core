@@ -15,6 +15,7 @@ use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Theme\ThemeManager;
+use CMW\Manager\Uploads\ImagesException;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
@@ -153,20 +154,22 @@ class ThemeController extends AbstractController
             //If file is empty, we don't update the config.
             if ($file['name'] !== "") {
 
-                $imageName = ImagesManager::upload($file, ThemeManager::getInstance()->getCurrentTheme()->name() . "/Img");
-                if (!str_contains($imageName, "ERROR")) {
-                    $remoteImageValue = ThemeModel::getInstance()->getInstance()->fetchConfigValue($conf);
-                    $localImageValue = ThemeManager::getInstance()->getCurrentThemeConfigSetting($conf);
-
-                    if ($remoteImageValue !== $file && $remoteImageValue !== $localImageValue) {
-                        ImagesManager::deleteImage(ThemeManager::getInstance()->getCurrentTheme()->name() . "/Img/$remoteImageValue");
-                    }
-
-                    ThemeModel::getInstance()->getInstance()->updateThemeConfig($conf, $imageName, ThemeManager::getInstance()->getCurrentTheme()->name());
-                } else {
+                try {
+                    $imageName = ImagesManager::upload($file, ThemeManager::getInstance()->getCurrentTheme()->name() . "/Img");
+                } catch (ImagesException $e) {
                     Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                        $conf . " => " . $imageName);
+                        $conf . " => " . $e);
+                    continue;
                 }
+
+                $remoteImageValue = ThemeModel::getInstance()->getInstance()->fetchConfigValue($conf);
+                $localImageValue = ThemeManager::getInstance()->getCurrentThemeConfigSetting($conf);
+
+                if ($remoteImageValue !== $file && $remoteImageValue !== $localImageValue) {
+                    ImagesManager::deleteImage(ThemeManager::getInstance()->getCurrentTheme()->name() . "/Img/$remoteImageValue");
+                }
+
+                ThemeModel::getInstance()->getInstance()->updateThemeConfig($conf, $imageName, ThemeManager::getInstance()->getCurrentTheme()->name());
             }
         }
 

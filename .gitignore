@@ -4,6 +4,9 @@
 # Exclude .cmw-version, it's a generated file.
 .cmw-version
 
+# Ignore sitemap changes
+sitemap.xml
+
 .idea
 .vscode
 __MACOSX/

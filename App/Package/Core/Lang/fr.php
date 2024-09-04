@@ -418,6 +418,9 @@ return [
             'type' => 'Type invalide pour %key%',
         ],
         "editConfiguration" => "Impossible de modifier la configuration %config%",
+        "upload" => [
+            "image" => "Erreur lors de l'envoie de l'image.",
+        ],
     ],
     "permissions" => [
         "dashboard" => "Accès au panel d'administration",
