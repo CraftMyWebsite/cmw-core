@@ -47,8 +47,8 @@ return [
         "status" => "Status de l'utilisateur changé !",
         "error_add" => "Impossible d'ajouter cet utilisateur",
         "success_add" => "Utilisateur %pseudo% ajouté",
-        "edited_not_pass_change" => "Utilisateur mis à jour (mot de passe non modifié)",
-        "edited_pass_change" => "Utilisateur mis à jour (mot de passe modifié)",
+        "edited_not_pass_change" => "Utilisateur mis à jour sans modification de mot de passe",
+        "edited_pass_change" => "Utilisateur mis à jour avec modification de mot de passe",
         "load_permissions_error" => "Impossible de charger les permissions du package %package%",
         "load_permissions_success" => "Permissions chargées avec succès !",
     ],
@@ -74,7 +74,7 @@ return [
         "reset_password" => "Réinitialiser le mot de passe",
     ],
     "blacklist" => [
-        "title" => "Pseudo blacklisté",
+        "title" => "Pseudo en liste noire",
         "table" => [
             "pseudo" => "Pseudo / Nom",
             "date" => "Date",
@@ -104,7 +104,7 @@ return [
             "list_title" => "Liste des rôles",
             "description" => "Description du rôle",
             "name" => "Nom du rôle",
-            "weightTips" => "Plus le chiffre est haut plus le rôle est important",
+            "weightTips" => "Plus le nombre est élevé plus le rôle est important",
             "delete" => [
                 "title" => "Supprimer ",
                 "content" => "La suppression d'un rôle est définitif !<br>Aucun retour possible !",
@@ -121,7 +121,7 @@ return [
     ],
     "modal" => [
         "delete" => "Supprimer",
-        "delete_message" => "La suppression d'un utilisateur est permanente !<br>Aucun retour en arrière n'est possible !",
+        "delete_message" => "La suppression d'un utilisateur est définitive !<br>Aucun retour en arrière n'est possible !",
     ],
     "delete" => [
         "toaster_error" => "Vous ne pouvez pas supprimer le compte avec lequel vous êtes connecté.",
@@ -165,7 +165,7 @@ return [
         "link_profile" => "Accéder à mon profil",
     ],
     "settings" => [
-        "title" => "Paramètres utilisateurs",
+        "title" => "Paramètres utilisateur",
         "desc" => "Gérez les paramètres de la partie utilisateur",
         "default_picture" => "Image de profil par défaut",
         "visualIdentity" => "Identité visuelle",

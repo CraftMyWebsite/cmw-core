@@ -36,7 +36,7 @@ return [
             "db" => "Base de données",
             "name" => "Nom",
             "login" => "Identifiant",
-            "name_about" => "Généralement <code>localhost</code>. Si localhost ne fonctionne pas, veuillez demander l'information à votre hébergeur.",
+            "name_about" => "Généralement <code>localhost</code>. Si localhost ne fonctionne pas, veuillez vous renseigner auprès de votre hébergeur.",
             "port" => "Port",
             "address" => "Adresse",
             "pass" => "Mot de passe"
@@ -70,10 +70,9 @@ return [
         "tags" => "Tags",
         "help" => [
             "title" => "Personnalisez votre installation",
-            "content" => "<b>Informations :</b> Cette étape vous permet en quelques clique d'installer les packages dont vous aurez
+            "content" => "<b>Informations :</b> Cette étape vous permet en quelques clics d'installer les packages dont vous aurez
                 besoin pour bien commencer votre site.<br>
-                Cette configuration n'est pas définitive, il est possible d'en ajouter ou d'en retirer par la suite via votre panel
-                d'administration.<br><br>
+                Cette configuration n'est pas définitive, il est possible d'en ajouter ou d'en retirer par la suite via votre panel d'administration.<br><br>
                 <b>Presets : </b>Les presets sélectionnent pour vous les packages les mieux adaptés à vos besoins, tout en vous offrant la possibilité d'ajouter ou de retirer des options selon vos exigences.<br>",
             "footer" => "**Survolez un package pour en savoir plus"
         ]

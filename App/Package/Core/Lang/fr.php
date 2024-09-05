@@ -81,7 +81,7 @@ return [
         ],
     ],
     "editor" => [
-        "title" => "Configuration Editeur",
+        "title" => "Configuration éditeur",
         "desc" => "Personnaliser l'éditeur de pages",
         "style" => "Style du syntax highlighter",
         "preview" => 'Vous pouvez prévisualiser le rendu des styles <a href="https://highlightjs.org/static/demo/" target="_blank">ici</a>',
@@ -298,8 +298,8 @@ return [
         "publishAt" => "Publié le",
         "errors" => [
             "download" => "Impossible de télécharger la dernière version du CMS.",
-            "nullFileUpdate" => "Cette version n'a pas de fichier de MAJ.",
-            "prepareArchive" => "Impossible de préparer l'archive pour la MAJ.",
+            "nullFileUpdate" => "Cette version n'a pas de fichier de mise à jour.",
+            "prepareArchive" => "Impossible de préparer l'archive pour la mise à jour.",
             "deletedFiles" => "Impossible de supprimer les anciens fichiers.",
             "deleteFile" => "Impossible de supprimer le fichier %file%",
             "sqlUpdate" => "Impossible de mettre à jour la base de données.",

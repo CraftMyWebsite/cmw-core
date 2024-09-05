@@ -2,8 +2,8 @@
 
 const CLI_EMPTY_ARGS = "Pour obtenir plus d'aide → LIENS DU WIKI CLI \n\n 
                         Liste des commandes disponibles: 
-                        \n > cmw theme-init => Lancez le buildeur de thèmes
-                        \n > cmw package-init => Lancez le buildeur de packages";
+                        \n > cmw theme-init => Lancez le constructeur de thèmes
+                        \n > cmw package-init => Lancez le constructeur de packages";
 
 const CLI_THEME_BUILDER_NAME = "Entrez le nom du thème";
 const CLI_THEME_BUILDER_VERSION = "Entrez la version du thème";
