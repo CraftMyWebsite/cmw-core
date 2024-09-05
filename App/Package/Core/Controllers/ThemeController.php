@@ -12,7 +12,7 @@ use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
-use CMW\Manager\Requests\Request;
+
 use CMW\Manager\Router\Link;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Uploads\ImagesException;
@@ -98,7 +98,7 @@ class ThemeController extends AbstractController
     }
 
     #[NoReturn] #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/theme")]
-    private function adminThemeInstallation(Request $request, int $id): void
+    private function adminThemeInstallation(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.manage");
 
@@ -195,7 +195,7 @@ class ThemeController extends AbstractController
     }
 
     #[Link("/update/:id/:actualVersion/:themeName", Link::GET, ["id" => "[0-9]+", "actualVersion" => ".*?", "themeName" => ".*?"], "/cmw-admin/theme")]
-    #[NoReturn] private function adminThemeUpdate(Request $request, int $id, string $actualVersion, string $themeName): void
+    #[NoReturn] private function adminThemeUpdate(int $id, string $actualVersion, string $themeName): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.manage");
 

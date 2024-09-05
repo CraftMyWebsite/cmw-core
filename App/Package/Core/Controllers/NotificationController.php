@@ -9,7 +9,7 @@ use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Notification\NotificationModel;
 use CMW\Manager\Package\AbstractController;
-use CMW\Manager\Requests\Request;
+
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Utils\Redirect;
@@ -25,7 +25,7 @@ use JetBrains\PhpStorm\NoReturn;
 class NotificationController extends AbstractController
 {
     #[NoReturn] #[Link("/notification/read/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin")]
-    private function readNotification(Request $request, int $id): void
+    private function readNotification(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.notification.read");
 
@@ -35,7 +35,7 @@ class NotificationController extends AbstractController
     }
 
     #[NoReturn] #[Link("/notification/unRead/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin")]
-    private function unReadNotification(Request $request, int $id): void
+    private function unReadNotification(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.notification.read");
 
@@ -66,7 +66,7 @@ class NotificationController extends AbstractController
     }
 
     #[NoReturn] #[Link("/notification/goTo/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin")]
-    private function goToNotification(Request $request, int $id): void
+    private function goToNotification(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.notification.read");
 

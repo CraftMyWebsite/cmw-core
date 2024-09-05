@@ -19,7 +19,7 @@ use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Loader\Loader;
 use CMW\Manager\Package\AbstractController;
-use CMW\Manager\Requests\Request;
+
 use CMW\Manager\Router\Link;
 use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Twofa\TwoFaManager;
@@ -180,7 +180,7 @@ class UsersController extends AbstractController
     }
 
     #[Link("/getUser/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
-    private function adminGetUser(Request $request, int $id): void
+    private function adminGetUser(int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.manage.edit");
 
@@ -217,7 +217,7 @@ class UsersController extends AbstractController
 
 
     #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users/manage")]
-    private function adminUsersEdit(Request $request, int $id): void
+    private function adminUsersEdit(int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.manage.edit");
 
@@ -233,7 +233,7 @@ class UsersController extends AbstractController
     }
 
     #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users/manage")]
-    #[NoReturn] private function adminUsersEditPost(Request $request, int $id): void
+    #[NoReturn] private function adminUsersEditPost(int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.manage.edit");
 
@@ -290,7 +290,7 @@ class UsersController extends AbstractController
     }
 
     #[Link("/manage/state/:id/:state", Link::GET, ["id" => "[0-9]+", "state" => "[0-9]+"], "/cmw-admin/users")]
-    #[NoReturn] private function adminUserState(Request $request, int $id, int $state): void
+    #[NoReturn] private function adminUserState(int $id, int $state): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.manage.edit");
 
@@ -311,7 +311,7 @@ class UsersController extends AbstractController
     }
 
     #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users")]
-    #[NoReturn] private function adminUsersDelete(Request $request, int $id): void
+    #[NoReturn] private function adminUsersDelete(int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.manage.delete");
 
@@ -336,7 +336,7 @@ class UsersController extends AbstractController
     }
 
     #[Link("/picture/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/users/manage")]
-    #[NoReturn] private function adminUsersEditPicturePost(Request $request, int $id): void
+    #[NoReturn] private function adminUsersEditPicturePost(int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.manage.edit");
 
@@ -345,7 +345,7 @@ class UsersController extends AbstractController
     }
 
     #[Link("/picture/reset/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/users/manage")]
-    #[NoReturn] private function adminUsersResetPicture(Request $request, int $id): void
+    #[NoReturn] private function adminUsersResetPicture(int $id): void
     {
         self::redirectIfNotHavePermissions("core.dashboard", "users.edit");
 
@@ -702,7 +702,7 @@ class UsersController extends AbstractController
     }
 
     #[Link('/profile/:pseudo', Link::GET, ['pseudo' => '.*?'])]
-    private function publicProfileWithPseudo(Request $request, string $pseudo): void
+    private function publicProfileWithPseudo(string $pseudo): void
     {
         if (!self::isUserLogged() && !UserSettingsEntity::getInstance()->isProfilePageEnabled()) {
             Redirect::redirect('login');
@@ -733,7 +733,7 @@ class UsersController extends AbstractController
     }
 
     #[NoReturn] #[Link("/profile/delete/:id", Link::GET, ["id" => "[0-9]+"])]
-    private function publicProfileDelete(Request $request, int $id): void
+    private function publicProfileDelete(int $id): void
     {
         //Check if this is the current user account
         if (UsersModel::getCurrentUser()?->getId() !== $id) {

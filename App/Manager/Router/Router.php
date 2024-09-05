@@ -91,7 +91,10 @@ class Router
             ErrorManager::showCustomWarning("Warning", "You can't call a public method in a route.");
         }
         new RateLimiter();
-        $method->invoke($classInstance, $request, ...$values);
+
+        $args = [...$values, $request];
+
+        $method->invoke($classInstance, ...$args);
     }
 
     private function generateRouteName(ReflectionMethod $method): string

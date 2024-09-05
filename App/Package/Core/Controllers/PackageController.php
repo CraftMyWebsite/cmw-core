@@ -12,7 +12,7 @@ use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Package\IPackageConfig;
-use CMW\Manager\Requests\Request;
+
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Utils\Directory;
@@ -158,7 +158,7 @@ class PackageController extends AbstractController
     }
 
     #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/packages")]
-    #[NoReturn] private function adminPackageInstallation(Request $request, int $id): void
+    #[NoReturn] private function adminPackageInstallation(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.market");
 
@@ -185,7 +185,7 @@ class PackageController extends AbstractController
     }
 
     #[Link("/delete/:package", Link::GET, ["package" => ".*?"], "/cmw-admin/packages")]
-    #[NoReturn] private function adminPackageDelete(Request $request, string $package): void
+    #[NoReturn] private function adminPackageDelete(string $package): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.manage");
 
@@ -204,7 +204,7 @@ class PackageController extends AbstractController
     }
 
     #[Link("/update/:id/:actualVersion/:packageName", Link::GET, ["id" => "[0-9]+", "actualVersion" => ".*?", "packageName" => ".*?"], "/cmw-admin/packages")]
-    #[NoReturn] private function adminPackageUpdate(Request $request, int $id, string $actualVersion, string $packageName): void
+    #[NoReturn] private function adminPackageUpdate(int $id, string $actualVersion, string $packageName): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.manage");
 

@@ -13,7 +13,6 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Loader\Loader;
 use CMW\Manager\Metrics\VisitsMetricsManager;
 use CMW\Manager\Package\AbstractController;
-use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Uploads\ImagesException;
 use CMW\Manager\Uploads\ImagesManager;
@@ -107,7 +106,7 @@ class CoreController extends AbstractController
     }
 
     #[NoReturn] #[Link(path: "/configuration", method: Link::POST, scope: "/cmw-admin")]
-    private function adminConfigurationPost(Request $request): void
+    private function adminConfigurationPost(): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.website");
 

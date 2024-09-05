@@ -9,7 +9,7 @@ use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
-use CMW\Manager\Requests\Request;
+
 use CMW\Manager\Router\Link;
 use CMW\Manager\Uploads\ImagesException;
 use CMW\Manager\Uploads\ImagesManager;
@@ -151,7 +151,7 @@ class UsersSettingsController extends AbstractController
     }
 
     #[NoReturn] #[Link("/settings/blacklist/pseudo/edit/:id", Link::POST, ['id' => "[0-9]+"], "/cmw-admin/users")]
-    private function editPseudoBlacklistPost(Request $request, int $id): void
+    private function editPseudoBlacklistPost(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings.blacklist.edit");
 
@@ -173,7 +173,7 @@ class UsersSettingsController extends AbstractController
     }
 
     #[NoReturn] #[Link("/settings/blacklist/pseudo/delete/:id", Link::GET, ['id' => "[0-9]+"], "/cmw-admin/users")]
-    private function deletePseudoBlacklisted(Request $request, int $id): void
+    private function deletePseudoBlacklisted(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.settings.blacklist.delete");
 

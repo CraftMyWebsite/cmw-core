@@ -11,7 +11,7 @@ use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
-use CMW\Manager\Requests\Request;
+
 use CMW\Manager\Router\Link;
 use CMW\Manager\Router\LinkStorage;
 use CMW\Manager\Security\EncryptManager;
@@ -141,7 +141,7 @@ class InstallerController extends AbstractController
     }
 
     #[Link(path: "/lang/:code", method: Link::GET, variables: ["code" => ".*?"], scope: "/installer")]
-    public function changeLang(Request $request, string $code): void
+    public function changeLang(string $code): void
     {
         EnvManager::getInstance()->setOrEditValue("LOCALE", $code);
         header("location: ../../installer");

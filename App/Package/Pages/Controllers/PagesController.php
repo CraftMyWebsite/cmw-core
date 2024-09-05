@@ -2,14 +2,12 @@
 
 namespace CMW\Controller\Pages;
 
-use CMW\Controller\Core\EditorController;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Error\ErrorManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
-use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Router\LinkStorage;
 use CMW\Manager\Router\Router;
@@ -21,7 +19,6 @@ use CMW\Model\Users\UsersModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\NoReturn;
-use JsonException;
 
 /**
  * Class: @pagesController
@@ -79,7 +76,7 @@ class PagesController extends AbstractController
     }
 
     #[Link("/edit/:slug", Link::GET, ["slug" => ".*?"], "/cmw-admin/pages")]
-    private function adminPagesEdit(Request $request, string $slug): void
+    private function adminPagesEdit(string $slug): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.show.edit");
 
@@ -94,7 +91,7 @@ class PagesController extends AbstractController
     }
 
     #[Link("/edit/:slug", Link::POST, [], "/cmw-admin/pages")]
-    private function adminPagesEditPost(Request $request, string $slug): void
+    private function adminPagesEditPost(string $slug): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.show.edit");
 
@@ -114,7 +111,7 @@ class PagesController extends AbstractController
     }
 
     #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/pages")]
-    #[NoReturn] private function adminPagesDelete(Request $request, int $id): void
+    #[NoReturn] private function adminPagesDelete(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "pages.show.delete");
 
@@ -127,13 +124,12 @@ class PagesController extends AbstractController
     }
 
     /**
-     * @param \CMW\Manager\Requests\Request $request
      * @param string $type => add, edit
      * @return void
      * @throws \JsonException
      */
     #[Link("/uploadImage/:type", Link::POST, ["type" => ".*?"], "/cmw-admin/pages", secure: false)]
-    private function adminPagesUploadImagePost(Request $request, string $type): void
+    private function adminPagesUploadImagePost(string $type): void
     {
         UsersController::hasPermission("core.dashboard", "pages.show." . (($type === "add") ? "add" : "edit"));
 
@@ -151,7 +147,7 @@ class PagesController extends AbstractController
      * @throws \CMW\Manager\Router\RouterException
      */
     #[Link('/:slug', Link::GET, ["slug" => ".*?"], weight: 0)]
-    private function publicShowPage(Request $request, string $slug): void
+    private function publicShowPage(string $slug): void
     {
         $pageEntity = PagesModel::getInstance()->getPageBySlug($slug);
 

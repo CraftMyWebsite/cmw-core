@@ -7,7 +7,7 @@ use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
-use CMW\Manager\Requests\Request;
+
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Users\PermissionsModel;
@@ -68,7 +68,7 @@ class RolesController extends AbstractController
     }
 
     #[Link("/edit/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles/manage")]
-    private function adminRolesEdit(Request $request, int $id): void
+    private function adminRolesEdit(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.edit");
 
@@ -92,7 +92,7 @@ class RolesController extends AbstractController
     }
 
     #[Link("/edit/:id", Link::POST, ["id" => "[0-9]+"], "/cmw-admin/roles/manage")]
-    #[NoReturn] private function adminRolesEditPost(Request $request, int $id): void
+    #[NoReturn] private function adminRolesEditPost(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.edit");
 
@@ -111,7 +111,7 @@ class RolesController extends AbstractController
     }
 
     #[Link("/set_default/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
-    #[NoReturn] private function adminRolesSetDefault(Request $request, int $id): void
+    #[NoReturn] private function adminRolesSetDefault(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.edit");
 
@@ -124,7 +124,7 @@ class RolesController extends AbstractController
     }
 
     #[Link("/delete/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
-    #[NoReturn] private function adminRolesDelete(Request $request, int $id): void
+    #[NoReturn] private function adminRolesDelete(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.delete");
 
@@ -146,7 +146,7 @@ class RolesController extends AbstractController
     }
 
     #[Link("/getRole/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/roles")]
-    private function adminGetRole(Request $request, int $id): void
+    private function adminGetRole(int $id): void
     {
         UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles");
 
