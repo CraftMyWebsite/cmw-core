@@ -61,8 +61,8 @@ use CMW\Utils\Website;
         --light-scrollbar-hover : #64748b;
         --light-scrollbar-bg : #e2e8f0;
 
-        --dark-primary: #030712;
-        --dark-secondary: #111827;
+        --dark-primary: #0d1220; /* (previous) #030712 */
+        --dark-secondary: #111828; /* (previous) #111827 */
         --dark-third: #334155;
         --dark-fourth: #1e293b;
         --dark-text-primary: #e5e7eb;
