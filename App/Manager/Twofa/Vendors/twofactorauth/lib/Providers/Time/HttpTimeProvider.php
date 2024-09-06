@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace RobThree\Auth\Providers\Time;
 
@@ -50,7 +48,7 @@ class HttpTimeProvider implements ITimeProvider
     public function getTime()
     {
         try {
-            $context  = stream_context_create($this->options);
+            $context = stream_context_create($this->options);
             $fd = fopen($this->url, 'rb', false, $context);
             $headers = stream_get_meta_data($fd);
             fclose($fd);

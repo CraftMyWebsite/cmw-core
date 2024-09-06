@@ -3,22 +3,20 @@ namespace CMW\Cli;
 
 use CMW\Manager\Env\EnvManager;
 
-
-class CliBuilder{
+class CliBuilder
+{
     protected EnvManager $envBuilder;
-
 
     public function __construct()
     {
         $this->envBuilder = new EnvManager();
-
 
         $this->loadLang();
     }
 
     private function loadLang(): void
     {
-        require_once("App/Cli/Utils/Lang/" . $this->envBuilder->getValue("LOCALE") . ".php");
+        require_once ('App/Cli/Utils/Lang/' . $this->envBuilder->getValue('LOCALE') . '.php');
     }
 
     public function emptyArgs(): void
@@ -28,23 +26,22 @@ class CliBuilder{
 
     /* UTILS FUNCTIONS */
 
-    public function say(string... $contents): void
+    public function say(string ...$contents): void
     {
-        foreach($contents as $content) {
+        foreach ($contents as $content) {
             echo "$content ";
         }
     }
 
-    public function sayLn(string... $contents): void
+    public function sayLn(string ...$contents): void
     {
-        foreach($contents as $content) {
+        foreach ($contents as $content) {
             echo "\n$content\n";
         }
     }
 
     public function read(): ?string
     {
-        return readline("> ");
+        return readline('> ');
     }
-
 }

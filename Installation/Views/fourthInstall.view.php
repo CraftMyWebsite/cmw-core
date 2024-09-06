@@ -44,7 +44,7 @@ use CMW\Manager\Lang\LangManager;
                 <div class="px-3 pb-3">
 
                     <!-- List packages -->
-                    <?php foreach (PublicAPI::getData("market/resources/filtered/1") as $package): ?>
+                    <?php foreach (PublicAPI::getData('market/resources/filtered/1') as $package): ?>
                         <?php
                         $tags = [];
 
@@ -52,7 +52,7 @@ use CMW\Manager\Lang\LangManager;
                             $tags[] = $tag['value'];
                         }
 
-                        $tags = implode(",", $tags);
+                        $tags = implode(',', $tags);
                         ?>
                         <li onmouseenter="showInfoPackage('<?= $package['name'] ?>','<?= $package['description'] ?>', '<?= $tags ?>',
                             '<?= $package['author_pseudo'] ?>', '<?= $package['price'] ?>', '<?= $package['downloads'] ?>',
@@ -61,7 +61,7 @@ use CMW\Manager\Lang\LangManager;
                             <input class="hidden" id="package_<?= $package['id'] ?>" type="checkbox" name="packages[]"
                                    value="<?= $package['id'] ?>">
                             <label class="label flex justify-start gap-2" for="package_<?= $package['id'] ?>">
-                                <img src='<?= $package["icon"] ?>'
+                                <img src='<?= $package['icon'] ?>'
                                      style="max-height: 32px; max-width: 32px"
                                      class="rounded" alt="Logo <?= $package['name'] ?>">
                                 <span class="font-medium text-lg"><?= $package['name'] ?></span>
@@ -76,11 +76,11 @@ use CMW\Manager\Lang\LangManager;
         <!-- Help card -->
         <div class="rounded-2xl bg-gray-800  h-fit sticky top-10">
             <h2 id="PackageName" class="font-bold text-lg text-center bg-gray-700 rounded-t-2xl p-1">
-                <?= LangManager::translate("Installation.packages.help.title") ?>
+                <?= LangManager::translate('Installation.packages.help.title') ?>
             </h2>
             <div class="p-4">
                 <p id="PackageInfo" class="mb-2">
-                    <?= LangManager::translate("Installation.packages.help.content") ?>
+                    <?= LangManager::translate('Installation.packages.help.content') ?>
                 </p>
                 <div id="Author"></div>
                 <div id="Download"></div>
@@ -91,7 +91,7 @@ use CMW\Manager\Lang\LangManager;
             </div>
             <div id="Price" class="text-lg text-center bg-gray-700 rounded-b-2xl p-1">
                 <small class="mt-2">
-                    <?= LangManager::translate("Installation.packages.help.footer") ?>
+                    <?= LangManager::translate('Installation.packages.help.footer') ?>
                 </small>
             </div>
         </div>
@@ -99,7 +99,7 @@ use CMW\Manager\Lang\LangManager;
 
     <div class="card-actions justify-end mt-4">
         <button id="formBtn" type="submit" class="btn btn-primary">
-            <?= LangManager::translate("core.btn.next") ?>
+            <?= LangManager::translate('core.btn.next') ?>
         </button>
     </div>
 </form>

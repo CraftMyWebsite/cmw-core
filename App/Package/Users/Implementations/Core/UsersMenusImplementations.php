@@ -7,7 +7,6 @@ use CMW\Manager\Lang\LangManager;
 
 class UsersMenusImplementations implements IMenus
 {
-
     public function getRoutes(): array
     {
         return [

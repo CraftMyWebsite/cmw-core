@@ -9,6 +9,7 @@ class PackageMenuType
     private string $title;
     private ?string $url;
     private ?string $permission;
+
     /* @var \CMW\Manager\Package\PackageSubMenuType[]|null $subMenus */
     private ?array $subMenus;
 

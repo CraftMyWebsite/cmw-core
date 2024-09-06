@@ -10,17 +10,17 @@ class Package implements IPackageConfig
 {
     public function name(): string
     {
-        return "Users";
+        return 'Users';
     }
 
     public function version(): string
     {
-        return "0.0.1";
+        return '0.0.1';
     }
 
     public function authors(): array
     {
-        return ["CraftMyWebsiteTeam"];
+        return ['CraftMyWebsiteTeam'];
     }
 
     public function isGame(): bool
@@ -37,9 +37,9 @@ class Package implements IPackageConfig
     {
         return [
             new PackageMenuType(
-                lang: "fr",
-                icon: "fas fa-user",
-                title: "Utilisateurs",
+                lang: 'fr',
+                icon: 'fas fa-user',
+                title: 'Utilisateurs',
                 url: null,
                 permission: null,
                 subMenus: [
@@ -61,9 +61,9 @@ class Package implements IPackageConfig
                 ],
             ),
             new PackageMenuType(
-                lang: "en",
-                icon: "fas fa-user",
-                title: "Users",
+                lang: 'en',
+                icon: 'fas fa-user',
+                title: 'Users',
                 url: null,
                 permission: null,
                 subMenus: [
@@ -89,7 +89,7 @@ class Package implements IPackageConfig
 
     public function requiredPackages(): array
     {
-        return ["Core"];
+        return ['Core'];
     }
 
     /**
@@ -98,7 +98,7 @@ class Package implements IPackageConfig
      */
     public function uninstall(): bool
     {
-        //Return true, we don't need other operations for uninstall.
+        // Return true, we don't need other operations for uninstall.
         return false;
     }
 }

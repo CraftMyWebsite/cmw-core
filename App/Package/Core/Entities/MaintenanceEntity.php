@@ -6,7 +6,6 @@ use CMW\Controller\Core\CoreController;
 
 class MaintenanceEntity
 {
-
     private bool $isEnable;
     private ?string $title;
     private ?string $description;

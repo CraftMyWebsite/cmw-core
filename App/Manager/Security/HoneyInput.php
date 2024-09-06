@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CMW\Manager\Security;
-
 
 class HoneyInput
 {
@@ -21,7 +19,6 @@ class HoneyInput
      */
     protected function checkHoneyInput(): bool
     {
-        return filter_input(INPUT_POST, "honeyInput") === '';
+        return filter_input(INPUT_POST, 'honeyInput') === '';
     }
-
 }

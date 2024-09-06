@@ -3,12 +3,11 @@
 namespace CMW\Manager\Requests;
 
 use CMW\Model\Core\CoreModel;
-use DateTime;
 use JetBrains\PhpStorm\ExpectedValues;
+use DateTime;
 
 class Validator
 {
-
     /**
      * @var array
      */
@@ -47,10 +46,12 @@ class Validator
      * @param mixed $key
      * @return $this
      */
-    public function checkType(#[ExpectedValues(["boolean", "integer", "double", "string", "array", "object", "mixed"])]
-                              string $type,
-                              mixed  $key): self
-    {
+    public function checkType(
+        #[ExpectedValues(['boolean', 'integer', 'double', 'string', 'array', 'object', 'mixed'])]
+        string $type,
+
+        mixed $key
+    ): self {
         $value = $this->getValue($key);
 
         if (gettype($value) !== $type) {
@@ -127,11 +128,10 @@ class Validator
     public function dateTime(string $key): self
     {
         $value = $this->getValue($key);
-        $format = (new CoreModel())->fetchOption("dateFormat");
+        $format = (new CoreModel())->fetchOption('dateFormat');
 
         $date = DateTime::createFromFormat($format, $value);
         $errors = DateTime::getLastErrors();
-
 
         if ($errors['error_count'] > 0 || $errors['warning_count']) {
             $this->addError($key, 'dateTime', [$format]);
@@ -165,5 +165,4 @@ class Validator
     {
         return empty($this->errors);
     }
-
 }

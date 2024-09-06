@@ -7,7 +7,6 @@ use CMW\Manager\Lang\LangManager;
 
 class CoreMenusImplementations implements IMenus
 {
-
     public function getRoutes(): array
     {
         return [
@@ -20,6 +19,6 @@ class CoreMenusImplementations implements IMenus
 
     public function getPackageName(): string
     {
-        return "Core";
+        return 'Core';
     }
 }

@@ -2,10 +2,11 @@
 
 namespace CMW\Manager\Env;
 
-use Closure;
 use CMW\Manager\Error\ErrorManager;
 use CMW\Utils\Utils;
+use Closure;
 use Exception;
+
 use function is_readable;
 use function is_writable;
 
@@ -19,7 +20,7 @@ class EnvManager
 {
     private static EnvManager $_instance;
 
-    private string $envFileName = ".env";
+    private string $envFileName = '.env';
     private string $envPath;
     private string $path;
     private string $absPath;
@@ -30,10 +31,10 @@ class EnvManager
      */
     public function __construct()
     {
-        $this->absPath = dirname(__DIR__, 3) . "/";
+        $this->absPath = dirname(__DIR__, 3) . '/';
         $this->envPath = $this->absPath;
         $this->path = $this->envPath . $this->envFileName;
-        $this->apiURL = "https://apiv2.craftmywebsite.fr";
+        $this->apiURL = 'https://apiv2.craftmywebsite.fr';
 
         if (!$this->checkForFile()) {
             $this->createFile();
@@ -41,8 +42,8 @@ class EnvManager
 
         if (!$this->hasReadPerms()) {
             ErrorManager::showCustomErrorPage(
-                "Permission error:",
-                "The file .env is not readable. Please check the permissions of the file.",
+                'Permission error:',
+                'The file .env is not readable. Please check the permissions of the file.',
             );
         }
 
@@ -76,7 +77,6 @@ class EnvManager
         }
 
         foreach ($lines as $line) {
-
             if (str_starts_with(trim($line), '#')) {
                 continue;
             }
@@ -151,8 +151,7 @@ class EnvManager
         $key = mb_strtoupper(trim($key));
 
         if ($this->valueExist($key)) {
-
-            $buildLine = trim($key . "=" . $this->getValue($key)) . PHP_EOL;
+            $buildLine = trim($key . '=' . $this->getValue($key)) . PHP_EOL;
 
             $contents = file_get_contents($this->path);
             $contents = str_replace($buildLine, '', $contents);
@@ -168,8 +167,8 @@ class EnvManager
     {
         if (!$this->hasWritePerms()) {
             ErrorManager::showCustomErrorPage(
-                "Permission error.",
-                "The file .env is not writable. Please check the permissions of the file.",
+                'Permission error.',
+                'The file .env is not writable. Please check the permissions of the file.',
             );
         }
 
@@ -178,7 +177,7 @@ class EnvManager
         if (!$this->valueExistInFile($key)) {
             $file = fopen($this->envPath . $this->envFileName, 'ab');
             $textToSet = static function (string $key, ?string $value) {
-                return $key . "=" . trim($value ?? 'UNDEFINED') . PHP_EOL;
+                return $key . '=' . trim($value ?? 'UNDEFINED') . PHP_EOL;
             };
 
             $res = $textToSet($key, $value);
@@ -218,15 +217,15 @@ class EnvManager
 
     private function createFile(): void
     {
-        fclose(fopen($this->envPath . $this->envFileName, "wb"));
+        fclose(fopen($this->envPath . $this->envFileName, 'wb'));
     }
 
     private function setDefaultValues(): void
     {
-        $this->addValue("installStep", 0);
-        $this->addValue("dir", $this->absPath);
-        $this->addValue("devMode", 0);
-        $this->addValue("APIURL", $this->apiURL);
+        $this->addValue('installStep', 0);
+        $this->addValue('dir', $this->absPath);
+        $this->addValue('devMode', 0);
+        $this->addValue('APIURL', $this->apiURL);
         $this->generateSalt();
     }
 
@@ -265,9 +264,8 @@ class EnvManager
         }
 
         $data = file_get_contents('.cmw-version');
-        $this->addValue("VERSION", $data);
+        $this->addValue('VERSION', $data);
 
         unlink('.cmw-version');
     }
-
 }

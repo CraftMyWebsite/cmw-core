@@ -22,7 +22,6 @@ use JsonException;
  */
 class PermissionsController extends AbstractController
 {
-
     /**
      * @return \CMW\Entity\Users\PermissionEntity[]
      */
@@ -31,14 +30,14 @@ class PermissionsController extends AbstractController
         return PermissionsModel::getInstance()->getParents();
     }
 
-    #[Link("/permissions/import", Link::GET, [], "/cmw-admin/roles")]
+    #[Link('/permissions/import', Link::GET, [], '/cmw-admin/roles')]
     private function adminImportPermissions(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "users.roles.manage");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'users.roles.manage');
 
         if ($this->reloadPackagesPermissions()) {
-            Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-                LangManager::translate("users.toaster.load_permissions_success"));
+            Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+                LangManager::translate('users.toaster.load_permissions_success'));
         }
         Redirect::redirectPreviousRoute();
     }
@@ -51,7 +50,7 @@ class PermissionsController extends AbstractController
             foreach ($packages as $package) {
                 $packageName = $package->name();
 
-                $initFolder = EnvManager::getInstance()->getValue("dir") . "App/Package/$packageName/Init";
+                $initFolder = EnvManager::getInstance()->getValue('dir') . "App/Package/$packageName/Init";
 
                 if (!is_dir($initFolder)) {
                     continue;
@@ -76,7 +75,5 @@ class PermissionsController extends AbstractController
         } else {
             return false;
         }
-
     }
-
 }

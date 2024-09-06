@@ -5,6 +5,7 @@ use CMW\Entity\Users\RoleEntity;
 use CMW\Manager\Lang\LangManager;
 use CMW\Model\USers\PermissionsModel;
 use CMW\Model\Users\RolesModel;
+
 /**
  * @param \CMW\Entity\Users\PermissionEntity[] $permissionList
  */
@@ -27,12 +28,12 @@ function showPermission(PermissionsModel $permissionModel, array $permissionList
             }
         }
 
-        $disabled = $isAdminRole ? "hidden" : "";
-        $check = $hasRole ? "checked" : "";
+        $disabled = $isAdminRole ? 'hidden' : '';
+        $check = $hasRole ? 'checked' : '';
 
-        $paddingClass = $depth > 0 ? "pl-6" : "";
-        $operatorClass = $packageTranslate === "Operator" ? "operator-permission" : "permission-item";
-        $dataParentId = $hasParent ? "data-parent-id='{$p->getParent()->getId()}'" : "";
+        $paddingClass = $depth > 0 ? 'pl-6' : '';
+        $operatorClass = $packageTranslate === 'Operator' ? 'operator-permission' : 'permission-item';
+        $dataParentId = $hasParent ? "data-parent-id='{$p->getParent()->getId()}'" : '';
 
         if (!$hasParent) {
             echo "<div class='$operatorClass $paddingClass'>";
@@ -40,16 +41,16 @@ function showPermission(PermissionsModel $permissionModel, array $permissionList
             echo "<div class='checkbox'>";
             echo "<input id='{$p->getId()}' type='checkbox' value='{$p->getId()}' name='perms[{$p->getId()}]' $check $dataParentId>";
             echo "<label for='{$p->getId()}'><h6>$packageTranslate</h6></label>";
-            echo "</div></div>";
+            echo '</div></div>';
 
-            if ($packageTranslate === "Operator") {
+            if ($packageTranslate === 'Operator') {
                 if ($isAdminRole) {
                     echo "<div class='alert-warning'>";
-                    echo "<p><i class='fa-solid fa-circle-info'></i>" . LangManager::translate("users.roles.perms.admin_warning") ."</p>";
-                    echo "</div>";
+                    echo "<p><i class='fa-solid fa-circle-info'></i>" . LangManager::translate('users.roles.perms.admin_warning') . '</p>';
+                    echo '</div>';
                 } else {
                     echo "<div class='rounded-b-lg border-b border-l border-r p-4'>";
-                    echo "<p>" . LangManager::translate("users.roles.perms.operator") ."</p>";
+                    echo '<p>' . LangManager::translate('users.roles.perms.operator') . '</p>';
                 }
             } else {
                 echo "<div class='rounded-b-lg border-b border-l border-r p-4'>";
@@ -66,23 +67,23 @@ function showPermission(PermissionsModel $permissionModel, array $permissionList
         }
 
         if ($hasParent) {
-            echo "</div>";
+            echo '</div>';
         }
 
         if (!$hasParent) {
-            echo "</div></div>";
+            echo '</div></div>';
         }
     }
 }
 
 function generateCheckBox(PermissionEntity $permission, bool $checked = false, ?int $parentId = null): string
 {
-    $check = $checked ? "checked" : "";
-    $dataParentId = $parentId ? "data-parent-id='{$parentId}'" : "";
+    $check = $checked ? 'checked' : '';
+    $dataParentId = $parentId ? "data-parent-id='{$parentId}'" : '';
     return <<<HTML
-        <div class="checkbox permission-item">
-            <input id="{$permission->getId()}" type="checkbox" name="perms[{$permission->getId()}]" value="{$permission->getId()}" $check $dataParentId>
-            <label for="{$permission->getId()}">{$permission->getDescription()}</label>
-        </div>
-HTML;
+                <div class="checkbox permission-item">
+                    <input id="{$permission->getId()}" type="checkbox" name="perms[{$permission->getId()}]" value="{$permission->getId()}" $check $dataParentId>
+                    <label for="{$permission->getId()}">{$permission->getDescription()}</label>
+                </div>
+        HTML;
 }

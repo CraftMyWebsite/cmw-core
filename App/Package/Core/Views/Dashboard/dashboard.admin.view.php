@@ -4,14 +4,13 @@ use CMW\Controller\Core\CoreController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Metrics\VisitsMetricsManager;
-use CMW\Model\Users\UsersModel;
 use CMW\Model\Core\CoreModel;
+use CMW\Model\Users\UsersModel;
 use CMW\Utils\Utils;
 use CMW\Utils\Website;
 
-Website::setTitle(LangManager::translate("core.dashboard.title"));
-Website::setDescription(LangManager::translate("core.dashboard.desc"));
-
+Website::setTitle(LangManager::translate('core.dashboard.title'));
+Website::setDescription(LangManager::translate('core.dashboard.desc'));
 
 /* @var array $monthlyVisits */
 /* @var array $dailyVisits */
@@ -25,24 +24,24 @@ Website::setDescription(LangManager::translate("core.dashboard.desc"));
     pendant que nous travaillons sur CraftMyWebsite.
 </div>
 
-<h3><i class="fa-solid fa-chart-pie"></i> <?= LangManager::translate("core.dashboard.title") ?></h3>
+<h3><i class="fa-solid fa-chart-pie"></i> <?= LangManager::translate('core.dashboard.title') ?></h3>
 
 <div class="grid-4">
     <div class="card col-span-3">
-        <h6><?= LangManager::translate("core.dashboard.numbers_views") ?></h6>
+        <h6><?= LangManager::translate('core.dashboard.numbers_views') ?></h6>
         <div class="tab-menu">
             <ul class="tab-horizontal" data-tabs-toggle="#tab-content-1">
                 <li>
                     <button data-tabs-target="#tab1"
-                            role="tab"><?= LangManager::translate("core.dashboard.days") ?></button>
+                            role="tab"><?= LangManager::translate('core.dashboard.days') ?></button>
                 </li>
                 <li>
                     <button data-tabs-target="#tab2"
-                            role="tab"><?= LangManager::translate("core.dashboard.weeks") ?></button>
+                            role="tab"><?= LangManager::translate('core.dashboard.weeks') ?></button>
                 </li>
                 <li>
                     <button data-tabs-target="#tab3"
-                            role="tab"><?= LangManager::translate("core.dashboard.months") ?></button>
+                            role="tab"><?= LangManager::translate('core.dashboard.months') ?></button>
                 </li>
             </ul>
         </div>
@@ -63,7 +62,7 @@ Website::setDescription(LangManager::translate("core.dashboard.desc"));
             <div class="center-flex items-center gap-6 py-4">
                 <i class="w-24 text-3xl fa-solid fa-user rounded-lg p-3 text-white" style="background-color: #9694FF"></i>
                 <div class="w-1/2">
-                    <p class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.total_member") ?></p>
+                    <p class="text-muted font-semibold"><?= LangManager::translate('core.dashboard.total_member') ?></p>
                     <h6 class="font-extrabold mb-0"><?= UsersModel::getInstance()->countUsers() ?></h6>
                 </div>
             </div>
@@ -72,8 +71,8 @@ Website::setDescription(LangManager::translate("core.dashboard.desc"));
             <div class="center-flex items-center gap-6 py-4">
                 <i class="w-24 fa-solid fa-calendar-day text-3xl rounded-lg p-3 text-white" style="background-color: #57CAEB"></i>
                 <div class="w-1/2">
-                    <p class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.daily_visits") ?></p>
-                    <h6 class="font-extrabold mb-0"><?= (new VisitsMetricsManager())->getVisitsNumber("day") ?></h6>
+                    <p class="text-muted font-semibold"><?= LangManager::translate('core.dashboard.daily_visits') ?></p>
+                    <h6 class="font-extrabold mb-0"><?= (new VisitsMetricsManager())->getVisitsNumber('day') ?></h6>
                 </div>
             </div>
         </div>
@@ -81,8 +80,8 @@ Website::setDescription(LangManager::translate("core.dashboard.desc"));
             <div class="center-flex items-center gap-6 py-4">
                 <i class="w-24 fa-solid fa-calendar-days text-3xl rounded-lg p-3 text-white" style="background-color: #5DDAB4"></i>
                 <div class="w-1/2">
-                    <p class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.monthly_visits") ?></p>
-                    <h6 class="font-extrabold mb-0"><?= (new VisitsMetricsManager())->getVisitsNumber("monthly") ?></h6>
+                    <p class="text-muted font-semibold"><?= LangManager::translate('core.dashboard.monthly_visits') ?></p>
+                    <h6 class="font-extrabold mb-0"><?= (new VisitsMetricsManager())->getVisitsNumber('monthly') ?></h6>
                 </div>
             </div>
         </div>
@@ -90,8 +89,8 @@ Website::setDescription(LangManager::translate("core.dashboard.desc"));
             <div class="center-flex items-center gap-6 py-4">
                 <i class="w-24  fa-regular fa-calendar text-3xl rounded-lg p-3 text-white" style="background-color: #FF7976"></i>
                 <div class="w-1/2">
-                    <p class="text-muted font-semibold"><?= LangManager::translate("core.dashboard.total_visits") ?></p>
-                    <h6 class="font-extrabold mb-0"><?= (new VisitsMetricsManager())->getVisitsNumber("all") ?></h6>
+                    <p class="text-muted font-semibold"><?= LangManager::translate('core.dashboard.total_visits') ?></p>
+                    <h6 class="font-extrabold mb-0"><?= (new VisitsMetricsManager())->getVisitsNumber('all') ?></h6>
                 </div>
             </div>
         </div>
@@ -109,8 +108,8 @@ Website::setDescription(LangManager::translate("core.dashboard.desc"));
         series: [{
             name: 'Visites',
             data: [<?php foreach ($dailyVisits as $dailyVisit):
-                echo json_encode($dailyVisit, JSON_THROW_ON_ERROR) . ",";
-            endforeach;?>]
+    echo json_encode($dailyVisit, JSON_THROW_ON_ERROR) . ',';
+endforeach; ?>]
         }],
         chart: {
             height: 350,
@@ -132,8 +131,8 @@ Website::setDescription(LangManager::translate("core.dashboard.desc"));
         series: [{
             name: 'Visites',
             data: [<?php foreach ($weeklyVisits as $weeklyVisit):
-                echo json_encode($weeklyVisit, JSON_THROW_ON_ERROR) . ",";
-            endforeach;?>]
+    echo json_encode($weeklyVisit, JSON_THROW_ON_ERROR) . ',';
+endforeach; ?>]
         }],
         chart: {
             height: 350,
@@ -155,8 +154,8 @@ Website::setDescription(LangManager::translate("core.dashboard.desc"));
         series: [{
             name: 'Visites',
             data: [<?php foreach ($monthlyVisits as $monthlyVisit):
-                echo json_encode($monthlyVisit, JSON_THROW_ON_ERROR) . ",";
-            endforeach;?>]
+    echo json_encode($monthlyVisit, JSON_THROW_ON_ERROR) . ',';
+endforeach; ?>]
         }],
         chart: {
             height: 350,

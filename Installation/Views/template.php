@@ -2,13 +2,14 @@
 
 use CMW\Manager\Views\View;
 
-require_once("Include/header.php") ?>
+require_once ('Include/header.php')
+?>
 
 <?php
-/* INCLUDE SCRIPTS / STYLES*/
+/* INCLUDE SCRIPTS / STYLES */
 /* @var $includes */
-View::loadInclude($includes, "beforeScript");
-View::loadInclude($includes, "styles");
+View::loadInclude($includes, 'beforeScript');
+View::loadInclude($includes, 'styles');
 ?>
 
 
@@ -19,10 +20,10 @@ View::loadInclude($includes, "styles");
 <?php
 
 /* INCLUDE SCRIPTS */
-View::loadInclude($includes, "afterScript");
+View::loadInclude($includes, 'afterScript');
 
 ?>
 
-<?php require_once("Include/footer.php") ?>
+<?php require_once ('Include/footer.php') ?>
 
 <script src="Installation/Views/Assets/Js/loader.js"></script>

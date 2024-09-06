@@ -8,22 +8,22 @@ class Theme implements IThemeConfig
 {
     public function name(): string
     {
-        return "Sampler";
+        return 'Sampler';
     }
 
     public function version(): string
     {
-        return "0.0.1";
+        return '0.0.1';
     }
 
     public function cmwVersion(): string
     {
-        return "2.0";
+        return '2.0';
     }
 
     public function author(): ?string
     {
-        return "CraftMyWebsite";
+        return 'CraftMyWebsite';
     }
 
     public function authors(): array
@@ -34,12 +34,18 @@ class Theme implements IThemeConfig
     public function compatiblesPackages(): array
     {
         return [
-            "Core", "Pages", "Users", "Faq", "News", "Votes", "Wiki",
+            'Core',
+            'Pages',
+            'Users',
+            'Faq',
+            'News',
+            'Votes',
+            'Wiki',
         ];
     }
 
     public function requiredPackages(): array
     {
-        return ["Core", "Users"];
+        return ['Core', 'Users'];
     }
 }

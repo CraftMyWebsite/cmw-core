@@ -38,7 +38,6 @@ class BlacklistedPseudoEntity
         return $this->pseudo;
     }
 
-
     /**
      * @return string
      */

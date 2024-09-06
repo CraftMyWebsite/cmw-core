@@ -2,7 +2,6 @@
 
 namespace CMW\Manager\Security;
 
-
 use Error;
 use Exception;
 
@@ -18,7 +17,6 @@ class SecurityManager extends HoneyInput
     private string $hashAlgo = 'sha256';
     private bool $hmac_ip = true;
     private string $hmacData = 'ABCeNBHVe3kmAqvU2s7yyuJSF2gpxKLC';
-
 
     public function __construct($excludeUrl = null, &$post = null, &$session = null, &$server = null)
     {
@@ -51,8 +49,8 @@ class SecurityManager extends HoneyInput
         $csrfTokenId = bin2hex(random_bytes(8));
         $csrfToken = $this->getCSRFToken($csrfTokenId);
 
-        echo "<input type=\"hidden\" name=\"" . $this->xssafe($this->formTokenLabel) . "\" value=\"" . $this->xssafe($csrfToken) . "\" />";
-        echo "<input type=\"hidden\" name=\"" . $this->xssafe($this->formTokenIdLabel) . "\" value=\"" . $this->xssafe($csrfTokenId) . "\" />";
+        echo '<input type="hidden" name="' . $this->xssafe($this->formTokenLabel) . '" value="' . $this->xssafe($csrfToken) . '" />';
+        echo '<input type="hidden" name="' . $this->xssafe($this->formTokenIdLabel) . '" value="' . $this->xssafe($csrfTokenId) . '" />';
 
         $this->generateHoneyInput();
     }
@@ -105,11 +103,11 @@ class SecurityManager extends HoneyInput
 
     private function getCurrentRequestUrl(): string
     {
-        $protocol = "http";
+        $protocol = 'http';
         if (isset($this->server['HTTPS'])) {
-            $protocol = "https";
+            $protocol = 'https';
         }
-        return $protocol . "://" . $this->server['HTTP_HOST'] . $this->server['REQUEST_URI'];
+        return $protocol . '://' . $this->server['HTTP_HOST'] . $this->server['REQUEST_URI'];
     }
 
     public function validateRequest(): bool

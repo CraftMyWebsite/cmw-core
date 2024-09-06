@@ -8,15 +8,12 @@ use CMW\Manager\Package\GlobalObject;
 
 abstract class AbstractEvent extends GlobalObject
 {
-
     private static bool $continuePropagation;
-
 
     public function init(): void
     {
         static::$continuePropagation = true;
     }
-
 
     abstract public function getName(): string;
 
@@ -29,6 +26,4 @@ abstract class AbstractEvent extends GlobalObject
     {
         static::$continuePropagation = false;
     }
-
-
 }

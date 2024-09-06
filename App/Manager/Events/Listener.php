@@ -4,16 +4,14 @@ namespace CMW\Manager\Events;
 
 use Attribute;
 
-#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)] class Listener
+#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
+class Listener
 {
-
     public function __construct(
         private readonly string $eventName,
-        private readonly int    $times = 0,
-        private readonly int    $weight = 1
-    )
-    {
-    }
+        private readonly int $times = 0,
+        private readonly int $weight = 1
+    ) {}
 
     /**
      * @return string
@@ -38,5 +36,4 @@ use Attribute;
     {
         return $this->weight;
     }
-
 }

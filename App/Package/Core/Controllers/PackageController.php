@@ -12,7 +12,6 @@ use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Package\IPackageConfig;
-
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Utils\Directory;
@@ -22,7 +21,6 @@ use JetBrains\PhpStorm\NoReturn;
 
 class PackageController extends AbstractController
 {
-
     public static array $corePackages = ['Core', 'Users'];
 
     /**
@@ -35,7 +33,6 @@ class PackageController extends AbstractController
         $packagesFolder = 'App/Package/';
         $contentDirectory = array_diff(scandir("$packagesFolder/"), ['..', '.']);
         foreach ($contentDirectory as $package) {
-
             if (in_array($package, self::$corePackages, true)) {
                 continue;
             }
@@ -76,7 +73,7 @@ class PackageController extends AbstractController
 
     public static function getPackage(string $packageName): ?IPackageConfig
     {
-        $namespace = 'CMW\\Package\\' . $packageName . "\\Package";
+        $namespace = 'CMW\\Package\\' . $packageName . '\Package';
 
         if (!class_exists($namespace)) {
             return null;
@@ -102,7 +99,7 @@ class PackageController extends AbstractController
      */
     public static function getMarketPackages(): array
     {
-        return PublicAPI::getData("market/resources/filtered/1");
+        return PublicAPI::getData('market/resources/filtered/1');
     }
 
     /**
@@ -131,82 +128,84 @@ class PackageController extends AbstractController
 
     /* ADMINISTRATION */
 
-    #[Link("/market", Link::GET, [], "/cmw-admin/packages")]
+    #[Link('/market', Link::GET, [], '/cmw-admin/packages')]
     private function adminPackageManage(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.market");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.market');
 
         $installedPackages = self::getInstalledPackages();
         $packagesList = self::getMarketPackages();
 
-        View::createAdminView("Core", "Package/market")
-            ->addVariableList(["installedPackages" => $installedPackages, "packagesList" => $packagesList])
+        View::createAdminView('Core', 'Package/market')
+            ->addVariableList(['installedPackages' => $installedPackages, 'packagesList' => $packagesList])
             ->view();
     }
 
-    #[Link("/package", Link::GET, [], "/cmw-admin/packages")]
+    #[Link('/package', Link::GET, [], '/cmw-admin/packages')]
     private function adminMyPackage(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.manage");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.manage');
 
         $installedPackages = self::getInstalledPackages();
         $packagesList = self::getMarketPackages();
 
-        View::createAdminView("Core", "Package/package")
-            ->addVariableList(["installedPackages" => $installedPackages, "packagesList" => $packagesList])
+        View::createAdminView('Core', 'Package/package')
+            ->addVariableList(['installedPackages' => $installedPackages, 'packagesList' => $packagesList])
             ->view();
     }
 
-    #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/packages")]
-    #[NoReturn] private function adminPackageInstallation(int $id): void
+    #[Link('/install/:id', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/packages')]
+    #[NoReturn]
+    private function adminPackageInstallation(int $id): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.market");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.market');
 
         $package = PublicAPI::putData("market/resources/install/$id");
 
         if (empty($package)) {
-            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                LangManager::translate("core.toaster.internalError") . ' (API)');
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.toaster.internalError') . ' (API)');
             Redirect::redirectPreviousRoute();
         }
 
-        if (!DownloadManager::installPackageWithLink($package['file'], "package", $package['name'])) {
-            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                LangManager::translate("core.downloads.errors.internalError",
+        if (!DownloadManager::installPackageWithLink($package['file'], 'package', $package['name'])) {
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.downloads.errors.internalError',
                     ['name' => $package['name'], 'version' => $package['version_name']]));
             Redirect::redirectPreviousRoute();
         }
 
-
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('core.Package.toasters.install.success', ['package' => $package['name']]));
 
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link("/delete/:package", Link::GET, ["package" => ".*?"], "/cmw-admin/packages")]
-    #[NoReturn] private function adminPackageDelete(string $package): void
+    #[Link('/delete/:package', Link::GET, ['package' => '.*?'], '/cmw-admin/packages')]
+    #[NoReturn]
+    private function adminPackageDelete(string $package): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.manage");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.manage');
 
         if (!$this->uninstallPackage($package)) {
-            Flash::send(Alert::ERROR, LangManager::translate("core.package.error"),
-                LangManager::translate("core.Package.toasters.delete.error",
+            Flash::send(Alert::ERROR, LangManager::translate('core.package.error'),
+                LangManager::translate('core.Package.toasters.delete.error',
                     ['package' => $package]));
             Redirect::redirectPreviousRoute();
         }
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate("core.Package.toasters.delete.success",
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+            LangManager::translate('core.Package.toasters.delete.success',
                 ['package' => $package]));
 
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link("/update/:id/:actualVersion/:packageName", Link::GET, ["id" => "[0-9]+", "actualVersion" => ".*?", "packageName" => ".*?"], "/cmw-admin/packages")]
-    #[NoReturn] private function adminPackageUpdate(int $id, string $actualVersion, string $packageName): void
+    #[Link('/update/:id/:actualVersion/:packageName', Link::GET, ['id' => '[0-9]+', 'actualVersion' => '.*?', 'packageName' => '.*?'], '/cmw-admin/packages')]
+    #[NoReturn]
+    private function adminPackageUpdate(int $id, string $actualVersion, string $packageName): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.packages.manage");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.manage');
 
         $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion");
 
@@ -215,7 +214,7 @@ class PackageController extends AbstractController
             Redirect::redirectPreviousRoute();
         }
 
-        //Update package
+        // Update package
 
         Directory::delete(EnvManager::getInstance()->getValue('DIR') . "App/Package/$packageName");
 
@@ -230,7 +229,7 @@ class PackageController extends AbstractController
             }
         }
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('core.Package.toasters.update.success', ['package' => $packageName]));
 
         Redirect::redirectPreviousRoute();
@@ -250,12 +249,12 @@ class PackageController extends AbstractController
             return false;
         }
 
-        //We can't delete core packages
+        // We can't delete core packages
         if (in_array($package, self::$corePackages, true)) {
             return false;
         }
 
-        //First we uninstall DB
+        // First we uninstall DB
         $uninstallSqlFile = EnvManager::getInstance()->getValue('DIR') . "App/Package/$packageName/Init/uninstall.sql";
 
         if (file_exists($uninstallSqlFile)) {
@@ -267,13 +266,12 @@ class PackageController extends AbstractController
             }
         }
 
-        //Check Package uninstall override
+        // Check Package uninstall override
         if (!$package->uninstall()) {
             return false;
         }
 
-        //Uninstall package:
+        // Uninstall package:
         return Directory::delete(EnvManager::getInstance()->getValue('DIR') . "App/Package/$packageName");
     }
-
 }

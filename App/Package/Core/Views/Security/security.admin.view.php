@@ -3,33 +3,33 @@
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 
-$title = LangManager::translate("core.security.title");
-$description = LangManager::translate("core.security.description");
+$title = LangManager::translate('core.security.title');
+$description = LangManager::translate('core.security.description');
 /* @var string $currentCaptcha */
 /* @var \CMW\Interface\Core\ICaptcha[] $availablesCaptcha */
 ?>
 
 <div class="page-title">
-    <h3><i class="fa-solid fa-shield-halved"></i> <?= LangManager::translate("core.security.title") ?></h3>
+    <h3><i class="fa-solid fa-shield-halved"></i> <?= LangManager::translate('core.security.title') ?></h3>
     <button class="btn-primary" form="captchaConfig"
-            type="submit"><?= LangManager::translate("core.btn.save") ?></button>
+            type="submit"><?= LangManager::translate('core.btn.save') ?></button>
 </div>
 
 <div class="center-flex">
     <div class="flex-content-lg space-y-3">
         <div class="card">
-            <h6><?= LangManager::translate("core.security.captcha.title") ?></h6>
+            <h6><?= LangManager::translate('core.security.captcha.title') ?></h6>
             <form id="captchaConfig" action="security/edit/captcha" method="post">
                 <?php (new SecurityManager())->insertHiddenToken() ?>
                 <select id="captcha" name="captcha" required
                         onchange="generateCaptchaInputs()">
-                    <option value="none" <?= $currentCaptcha === "none" ? "selected" : "" ?>>
-                        <?= LangManager::translate("core.security.no_captcha") ?>
+                    <option value="none" <?= $currentCaptcha === 'none' ? 'selected' : '' ?>>
+                        <?= LangManager::translate('core.security.no_captcha') ?>
                     </option>
 
                     <?php foreach ($availablesCaptcha as $captcha): ?>
                         <option
-                            value="<?= $captcha->getCode() ?>" <?= $currentCaptcha === $captcha->getCode() ? "selected" : "" ?>>
+                            value="<?= $captcha->getCode() ?>" <?= $currentCaptcha === $captcha->getCode() ? 'selected' : '' ?>>
                             <?= $captcha->getName() ?>
                         </option>
                     <?php endforeach; ?>

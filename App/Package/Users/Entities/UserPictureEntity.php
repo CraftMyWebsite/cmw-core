@@ -2,7 +2,6 @@
 
 namespace CMW\Entity\Users;
 
-
 use CMW\Controller\Core\CoreController;
 use CMW\Model\Users\UsersModel;
 
@@ -52,5 +51,4 @@ class UserPictureEntity
     {
         return $this->image;
     }
-
 }

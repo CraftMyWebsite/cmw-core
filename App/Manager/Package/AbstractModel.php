@@ -2,7 +2,4 @@
 
 namespace CMW\Manager\Package;
 
-class AbstractModel extends GlobalObject
-{
-
-}
+class AbstractModel extends GlobalObject {}

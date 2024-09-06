@@ -11,7 +11,6 @@ use ZipArchive;
 
 class DownloadManager
 {
-
     /**
      * @param string $url
      * @param string $type
@@ -21,30 +20,27 @@ class DownloadManager
      */
     public static function installPackageWithLink(string $url, #[ExpectedValues(['package', 'Theme'])] string $type, string $name): bool
     {
-
         if (!in_array($type, ['package', 'Theme'])) {
             return false;
         }
 
-        file_put_contents(EnvManager::getInstance()->getValue("DIR") . "Public/resource.zip",
+        file_put_contents(EnvManager::getInstance()->getValue('DIR') . 'Public/resource.zip',
             fopen($url, 'rb'));
 
         $archiveUpdate = new ZipArchive;
-        if ($archiveUpdate->open(EnvManager::getInstance()->getValue("DIR") . 'Public/resource.zip') === TRUE) {
-
+        if ($archiveUpdate->open(EnvManager::getInstance()->getValue('DIR') . 'Public/resource.zip') === TRUE) {
             if ($type === 'package') {
-                $archiveUpdate->extractTo(EnvManager::getInstance()->getValue("DIR") . 'App/Package');
+                $archiveUpdate->extractTo(EnvManager::getInstance()->getValue('DIR') . 'App/Package');
             } else {
-                $archiveUpdate->extractTo(EnvManager::getInstance()->getValue("DIR") . 'Public/Themes');
+                $archiveUpdate->extractTo(EnvManager::getInstance()->getValue('DIR') . 'Public/Themes');
             }
 
             $archiveUpdate->close();
 
-            //Delete download archive
-            unlink(EnvManager::getInstance()->getValue("DIR") . 'Public/resource.zip');
+            // Delete download archive
+            unlink(EnvManager::getInstance()->getValue('DIR') . 'Public/resource.zip');
 
-
-            //INSTALL INIT FOLDER
+            // INSTALL INIT FOLDER
             if ($type === 'package') {
                 self::initPackages($name);
             }
@@ -55,10 +51,10 @@ class DownloadManager
         return false;
     }
 
-    public static function initPackages(string...$packages): void
+    public static function initPackages(string ...$packages): void
     {
         foreach ($packages as $package):
-            $initFolder = EnvManager::getInstance()->getValue("dir") . "App/Package/$package/Init";
+            $initFolder = EnvManager::getInstance()->getValue('dir') . "App/Package/$package/Init";
 
             if (!is_dir($initFolder)) {
                 continue;
@@ -83,7 +79,7 @@ class DownloadManager
             $sqlFile = "$initFolder/init.sql";
             if (file_exists($sqlFile)) {
                 $db = DatabaseManager::getLiteInstance();
-                $devMode = EnvManager::getInstance()->getValue("DEVMODE");
+                $devMode = EnvManager::getInstance()->getValue('DEVMODE');
 
                 $querySqlFile = file_get_contents($sqlFile);
                 $req = $db->query($querySqlFile);
@@ -93,8 +89,6 @@ class DownloadManager
                     unlink($sqlFile);
                 }
             }
-
         endforeach;
     }
-
 }

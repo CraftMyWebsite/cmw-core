@@ -8,11 +8,10 @@ use CMW\Manager\Loader\Loader;
 
 class LangManager
 {
-
     private static array $translations;
     private static array $langCache = array();
 
-    private const CANNOT_TRANSLATE = "NO TRANSLATION FOUND FOR %value%";
+    private const CANNOT_TRANSLATE = 'NO TRANSLATION FOUND FOR %value%';
 
     private static function setTranslationList(array $array, string $package, string $lang): void
     {
@@ -57,13 +56,11 @@ class LangManager
     public static function loadTranslation(string $package, ?string $lang = null): ?array
     {
         if (is_null($lang)) {
-            $lang = strtolower(EnvManager::getInstance()->getValue("LOCALE"));
+            $lang = strtolower(EnvManager::getInstance()->getValue('LOCALE'));
         }
 
-
         if (is_null(self::getTranslationList($package, $lang))) {
-
-            if (strtolower($package) === "installation"){
+            if (strtolower($package) === 'installation') {
                 $translationList = InstallerController::loadLang();
             } else {
                 $translationList = Loader::loadLang($package, $lang);
@@ -76,19 +73,18 @@ class LangManager
             self::setTranslationList($translationList, $package, $lang);
         }
 
-
         return self::getTranslationList($package, $lang);
     }
 
     public static function translate(string $valueToTranslate, array $vars = [], bool $lineBreak = false, bool $forJs = false): string
     {
-        $CANNOT_TRANSLATE = strtoupper(str_replace("%value%", "<b>$valueToTranslate</b>", self::CANNOT_TRANSLATE));
+        $CANNOT_TRANSLATE = strtoupper(str_replace('%value%', "<b>$valueToTranslate</b>", self::CANNOT_TRANSLATE));
 
-        if (count(explode(".", $valueToTranslate)) < 2) {
+        if (count(explode('.', $valueToTranslate)) < 2) {
             return $CANNOT_TRANSLATE;
         }
 
-        $elements = explode(".", $valueToTranslate);
+        $elements = explode('.', $valueToTranslate);
 
         $package = array_shift($elements);
 
@@ -103,9 +99,9 @@ class LangManager
             return $CANNOT_TRANSLATE;
         }
 
-        $toReturn = self::parseVariables($translation, $vars) . ($lineBreak ? "<br>" : "");
+        $toReturn = self::parseVariables($translation, $vars) . ($lineBreak ? '<br>' : '');
 
-        if ($forJs){
+        if ($forJs) {
             $toReturn = '"' . $toReturn . '"';
         }
 

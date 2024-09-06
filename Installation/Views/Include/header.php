@@ -10,11 +10,11 @@ use CMW\Manager\Lang\LangManager;
 <html lang="<?= $lang ?>" class="bg-cmw-gray">
 <head>
     <meta charset="utf-8"/>
-    <title><?= LangManager::translate("Installation.title") ?></title>
+    <title><?= LangManager::translate('Installation.title') ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta name="robots" content="NOINDEX, NOFOLLOW">
-    <meta name="description" content="<?= LangManager::translate("Installation.desc") ?>">
+    <meta name="description" content="<?= LangManager::translate('Installation.desc') ?>">
 
     <link rel="icon" type="image/png"
           href="Admin/Resources/Assets/Img/favicon.ico">

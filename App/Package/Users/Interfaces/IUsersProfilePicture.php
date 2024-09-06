@@ -2,12 +2,10 @@
 
 namespace CMW\Interface\Users;
 
-
 use CMW\Entity\Users\UserPictureEntity;
 
 interface IUsersProfilePicture
 {
-
     /**
      * @return int
      * @desc Return the weight of this implementation.

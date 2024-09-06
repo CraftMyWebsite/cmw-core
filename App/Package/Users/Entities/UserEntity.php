@@ -7,7 +7,6 @@ use CMW\Model\Users\UsersModel;
 
 class UserEntity
 {
-
     private int $userId;
     private string $userMail;
     private string $userPseudo;
@@ -23,7 +22,6 @@ class UserEntity
     private string $userCreated;
     private string $userUpdated;
     private ?UserPictureEntity $userPicture;
-
 
     /**
      * @param int $userId
@@ -182,5 +180,4 @@ class UserEntity
     {
         return UsersModel::getCurrentUser()?->userId === $this->userId;
     }
-
 }

@@ -16,16 +16,16 @@ use CMW\Utils\Utils;
  */
 class PermissionsModel extends AbstractModel
 {
-    /**==> GETTERS */
+    /* ==> GETTERS */
 
     public function getPermissionById(int $id): ?PermissionEntity
     {
-        $sql = "SELECT * FROM cmw_permissions WHERE permission_id = :permission_id";
+        $sql = 'SELECT * FROM cmw_permissions WHERE permission_id = :permission_id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute(["permission_id" => $id])) {
+        if (!$req->execute(['permission_id' => $id])) {
             return null;
         }
 
@@ -37,14 +37,14 @@ class PermissionsModel extends AbstractModel
 
         $parentEntity = null;
 
-        if (!is_null($res["permission_parent_id"])) {
-            $parentEntity = $this->getPermissionById($res["permission_parent_id"]);
+        if (!is_null($res['permission_parent_id'])) {
+            $parentEntity = $this->getPermissionById($res['permission_parent_id']);
         }
 
         return new PermissionEntity(
             $id,
             $parentEntity,
-            $res["permission_code"],
+            $res['permission_code'],
             $res['permission_description']
         );
     }
@@ -56,23 +56,21 @@ class PermissionsModel extends AbstractModel
      */
     public function getPermissionByParentId(int $parentId): array
     {
-        $sql = "SELECT permission_id FROM cmw_permissions WHERE permission_parent_id = :permission_parent_id";
+        $sql = 'SELECT permission_id FROM cmw_permissions WHERE permission_parent_id = :permission_parent_id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute(["permission_parent_id" => $parentId])) {
+        if (!$req->execute(['permission_parent_id' => $parentId])) {
             return [];
         }
 
         $toReturn = [];
 
         while ($res = $req->fetch()) {
-
-            $entity = $this->getPermissionById($res["permission_id"]);
+            $entity = $this->getPermissionById($res['permission_id']);
 
             Utils::addIfNotNull($toReturn, $entity);
-
         }
 
         return $toReturn;
@@ -85,21 +83,19 @@ class PermissionsModel extends AbstractModel
      * @param string $separationChar Default point, only for decoration users<separationChar>edit.
      * @return string Parsed permission
      */
-    public function getFullPermissionCodeById(int $id, string $separationChar = "."): string
+    public function getFullPermissionCodeById(int $id, string $separationChar = '.'): string
     {
         $permissionEntity = $this->getPermissionById($id);
 
         if (is_null($permissionEntity)) {
-            return "";
+            return '';
         }
 
         $toReturn = [$permissionEntity->getCode()];
 
         while (!is_null($permissionEntity->getParent())) {
-
             $permissionEntity = $permissionEntity->getParent();
             $toReturn[] = $permissionEntity->getCode();
-
         }
 
         return implode($separationChar, array_reverse($toReturn));
@@ -113,41 +109,39 @@ class PermissionsModel extends AbstractModel
      */
     public function getPermissionsByLastCode(string $code, int $limit = -1): array
     {
-        $sql = "SELECT permission_id FROM cmw_permissions WHERE permission_code = :permission_code ORDER BY permission_parent_id ";
-        $sql .= $limit > 0 ? "LIMIT $limit" : "";
+        $sql = 'SELECT permission_id FROM cmw_permissions WHERE permission_code = :permission_code ORDER BY permission_parent_id ';
+        $sql .= $limit > 0 ? "LIMIT $limit" : '';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute(["permission_code" => $code])) {
+        if (!$req->execute(['permission_code' => $code])) {
             return [];
         }
 
         $toReturn = [];
 
         while ($res = $req->fetch()) {
-
-            $permissionEntity = $this->getPermissionById($res["permission_id"]);
+            $permissionEntity = $this->getPermissionById($res['permission_id']);
 
             Utils::addIfNotNull($toReturn, $permissionEntity);
-
         }
 
         return $toReturn;
     }
 
-    /** With an parsed code (like <b>users.edit</b>), get permission Entity
+    /**
+     * With an parsed code (like <b>users.edit</b>), get permission Entity
      * @param string $code Parsed code
      * @return \CMW\Entity\Users\PermissionEntity|null
      */
     public function getPermissionByFullCode(string $code): ?PermissionEntity
     {
-        $codeList = explode(".", $code);
+        $codeList = explode('.', $code);
 
         $idCodeList = [];
 
         foreach ($codeList as $key => $value) {
-
             $elm = $this->getPermissionsByLastCode($value, 1);
 
             if (empty($elm)) {
@@ -156,13 +150,11 @@ class PermissionsModel extends AbstractModel
 
             $elm = $elm[0];
 
-
             if ($key === 0 && $elm?->hasParent()) {
                 return null;
             }
 
             $parentElement = $elm?->getParent();
-
 
             if ($key !== 0 && (is_null($parentElement) || $parentElement->getId() !== $idCodeList[count($idCodeList) - 1])) {
                 return null;
@@ -174,8 +166,7 @@ class PermissionsModel extends AbstractModel
         return $this->getPermissionById($idCodeList[count($idCodeList) - 1]);
     }
 
-
-    /**==> ADDS */
+    /* ==> ADDS */
 
     public function addParentPermission(string $code): ?PermissionEntity
     {
@@ -187,19 +178,18 @@ class PermissionsModel extends AbstractModel
             }
         }
 
-        $sql = "INSERT INTO cmw_permissions(permission_parent_id, permission_code) VALUES (NULL, :permission_code)";
+        $sql = 'INSERT INTO cmw_permissions(permission_parent_id, permission_code) VALUES (NULL, :permission_code)';
 
         $db = DatabaseManager::getInstance();
 
         $req = $db->prepare($sql);
 
-        if ($req->execute(["permission_code" => $code])) {
+        if ($req->execute(['permission_code' => $code])) {
             $id = $db->lastInsertId();
             return new PermissionEntity($id, null, $code, null);
         }
 
         return null;
-
     }
 
     public function addChildPermission(int $parentId, string $code, ?string $description): ?PermissionEntity
@@ -217,14 +207,14 @@ class PermissionsModel extends AbstractModel
             }
         }
 
-        $sql = "INSERT INTO cmw_permissions(permission_parent_id, permission_code, permission_description) 
-                    VALUES (:parent_id, :permission_code, :permission_description)";
+        $sql = 'INSERT INTO cmw_permissions(permission_parent_id, permission_code, permission_description) 
+                    VALUES (:parent_id, :permission_code, :permission_description)';
 
         $db = DatabaseManager::getInstance();
 
         $req = $db->prepare($sql);
 
-        if ($req->execute(["parent_id" => $parentId, "permission_code" => $code, 'permission_description' => $description])) {
+        if ($req->execute(['parent_id' => $parentId, 'permission_code' => $code, 'permission_description' => $description])) {
             $id = $db->lastInsertId();
             return new PermissionEntity($id, $parent, $code, $description);
         }
@@ -238,14 +228,14 @@ class PermissionsModel extends AbstractModel
             return null;
         }
 
-        $values = explode(".", $permission->getCode());
+        $values = explode('.', $permission->getCode());
         $actualPermission = null;
 
         foreach ($values as $key => $value) {
-            //Add description only for last child
+            // Add description only for last child
             $description = $value === end($values) ? $permission->getDescription() : ucfirst($value);
 
-            //Add permissions
+            // Add permissions
             $actualPermission = ($key === 0)
                 ? $this->addParentPermission($value)
                 : $this->addChildPermission($actualPermission->getId(), $value, $description);
@@ -266,7 +256,7 @@ class PermissionsModel extends AbstractModel
         return $db->prepare($sql)->execute();
     }
 
-    /**==> UTILS */
+    /* ==> UTILS */
 
     /**
      * @param PermissionEntity[] $permissionList
@@ -288,7 +278,6 @@ class PermissionsModel extends AbstractModel
                     return true;
                 }
             }
-
         }
 
         return false;
@@ -296,7 +285,7 @@ class PermissionsModel extends AbstractModel
 
     private function checkPermission(PermissionEntity $permissionEntity, string $code): bool
     {
-        $operatorPermission = "operator";
+        $operatorPermission = 'operator';
 
         $permissionFullCode = $this->getFullPermissionCodeById($permissionEntity->getId());
 
@@ -316,8 +305,7 @@ class PermissionsModel extends AbstractModel
      */
     public function getParents(): array
     {
-
-        $sql = "SELECT permission_id FROM cmw_permissions WHERE permission_parent_id IS NULL";
+        $sql = 'SELECT permission_id FROM cmw_permissions WHERE permission_parent_id IS NULL';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -329,30 +317,25 @@ class PermissionsModel extends AbstractModel
         $toReturn = [];
 
         while ($res = $req->fetch()) {
-
-            $entity = $this->getPermissionById($res["permission_id"]);
+            $entity = $this->getPermissionById($res['permission_id']);
 
             Utils::addIfNotNull($toReturn, $entity);
-
         }
 
         return $toReturn;
-
     }
 
     public function hasChild(int $id): bool
     {
-
-        $sql = "SELECT permission_id FROM cmw_permissions WHERE permission_parent_id = :permission_parent_id";
+        $sql = 'SELECT permission_id FROM cmw_permissions WHERE permission_parent_id = :permission_parent_id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute(["permission_parent_id" => $id])) {
+        if (!$req->execute(['permission_parent_id' => $id])) {
             return false;
         }
 
-        return (bool)$req->rowCount();
+        return (bool) $req->rowCount();
     }
-
 }

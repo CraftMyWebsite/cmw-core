@@ -9,8 +9,6 @@ use CMW\Manager\Package\AbstractModel;
 
 class MailModel extends AbstractModel
 {
-
-
     /**
      * @param string $mail
      * @param string $mailReply
@@ -33,27 +31,27 @@ class MailModel extends AbstractModel
         }
 
         $var = array(
-            "mail" => $mail,
-            "mailReply" => $mailReply,
-            "addressSMTP" => $addressSMTP,
-            "user" => $user,
-            "port" => $port,
-            "protocol" => $protocol,
-            "footer" => $footer,
-            "enable" => $enable
+            'mail' => $mail,
+            'mailReply' => $mailReply,
+            'addressSMTP' => $addressSMTP,
+            'user' => $user,
+            'port' => $port,
+            'protocol' => $protocol,
+            'footer' => $footer,
+            'enable' => $enable
         );
 
-        $sql = "INSERT INTO cmw_mail_config_smtp (mail_config_mail, mail_config_mail_reply, mail_config_address_smtp, 
+        $sql = 'INSERT INTO cmw_mail_config_smtp (mail_config_mail, mail_config_mail_reply, mail_config_address_smtp, 
                             mail_config_user, mail_config_port, mail_config_protocol, mail_config_footer, mail_config_enable) 
-                VALUES (:mail, :mailReply, :addressSMTP, :user, :port, :protocol, :footer, :enable)";
+                VALUES (:mail, :mailReply, :addressSMTP, :user, :port, :protocol, :footer, :enable)';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
-            //We store the password in the .env file
-            EnvManager::getInstance()->setOrEditValue("SMTP_PASSWORD", $password);
-            //We return the current config
+            // We store the password in the .env file
+            EnvManager::getInstance()->setOrEditValue('SMTP_PASSWORD', $password);
+            // We return the current config
             return $this->getConfig();
         }
 
@@ -66,7 +64,7 @@ class MailModel extends AbstractModel
      */
     public function configExist(): bool
     {
-        $sql = "SELECT * FROM `cmw_mail_config_smtp`";
+        $sql = 'SELECT * FROM `cmw_mail_config_smtp`';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -80,7 +78,7 @@ class MailModel extends AbstractModel
 
     public function getConfig(): ?MailConfigEntity
     {
-        $sql = "SELECT * FROM cmw_mail_config_smtp LIMIT 1 ";
+        $sql = 'SELECT * FROM cmw_mail_config_smtp LIMIT 1 ';
 
         $db = DatabaseManager::getInstance();
 
@@ -97,16 +95,16 @@ class MailModel extends AbstractModel
         }
 
         return new MailConfigEntity(
-            $res['mail_config_id'] ?? "",
-            $res['mail_config_mail'] ?? "",
-            $res['mail_config_mail_reply'] ?? "",
-            $res['mail_config_address_smtp'] ?? "",
-            $res['mail_config_user'] ?? "",
-            EnvManager::getInstance()->getValue("SMTP_PASSWORD") ?? "",
-            $res['mail_config_port'] ?? "",
-            $res['mail_config_protocol'] ?? "",
-            $res['mail_config_footer'] ?? "",
-            $res['mail_config_enable'] ?? ""
+            $res['mail_config_id'] ?? '',
+            $res['mail_config_mail'] ?? '',
+            $res['mail_config_mail_reply'] ?? '',
+            $res['mail_config_address_smtp'] ?? '',
+            $res['mail_config_user'] ?? '',
+            EnvManager::getInstance()->getValue('SMTP_PASSWORD') ?? '',
+            $res['mail_config_port'] ?? '',
+            $res['mail_config_protocol'] ?? '',
+            $res['mail_config_footer'] ?? '',
+            $res['mail_config_enable'] ?? ''
         );
     }
 
@@ -127,29 +125,29 @@ class MailModel extends AbstractModel
     public function update(int $id, string $mail, string $mailReply, string $addressSMTP, string $user, string $password, int $port, string $protocol, string $footer, int $enable): ?MailConfigEntity
     {
         $var = array(
-            "id" => $id,
-            "mail" => $mail,
-            "mailReply" => $mailReply,
-            "addressSMTP" => $addressSMTP,
-            "user" => $user,
-            "port" => $port,
-            "protocol" => $protocol,
-            "footer" => $footer,
-            "enable" => $enable
+            'id' => $id,
+            'mail' => $mail,
+            'mailReply' => $mailReply,
+            'addressSMTP' => $addressSMTP,
+            'user' => $user,
+            'port' => $port,
+            'protocol' => $protocol,
+            'footer' => $footer,
+            'enable' => $enable
         );
 
-        $sql = "UPDATE cmw_mail_config_smtp SET mail_config_mail = :mail, mail_config_mail_reply = :mailReply, 
+        $sql = 'UPDATE cmw_mail_config_smtp SET mail_config_mail = :mail, mail_config_mail_reply = :mailReply, 
                 mail_config_address_smtp = :addressSMTP, mail_config_user = :user, mail_config_port = :port, 
                 mail_config_protocol = :protocol, mail_config_footer = :footer, mail_config_enable = :enable
-                WHERE mail_config_id = :id";
+                WHERE mail_config_id = :id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
-            //We store the password in the .env file
-            EnvManager::getInstance()->setOrEditValue("SMTP_PASSWORD", $password);
-            //We return the current config
+            // We store the password in the .env file
+            EnvManager::getInstance()->setOrEditValue('SMTP_PASSWORD', $password);
+            // We return the current config
             $this->getConfig();
         }
 
@@ -158,13 +156,11 @@ class MailModel extends AbstractModel
 
     private function deleteConfig(int $id): void
     {
-        $sql = "DELETE FROM `cmw_mail_config_smtp` WHERE mail_config_id = :id;";
+        $sql = 'DELETE FROM `cmw_mail_config_smtp` WHERE mail_config_id = :id;';
 
         $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 
-        $res->execute(array("id" => $id));
-
+        $res->execute(array('id' => $id));
     }
-
 }

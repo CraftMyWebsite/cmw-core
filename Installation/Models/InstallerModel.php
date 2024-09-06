@@ -26,25 +26,23 @@ use PDOException;
  */
 class InstallerModel
 {
-
     private static function loadDatabase(string $serverName, string $database, string $username, $password, int $port): PDO
     {
         $db = new PDO("mysql:host=$serverName;port=$port", $username, $password);
-        $db->exec("SET CHARACTER SET utf8");
-        $db->exec("CREATE DATABASE IF NOT EXISTS " . $database . ";");
-        $db->exec("USE " . $database . ";");
+        $db->exec('SET CHARACTER SET utf8');
+        $db->exec('CREATE DATABASE IF NOT EXISTS ' . $database . ';');
+        $db->exec('USE ' . $database . ';');
 
         return $db;
     }
 
     private static function loadDatabaseWithoutParams(): PDO
     {
-
-        $dbServername = EnvManager::getInstance()->getValue("DB_HOST");
-        $dbUsername = EnvManager::getInstance()->getValue("DB_USERNAME");
-        $dbPassword = EnvManager::getInstance()->getValue("DB_PASSWORD");
-        $dbName = EnvManager::getInstance()->getValue("DB_NAME");
-        $dbPort = EnvManager::getInstance()->getValue("DB_PORT");
+        $dbServername = EnvManager::getInstance()->getValue('DB_HOST');
+        $dbUsername = EnvManager::getInstance()->getValue('DB_USERNAME');
+        $dbPassword = EnvManager::getInstance()->getValue('DB_PASSWORD');
+        $dbName = EnvManager::getInstance()->getValue('DB_NAME');
+        $dbPort = EnvManager::getInstance()->getValue('DB_PORT');
 
         return self::loadDatabase($dbServername, $dbName, $dbUsername, $dbPassword, $dbPort);
     }
@@ -77,7 +75,7 @@ class InstallerModel
     {
         $db = self::loadDatabase($serverName, $database, $username, $password, $port);
 
-        $query = file_get_contents(EnvManager::getInstance()->getValue("dir") . "Installation/init.sql");
+        $query = file_get_contents(EnvManager::getInstance()->getValue('dir') . 'Installation/init.sql');
         $db->query($query);
 
         /* IMPORT PACKAGE SQL */
@@ -86,7 +84,7 @@ class InstallerModel
 
     private static function loadDefaultPackages(): void
     {
-        //Load packages files
+        // Load packages files
         $packages = PackageController::getAllPackages();
 
         foreach ($packages as $package) {
@@ -96,7 +94,6 @@ class InstallerModel
 
     public static function initAdmin(string $email, string $pseudo, string $password): void
     {
-
         $db = self::loadDatabaseWithoutParams();
 
         $query = $db->prepare('INSERT INTO cmw_users (user_email, user_pseudo, user_password, user_state, user_key, user_created, user_updated) VALUES (:user_email, :user_pseudo, :user_password, :user_state, :user_key, NOW(), NOW())');
@@ -110,10 +107,10 @@ class InstallerModel
 
         $userId = $db->lastInsertId();
 
-        $query = $db->prepare("INSERT INTO cmw_users_roles (user_id, role_id) VALUES (:user_id, :role_id)");
+        $query = $db->prepare('INSERT INTO cmw_users_roles (user_id, role_id) VALUES (:user_id, :role_id)');
         $query->execute([
-            "user_id" => $userId,
-            "role_id" => 5, //Default administrator id is 5
+            'user_id' => $userId,
+            'role_id' => 5,  // Default administrator id is 5
         ]);
 
         self::initCondition($userId);
@@ -124,8 +121,8 @@ class InstallerModel
         $user = UsersModel::getInstance()->getUserById($userId);
 
         if (is_null($user)) {
-            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                LangManager::translate("core.toaster.internalError"));
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.toaster.internalError'));
             Redirect::redirectPreviousRoute();
         }
 
@@ -134,7 +131,7 @@ class InstallerModel
 
     public static function initCondition(int $userId): void
     {
-        $sql = "UPDATE cmw_core_condition SET condition_last_editor = :id";
+        $sql = 'UPDATE cmw_core_condition SET condition_last_editor = :id';
 
         $db = self::loadDatabaseWithoutParams();
 
@@ -147,17 +144,16 @@ class InstallerModel
     {
         $db = self::loadDatabaseWithoutParams();
 
-        $query = $db->prepare("INSERT INTO cmw_core_options (option_name, option_value, option_updated) VALUES (:option_name, :option_value, NOW())");
+        $query = $db->prepare('INSERT INTO cmw_core_options (option_name, option_value, option_updated) VALUES (:option_name, :option_value, NOW())');
 
         $query->execute([
-            "option_name" => "name",
-            "option_value" => $name,
+            'option_name' => 'name',
+            'option_value' => $name,
         ]);
 
         $query->execute([
-            "option_name" => "description",
-            "option_value" => $description,
+            'option_name' => 'description',
+            'option_value' => $description,
         ]);
     }
-
 }

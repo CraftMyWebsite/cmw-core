@@ -59,7 +59,6 @@ class User2FaEntity
         return EncryptManager::decrypt($this->secret);
     }
 
-
     /**
      * @param int $size
      * @return string

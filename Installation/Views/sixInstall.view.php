@@ -1,9 +1,9 @@
 <?php use CMW\Manager\Lang\LangManager; ?>
-<h2 class="text-2xl font-medium text-center"><?= LangManager::translate("Installation.administrator.title") ?></h2>
+<h2 class="text-2xl font-medium text-center"><?= LangManager::translate('Installation.administrator.title') ?></h2>
 <form action="installer/submit" method="post" id="mainForm" name="mainForm">
     <div class="lg:grid grid-cols-2 gap-8">
         <div class="form-control">
-            <p><?= LangManager::translate("users.users.pseudo") ?> :</p>
+            <p><?= LangManager::translate('users.users.pseudo') ?> :</p>
             <label class="input-group input-group">
                 <span><i class="fa-solid fa-user"></i></span>
                 <input type="text" placeholder="cmw" name="pseudo" class="input input-bordered input-sm w-full"
@@ -11,7 +11,7 @@
             </label>
         </div>
         <div class="form-control">
-            <p><?= LangManager::translate("users.users.mail") ?> :</p>
+            <p><?= LangManager::translate('users.users.mail') ?> :</p>
             <label class="input-group input-group">
                 <span><i class="fa-solid fa-at"></i></i></span>
                 <input type="email" placeholder="contact@craftmywebsite.fr" name="email"
@@ -21,11 +21,11 @@
     </div>
     <div class="lg:grid grid-cols-2 gap-8">
         <div class="form-control">
-            <p><?= LangManager::translate("users.users.password") ?> :</p>
+            <p><?= LangManager::translate('users.users.password') ?> :</p>
             <label class="input-group input-group">
                 <span><i class="fa-solid fa-unlock"></i></span>
                 <input onblur="checkPasswordIsSame()" type="password"
-                       placeholder="<?= LangManager::translate("users.users.pass") ?>"
+                       placeholder="<?= LangManager::translate('users.users.pass') ?>"
                        id="password" name="password"
                        class="input input-bordered input-sm w-full" required>
                 <div onclick="showPassword()"
@@ -34,11 +34,11 @@
             </label>
         </div>
         <div class="form-control">
-            <p><?= LangManager::translate("users.users.password_confirm") ?> :</p>
+            <p><?= LangManager::translate('users.users.password_confirm') ?> :</p>
             <label class="input-group input-group">
                 <span><i class="fa-solid fa-unlock"></i></span>
                 <input onblur="checkPasswordIsSame()" type="password"
-                       placeholder="<?= LangManager::translate("users.users.pass") ?>"
+                       placeholder="<?= LangManager::translate('users.users.pass') ?>"
                        id="passwordCheck" name="passwordCheck"
                        class="input input-bordered input-sm w-full" required>
                 <div onclick="showPasswordV()"
@@ -47,7 +47,7 @@
             </label>
         </div>
     </div>
-    <div class="mt-2"><?= LangManager::translate("Installation.password.strenght") ?>
+    <div class="mt-2"><?= LangManager::translate('Installation.password.strenght') ?>
         <div class="">
             <progress class="w-64 min-h-6" max="100" value="0" id="meter"></progress>
             <div class="flex justify-between w-64 mt-1">
@@ -59,7 +59,7 @@
     <div class="mt-2" id="passwordTextAlert"></div>
     <div class="card-actions justify-end">
         <button id="formBtn" type="submit" class="btn btn-primary" disabled>
-            <?= LangManager::translate("core.btn.next") ?>
+            <?= LangManager::translate('core.btn.next') ?>
         </button>
     </div>
 </form>

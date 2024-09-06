@@ -2,7 +2,7 @@
 
 namespace CMW\Interface\Core;
 
-
-interface IDashboardElements {
+interface IDashboardElements
+{
     public function widgets(): void;
 }

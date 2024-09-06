@@ -2,7 +2,7 @@
 
 namespace CMW\Interface\Core;
 
-
-interface ITopBarElements {
+interface ITopBarElements
+{
     public function widgets(): void;
 }

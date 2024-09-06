@@ -5,11 +5,11 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Utils\Website;
 
-$title = LangManager::translate("pages.add.title");
-$description = LangManager::translate("pages.add.desc");
+$title = LangManager::translate('pages.add.title');
+$description = LangManager::translate('pages.add.desc');
 ?>
 
-<h3><i class="fa-solid fa-file-lines"></i> <?= LangManager::translate("pages.add.title") ?></h3>
+<h3><i class="fa-solid fa-file-lines"></i> <?= LangManager::translate('pages.add.title') ?></h3>
 
 <form action="" method="post">
     <?php (new SecurityManager())->insertHiddenToken() ?>
@@ -20,24 +20,24 @@ $description = LangManager::translate("pages.add.desc");
         </div>
         <div class="card space-y-4">
             <div>
-                <label for="title"><?= LangManager::translate("pages.title") ?> :</label>
+                <label for="title"><?= LangManager::translate('pages.title') ?> :</label>
                 <input type="text" id="title" name="title" required class="input-sm"
-                       placeholder="<?= LangManager::translate("pages.title") ?>" value="">
+                       placeholder="<?= LangManager::translate('pages.title') ?>" value="">
             </div>
             <div>
                 <label for="slug">URL :</label>
                 <div class="input-group-sm">
-                    <i><?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?></i>
+                    <i><?= Website::getProtocol() . '://' . $_SERVER['SERVER_NAME'] . EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?></i>
                     <input type="text" value="" id="slug" name="page_slug" required>
                 </div>
             </div>
             <label class="toggle">
-                <p class="toggle-label"><?= LangManager::translate("pages.draft") ?></p>
+                <p class="toggle-label"><?= LangManager::translate('pages.draft') ?></p>
                 <input type="checkbox" class="toggle-input" name="state">
                 <div class="toggle-slider"></div>
             </label>
             <button type="submit" class="btn-primary mt-4 loading-btn btn-center"
-                    data-loading-btn="Sauvegarde ..."><?= LangManager::translate("core.btn.add") ?></button>
+                    data-loading-btn="Sauvegarde ..."><?= LangManager::translate('core.btn.add') ?></button>
         </div>
     </div>
 </form>

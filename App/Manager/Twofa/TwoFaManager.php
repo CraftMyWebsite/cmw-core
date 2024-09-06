@@ -74,5 +74,4 @@ class TwoFaManager
             return false;
         }
     }
-
 }

@@ -14,10 +14,10 @@ class ThemeManager extends AbstractManager
     public function getCurrentTheme(): IThemeConfig
     {
         $currentThemeName = 'Sampler';
-        $isInstallation = EnvManager::getInstance()->getValue('INSTALLSTEP') !== "-1";
+        $isInstallation = EnvManager::getInstance()->getValue('INSTALLSTEP') !== '-1';
 
         if (!$isInstallation) {
-            $currentThemeName = CoreModel::getInstance()->fetchOption("Theme");
+            $currentThemeName = CoreModel::getInstance()->fetchOption('Theme');
         }
 
         if (!$this->isLocalThemeExist($currentThemeName)) {
@@ -33,7 +33,7 @@ class ThemeManager extends AbstractManager
      */
     public function getTheme(string $themeName): ?IThemeConfig
     {
-        $namespace = 'CMW\\Theme\\' . $themeName . '\\Theme';
+        $namespace = 'CMW\\Theme\\' . $themeName . '\Theme';
 
         if (!class_exists($namespace)) {
             return null;
@@ -94,7 +94,7 @@ class ThemeManager extends AbstractManager
      */
     public function getCurrentThemeConfigFile(): void
     {
-        $themeConfigFile = "Public/Themes/" . $this->getCurrentTheme()->name() . "/Config/config.php";
+        $themeConfigFile = 'Public/Themes/' . $this->getCurrentTheme()->name() . '/Config/config.php';
         require_once $themeConfigFile;
     }
 
@@ -103,7 +103,7 @@ class ThemeManager extends AbstractManager
      */
     public function getCurrentThemeConfigSettings(): array
     {
-        $themeConfigFile = "Public/Themes/" . $this->getCurrentTheme()->name() . "/Config/config.settings.php";
+        $themeConfigFile = 'Public/Themes/' . $this->getCurrentTheme()->name() . '/Config/config.settings.php';
 
         if (!file_exists($themeConfigFile)) {
             return [];
@@ -125,7 +125,6 @@ class ThemeManager extends AbstractManager
      */
     public function getCurrentThemeConfigSetting(string $setting): ?string
     {
-
         return $this->getCurrentThemeConfigSettings()[$setting] ?? null;
     }
 
@@ -158,7 +157,6 @@ class ThemeManager extends AbstractManager
 
         $content = include $themeConfigFile;
 
-
         foreach ($content as $config => $value) {
             ThemeModel::getInstance()->getInstance()->storeThemeConfig($config, $value, $theme);
         }
@@ -170,7 +168,7 @@ class ThemeManager extends AbstractManager
      */
     public function getMarketThemes(): array
     {
-        return PublicAPI::getData("market/resources/filtered/0");
+        return PublicAPI::getData('market/resources/filtered/0');
     }
 
     /**

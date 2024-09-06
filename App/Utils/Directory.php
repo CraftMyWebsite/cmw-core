@@ -4,7 +4,6 @@ namespace CMW\Utils;
 
 class Directory
 {
-
     public static function getFilesRecursively(string $dir, ?string $extension = null): array
     {
         $results = [];
@@ -16,16 +15,16 @@ class Directory
         }
 
         foreach ($content as $value) {
-            if ($value === "." || $value === "..") {
+            if ($value === '.' || $value === '..') {
                 continue;
             }
 
             $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
 
             if (is_dir($path)) {
-               self::arrayMerge($results, self::getFilesRecursively($path, $extension));
+                self::arrayMerge($results, self::getFilesRecursively($path, $extension));
             } elseif ((is_null($extension) || self::hasMatchingExtension($path, $extension)) && is_file($path)) {
-                    $results[] = $path;
+                $results[] = $path;
             }
         }
 
@@ -111,7 +110,6 @@ class Directory
             if (!self::delete($dir . DIRECTORY_SEPARATOR . $item)) {
                 return false;
             }
-
         }
 
         return rmdir($dir);
@@ -124,7 +122,7 @@ class Directory
     public static function createFolders(string ...$dirs): bool
     {
         foreach ($dirs as $dir):
-            if (is_dir($dir)){
+            if (is_dir($dir)) {
                 continue;
             }
 
@@ -135,5 +133,4 @@ class Directory
 
         return true;
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace CMW\Manager\Notification;
 
-
 use CMW\Controller\Core\CoreController;
 
 class NotificationEntity
@@ -84,6 +83,4 @@ class NotificationEntity
     {
         return CoreController::formatDate($this->UpdatedAt);
     }
-
-
 }

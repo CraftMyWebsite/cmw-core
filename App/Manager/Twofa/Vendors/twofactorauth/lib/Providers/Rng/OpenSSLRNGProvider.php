@@ -1,14 +1,10 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace RobThree\Auth\Providers\Rng;
 
 class OpenSSLRNGProvider implements IRNGProvider
 {
-    public function __construct(private bool $requirestrong = true)
-    {
-    }
+    public function __construct(private bool $requirestrong = true) {}
 
     /**
      * {@inheritdoc}

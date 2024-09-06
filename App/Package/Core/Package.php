@@ -11,17 +11,17 @@ class Package implements IPackageConfig
 {
     public function name(): string
     {
-        return "Core";
+        return 'Core';
     }
 
     public function version(): string
     {
-        return "0.0.1";
+        return '0.0.1';
     }
 
     public function authors(): array
     {
-        return ["CraftMyWebsiteTeam"];
+        return ['CraftMyWebsiteTeam'];
     }
 
     public function isGame(): bool
@@ -38,9 +38,9 @@ class Package implements IPackageConfig
     {
         return [
             new PackageMenuType(
-                lang: "fr",
-                icon: "fas fa-gear",
-                title: "Paramètres",
+                lang: 'fr',
+                icon: 'fas fa-gear',
+                title: 'Paramètres',
                 url: null,
                 permission: null,
                 subMenus: [
@@ -72,25 +72,25 @@ class Package implements IPackageConfig
                 ],
             ),
             new PackageMenuType(
-                lang: "fr",
-                icon: "fas fa-bars",
-                title: "Menus",
-                url: "menus",
-                permission: "core.menu",
+                lang: 'fr',
+                icon: 'fas fa-bars',
+                title: 'Menus',
+                url: 'menus',
+                permission: 'core.menu',
                 subMenus: [],
             ),
             new PackageMenuType(
-                lang: "fr",
-                icon: "fas fa-cloud-arrow-down",
-                title: "Mises à jour",
-                url: "updates/cms",
-                permission: "core.update",
+                lang: 'fr',
+                icon: 'fas fa-cloud-arrow-down',
+                title: 'Mises à jour',
+                url: 'updates/cms',
+                permission: 'core.update',
                 subMenus: [],
             ),
             new PackageMenuType(
-                lang: "fr",
-                icon: "fas fa-palette",
-                title: "Thèmes",
+                lang: 'fr',
+                icon: 'fas fa-palette',
+                title: 'Thèmes',
                 url: null,
                 permission: null,
                 subMenus: [
@@ -112,9 +112,9 @@ class Package implements IPackageConfig
                 ],
             ),
             new PackageMenuType(
-                lang: "fr",
-                icon: "fas fa-puzzle-piece",
-                title: "Packages",
+                lang: 'fr',
+                icon: 'fas fa-puzzle-piece',
+                title: 'Packages',
                 url: null,
                 permission: null,
                 subMenus: [
@@ -131,9 +131,9 @@ class Package implements IPackageConfig
                 ],
             ),
             new PackageMenuType(
-                lang: "en",
-                icon: "fas fa-gear",
-                title: "Settings",
+                lang: 'en',
+                icon: 'fas fa-gear',
+                title: 'Settings',
                 url: null,
                 permission: null,
                 subMenus: [
@@ -165,25 +165,25 @@ class Package implements IPackageConfig
                 ],
             ),
             new PackageMenuType(
-                lang: "en",
-                icon: "fas fa-bars",
-                title: "Menus",
-                url: "menus",
-                permission: "core.menu",
+                lang: 'en',
+                icon: 'fas fa-bars',
+                title: 'Menus',
+                url: 'menus',
+                permission: 'core.menu',
                 subMenus: [],
             ),
             new PackageMenuType(
-                lang: "en",
-                icon: "fas fa-cloud-arrow-down",
-                title: "Updates",
-                url: "updates/cms",
-                permission: "core.update",
+                lang: 'en',
+                icon: 'fas fa-cloud-arrow-down',
+                title: 'Updates',
+                url: 'updates/cms',
+                permission: 'core.update',
                 subMenus: [],
             ),
             new PackageMenuType(
-                lang: "en",
-                icon: "fas fa-palette",
-                title: "Themes",
+                lang: 'en',
+                icon: 'fas fa-palette',
+                title: 'Themes',
                 url: null,
                 permission: null,
                 subMenus: [
@@ -205,9 +205,9 @@ class Package implements IPackageConfig
                 ],
             ),
             new PackageMenuType(
-                lang: "en",
-                icon: "fas fa-puzzle-piece",
-                title: "Packages",
+                lang: 'en',
+                icon: 'fas fa-puzzle-piece',
+                title: 'Packages',
                 url: null,
                 permission: null,
                 subMenus: [
@@ -237,7 +237,7 @@ class Package implements IPackageConfig
      */
     public function uninstall(): bool
     {
-        //Return true, we don't need other operations for uninstall.
+        // Return true, we don't need other operations for uninstall.
         return false;
     }
 }

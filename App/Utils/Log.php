@@ -16,14 +16,14 @@ class Log
         echo '</script>';
     }
 
-    /***
+    /*
      * @param mixed $arr
      * @desc Return a pretty array
      */
     public static function debug(mixed $arr): void
     {
-        echo "<pre>";
+        echo '<pre>';
         print_r($arr);
-        echo "</pre>";
+        echo '</pre>';
     }
 }

@@ -10,7 +10,6 @@ use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Loader\Loader;
 use CMW\Manager\Package\AbstractController;
-
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\MenusModel;
@@ -27,11 +26,11 @@ use JetBrains\PhpStorm\NoReturn;
  */
 class MenusController extends AbstractController
 {
-    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/menus")]
-    #[Link("/", Link::GET, [], "/cmw-admin/menus")]
+    #[Link(path: '/', method: Link::GET, scope: '/cmw-admin/menus')]
+    #[Link('/', Link::GET, [], '/cmw-admin/menus')]
     private function adminMenus(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menu");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.menu');
 
         $packagesLinks = $this->getPackagesLinks();
         $roles = RolesModel::getInstance()->getRoles();
@@ -39,8 +38,8 @@ class MenusController extends AbstractController
 
         $view = View::createAdminView('Core', 'Menu/menus')
             ->addVariableList(['packagesLinks' => $packagesLinks, 'roles' => $roles, 'menus' => $menus])
-            ->addScriptBefore("App/Package/Core/Views/Resources/Js/sortable.min.js")
-            ->addScriptAfter("App/Package/Core/Views/Resources/Js/menu.js");
+            ->addScriptBefore('App/Package/Core/Views/Resources/Js/sortable.min.js')
+            ->addScriptAfter('App/Package/Core/Views/Resources/Js/menu.js');
         $view->view();
     }
 
@@ -56,10 +55,10 @@ class MenusController extends AbstractController
         return $toReturn;
     }
 
-    #[Link("/", Link::POST, [], "/cmw-admin/menus")]
+    #[Link('/', Link::POST, [], '/cmw-admin/menus')]
     private function adminMenusAddPost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menu");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.menu');
 
         [$name, $choice] = Utils::filterInput('name', 'choice');
 
@@ -77,12 +76,11 @@ class MenusController extends AbstractController
         $menu = MenusModel::getInstance()->createMenu($name, $url, $targetBlank, $isRestricted, $customUrl);
 
         if (is_null($menu)) {
-            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                LangManager::translate("core.toaster.internalError"));
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.toaster.internalError'));
 
             Redirect::redirectPreviousRoute();
         }
-
 
         if (!empty($_POST['allowedGroupsToggle']) && !empty($_POST['allowedGroups'])) {
             foreach ($_POST['allowedGroups'] as $roleId) {
@@ -90,16 +88,16 @@ class MenusController extends AbstractController
             }
         }
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate("core.menus.add.toaster.success"));
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+            LangManager::translate('core.menus.add.toaster.success'));
 
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link("/add-submenu/:menuId", Link::GET, [], "/cmw-admin/menus")]
+    #[Link('/add-submenu/:menuId', Link::GET, [], '/cmw-admin/menus')]
     private function adminMenusAddSub(int $menuId): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menu");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.menu');
 
         $packagesLinks = $this->getPackagesLinks();
         $roles = RolesModel::getInstance()->getRoles();
@@ -107,18 +105,23 @@ class MenusController extends AbstractController
 
         $view = View::createAdminView('Core', 'Menu/addSub')
             ->addVariableList(['packagesLinks' => $packagesLinks, 'roles' => $roles, 'instanceMenu' => $instanceMenu])
-            ->addScriptAfter("App/Package/Core/Views/Resources/Js/menu.js");;
+            ->addScriptAfter('App/Package/Core/Views/Resources/Js/menu.js');;
         $view->view();
     }
 
-    #[NoReturn] #[Link("/add-submenu/:menuId", Link::POST, [], "/cmw-admin/menus")]
+    #[NoReturn]
+    #[Link('/add-submenu/:menuId', Link::POST, [], '/cmw-admin/menus')]
     private function adminMenusAddSubPost(int $menuId): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menu");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.menu');
 
         [$name, $choice, $targetBlank] = Utils::filterInput('name', 'choice', 'targetBlank');
 
-        if ($targetBlank === null) {$targetBlank = 0;} else {$targetBlank = 1;}
+        if ($targetBlank === null) {
+            $targetBlank = 0;
+        } else {
+            $targetBlank = 1;
+        }
         $isRestricted = empty($_POST['allowedGroupsToggle']) ? 0 : 1;
 
         if ($choice === 'package') {
@@ -129,16 +132,15 @@ class MenusController extends AbstractController
             $customUrl = 1;
         }
 
-        $menu = MenusModel::getInstance()->createSubMenu($name, $menuId, $url, $targetBlank, $isRestricted,$customUrl);
+        $menu = MenusModel::getInstance()->createSubMenu($name, $menuId, $url, $targetBlank, $isRestricted, $customUrl);
 
         if (is_null($menu)) {
-            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                LangManager::translate("core.toaster.internalError"));
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.toaster.internalError'));
 
-            //TODO redirect vers /menus
+            // TODO redirect vers /menus
             Redirect::redirectPreviousRoute();
         }
-
 
         if (!empty($_POST['allowedGroupsToggle']) && !empty($_POST['allowedGroups'])) {
             foreach ($_POST['allowedGroups'] as $roleId) {
@@ -146,16 +148,16 @@ class MenusController extends AbstractController
             }
         }
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate("core.menus.add.toaster.success"));
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+            LangManager::translate('core.menus.add.toaster.success'));
 
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link("/edit/:menuId", Link::GET, [], "/cmw-admin/menus")]
+    #[Link('/edit/:menuId', Link::GET, [], '/cmw-admin/menus')]
     private function adminMenusEdit(int $menuId): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menu");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.menu');
 
         $packagesLinks = $this->getPackagesLinks();
         $roles = RolesModel::getInstance()->getRoles();
@@ -163,18 +165,23 @@ class MenusController extends AbstractController
 
         $view = View::createAdminView('Core', 'Menu/edit')
             ->addVariableList(['packagesLinks' => $packagesLinks, 'roles' => $roles, 'instanceMenu' => $instanceMenu])
-            ->addScriptAfter("App/Package/Core/Views/Resources/Js/menu.js");;
+            ->addScriptAfter('App/Package/Core/Views/Resources/Js/menu.js');;
         $view->view();
     }
 
-    #[NoReturn] #[Link("/edit/:menuId", Link::POST, [], "/cmw-admin/menus")]
+    #[NoReturn]
+    #[Link('/edit/:menuId', Link::POST, [], '/cmw-admin/menus')]
     private function adminMenusEditPost(int $menuId): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menu");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.menu');
 
         [$name, $choice, $targetBlank] = Utils::filterInput('name', 'choice', 'targetBlank');
 
-        if ($targetBlank === null) {$targetBlank = 0;} else {$targetBlank = 1;}
+        if ($targetBlank === null) {
+            $targetBlank = 0;
+        } else {
+            $targetBlank = 1;
+        }
         $isRestricted = empty($_POST['allowedGroupsToggle']) ? 0 : 1;
 
         if ($choice === 'package') {
@@ -185,13 +192,13 @@ class MenusController extends AbstractController
             $customUrl = 1;
         }
 
-        $menu = MenusModel::getInstance()->editMenu($menuId,$name,$url,$targetBlank,$isRestricted, $customUrl);
+        $menu = MenusModel::getInstance()->editMenu($menuId, $name, $url, $targetBlank, $isRestricted, $customUrl);
 
         if (is_null($menu)) {
-            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                LangManager::translate("core.toaster.internalError"));
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.toaster.internalError'));
 
-            //TODO redirect vers /menus
+            // TODO redirect vers /menus
             Redirect::redirectPreviousRoute();
         }
 
@@ -206,19 +213,18 @@ class MenusController extends AbstractController
             }
         }
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            "Menu éditer !");
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+            'Menu éditer !');
 
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link("/delete/:id/:currentOrder", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/menus")]
+    #[Link('/delete/:id/:currentOrder', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/menus')]
     public function adminMenuDelete(int $id, int $currentOrder): void
     {
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"), "Menu supprimé");
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'), 'Menu supprimé');
 
-
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menu");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.menu');
 
         menusModel::getInstance()->deleteMenu($id, $currentOrder);
 
@@ -228,13 +234,12 @@ class MenusController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link("/delete/:id/:currentOrder/:parentId", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/menus")]
+    #[Link('/delete/:id/:currentOrder/:parentId', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/menus')]
     public function adminSubMenuDelete(int $id, int $currentOrder, int $parentId): void
     {
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"), "Menu supprimé");
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'), 'Menu supprimé');
 
-
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menu");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.menu');
 
         menusModel::getInstance()->deleteSubMenu($id, $currentOrder, $parentId);
 
@@ -244,44 +249,44 @@ class MenusController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link("/menuUp/:id/:currentOrder", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/menus")]
+    #[Link('/menuUp/:id/:currentOrder', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/menus')]
     public function adminMenuUp(int $id, int $currentOrder): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menu");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.menu');
 
         menusModel::getInstance()->upPositionMenu($id, $currentOrder);
 
-        Redirect::redirect("cmw-admin/menus");
+        Redirect::redirect('cmw-admin/menus');
     }
 
-    #[Link("/menuDown/:id/:currentOrder", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/menus")]
+    #[Link('/menuDown/:id/:currentOrder', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/menus')]
     public function adminMenuDown(int $id, int $currentOrder): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menu");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.menu');
 
         menusModel::getInstance()->downPositionMenu($id, $currentOrder);
 
-        Redirect::redirect("cmw-admin/menus");
+        Redirect::redirect('cmw-admin/menus');
     }
 
-    #[Link("/submenuUp/:id/:currentOrder/:parentId", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/menus")]
+    #[Link('/submenuUp/:id/:currentOrder/:parentId', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/menus')]
     public function adminSubMenuUp(int $id, int $currentOrder, int $parentId): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menu");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.menu');
 
         menusModel::getInstance()->upPositionSubMenu($id, $currentOrder, $parentId);
 
-        Redirect::redirect("cmw-admin/menus");
+        Redirect::redirect('cmw-admin/menus');
     }
 
-    #[Link("/submenuDown/:id/:currentOrder/:parentId", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/menus")]
+    #[Link('/submenuDown/:id/:currentOrder/:parentId', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/menus')]
     public function adminSubMenuDown(int $id, int $currentOrder, int $parentId): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.menu");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.menu');
 
         menusModel::getInstance()->downPositionSubMenu($id, $currentOrder, $parentId);
 
-        Redirect::redirect("cmw-admin/menus");
+        Redirect::redirect('cmw-admin/menus');
     }
 
     /**

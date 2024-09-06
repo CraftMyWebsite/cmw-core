@@ -6,7 +6,6 @@ use CMW\Manager\Env\EnvManager;
 
 class EncryptManager
 {
-
     private static int $ivLength = 16;
 
     public static function getSalt(): string

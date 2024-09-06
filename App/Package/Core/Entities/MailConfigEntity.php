@@ -27,8 +27,8 @@ class MailConfigEntity
      * @param string|null $footer
      * @param int|null $enable
      */
-    public function __construct(?int    $id, ?string $mail, ?string $mailReply, ?string $addressSMTP, ?string $user,
-                                ?string $password, ?int $port, ?string $protocol, ?string $footer, ?int $enable)
+    public function __construct(?int $id, ?string $mail, ?string $mailReply, ?string $addressSMTP, ?string $user,
+        ?string $password, ?int $port, ?string $protocol, ?string $footer, ?int $enable)
     {
         $this->id = $id;
         $this->mail = $mail;

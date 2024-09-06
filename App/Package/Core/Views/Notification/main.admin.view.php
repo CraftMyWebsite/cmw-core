@@ -13,9 +13,9 @@ use CMW\Manager\Security\SecurityManager;
 /* @var string $mailReceiver */
 /* @var array $refusedPackages */
 
-
-$title = "Notifications";
-$description = "Notifications" ?>
+$title = 'Notifications';
+$description = 'Notifications'
+?>
 
 <div class="page-title">
     <h3><i class="fa-solid fa-bell"></i> Notifications</h3>
@@ -42,7 +42,7 @@ $description = "Notifications" ?>
         <tbody>
         <?php foreach ($notifications as $notification): ?>
             <tr <?php if (!$notification->isRead()): ?>style="background-color: rgba(87,161,146,0.21)"<?php endif; ?>>
-                <td class="item-selector" data-value="<?=$notification->getId()?>"></td>
+                <td class="item-selector" data-value="<?= $notification->getId() ?>"></td>
                 <td><b><?= $notification->getPackage() ?></b></td>
                 <td>
                     <?php if ($notification->isRead()): ?>
@@ -56,7 +56,7 @@ $description = "Notifications" ?>
                 <td><?= $notification->getCreatedAt() ?></td>
                 <td class="text-center space-x-2">
                     <?php if ($notification->getSlug()): ?>
-                        <a href="<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>cmw-admin/<?=$notification->getSlug()?>" class="text-info" title="S'y rendre"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/<?= $notification->getSlug() ?>" class="text-info" title="S'y rendre"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                     <?php endif; ?>
                     <?php if ($notification->isRead()): ?>
                         <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/notification/unRead/<?= $notification->getId() ?>" class="text-warning" title="Marqué comme non lue"><i class="fa-solid fa-eye-slash"></i></a>
@@ -77,7 +77,7 @@ $description = "Notifications" ?>
                             <div class="modal-footer">
                                 <div>
                                     <?php if ($notification->getSlug()): ?>
-                                        <a type="button" href="<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>cmw-admin/<?=$notification->getSlug()?>" class="btn-info">S'y rendre</a>
+                                        <a type="button" href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/<?= $notification->getSlug() ?>" class="btn-info">S'y rendre</a>
                                     <?php endif; ?>
                                     <?php if ($notification->isRead()): ?>
                                         <a type="button" href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/notification/unRead/<?= $notification->getId() ?>" class="btn-warning">Marqué comme non lue</a>
@@ -138,7 +138,7 @@ $description = "Notifications" ?>
                 <?php foreach ($packages as $package): ?>
                     <option
                         <?php foreach ($refusedPackages as $refusedPackage): ?>
-                        <?= $refusedPackage ===  $package->name() ? 'selected' : '' ?>
+                        <?= $refusedPackage === $package->name() ? 'selected' : '' ?>
                         <?php endforeach ?>
                         value="<?= $package->name() ?>"><?= $package->name() ?></option>
                 <?php endforeach; ?>

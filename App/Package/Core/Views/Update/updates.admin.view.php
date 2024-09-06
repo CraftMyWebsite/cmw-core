@@ -11,10 +11,11 @@ use CMW\Manager\Updater\UpdatesManager;
 /* @var UpdatesController[] $previousVersionChangelogGroup */
 /* @var string $currentVersion */
 
-$title = LangManager::translate("core.updates.title");
-$description = LangManager::translate("core.updates.description"); ?>
+$title = LangManager::translate('core.updates.title');
+$description = LangManager::translate('core.updates.description');
+?>
 
-<h3><i class="fas fa-arrows-rotate"></i> <?= LangManager::translate("core.updates.pageTitle") ?></h3>
+<h3><i class="fas fa-arrows-rotate"></i> <?= LangManager::translate('core.updates.pageTitle') ?></h3>
 
 <div class="grid-2">
     <div class="card">
@@ -24,37 +25,37 @@ $description = LangManager::translate("core.updates.description"); ?>
                 <h3><span class="text-danger"><?= $currentVersion ?></span>
                     <i
                         data-bs-toggle="tooltip" data-bs-placement="top"
-                        title="<?= LangManager::translate("core.updates.warningUpdate") ?>"
+                        title="<?= LangManager::translate('core.updates.warningUpdate') ?>"
                         class="text-danger fa-solid fa-heart-crack fa-beat-fade"></i>
                 </h3>
-                <p><?= LangManager::translate("core.updates.updateTo") ?> <b
-                        class="text-success"><?= $latestVersion["value"] ?></b> !</p>
+                <p><?= LangManager::translate('core.updates.updateTo') ?> <b
+                        class="text-success"><?= $latestVersion['value'] ?></b> !</p>
             </div>
             <?php else: ?>
             <div>
                 <h3><span class="text-success"><?= $currentVersion ?></span>
                     <i data-bs-toggle="tooltip"
                        data-bs-placement="top"
-                       title="<?= LangManager::translate("core.updates.isUp") ?>"
+                       title="<?= LangManager::translate('core.updates.isUp') ?>"
                        class="text-success fa-solid fa-heart-pulse fa-beat-fade"></i>
                 </h3>
             </div>
             <?php endif; ?>
             <?php if (UpdatesManager::checkNewUpdateAvailable()): ?>
-                <a href="cms/update" class="btn-success h-fit"><?= LangManager::translate("core.updates.updateButton") ?></a>
+                <a href="cms/update" class="btn-success h-fit"><?= LangManager::translate('core.updates.updateButton') ?></a>
             <?php endif; ?>
         </div>
         <p>
-            <?= LangManager::translate("core.updates.availableFrom") ?>
-            <?= CoreController::formatDate($latestVersion["date_upload"]) ?>
+            <?= LangManager::translate('core.updates.availableFrom') ?>
+            <?= CoreController::formatDate($latestVersion['date_upload']) ?>
         </p>
-        <h6><?= LangManager::translate("core.updates.lastNote") ?></h6>
-        <?php foreach ($latestVersionChangelogGroup as $groupedType) : ?>
+        <h6><?= LangManager::translate('core.updates.lastNote') ?></h6>
+        <?php foreach ($latestVersionChangelogGroup as $groupedType): ?>
             <?php if ($groupedType[0]['content']): ?>
             <div class="border rounded-lg p-2 dark:border-gray-700">
                 <p class="font-bold"><?= $groupedType[0]['type'] ?> :</p>
                 <ul style="list-style: disc" class="pl-5">
-                    <?php foreach ($groupedType as $changelogInfos) : ?>
+                    <?php foreach ($groupedType as $changelogInfos): ?>
                         <li><?= $changelogInfos['content'] ?>
                             <?php if ($changelogInfos['code_link']): ?>
                                 <small><a class="text-bg-primary px-1 rounded-2"
@@ -69,18 +70,18 @@ $description = LangManager::translate("core.updates.description"); ?>
         <?php endforeach; ?>
     </div>
     <div class="card">
-        <h6><?= LangManager::translate("core.updates.previousVersion") ?></h6>
-        <?php foreach ($previousVersions as $previousVersion) : ?>
+        <h6><?= LangManager::translate('core.updates.previousVersion') ?></h6>
+        <?php foreach ($previousVersions as $previousVersion): ?>
             <div class="accordion">
                 <button class="accordion-btn font-bold"><?= $previousVersion['value'] ?></button>
                 <div class="accordion-content">
-                    <p><?= LangManager::translate("core.updates.publishAt") ?> <?= CoreController::formatDate($previousVersion['date_upload']) ?></p>
-                    <?php foreach ($previousVersionChangelogGroup = UpdatesController::groupBy("type", $previousVersion['changelog']) as $previousGroupedType) : ?>
+                    <p><?= LangManager::translate('core.updates.publishAt') ?> <?= CoreController::formatDate($previousVersion['date_upload']) ?></p>
+                    <?php foreach ($previousVersionChangelogGroup = UpdatesController::groupBy('type', $previousVersion['changelog']) as $previousGroupedType): ?>
                         <?php if ($previousGroupedType[0]['content']): ?>
                         <div class="border rounded-lg p-2 dark:border-gray-700 mb-1">
                             <p class="font-bold"><?= $previousGroupedType[0]['type'] ?> :</p>
                                 <ul style="list-style: disc" class="pl-5">
-                                    <?php foreach ($previousGroupedType as $previousChangelogInfos) : ?>
+                                    <?php foreach ($previousGroupedType as $previousChangelogInfos): ?>
                                         <li><?= $previousChangelogInfos['content'] ?>
                                             <?php if ($previousChangelogInfos['code_link']): ?>
                                                 <small><a class="link"

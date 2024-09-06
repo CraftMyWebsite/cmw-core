@@ -8,15 +8,11 @@ use JsonException;
 
 class APIManager
 {
+    private const ENV_KEY = 'api_password';
+    private const HEADER_KEY = 'X-CMW-ACCESS';
+    private const HTTP_HEADER_KEY = 'HTTP_X_CMW_ACCESS';
 
-    private const ENV_KEY = "api_password";
-    private const HEADER_KEY = "X-CMW-ACCESS";
-    private const HTTP_HEADER_KEY = "HTTP_X_CMW_ACCESS";
-
-    public function __construct()
-    {
-
-    }
+    public function __construct() {}
 
     public function __invoke(): void
     {
@@ -25,7 +21,7 @@ class APIManager
 
     public static function generatePassword(): string
     {
-        return uniqid("cmw-api", true);
+        return uniqid('cmw-api', true);
     }
 
     private static function hashPassword($password): string
@@ -50,7 +46,7 @@ class APIManager
         $passwordAccess = self::getPassword();
         $headerAccess = self::HEADER_KEY;
         $headers = $secure
-            ? array(self::HEADER_KEY . ": " . $cmwlToken)
+            ? array(self::HEADER_KEY . ': ' . $cmwlToken)
             : array();
 
         $isPost === true ? $headers[] .= 'Content-Type: application/x-www-form-urlencoded' : '';
@@ -62,10 +58,9 @@ class APIManager
         return $curlHandle;
     }
 
-
     public static function postRequest(string $url, array $data = [], $secure = true, string $cmwlToken = null): string|false
     {
-        //todo verif if url is real URL.
+        // todo verif if url is real URL.
 
         // TODO Add retry function
 
@@ -75,7 +70,7 @@ class APIManager
         curl_setopt($curlHandle, CURLOPT_POST, 1);
         curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $parsedData);
         curl_setopt($curlHandle, CURLOPT_TIMEOUT, 5);
-        curl_setopt($curlHandle, CURLOPT_ENCODING, "gzip");
+        curl_setopt($curlHandle, CURLOPT_ENCODING, 'gzip');
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($curlHandle);
         curl_close($curlHandle);
@@ -84,30 +79,29 @@ class APIManager
 
     public static function getRequest(string $url, $secure = true, string $cmwlToken = null): string|false
     {
-        //todo verif if url is real URL.
+        // todo verif if url is real URL.
 
         // TODO Add retry function
 
         $curlHandle = self::generateHeader($url, $secure, cmwlToken: $cmwlToken);
 
-        curl_setopt($curlHandle, CURLOPT_TIMEOUT, 3); // 3sec timeout
+        curl_setopt($curlHandle, CURLOPT_TIMEOUT, 3);  // 3sec timeout
         $response = curl_exec($curlHandle);
         curl_close($curlHandle);
         return $response;
     }
 
-    public static function createResponse(string $message = "", int $code = 200, array $data = array(), $secure = true, string $cmwlToken = null): bool|string
+    public static function createResponse(string $message = '', int $code = 200, array $data = array(), $secure = true, string $cmwlToken = null): bool|string
     {
-
-        header("Content-Type: application/json; charset=UTF-8");
+        header('Content-Type: application/json; charset=UTF-8');
         if ($secure && !is_null($cmwlToken)) {
-            header(self::HEADER_KEY . ": " . $cmwlToken);
+            header(self::HEADER_KEY . ': ' . $cmwlToken);
         }
         try {
             return json_encode(array(
-                "message" => $message,
-                "code" => $code,
-                "data" => $data
+                'message' => $message,
+                'code' => $code,
+                'data' => $data
             ), JSON_THROW_ON_ERROR);
         } catch (JsonException) {
         }
@@ -128,6 +122,4 @@ class APIManager
     {
         return password_verify(EnvManager::getInstance()->getValue($key), $hashedPass);
     }
-
-
 }

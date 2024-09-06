@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace RobThree\Auth\Providers\Qr;
 
@@ -9,9 +7,7 @@ namespace RobThree\Auth\Providers\Qr;
  */
 class QRServerProvider extends BaseHTTPQRCodeProvider
 {
-    public function __construct(protected bool $verifyssl = false, public string $errorcorrectionlevel = 'L', public int $margin = 4, public int $qzone = 1, public string $bgcolor = 'ffffff', public string $color = '000000', public string $format = 'png')
-    {
-    }
+    public function __construct(protected bool $verifyssl = false, public string $errorcorrectionlevel = 'L', public int $margin = 4, public int $qzone = 1, public string $bgcolor = 'ffffff', public string $color = '000000', public string $format = 'png') {}
 
     public function getMimeType(): string
     {

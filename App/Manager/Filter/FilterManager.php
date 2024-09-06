@@ -24,7 +24,7 @@ class FilterManager
      */
     public static function filterData(string $data, int $maxLength = 128, int $filter = FILTER_UNSAFE_RAW): string
     {
-        $data = trim(preg_replace("/<\?.*\?>/", '', $data)); //Remove scripts tags
+        $data = trim(preg_replace('/<\?.*\?>/', '', $data));  // Remove scripts tags
         $data = mb_substr($data, 0, $maxLength);
         return filter_var($data, $filter);
     }
@@ -69,7 +69,7 @@ class FilterManager
      */
     public static function filterInputIntPost(string $data, int $maxLength = 128): int
     {
-        return (int)mb_substr(trim(filter_input(INPUT_POST, $data, FILTER_SANITIZE_NUMBER_INT)), 0, $maxLength);
+        return (int) mb_substr(trim(filter_input(INPUT_POST, $data, FILTER_SANITIZE_NUMBER_INT)), 0, $maxLength);
     }
 
     /**

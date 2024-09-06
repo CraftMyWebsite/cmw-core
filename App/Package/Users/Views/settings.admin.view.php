@@ -9,21 +9,22 @@ use CMW\Model\Users\UsersSettingsModel;
 /* @var RoleEntity[] $roles */
 /* @var \CMW\Entity\Users\BlacklistedPseudoEntity[] $pseudos */
 
-$title = LangManager::translate("users.settings.title");
-$description = LangManager::translate("users.settings.desc"); ?>
+$title = LangManager::translate('users.settings.title');
+$description = LangManager::translate('users.settings.desc');
+?>
 
 <div class="page-title">
-    <h3><i class="fa-solid fa-gears"></i> <?= LangManager::translate("users.settings.title") ?></h3>
-    <button form="setting" type="submit" class="btn btn-primary"><?= LangManager::translate("core.btn.save") ?></button>
+    <h3><i class="fa-solid fa-gears"></i> <?= LangManager::translate('users.settings.title') ?></h3>
+    <button form="setting" type="submit" class="btn btn-primary"><?= LangManager::translate('core.btn.save') ?></button>
 </div>
 
 <div class="grid-2">
     <div class="space-y-4">
         <div class="card">
             <div class="card-title">
-                <h6><?= LangManager::translate("users.blacklist.title") ?></h6>
+                <h6><?= LangManager::translate('users.blacklist.title') ?></h6>
                 <button type="button" class="btn-danger btn-mass-delete loading-btn" data-loading-btn="Chargement"
-                        data-target-table="1"><?= LangManager::translate("core.btn.mass_delete") ?>
+                        data-target-table="1"><?= LangManager::translate('core.btn.mass_delete') ?>
                 </button>
             </div>
             <div class="table-container">
@@ -31,13 +32,13 @@ $description = LangManager::translate("users.settings.desc"); ?>
                     <thead>
                     <tr>
                         <th class="mass-selector"></th>
-                        <th><?= LangManager::translate("users.blacklist.table.pseudo") ?></th>
-                        <th><?= LangManager::translate("users.blacklist.table.date") ?></th>
-                        <th class="text-center"><?= LangManager::translate("users.blacklist.table.action") ?></th>
+                        <th><?= LangManager::translate('users.blacklist.table.pseudo') ?></th>
+                        <th><?= LangManager::translate('users.blacklist.table.date') ?></th>
+                        <th class="text-center"><?= LangManager::translate('users.blacklist.table.action') ?></th>
                     </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($pseudos as $pseudo) : ?>
+                        <?php foreach ($pseudos as $pseudo): ?>
                         <tr>
                             <td class="item-selector" data-value="<?= $pseudo->getId() ?>"></td>
                             <td><?= $pseudo->getPseudo() ?></td>
@@ -51,14 +52,14 @@ $description = LangManager::translate("users.settings.desc"); ?>
                             <div id="modal-<?= $pseudo->getId() ?>" class="modal-container">
                                 <div class="modal">
                                     <div class="modal-header-danger">
-                                        <h6><?= LangManager::translate("users.blacklist.delete.title") ?><?= $pseudo->getPseudo() ?></h6>
+                                        <h6><?= LangManager::translate('users.blacklist.delete.title') ?><?= $pseudo->getPseudo() ?></h6>
                                         <button type="button" data-modal-hide="modal-<?= $pseudo->getId() ?>"><i class="fa-solid fa-xmark"></i></button>
                                     </div>
                                     <div class="modal-body">
-                                        <?= LangManager::translate("users.blacklist.delete.content") ?>
+                                        <?= LangManager::translate('users.blacklist.delete.content') ?>
                                     </div>
                                     <div class="modal-footer">
-                                        <a href="settings/blacklist/pseudo/delete/<?= $pseudo->getId() ?>" type="button" class="btn-danger"><?= LangManager::translate("core.btn.delete") ?></a>
+                                        <a href="settings/blacklist/pseudo/delete/<?= $pseudo->getId() ?>" type="button" class="btn-danger"><?= LangManager::translate('core.btn.delete') ?></a>
                                     </div>
                                 </div>
                             </div>
@@ -66,7 +67,7 @@ $description = LangManager::translate("users.settings.desc"); ?>
                             <div id="modal-edit-<?= $pseudo->getId() ?>" class="modal-container">
                                 <div class="modal">
                                     <div class="modal-header">
-                                        <h6><?= LangManager::translate("users.blacklist.edit.title") ?><?= $pseudo->getPseudo() ?></h6>
+                                        <h6><?= LangManager::translate('users.blacklist.edit.title') ?><?= $pseudo->getPseudo() ?></h6>
                                         <button type="button" data-modal-hide="modal-edit-<?= $pseudo->getId() ?>"><i class="fa-solid fa-xmark"></i></button>
                                     </div>
                                     <form action="settings/blacklist/pseudo/edit/<?= $pseudo->getId() ?>" method="post">
@@ -78,7 +79,7 @@ $description = LangManager::translate("users.settings.desc"); ?>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="submit" class="btn-primary"><?= LangManager::translate("core.btn.edit") ?></button>
+                                        <button type="submit" class="btn-primary"><?= LangManager::translate('core.btn.edit') ?></button>
                                     </div>
                                     </form>
                                 </div>
@@ -111,13 +112,13 @@ $description = LangManager::translate("users.settings.desc"); ?>
 
         <div class="card mb-4">
             <div class="card-title">
-                <h6><?= LangManager::translate("users.settings.default_picture") ?></h6>
+                <h6><?= LangManager::translate('users.settings.default_picture') ?></h6>
                 <a href="settings/resetImg" class="btn-warning">Reset</a>
             </div>
             <div class="grid-2">
                 <img class="rounded-lg"
                      src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Public/Uploads/Users/Default/<?= $settings->getDefaultImage() ?>"
-                     alt="<?= LangManager::translate("users.settings.default_picture") ?>">
+                     alt="<?= LangManager::translate('users.settings.default_picture') ?>">
                 <div class="drop-img-area" data-input-name="defaultPicture"></div>
             </div>
         </div>
@@ -127,12 +128,12 @@ $description = LangManager::translate("users.settings.desc"); ?>
             <h6>Double facteur obligatoire</h6>
             <fieldset class="form-group">
                 <select class="form-select" id="listEnforcedToggle" name="listEnforcedToggle" required>
-                    <option value="0" <?php if (!UsersSettingsModel::getSetting("listEnforcedToggle")) { echo "selected";} ?>>Pas d'obligation</option>
-                    <option value="1" <?php if (UsersSettingsModel::getSetting("listEnforcedToggle")) { echo "selected";} ?>>Ayant le rôle :</option>
+                    <option value="0" <?php if (!UsersSettingsModel::getSetting('listEnforcedToggle')) { echo 'selected'; } ?>>Pas d'obligation</option>
+                    <option value="1" <?php if (UsersSettingsModel::getSetting('listEnforcedToggle')) { echo 'selected'; } ?>>Ayant le rôle :</option>
                 </select>
             </fieldset>
             <div class="mt-2" id="listEnforcedRoles">
-                <h6><?= LangManager::translate("core.menus.add.group_select") ?> :</h6>
+                <h6><?= LangManager::translate('core.menus.add.group_select') ?> :</h6>
                 <div class="form-group">
                     <select class="choices form-select" name="enforcedRoles[]" multiple>
                         <?php foreach ($roles as $role): ?>
@@ -151,10 +152,10 @@ $description = LangManager::translate("users.settings.desc"); ?>
             <h6><?= LangManager::translate('users.settings.resetPasswordMethod.label') ?></h6>
             <select id="basicSelect" name="reset_password_method" required>
                 <option value="0" <?= $settings->getResetPasswordMethod() === 0 ? 'selected' : '' ?>>
-                    <?= LangManager::translate("users.settings.resetPasswordMethod.options.0") ?>
+                    <?= LangManager::translate('users.settings.resetPasswordMethod.options.0') ?>
                 </option>
                 <!--<option value="1" <?= $settings->getResetPasswordMethod() === 1 ? 'selected' : '' ?>>
-                    <?= LangManager::translate("users.settings.resetPasswordMethod.options.1") ?>
+                    <?= LangManager::translate('users.settings.resetPasswordMethod.options.1') ?>
                 </option>-->
             </select>
         </div>
@@ -163,15 +164,15 @@ $description = LangManager::translate("users.settings.desc"); ?>
             <h6><?= LangManager::translate('users.settings.profile_view.label') ?></h6>
             <select class="form-select" id="basicSelect" name="profile_page" required>
                 <option value="0" <?= $settings->getProfilePageStatus() === 0 ? 'selected' : '' ?>>
-                    <?= LangManager::translate("users.settings.profile_view.options.0") ?>
+                    <?= LangManager::translate('users.settings.profile_view.options.0') ?>
                 </option>
 
                 <option value="1" <?= $settings->getProfilePageStatus() === 1 ? 'selected' : '' ?>>
-                    <?= LangManager::translate("users.settings.profile_view.options.1") ?>
+                    <?= LangManager::translate('users.settings.profile_view.options.1') ?>
                 </option>
 
                 <option value="2" <?= $settings->getProfilePageStatus() === 2 ? 'selected' : '' ?>>
-                    <?= LangManager::translate("users.settings.profile_view.options.2") ?>
+                    <?= LangManager::translate('users.settings.profile_view.options.2') ?>
                 </option>
             </select>
         </div>

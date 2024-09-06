@@ -2,14 +2,14 @@
 
 namespace CMW\Manager\Router;
 
-use Attribute;
 use JetBrains\PhpStorm\ExpectedValues;
+use Attribute;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 class Link
 {
-    public const GET = "get";
-    public const POST = "post";
+    public const GET = 'get';
+    public const POST = 'post';
 
     /**
      * @param string $path
@@ -20,15 +20,18 @@ class Link
      * @param string|null $name
      * @param bool $secure
      */
-    public function __construct(private readonly string                                                $path,
-                                #[ExpectedValues(flagsFromClass: Link::class)] private readonly string $method,
-                                private readonly array                                                 $variables = array(),
-                                private readonly ?string                                               $scope = null,
-                                private readonly int                                                   $weight = 1,
-                                private ?string                                                        $name = null,
-                                private readonly bool                                                  $secure = true)
-    {
-    }
+    public function __construct(
+        private readonly string $path,
+
+        #[ExpectedValues(flagsFromClass: Link::class)]
+        private readonly string $method,
+
+        private readonly array $variables = array(),
+        private readonly ?string $scope = null,
+        private readonly int $weight = 1,
+        private ?string $name = null,
+        private readonly bool $secure = true
+    ) {}
 
     /**
      * @return string
@@ -90,5 +93,4 @@ class Link
     {
         return $this->secure;
     }
-
 }

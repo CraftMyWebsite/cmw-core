@@ -2,12 +2,10 @@
 
 namespace CMW\Manager\Webhook;
 
-
 use JetBrains\PhpStorm\Pure;
 
 class DiscordWebhook
 {
-
     private ?string $url;
     private ?string $name;
     private ?string $content;
@@ -17,20 +15,15 @@ class DiscordWebhook
     private string $description;
     private ?string $titleLink;
     private string $color;
-
     private string $footerText;
     private ?string $footerIconUrl;
-
     private ?string $imageUrl;
-
     private string $authorName;
     private ?string $authorUrl;
-
     private array $fields = [];
 
-    //Optionnal (Text To Speech)
+    // Optionnal (Text To Speech)
     private bool $tts = false;
-
 
     public function __construct(?string $url = null, ?string $name = null, ?string $content = null)
     {
@@ -39,12 +32,12 @@ class DiscordWebhook
         $this->content = $content;
     }
 
-
     /**
      * @param string $url
      * @return \CMW\Manager\Webhook\DiscordWebhook
      */
-    #[Pure] public static function createWebhook(string $url): DiscordWebhook
+    #[Pure]
+    public static function createWebhook(string $url): DiscordWebhook
     {
         return new self($url);
     }
@@ -201,80 +194,63 @@ class DiscordWebhook
         return $this;
     }
 
-
     /**
      * @return void
      * @desc Send the webhook message
      */
     public function send(): void
     {
-        $timestamp = date("c");
+        $timestamp = date('c');
         $data = [
             // Message
-            "content" => $this->content,
-
+            'content' => $this->content,
             // Username
-            "username" => $this->name,
-
+            'username' => $this->name,
             // Avatar URL.
-            "avatar_url" => $this->imageUrl,
-
+            'avatar_url' => $this->imageUrl,
             // Text-to-speech
-            "tts" => $this->tts,
-
+            'tts' => $this->tts,
             // Files upload
             // "file" => "",
-
             // Embeds Array
-            "embeds" => [
+            'embeds' => [
                 [
                     // Embed Title
-                    "title" => $this->title,
-
+                    'title' => $this->title,
                     // Embed Type
-                    "type" => "rich",
-
+                    'type' => 'rich',
                     // Embed Description
-                    "description" => $this->description,
-
+                    'description' => $this->description,
                     // URL of title link
-                    "url" => $this->titleLink,
-
+                    'url' => $this->titleLink,
                     // Timestamp of embed must be formatted as ISO8601
-                    "timestamp" => $timestamp,
-
+                    'timestamp' => $timestamp,
                     // Embed left border color in HEX
-                    "color" => hexdec($this->color),
-
+                    'color' => hexdec($this->color),
                     // Footer
-                    "footer" => [
-                        "text" => $this->footerText,
-                        "icon_url" => $this->footerIconUrl
+                    'footer' => [
+                        'text' => $this->footerText,
+                        'icon_url' => $this->footerIconUrl
                     ],
-
                     // Author
-                    "author" => [
-                        "name" => $this->authorName,
-                        "url" => $this->authorUrl
+                    'author' => [
+                        'name' => $this->authorName,
+                        'url' => $this->authorUrl
                     ],
-
                     // Additional Fields array
-                    "fields" => $this->fields,
+                    'fields' => $this->fields,
                 ],
             ],
-
         ];
 
         if (!empty($this->imageUrl)) {
             $data += ['embeds' =>
-                ["image" => [
-                    "url" => $this->imageUrl
+                ['image' => [
+                    'url' => $this->imageUrl
                 ]]];
-
         }
 
         $data = json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-
 
         $ch = curl_init($this->url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
@@ -287,9 +263,8 @@ class DiscordWebhook
 
         curl_exec($ch);
 
-        //curl_error($ch);
+        // curl_error($ch);
 
         curl_close($ch);
     }
-
 }

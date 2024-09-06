@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace RobThree\Auth\Providers\Rng;
 
@@ -11,7 +9,7 @@ class CSRNGProvider implements IRNGProvider
      */
     public function getRandomBytes(int $bytecount): string
     {
-        return random_bytes($bytecount);    // PHP7+
+        return random_bytes($bytecount);  // PHP7+
     }
 
     /**

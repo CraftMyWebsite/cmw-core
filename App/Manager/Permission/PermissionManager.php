@@ -6,11 +6,10 @@ use RuntimeException;
 
 class PermissionManager
 {
-
     public static function canCreateFile(string $path): bool
     {
-        self::createDirectory($path); //Create the log directory
-        return is_writable($path); //todo test-it
+        self::createDirectory($path);  // Create the log directory
+        return is_writable($path);  // todo test-it
     }
 
     /**
@@ -48,7 +47,7 @@ class PermissionManager
 
     public static function getPackagePermissions(string $packageName): ?IPermissionInit
     {
-        $namespace = 'CMW\\Permissions\\' . $packageName . '\\Permissions';
+        $namespace = 'CMW\\Permissions\\' . $packageName . '\Permissions';
 
         if (!class_exists($namespace)) {
             return null;
@@ -62,5 +61,4 @@ class PermissionManager
 
         return $classInstance;
     }
-
 }

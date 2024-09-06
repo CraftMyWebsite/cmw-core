@@ -3,8 +3,8 @@
 use CMW\Manager\Env\EnvManager;
 use CMW\Utils\Website;
 
-Website::setTitle("Hello World");
-Website::setDescription("CraftMyWebsite is wonderful.");
+Website::setTitle('Hello World');
+Website::setDescription('CraftMyWebsite is wonderful.');
 ?>
 
 <section class="page-section">

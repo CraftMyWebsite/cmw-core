@@ -2,8 +2,8 @@
 
 namespace CMW\Interface\Core;
 
-
-interface ISideBarElements {
+interface ISideBarElements
+{
     public function beforeWidgets(): void;
     public function afterWidgets(): void;
 }

@@ -2,12 +2,12 @@
 
 namespace CMW\Manager\Events;
 
-use Closure;
 use CMW\Manager\Collections\Collection;
 use CMW\Manager\Collections\CollectionEntity;
 use CMW\Manager\Loader\Loader;
 use CMW\Utils\Log;
 use JetBrains\PhpStorm\ExpectedValues;
+use Closure;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -23,11 +23,10 @@ class Emitter
          * @var $method ReflectionMethod
          */
         foreach ($attributeList as [$attr, $method]) {
-
             /** @var Listener $attributeInstance */
             $attributeInstance = $attr->newInstance();
 
-            //todo use GlobalObject getInstance
+            // todo use GlobalObject getInstance
             if ($eventName !== $attributeInstance->getEventName()) {
                 continue;
             }
@@ -43,8 +42,12 @@ class Emitter
     private static function sortAttributes(array &$eventAttributes): void
     {
         usort($eventAttributes, static function (array $a, array $b) {
-            [$firstAttr,] = $a;
-            [$secondAttr,] = $b;
+            [
+                $firstAttr,
+            ] = $a;
+            [
+                $secondAttr,
+            ] = $b;
             return $secondAttr->getWeight() - $firstAttr->getWeight();
         });
     }
@@ -54,7 +57,7 @@ class Emitter
      */
     private static function initEventClass(#[ExpectedValues(AbstractEvent::class)] string $eventName): void
     {
-        self::$actualEvent = (new ReflectionClass($eventName))->getMethod("getInstance")->invoke(null);
+        self::$actualEvent = (new ReflectionClass($eventName))->getMethod('getInstance')->invoke(null);
         self::$actualEvent->init();
     }
 
@@ -73,7 +76,7 @@ class Emitter
      */
     private static function invokeEventMethod(#[ExpectedValues(AbstractEvent::class)] string $eventName, ReflectionMethod $method, mixed $data): void
     {
-        $controller = $method->getDeclaringClass()->getMethod("getInstance")->invoke(null);
+        $controller = $method->getDeclaringClass()->getMethod('getInstance')->invoke(null);
         $method->invoke($controller, $data);
 
         self::increment($eventName, $method);
@@ -87,12 +90,11 @@ class Emitter
     /**
      * @throws \ReflectionException
      */
-    private static function invoke(#[ExpectedValues(AbstractEvent::class)] string $eventName, array $eventAttributes, mixed $data) : void
+    private static function invoke(#[ExpectedValues(AbstractEvent::class)] string $eventName, array $eventAttributes, mixed $data): void
     {
         /* @var \CMW\Manager\Events\Listener $attr */
         /* @var ReflectionMethod $method */
         foreach ($eventAttributes as [$attr, $method]) {
-
             if (!self::$actualEvent->canPropagate()) {
                 break;
             }
@@ -110,7 +112,6 @@ class Emitter
      */
     public static function send(#[ExpectedValues(AbstractEvent::class)] string $eventName, mixed $data): void
     {
-
         $attributeList = Loader::getAttributeList()[Listener::class];
         $eventAttributes = array();
 
@@ -134,5 +135,4 @@ class Emitter
 
         self::invoke($eventName, $eventAttributes, $data);
     }
-
 }

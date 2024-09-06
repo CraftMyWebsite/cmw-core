@@ -4,15 +4,12 @@ namespace CMW\Entity\Users;
 
 class RoleEntity
 {
-
     private int $roleId;
     private string $roleName;
     private string $roleDescription;
     private int $roleWeight;
     private bool $roleIsDefault;
-
     private array $rolePermissions;
-
 
     /**
      * @param int $roleId
@@ -72,7 +69,6 @@ class RoleEntity
         return $this->roleIsDefault;
     }
 
-
     /**
      * @return PermissionEntity[]
      */
@@ -80,6 +76,4 @@ class RoleEntity
     {
         return $this->rolePermissions;
     }
-
-
 }

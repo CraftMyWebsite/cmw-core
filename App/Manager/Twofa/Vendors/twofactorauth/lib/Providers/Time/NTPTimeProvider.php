@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace RobThree\Auth\Providers\Time;
 
@@ -36,7 +34,7 @@ class NTPTimeProvider implements ITimeProvider
             socket_connect($sock, $this->host, $this->port);
 
             // Send request
-            $msg = "\010" . str_repeat("\0", 47);
+            $msg = "\x08" . str_repeat("\0", 47);
             socket_send($sock, $msg, strlen($msg), 0);
 
             // Receive response and close socket

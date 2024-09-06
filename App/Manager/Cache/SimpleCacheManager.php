@@ -9,11 +9,12 @@ use JsonException;
 
 class SimpleCacheManager
 {
-    private static int $cacheTime = 86400; //Variable data ?
+    private static int $cacheTime = 86400;  // Variable data ?
 
-    private static string $dir = "App/Storage/Cache";
+    private static string $dir = 'App/Storage/Cache';
 
-    private static function getCompletePath() : string {
+    private static function getCompletePath(): string
+    {
         return EnvManager::getInstance()->getValue('DIR') . self::$dir;
     }
 
@@ -22,15 +23,15 @@ class SimpleCacheManager
      * @param string $subFolder
      * @return bool
      */
-    public static function checkCache(string $fileName, string $subFolder = "/"): bool
+    public static function checkCache(string $fileName, string $subFolder = '/'): bool
     {
-        $fileName .= ".cache";
+        $fileName .= '.cache';
 
-        if ($subFolder[-1] !== '/'){
+        if ($subFolder[-1] !== '/') {
             $subFolder .= '/';
         }
 
-        if ($subFolder[0] !== '/'){
+        if ($subFolder[0] !== '/') {
             $subFolder = '/' . $subFolder;
         }
 
@@ -43,15 +44,15 @@ class SimpleCacheManager
      * @param string $subFolder
      * @return mixed
      */
-    public static function getCache(string $fileName, string $subFolder = "/"): mixed
+    public static function getCache(string $fileName, string $subFolder = '/'): mixed
     {
-        $fileName .= ".cache";
+        $fileName .= '.cache';
 
-        if ($subFolder[-1] !== '/'){
+        if ($subFolder[-1] !== '/') {
             $subFolder .= '/';
         }
 
-        if ($subFolder[0] !== '/'){
+        if ($subFolder[0] !== '/') {
             $subFolder = '/' . $subFolder;
         }
 
@@ -68,21 +69,21 @@ class SimpleCacheManager
      * @param string $subFolder
      * @return void
      */
-    public static function storeCache(mixed $value, string $fileName, string $subFolder = "/"): void
+    public static function storeCache(mixed $value, string $fileName, string $subFolder = '/'): void
     {
-        $fileName .= ".cache";
+        $fileName .= '.cache';
 
-        if ($subFolder[-1] !== '/'){
+        if ($subFolder[-1] !== '/') {
             $subFolder .= '/';
         }
 
-        if ($subFolder[0] !== '/'){
+        if ($subFolder[0] !== '/') {
             $subFolder = '/' . $subFolder;
         }
 
         Directory::createFolders(self::$dir . $subFolder);
 
-        if (self::cacheExist($fileName, $subFolder)){
+        if (self::cacheExist($fileName, $subFolder)) {
             self::deleteSpecificCacheFile($fileName, $subFolder);
         }
 
@@ -97,15 +98,15 @@ class SimpleCacheManager
      * @param string $subFolder
      * @return bool
      */
-    public static function cacheExist(string $fileName, string $subFolder = "/"): bool
+    public static function cacheExist(string $fileName, string $subFolder = '/'): bool
     {
-        $fileName .= ".cache";
+        $fileName .= '.cache';
 
-        if ($subFolder[-1] !== '/'){
+        if ($subFolder[-1] !== '/') {
             $subFolder .= '/';
         }
 
-        if ($subFolder[0] !== '/'){
+        if ($subFolder[0] !== '/') {
             $subFolder = '/' . $subFolder;
         }
 
@@ -117,15 +118,15 @@ class SimpleCacheManager
      * @param string $subFolder
      * @return void
      */
-    public static function deleteSpecificCacheFile(string $fileName, string $subFolder = "/"): void
+    public static function deleteSpecificCacheFile(string $fileName, string $subFolder = '/'): void
     {
-        $fileName .= ".cache";
+        $fileName .= '.cache';
 
-        if ($subFolder[-1] !== '/'){
+        if ($subFolder[-1] !== '/') {
             $subFolder .= '/';
         }
 
-        if ($subFolder[0] !== '/'){
+        if ($subFolder[0] !== '/') {
             $subFolder = '/' . $subFolder;
         }
 
@@ -139,13 +140,12 @@ class SimpleCacheManager
      * @param string $subFolder
      * @return void
      */
-    public static function editCacheValue(string $valueKey, mixed $newValue, string $fileName, string $subFolder = "/"): void
+    public static function editCacheValue(string $valueKey, mixed $newValue, string $fileName, string $subFolder = '/'): void
     {
         $data = self::getCache($fileName, $subFolder);
 
         $data[$valueKey] = $newValue;
 
         self::storeCache($data, $fileName, $subFolder);
-
     }
 }

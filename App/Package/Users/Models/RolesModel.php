@@ -18,7 +18,6 @@ use CMW\Utils\Utils;
  */
 class RolesModel extends AbstractModel
 {
-
     private PermissionsModel $permissionsModel;
     private static UsersModel $usersModel;
 
@@ -30,13 +29,12 @@ class RolesModel extends AbstractModel
 
     public function getRoleById($id): ?RoleEntity
     {
-
-        $sql = "SELECT * FROM cmw_roles WHERE role_id = :role_id";
+        $sql = 'SELECT * FROM cmw_roles WHERE role_id = :role_id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute(array("role_id" => $id))) {
+        if (!$req->execute(array('role_id' => $id))) {
             return null;
         }
 
@@ -54,7 +52,6 @@ class RolesModel extends AbstractModel
             $res['role_is_default'],
             $this->getPermissions($id)
         );
-
     }
 
     /**
@@ -62,7 +59,7 @@ class RolesModel extends AbstractModel
      */
     public function getRoles(): array
     {
-        $sql = "SELECT role_id FROM cmw_roles ORDER BY role_weight DESC";
+        $sql = 'SELECT role_id FROM cmw_roles ORDER BY role_weight DESC';
         $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 
@@ -73,7 +70,7 @@ class RolesModel extends AbstractModel
         $toReturn = array();
 
         while ($role = $res->fetch()) {
-            Utils::addIfNotNull($toReturn, $this->getRoleById($role["role_id"]));
+            Utils::addIfNotNull($toReturn, $this->getRoleById($role['role_id']));
         }
 
         return $toReturn;
@@ -89,29 +86,28 @@ class RolesModel extends AbstractModel
      */
     public function createRole(string $roleName, string $roleDescription, int $roleWeight, int $roleIsDefault, ?array $permList): ?int
     {
-        //Create role & return roleId
+        // Create role & return roleId
         $var = array(
-            "role_name" => $roleName,
-            "role_description" => $roleDescription,
-            "role_weight" => $roleWeight,
-            "role_is_default" => $roleIsDefault
+            'role_name' => $roleName,
+            'role_description' => $roleDescription,
+            'role_weight' => $roleWeight,
+            'role_is_default' => $roleIsDefault
         );
 
         if ($roleIsDefault === 1) {
             $this->removePreviousDefaultRole();
         }
 
-        $sql = "INSERT INTO cmw_roles (role_name, role_description, role_weight, role_is_default) 
-                VALUES (:role_name, :role_description, :role_weight, :role_is_default)";
+        $sql = 'INSERT INTO cmw_roles (role_name, role_description, role_weight, role_is_default) 
+                VALUES (:role_name, :role_description, :role_weight, :role_is_default)';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
         if ($req->execute($var)) {
-
             $roleId = $db->lastInsertId();
 
-            //Insert permissions
+            // Insert permissions
             foreach ($permList as $permId) {
                 $this->addPermission($roleId, $permId);
             }
@@ -119,15 +115,14 @@ class RolesModel extends AbstractModel
             return $roleId;
         }
 
-
         return null;
     }
 
     public function addPermission(int $roleId, int $permId): bool
     {
-        $sql = "INSERT INTO cmw_roles_permissions VALUES (:permission_id, :role_id)";
+        $sql = 'INSERT INTO cmw_roles_permissions VALUES (:permission_id, :role_id)';
         $db = DatabaseManager::getInstance();
-        return $db->prepare($sql)->execute(array("permission_id" => $permId, "role_id" => $roleId));
+        return $db->prepare($sql)->execute(array('permission_id' => $permId, 'role_id' => $roleId));
     }
 
     /**
@@ -136,22 +131,21 @@ class RolesModel extends AbstractModel
      */
     public function getPermissions(int $roleId): array
     {
-        $sql = "SELECT permission_id FROM cmw_roles_permissions WHERE role_id = :role_id";
+        $sql = 'SELECT permission_id FROM cmw_roles_permissions WHERE role_id = :role_id';
         $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 
-        if (!$res->execute(array("role_id" => $roleId))) {
+        if (!$res->execute(array('role_id' => $roleId))) {
             return array();
         }
 
         $toReturn = array();
 
         while ($perm = $res->fetch()) {
-            Utils::addIfNotNull($toReturn, $this->permissionsModel->getPermissionById($perm["permission_id"]));
+            Utils::addIfNotNull($toReturn, $this->permissionsModel->getPermissionById($perm['permission_id']));
         }
 
         return $toReturn;
-
     }
 
     public function roleHasPermission(int $id, string $permCode): int
@@ -182,15 +176,15 @@ class RolesModel extends AbstractModel
      */
     public function updateRole(string $roleName, string $roleDescription, int $roleId, int $roleWeight, ?array $permList): void
     {
-        //Update role
+        // Update role
         $var = array(
-            "role_name" => $roleName,
-            "role_description" => $roleDescription,
-            "role_id" => $roleId,
-            "role_weight" => $roleWeight
+            'role_name' => $roleName,
+            'role_description' => $roleDescription,
+            'role_id' => $roleId,
+            'role_weight' => $roleWeight
         );
 
-        $sql = "UPDATE cmw_roles SET role_name = :role_name, role_description = :role_description, role_weight = :role_weight WHERE role_id = :role_id";
+        $sql = 'UPDATE cmw_roles SET role_name = :role_name, role_description = :role_description, role_weight = :role_weight WHERE role_id = :role_id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -205,11 +199,11 @@ class RolesModel extends AbstractModel
     public function changeDefault(int $id): void
     {
         $this->removePreviousDefaultRole();
-        $sql = "UPDATE cmw_roles SET role_is_default = 1 WHERE role_id = :id";
+        $sql = 'UPDATE cmw_roles SET role_is_default = 1 WHERE role_id = :id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
-        $req->execute(array("id" => $id));
+        $req->execute(array('id' => $id));
     }
 
     /**
@@ -217,7 +211,7 @@ class RolesModel extends AbstractModel
      */
     public function removePreviousDefaultRole(): void
     {
-        $sql = "UPDATE cmw_roles SET role_is_default = 0 WHERE role_is_default = 1";
+        $sql = 'UPDATE cmw_roles SET role_is_default = 0 WHERE role_is_default = 1';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -234,9 +228,9 @@ class RolesModel extends AbstractModel
 
     public function deleteAllPermissions(int $roleId): void
     {
-        $sql = "DELETE FROM cmw_roles_permissions WHERE role_id = :role_id";
+        $sql = 'DELETE FROM cmw_roles_permissions WHERE role_id = :role_id';
         $db = DatabaseManager::getInstance();
-        $db->prepare($sql)->execute(array("role_id" => $roleId));
+        $db->prepare($sql)->execute(array('role_id' => $roleId));
     }
 
     public function deleteRole(int $roleId): void
@@ -244,10 +238,10 @@ class RolesModel extends AbstractModel
         $this->deleteAllPermissions($roleId);
 
         $var = array(
-            "role_id" => $roleId
+            'role_id' => $roleId
         );
 
-        $sql = "DELETE FROM cmw_roles WHERE role_id = :role_id";
+        $sql = 'DELETE FROM cmw_roles WHERE role_id = :role_id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -256,12 +250,12 @@ class RolesModel extends AbstractModel
 
     public function roleIsDefault(int $roleId): bool
     {
-        $sql = "SELECT role_is_default FROM cmw_roles WHERE role_id = :id AND role_is_default = 1";
+        $sql = 'SELECT role_is_default FROM cmw_roles WHERE role_id = :id AND role_is_default = 1';
 
         $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 
-        if ($res->execute(array("id" => $roleId))) {
+        if ($res->execute(array('id' => $roleId))) {
             return $res->rowCount() === 1;
         }
         return false;
@@ -309,16 +303,15 @@ class RolesModel extends AbstractModel
 
         foreach ($res as $role) {
             $toReturn[] = new RoleEntity(
-                $role["role_id"],
-                $role["role_name"],
-                $role["role_description"],
-                $role["role_weight"],
-                $role["role_is_default"],
-                $this->getPermissions($role["role_id"])
+                $role['role_id'],
+                $role['role_name'],
+                $role['role_description'],
+                $role['role_weight'],
+                $role['role_is_default'],
+                $this->getPermissions($role['role_id'])
             );
         }
 
         return $toReturn;
     }
-
 }

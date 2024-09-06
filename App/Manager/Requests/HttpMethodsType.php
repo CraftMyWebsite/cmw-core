@@ -2,7 +2,6 @@
 
 namespace CMW\Manager\Requests;
 
-
 enum HttpMethodsType
 {
     case GET;

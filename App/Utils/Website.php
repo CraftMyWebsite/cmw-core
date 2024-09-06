@@ -8,7 +8,6 @@ use JetBrains\PhpStorm\ExpectedValues;
 
 class Website
 {
-
     private static string $title;
     private static string $description;
     private static ?string $customHeader;
@@ -29,7 +28,7 @@ class Website
      */
     public static function getTitle(bool $useSiteName = true): string
     {
-        $title = $useSiteName ? self::getWebsiteName() . " | " . self::$title : self::$title;
+        $title = $useSiteName ? self::getWebsiteName() . ' | ' . self::$title : self::$title;
 
         return htmlspecialchars_decode($title, ENT_QUOTES);
     }
@@ -64,7 +63,7 @@ class Website
      */
     public static function getCustomHeader(): string
     {
-        return htmlspecialchars_decode(self::$customHeader ?? "", ENT_HTML5);
+        return htmlspecialchars_decode(self::$customHeader ?? '', ENT_HTML5);
     }
 
     #[ExpectedValues(values: ['https', 'http'])]
@@ -75,7 +74,7 @@ class Website
 
     public static function getUrl(): string
     {
-        return self::getProtocol() . "://$_SERVER[HTTP_HOST]" . EnvManager::getInstance()->getValue("PATH_SUBFOLDER");
+        return self::getProtocol() . "://$_SERVER[HTTP_HOST]" . EnvManager::getInstance()->getValue('PATH_SUBFOLDER');
     }
 
     /**
@@ -84,7 +83,7 @@ class Website
      */
     public static function getClientIp(): string
     {
-        $NOT_VALID_IP = "0.0.0.0";
+        $NOT_VALID_IP = '0.0.0.0';
 
         $clientIp = $_SERVER['HTTP_CLIENT_IP'] ?? ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR']);
 
@@ -97,9 +96,9 @@ class Website
 
     public static function refresh(bool $die = false): void
     {
-        header("Refresh:0");
+        header('Refresh:0');
 
-        if ($die){
+        if ($die) {
             die();
         }
     }
@@ -113,13 +112,13 @@ class Website
     {
         $currentUrl = $_SERVER['REQUEST_URI'];
 
-        if ($targetUrl[0] === '/'){
+        if ($targetUrl[0] === '/') {
             $targetUrl = substr($targetUrl, 0);
         }
 
         $targetUrl = EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . $targetUrl;
 
-        return $currentUrl === $targetUrl || $currentUrl === $targetUrl . '/' || $currentUrl === $targetUrl . '#'; //Use Regex ?
+        return $currentUrl === $targetUrl || $currentUrl === $targetUrl . '/' || $currentUrl === $targetUrl . '#';  // Use Regex ?
     }
 
     /**
@@ -128,10 +127,9 @@ class Website
      */
     public static function isContainingRoute(string $targetUrl): bool
     {
-        $path = explode("/", $_SERVER["REQUEST_URI"]);
+        $path = explode('/', $_SERVER['REQUEST_URI']);
         return in_array($targetUrl, $path);
     }
-
 
     /**
      * @return string
@@ -139,7 +137,7 @@ class Website
      */
     public static function getWebsiteName(): string
     {
-        return CoreModel::getInstance()->fetchOption("name");
+        return CoreModel::getInstance()->fetchOption('name');
     }
 
     /**
@@ -148,23 +146,22 @@ class Website
      */
     public static function getWebsiteDescription(): string
     {
-        return CoreModel::getInstance()->fetchOption("description");
+        return CoreModel::getInstance()->fetchOption('description');
     }
 
     public static function getLogoPath(): string
     {
-        $logoName = Directory::getFiles(EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "Public/Uploads/logo");
+        $logoName = Directory::getFiles(EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Public/Uploads/logo');
 
         if (!empty($logoName)) {
-            return EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "Public/Uploads/Logo/" . $logoName[0];
+            return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Public/Uploads/Logo/' . $logoName[0];
         }
 
-        return EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "Admin/Resources/Assets/Images/Logo/Logo_compact.png"; //unstable...
+        return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Admin/Resources/Assets/Images/Logo/Logo_compact.png';  // unstable...
     }
 
     public static function getFavicon(): string
     {
-        return EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . 'Public/Uploads/Favicon/favicon.ico';
+        return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Public/Uploads/Favicon/favicon.ico';
     }
-
 }

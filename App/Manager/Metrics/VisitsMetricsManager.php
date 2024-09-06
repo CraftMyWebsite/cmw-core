@@ -14,21 +14,21 @@ use JetBrains\PhpStorm\ExpectedValues;
 
 class VisitsMetricsManager extends AbstractManager
 {
-    private int $maxLines = 50; // Variable data ?
+    private int $maxLines = 50;  // Variable data ?
     private string $filePath;
     private string $dirStorage;
 
     public function __construct()
     {
-        $this->dirStorage = EnvManager::getInstance()->getValue("DIR") . "App/Storage/Visits";
+        $this->dirStorage = EnvManager::getInstance()->getValue('DIR') . 'App/Storage/Visits';
         $this->filePath = "$this->dirStorage/history.log";
     }
 
     public function registerVisit(Route $route): void
     {
-        $package = explode(".", $route->getName())[0] ?? null;
+        $package = explode('.', $route->getName())[0] ?? null;
 
-        $isAdmin = str_starts_with($route->getPath(), "cmw-admin/") ?: 0;
+        $isAdmin = str_starts_with($route->getPath(), 'cmw-admin/') ?: 0;
 
         $path = $route->getPath() === '' ? '/' : $route->getPath();
 
@@ -38,9 +38,9 @@ class VisitsMetricsManager extends AbstractManager
 
         $_SESSION['latestVisitPath'] = $path;
 
-        $data = Website::getClientIp() . "," . date('Y-m-d H:i:s') . "," . $path . "," . $package . "," . http_response_code() . "," . $isAdmin;
+        $data = Website::getClientIp() . ',' . date('Y-m-d H:i:s') . ',' . $path . ',' . $package . ',' . http_response_code() . ',' . $isAdmin;
 
-        //If we don't have file perms, we ignore temp file writing
+        // If we don't have file perms, we ignore temp file writing
         if (!$this->checkPermissions()) {
             $this->sendLogToDatabase();
             return;
@@ -102,17 +102,17 @@ class VisitsMetricsManager extends AbstractManager
             return;
         }
 
-        $sql = "INSERT INTO cmw_visits (visits_ip, visits_date, visits_path, visits_package, visits_code, visits_is_admin) VALUES ";
+        $sql = 'INSERT INTO cmw_visits (visits_ip, visits_date, visits_path, visits_package, visits_code, visits_is_admin) VALUES ';
         foreach ($logs as $line) {
-            $res = explode(",", $line);
+            $res = explode(',', $line);
             $sql .= "('$res[0]','$res[1]','$res[2]','$res[3]','$res[4]','$res[5]'),";
         }
 
         $db = DatabaseManager::getInstance();
         $db->query(mb_substr($sql, 0, -1));
 
-        //Clean old file
-        File::write($this->filePath, "");
+        // Clean old file
+        File::write($this->filePath, '');
     }
 
     private function getLogData(): array|false
@@ -120,49 +120,47 @@ class VisitsMetricsManager extends AbstractManager
         return File::readArray($this->filePath);
     }
 
-    public function getVisitsNumber(#[ExpectedValues(["all", "monthly", "week", "day", "hour"])] $period): ?int
+    public function getVisitsNumber(#[ExpectedValues(['all', 'monthly', 'week', 'day', 'hour'])] $period): ?int
     {
         $rangeStart = null;
         $rangeFinish = null;
 
-        if ($period === "monthly" || $period === "week" || $period === "day" || $period === "hour"):
+        if ($period === 'monthly' || $period === 'week' || $period === 'day' || $period === 'hour'):
             switch ($period):
-                case "monthly":
-                    $rangeStart = date("Y-m-d 00:00:00", strtotime("first day of this month"));
-                    $rangeFinish = date("Y-m-d 00:00:00", strtotime("last day of this month"));
+                case 'monthly':
+                    $rangeStart = date('Y-m-d 00:00:00', strtotime('first day of this month'));
+                    $rangeFinish = date('Y-m-d 00:00:00', strtotime('last day of this month'));
                     break;
-                case "week":
-                    $rangeStart = date("Y-m-d 00:00:00", strtotime("monday this week"));
-                    $rangeFinish = date("Y-m-d 00:00:00", strtotime("sunday this week"));
+                case 'week':
+                    $rangeStart = date('Y-m-d 00:00:00', strtotime('monday this week'));
+                    $rangeFinish = date('Y-m-d 00:00:00', strtotime('sunday this week'));
                     break;
-                case "day":
-                    $rangeStart = date("Y-m-d 00:00:00");
-                    $rangeFinish = date("Y-m-d 23:59:59");
+                case 'day':
+                    $rangeStart = date('Y-m-d 00:00:00');
+                    $rangeFinish = date('Y-m-d 23:59:59');
                     break;
-                case "hour":
-                    $rangeStart = date("Y-m-d h:00:00");
-                    $rangeFinish = date("Y-m-d h:00:00", strtotime("+1 hour"));
+                case 'hour':
+                    $rangeStart = date('Y-m-d h:00:00');
+                    $rangeFinish = date('Y-m-d h:00:00', strtotime('+1 hour'));
                     break;
             endswitch;
 
             $var = [
-                "range_start" => $rangeStart,
-                "range_finish" => $rangeFinish,
+                'range_start' => $rangeStart,
+                'range_finish' => $rangeFinish,
             ];
 
-            $sql = "SELECT COUNT(DISTINCT visits_ip) AS `result` FROM cmw_visits WHERE visits_date BETWEEN (:range_start) AND (:range_finish)";
+            $sql = 'SELECT COUNT(DISTINCT visits_ip) AS `result` FROM cmw_visits WHERE visits_date BETWEEN (:range_start) AND (:range_finish)';
 
             $db = DatabaseManager::getInstance();
             $req = $db->prepare($sql);
             $res = $req->execute($var);
-
         else:
-            $sql = "SELECT COUNT(DISTINCT visits_ip) AS `result` FROM cmw_visits";
+            $sql = 'SELECT COUNT(DISTINCT visits_ip) AS `result` FROM cmw_visits';
 
             $db = DatabaseManager::getInstance();
             $req = $db->prepare($sql);
             $res = $req->execute();
-
         endif;
 
         if ($res) {
@@ -180,11 +178,11 @@ class VisitsMetricsManager extends AbstractManager
     public function getDataVisits(string $rangeStart, string $rangeFinish): int
     {
         $var = [
-            "range_start" => $rangeStart,
-            "range_finish" => $rangeFinish,
+            'range_start' => $rangeStart,
+            'range_finish' => $rangeFinish,
         ];
 
-        $sql = "SELECT COUNT(DISTINCT visits_ip) AS `result` FROM cmw_visits WHERE visits_date BETWEEN (:range_start) AND (:range_finish)";
+        $sql = 'SELECT COUNT(DISTINCT visits_ip) AS `result` FROM cmw_visits WHERE visits_date BETWEEN (:range_start) AND (:range_finish)';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -214,7 +212,6 @@ class VisitsMetricsManager extends AbstractManager
             return 0;
         }
 
-
         return $req->fetch()['count'] ?? 0;
     }
 
@@ -229,18 +226,17 @@ class VisitsMetricsManager extends AbstractManager
         $toReturn = [];
 
         for ($i = 0; $i < $pastMonths; $i++) {
-            $targetMonth = idate("m", strtotime("-$i months"));
+            $targetMonth = idate('m', strtotime("-$i months"));
             $targetMonthTranslate = LangManager::translate("core.months.$targetMonth");
 
-            $rangeStart = date("Y-m-d 00:00:00", strtotime("first day of -$i months"));
-            $rangeFinish = date("Y-m-d 23:59:59", strtotime("last day of -$i months"));
+            $rangeStart = date('Y-m-d 00:00:00', strtotime("first day of -$i months"));
+            $rangeFinish = date('Y-m-d 23:59:59', strtotime("last day of -$i months"));
 
             $toReturn[$targetMonthTranslate] = $this->getDataVisits($rangeStart, $rangeFinish);
 
             if ($targetMonth === $currentMonth) {
                 $toReturn[$targetMonthTranslate] += $this->getFileLineNumber();
             }
-
         }
         return array_reverse($toReturn);
     }
@@ -251,22 +247,22 @@ class VisitsMetricsManager extends AbstractManager
      */
     public function getPastDaysVisits(int $pastDays): array
     {
-        $currentDay = idate("d");
+        $currentDay = idate('d');
 
         $toReturn = [];
 
         for ($i = 0; $i < $pastDays; $i++) {
-            $targetDay = date("d", strtotime("-$i days"));
+            $targetDay = date('d', strtotime("-$i days"));
 
             if ($targetDay === $currentDay) {
-                $rangeStart = date("Y-m-d 00:00:00", strtotime("-$i days"));
-                $rangeFinish = date("Y-m-d 23:59:59", strtotime("-$i days"));
+                $rangeStart = date('Y-m-d 00:00:00', strtotime("-$i days"));
+                $rangeFinish = date('Y-m-d 23:59:59', strtotime("-$i days"));
 
                 $dataVisits = $this->getDataVisits($rangeStart, $rangeFinish);
                 $toReturn[] = $dataVisits + $this->getFileLineNumber();
             } else {
-                $rangeStart = date("Y-m-d 00:00:00", strtotime("-$i days"));
-                $rangeFinish = date("Y-m-d 23:59:59", strtotime("-$i days"));
+                $rangeStart = date('Y-m-d 00:00:00', strtotime("-$i days"));
+                $rangeFinish = date('Y-m-d 23:59:59', strtotime("-$i days"));
                 $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish);
             }
         }
@@ -285,18 +281,16 @@ class VisitsMetricsManager extends AbstractManager
         $toReturn = [];
 
         for ($i = 0; $i < $pastWeeks; $i++) {
-            $targetWeek = idate("W", strtotime("-$i weeks"));
+            $targetWeek = idate('W', strtotime("-$i weeks"));
 
-
-            $rangeStart = date("Y-m-d 00:00:00", strtotime("-$i monday this week"));
-            $rangeFinish = date("Y-m-d 23:59:59", strtotime("-$i sunday this week"));
+            $rangeStart = date('Y-m-d 00:00:00', strtotime("-$i monday this week"));
+            $rangeFinish = date('Y-m-d 23:59:59', strtotime("-$i sunday this week"));
 
             $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish);
 
             if ($targetWeek === $currentWeeks) {
                 $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish) + $this->getFileLineNumber();
             }
-
         }
         return array_reverse($toReturn);
     }

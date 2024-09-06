@@ -7,6 +7,6 @@ class RegisterEvent extends AbstractEvent
 {
     public function getName(): string
     {
-        return "RegisterEvent-Users-CraftMyWebsite"; //avoid simple names :)
+        return 'RegisterEvent-Users-CraftMyWebsite';  // avoid simple names :)
     }
 }
