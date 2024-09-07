@@ -6,8 +6,8 @@ use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Utils\Website;
 
-Website::setTitle("News - " . $news->getTitle());
-Website::setDescription("Affichage de la news " . $news->getTitle());
+Website::setTitle('News - ' . $news->getTitle());
+Website::setDescription('Affichage de la news ' . $news->getTitle());
 ?>
 
 
@@ -23,9 +23,9 @@ Website::setDescription("Affichage de la news " . $news->getTitle());
             <?= $news->getLikes()->getTotal() ?>
             <?php if ($news->getLikes()->userCanLike()): ?>
                 <?php if (UsersController::isUserLogged()) {
-                    echo "You already love!";
+                    echo 'You already love!';
                 } else {
-                    echo "Log in to like!";
+                    echo 'Log in to like!';
                 } ?>
             <?php else: ?>
                 <a href="<?= $news->getLikes()->getSendLike() ?>">You will like</a>
@@ -58,7 +58,7 @@ Website::setDescription("Affichage de la news " . $news->getTitle());
                     <?php if (UsersController::isUserLogged()): ?>
                         <button type="submit">Commenter</button>
                     <?php else: ?>
-                        <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>login">Commenter</a>
+                        <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>login">Commenter</a>
                     <?php endif; ?>
                 </div>
             </form>

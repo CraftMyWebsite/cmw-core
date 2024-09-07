@@ -1,5 +1,8 @@
 <?php
-/** @var Alert $alert */
+
+/**
+ * @var Alert $alert
+ */
 
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;

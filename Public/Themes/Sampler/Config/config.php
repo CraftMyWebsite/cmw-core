@@ -1,7 +1,7 @@
 <?php use CMW\Controller\Core\ThemeController;
 use CMW\Manager\Lang\LangManager;
-use CMW\Model\Core\ThemeModel;
-use CMW\Manager\Security\SecurityManager; ?>
+use CMW\Manager\Security\SecurityManager;
+use CMW\Model\Core\ThemeModel; ?>
 <!-------------->
 <!--Navigation-->
 <!-------------->
@@ -27,7 +27,7 @@ use CMW\Manager\Security\SecurityManager; ?>
             <label for="backgroundColor">Image de fond :</label>
             <div class="grid-3">
                 <img width="100%" class="col-span-2"
-                     src='<?= ThemeModel::getInstance()->fetchImageLink("background") ?>'>
+                     src='<?= ThemeModel::getInstance()->fetchImageLink('background') ?>'>
                 <div class="drop-img-area" data-input-name="background"></div>
             </div>
         </div>

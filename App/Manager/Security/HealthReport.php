@@ -13,8 +13,8 @@ use CMW\Model\Core\CoreModel;
 use CMW\Model\Users\UsersModel;
 use DateTime;
 
-class HealthReport {
-
+class HealthReport
+{
     /**
      * @return string
      * @desc <p> Generate CMW Health Report for help our support team.</p>
@@ -24,12 +24,12 @@ class HealthReport {
      */
     public function generateReport(): string
     {
-        $generationDate = date(CoreModel::getInstance()->fetchOption("dateFormat"));
+        $generationDate = date(CoreModel::getInstance()->fetchOption('dateFormat'));
         $generatorName = UsersModel::getCurrentUser()?->getPseudo();
 
-        #PHP
+        // PHP
         $phpVersion = $this->getPhpVersion();
-        $phpExtensions = "";
+        $phpExtensions = '';
 
         foreach ($this->getPhpExtensions() as $name => $version) {
             $phpExtensions .= "     - $name @$version" . "\n";
@@ -38,90 +38,90 @@ class HealthReport {
         $phpSessionDuration = $this->getPhpSessionDuration();
         $phpPostMaxUpload = $this->getPhpPostMaxUpload();
 
-        #Server
+        // Server
         $serverOs = $this->getServerOs();
         $serverTimeZone = EnvManager::getInstance()->getValue('TIMEZONE');
-        $serverSoftware = $_SERVER["SERVER_SOFTWARE"];
+        $serverSoftware = $_SERVER['SERVER_SOFTWARE'];
 
-        #Website
+        // Website
         $websitePathSubFolder = EnvManager::getInstance()->getValue('PATH_SUBFOLDER');
         $websiteDir = EnvManager::getInstance()->getValue('DIR');
         $websiteUrl = EnvManager::getInstance()->getValue('PATH_URL');
         $websiteDevMode = EnvManager::getInstance()->getValue('DEVMODE');
         $websiteUpdateChecker = EnvManager::getInstance()->getValue('UPDATE_CHECKER');
 
-        #SQL
+        // SQL
         $sqlVersion = $this->getMySqlVersion();
         $sqlIsMariaDB = $this->isMariaDB() ? 'True' : 'False';
 
-        #Packages
-        $packages = "";
+        // Packages
+        $packages = '';
         foreach (PackageController::getInstalledPackages() as $package) {
-            $packages .= "      - " . $package->name() . " @" . $package->version() . " \n ";
+            $packages .= '      - ' . $package->name() . ' @' . $package->version() . " \n ";
         }
 
-        #Themes
-        $themes = "";
+        // Themes
+        $themes = '';
         foreach (ThemeManager::getInstance()->getInstalledThemes() as $theme) {
             $isActiveTheme = ThemeManager::getInstance()->getCurrentTheme()->name() === $theme->name();
 
-            $themes .= "        - " . $theme->name() . " @" . $theme->version();
+            $themes .= '        - ' . $theme->name() . ' @' . $theme->version();
 
-            $themes .= $isActiveTheme ? " [ACTIVE]" : '';
+            $themes .= $isActiveTheme ? ' [ACTIVE]' : '';
 
             $themes .= " \n ";
         }
 
-        #CMS
+        // CMS
         $cmsVersion = UpdatesManager::getVersion();
 
         $data =
-        <<<EOL
-        ################### CraftMyWebsite - Health Reporting ################### 
-         
-         Generation date: $generationDate
-         Generator name: $generatorName
-         
-         
-         ----- PHP -----
-            => Version: $phpVersion
-            => Extensions:
-         $phpExtensions
-            => Session duration: $phpSessionDuration
-            => Post max upload: $phpPostMaxUpload
-         
-         ----- SERVER -----
-            => OS: $serverOs
-            => TimeZone: $serverTimeZone
-            => ServerSoftware: $serverSoftware
-         
-         ----- WEBSITE -----
-            => SUBFOLDER => $websitePathSubFolder
-            => DIR => $websiteDir
-            => URL => $websiteUrl
-            => DevMode => $websiteDevMode
-            => Update checker => $websiteUpdateChecker
-         
-         ----- SQL -----
-            => Version: $sqlVersion
-            => MariaDB: $sqlIsMariaDB
-         
-         ----- PACKAGES -----
-            => Packages:
-         $packages
+            <<<EOL
+            ################### CraftMyWebsite - Health Reporting ################### 
              
-         ----- THEMES -----
-            => Themes:
-         $themes
+             Generation date: $generationDate
+             Generator name: $generatorName
              
-         ----- CMS -----
-             => Version: $cmsVersion
-            
-        EOL;
+             
+             ----- PHP -----
+                => Version: $phpVersion
+                => Extensions:
+             $phpExtensions
+                => Session duration: $phpSessionDuration
+                => Post max upload: $phpPostMaxUpload
+             
+             ----- SERVER -----
+                => OS: $serverOs
+                => TimeZone: $serverTimeZone
+                => ServerSoftware: $serverSoftware
+             
+             ----- WEBSITE -----
+                => SUBFOLDER => $websitePathSubFolder
+                => DIR => $websiteDir
+                => URL => $websiteUrl
+                => DevMode => $websiteDevMode
+                => Update checker => $websiteUpdateChecker
+             
+             ----- SQL -----
+                => Version: $sqlVersion
+                => MariaDB: $sqlIsMariaDB
+             
+             ----- PACKAGES -----
+                => Packages:
+             $packages
+                 
+             ----- THEMES -----
+                => Themes:
+             $themes
+                 
+             ----- CMS -----
+                 => Version: $cmsVersion
+                
+            EOL;
 
-        $fileName = "report_" . (new DateTime())->format('Y-m-d_H\hi\ms\s') . ".txt";
+        $fileName = 'report_' . (new DateTime())->format('Y-m-d_H\hi\ms\s') . '.txt';
 
-        file_put_contents(EnvManager::getInstance()->getValue('DIR') . "App/Storage/Reports/" . $fileName, $data);
+        file_put_contents(EnvManager::getInstance()->getValue('DIR') . 'App/Storage/Reports/' . $fileName, $data);
 
         return $fileName;
     }
@@ -132,15 +132,14 @@ class HealthReport {
      */
     public function deleteHealthReports(): void
     {
-        $files = glob(EnvManager::getInstance()->getValue('DIR') . "App/Storage/Reports/*");
+        $files = glob(EnvManager::getInstance()->getValue('DIR') . 'App/Storage/Reports/*');
 
         foreach ($files as $file) {
-            if (is_file($file) && pathinfo($file, PATHINFO_EXTENSION) === "txt") {
+            if (is_file($file) && pathinfo($file, PATHINFO_EXTENSION) === 'txt') {
                 unlink($file);
             }
         }
     }
-
 
     private function getPhpVersion(): string
     {
@@ -180,7 +179,7 @@ class HealthReport {
         $db = DatabaseManager::getInstance();
         $version = $db->query('select version()')->fetchColumn();
 
-        preg_match("/^[0-9.]+/", $version, $match);
+        preg_match('/^[0-9.]+/', $version, $match);
 
         return $match[0];
     }

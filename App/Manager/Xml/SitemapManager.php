@@ -2,14 +2,12 @@
 
 namespace CMW\Manager\Xml;
 
-
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Manager\AbstractManager;
 use CMW\Utils\File;
 
 class SitemapManager extends AbstractManager
 {
-
     /**
      * @return bool
      * @desc Generate XML file with default location
@@ -20,19 +18,19 @@ class SitemapManager extends AbstractManager
         $date = date('c');
 
         $data = <<<XML
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset 
-    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
-        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-    <url>
-        <loc>$url</loc>
-        <lastmod>$date</lastmod>
-        <priority>1.00</priority>
-    </url>
-</urlset>
-XML;
+            <?xml version="1.0" encoding="UTF-8"?>
+            <urlset 
+                xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 
+                    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+                <url>
+                    <loc>$url</loc>
+                    <lastmod>$date</lastmod>
+                    <priority>1.00</priority>
+                </url>
+            </urlset>
+            XML;
 
         $file = EnvManager::getInstance()->getValue('DIR') . 'sitemap.xml';
 
@@ -65,9 +63,9 @@ XML;
         $loc = EnvManager::getInstance()->getValue('PATH_URL') . $slug;
 
         $object = $content->addChild('url');
-        $object?->addChild("loc", $loc);
-        $object?->addChild("lastmod", $date);
-        $object?->addChild("priority", $priority);
+        $object?->addChild('loc', $loc);
+        $object?->addChild('lastmod', $date);
+        $object?->addChild('priority', $priority);
 
         $formattedData = $content->asXML();
 
@@ -100,7 +98,7 @@ XML;
         $loc = EnvManager::getInstance()->getValue('PATH_URL') . $slug;
 
         foreach ($content->url as $url) {
-            if ((string)$url->loc === $loc) {
+            if ((string) $url->loc === $loc) {
                 $url->lastmod = date('c');
                 $url->priority = $priority;
 
@@ -140,7 +138,7 @@ XML;
         for ($i = 0, $iMax = count($content->url); $i < $iMax; $i++) {
             $url = $content->url[$i];
 
-            if ((string)$url->loc === $loc) {
+            if ((string) $url->loc === $loc) {
                 unset($content->url[$i]);
 
                 $formattedData = $content->asXML();

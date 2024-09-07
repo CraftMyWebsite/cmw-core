@@ -2,8 +2,8 @@
 
 namespace CMW\Entity\Core;
 
-
-class PackageMenusEntity {
+class PackageMenusEntity
+{
     private string $name;
     private string $icon;
     private string $url;
@@ -54,5 +54,4 @@ class PackageMenusEntity {
     {
         return $this->submenu;
     }
-
 }

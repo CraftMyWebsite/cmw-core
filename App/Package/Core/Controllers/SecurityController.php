@@ -17,6 +17,7 @@ use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
+
 use function array_filter;
 use function current;
 
@@ -28,53 +29,53 @@ use function current;
  */
 class SecurityController extends AbstractController
 {
-
-    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin")]
-    #[Link("/security", Link::GET, [], "/cmw-admin")]
+    #[Link(path: '/', method: Link::GET, scope: '/cmw-admin')]
+    #[Link('/security', Link::GET, [], '/cmw-admin')]
     private function adminSecurity(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.security");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.settings.security');
 
         $availablesCaptcha = Loader::loadImplementations(ICaptcha::class);
 
-        View::createAdminView("Core", "Security/security")
-            ->addScriptAfter("App/Package/Core/Views/Resources/Js/security.js")
+        View::createAdminView('Core', 'Security/security')
+            ->addScriptAfter('App/Package/Core/Views/Resources/Js/security.js')
             ->addVariableList([
-                "currentCaptcha" => self::getCaptchaType(),
+                'currentCaptcha' => self::getCaptchaType(),
                 'availablesCaptcha' => $availablesCaptcha,
             ])
             ->view();
     }
 
-    #[NoReturn] #[Link("/security/edit/captcha", Link::POST, [], "/cmw-admin")]
+    #[NoReturn]
+    #[Link('/security/edit/captcha', Link::POST, [], '/cmw-admin')]
     private function adminSecurityEditCaptchaPost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.security");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.settings.security');
 
-        //Get captcha value
-        $captcha = FilterManager::filterInputStringPost("captcha");
+        // Get captcha value
+        $captcha = FilterManager::filterInputStringPost('captcha');
 
-        //Update option in DB
-        if (!CoreModel::getInstance()->updateOption("captcha", $captcha)) {
+        // Update option in DB
+        if (!CoreModel::getInstance()->updateOption('captcha', $captcha)) {
             Flash::send(
                 Alert::ERROR,
-                LangManager::translate("core.toaster.error"),
-                LangManager::translate("core.toaster.internalError"),
+                LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.toaster.internalError'),
             );
             Redirect::redirectPreviousRoute();
         }
 
-        //If we don't want captcha, we don't need to do anything else
-        if ($captcha === "none") {
+        // If we don't want captcha, we don't need to do anything else
+        if ($captcha === 'none') {
             Flash::send(
                 Alert::SUCCESS,
-                LangManager::translate("core.toaster.success"),
-                LangManager::translate("core.toaster.config.success"),
+                LangManager::translate('core.toaster.success'),
+                LangManager::translate('core.toaster.config.success'),
             );
             Redirect::redirectPreviousRoute();
         }
 
-        //Get captcha implementation
+        // Get captcha implementation
         $captchaImplementation = current(array_filter(
             Loader::loadImplementations(ICaptcha::class),
             static fn($implementation) => $implementation->getCode() === $captcha
@@ -83,28 +84,29 @@ class SecurityController extends AbstractController
         if (!$captchaImplementation instanceof ICaptcha) {
             Flash::send(
                 Alert::ERROR,
-                LangManager::translate("core.toaster.error"),
-                LangManager::translate("core.toaster.internalError"),
+                LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.toaster.internalError'),
             );
             Redirect::redirectPreviousRoute();
         }
 
-        //Process captcha implementation
+        // Process captcha implementation
         $captchaImplementation->adminFormPost();
 
         Flash::send(
             Alert::SUCCESS,
-            LangManager::translate("core.toaster.success"),
-            LangManager::translate("core.toaster.config.success"),
+            LangManager::translate('core.toaster.success'),
+            LangManager::translate('core.toaster.config.success'),
         );
 
         Redirect::redirectPreviousRoute();
     }
 
-    #[NoReturn] #[Link("/security/generate/report/health", Link::GET, [], "/cmw-admin")]
+    #[NoReturn]
+    #[Link('/security/generate/report/health', Link::GET, [], '/cmw-admin')]
     private function adminGenerateReportHealth(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.security.healthReport");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.settings.security.healthReport');
 
         $healthReport = new HealthReport();
 
@@ -114,15 +116,16 @@ class SecurityController extends AbstractController
 
         View::createAdminView('Core', 'Security/displayHealthReport')
             ->addVariableList(['report' => $report, 'reportName' => $reportName])
-            ->addStyle("Admin/Resources/Vendors/Izitoast/iziToast.min.css")
-            ->addScriptAfter("Admin/Resources/Vendors/Izitoast/iziToast.min.js")
+            ->addStyle('Admin/Resources/Vendors/Izitoast/iziToast.min.css')
+            ->addScriptAfter('Admin/Resources/Vendors/Izitoast/iziToast.min.js')
             ->view();
     }
 
-    #[NoReturn] #[Link("/security/delete/report/health", Link::GET, [], "/cmw-admin")]
+    #[NoReturn]
+    #[Link('/security/delete/report/health', Link::GET, [], '/cmw-admin')]
     private function adminDeleteReportHealth(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.security.healthReport");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.settings.security.healthReport');
 
         $healthReport = new HealthReport();
 
@@ -131,7 +134,7 @@ class SecurityController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('core.toaster.security.healthReport.delete'));
 
-        Redirect::redirect("cmw-admin/security");
+        Redirect::redirect('cmw-admin/security');
     }
 
     /**
@@ -140,7 +143,7 @@ class SecurityController extends AbstractController
      */
     public static function getCaptchaType(): string
     {
-        return CoreModel::getOptionValue("captcha");
+        return CoreModel::getOptionValue('captcha');
     }
 
     /**
@@ -151,7 +154,7 @@ class SecurityController extends AbstractController
     {
         $captcha = self::getCaptchaType();
 
-        if ($captcha === "none") {
+        if ($captcha === 'none') {
             return false;
         }
 

@@ -13,7 +13,6 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Loader\Loader;
 use CMW\Manager\Metrics\VisitsMetricsManager;
 use CMW\Manager\Package\AbstractController;
-use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Uploads\ImagesException;
 use CMW\Manager\Uploads\ImagesManager;
@@ -32,31 +31,30 @@ use JetBrains\PhpStorm\NoReturn;
 class CoreController extends AbstractController
 {
     public static string $themeName;
-    public static array $availableLocales = ['fr' => 'Français', 'en' => 'English']; //todo remove that
-    public static array $exampleDateFormat = ["d-m-Y H:i:s", "d-m-Y Hh im ss", "d/m/Y H:i:s", "d/m/Y à H\h i\m s\s", "d/m/Y à H\h i\m", "d/m/Y at H\h i\m s\s", "d F \à H\hi", "d F \at H\hi"];
+    public static array $availableLocales = ['fr' => 'Français', 'en' => 'English'];  // todo remove that
+    public static array $exampleDateFormat = ['d-m-Y H:i:s', 'd-m-Y Hh im ss', 'd/m/Y H:i:s', 'd/m/Y à H\h i\m s\s', 'd/m/Y à H\h i\m', 'd/m/Y at H\h i\m s\s', 'd F \à H\hi', 'd F \at H\hi'];
 
     public static function getThemePath(): string
     {
-        self::$themeName = CoreModel::getInstance()->fetchOption("Theme");
-        return (empty($themeName = self::$themeName)) ? "" : "./Public/Themes/$themeName/";
+        self::$themeName = CoreModel::getInstance()->fetchOption('Theme');
+        return (empty($themeName = self::$themeName)) ? '' : "./Public/Themes/$themeName/";
     }
 
     public static function formatDate(string $date): string
     {
-        return date(CoreModel::getInstance()->fetchOption("dateFormat"), strtotime($date));
+        return date(CoreModel::getInstance()->fetchOption('dateFormat'), strtotime($date));
     }
 
     /* ADMINISTRATION */
-    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin")]
-    #[Link("/dashboard", Link::GET, [], "/cmw-admin")]
+    #[Link(path: '/', method: Link::GET, scope: '/cmw-admin')]
+    #[Link('/dashboard', Link::GET, [], '/cmw-admin')]
     private function adminDashboard(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard");
+        UsersController::redirectIfNotHavePermissions('core.dashboard');
 
-        //Redirect to the dashboard
-        if ($_GET['url'] === "cmw-admin") {
-            Redirect::redirect(EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . 'cmw-admin/dashboard');
-
+        // Redirect to the dashboard
+        if ($_GET['url'] === 'cmw-admin') {
+            Redirect::redirect(EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
         }
 
         $monthlyVisits = VisitsMetricsManager::getInstance()->getPastMonthsVisits(12);
@@ -64,10 +62,10 @@ class CoreController extends AbstractController
         $weeklyVisits = VisitsMetricsManager::getInstance()->getPastWeeksVisits(17);
         $registers = UsersMetricsModel::getInstance()->getPastMonthsRegisterNumbers(12);
 
-        View::createAdminView("Core", "Dashboard/dashboard")
+        View::createAdminView('Core', 'Dashboard/dashboard')
             ->addVariableList(['monthlyVisits' => $monthlyVisits, 'dailyVisits' => $dailyVisits,
                 'weeklyVisits' => $weeklyVisits, 'registers' => $registers])
-            ->addScriptBefore("Admin/Resources/Vendors/Apexcharts/Js/apexcharts.js")
+            ->addScriptBefore('Admin/Resources/Vendors/Apexcharts/Js/apexcharts.js')
             ->view();
     }
 
@@ -97,55 +95,57 @@ class CoreController extends AbstractController
         }
     }
 
-    #[Link(path: "/configuration", method: Link::GET, scope: "/cmw-admin")]
+    #[Link(path: '/configuration', method: Link::GET, scope: '/cmw-admin')]
     private function adminConfiguration(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.website");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.settings.website');
 
-        View::createAdminView("Core", "Configuration/configuration")
+        View::createAdminView('Core', 'Configuration/configuration')
             ->view();
     }
 
-    #[NoReturn] #[Link(path: "/configuration", method: Link::POST, scope: "/cmw-admin")]
-    private function adminConfigurationPost(Request $request): void
+    #[NoReturn]
+    #[Link(path: '/configuration', method: Link::POST, scope: '/cmw-admin')]
+    private function adminConfigurationPost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.website");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.settings.website');
 
         foreach ($_POST as $option_name => $option_value):
-            if ($option_name === "locale") {
-                EnvManager::getInstance()->editValue("LOCALE", $option_value);
-                //TODO rename perms desc DB
+            if ($option_name === 'locale') {
+                EnvManager::getInstance()->editValue('LOCALE', $option_value);
+                // TODO rename perms desc DB
             }
             CoreModel::getInstance()->updateOption($option_name, $option_value);
         endforeach;
 
-        //update favicon
-        if ($_FILES['favicon']['name'] !== "") {
+        // update favicon
+        if ($_FILES['favicon']['name'] !== '') {
             try {
-                $imgStatus = ImagesManager::upload($_FILES['favicon'], "Favicon", false, "favicon");
-                //Show error
+                $imgStatus = ImagesManager::upload($_FILES['favicon'], 'Favicon', false, 'favicon');
+                // Show error
                 if ($imgStatus !== 'favicon.ico') {
-                    Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
+                    Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
                         LangManager::translate($imgStatus));
                 } else {
-                    Flash::send(Alert::SUCCESS, "Icon", LangManager::translate("core.config.alert_img"));
+                    Flash::send(Alert::SUCCESS, 'Icon', LangManager::translate('core.config.alert_img'));
                 }
             } catch (ImagesException) {
-                Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                    LangManager::translate("core.errors.editConfiguration", ['config' => 'Favicon']));
+                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                    LangManager::translate('core.errors.editConfiguration', ['config' => 'Favicon']));
             }
         }
 
         $options = CoreModel::getInstance()->fetchOptions();
-        SimpleCacheManager::storeCache($options, 'options', "Options");
+        SimpleCacheManager::storeCache($options, 'options', 'Options');
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate("core.toaster.config.success"));
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+            LangManager::translate('core.toaster.config.success'));
 
         Redirect::redirectPreviousRoute();
     }
 
     /* PUBLIC FRONT */
+
     /**
      * @throws \CMW\Manager\Router\RouterException
      */
@@ -158,7 +158,7 @@ class CoreController extends AbstractController
     #[Link('/', Link::GET)]
     private function frontHome(): void
     {
-        $view = new View("Core", "home");
+        $view = new View('Core', 'home');
         $view->view();
     }
 
@@ -168,13 +168,12 @@ class CoreController extends AbstractController
     /* Security Warning */
     public function cmwWarn(): ?string
     {
-        if (is_dir("Installation") && EnvManager::getInstance()->getValue("DEVMODE") !== '1') {
-            //Todo Set that in Lang file
+        if (is_dir('Installation') && EnvManager::getInstance()->getValue('DEVMODE') !== '1') {
+            // Todo Set that in Lang file
             return <<<HTML
-            <p class='security-warning'>ATTENTION - Votre dossier d'Installation n'a pas encore été supprimé. Pour des questions de sécurité, vous devez supprimer le dossier Installation situé à la racine de votre site.</p>
-            HTML;
+                <p class='security-warning'>ATTENTION - Votre dossier d'Installation n'a pas encore été supprimé. Pour des questions de sécurité, vous devez supprimer le dossier Installation situé à la racine de votre site.</p>
+                HTML;
         }
         return null;
     }
 }
-

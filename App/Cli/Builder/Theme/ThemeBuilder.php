@@ -3,10 +3,10 @@ namespace CMW\Cli\Builder\Theme;
 
 use CMW\Cli\CliBuilder;
 
-require_once("App/Cli/CliBuilder.php");
+require_once ('App/Cli/CliBuilder.php');
 
-class ThemeBuilder extends CliBuilder{
-
+class ThemeBuilder extends CliBuilder
+{
     protected string $themeName;
     protected string $themeVersion;
     protected string $themeAuthor;
@@ -14,7 +14,7 @@ class ThemeBuilder extends CliBuilder{
     protected ?array $themeDependPackages;
     protected ?array $themeExtensions;
 
-    private array $availableExtensions = ["Bootstrap", "Tailwind", "jQuery", "FontAwesome"];
+    private array $availableExtensions = ['Bootstrap', 'Tailwind', 'jQuery', 'FontAwesome'];
 
     /**
      * @throws \JsonException
@@ -23,9 +23,9 @@ class ThemeBuilder extends CliBuilder{
     {
         parent::__construct();
 
-        $this->init(); //Builder setup (wizard)
+        $this->init();  // Builder setup (wizard)
 
-        $this->build(); //Create the Theme with all the datas
+        $this->build();  // Create the Theme with all the datas
 
         $this->sayLn(CLI_THEME_BUILD_SUCCESS);
     }
@@ -39,13 +39,12 @@ class ThemeBuilder extends CliBuilder{
         $this->setThemeExtensions();
     }
 
-
     private function setThemeName(): void
     {
         $this->sayLn(CLI_THEME_BUILDER_NAME);
 
         $this->themeName = trim($this->read());
-        //TODO Check if the Theme name is not already use
+        // TODO Check if the Theme name is not already use
     }
 
     private function setThemeVersion(): void
@@ -62,7 +61,7 @@ class ThemeBuilder extends CliBuilder{
 
     private function setThemeCmwVersion(): void
     {
-        $this->sayLn(CLI_THEME_BUILDER_CMW_VERSION . "XX");
+        $this->sayLn(CLI_THEME_BUILDER_CMW_VERSION . 'XX');
         $this->themeCmwVersion = $this->read();
     }
 
@@ -71,14 +70,13 @@ class ThemeBuilder extends CliBuilder{
         $this->sayLn(CLI_THEME_BUILDER_EXTENSIONS);
 
         $i = 0;
-        foreach ($this->availableExtensions as $extension){
-            $this->sayLn($i . ") " . $extension);
+        foreach ($this->availableExtensions as $extension) {
+            $this->sayLn($i . ') ' . $extension);
 
             ++$i;
         }
         $this->themeExtensions = explode(' ', $this->read());
     }
-
 
     /**
      * @throws \JsonException
@@ -86,15 +84,14 @@ class ThemeBuilder extends CliBuilder{
     private function build(): void
     {
         $this->say($this->themeName, $this->themeVersion, $this->themeAuthor, $this->themeCmwVersion);
-        foreach ($this->themeExtensions as $extension){
+        foreach ($this->themeExtensions as $extension) {
             $this->say($extension);
         }
 
-        //Launch the build process
-        require_once("App/Cli/Builder/Theme/ThemeBuilderInstallation.php");
+        // Launch the build process
+        require_once ('App/Cli/Builder/Theme/ThemeBuilderInstallation.php');
         $themeBuilderInstallation = new ThemeBuilderInstallation();
         $themeBuilderInstallation->generateTheme($this->themeName, $this->themeVersion, $this->themeAuthor,
             $this->themeCmwVersion, $this->themeExtensions);
     }
-
 }

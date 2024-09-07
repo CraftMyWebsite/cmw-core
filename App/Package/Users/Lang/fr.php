@@ -1,26 +1,26 @@
 <?php
 
 return [
-    "profile" => "Profil",
-    "login" => [
-        "title" => "Connexion",
-        "desc" => "Connectez-vous pour accéder au panneau d'administration",
-        "remember" => "Se souvenir de moi",
-        "signin" => "Connexion",
-        "lost_password" => "Mot de passe oublié ?",
-        "register" => "S'inscrire",
-        "forgot_password" => [
-            "title" => "Mot de passe oublié",
-            "desc" => "Récupérez votre mot de passe",
-            "btn" => "Confirmation",
-            "mail" => [
-                "object" => "Votre nouveau mot de passe %site_name%",
-                "body" => "Voici votre nouveau mot de passe à changer rapidement après votre connexion : <b> %password% </b>",
+    'profile' => 'Profil',
+    'login' => [
+        'title' => 'Connexion',
+        'desc' => "Connectez-vous pour accéder au panneau d'administration",
+        'remember' => 'Se souvenir de moi',
+        'signin' => 'Connexion',
+        'lost_password' => 'Mot de passe oublié ?',
+        'register' => "S'inscrire",
+        'forgot_password' => [
+            'title' => 'Mot de passe oublié',
+            'desc' => 'Récupérez votre mot de passe',
+            'btn' => 'Confirmation',
+            'mail' => [
+                'object' => 'Votre nouveau mot de passe %site_name%',
+                'body' => 'Voici votre nouveau mot de passe à changer rapidement après votre connexion : <b> %password% </b>',
             ],
         ],
     ],
-    "register" => [
-        "title" => "Inscription",
+    'register' => [
+        'title' => 'Inscription',
     ],
     "files" => "Fichiers autorisés : png, jpg, jpeg, webp, svg, gif",
     "toaster" => [
@@ -52,26 +52,26 @@ return [
         "load_permissions_error" => "Impossible de charger les permissions du package %package%",
         "load_permissions_success" => "Permissions chargées avec succès !",
     ],
-    "manage" => [
-        "title" => "Gestion des utilisateurs",
-        "desc" => "Gérez les utilisateurs de votre site",
-        "card_title_list" => "Liste des utilisateurs inscrits",
-        "card_title_add" => "Ajouter un utilisateur",
-        "edit" => [
-            "title" => "Edition de ",
-            "about" => "A propos",
+    'manage' => [
+        'title' => 'Gestion des utilisateurs',
+        'desc' => 'Gérez les utilisateurs de votre site',
+        'card_title_list' => 'Liste des utilisateurs inscrits',
+        'card_title_add' => 'Ajouter un utilisateur',
+        'edit' => [
+            'title' => 'Edition de ',
+            'about' => 'A propos',
         ],
-        "randomPasswordTooltip" => "Générez un mot de passe aléatoire et sécurisé en un clic. Le mot de passe sera copié dans votre presse papier",
+        'randomPasswordTooltip' => 'Générez un mot de passe aléatoire et sécurisé en un clic. Le mot de passe sera copié dans votre presse papier',
     ],
-    "edit" => [
-        "title" => "Utilisateurs | Edition",
-        "desc" => "Editez les comptes de vos utilisateurs",
-        "activate_account" => "Activer le compte",
-        "disable_account" => "Désactiver le compte",
-        "delete_account" => "Supprimer le compte",
-        "toaster_success" => "Le compte a bien été mis à jour !",
-        "toaster_pass_error" => "Une erreur est survenue dans la modification du mot de passe.<br>Les mots de passes ne correspondent pas.",
-        "reset_password" => "Réinitialiser le mot de passe",
+    'edit' => [
+        'title' => 'Utilisateurs | Edition',
+        'desc' => 'Editez les comptes de vos utilisateurs',
+        'activate_account' => 'Activer le compte',
+        'disable_account' => 'Désactiver le compte',
+        'delete_account' => 'Supprimer le compte',
+        'toaster_success' => 'Le compte a bien été mis à jour !',
+        'toaster_pass_error' => 'Une erreur est survenue dans la modification du mot de passe.<br>Les mots de passes ne correspondent pas.',
+        'reset_password' => 'Réinitialiser le mot de passe',
     ],
     "blacklist" => [
         "title" => "Pseudo en liste noire",
@@ -80,12 +80,12 @@ return [
             "date" => "Date",
             "action" => "Actions",
         ],
-        "delete" => [
-            "title" => "Suppression du pseudo ",
-            "content" => "Ceci permettra à nouveau à vos utilisateurs d'utiliser ce pseudo.",
+        'delete' => [
+            'title' => 'Suppression du pseudo ',
+            'content' => "Ceci permettra à nouveau à vos utilisateurs d'utiliser ce pseudo.",
         ],
-        "edit" => [
-            "title" => "Édition du pseudo ",
+        'edit' => [
+            'title' => 'Édition du pseudo ',
         ],
     ],
     "roles" => [
@@ -114,22 +114,22 @@ return [
                 "tips" => "Définissez ce rôle parmi ceux par défaut. Lors de l'inscription, vos membres se les verront ajouté automatiquement.",
             ],
         ],
-        "perms" => [
-            "admin_warning" => " Ce rôle est le plus important. Par conséquent, vous ne pouvez pas le supprimer ou modifier ses permissions !",
-            "operator" => "Cette permission est la plus importante et donne tous les accès sans exception.",
+        'perms' => [
+            'admin_warning' => ' Ce rôle est le plus important. Par conséquent, vous ne pouvez pas le supprimer ou modifier ses permissions !',
+            'operator' => 'Cette permission est la plus importante et donne tous les accès sans exception.',
         ],
     ],
     "modal" => [
         "delete" => "Supprimer",
         "delete_message" => "La suppression d'un utilisateur est définitive !<br>Aucun retour en arrière n'est possible !",
     ],
-    "delete" => [
-        "toaster_error" => "Vous ne pouvez pas supprimer le compte avec lequel vous êtes connecté.",
-        "toaster_success" => "Le compte a bien été supprimé !",
+    'delete' => [
+        'toaster_error' => 'Vous ne pouvez pas supprimer le compte avec lequel vous êtes connecté.',
+        'toaster_success' => 'Le compte a bien été supprimé !',
     ],
-    "state" => [
-        "toaster_error" => "Vous ne pouvez pas désactiver le compte avec lequel vous êtes connecté.",
-        "toaster_success" => "Le compte a bien été modifié !",
+    'state' => [
+        'toaster_error' => 'Vous ne pouvez pas désactiver le compte avec lequel vous êtes connecté.',
+        'toaster_success' => 'Le compte a bien été modifié !',
     ],
     "users" => [
         "user" => "Utilisateur",
@@ -162,7 +162,7 @@ return [
             "image_alt" => "Image de profil de %username%",
             "reset" => "Réinitialisez l'image",
         ],
-        "link_profile" => "Accéder à mon profil",
+        'link_profile' => 'Accéder à mon profil',
     ],
     "settings" => [
         "title" => "Paramètres utilisateur",
@@ -177,72 +177,72 @@ return [
                 1 => "Lien unique envoyé par mail",
             ],
         ],
-        "profile_view" => [
-            "title" => "Page profil",
-            "label" => "Choisissez comment afficher la page profil",
-            "tips" => "Si vous n'utilisez pas la page profil, nous vous conseillons de la désactiver.",
-            "options" => [
-                0 => "/profile",
-                1 => "/profile/VotrePseudo",
-                2 => "Désactiver la page profil",
+        'profile_view' => [
+            'title' => 'Page profil',
+            'label' => 'Choisissez comment afficher la page profil',
+            'tips' => "Si vous n'utilisez pas la page profil, nous vous conseillons de la désactiver.",
+            'options' => [
+                0 => '/profile',
+                1 => '/profile/VotrePseudo',
+                2 => 'Désactiver la page profil',
             ],
         ],
-        "blacklisted" => [
-            "pseudo" => [
-                "label" => "Gérer la liste noire des pseudos",
-                "hint" => "Vous pouvez facilement interdire des pseudos que vous ne souhaitez pas avoir lors de
+        'blacklisted' => [
+            'pseudo' => [
+                'label' => 'Gérer la liste noire des pseudos',
+                'hint' => "Vous pouvez facilement interdire des pseudos que vous ne souhaitez pas avoir lors de
                            l'inscription ou lors de la modification d'un pseudo.",
-                "goBtn" => "Gérer les pseudos interdits",
-                "title" => "Ajouter des pseudos à la liste noire",
-                "description" => "Ajouter des pseudos à la liste noire",
-                "edit" => [
-                    "title" => "Modifiez un pseudo de la liste noire",
-                    "description" => "Édition d'un pseudo de la liste noire",
-                    "label" => "Modification du pseudo %pseudo%",
+                'goBtn' => 'Gérer les pseudos interdits',
+                'title' => 'Ajouter des pseudos à la liste noire',
+                'description' => 'Ajouter des pseudos à la liste noire',
+                'edit' => [
+                    'title' => 'Modifiez un pseudo de la liste noire',
+                    'description' => "Édition d'un pseudo de la liste noire",
+                    'label' => 'Modification du pseudo %pseudo%',
                 ],
-                "btn" => "Ajouter à la liste noire",
-                "toasters" => [
-                    "add" => [
-                        "success" => "Pseudo %pseudo% ajouté à la liste",
-                        "error" => "Impossible d'ajouter le pseudo %pseudo% à la liste",
+                'btn' => 'Ajouter à la liste noire',
+                'toasters' => [
+                    'add' => [
+                        'success' => 'Pseudo %pseudo% ajouté à la liste',
+                        'error' => "Impossible d'ajouter le pseudo %pseudo% à la liste",
                     ],
-                    "edit" => [
-                        "success" => "Pseudo %pseudo% modifié",
-                        "error" => "Impossible de modifier le pseudo %pseudo%",
+                    'edit' => [
+                        'success' => 'Pseudo %pseudo% modifié',
+                        'error' => 'Impossible de modifier le pseudo %pseudo%',
                     ],
-                    "delete" => [
-                        "success" => "Pseudo supprimé",
-                        "error" => "Impossible de supprimer le pseudo",
+                    'delete' => [
+                        'success' => 'Pseudo supprimé',
+                        'error' => 'Impossible de supprimer le pseudo',
                     ],
                 ],
             ],
         ],
     ],
-    "flush" => [
-        "modal" => [
-            "warning" => "Ceci va réinitialiser tous vos rôles ! (sauf Administrateur)",
-            "text" => "Flusher les permissions est un outil de débogage souvent utilisé par les développeurs qui souhaitent forcer l'ajout manuel des permissions de leurs fichiers Permissions.php se trouvant dans le dossier Init."
+    'flush' => [
+        'modal' => [
+            'warning' => 'Ceci va réinitialiser tous vos rôles ! (sauf Administrateur)',
+            'text' => "Flusher les permissions est un outil de débogage souvent utilisé par les développeurs qui souhaitent forcer l'ajout manuel des permissions de leurs fichiers Permissions.php se trouvant dans le dossier Init."
         ],
     ],
-    "permissions" => [
-        "settings" => [
-            "manage" => "Gérer les paramètres",
-            "blacklist" => [
-                "add" => "Ajouter",
-                "edit" => "Éditer",
-                "delete" => "Supprimer",
+    'permissions' => [
+        'settings' => [
+            'manage' => 'Gérer les paramètres',
+            'blacklist' => [
+                'add' => 'Ajouter',
+                'edit' => 'Éditer',
+                'delete' => 'Supprimer',
             ],
         ],
-        "users" => [
-            "manage" => "Gérer les utilisateurs",
-            "edit" => "Éditer",
-            "add" => "Ajouter",
-            "delete" => "Supprimer",
-            "roles" => [
-                "manage" => "Gérer les rôles",
-                "add" => "Ajouter",
-                "edit" => "Éditer",
-                "delete" => "Supprimer",
+        'users' => [
+            'manage' => 'Gérer les utilisateurs',
+            'edit' => 'Éditer',
+            'add' => 'Ajouter',
+            'delete' => 'Supprimer',
+            'roles' => [
+                'manage' => 'Gérer les rôles',
+                'add' => 'Ajouter',
+                'edit' => 'Éditer',
+                'delete' => 'Supprimer',
             ],
         ],
     ],

@@ -4,8 +4,8 @@ use CMW\Manager\Env\EnvManager;
 use CMW\Model\Users\UsersModel;
 use CMW\Utils\Website;
 
-Website::setTitle("Voter");
-Website::setDescription("Votez dès maintenant pour le site " . Website::getWebsiteName());
+Website::setTitle('Voter');
+Website::setDescription('Votez dès maintenant pour le site ' . Website::getWebsiteName());
 
 /* @var \CMW\Entity\Votes\VotesSitesEntity[] $sites */
 /* @var \CMW\Entity\Votes\VotesPlayerStatsEntity[] $topCurrent */
@@ -61,7 +61,8 @@ Website::setDescription("Votez dès maintenant pour le site " . Website::getWebs
                     </thead>
                     <tbody>
                     <?php $i = 0;
-                    foreach ($topCurrent as $top): $i++; ?>
+                    foreach ($topCurrent as $top):
+                        $i++; ?>
                         <tr>
                             <td>#<?= $i ?></td>
                             <td><?= $top->getUser()->getPseudo() ?></td>
@@ -84,7 +85,8 @@ Website::setDescription("Votez dès maintenant pour le site " . Website::getWebs
                 </thead>
                 <tbody>
                 <?php $i = 0;
-                foreach ($topGlobal as $top): $i++; ?>
+                foreach ($topGlobal as $top):
+                    $i++; ?>
                     <tr>
                         <td>#<?= $i ?></td>
                         <td><?= $top->getUser()->getPseudo() ?></td>

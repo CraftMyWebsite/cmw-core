@@ -7,6 +7,6 @@ class LogoutEvent extends AbstractEvent
 {
     public function getName(): string
     {
-        return "LogoutEvent-Users-CraftMyWebsite"; //avoid simple names :)
+        return 'LogoutEvent-Users-CraftMyWebsite';  // avoid simple names :)
     }
 }

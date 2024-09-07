@@ -2,14 +2,12 @@
 
 namespace CMW\Model\Users;
 
-
 use CMW\Entity\Users\BlacklistedPseudoEntity;
 use CMW\Entity\Users\UserEnforced2FaEntity;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Package\AbstractModel;
-
 
 /**
  * Class: @UsersSettingsModel
@@ -45,7 +43,7 @@ class UsersSettingsModel extends AbstractModel
     {
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('UPDATE cmw_users_settings SET users_settings_value=:settingValue, users_settings_updated=now() WHERE users_settings_name=:settingName');
-        $req->execute(array("settingName" => $settingName, "settingValue" => $settingValue));
+        $req->execute(array('settingName' => $settingName, 'settingValue' => $settingValue));
     }
 
     public static function addSetting(string $settingName, string $settingValue): void
@@ -53,14 +51,14 @@ class UsersSettingsModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('INSERT INTO cmw_users_settings (users_settings_value, users_settings_updated, users_settings_name) 
                                     VALUES (:settingValue, now(), :settingName)');
-        $req->execute(array("settingName" => $settingName, "settingValue" => $settingValue));
+        $req->execute(array('settingName' => $settingName, 'settingValue' => $settingValue));
     }
 
     public static function deleteSetting(string $settingName): void
     {
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('DELETE FROM cmw_users_settings where users_settings_name = :settingName');
-        $req->execute(array("settingName" => $settingName));
+        $req->execute(array('settingName' => $settingName));
     }
 
     /**
@@ -69,8 +67,8 @@ class UsersSettingsModel extends AbstractModel
      */
     public function addBlacklistedPseudo(string $pseudo): bool
     {
-        $sql = "INSERT INTO cmw_users_blacklist_pseudo (pseudo) 
-                    VALUES (:pseudo)";
+        $sql = 'INSERT INTO cmw_users_blacklist_pseudo (pseudo) 
+                    VALUES (:pseudo)';
         $db = DatabaseManager::getInstance();
         return $db->prepare($sql)->execute(['pseudo' => $pseudo]);
     }
@@ -82,7 +80,7 @@ class UsersSettingsModel extends AbstractModel
      */
     public function editBlacklistedPseudo(int $id, string $pseudo): bool
     {
-        $sql = "UPDATE cmw_users_blacklist_pseudo SET pseudo = :pseudo WHERE id = :id";
+        $sql = 'UPDATE cmw_users_blacklist_pseudo SET pseudo = :pseudo WHERE id = :id';
         $db = DatabaseManager::getInstance();
         return $db->prepare($sql)->execute(['id' => $id, 'pseudo' => $pseudo]);
     }
@@ -93,23 +91,23 @@ class UsersSettingsModel extends AbstractModel
      */
     public function removeBlacklistedPseudo(int $id): bool
     {
-        $sql = "DELETE FROM cmw_users_blacklist_pseudo WHERE id = :id";
+        $sql = 'DELETE FROM cmw_users_blacklist_pseudo WHERE id = :id';
         $db = DatabaseManager::getInstance();
         return $db->prepare($sql)->execute(['id' => $id]);
     }
 
     /**
- * @return \CMW\Entity\Users\BlacklistedPseudoEntity[]
- */
+     * @return \CMW\Entity\Users\BlacklistedPseudoEntity[]
+     */
     public function getBlacklistedPseudos(): array
     {
-        $sql = "SELECT * FROM cmw_users_blacklist_pseudo";
+        $sql = 'SELECT * FROM cmw_users_blacklist_pseudo';
         $db = DatabaseManager::getInstance();
         $req = $db->query($sql);
 
         $res = $req->fetchAll();
 
-        if (!$res){
+        if (!$res) {
             return [];
         }
 
@@ -132,17 +130,17 @@ class UsersSettingsModel extends AbstractModel
      */
     public function getBlacklistedPseudo(int $id): ?BlacklistedPseudoEntity
     {
-        $sql = "SELECT * FROM cmw_users_blacklist_pseudo WHERE id = :id";
+        $sql = 'SELECT * FROM cmw_users_blacklist_pseudo WHERE id = :id';
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute(['id' => $id])){
+        if (!$req->execute(['id' => $id])) {
             return null;
         }
 
         $res = $req->fetch();
 
-        if (!$res){
+        if (!$res) {
             return null;
         }
 
@@ -159,18 +157,18 @@ class UsersSettingsModel extends AbstractModel
      */
     public function isPseudoBlacklisted(string $pseudo): bool
     {
-        $sql = "SELECT id FROM cmw_users_blacklist_pseudo WHERE pseudo = :pseudo";
+        $sql = 'SELECT id FROM cmw_users_blacklist_pseudo WHERE pseudo = :pseudo';
         $db = DatabaseManager::getInstance();
 
         $req = $db->prepare($sql);
 
-        if(!$req->execute(['pseudo' => $pseudo])){
+        if (!$req->execute(['pseudo' => $pseudo])) {
             return true;
         }
 
         $res = $req->fetch();
 
-        if (!$res){
+        if (!$res) {
             return false;
         }
 
@@ -182,13 +180,13 @@ class UsersSettingsModel extends AbstractModel
      */
     public function getEnforcedRoles(): array
     {
-        $sql = "SELECT * FROM cmw_users_enforced2fa_roles";
+        $sql = 'SELECT * FROM cmw_users_enforced2fa_roles';
         $db = DatabaseManager::getInstance();
         $req = $db->query($sql);
 
         $res = $req->fetchAll();
 
-        if (!$res){
+        if (!$res) {
             return [];
         }
 
@@ -202,7 +200,8 @@ class UsersSettingsModel extends AbstractModel
         return $toReturn;
     }
 
-    public function updateEnforcedRoles($roleId):bool {
+    public function updateEnforcedRoles($roleId): bool
+    {
         foreach (RolesModel::getInstance()->getRoles() as $role) {
             if ($role->getId() == $roleId) {
                 if ($this->addEnforcedRoles($roleId)) {
@@ -214,7 +213,7 @@ class UsersSettingsModel extends AbstractModel
                         }
                     }
                 } else {
-                    Flash::send(Alert::ERROR, "Erreur", "Impossible d'ajouter les rôles à l'imposition du 2fa");
+                    Flash::send(Alert::ERROR, 'Erreur', "Impossible d'ajouter les rôles à l'imposition du 2fa");
                     return false;
                 }
             }
@@ -222,19 +221,21 @@ class UsersSettingsModel extends AbstractModel
         return true;
     }
 
-    public function clearEnforcedRoles():bool {
+    public function clearEnforcedRoles(): bool
+    {
         Users2FaModel::getInstance()->clearEnforce2Fa();
 
-        $sql = "DELETE FROM cmw_users_enforced2fa_roles";
+        $sql = 'DELETE FROM cmw_users_enforced2fa_roles';
 
         $db = DatabaseManager::getInstance();
 
         return $db->prepare($sql)->execute();
     }
 
-    private function addEnforcedRoles($roleId):bool {
-        $sql = "INSERT INTO cmw_users_enforced2fa_roles (enforced2fa_roles) 
-                VALUES (:enforced2fa_roles)";
+    private function addEnforcedRoles($roleId): bool
+    {
+        $sql = 'INSERT INTO cmw_users_enforced2fa_roles (enforced2fa_roles) 
+                VALUES (:enforced2fa_roles)';
         $db = DatabaseManager::getInstance();
         return $db->prepare($sql)->execute(['enforced2fa_roles' => $roleId]);
     }

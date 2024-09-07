@@ -3,14 +3,15 @@
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 
-$title = LangManager::translate("core.security.healthReport.title");
-$description = LangManager::translate("core.security.healthReport.title");
+$title = LangManager::translate('core.security.healthReport.title');
+$description = LangManager::translate('core.security.healthReport.title');
 
 /* @var $report */
-/* @var $reportName */ ?>
+/* @var $reportName */
+?>
 
 <div class="d-flex flex-wrap justify-content-between" style="width: 100%">
-    <h3><i class="fa-solid fa-suitcase-medical"></i> <?= LangManager::translate("core.security.healthReport.title") ?>
+    <h3><i class="fa-solid fa-suitcase-medical"></i> <?= LangManager::translate('core.security.healthReport.title') ?>
     </h3>
     <div class="d-flex flex-wrap justify-content-end gap-4 align-items-center">
         <button class="btn btn-primary"

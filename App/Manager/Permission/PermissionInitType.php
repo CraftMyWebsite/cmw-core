@@ -1,9 +1,8 @@
 <?php
 
-
 namespace CMW\Manager\Permission;
 
-class  PermissionInitType
+class PermissionInitType
 {
     private string $code;
     private string $description;

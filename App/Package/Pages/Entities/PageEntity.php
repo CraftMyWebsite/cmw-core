@@ -2,13 +2,11 @@
 
 namespace CMW\Entity\Pages;
 
-
 use CMW\Controller\Core\CoreController;
 use CMW\Entity\Users\UserEntity;
 
 class PageEntity
 {
-
     private int $pageId;
     private string $pageSlug;
     private string $pageTitle;
@@ -30,7 +28,6 @@ class PageEntity
      * @param string $pageCreated
      * @param string $pageEdited
      */
-     
     public function __construct(int $pageId, string $pageSlug, string $pageTitle, string $pageContent, UserEntity $pageUser, string $pageConverted, int $pageState, string $pageCreated, string $pageEdited)
     {
         $this->pageId = $pageId;
@@ -86,7 +83,7 @@ class PageEntity
         $desc = trim(substr(preg_split('#\r?\n#', $this->pageContent)[0], 0, $length));
 
         if ($useDoted) {
-            $desc .= "...";
+            $desc .= '...';
         }
 
         return strip_tags($desc);
@@ -97,7 +94,6 @@ class PageEntity
      */
     public function getContentNotTranslate(): string
     {
-
         return htmlspecialchars($this->pageContent);
     }
 
@@ -140,5 +136,4 @@ class PageEntity
     {
         return CoreController::formatDate($this->pageEdited);
     }
-
 }

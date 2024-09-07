@@ -14,10 +14,9 @@ use CMW\Manager\Package\AbstractModel;
  */
 class CoreModel extends AbstractModel
 {
-
     public function fetchOption(string $option): string
     {
-//        TODO Le cache ne fonctionne pas et du coup ralenti le chargement des page
+        //        TODO Le cache ne fonctionne pas et du coup ralenti le chargement des page
         /*if (SimpleCacheManager::cacheExist('options', "Options")){
             $data = SimpleCacheManager::getCache('options', "Options");
 
@@ -46,7 +45,7 @@ class CoreModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT option_value FROM cmw_core_options WHERE option_name = ?');
 
-        return ($req->execute(array($option))) ? $req->fetch()["option_value"] : "";
+        return ($req->execute(array($option))) ? $req->fetch()['option_value'] : '';
     }
 
     public function fetchOptions(): array
@@ -65,7 +64,7 @@ class CoreModel extends AbstractModel
     {
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('UPDATE cmw_core_options SET option_value=:option_value, option_updated=NOW() WHERE option_name=:option_name');
-        return $req->execute(array("option_name" => $option_name, "option_value" => $option_value));
+        return $req->execute(array('option_name' => $option_name, 'option_value' => $option_value));
     }
 
     public static function getLanguages(string $prefix): array|string
@@ -76,7 +75,7 @@ class CoreModel extends AbstractModel
             }
         }
 
-        //Todo Error Manager.
+        // Todo Error Manager.
         return !empty($dump) ? $dump : "Error: No Constants found with prefix '" . $prefix . "'";
     }
 }

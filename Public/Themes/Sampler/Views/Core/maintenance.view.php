@@ -4,8 +4,8 @@ use CMW\Utils\Website;
 
 /* @var \CMW\Entity\Core\MaintenanceEntity $maintenance */
 
-Website::setTitle("Maintenance");
-Website::setDescription("Maintenance en cours sur le site");
+Website::setTitle('Maintenance');
+Website::setDescription('Maintenance en cours sur le site');
 ?>
 
 <section class="page-section">

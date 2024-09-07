@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace RobThree\Auth;
 
@@ -21,10 +19,14 @@ class TwoFactorAuth
 {
     private static string $_base32dict = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567=';
 
-    /** @var array<string> */
+    /**
+     * @var array<string>
+     */
     private static array $_base32;
 
-    /** @var array<string, int> */
+    /**
+     * @var array<string, int>
+     */
     private static array $_base32lookup = array();
 
     public function __construct(
@@ -54,14 +56,14 @@ class TwoFactorAuth
     public function createSecret(int $bits = 80, bool $requirecryptosecure = true): string
     {
         $secret = '';
-        $bytes = (int) ceil($bits / 5);   // We use 5 bits of each byte (since we have a 32-character 'alphabet' / BASE32)
+        $bytes = (int) ceil($bits / 5);  // We use 5 bits of each byte (since we have a 32-character 'alphabet' / BASE32)
         $rngprovider = $this->getRngProvider();
         if ($requirecryptosecure && !$rngprovider->isCryptographicallySecure()) {
             throw new TwoFactorAuthException('RNG provider is not cryptographically secure');
         }
         $rnd = $rngprovider->getRandomBytes($bytes);
         for ($i = 0; $i < $bytes; $i++) {
-            $secret .= self::$_base32[ord($rnd[$i]) & 31];  //Mask out left 3 bits for 0-31 values
+            $secret .= self::$_base32[ord($rnd[$i]) & 31];  // Mask out left 3 bits for 0-31 values
         }
         return $secret;
     }
@@ -74,12 +76,12 @@ class TwoFactorAuth
         $secretkey = $this->base32Decode($secret);
 
         $timestamp = "\0\0\0\0" . pack('N*', $this->getTimeSlice($this->getTime($time)));  // Pack time into binary string
-        $hashhmac = hash_hmac($this->algorithm->value, $timestamp, $secretkey, true);             // Hash it with users secret key
-        $hashpart = substr($hashhmac, ord(substr($hashhmac, -1)) & 0x0F, 4);               // Use last nibble of result as index/offset and grab 4 bytes of the result
-        $value = unpack('N', $hashpart);                                                   // Unpack binary value
-        $value = $value[1] & 0x7FFFFFFF;                                                   // Drop MSB, keep only 31 bits
+        $hashhmac = hash_hmac($this->algorithm->value, $timestamp, $secretkey, true);  // Hash it with users secret key
+        $hashpart = substr($hashhmac, ord(substr($hashhmac, -1)) & 0x0F, 4);  // Use last nibble of result as index/offset and grab 4 bytes of the result
+        $value = unpack('N', $hashpart);  // Unpack binary value
+        $value = $value[1] & 0x7FFFFFFF;  // Drop MSB, keep only 31 bits
 
-        return str_pad((string) ($value % 10** $this->digits), $this->digits, '0', STR_PAD_LEFT);
+        return str_pad((string) ($value % 10 ** $this->digits), $this->digits, '0', STR_PAD_LEFT);
     }
 
     /**
@@ -156,7 +158,7 @@ class TwoFactorAuth
     {
         return 'otpauth://totp/' . rawurlencode($label)
             . '?secret=' . rawurlencode($secret)
-            . '&issuer=' . rawurlencode((string)$this->issuer)
+            . '&issuer=' . rawurlencode((string) $this->issuer)
             . '&period=' . intval($this->period)
             . '&algorithm=' . rawurlencode(strtoupper($this->algorithm->value))
             . '&digits=' . intval($this->digits);

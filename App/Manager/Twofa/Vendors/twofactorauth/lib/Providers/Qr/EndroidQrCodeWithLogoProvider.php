@@ -1,12 +1,10 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace RobThree\Auth\Providers\Qr;
 
 use Endroid\QrCode\Logo\Logo;
-use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\QrCode;
 
 class EndroidQrCodeWithLogoProvider extends EndroidQrCodeProvider
 {
@@ -22,7 +20,7 @@ class EndroidQrCodeWithLogoProvider extends EndroidQrCodeProvider
     public function setLogo($path, $size = null)
     {
         $this->logoPath = $path;
-        $this->logoSize = (array)$size;
+        $this->logoSize = (array) $size;
     }
 
     public function getQRCodeImage(string $qrtext, int $size): string

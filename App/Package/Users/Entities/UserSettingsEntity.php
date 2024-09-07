@@ -2,7 +2,6 @@
 
 namespace CMW\Entity\Users;
 
-
 use CMW\Model\Users\UsersSettingsModel;
 use CMW\Utils\Redirect;
 
@@ -14,12 +13,11 @@ class UserSettingsEntity
 
     private static UserSettingsEntity $_instance;
 
-
     public function __construct()
     {
         $this->defaultImage = UsersSettingsModel::getSetting('defaultImage');
-        $this->profilePageStatus = (int)UsersSettingsModel::getSetting('profilePage');
-        $this->resetPasswordMethod = (int)UsersSettingsModel::getSetting('resetPasswordMethod');
+        $this->profilePageStatus = (int) UsersSettingsModel::getSetting('profilePage');
+        $this->resetPasswordMethod = (int) UsersSettingsModel::getSetting('resetPasswordMethod');
     }
 
     public static function getInstance(): self

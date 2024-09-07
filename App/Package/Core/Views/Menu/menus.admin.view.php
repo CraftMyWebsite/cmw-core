@@ -8,11 +8,11 @@ use CMW\Manager\Security\SecurityManager;
 /* @var RoleEntity[] $roles */
 /* @var \CMW\Model\Core\MenusModel $menus */
 
-$title = LangManager::translate("core.menus.title");
-$description = LangManager::translate("core.menus.desc");
+$title = LangManager::translate('core.menus.title');
+$description = LangManager::translate('core.menus.desc');
 ?>
 <div class="d-flex flex-wrap justify-content-between">
-    <h3><i class="fas fa-bars"></i> <span class="m-lg-auto"><?= LangManager::translate("core.menus.title") ?></span>
+    <h3><i class="fas fa-bars"></i> <span class="m-lg-auto"><?= LangManager::translate('core.menus.title') ?></span>
     </h3>
 </div>
 
@@ -21,30 +21,30 @@ $description = LangManager::translate("core.menus.desc");
         <form action="" method="post" class="space-y-3">
             <?php (new SecurityManager())->insertHiddenToken() ?>
             <div>
-                <label for="name"><?= LangManager::translate("core.menus.add.name") ?> :</label>
+                <label for="name"><?= LangManager::translate('core.menus.add.name') ?> :</label>
                 <div class="input-group">
                     <i class="fa-solid fa-text-width"></i>
                     <input type="text" id="name" name="name"
-                           placeholder="<?= LangManager::translate("core.menus.add.name_hint") ?>"
+                           placeholder="<?= LangManager::translate('core.menus.add.name_hint') ?>"
                            required>
                 </div>
             </div>
             <div>
-                <label for="super-choice"><?= LangManager::translate("core.menus.add.choice") ?> :</label>
+                <label for="super-choice"><?= LangManager::translate('core.menus.add.choice') ?> :</label>
                 <select id="super-choice" name="choice" class="choices" required>
                     <option value="package">
-                        <?= LangManager::translate("core.menus.add.package") ?>
+                        <?= LangManager::translate('core.menus.add.package') ?>
                     </option>
                     <option value="custom">
-                        <?= LangManager::translate("core.menus.add.custom") ?>
+                        <?= LangManager::translate('core.menus.add.custom') ?>
                     </option>
                 </select>
             </div>
             <div id="addPackage">
-                <label for="slugPackage"><?= LangManager::translate("core.menus.add.package_select") ?> :</label>
+                <label for="slugPackage"><?= LangManager::translate('core.menus.add.package_select') ?> :</label>
                 <select id="slugPackage" class="choices" name="slugPackage">
                     <?php foreach ($packagesLinks as $package => $routes):
-                        if ($routes !== []):?>
+                        if ($routes !== []): ?>
                             <option disabled>──── <?= $package ?> ────</option>
                         <?php endif; ?>
                         <?php foreach ($routes as $name => $route): ?>
@@ -54,23 +54,23 @@ $description = LangManager::translate("core.menus.desc");
                 </select>
             </div>
             <div id="addCustom" style="display: none">
-                <label for="slugCustom"><?= LangManager::translate("core.menus.add.custom") ?> :</label>
+                <label for="slugCustom"><?= LangManager::translate('core.menus.add.custom') ?> :</label>
                 <div class="input-group">
                     <i class="fa-solid fa-link"></i>
                     <input type="text" id="slugCustom" name="slugCustom" class="form-control"
-                           placeholder="<?= LangManager::translate("core.menus.add.custom_hint") ?>">
+                           placeholder="<?= LangManager::translate('core.menus.add.custom_hint') ?>">
                 </div>
             </div>
             <div>
                 <label class="toggle">
-                    <p class="toggle-label"><?= LangManager::translate("core.menus.add.targetBlank") ?></p>
+                    <p class="toggle-label"><?= LangManager::translate('core.menus.add.targetBlank') ?></p>
                     <input type="checkbox" class="toggle-input" name="targetBlank" id="targetBlank">
                     <div class="toggle-slider"></div>
                 </label>
             </div>
             <div>
                 <label class="toggle">
-                    <p class="toggle-label"><?= LangManager::translate("core.menus.add.allowedGroups") ?> :</p>
+                    <p class="toggle-label"><?= LangManager::translate('core.menus.add.allowedGroups') ?> :</p>
                     <input type="checkbox" class="toggle-input" name="allowedGroupsToggle" id="allowedGroups">
                     <div class="toggle-slider"></div>
                 </label>
@@ -84,7 +84,7 @@ $description = LangManager::translate("core.menus.desc");
                     <?php endforeach; ?>
                 </select>
             </div>
-            <button type="submit" class="btn-primary btn-center"><?= LangManager::translate("core.btn.add") ?></button>
+            <button type="submit" class="btn-primary btn-center"><?= LangManager::translate('core.btn.add') ?></button>
         </form>
     </div>
 
@@ -113,7 +113,7 @@ $description = LangManager::translate("core.menus.desc");
                             <thead>
                             <tr class="flex justify-between hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">
                                 <th><?= $menu->getName() ?> -
-                                    <?php if ($menu->getUrl() === "#"): ?>
+                                    <?php if ($menu->getUrl() === '#'): ?>
                                         <small><?= LangManager::translate('core.nolink') ?></small>
                                     <?php else: ?>
                                         <small><?= LangManager::translate('core.menus.send_to', ['url' => $menu->getUrl()]) ?>
@@ -142,11 +142,11 @@ $description = LangManager::translate("core.menus.desc");
                             <?php foreach ($menus->getSubMenusByMenu($menu->getId()) as $subMenu): ?>
                                 <tr class="flex justify-between hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">
                                     <td class="pl-3"><?= $subMenu->getName() ?> -
-                                        <?php if ($subMenu->getUrl() === "#"): ?>
+                                        <?php if ($subMenu->getUrl() === '#'): ?>
                                             <small><?= LangManager::translate('core.nolink') ?></small>
                                         <?php else: ?>
                                             <small><?= LangManager::translate('core.menus.send_to',
-                                                    ['url' => $subMenu->getUrl()]) ?></small>
+                ['url' => $subMenu->getUrl()]) ?></small>
                                         <?php endif; ?>
                                         <?php if (!$subMenu->isUserAllowed()): ?><small style="color: #af1a1a">*Accès
                                             restreint</small><?php endif; ?>
@@ -179,11 +179,11 @@ $description = LangManager::translate("core.menus.desc");
                                 <?php foreach ($menus->getSubMenusByMenu($subMenu->getId()) as $subSubMenu): ?>
                                     <tr class="flex justify-between hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">
                                         <td class="pl-10"><?= $subSubMenu->getName() ?> -
-                                            <?php if ($subSubMenu->getUrl() === "#"): ?>
+                                            <?php if ($subSubMenu->getUrl() === '#'): ?>
                                                 <small><?= LangManager::translate('core.nolink') ?></small>
                                             <?php else: ?>
                                                 <small><?= LangManager::translate('core.menus.send_to',
-                                                        ['url' => $subSubMenu->getUrl()]) ?>
+                    ['url' => $subSubMenu->getUrl()]) ?>
                                                 </small>
                                             <?php endif; ?>
                                             <?php if (!$subSubMenu->isUserAllowed()): ?><small
@@ -215,14 +215,14 @@ $description = LangManager::translate("core.menus.desc");
                                     <div id="delete-<?= $subSubMenu->getId() ?>" class="modal-container">
                                         <div class="modal">
                                             <div class="modal-header-danger">
-                                                <h6><?= LangManager::translate("core.menus.delete_title", ['menu' => $subSubMenu->getName()]) ?></h6>
+                                                <h6><?= LangManager::translate('core.menus.delete_title', ['menu' => $subSubMenu->getName()]) ?></h6>
                                                 <button type="button" data-modal-hide="delete-<?= $subSubMenu->getId() ?>"><i class="fa-solid fa-xmark"></i></button>
                                             </div>
                                             <div class="modal-body">
-                                                <?= LangManager::translate("core.menus.delete_message") ?>
+                                                <?= LangManager::translate('core.menus.delete_message') ?>
                                             </div>
                                             <div class="modal-footer">
-                                                <a href="menus/delete/<?= $subSubMenu->getId() ?>/<?= $subSubMenu->getOrder() ?>/<?= $subMenu->getId() ?>" class="btn-danger"><?= LangManager::translate("core.btn.delete") ?></a>
+                                                <a href="menus/delete/<?= $subSubMenu->getId() ?>/<?= $subSubMenu->getOrder() ?>/<?= $subMenu->getId() ?>" class="btn-danger"><?= LangManager::translate('core.btn.delete') ?></a>
                                             </div>
                                         </div>
                                     </div>
@@ -233,14 +233,14 @@ $description = LangManager::translate("core.menus.desc");
                                 <div id="delete-<?= $subMenu->getId() ?>" class="modal-container">
                                     <div class="modal">
                                         <div class="modal-header-danger">
-                                            <h6><?= LangManager::translate("core.menus.delete_title", ['menu' => $subMenu->getName()]) ?></h6>
+                                            <h6><?= LangManager::translate('core.menus.delete_title', ['menu' => $subMenu->getName()]) ?></h6>
                                             <button type="button" data-modal-hide="delete-<?= $subMenu->getId() ?>"><i class="fa-solid fa-xmark"></i></button>
                                         </div>
                                         <div class="modal-body">
-                                            <?= LangManager::translate("core.menus.delete_message") ?>
+                                            <?= LangManager::translate('core.menus.delete_message') ?>
                                         </div>
                                         <div class="modal-footer">
-                                            <a href="menus/delete/<?= $subMenu->getId() ?>/<?= $subMenu->getOrder() ?>/<?= $menu->getId() ?>" class="btn-danger"><?= LangManager::translate("core.btn.delete") ?></a>
+                                            <a href="menus/delete/<?= $subMenu->getId() ?>/<?= $subMenu->getOrder() ?>/<?= $menu->getId() ?>" class="btn-danger"><?= LangManager::translate('core.btn.delete') ?></a>
                                         </div>
                                     </div>
                                 </div>
@@ -257,14 +257,14 @@ $description = LangManager::translate("core.menus.desc");
             <div id="delete-<?= $menu->getId() ?>" class="modal-container">
                 <div class="modal">
                     <div class="modal-header-danger">
-                        <h6><?= LangManager::translate("core.menus.delete_title", ['menu' => $menu->getName()]) ?></h6>
+                        <h6><?= LangManager::translate('core.menus.delete_title', ['menu' => $menu->getName()]) ?></h6>
                         <button type="button" data-modal-hide="delete-<?= $menu->getId() ?>"><i class="fa-solid fa-xmark"></i></button>
                     </div>
                     <div class="modal-body">
-                        <?= LangManager::translate("core.menus.delete_message") ?>
+                        <?= LangManager::translate('core.menus.delete_message') ?>
                     </div>
                     <div class="modal-footer">
-                        <a href="menus/delete/<?= $menu->getId() ?>/<?= $menu->getOrder() ?>" class="btn-danger"><?= LangManager::translate("core.btn.delete") ?></a>
+                        <a href="menus/delete/<?= $menu->getId() ?>/<?= $menu->getOrder() ?>" class="btn-danger"><?= LangManager::translate('core.btn.delete') ?></a>
                     </div>
                 </div>
             </div>

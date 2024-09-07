@@ -12,7 +12,6 @@ use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
-use CMW\Manager\Requests\Request;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Uploads\ImagesException;
@@ -27,123 +26,125 @@ use JetBrains\PhpStorm\NoReturn;
 
 class ThemeController extends AbstractController
 {
-
     /* ADMINISTRATION */
-    #[Link("/market", Link::GET, [], "/cmw-admin/theme")]
+    #[Link('/market', Link::GET, [], '/cmw-admin/theme')]
     private function adminThemeMarket(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.market");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.market');
 
         $currentTheme = ThemeManager::getInstance()->getCurrentTheme();
         $installedThemes = ThemeManager::getInstance()->getInstalledThemes();
         $themesList = ThemeManager::getInstance()->getMarketThemes();
 
         $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs($currentTheme->name());
-        SimpleCacheManager::storeCache($themeConfigs, 'config', "Themes/" . $currentTheme->name());
+        SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . $currentTheme->name());
 
-        View::createAdminView("Core", "Theme/market")
-            ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes, "themesList" => $themesList])
+        View::createAdminView('Core', 'Theme/market')
+            ->addVariableList(['currentTheme' => $currentTheme, 'installedThemes' => $installedThemes, 'themesList' => $themesList])
             ->view();
     }
 
-    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/theme")]
-    #[Link("/theme", Link::GET, [], "/cmw-admin/theme")]
+    #[Link(path: '/', method: Link::GET, scope: '/cmw-admin/theme')]
+    #[Link('/theme', Link::GET, [], '/cmw-admin/theme')]
     private function adminThemeConfiguration(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.manage");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
 
         $currentTheme = ThemeManager::getInstance()->getCurrentTheme();
         $installedThemes = ThemeManager::getInstance()->getInstalledThemes();
         $themesList = ThemeManager::getInstance()->getMarketThemes();
 
         $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs($currentTheme->name());
-        SimpleCacheManager::storeCache($themeConfigs, 'config', "Themes/" . $currentTheme->name());
+        SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . $currentTheme->name());
 
-        View::createAdminView("Core", "Theme/themes")
-            ->addVariableList(["currentTheme" => $currentTheme, "installedThemes" => $installedThemes, "themesList" => $themesList])
+        View::createAdminView('Core', 'Theme/themes')
+            ->addVariableList(['currentTheme' => $currentTheme, 'installedThemes' => $installedThemes, 'themesList' => $themesList])
             ->view();
     }
 
-    #[NoReturn] #[Link("/theme", Link::POST, [], "/cmw-admin/theme")]
+    #[NoReturn]
+    #[Link('/theme', Link::POST, [], '/cmw-admin/theme')]
     private function adminThemeConfigurationPost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.edit");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.edit');
 
         $theme = FilterManager::filterInputStringPost('theme', 50);
 
-        CoreModel::getInstance()->updateOption("theme", $theme);
+        CoreModel::getInstance()->updateOption('theme', $theme);
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate("core.toaster.config.success"));
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+            LangManager::translate('core.toaster.config.success'));
 
         Redirect::redirectPreviousRoute();
     }
 
-    #[NoReturn] #[Link("/market/regenerate", Link::GET, [], "/cmw-admin/theme")]
+    #[NoReturn]
+    #[Link('/market/regenerate', Link::GET, [], '/cmw-admin/theme')]
     private function adminThemeConfigurationRegenerate(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.edit");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.edit');
 
         $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
         ThemeModel::getInstance()->getInstance()->deleteThemeConfig($themeName);
         ThemeManager::getInstance()->installThemeSettings($themeName);
 
         $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs($themeName);
-        SimpleCacheManager::storeCache($themeConfigs, 'config', "Themes/" . $themeName);
+        SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . $themeName);
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate("core.toaster.theme.regenerate"));
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+            LangManager::translate('core.toaster.theme.regenerate'));
 
         Redirect::redirectPreviousRoute();
     }
 
-    #[NoReturn] #[Link("/install/:id", Link::GET, ["id" => "[0-9]+"], "/cmw-admin/theme")]
-    private function adminThemeInstallation(Request $request, int $id): void
+    #[NoReturn]
+    #[Link('/install/:id', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/theme')]
+    private function adminThemeInstallation(int $id): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.manage");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
 
         $theme = PublicAPI::putData("market/resources/install/$id");
 
         if (empty($theme)) {
-            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                LangManager::translate("core.toaster.internalError") . ' (API)');
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.toaster.internalError') . ' (API)');
             Redirect::redirectPreviousRoute();
         }
 
-        if (!DownloadManager::installPackageWithLink($theme['file'], "Theme", $theme['name'])) {
-            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                LangManager::translate("core.downloads.errors.internalError",
+        if (!DownloadManager::installPackageWithLink($theme['file'], 'Theme', $theme['name'])) {
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.downloads.errors.internalError',
                     ['name' => $theme['name'], 'version' => $theme['version_name']]));
             Redirect::redirectPreviousRoute();
         }
 
-        //Install Theme settings
+        // Install Theme settings
         ThemeManager::getInstance()->installThemeSettings($theme['name']);
-        CoreModel::getInstance()->updateOption("theme", $theme['name']);
+        CoreModel::getInstance()->updateOption('theme', $theme['name']);
 
         $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs($theme['name']);
-        SimpleCacheManager::storeCache($themeConfigs, 'config', "Themes/" . $theme['name']);
+        SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . $theme['name']);
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate("core.toaster.Theme.installed", ['theme' => $theme['name']]));
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+            LangManager::translate('core.toaster.Theme.installed', ['theme' => $theme['name']]));
 
-        Redirect::redirect("cmw-admin/theme/manage");
+        Redirect::redirect('cmw-admin/theme/manage');
     }
 
-
-    #[Link("/manage", Link::GET, [], "/cmw-admin/theme")]
+    #[Link('/manage', Link::GET, [], '/cmw-admin/theme')]
     private function adminThemeManage(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.edit");
-        View::createAdminView("Core", "Theme/themeManage")
-            ->addScriptBefore("Admin/Resources/Vendors/Tinymce/tinymce.min.js", "Admin/Resources/Vendors/Tinymce/Config/full.js", "Admin/Resources/Vendors/PageLoader/main.js")
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.edit');
+        View::createAdminView('Core', 'Theme/themeManage')
+            ->addScriptBefore('Admin/Resources/Vendors/Tinymce/tinymce.min.js', 'Admin/Resources/Vendors/Tinymce/Config/full.js', 'Admin/Resources/Vendors/PageLoader/main.js')
             ->view();
     }
 
-    #[NoReturn] #[Link("/manage", Link::POST, [], "/cmw-admin/theme")]
+    #[NoReturn]
+    #[Link('/manage', Link::POST, [], '/cmw-admin/theme')]
     private function adminThemeManagePost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.edit");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.edit');
 
         $aresFiles = [];
 
@@ -151,14 +152,13 @@ class ThemeController extends AbstractController
         foreach ($_FILES as $conf => $file) {
             $aresFiles['__images__'][$conf] = true;
 
-            //If file is empty, we don't update the config.
-            if ($file['name'] !== "") {
-
+            // If file is empty, we don't update the config.
+            if ($file['name'] !== '') {
                 try {
-                    $imageName = ImagesManager::upload($file, ThemeManager::getInstance()->getCurrentTheme()->name() . "/Img");
+                    $imageName = ImagesManager::upload($file, ThemeManager::getInstance()->getCurrentTheme()->name() . '/Img');
                 } catch (ImagesException $e) {
-                    Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                        $conf . " => " . $e);
+                    Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                        $conf . ' => ' . $e);
                     continue;
                 }
 
@@ -173,7 +173,6 @@ class ThemeController extends AbstractController
             }
         }
 
-
         // Manage inputs
         foreach (ThemeManager::getInstance()->getCurrentThemeConfigSettings() as $conf => $value) {
             if (isset($aresFiles['__images__'][$conf])) {
@@ -181,29 +180,30 @@ class ThemeController extends AbstractController
             }
 
             if (!isset($_POST[$conf]) || !empty($_POST[$conf])) {
-                ThemeModel::getInstance()->getInstance()->updateThemeConfig($conf, $_POST[$conf] ?? "0", ThemeManager::getInstance()->getCurrentTheme()->name());
+                ThemeModel::getInstance()->getInstance()->updateThemeConfig($conf, $_POST[$conf] ?? '0', ThemeManager::getInstance()->getCurrentTheme()->name());
             }
         }
 
         $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs(ThemeManager::getInstance()->getCurrentTheme()->name());
-        SimpleCacheManager::storeCache($themeConfigs, 'config', "Themes/" . ThemeManager::getInstance()->getCurrentTheme()->name());
+        SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . ThemeManager::getInstance()->getCurrentTheme()->name());
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate("core.toaster.config.success"));
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+            LangManager::translate('core.toaster.config.success'));
 
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link("/update/:id/:actualVersion/:themeName", Link::GET, ["id" => "[0-9]+", "actualVersion" => ".*?", "themeName" => ".*?"], "/cmw-admin/theme")]
-    #[NoReturn] private function adminThemeUpdate(Request $request, int $id, string $actualVersion, string $themeName): void
+    #[Link('/update/:id/:actualVersion/:themeName', Link::GET, ['id' => '[0-9]+', 'actualVersion' => '.*?', 'themeName' => '.*?'], '/cmw-admin/theme')]
+    #[NoReturn]
+    private function adminThemeUpdate(int $id, string $actualVersion, string $themeName): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.manage");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
 
         $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion");
 
         Log::debug($updates);
 
-        //Update package
+        // Update package
 
         Directory::delete(EnvManager::getInstance()->getValue('DIR') . "App/Public/Theme/$themeName");
 
@@ -214,26 +214,26 @@ class ThemeController extends AbstractController
             }
         }
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('core.theme.toasters.update.success', ['theme' => $themeName]));
 
         Redirect::redirectPreviousRoute();
     }
 
-    #[NoReturn] #[Link("/force/reset", Link::POST, [], "/cmw-admin/theme")]
+    #[NoReturn]
+    #[Link('/force/reset', Link::POST, [], '/cmw-admin/theme')]
     private function themeReset(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.themes.manage");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
 
-        if (!CoreModel::getInstance()->updateOption("theme", 'Sampler')) {
-            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                LangManager::translate("core.toaster.internalError"));
+        if (!CoreModel::getInstance()->updateOption('theme', 'Sampler')) {
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.toaster.internalError'));
             Redirect::redirectPreviousRoute();
         }
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate("core.toaster.theme.reset"));
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+            LangManager::translate('core.toaster.theme.reset'));
         Redirect::redirectToHome();
     }
-
 }

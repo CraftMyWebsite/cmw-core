@@ -4,15 +4,13 @@ namespace CMW\Manager\Class;
 
 class PackageManager
 {
-
     private static function getPackageNameByPathPart(string $packageNameFromPath): ?string
     {
         return match ($packageNameFromPath) {
-            "Installation" => "Installer",
+            'Installation' => 'Installer',
             default => $packageNameFromPath
         };
     }
-
 
     /**
      * @param array{string} $fileParts
@@ -38,11 +36,11 @@ class PackageManager
     private static function getElementNameByPathPart(string $elementNameFromPath): ?string
     {
         return match ($elementNameFromPath) {
-            "Controllers" => "Controller",
-            "Models" => "Model",
-            "Entities" => "Entity",
-            "Implementations" => "Implementation",
-            "Interfaces" => "Interface",
+            'Controllers' => 'Controller',
+            'Models' => 'Model',
+            'Entities' => 'Entity',
+            'Implementations' => 'Implementation',
+            'Interfaces' => 'Interface',
             default => null
         };
     }
@@ -57,16 +55,15 @@ class PackageManager
             return null;
         }
 
-        $PACKAGE_PREFIX = "CMW";
+        $PACKAGE_PREFIX = 'CMW';
         $PACKAGE_POSITION = $basePosition - 1;
         $CLASSNAME_POSITION = $basePosition + 1;
 
         $package = self::getPackageNameByPathPart($fileParts[$PACKAGE_POSITION]);
 
         $classPath = array_slice($fileParts, $CLASSNAME_POSITION);
-        $className = explode(".php", implode("\\", $classPath))[0];
+        $className = explode('.php', implode('\\', $classPath))[0];
 
         return "$PACKAGE_PREFIX\\$element\\$package\\$className";
     }
-
 }

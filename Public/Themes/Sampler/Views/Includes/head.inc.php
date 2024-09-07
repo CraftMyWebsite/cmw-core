@@ -1,6 +1,6 @@
 <?php
 
-header("Cache-Control: max-age=2592000");
+header('Cache-Control: max-age=2592000');
 
 use CMW\Controller\Core\CoreController;
 use CMW\Manager\Env\EnvManager;
@@ -41,15 +41,15 @@ $siteName = Website::getWebsiteName();
 
         <!-- Core theme CSS (Includes Bootstrap)-->
         <link
-            href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>Public/Themes/Sampler/Resources/Assets/Css/main.css"
+            href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Public/Themes/Sampler/Resources/Assets/Css/main.css"
             rel="stylesheet"/>
 
         <?php
-        View::loadInclude($includes, "styles");
+            View::loadInclude($includes, 'styles');
         ?>
 
         <?= ImagesManager::getFaviconInclude() ?>
     </head>
 <body id="page-top">
-<?php View::loadInclude($includes, "beforeScript", "beforePhp"); ?>
+<?php View::loadInclude($includes, 'beforeScript', 'beforePhp'); ?>
 <?= CoreController::getInstance()->cmwWarn() ?>

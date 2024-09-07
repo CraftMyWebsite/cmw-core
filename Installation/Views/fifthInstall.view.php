@@ -40,7 +40,7 @@ use CMW\Manager\Lang\LangManager;
 
     <ul id="mySearch" class="lg:flex flex-wrap">
 
-        <?php foreach (PublicAPI::getData("market/resources/filtered/0") as $theme): ?>
+        <?php foreach (PublicAPI::getData('market/resources/filtered/0') as $theme): ?>
 
             <li class="lg:w-1/2 lg:px-2 mb-4">
                 <input class="hidden" id="theme_<?= $theme['id'] ?>" type="radio" name="theme"
@@ -48,7 +48,7 @@ use CMW\Manager\Lang\LangManager;
                 <label class="label" for="theme_<?= $theme['id'] ?>">
                     <h2 class="font-bold text-lg text-center bg-gray-700 rounded-t-2xl p-1"><?= $theme['name'] ?></h2>
                     <div class="bg-gray-800">
-                        <figure><img src="<?= $theme["icon"] ?>" alt="Icon <?= $theme['icon'] ?>"/></figure>
+                        <figure><img src="<?= $theme['icon'] ?>" alt="Icon <?= $theme['icon'] ?>"/></figure>
                         <div class="p-2">
                             <p><?= $theme['description'] ?></p>
                             <?php foreach ($theme['tags'] as $tag): ?>
@@ -60,9 +60,9 @@ use CMW\Manager\Lang\LangManager;
                 <div class="flex justify-between p-2 bg-gray-700 rounded-b-2xl">
                     <div><a class="text-gray-400 hover:text-cmw-pink" href="" target="_blank"><i class='fa-solid fa-at'></i><i> <?= $theme['author_pseudo'] ?></i></a></div>
                     <div><i class='fa-solid fa-download'></i> <?= $theme['downloads'] ?></div>
-                    <div><?= LangManager::translate("Installation.packages.version") ?> : <?= $theme['version_name'] ?></div>
-                    <?= $theme['demo_link'] !== "" ?"<div><a class='text-gray-400 hover:text-cmw-pink' href='" . $theme['demo_link'] . "' target='_blank'> <i class='fa-solid fa-up-right-from-square'></i>" . " " . LangManager::translate('Installation.packages.demo') . "</a></div>" : "" ?>
-                    <?= $theme['code_link'] !== "" ? "<div><a class='text-gray-400 hover:text-cmw-pink' href='" . $theme['code_link'] . "' target='_blank'><i class='fa-brands fa-github'></i></a></div>" : "" ?>
+                    <div><?= LangManager::translate('Installation.packages.version') ?> : <?= $theme['version_name'] ?></div>
+                    <?= $theme['demo_link'] !== '' ? "<div><a class='text-gray-400 hover:text-cmw-pink' href='" . $theme['demo_link'] . "' target='_blank'> <i class='fa-solid fa-up-right-from-square'></i>" . ' ' . LangManager::translate('Installation.packages.demo') . '</a></div>' : '' ?>
+                    <?= $theme['code_link'] !== '' ? "<div><a class='text-gray-400 hover:text-cmw-pink' href='" . $theme['code_link'] . "' target='_blank'><i class='fa-brands fa-github'></i></a></div>" : '' ?>
                 </div>
             </li>
         <?php endforeach; ?>
@@ -71,7 +71,7 @@ use CMW\Manager\Lang\LangManager;
 
     <div class="card-actions justify-end mt-4">
         <button id="formBtn" type="submit" class="btn btn-primary">
-            <?= LangManager::translate("core.btn.next") ?>
+            <?= LangManager::translate('core.btn.next') ?>
         </button>
     </div>
 </form>

@@ -10,6 +10,7 @@ use RuntimeException;
 class ImagesManager
 {
     protected static string $returnName;
+
     private static array $allowedTypes = [
         'image/png' => 'png',
         'image/jpg' => 'jpg',
@@ -30,7 +31,7 @@ class ImagesManager
      * * @desc Upload images on the uploads' folder. Files accepted [png, jpeg, jpg, gif, webp].
      * @throws Exception
      */
-    public static function uploadMultiple(array $files, string $dirName = ""): array
+    public static function uploadMultiple(array $files, string $dirName = ''): array
     {
         $toReturn = [];
 
@@ -52,27 +53,22 @@ class ImagesManager
      * @throws \CMW\Manager\Uploads\ImagesException
      * @desc Upload image on the uploads' folder. Files accepted [png, jpeg, jpg, gif, webp, ico, svg].
      */
-    public static function upload(array $file, string $dirName = "", bool $keepName = false, string $customName = ""): string
+    public static function upload(array $file, string $dirName = '', bool $keepName = false, string $customName = ''): string
     {
-
         if (is_uploaded_file($file['tmp_name']) === false) {
-            throw new ImagesException("ERROR_INVALID_FILE_DEFINITION");
+            throw new ImagesException('ERROR_INVALID_FILE_DEFINITION');
         }
-
 
         if (!empty(mb_substr($dirName, -1))) {
-            $dirName .= "/";
+            $dirName .= '/';
         }
 
+        self::createDirectory($dirName);  // Create the directory if this is necessary
 
-        self::createDirectory($dirName); //Create the directory if this is necessary
+        $path = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName;
 
-
-        $path = EnvManager::getInstance()->getValue('DIR') . "Public/Uploads/" . $dirName;
-
-
-        if (!empty($dirName) && $dirName !== "/" && !is_dir($path)) {
-            throw new ImagesException("ERROR_FOLDER_DONT_EXIST");
+        if (!empty($dirName) && $dirName !== '/' && !is_dir($path)) {
+            throw new ImagesException('ERROR_FOLDER_DONT_EXIST');
         }
 
         $filePath = $file['tmp_name'];
@@ -81,23 +77,21 @@ class ImagesManager
         $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
         $fileType = finfo_file($fileInfo, $filePath);
 
-
         $maxFileSize = self::getUploadMaxSizeFileSize();
 
-
         if (empty($fileSize2) || ($fileSize2[0] === 0) || ($fileSize2[1] === 0 || filesize($filePath) <= 0)) {
-            throw new ImagesException("ERROR_EMPTY_FILE");
+            throw new ImagesException('ERROR_EMPTY_FILE');
         }
 
         if ($fileSize > $maxFileSize) {
-            throw new ImagesException("ERROR_FILE_TOO_LARGE");
+            throw new ImagesException('ERROR_FILE_TOO_LARGE');
         }
 
         if (!array_key_exists($fileType, self::$allowedTypes)) {
-            throw new ImagesException("ERROR_FILE_NOT_ALLOWED");
+            throw new ImagesException('ERROR_FILE_NOT_ALLOWED');
         }
 
-        //If $keepName is false, we generate a random name
+        // If $keepName is false, we generate a random name
         if ($keepName) {
             $fileName = $file['name'];
         } elseif (!empty($customName)) {
@@ -108,20 +102,19 @@ class ImagesManager
 
         $extension = self::$allowedTypes[$fileType];
 
-        self::$returnName = $fileName . "." . $extension;
+        self::$returnName = $fileName . '.' . $extension;
 
         $newFilePath = $path . self::$returnName;
 
-
         if (!copy($filePath, $newFilePath)) {
-            throw new ImagesException("ERROR_CANT_MOVE_FILE");
+            throw new ImagesException('ERROR_CANT_MOVE_FILE');
         }
 
-        //Clear image metadata
-        $oldFilePath = $path . $fileName . "-old." . $extension;
+        // Clear image metadata
+        $oldFilePath = $path . $fileName . '-old.' . $extension;
         self::clearMetadata($oldFilePath, $path . self::$returnName, $extension);
 
-        //Return the file name with extension
+        // Return the file name with extension
         return self::$returnName;
     }
 
@@ -132,7 +125,7 @@ class ImagesManager
      */
     private static function createDirectory(string $dirName): void
     {
-        if (!file_exists(EnvManager::getInstance()->getValue('DIR') . "Public/Uploads/" . $dirName) && !mkdir($concurrentDirectory = EnvManager::getInstance()->getValue('DIR') . "Public/Uploads/" . $dirName, 0777, true) && !is_dir($concurrentDirectory)) {
+        if (!file_exists(EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName) && !mkdir($concurrentDirectory = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName, 0777, true) && !is_dir($concurrentDirectory)) {
             throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
     }
@@ -169,7 +162,7 @@ class ImagesManager
      */
     private static function clearMetadata(string $oldFilePath, string $filePath, string $imageFormat): void
     {
-        //We copy the current file
+        // We copy the current file
         copy($filePath, $oldFilePath);
 
         $bufferLen = filesize($filePath);
@@ -188,7 +181,6 @@ class ImagesManager
                 $filepos = $match[0][1] + 2 + $len - strlen($buffer);
                 fseek($fdIn, $filepos, SEEK_CUR);
 
-
                 $buffer = fread($fdIn, $bufferLen);
             }
             fwrite($fdOut, $buffer, strlen($buffer));
@@ -196,7 +188,7 @@ class ImagesManager
         fclose($fdOut);
         fclose($fdIn);
 
-        //We delete the "old" file
+        // We delete the "old" file
         unlink($oldFilePath);
     }
 
@@ -206,17 +198,17 @@ class ImagesManager
      * @return void
      * @desc Delete the specific image
      */
-    public static function deleteImage(string $imageName, string $dirName = ""): void
+    public static function deleteImage(string $imageName, string $dirName = ''): void
     {
         if (!empty(mb_substr($dirName, -1))) {
-            $dirName .= "/";
+            $dirName .= '/';
         }
 
-        if (!file_exists(EnvManager::getInstance()->getValue("DIR") . "Public/Uploads/" . $dirName) && !mkdir($concurrentDirectory = EnvManager::getInstance()->getValue("DIR") . "Public/Uploads/" . $dirName) && !is_dir($concurrentDirectory)) {
+        if (!file_exists(EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName) && !mkdir($concurrentDirectory = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName) && !is_dir($concurrentDirectory)) {
             throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
 
-        $path = EnvManager::getInstance()->getValue("DIR") . "Public/Uploads/" . $dirName;
+        $path = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName;
 
         unlink($path . $imageName);
     }
@@ -227,9 +219,8 @@ class ImagesManager
      */
     public static function getFaviconInclude(): string
     {
-        $path = EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . 'Public/Uploads/Favicon/favicon.ico';
+        $path = EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Public/Uploads/Favicon/favicon.ico';
 
         return '<link rel="icon" type="image/x-icon" href="' . $path . '">';
     }
-
 }

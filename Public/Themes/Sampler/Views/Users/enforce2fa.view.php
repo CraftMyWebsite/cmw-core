@@ -7,7 +7,7 @@ use CMW\Manager\Security\SecurityManager;
 use CMW\Model\Core\ThemeModel;
 use CMW\Utils\Website;
 
-Website::setTitle("Double facteur obligatoire");
+Website::setTitle('Double facteur obligatoire');
 Website::setDescription("Merci d'activer le 2fa !");
 ?>
 

@@ -6,7 +6,6 @@ use CMW\Manager\Lang\LangManager;
 
 class PermissionEntity
 {
-
     private int $permissionId;
     private ?PermissionEntity $permissionParent;
     private string $permissionCode;
@@ -26,24 +25,21 @@ class PermissionEntity
         $this->permissionDescription = $permissionDescription;
     }
 
-
     public function __toString(): string
     {
-
-        $parent = $this->getParent() ?? "<u>Aucun parent !</u>";
+        $parent = $this->getParent() ?? '<u>Aucun parent !</u>';
 
         return <<<HTML
-        <div>
-            <h4>Permission #{$this->getId()}</h4>
-            <ul>
-                <li><b>Parent: </b> $parent</li>
-                <br>
-                <li><b>Name (Code): </b> {$this->getCode()}</li>
-            </ul>
-        </div>
-        HTML;
+            <div>
+                <h4>Permission #{$this->getId()}</h4>
+                <ul>
+                    <li><b>Parent: </b> $parent</li>
+                    <br>
+                    <li><b>Name (Code): </b> {$this->getCode()}</li>
+                </ul>
+            </div>
+            HTML;
     }
-
 
     /**
      * @return int
@@ -77,11 +73,8 @@ class PermissionEntity
         return $this->permissionDescription;
     }
 
-
     public function hasParent(): bool
     {
         return !is_null($this->permissionParent);
     }
-
-
 }

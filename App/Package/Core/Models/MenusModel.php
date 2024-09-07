@@ -15,7 +15,6 @@ use CMW\Model\Users\RolesModel;
  */
 class MenusModel extends AbstractModel
 {
-
     /**
      * @param string $name
      * @param string $url
@@ -27,21 +26,21 @@ class MenusModel extends AbstractModel
     public function createMenu(string $name, string $url, int $targetBlank, int $isRestricted, int $customUrl): ?MenuEntity
     {
         $var = [
-            "name" => $name,
-            "url" => $url,
-            "menu_order" => $this->getLastMenuOrder() + 1,
-            "target_blank" => $targetBlank,
-            "restricted" => $isRestricted,
-            "customUrl" => $customUrl
+            'name' => $name,
+            'url' => $url,
+            'menu_order' => $this->getLastMenuOrder() + 1,
+            'target_blank' => $targetBlank,
+            'restricted' => $isRestricted,
+            'customUrl' => $customUrl
         ];
 
-        $sql = "INSERT INTO cmw_menus (menu_name, menu_url, menu_is_restricted, menu_order, menu_target_blank, menu_is_custom_url) 
-                VALUES (:name, :url, :restricted,:menu_order ,:target_blank, :customUrl)";
+        $sql = 'INSERT INTO cmw_menus (menu_name, menu_url, menu_is_restricted, menu_order, menu_target_blank, menu_is_custom_url) 
+                VALUES (:name, :url, :restricted,:menu_order ,:target_blank, :customUrl)';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute($var)){
+        if (!$req->execute($var)) {
             return null;
         }
 
@@ -59,25 +58,25 @@ class MenusModel extends AbstractModel
      * @param int $customUrl
      * @return \CMW\Entity\Core\MenuEntity|null
      */
-    public function createSubMenu(string $name,string $parentId, string $url, int $targetBlank, int $isRestricted, int $customUrl): ?MenuEntity
+    public function createSubMenu(string $name, string $parentId, string $url, int $targetBlank, int $isRestricted, int $customUrl): ?MenuEntity
     {
         $var = [
-            "name" => $name,
-            "parentId" => $parentId,
-            "url" => $url,
-            "menu_order" => $this->getLastSubMenuOrder($parentId) + 1,
-            "target_blank" => $targetBlank,
-            "restricted" => $isRestricted,
-            "customUrl" => $customUrl
+            'name' => $name,
+            'parentId' => $parentId,
+            'url' => $url,
+            'menu_order' => $this->getLastSubMenuOrder($parentId) + 1,
+            'target_blank' => $targetBlank,
+            'restricted' => $isRestricted,
+            'customUrl' => $customUrl
         ];
 
-        $sql = "INSERT INTO cmw_menus (menu_name, menu_parent_id, menu_url, menu_is_restricted, menu_order, menu_target_blank, menu_is_custom_url) 
-                VALUES (:name, :parentId, :url, :restricted,:menu_order ,:target_blank, :customUrl)";
+        $sql = 'INSERT INTO cmw_menus (menu_name, menu_parent_id, menu_url, menu_is_restricted, menu_order, menu_target_blank, menu_is_custom_url) 
+                VALUES (:name, :parentId, :url, :restricted,:menu_order ,:target_blank, :customUrl)';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute($var)){
+        if (!$req->execute($var)) {
             return null;
         }
 
@@ -90,12 +89,12 @@ class MenusModel extends AbstractModel
      * @return ?MenuEntity
      * @desc Edit the menu
      */
-    public function editMenu(int $menuId,string $name, string $url, int $targetBlank, int $isRestricted, int $customUrl): ?MenuEntity
+    public function editMenu(int $menuId, string $name, string $url, int $targetBlank, int $isRestricted, int $customUrl): ?MenuEntity
     {
-        $sql = "UPDATE cmw_menus SET menu_name=:menu_name, menu_url=:menu_url, menu_is_restricted=:menu_is_restricted, menu_target_blank=:menu_target_blank, menu_is_custom_url=:customUrl WHERE menu_id = :menu_id";
+        $sql = 'UPDATE cmw_menus SET menu_name=:menu_name, menu_url=:menu_url, menu_is_restricted=:menu_is_restricted, menu_target_blank=:menu_target_blank, menu_is_custom_url=:customUrl WHERE menu_id = :menu_id';
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
-        $req->execute(array("menu_id" => $menuId,"menu_name" => $name,"menu_url" => $url,"menu_target_blank" => $targetBlank,"menu_is_restricted" => $isRestricted, "customUrl" => $customUrl));
+        $req->execute(array('menu_id' => $menuId, 'menu_name' => $name, 'menu_url' => $url, 'menu_target_blank' => $targetBlank, 'menu_is_restricted' => $isRestricted, 'customUrl' => $customUrl));
         return $this->getMenuById($menuId);
     }
 
@@ -105,17 +104,17 @@ class MenusModel extends AbstractModel
      */
     public function getMenuById(int $id): ?MenuEntity
     {
-        $sql = "SELECT * FROM cmw_menus WHERE menu_id = :id";
+        $sql = 'SELECT * FROM cmw_menus WHERE menu_id = :id';
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute(['id' => $id])){
+        if (!$req->execute(['id' => $id])) {
             return null;
         }
 
         $res = $req->fetch();
 
-        if (!$res){
+        if (!$res) {
             return null;
         }
 
@@ -136,11 +135,11 @@ class MenusModel extends AbstractModel
      */
     public function getMenus(): array
     {
-        $sql = "SELECT menu_id FROM cmw_menus WHERE menu_parent_id IS NULL ORDER BY menu_order";
+        $sql = 'SELECT menu_id FROM cmw_menus WHERE menu_parent_id IS NULL ORDER BY menu_order';
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req){
+        if (!$req) {
             return [];
         }
 
@@ -151,7 +150,7 @@ class MenusModel extends AbstractModel
         $toReturn = array();
 
         while ($menu = $req->fetch()) {
-            $toReturn[] = $this->getMenuById($menu["menu_id"]);
+            $toReturn[] = $this->getMenuById($menu['menu_id']);
         }
 
         return $toReturn;
@@ -162,18 +161,18 @@ class MenusModel extends AbstractModel
      */
     public function getSubMenusByMenu(int $id): array
     {
-        $sql = "SELECT menu_id FROM cmw_menus WHERE menu_parent_id = :menu_id ORDER BY menu_order";
+        $sql = 'SELECT menu_id FROM cmw_menus WHERE menu_parent_id = :menu_id ORDER BY menu_order';
         $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
 
-        if (!$res->execute(array("menu_id" => $id))) {
+        if (!$res->execute(array('menu_id' => $id))) {
             return array();
         }
 
         $toReturn = array();
 
         while ($menu = $res->fetch()) {
-            $toReturn[] = $this->getMenuById($menu["menu_id"]);
+            $toReturn[] = $this->getMenuById($menu['menu_id']);
         }
 
         return $toReturn;
@@ -185,23 +184,22 @@ class MenusModel extends AbstractModel
      */
     public function getLastMenuOrder(): int
     {
-        $sql = "SELECT menu_order FROM cmw_menus WHERE menu_parent_id IS null ORDER BY menu_order DESC LIMIT 1";
+        $sql = 'SELECT menu_order FROM cmw_menus WHERE menu_parent_id IS null ORDER BY menu_order DESC LIMIT 1';
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute()){
+        if (!$req->execute()) {
             return 0;
         }
 
         $res = $req->fetch();
 
-        if(!$res){
+        if (!$res) {
             return 0;
         }
 
         return $res['menu_order'] ?? 0;
     }
-
 
     /**
      * @return int
@@ -209,17 +207,17 @@ class MenusModel extends AbstractModel
      */
     public function getLastSubMenuOrder(int $parentId): int
     {
-        $sql = "SELECT menu_order FROM cmw_menus WHERE menu_parent_id = :parentID ORDER BY menu_order DESC LIMIT 1";
+        $sql = 'SELECT menu_order FROM cmw_menus WHERE menu_parent_id = :parentID ORDER BY menu_order DESC LIMIT 1';
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute(array("parentID" => $parentId))) {
+        if (!$req->execute(array('parentID' => $parentId))) {
             return 0;
         }
 
         $res = $req->fetch();
 
-        if(!$res){
+        if (!$res) {
             return 0;
         }
 
@@ -232,15 +230,15 @@ class MenusModel extends AbstractModel
      */
     public function getMenuIdByOrder(int $currentOrder): int
     {
-        $sql = "SELECT menu_id FROM cmw_menus WHERE menu_order = :currentOrder";
+        $sql = 'SELECT menu_id FROM cmw_menus WHERE menu_order = :currentOrder';
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute(array("currentOrder" => $currentOrder))) {
+        if (!$req->execute(array('currentOrder' => $currentOrder))) {
             return 0;
         }
         $res = $req->fetch();
-        if(!$res){
+        if (!$res) {
             return 0;
         }
         return $res['menu_id'] ?? 0;
@@ -252,15 +250,15 @@ class MenusModel extends AbstractModel
      */
     public function getSubMenuIdByOrder(int $currentOrder, int $parentId): int
     {
-        $sql = "SELECT menu_id FROM cmw_menus WHERE menu_order = :currentOrder AND menu_parent_id = :parentId";
+        $sql = 'SELECT menu_id FROM cmw_menus WHERE menu_order = :currentOrder AND menu_parent_id = :parentId';
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute(array("currentOrder" => $currentOrder, "parentId" => $parentId))) {
+        if (!$req->execute(array('currentOrder' => $currentOrder, 'parentId' => $parentId))) {
             return 0;
         }
         $res = $req->fetch();
-        if(!$res){
+        if (!$res) {
             return 0;
         }
         return $res['menu_id'] ?? 0;
@@ -273,10 +271,10 @@ class MenusModel extends AbstractModel
     public function updateNextMenuIdByOrder(int $currentOrder): void
     {
         $id = $this->getMenuIdByOrder($currentOrder + 1);
-        $sql = "UPDATE cmw_menus SET menu_order = :newOrder WHERE menu_id = :id";
+        $sql = 'UPDATE cmw_menus SET menu_order = :newOrder WHERE menu_id = :id';
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
-        $req->execute(array("id" => $id, "newOrder" => $currentOrder));
+        $req->execute(array('id' => $id, 'newOrder' => $currentOrder));
     }
 
     /**
@@ -286,10 +284,10 @@ class MenusModel extends AbstractModel
     public function updateNextSubMenuIdByOrder(int $currentOrder, int $parentId): void
     {
         $id = $this->getSubMenuIdByOrder($currentOrder + 1, $parentId);
-        $sql = "UPDATE cmw_menus SET menu_order = :newOrder WHERE menu_id = :id";
+        $sql = 'UPDATE cmw_menus SET menu_order = :newOrder WHERE menu_id = :id';
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
-        $req->execute(array("id" => $id, "newOrder" => $currentOrder));
+        $req->execute(array('id' => $id, 'newOrder' => $currentOrder));
     }
 
     /**
@@ -299,10 +297,10 @@ class MenusModel extends AbstractModel
     public function updatePreviousMenuIdByOrder(int $currentOrder): void
     {
         $id = $this->getMenuIdByOrder($currentOrder - 1);
-        $sql = "UPDATE cmw_menus SET menu_order = :newOrder WHERE menu_id = :id";
+        $sql = 'UPDATE cmw_menus SET menu_order = :newOrder WHERE menu_id = :id';
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
-        $req->execute(array("id" => $id, "newOrder" => $currentOrder));
+        $req->execute(array('id' => $id, 'newOrder' => $currentOrder));
     }
 
     /**
@@ -312,10 +310,10 @@ class MenusModel extends AbstractModel
     public function updatePreviousSubMenuIdByOrder(int $currentOrder, int $parentId): void
     {
         $id = $this->getSubMenuIdByOrder($currentOrder - 1, $parentId);
-        $sql = "UPDATE cmw_menus SET menu_order = :newOrder WHERE menu_id = :id";
+        $sql = 'UPDATE cmw_menus SET menu_order = :newOrder WHERE menu_id = :id';
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
-        $req->execute(array("id" => $id, "newOrder" => $currentOrder));
+        $req->execute(array('id' => $id, 'newOrder' => $currentOrder));
     }
 
     /**
@@ -325,11 +323,11 @@ class MenusModel extends AbstractModel
     public function upPositionMenu(int $id, int $currentOrder): void
     {
         $this->updateNextMenuIdByOrder($currentOrder);
-        $sql = "UPDATE cmw_menus SET menu_order = :newOrder WHERE menu_id = :id";
+        $sql = 'UPDATE cmw_menus SET menu_order = :newOrder WHERE menu_id = :id';
         $newOrder = $currentOrder + 1;
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
-        $req->execute(array("id" => $id, "newOrder" => $newOrder));
+        $req->execute(array('id' => $id, 'newOrder' => $newOrder));
     }
 
     /**
@@ -339,11 +337,11 @@ class MenusModel extends AbstractModel
     public function upPositionSubMenu(int $id, int $currentOrder, int $parentId): void
     {
         $this->updateNextSubMenuIdByOrder($currentOrder, $parentId);
-        $sql = "UPDATE cmw_menus SET menu_order = :newOrder WHERE menu_id = :id";
+        $sql = 'UPDATE cmw_menus SET menu_order = :newOrder WHERE menu_id = :id';
         $newOrder = $currentOrder + 1;
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
-        $req->execute(array("id" => $id, "newOrder" => $newOrder));
+        $req->execute(array('id' => $id, 'newOrder' => $newOrder));
     }
 
     /**
@@ -353,11 +351,11 @@ class MenusModel extends AbstractModel
     public function downPositionMenu(int $id, int $currentOrder): void
     {
         $this->updatePreviousMenuIdByOrder($currentOrder);
-        $sql = "UPDATE cmw_menus SET menu_order = :newOrder WHERE menu_id = :id";
+        $sql = 'UPDATE cmw_menus SET menu_order = :newOrder WHERE menu_id = :id';
         $newOrder = $currentOrder - 1;
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
-        $req->execute(array("id" => $id, "newOrder" => $newOrder));
+        $req->execute(array('id' => $id, 'newOrder' => $newOrder));
     }
 
     /**
@@ -367,31 +365,30 @@ class MenusModel extends AbstractModel
     public function downPositionSubMenu(int $id, int $currentOrder, int $parentId): void
     {
         $this->updatePreviousSubMenuIdByOrder($currentOrder, $parentId);
-        $sql = "UPDATE cmw_menus SET menu_order = :newOrder WHERE menu_id = :id";
+        $sql = 'UPDATE cmw_menus SET menu_order = :newOrder WHERE menu_id = :id';
         $newOrder = $currentOrder - 1;
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
-        $req->execute(array("id" => $id, "newOrder" => $newOrder));
+        $req->execute(array('id' => $id, 'newOrder' => $newOrder));
     }
 
     public function addMenuGroupsAllowed(int $menuId, int $roleId): void
     {
-        $sql = "INSERT INTO cmw_menus_groups_allowed (menus_groups_group_id, menus_groups_menu_id)
-                VALUES (:group_id, :menu_id)";
+        $sql = 'INSERT INTO cmw_menus_groups_allowed (menus_groups_group_id, menus_groups_menu_id)
+                VALUES (:group_id, :menu_id)';
         $db = DatabaseManager::getInstance();
-        $req = $db ->prepare($sql);
+        $req = $db->prepare($sql);
         $req->execute(['group_id' => $roleId, 'menu_id' => $menuId]);
     }
 
     public function deleteMenuGroupsAllowed(int $id): bool
     {
-        $sql = "DELETE FROM cmw_menus_groups_allowed WHERE menus_groups_menu_id = :menus_groups_menu_id";
+        $sql = 'DELETE FROM cmw_menus_groups_allowed WHERE menus_groups_menu_id = :menus_groups_menu_id';
 
         $db = DatabaseManager::getInstance();
 
-        return $db->prepare($sql)->execute(array("menus_groups_menu_id" => $id));
+        return $db->prepare($sql)->execute(array('menus_groups_menu_id' => $id));
     }
-
 
     /**
      * @param int $menuId
@@ -399,15 +396,14 @@ class MenusModel extends AbstractModel
      */
     public function getAllowedRoles(int $menuId): ?array
     {
-        $sql = "SELECT menus_groups_group_id FROM cmw_menus_groups_allowed WHERE menus_groups_menu_id = :id";
+        $sql = 'SELECT menus_groups_group_id FROM cmw_menus_groups_allowed WHERE menus_groups_menu_id = :id';
         $db = DatabaseManager::getInstance();
 
         $req = $db->prepare($sql);
 
-        if (!$req->execute(['id' => $menuId])){
+        if (!$req->execute(['id' => $menuId])) {
             return null;
         }
-
 
         $roles = [];
         while ($role = $req->fetch()) {
@@ -424,10 +420,10 @@ class MenusModel extends AbstractModel
      */
     public function reorderMenu(int $currentOrder): void
     {
-        $sql = "UPDATE cmw_menus SET menu_order = menu_order - 1 WHERE menu_order > :currentOrder";
+        $sql = 'UPDATE cmw_menus SET menu_order = menu_order - 1 WHERE menu_order > :currentOrder';
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
-        $req->execute(array("currentOrder" => $currentOrder));
+        $req->execute(array('currentOrder' => $currentOrder));
     }
 
     /**
@@ -437,10 +433,10 @@ class MenusModel extends AbstractModel
      */
     public function reorderSubMenu(int $currentOrder, int $parentId): void
     {
-        $sql = "UPDATE cmw_menus SET menu_order = menu_order - 1 WHERE menu_order > :currentOrder AND menu_parent_id = :parentId";
+        $sql = 'UPDATE cmw_menus SET menu_order = menu_order - 1 WHERE menu_order > :currentOrder AND menu_parent_id = :parentId';
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
-        $req->execute(array("currentOrder" => $currentOrder, "parentId" => $parentId));
+        $req->execute(array('currentOrder' => $currentOrder, 'parentId' => $parentId));
     }
 
     /**
@@ -451,11 +447,11 @@ class MenusModel extends AbstractModel
      */
     public function deleteMenu(int $id, int $currentOrder): void
     {
-        $sql = "DELETE FROM cmw_menus WHERE menu_id=:id";
+        $sql = 'DELETE FROM cmw_menus WHERE menu_id=:id';
         $this->reorderMenu($currentOrder);
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
-        $req->execute(array("id" => $id));
+        $req->execute(array('id' => $id));
     }
 
     /**
@@ -466,11 +462,10 @@ class MenusModel extends AbstractModel
      */
     public function deleteSubMenu(int $id, int $currentOrder, int $parentId): void
     {
-        $sql = "DELETE FROM cmw_menus WHERE menu_id=:id";
+        $sql = 'DELETE FROM cmw_menus WHERE menu_id=:id';
         $this->reorderSubMenu($currentOrder, $parentId);
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
-        $req->execute(array("id" => $id));
+        $req->execute(array('id' => $id));
     }
-
 }

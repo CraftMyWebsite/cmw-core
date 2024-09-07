@@ -1,13 +1,13 @@
 <?php
 
 return [
-    "title" => "CraftMyWebsite | Installation",
-    "desc" => "Installation du CMS CraftMyWebsite",
-    "welcome" => [
-        "title" => "Bienvenue",
-        "subtitle" => "Merci d'avoir choisi CraftMyWebsite pour votre site web !",
-        "config" => [
-            "title" => "Faisons le point sur votre configuration",
+    'title' => 'CraftMyWebsite | Installation',
+    'desc' => 'Installation du CMS CraftMyWebsite',
+    'welcome' => [
+        'title' => 'Bienvenue',
+        'subtitle' => "Merci d'avoir choisi CraftMyWebsite pour votre site web !",
+        'config' => [
+            'title' => 'Faisons le point sur votre configuration',
         ],
         "content" => "<p>Si votre configuration n'est pas suffisante merci de vous référer aux <a class='text-primary' href='https://craftmywebsite.fr/docs/fr/users/commencer/prerequis' target='_blank'>prérequis</a>
                       avant de continuer l'installation.</p>
@@ -25,9 +25,9 @@ return [
         "includes" => "Ce bundle inclut les packages :",
         "customText" => "<p>Personnalisez votre installation vous-même.</p><p>Ceci ne veut pas dire qu'il n'est pas possible de le personnaliser avec d'autres bundle.</p>",
     ],
-    "password" => [
-        "strenght" => "Force du mot de passe :",
-        "notmatch" => "Les mots de passe ne correspondent pas !"
+    'password' => [
+        'strenght' => 'Force du mot de passe :',
+        'notmatch' => 'Les mots de passe ne correspondent pas !'
     ],
     "search" => "Rechercher",
     "config" => [
@@ -49,16 +49,14 @@ return [
             "site_folder_about" => "Généralement <code>/</code>. Si CraftMyWebsite se trouve dans un dossier, veuillez indiquer <code>/dossier/</code>."
         ]
     ],
-
-    "details" => [
-        "title" => "Détails",
-        "website" => [
-            "name" => "Nom du site",
-            "description" => "Description",
-            "description_placeholder" => "Découvrez mon nouveau site grâce à CraftMyWebsite"
+    'details' => [
+        'title' => 'Détails',
+        'website' => [
+            'name' => 'Nom du site',
+            'description' => 'Description',
+            'description_placeholder' => 'Découvrez mon nouveau site grâce à CraftMyWebsite'
         ]
     ],
-
     "packages" => [
         "title" => "Choix des packages",
         "sub_title" => "Cliquez pour sélectionner",
@@ -77,37 +75,33 @@ return [
             "footer" => "**Survolez un package pour en savoir plus"
         ]
     ],
-
-    "themes" => [
-        "title" => "Choix d'un thème",
-        "sub_title" => "Cliquez sur l'image pour sélectionner",
-        "compatibility" => "Compatibilité",
-        "more" => "Plus d'informations"
+    'themes' => [
+        'title' => "Choix d'un thème",
+        'sub_title' => "Cliquez sur l'image pour sélectionner",
+        'compatibility' => 'Compatibilité',
+        'more' => "Plus d'informations"
     ],
-
-    "administrator" => [
-        "title" => "Compte Administrateur",
+    'administrator' => [
+        'title' => 'Compte Administrateur',
     ],
-
-    "finish" => [
-        "title" => "Félicitations !",
-        "desc" => "Votre site est maintenant prêt !",
-        "review" => "Revoyons ensemble votre configuration :",
-        "version" => "Version CMW :",
-        "Theme" => "Thème :",
-        "bundle" => "Bundle :",
-        "package" => "Packages :",
-        "goToMySite" => "Aller sur mon site",
+    'finish' => [
+        'title' => 'Félicitations !',
+        'desc' => 'Votre site est maintenant prêt !',
+        'review' => 'Revoyons ensemble votre configuration :',
+        'version' => 'Version CMW :',
+        'Theme' => 'Thème :',
+        'bundle' => 'Bundle :',
+        'package' => 'Packages :',
+        'goToMySite' => 'Aller sur mon site',
     ],
-
-    "steps" => [
-        0 => "Bienvenue",
-        1 => "Configuration",
-        2 => "Détails",
-        3 => "Bundles",
-        4 => "Packages",
-        5 => "Thèmes",
-        6 => "Administrateur",
-        7 => "Terminé",
+    'steps' => [
+        0 => 'Bienvenue',
+        1 => 'Configuration',
+        2 => 'Détails',
+        3 => 'Bundles',
+        4 => 'Packages',
+        5 => 'Thèmes',
+        6 => 'Administrateur',
+        7 => 'Terminé',
     ],
 ];

@@ -10,7 +10,6 @@ namespace CMW\Manager\Router;
  */
 class Route
 {
-
     private string $path;
     private string $name;
     private int $weight;
@@ -19,7 +18,7 @@ class Route
     private array $matches = [];
     private array $params = [];
 
-    public function __construct($path, $callable, $weight = 1, string $name = "")
+    public function __construct($path, $callable, $weight = 1, string $name = '')
     {
         $this->path = trim($path, '/');
         $this->weight = $weight;
@@ -30,11 +29,11 @@ class Route
     public function __debugInfo(): ?array
     {
         return array(
-            "path" => $this->path,
-            "name" => $this->name,
-            "weight" => $this->weight,
-            "matches" => $this->matches,
-            "params" => $this->params
+            'path' => $this->path,
+            'name' => $this->name,
+            'weight' => $this->weight,
+            'matches' => $this->matches,
+            'params' => $this->params
         );
     }
 
@@ -83,7 +82,7 @@ class Route
     {
         $url = trim($url, '/');
         $path = preg_replace_callback('#:(\w+)#', [$this, 'paramMatch'], $this->path);
-        $regex = "#^$path$#i";
+        $regex = "#^$path\$#i";
 
         if (!preg_match($regex, $url, $matches)) {
             return false;

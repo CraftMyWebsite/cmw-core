@@ -14,7 +14,7 @@ class ConditionModel extends AbstractModel
      */
     public function getCGU(): ?ConditionEntity
     {
-        $sql = "SELECT * FROM cmw_core_condition WHERE condition_id = 2";
+        $sql = 'SELECT * FROM cmw_core_condition WHERE condition_id = 2';
 
         $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
@@ -25,7 +25,7 @@ class ConditionModel extends AbstractModel
 
         $res = $res->fetch();
 
-        $author = (new UsersModel())->getUserById($res["condition_last_editor"]);
+        $author = (new UsersModel())->getUserById($res['condition_last_editor']);
 
         return new ConditionEntity(
             $res['condition_id'],
@@ -46,14 +46,14 @@ class ConditionModel extends AbstractModel
     public function updateCondition(?string $cguContent, int $cguState, ?string $cgvContent, int $cgvState, int $author): ?ConditionEntity
     {
         $info = array(
-            "cguContent" => $cguContent,
-            "cguState" => $cguState,
-            "cgvContent" => $cgvContent,
-            "cgvState" => $cgvState,
-            "author" => $author,
+            'cguContent' => $cguContent,
+            'cguState' => $cguState,
+            'cgvContent' => $cgvContent,
+            'cgvState' => $cgvState,
+            'author' => $author,
         );
 
-        $sql = "UPDATE cmw_core_condition
+        $sql = 'UPDATE cmw_core_condition
 SET
     condition_content = CASE
         WHEN condition_id = 1 THEN :cgvContent
@@ -66,7 +66,7 @@ SET
         ELSE condition_state
     END,
     condition_last_editor = :author
-WHERE condition_id IN (1, 2);";
+WHERE condition_id IN (1, 2);';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -82,11 +82,10 @@ WHERE condition_id IN (1, 2);";
      */
     public function getCGV(): ?ConditionEntity
     {
-        $sql = "SELECT * FROM cmw_core_condition WHERE condition_id = 1";
+        $sql = 'SELECT * FROM cmw_core_condition WHERE condition_id = 1';
 
         $db = DatabaseManager::getInstance();
         $res = $db->prepare($sql);
-
 
         if (!$res->execute()) {
             return null;
@@ -94,7 +93,7 @@ WHERE condition_id IN (1, 2);";
 
         $res = $res->fetch();
 
-        $author = (new UsersModel())->getUserById($res["condition_last_editor"]);
+        $author = (new UsersModel())->getUserById($res['condition_last_editor']);
 
         return new ConditionEntity(
             $res['condition_id'],

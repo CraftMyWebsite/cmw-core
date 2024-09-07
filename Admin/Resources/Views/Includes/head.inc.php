@@ -1,10 +1,14 @@
 <?php
 
-header("Cache-Control: max-age=2592000");
+header('Cache-Control: max-age=2592000');
 
-/** @var $title */
+/**
+ * @var $title
+ */
 
-/** @var $description */
+/**
+ * @var $description
+ */
 
 use CMW\Manager\Env\EnvManager;
 use CMW\Utils\Website;
@@ -40,12 +44,12 @@ use CMW\Utils\Website;
 </script>
 
 <style>
-    @font-face {  font-family: rubik;  src:url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Rubik-Light.ttf"); font-weight: 300;  }
-    @font-face {  font-family: rubik;  src:url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Rubik-Regular.ttf"); font-weight: 400;  }
-    @font-face {  font-family: rubik;  src:url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Rubik-Medium.ttf"); font-weight: 500;  }
-    @font-face {  font-family: rubik;  src:url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Rubik-SemiBold.ttf"); font-weight: 600;  }
-    @font-face {  font-family: rubik;  src:url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Rubik-Bold.ttf"); font-weight: 700;  }
-    @font-face {  font-family: rubik;  src:url("<?=EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>Admin/Resources/Assets/Webfonts/Rubik-ExtraBold.ttf"); font-weight: 800;  }
+    @font-face {  font-family: rubik;  src:url("<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Webfonts/Rubik-Light.ttf"); font-weight: 300;  }
+    @font-face {  font-family: rubik;  src:url("<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Webfonts/Rubik-Regular.ttf"); font-weight: 400;  }
+    @font-face {  font-family: rubik;  src:url("<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Webfonts/Rubik-Medium.ttf"); font-weight: 500;  }
+    @font-face {  font-family: rubik;  src:url("<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Webfonts/Rubik-SemiBold.ttf"); font-weight: 600;  }
+    @font-face {  font-family: rubik;  src:url("<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Webfonts/Rubik-Bold.ttf"); font-weight: 700;  }
+    @font-face {  font-family: rubik;  src:url("<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Webfonts/Rubik-ExtraBold.ttf"); font-weight: 800;  }
 </style>
 
 <style>
@@ -61,8 +65,8 @@ use CMW\Utils\Website;
         --light-scrollbar-hover : #64748b;
         --light-scrollbar-bg : #e2e8f0;
 
-        --dark-primary: #030712;
-        --dark-secondary: #111827;
+        --dark-primary: #0d1220; /* (previous) #030712 */
+        --dark-secondary: #111828; /* (previous) #111827 */
         --dark-third: #334155;
         --dark-fourth: #1e293b;
         --dark-text-primary: #e5e7eb;

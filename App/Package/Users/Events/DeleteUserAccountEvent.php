@@ -7,6 +7,6 @@ class DeleteUserAccountEvent extends AbstractEvent
 {
     public function getName(): string
     {
-        return "DeleteUserAccountEvent-Users-CraftMyWebsite"; //avoid simple names :)
+        return 'DeleteUserAccountEvent-Users-CraftMyWebsite';  // avoid simple names :)
     }
 }

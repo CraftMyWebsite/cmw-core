@@ -1,6 +1,5 @@
 <?php
 
-
 namespace CMW\Manager\Theme;
 
 /**

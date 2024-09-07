@@ -7,47 +7,47 @@ use CMW\Manager\Security\SecurityManager;
 /** @var \CMW\Entity\Users\UserEntity $user */
 /** @var \CMW\Entity\Users\RoleEntity[] $roles */
 /** @var \CMW\Entity\Users\UserEntity[] $userList */
+$title = LangManager::translate('users.manage.title');
+$description = LangManager::translate('users.manage.desc');
+?>
 
-$title = LangManager::translate("users.manage.title");
-$description = LangManager::translate("users.manage.desc"); ?>
-
-<h3><i class="fa-solid fa-sliders"></i> <?= LangManager::translate("users.manage.title") ?></h3>
+<h3><i class="fa-solid fa-sliders"></i> <?= LangManager::translate('users.manage.title') ?></h3>
 
 
 <div class="card">
     <div class="flex justify-between">
-        <h6><?= LangManager::translate("users.manage.card_title_add") ?></h6>
-        <button form="adduser" type="submit" class="btn-primary"><?= LangManager::translate("core.btn.add") ?></button>
+        <h6><?= LangManager::translate('users.manage.card_title_add') ?></h6>
+        <button form="adduser" type="submit" class="btn-primary"><?= LangManager::translate('core.btn.add') ?></button>
     </div>
     <form id="adduser" method="post" action="add" class="grid-4">
         <?php (new SecurityManager())->insertHiddenToken() ?>
         <div>
-            <label for="email"><?= LangManager::translate("users.users.mail") ?> :</label>
+            <label for="email"><?= LangManager::translate('users.users.mail') ?> :</label>
             <div class="input-group">
                 <i class="fa-solid fa-at"></i>
                 <input type="email" id="email" name="email" autocomplete="off"
-                       placeholder="<?= LangManager::translate("users.users.mail") ?>" required>
+                       placeholder="<?= LangManager::translate('users.users.mail') ?>" required>
             </div>
         </div>
         <div>
-            <label for="pseudo"><?= LangManager::translate("users.users.pseudo") ?> :</label>
+            <label for="pseudo"><?= LangManager::translate('users.users.pseudo') ?> :</label>
             <div class="input-group">
                 <i class="fa-solid fa-user"></i>
                 <input type="text" id="pseudo" name="pseudo" autocomplete="off"
-                       placeholder="<?= LangManager::translate("users.users.pseudo") ?>" required>
+                       placeholder="<?= LangManager::translate('users.users.pseudo') ?>" required>
             </div>
         </div>
         <div>
-            <label for="password"><?= LangManager::translate("users.users.password") ?> :</label>
+            <label for="password"><?= LangManager::translate('users.users.password') ?> :</label>
             <div class="input-btn">
                 <input type="password" id="password" name="password" placeholder="" required/>
                 <button onclick="generatePassword('password')" type="button"><i class="fa-solid fa-rotate"></i></button>
             </div>
         </div>
         <div>
-            <label for="roles"><?= LangManager::translate("users.users.role") ?> :</label>
+            <label for="roles"><?= LangManager::translate('users.users.role') ?> :</label>
             <select id="roles" class="choices choices__list--multiple" name="roles[]" multiple required>
-                <?php foreach ($roles as $role) : ?>
+                <?php foreach ($roles as $role): ?>
                     <option value="<?= $role->getId() ?>"><?= $role->getName() ?></option>
                 <?php endforeach; ?>
             </select>
@@ -56,22 +56,22 @@ $description = LangManager::translate("users.manage.desc"); ?>
 </div>
 
 <div class="card mt-4">
-    <h6><?= LangManager::translate("users.manage.card_title_list") ?></h6>
+    <h6><?= LangManager::translate('users.manage.card_title_list') ?></h6>
     <div class="table-container table-container-striped">
         <table id="table1" data-load-per-page="20">
             <thead>
             <tr>
-                <th><?= LangManager::translate("users.users.mail") ?></th>
-                <th><?= LangManager::translate("users.users.pseudo") ?></th>
-                <th><?= LangManager::translate("users.users.role") ?></th>
-                <th><?= LangManager::translate("users.users.creation") ?></th>
-                <th><?= LangManager::translate("users.users.last_connection") ?></th>
+                <th><?= LangManager::translate('users.users.mail') ?></th>
+                <th><?= LangManager::translate('users.users.pseudo') ?></th>
+                <th><?= LangManager::translate('users.users.role') ?></th>
+                <th><?= LangManager::translate('users.users.creation') ?></th>
+                <th><?= LangManager::translate('users.users.last_connection') ?></th>
                 <th class="text-center">2fa</th>
-                <th class="text-center"><?= LangManager::translate("core.btn.edit") ?></th>
+                <th class="text-center"><?= LangManager::translate('core.btn.edit') ?></th>
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($userList as $user) : ?>
+            <?php foreach ($userList as $user): ?>
                 <tr>
                     <td><?= $user->getMail() ?></td>
                     <td><?= $user->getPseudo() ?></td>
@@ -89,15 +89,15 @@ $description = LangManager::translate("users.manage.desc"); ?>
                         <div id="modal-danger-<?= $user->getId() ?>" class="modal-container">
                             <div class="modal">
                                 <div class="modal-header-danger">
-                                    <h6><?= LangManager::translate("users.modal.delete") ?> <?= $user->getPseudo() ?>
+                                    <h6><?= LangManager::translate('users.modal.delete') ?> <?= $user->getPseudo() ?>
                                         ?</h6>
                                     <button type="button" data-modal-hide="modal-danger-<?= $user->getId() ?>"><i class="fa-solid fa-xmark"></i></button>
                                 </div>
                                 <div class="modal-body">
-                                    <?= LangManager::translate("users.modal.delete_message") ?>
+                                    <?= LangManager::translate('users.modal.delete_message') ?>
                                 </div>
                                 <div class="modal-footer">
-                                    <a href="/cmw-admin/users/delete/<?= $user->getId() ?>" type="button" class="btn-danger"><?= LangManager::translate("core.btn.delete") ?></a>
+                                    <a href="/cmw-admin/users/delete/<?= $user->getId() ?>" type="button" class="btn-danger"><?= LangManager::translate('core.btn.delete') ?></a>
                                 </div>
                             </div>
                         </div>

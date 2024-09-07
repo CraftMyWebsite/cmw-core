@@ -15,7 +15,6 @@ use CMW\Utils\Utils;
 use CMW\Utils\Website;
 use JetBrains\PhpStorm\NoReturn;
 
-
 /**
  * Class: @MaintenanceController
  * @package Core
@@ -24,16 +23,15 @@ use JetBrains\PhpStorm\NoReturn;
  */
 class MaintenanceController extends AbstractController
 {
-
     // Admin
-    #[Link(path: "/manage", method: Link::GET, scope: "/cmw-admin/maintenance")]
+    #[Link(path: '/manage', method: Link::GET, scope: '/cmw-admin/maintenance')]
     private function adminConfiguration(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.maintenance");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.settings.maintenance');
 
         $maintenance = MaintenanceModel::getInstance()->getMaintenance();
 
-        View::createAdminView("Core", "Maintenance/maintenance")
+        View::createAdminView('Core', 'Maintenance/maintenance')
             ->addVariableList(['maintenance' => $maintenance])
             ->view();
     }
@@ -41,10 +39,11 @@ class MaintenanceController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[NoReturn] #[Link(path: "/manage", method: Link::POST, scope: "/cmw-admin/maintenance")]
+    #[NoReturn]
+    #[Link(path: '/manage', method: Link::POST, scope: '/cmw-admin/maintenance')]
     private function adminConfigurationPost(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.settings.maintenance");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.settings.maintenance');
 
         [$title, $description, $targetDate, $type, $overrideThemeCode] = Utils::filterInput('title', 'description', 'target-date', 'type', 'overrideThemeCode');
 
@@ -70,15 +69,14 @@ class MaintenanceController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
-
     public function redirectMaintenance(): void
     {
-        //Prevent loop
+        // Prevent loop
         if (Website::isCurrentPage('maintenance')) {
             return;
         }
 
-        //Ignore installer
+        // Ignore installer
         if (Website::isContainingRoute('installer')) {
             return;
         }
@@ -90,7 +88,7 @@ class MaintenanceController extends AbstractController
             return;
         }
 
-        //Check date
+        // Check date
         if (time() >= strtotime($maintenance->getTargetDate())) {
             MaintenanceModel::getInstance()->updateMaintenance(0,
                 $maintenance->getTitle(), $maintenance->getDescription(),
@@ -105,23 +103,23 @@ class MaintenanceController extends AbstractController
             return;
         }
 
-        ///// Login checks
+        // /// Login checks
         if ($maintenance->getType() === 1 &&
-            (Website::isCurrentPage('login') || Website::isCurrentPage('register') || Website::isCurrentPage('login/forgot') || Website::isCurrentPage('login/validate/tfa'))) {
+                (Website::isCurrentPage('login') || Website::isCurrentPage('register') || Website::isCurrentPage('login/forgot') || Website::isCurrentPage('login/validate/tfa'))) {
             return;
         }
 
         if ($maintenance->getType() === 2 &&
-            (Website::isCurrentPage('login') || Website::isCurrentPage('login/forgot') || Website::isCurrentPage('login/validate/tfa'))) {
+                (Website::isCurrentPage('login') || Website::isCurrentPage('login/forgot') || Website::isCurrentPage('login/validate/tfa'))) {
             return;
         }
 
-        //Force redirect to maintenance page
+        // Force redirect to maintenance page
         Redirect::redirect('maintenance');
     }
 
     // Public
-    #[Link(path: "/maintenance", method: Link::GET, scope: "/")]
+    #[Link(path: '/maintenance', method: Link::GET, scope: '/')]
     private function publicMaintenance(): void
     {
         $maintenance = MaintenanceModel::getInstance()->getMaintenance();
@@ -131,14 +129,11 @@ class MaintenanceController extends AbstractController
         }
 
         if ($maintenance->isOverrideTheme()) {
-
             eval('?>' . $maintenance->getOverrideThemeCode());
-
         } else {
             $view = new View('Core', 'maintenance');
             $view->addVariableList(['maintenance' => $maintenance]);
             $view->view();
         }
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace CMW\Manager\Metrics;
 
-
 class VisitsMetricsEntity
 {
     private int $id;
@@ -88,5 +87,4 @@ class VisitsMetricsEntity
     {
         return $this->isAdmin;
     }
-
 }

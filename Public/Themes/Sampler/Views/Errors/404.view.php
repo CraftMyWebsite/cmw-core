@@ -2,8 +2,8 @@
 
 use CMW\Utils\Website;
 
-Website::setTitle("Page introuvable");
-Website::setDescription("Erreur, page introuvable.");
+Website::setTitle('Page introuvable');
+Website::setDescription('Erreur, page introuvable.');
 ?>
 
 <section class="page-section">

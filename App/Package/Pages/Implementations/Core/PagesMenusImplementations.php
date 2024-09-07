@@ -5,8 +5,8 @@ namespace CMW\Implementation\Pages\Core;
 use CMW\Interface\Core\IMenus;
 use CMW\Model\Pages\PagesModel;
 
-class PagesMenusImplementations implements IMenus {
-
+class PagesMenusImplementations implements IMenus
+{
     public function getRoutes(): array
     {
         $slug = [];
@@ -20,6 +20,6 @@ class PagesMenusImplementations implements IMenus {
 
     public function getPackageName(): string
     {
-        return "Pages";
+        return 'Pages';
     }
 }

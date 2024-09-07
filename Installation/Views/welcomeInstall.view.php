@@ -1,12 +1,12 @@
-<?php /* @var $lang String */
+<?php  /* @var $lang String */
 
 use CMW\Controller\Installer\InstallerController;
 use CMW\Manager\Lang\LangManager;
 
 ?>
-<h2 class="text-2xl font-medium text-center"><?= LangManager::translate("Installation.welcome.title") ?></h2>
-<p class="text-center"><?= LangManager::translate("Installation.welcome.subtitle") ?></p>
-<p><?= LangManager::translate("Installation.welcome.config.title") ?> :</p>
+<h2 class="text-2xl font-medium text-center"><?= LangManager::translate('Installation.welcome.title') ?></h2>
+<p class="text-center"><?= LangManager::translate('Installation.welcome.subtitle') ?></p>
+<p><?= LangManager::translate('Installation.welcome.config.title') ?> :</p>
 <div class="overflow-x-auto">
     <table class="table w-full">
         <!-- head -->
@@ -24,7 +24,7 @@ use CMW\Manager\Lang\LangManager;
         <tr class="text-center">
             <td>
                 <?= InstallerController::hasRequiredFormatted('php') ?>
-                <?= InstallerController::$minPhpVersion . " +" ?>
+                <?= InstallerController::$minPhpVersion . ' +' ?>
             </td>
             <td>
                 <?= InstallerController::hasRequiredFormatted('https') ?>
@@ -43,20 +43,20 @@ use CMW\Manager\Lang\LangManager;
     </table>
 </div>
 
-<?= LangManager::translate("Installation.welcome.content") ?>
+<?= LangManager::translate('Installation.welcome.content') ?>
 <form action="installer/submit" method="post" id="mainForm">
     <div class="form-control">
         <label class="label cursor-pointer">
             <input id="cgu" name="cgu" type="checkbox" class="checkbox checkbox-primary checkbox-xs"/>
             <span class=""><a
                     class="text-gray-400 hover:text-primary" target="_blank"
-                    href="https://craftmywebsite.fr/cgu"><?= LangManager::translate("Installation.welcome.readaccept") ?> <i></a></i></span>
+                    href="https://craftmywebsite.fr/cgu"><?= LangManager::translate('Installation.welcome.readaccept') ?> <i></a></i></span>
         </label>
     </div>
     <div class="card-actions justify-end">
         <button disabled id="formBtn" type="submit"
                 class="btn btn-primary" <?= InstallerController::checkAllRequired() ? '' : 'disabled' ?>>
-            <?= LangManager::translate("core.btn.next") ?>
+            <?= LangManager::translate('core.btn.next') ?>
         </button>
     </div>
 </form>

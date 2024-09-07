@@ -31,7 +31,7 @@ class ThemeModel extends AbstractModel
             $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
         }
 
-        //TODO Add a toggle ?
+        // TODO Add a toggle ?
         if (SimpleCacheManager::cacheExist('config', "Themes/$themeName")) {
             $data = SimpleCacheManager::getCache('config', "Themes/$themeName");
 
@@ -46,9 +46,9 @@ class ThemeModel extends AbstractModel
         $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config
                                     WHERE theme_config_name = :config AND theme_config_theme = :theme');
 
-        $req->execute(["config" => $config, "theme" => $themeName]);
+        $req->execute(['config' => $config, 'theme' => $themeName]);
 
-        return $req->fetch()["theme_config_value"] ?? "";
+        return $req->fetch()['theme_config_value'] ?? '';
     }
 
     /**
@@ -70,9 +70,9 @@ class ThemeModel extends AbstractModel
         $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config 
                                     WHERE theme_config_name = :config AND theme_config_theme = :theme');
 
-        $req->execute(["config" => $configName, "theme" => $theme]);
+        $req->execute(['config' => $configName, 'theme' => $theme]);
 
-        $value = $req->fetch()["theme_config_value"] ?? "";
+        $value = $req->fetch()['theme_config_value'] ?? '';
         $localValue = ThemeManager::getInstance()->getCurrentThemeConfigSetting($configName);
 
         if ($value === $localValue) {
@@ -101,9 +101,9 @@ class ThemeModel extends AbstractModel
         $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config 
                                     WHERE theme_config_name = :config AND theme_config_theme = :theme');
 
-        $req->execute(["config" => $configName, "theme" => $theme]);
+        $req->execute(['config' => $configName, 'theme' => $theme]);
 
-        $value = $req->fetch()["theme_config_value"] ?? "";
+        $value = $req->fetch()['theme_config_value'] ?? '';
         $localValue = ThemeManager::getInstance()->getCurrentThemeConfigSetting($configName);
 
         if ($value === $localValue) {
@@ -118,7 +118,7 @@ class ThemeModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT * FROM cmw_theme_config WHERE theme_config_theme = :theme');
 
-        if ($req->execute(["theme" => $theme])) {
+        if ($req->execute(['theme' => $theme])) {
             return $req->fetchAll();
         }
 
@@ -130,9 +130,9 @@ class ThemeModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('INSERT INTO cmw_theme_config (theme_config_name, theme_config_value, theme_config_theme) 
                                     VALUES (:theme_config_name, :theme_config_value, :theme_config_theme)');
-        $req->execute(["theme_config_name" => $configName,
-            "theme_config_value" => $configValue,
-            "theme_config_theme" => $theme]);
+        $req->execute(['theme_config_name' => $configName,
+            'theme_config_value' => $configValue,
+            'theme_config_theme' => $theme]);
     }
 
     public function updateThemeConfig(string $configName, ?string $configValue, string $theme): void
@@ -141,7 +141,7 @@ class ThemeModel extends AbstractModel
         $req = $db->prepare('UPDATE cmw_theme_config SET theme_config_value = :theme_config_value 
                         WHERE theme_config_name = :theme_config_name AND theme_config_theme = :theme');
 
-        $req->execute(["theme_config_name" => $configName, "theme_config_value" => $configValue, "theme" => $theme]);
+        $req->execute(['theme_config_name' => $configName, 'theme_config_value' => $configValue, 'theme' => $theme]);
     }
 
     public function deleteThemeConfig(string $themeName): void
@@ -149,6 +149,6 @@ class ThemeModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('DELETE FROM cmw_theme_config WHERE theme_config_theme = :themeName');
 
-        $req->execute(["themeName" => $themeName]);
+        $req->execute(['themeName' => $themeName]);
     }
 }

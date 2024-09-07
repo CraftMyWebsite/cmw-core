@@ -7,11 +7,9 @@ use CMW\Controller\Users\LoginStatus;
 use CMW\Controller\Users\UsersController;
 use CMW\Entity\Users\RoleEntity;
 use CMW\Entity\Users\User2FaEntity;
-use CMW\Entity\Users\UserPictureEntity;
 use CMW\Entity\Users\UserEntity;
-
+use CMW\Entity\Users\UserPictureEntity;
 use CMW\Manager\Database\DatabaseManager;
-
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractModel;
 use CMW\Manager\Security\EncryptManager;
@@ -31,16 +29,15 @@ class UsersModel extends AbstractModel
 {
     public function getUserById(int $id): ?UserEntity
     {
-
-        $sql = "SELECT cmw_users.*, 2fa.users_2fa_is_enabled, users_2fa_secret,users_2fa_is_enforced  FROM cmw_users 
+        $sql = 'SELECT cmw_users.*, 2fa.users_2fa_is_enabled, users_2fa_secret,users_2fa_is_enforced  FROM cmw_users 
                 JOIN cmw_users_2fa 2fa ON cmw_users.user_id = 2fa.users_2fa_user_id
-                WHERE user_id = :user_id";
+                WHERE user_id = :user_id';
 
         $db = DatabaseManager::getInstance();
 
         $res = $db->prepare($sql);
 
-        if (!$res->execute(["user_id" => $id])) {
+        if (!$res->execute(['user_id' => $id])) {
             return null;
         }
 
@@ -50,26 +47,23 @@ class UsersModel extends AbstractModel
             return null;
         }
 
-
         $roles = [];
 
-        $roleSql = "SELECT * FROM cmw_users_roles WHERE user_id = :user_id";
+        $roleSql = 'SELECT * FROM cmw_users_roles WHERE user_id = :user_id';
         $roleRes = $db->prepare($roleSql);
 
-        if ($roleRes->execute(["user_id" => $id])) {
-
+        if ($roleRes->execute(['user_id' => $id])) {
             $rolesModel = new RolesModel();
 
             $roleRes = $roleRes->fetchAll();
 
             foreach ($roleRes as $role) {
-
-                $rlData = "SELECT cmw_roles.*
+                $rlData = 'SELECT cmw_roles.*
                             FROM cmw_roles 
-                            WHERE role_id = :role_id";
+                            WHERE role_id = :role_id';
                 $rlRes = $db->prepare($rlData);
 
-                if (!$rlRes->execute(["role_id" => $role["role_id"]])) {
+                if (!$rlRes->execute(['role_id' => $role['role_id']])) {
                     continue;
                 }
 
@@ -80,41 +74,38 @@ class UsersModel extends AbstractModel
                 }
 
                 $roles[] = new RoleEntity(
-                    $role["role_id"],
-                    $rl["role_name"],
-                    $rl["role_description"],
-                    $rl["role_weight"],
-                    $rl["role_is_default"],
-                    $rolesModel->getPermissions($role["role_id"])
+                    $role['role_id'],
+                    $rl['role_name'],
+                    $rl['role_description'],
+                    $rl['role_weight'],
+                    $rl['role_is_default'],
+                    $rolesModel->getPermissions($role['role_id'])
                 );
-
             }
-
         }
 
         $highestRole = $this->getUserHighestRole($res['user_id']);
 
-
         return new UserEntity(
-            $res["user_id"],
-            EncryptManager::decrypt($res["user_email"]),
-            $res["user_pseudo"],
-            $res["user_firstname"] ?? "",
-            $res["user_lastname"] ?? "",
-            $res["user_state"],
-            $res["user_key"],
+            $res['user_id'],
+            EncryptManager::decrypt($res['user_email']),
+            $res['user_pseudo'],
+            $res['user_firstname'] ?? '',
+            $res['user_lastname'] ?? '',
+            $res['user_state'],
+            $res['user_key'],
             new User2FaEntity(
                 $res['user_id'],
                 $res['users_2fa_is_enabled'],
                 $res['users_2fa_secret'],
                 $res['users_2fa_is_enforced']
             ),
-            $res["user_logged"],
+            $res['user_logged'],
             $roles,
             $highestRole,
-            $res["user_created"],
-            $res["user_updated"],
-            UsersController::getInstance()->getUserProfilePicture($res["user_id"])
+            $res['user_created'],
+            $res['user_updated'],
+            UsersController::getInstance()->getUserProfilePicture($res['user_id'])
         );
     }
 
@@ -124,7 +115,7 @@ class UsersModel extends AbstractModel
      */
     public function getUserWithPseudo(string $pseudo): ?UserEntity
     {
-        $sql = "SELECT user_id FROM cmw_users WHERE user_pseudo = :pseudo";
+        $sql = 'SELECT user_id FROM cmw_users WHERE user_pseudo = :pseudo';
 
         $db = DatabaseManager::getInstance();
 
@@ -140,14 +131,14 @@ class UsersModel extends AbstractModel
             return null;
         }
 
-        $userId = (int)$res['user_id'];
+        $userId = (int) $res['user_id'];
 
         return $this->getUserById($userId);
     }
 
     public function getUserWithMail(string $mail): ?UserEntity
     {
-        $sql = "SELECT user_id FROM cmw_users WHERE user_email = :mail";
+        $sql = 'SELECT user_id FROM cmw_users WHERE user_email = :mail';
 
         $db = DatabaseManager::getInstance();
 
@@ -163,14 +154,14 @@ class UsersModel extends AbstractModel
             return null;
         }
 
-        $userId = (int)$res['user_id'];
+        $userId = (int) $res['user_id'];
 
         return $this->getUserById($userId);
     }
 
     public static function getCurrentUser(): ?UserEntity
     {
-        //return !isset($_SESSION['cmwUserId']) ? null : (new self)->getUserById($_SESSION['cmwUserId']);
+        // return !isset($_SESSION['cmwUserId']) ? null : (new self)->getUserById($_SESSION['cmwUserId']);
 
         if (isset($_SESSION['cmwUser']) && $_SESSION['cmwUser'] instanceof UserEntity) {
             return $_SESSION['cmwUser'];
@@ -191,7 +182,6 @@ class UsersModel extends AbstractModel
     public static function updateStoredUser(int|UserEntity $user): bool
     {
         if (isset($_SESSION['cmwUser']) && $_SESSION['cmwUser'] instanceof UserEntity) {
-
             if ($user instanceof UserEntity) {
                 $_SESSION['cmwUser'] = $user;
                 return true;
@@ -220,13 +210,12 @@ class UsersModel extends AbstractModel
         return 0;
     }
 
-
     /**
      * @return UserEntity[]
      */
     public function getUsers(): array
     {
-        $sql = "SELECT user_id FROM cmw_users";
+        $sql = 'SELECT user_id FROM cmw_users';
         $db = DatabaseManager::getInstance();
 
         $res = $db->prepare($sql);
@@ -238,7 +227,7 @@ class UsersModel extends AbstractModel
         $toReturn = [];
 
         while ($user = $res->fetch()) {
-            Utils::addIfNotNull($toReturn, $this->getUserById($user["user_id"]));
+            Utils::addIfNotNull($toReturn, $this->getUserById($user['user_id']));
         }
 
         return $toReturn;
@@ -252,17 +241,17 @@ class UsersModel extends AbstractModel
      */
     public function isCredentialsMatch(string $mail, string $password): LoginStatus|int
     {
-        $sql = "SELECT cmw_users.user_password, cmw_users.user_id FROM cmw_users WHERE user_state=1 AND user_email=:mail";
+        $sql = 'SELECT cmw_users.user_password, cmw_users.user_id FROM cmw_users WHERE user_state=1 AND user_email=:mail';
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute(['mail' => $mail])){
+        if (!$req->execute(['mail' => $mail])) {
             return LoginStatus::INTERNAL_ERROR;
         }
 
         $res = $req->fetch();
 
-        if (!$res){
+        if (!$res) {
             return LoginStatus::NOT_FOUND;
         }
 
@@ -274,12 +263,11 @@ class UsersModel extends AbstractModel
         $_SESSION = [];
         $params = session_get_cookie_params();
         setcookie(session_name(), '', time() - 42000,
-            $params["path"], $params["domain"],
-            $params["secure"], $params["httponly"]
-        );
+            $params['path'], $params['domain'],
+            $params['secure'], $params['httponly']);
         session_destroy();
 
-        setcookie('cmw_cookies_user_id', '', time() + 60 * 60 * 24 * 30, "/", true, true);
+        setcookie('cmw_cookies_user_id', '', time() + 60 * 60 * 24 * 30, '/', true, true);
     }
 
     public function create(string $mail, ?string $username, ?string $firstName, ?string $lastName, array $roles): ?UserEntity
@@ -293,8 +281,8 @@ class UsersModel extends AbstractModel
             'user_key' => uniqid('', true),
         ];
 
-        $sql = "INSERT INTO cmw_users (user_email, user_pseudo, user_firstname, user_lastname, user_state, user_key) 
-                VALUES (:user_email, :user_pseudo, :user_firstname, :user_lastname, :user_state, :user_key)";
+        $sql = 'INSERT INTO cmw_users (user_email, user_pseudo, user_firstname, user_lastname, user_state, user_key) 
+                VALUES (:user_email, :user_pseudo, :user_firstname, :user_lastname, :user_state, :user_key)';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -317,13 +305,12 @@ class UsersModel extends AbstractModel
     public function addRole(int $id, array $rolesId): void
     {
         foreach ($rolesId as $roleId) {
-
             $var = [
-                "user_id" => $id,
-                "role_id" => $roleId,
+                'user_id' => $id,
+                'role_id' => $roleId,
             ];
 
-            $sql = "INSERT INTO cmw_users_roles (user_id, role_id) VALUES (:user_id, :role_id)";
+            $sql = 'INSERT INTO cmw_users_roles (user_id, role_id) VALUES (:user_id, :role_id)';
 
             $db = DatabaseManager::getInstance();
             $req = $db->prepare($sql);
@@ -334,14 +321,14 @@ class UsersModel extends AbstractModel
     public function update(int $id, string $mail, ?string $username, ?string $firstname, ?string $lastname, array $roles): ?UserEntity
     {
         $var = [
-            "user_id" => $id,
-            "user_email" => $mail,
-            "user_pseudo" => $username !== null ? mb_strimwidth($username, 0, 255) : "",
-            "user_firstname" => $firstname !== null ? mb_strimwidth($firstname, 0, 255) : "",
-            "user_lastname" => $lastname !== null ? mb_strimwidth($lastname, 0, 255) : "",
+            'user_id' => $id,
+            'user_email' => $mail,
+            'user_pseudo' => $username !== null ? mb_strimwidth($username, 0, 255) : '',
+            'user_firstname' => $firstname !== null ? mb_strimwidth($firstname, 0, 255) : '',
+            'user_lastname' => $lastname !== null ? mb_strimwidth($lastname, 0, 255) : '',
         ];
 
-        $sql = "UPDATE cmw_users SET user_email=:user_email,user_pseudo=:user_pseudo,user_firstname=:user_firstname,user_lastname=:user_lastname WHERE user_id=:user_id";
+        $sql = 'UPDATE cmw_users SET user_email=:user_email,user_pseudo=:user_pseudo,user_firstname=:user_firstname,user_lastname=:user_lastname WHERE user_id=:user_id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -356,10 +343,10 @@ class UsersModel extends AbstractModel
     private function updateEditTime(int $id): void
     {
         $var = [
-            "user_id" => $id,
+            'user_id' => $id,
         ];
 
-        $sql = "UPDATE cmw_users SET user_updated=NOW() WHERE user_id=:user_id";
+        $sql = 'UPDATE cmw_users SET user_updated=NOW() WHERE user_id=:user_id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -368,29 +355,29 @@ class UsersModel extends AbstractModel
 
     private function updateRoles(int $id, array $roles): void
     {
-        //Delete all the roles of the players
+        // Delete all the roles of the players
         $var = [
-            "user_id" => $id,
+            'user_id' => $id,
         ];
 
-        $sql = "DELETE FROM cmw_users_roles WHERE user_id = :user_id";
+        $sql = 'DELETE FROM cmw_users_roles WHERE user_id = :user_id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         $req->execute($var);
 
-        //Add all the new roles
+        // Add all the new roles
         $this->addRole($id, $roles);
     }
 
     public function updatePass($id, $password): void
     {
         $var = [
-            "user_id" => $id,
-            "user_password" => $password,
+            'user_id' => $id,
+            'user_password' => $password,
         ];
 
-        $sql = "UPDATE cmw_users SET user_password=:user_password WHERE user_id=:user_id";
+        $sql = 'UPDATE cmw_users SET user_password=:user_password WHERE user_id=:user_id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -402,11 +389,11 @@ class UsersModel extends AbstractModel
     public function updatePassWithMail(string $mail, string $password): void
     {
         $var = [
-            "user_email" => $mail,
-            "user_password" => $password,
+            'user_email' => $mail,
+            'user_password' => $password,
         ];
 
-        $sql = "UPDATE cmw_users SET user_password=:user_password WHERE user_email=:user_email";
+        $sql = 'UPDATE cmw_users SET user_password=:user_password WHERE user_email=:user_email';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -418,11 +405,11 @@ class UsersModel extends AbstractModel
     public function changeState(int $id, int $state): void
     {
         $var = [
-            "user_id" => $id,
-            "user_state" => $state,
+            'user_id' => $id,
+            'user_state' => $state,
         ];
 
-        $sql = "UPDATE cmw_users SET user_state=:user_state WHERE user_id=:user_id";
+        $sql = 'UPDATE cmw_users SET user_state=:user_state WHERE user_id=:user_id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -434,9 +421,9 @@ class UsersModel extends AbstractModel
     public function delete(int $id): void
     {
         $var = [
-            "user_id" => $id,
+            'user_id' => $id,
         ];
-        $sql = "DELETE FROM cmw_users WHERE user_id=:user_id";
+        $sql = 'DELETE FROM cmw_users WHERE user_id=:user_id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -446,10 +433,10 @@ class UsersModel extends AbstractModel
     public function updateLoggedTime(int $id): void
     {
         $var = [
-            "user_id" => $id,
+            'user_id' => $id,
         ];
 
-        $sql = "UPDATE cmw_users SET user_logged=NOW() WHERE user_id=:user_id";
+        $sql = 'UPDATE cmw_users SET user_logged=NOW() WHERE user_id=:user_id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -475,25 +462,20 @@ class UsersModel extends AbstractModel
      */
     public static function getPermissions(int $userId): array
     {
-
         $roles = self::getRoles($userId);
 
         $rolesModel = new RolesModel();
 
         $toReturn = [];
         foreach ($roles as $role) {
-
             $permissions = $rolesModel->getPermissions($role->getId());
             foreach ($permissions as $permission) {
                 $toReturn[] = $permission;
             }
-
         }
 
         return $toReturn;
-
     }
-
 
     /**
      * @return \CMW\Entity\Users\RoleEntity[]
@@ -502,24 +484,23 @@ class UsersModel extends AbstractModel
     {
         $rolesModel = new RolesModel();
 
-        $sql = "SELECT role_id FROM cmw_users_roles WHERE user_id = :user_id";
+        $sql = 'SELECT role_id FROM cmw_users_roles WHERE user_id = :user_id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute(["user_id" => $userId])) {
+        if (!$req->execute(['user_id' => $userId])) {
             return [];
         }
 
         $toReturn = [];
 
         while ($role = $req->fetch()) {
-            Utils::addIfNotNull($toReturn, $rolesModel->getRoleById($role["role_id"]));
+            Utils::addIfNotNull($toReturn, $rolesModel->getRoleById($role['role_id']));
         }
 
         return $toReturn;
     }
-
 
     /**
      * @param int $userId
@@ -529,17 +510,17 @@ class UsersModel extends AbstractModel
     {
         $rolesModel = new RolesModel();
 
-        $sql = "SELECT cmw_users_roles.role_id 
+        $sql = 'SELECT cmw_users_roles.role_id 
                 FROM cmw_users_roles
                 JOIN cmw_roles ON cmw_users_roles.role_id = cmw_roles.role_id
                 WHERE user_id = :user_id
                 ORDER BY cmw_roles.role_weight DESC
-                LIMIT 1";
+                LIMIT 1';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if (!$req->execute(["user_id" => $userId])) {
+        if (!$req->execute(['user_id' => $userId])) {
             return null;
         }
 
@@ -549,17 +530,16 @@ class UsersModel extends AbstractModel
             return null;
         }
 
-        return $rolesModel->getRoleById($res["role_id"]);
+        return $rolesModel->getRoleById($res['role_id']);
     }
-
 
     public function checkPseudo($pseudo): int
     {
         $var = [
-            "pseudo" => $pseudo,
+            'pseudo' => $pseudo,
         ];
 
-        $sql = "SELECT user_id FROM `cmw_users` WHERE user_pseudo = :pseudo";
+        $sql = 'SELECT user_id FROM `cmw_users` WHERE user_pseudo = :pseudo';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -574,10 +554,10 @@ class UsersModel extends AbstractModel
     public function checkEmail($email): int
     {
         $var = [
-            "email" => $email,
+            'email' => $email,
         ];
 
-        $sql = "SELECT user_id FROM `cmw_users` WHERE user_email = :email";
+        $sql = 'SELECT user_id FROM `cmw_users` WHERE user_email = :email';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -592,11 +572,11 @@ class UsersModel extends AbstractModel
     public function isEmailAvailable(int $userId, string $email): bool
     {
         $var = [
-            "userId" => $userId,
-            "email" => $email,
+            'userId' => $userId,
+            'email' => $email,
         ];
 
-        $sql = "SELECT user_id FROM `cmw_users` WHERE user_email = :email AND user_id != :userId";
+        $sql = 'SELECT user_id FROM `cmw_users` WHERE user_email = :email AND user_id != :userId';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -611,11 +591,11 @@ class UsersModel extends AbstractModel
     public function isPseudoAvailable(int $userId, string $pseudo): bool
     {
         $var = [
-            "userId" => $userId,
-            "pseudo" => $pseudo,
+            'userId' => $userId,
+            'pseudo' => $pseudo,
         ];
 
-        $sql = "SELECT user_id FROM `cmw_users` WHERE user_pseudo = :pseudo AND user_id != :userId";
+        $sql = 'SELECT user_id FROM `cmw_users` WHERE user_pseudo = :pseudo AND user_id != :userId';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -629,9 +609,9 @@ class UsersModel extends AbstractModel
 
     public function resetPassword(string $email): void
     {
-        if (UsersSettingsModel::getSetting("resetPasswordMethod") === "0") {
+        if (UsersSettingsModel::getSetting('resetPasswordMethod') === '0') {
             $this->resetPasswordMethodPasswordSendByMail($email);
-        } elseif (UsersSettingsModel::getSetting("resetPasswordMethod") === "1") {
+        } elseif (UsersSettingsModel::getSetting('resetPasswordMethod') === '1') {
             $this->resetPasswordMethodUniqueLinkSendByMail($email);
         }
     }
@@ -647,17 +627,16 @@ class UsersModel extends AbstractModel
 
     public function resetPasswordMethodUniqueLinkSendByMail(string $email): void
     {
-        //TODO
+        // TODO
     }
 
     public function sendResetPassword(string $email, string $password): void
     {
         $mailController = new MailController();
-        $mailController->sendMail($email, LangManager::translate("users.login.forgot_password.mail.object",
-            ["site_name" => (new CoreModel())->fetchOption("name")]),
-            LangManager::translate("users.login.forgot_password.mail.body",
-                ["password" => $password]));
-
+        $mailController->sendMail($email, LangManager::translate('users.login.forgot_password.mail.object',
+                ['site_name' => (new CoreModel())->fetchOption('name')]),
+            LangManager::translate('users.login.forgot_password.mail.body',
+                ['password' => $password]));
     }
 
     private function generatePassword(): string
@@ -667,15 +646,13 @@ class UsersModel extends AbstractModel
         } catch (Exception) {
             return bin2hex(Utils::genId(10));
         }
-
     }
 
-    //TODO set that in other class (try on Installation to generate Controller for games ?)
+    // TODO set that in other class (try on Installation to generate Controller for games ?)
     private function checkMinecraftPseudo($pseudo): int
     {
         $req = file_get_contents("https://api.mojang.com/users/profiles/minecraft/$pseudo");
 
-        return (int)($req === "NULL");
+        return (int) ($req === 'NULL');
     }
-
 }

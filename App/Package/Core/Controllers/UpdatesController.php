@@ -19,7 +19,8 @@ class UpdatesController extends AbstractController
      * @return array
      * @desc Return the list of public changelog for previous version
      */
-    public static function getPrevious(string $latestVersionName): array {
+    public static function getPrevious(string $latestVersionName): array
+    {
         return PublicAPI::getData("cms/previous/$latestVersionName");
     }
 
@@ -29,14 +30,15 @@ class UpdatesController extends AbstractController
      * @param {String} $key Property to sort by.
      * @param {Array} $data Array that stores multiple associative arrays.
      */
-    public static function groupBy($key, $data): array {
+    public static function groupBy($key, $data): array
+    {
         $result = array();
 
-        foreach($data as $val) {
-            if(array_key_exists($key, $val)){
+        foreach ($data as $val) {
+            if (array_key_exists($key, $val)) {
                 $result[$val[$key]][] = $val;
-            }else{
-                $result[""][] = $val;
+            } else {
+                $result[''][] = $val;
             }
         }
 
@@ -45,28 +47,29 @@ class UpdatesController extends AbstractController
 
     /* ADMINISTRATION */
 
-    #[Link(path: "/", method: Link::GET, scope: "/cmw-admin/updates")]
-    #[Link("/cms", Link::GET, [], "/cmw-admin/updates")]
+    #[Link(path: '/', method: Link::GET, scope: '/cmw-admin/updates')]
+    #[Link('/cms', Link::GET, [], '/cmw-admin/updates')]
     private function adminUpdates(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.update");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.update');
 
         $latestVersion = UpdatesManager::getCmwLatest();
-        $latestVersionChangelogGroup = self::groupBy("type", $latestVersion['changelog']);
+        $latestVersionChangelogGroup = self::groupBy('type', $latestVersion['changelog']);
         $previousVersions = self::getPrevious($latestVersion['value']);
         $currentVersion = UpdatesManager::getVersion();
 
-        View::createAdminView("Core", "Update/updates")
-            ->addVariableList(["latestVersion" => $latestVersion, "latestVersionChangelogGroup" =>
-                $latestVersionChangelogGroup, "previousVersions" => $previousVersions,
-                "currentVersion" => $currentVersion])
+        View::createAdminView('Core', 'Update/updates')
+            ->addVariableList(['latestVersion' => $latestVersion, 'latestVersionChangelogGroup' =>
+                    $latestVersionChangelogGroup, 'previousVersions' => $previousVersions,
+                'currentVersion' => $currentVersion])
             ->view();
     }
 
-    #[NoReturn] #[Link("/cms/update", Link::GET, [], "/cmw-admin/updates")]
+    #[NoReturn]
+    #[Link('/cms/update', Link::GET, [], '/cmw-admin/updates')]
     private function adminUpdatesInstall(): void
     {
-        UsersController::redirectIfNotHavePermissions("core.dashboard", "core.update");
+        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.update');
 
         // We get all the new version id.
         $targetVersions = PublicAPI::postData('cms/update', ['current_version' => UpdatesManager::getVersion()]);

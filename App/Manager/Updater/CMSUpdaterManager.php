@@ -13,8 +13,8 @@ use ZipArchive;
 
 class CMSUpdaterManager
 {
-    private static string $archivePath = "Public/Uploads/cmw.zip";
-    private static string $archiveUpdatePath = "Public/Uploads/update.zip";
+    private static string $archivePath = 'Public/Uploads/cmw.zip';
+    private static string $archiveUpdatePath = 'Public/Uploads/update.zip';
 
     /**
      * @param int $targetVersionId
@@ -26,39 +26,39 @@ class CMSUpdaterManager
         $updateData = self::getUpdateLink($targetVersionId);
 
         if ($this->downloadUpdateFile($updateData) === false) {
-            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                LangManager::translate("core.updates.errors.download"));
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.updates.errors.download'));
             return;
         }
 
         if ($this->downloadUpdateFile($updateData) === null) {
-            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                LangManager::translate("core.updates.errors.nullFileUpdate"));
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.updates.errors.nullFileUpdate'));
             return;
         }
 
         if (!$this->prepareArchive()) {
-            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                LangManager::translate("core.updates.errors.prepareArchive"));
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.updates.errors.prepareArchive'));
             return;
         }
 
         if (!$this->deletedFiles()) {
-            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                LangManager::translate("core.updates.errors.deletedFiles"));
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.updates.errors.deletedFiles'));
             return;
         }
 
         if (!$this->sqlUpdate()) {
-            Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                LangManager::translate("core.updates.errors.sqlUpdate"));
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.updates.errors.sqlUpdate'));
             return;
         }
 
         $this->updateVersionName($updateData['value']);
 
-        Flash::send(Alert::SUCCESS, LangManager::translate("core.toaster.success"),
-            LangManager::translate("core.updates.success"));
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+            LangManager::translate('core.updates.success'));
     }
 
     /**
@@ -74,8 +74,8 @@ class CMSUpdaterManager
             return null;
         }
 
-        if (!file_put_contents(EnvManager::getInstance()->getValue("DIR") . self::$archivePath,
-            fopen($data, 'rb'))) {
+        if (!file_put_contents(EnvManager::getInstance()->getValue('DIR') . self::$archivePath,
+                fopen($data, 'rb'))) {
             return false;
         }
         return true;
@@ -88,19 +88,17 @@ class CMSUpdaterManager
     private function prepareArchive(): bool
     {
         $archiveUpdate = new ZipArchive;
-        if ($archiveUpdate->open(EnvManager::getInstance()->getValue("DIR") . self::$archivePath) === TRUE) {
-
-            $archiveUpdate->extractTo(EnvManager::getInstance()->getValue("DIR") . "Public/Uploads/");
+        if ($archiveUpdate->open(EnvManager::getInstance()->getValue('DIR') . self::$archivePath) === TRUE) {
+            $archiveUpdate->extractTo(EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/');
             $archiveUpdate->close();
-            //Delete download archive
-            unlink(EnvManager::getInstance()->getValue("DIR") . self::$archivePath);
+            // Delete download archive
+            unlink(EnvManager::getInstance()->getValue('DIR') . self::$archivePath);
 
-            if ($archiveUpdate->open(EnvManager::getInstance()->getValue("DIR") . self::$archiveUpdatePath) === TRUE) {
-
-                $archiveUpdate->extractTo(EnvManager::getInstance()->getValue("DIR"));
+            if ($archiveUpdate->open(EnvManager::getInstance()->getValue('DIR') . self::$archiveUpdatePath) === TRUE) {
+                $archiveUpdate->extractTo(EnvManager::getInstance()->getValue('DIR'));
                 $archiveUpdate->close();
-                //Delete download archive
-                unlink(EnvManager::getInstance()->getValue("DIR") . self::$archiveUpdatePath);
+                // Delete download archive
+                unlink(EnvManager::getInstance()->getValue('DIR') . self::$archiveUpdatePath);
                 return true;
             }
             return false;
@@ -127,11 +125,10 @@ class CMSUpdaterManager
 
             foreach ($json as $file) {
                 if (!unlink(EnvManager::getInstance()->getValue('DIR') . $file)) {
-                    Flash::send(Alert::ERROR, LangManager::translate("core.toaster.error"),
-                        LangManager::translate("core.updates.errors.deleteFile", ['file' => $file]));
+                    Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                        LangManager::translate('core.updates.errors.deleteFile', ['file' => $file]));
                 }
             }
-
         } catch (JsonException) {
             return false;
         }
@@ -172,9 +169,8 @@ class CMSUpdaterManager
      */
     private function updateVersionName(string $version): void
     {
-        EnvManager::getInstance()->editValue("VERSION", $version);
+        EnvManager::getInstance()->editValue('VERSION', $version);
     }
-
 
     /**
      * @param int $targetVersionId
@@ -183,7 +179,7 @@ class CMSUpdaterManager
      */
     private static function getUpdateLink(int $targetVersionId): mixed
     {
-        return PublicAPI::postData("/cms/update", ['current_version' => UpdatesManager::getVersion(),
+        return PublicAPI::postData('/cms/update', ['current_version' => UpdatesManager::getVersion(),
             'target_version_id' => $targetVersionId]);
     }
 }

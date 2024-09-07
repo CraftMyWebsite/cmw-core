@@ -4,8 +4,8 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Utils\Website;
 
-Website::setTitle("Mot de passe oublié");
-Website::setDescription("Retrouvez votre mot de passe");
+Website::setTitle('Mot de passe oublié');
+Website::setDescription('Retrouvez votre mot de passe');
 ?>
 
 <section class="page-section">
@@ -16,13 +16,13 @@ Website::setDescription("Retrouvez votre mot de passe");
             <?php (new SecurityManager())->insertHiddenToken() ?>
             <div class="input-group mb-3">
                 <input type="email" class="form-control" name="mail"
-                       placeholder="<?= LangManager::translate("users.users.mail") ?>">
+                       placeholder="<?= LangManager::translate('users.users.mail') ?>">
 
             </div>
             <div class="row">
                 <div class="col-12">
                     <button type="submit"
-                            class="btn btn-primary btn-block"><?= LangManager::translate("users.login.forgot_password.btn") ?></button>
+                            class="btn btn-primary btn-block"><?= LangManager::translate('users.login.forgot_password.btn') ?></button>
                 </div>
 
             </div>

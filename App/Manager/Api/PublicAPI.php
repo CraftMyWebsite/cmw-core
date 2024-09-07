@@ -3,6 +3,7 @@
 namespace CMW\Manager\Api;
 
 use CMW\Manager\Env\EnvManager;
+use CMW\Model\Users\UsersModel;
 use JsonException;
 
 class PublicAPI
@@ -13,7 +14,7 @@ class PublicAPI
      */
     public static function getUrl(): string
     {
-        return EnvManager::getInstance()->getValue("APIURL") . "/v" . self::$currentApiVersion . "/";
+        return EnvManager::getInstance()->getValue('APIURL') . '/v' . self::$currentApiVersion . '/';
     }
 
     private static int $currentApiVersion = 1;
@@ -24,7 +25,7 @@ class PublicAPI
      */
     private static function getWebsiteKeyEncoded(): ?string
     {
-        $key = EnvManager::getInstance()->getValue("CMW_KEY");
+        $key = EnvManager::getInstance()->getValue('CMW_KEY');
         if (!is_null($key)) {
             return base64_encode($key);
         }
@@ -44,19 +45,31 @@ class PublicAPI
         $url .= '&lang=' . EnvManager::getInstance()->getValue('LOCALE');
         $url .= '&website_key=' . self::getWebsiteKeyEncoded();
 
-        $options = [
-            'http' => [
-                'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-                'method' => "POST",
-                'ignore_errors' => true,
-                'content' => http_build_query($data),
-            ],
-        ];
+        $adminKey = UsersModel::getCurrentUser()?->getUserKey();
 
-        $context = stream_context_create($options);
+        $ch = curl_init();
+
+        // Configurer les options de cURL
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/x-www-form-urlencoded',
+            "Adminkey: $adminKey",
+        ]);
+
+        $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            curl_close($ch);
+            return [];
+        }
+
+        curl_close($ch);
 
         try {
-            return json_decode(file_get_contents($url, false, $context), true, 512, JSON_THROW_ON_ERROR);
+            return json_decode($response, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException) {
             return [];
         }
@@ -76,8 +89,11 @@ class PublicAPI
 
         $options = [
             'http' => [
-                'method' => "GET",
+                'method' => 'GET',
                 'ignore_errors' => true,
+                'header' => [
+                    'Adminkey: ' . UsersModel::getCurrentUser()?->getUserKey(),
+                ],
             ],
         ];
 
@@ -104,8 +120,11 @@ class PublicAPI
 
         $options = [
             'http' => [
-                'method' => "PUT",
+                'method' => 'PUT',
                 'ignore_errors' => true,
+                'header' => [
+                    'Adminkey: ' . UsersModel::getCurrentUser()?->getUserKey(),
+                ],
             ],
         ];
 
@@ -117,5 +136,4 @@ class PublicAPI
             return [];
         }
     }
-
 }

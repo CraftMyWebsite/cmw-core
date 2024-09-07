@@ -1,14 +1,13 @@
 <?php
 
-
 use CMW\Controller\Core\SecurityController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Model\Core\ThemeModel;
 use CMW\Utils\Website;
 
-Website::setTitle("Connexion");
-Website::setDescription("Connectez-vous à votre compte " . Website::getWebsiteName());
+Website::setTitle('Connexion');
+Website::setDescription('Connectez-vous à votre compte ' . Website::getWebsiteName());
 ?>
 
 

@@ -7,16 +7,14 @@ use CMW\Manager\Env\EnvManager;
 
 class UpdatesManager
 {
-
     /**
      * @return string
      * @desc Return the local CMW version
      */
     public static function getVersion(): string
     {
-        return EnvManager::getInstance()->getValue("VERSION") ?? 'DEV';
+        return EnvManager::getInstance()->getValue('VERSION') ?? 'DEV';
     }
-
 
     /**
      * @return \stdClass|null
@@ -27,7 +25,6 @@ class UpdatesManager
     {
         return PublicAPI::getData('cms/latest');
     }
-
 
     /**
      * @return bool
@@ -47,7 +44,7 @@ class UpdatesManager
      */
     public static function ignoreUpdates(): bool
     {
-        return EnvManager::getInstance()->getValue("UPDATE_CHECKER") === "0" &&
-            EnvManager::getInstance()->getValue("DEVMODE") === "1";
+        return EnvManager::getInstance()->getValue('UPDATE_CHECKER') === '0' &&
+            EnvManager::getInstance()->getValue('DEVMODE') === '1';
     }
 }

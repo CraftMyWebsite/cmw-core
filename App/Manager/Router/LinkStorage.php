@@ -2,7 +2,6 @@
 
 namespace CMW\Manager\Router;
 
-
 use CMW\Manager\Class\PackageManager;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
@@ -31,7 +30,6 @@ class LinkStorage
         return self::$_instance;
     }
 
-
     /**
      * @return void
      * @desc Store all Default routes to the DB
@@ -41,11 +39,11 @@ class LinkStorage
         foreach ($this->getAllRoutes() as $package => $routes) {
             /* @var Link $route */
             foreach ($routes as $route) {
-                if ($route->getPath() !== "/") {
+                if ($route->getPath() !== '/') {
                     $slug = $route->getScope() . $route->getPath();
                     $title = $route->getName() === '1' ?: Utils::normalizeForSlug($route->getPath());
                     $method = $route->getMethod();
-                    $isAdmin = str_contains(mb_strtolower($route->getScope() ?? "/"), "cmw-admin");
+                    $isAdmin = str_contains(mb_strtolower($route->getScope() ?? '/'), 'cmw-admin');
                     $isDynamic = $route->getVariables() !== [];
                     $weight = $route->getWeight();
 
@@ -54,7 +52,6 @@ class LinkStorage
             }
         }
     }
-
 
     /**
      * @return \CMW\Manager\Router\Link[]
@@ -66,7 +63,7 @@ class LinkStorage
 
         $packageFolder = 'App/Package';
         $contentDirectory = array_diff(scandir("$packageFolder/"), ['..', '.']);
-        $dir = EnvManager::getInstance()->getValue("dir");
+        $dir = EnvManager::getInstance()->getValue('dir');
         foreach ($contentDirectory as $package) {
             $packageSubFolder = "$packageFolder/$package/Controllers";
             if (is_dir($packageSubFolder)) {
@@ -82,7 +79,6 @@ class LinkStorage
 
         return $toReturn;
     }
-
 
     /**
      * @param string $file
@@ -102,7 +98,6 @@ class LinkStorage
             if (!is_null($className)) {
                 $classRef = new ReflectionClass($className);
                 foreach ($classRef->getMethods() as $method) {
-
                     $isMethodClass = $method->getDeclaringClass()->getName() === $className;
 
                     if (!$isMethodClass) {
@@ -111,11 +106,9 @@ class LinkStorage
 
                     $linkAttributes = $method->getAttributes(Link::class);
                     foreach ($linkAttributes as $attribute) {
-
                         /** @var Link $linkInstance */
                         $toReturn[] = $attribute->newInstance();
                     }
-
                 }
             }
             $this->fileLoaded[] = $file;
@@ -141,23 +134,23 @@ class LinkStorage
     public function storeRoute(string $slug, string $package, string $title, string $method, bool $isAdmin, bool $isDynamic, int $weight): void
     {
         /* Add '/' if the slug don't start with this symbol... */
-        if ($slug[0] !== "/") {
-            $slug = "/" . $slug;
+        if ($slug[0] !== '/') {
+            $slug = '/' . $slug;
         }
 
         $var = [
-            "slug" => $slug,
-            "package" => $package,
-            "title" => $title,
-            "method" => mb_strtoupper($method),
-            "isAdmin" => !empty($isAdmin) ?: 0,
-            "isDynamic" => !empty($isDynamic) ?: 0,
-            "weight" => $weight,
+            'slug' => $slug,
+            'package' => $package,
+            'title' => $title,
+            'method' => mb_strtoupper($method),
+            'isAdmin' => !empty($isAdmin) ?: 0,
+            'isDynamic' => !empty($isDynamic) ?: 0,
+            'weight' => $weight,
         ];
 
-        $sql = "INSERT INTO cmw_core_routes (core_routes_slug, core_routes_package, core_routes_title, 
+        $sql = 'INSERT INTO cmw_core_routes (core_routes_slug, core_routes_package, core_routes_title, 
                              core_routes_method, core_routes_is_admin, core_routes_is_dynamic, core_routes_weight)
-                VALUES (:slug, :package, :title, :method, :isAdmin, :isDynamic, :weight)";
+                VALUES (:slug, :package, :title, :method, :isAdmin, :isDynamic, :weight)';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -170,11 +163,11 @@ class LinkStorage
      */
     public function deleteRouteById(int $id): void
     {
-        $sql = "DELETE FROM cmw_core_routes WHERE core_routes_id = :id";
+        $sql = 'DELETE FROM cmw_core_routes WHERE core_routes_id = :id';
         $db = DatabaseManager::getInstance();
 
         $req = $db->prepare($sql);
-        $req->execute(["id" => $id]);
+        $req->execute(['id' => $id]);
     }
 
     /**
@@ -183,7 +176,7 @@ class LinkStorage
      */
     public function deleteAllRoutes(): void
     {
-        $sql = "TRUNCATE TABLE `cmw_core_routes`";
+        $sql = 'TRUNCATE TABLE `cmw_core_routes`';
         $db = DatabaseManager::getInstance();
         $db->query($sql);
     }
@@ -202,24 +195,24 @@ class LinkStorage
     public function updateRouteById(int $id, string $slug, string $package, string $title, string $method, bool $isAdmin, bool $isDynamic, int $weight): void
     {
         /* Add '/' if the slug don't start with this symbol... */
-        if ($slug[0] !== "/") {
-            $slug = "/" . $slug;
+        if ($slug[0] !== '/') {
+            $slug = '/' . $slug;
         }
 
         $var = [
-            "id" => $id,
-            "slug" => $slug,
-            "package" => $package,
-            "title" => $title,
-            "method" => mb_strtoupper($method),
-            "isAdmin" => !empty($isAdmin) ?: 0,
-            "isDynamic" => !empty($isDynamic) ?: 0,
-            "weight" => $weight,
+            'id' => $id,
+            'slug' => $slug,
+            'package' => $package,
+            'title' => $title,
+            'method' => mb_strtoupper($method),
+            'isAdmin' => !empty($isAdmin) ?: 0,
+            'isDynamic' => !empty($isDynamic) ?: 0,
+            'weight' => $weight,
         ];
 
-        $sql = "UPDATE cmw_core_routes SET core_routes_slug = :slug, core_routes_package = :package, 
+        $sql = 'UPDATE cmw_core_routes SET core_routes_slug = :slug, core_routes_package = :package, 
                            core_routes_title = :title, core_routes_method = :method, core_routes_is_admin = :isAdmin,
-                           core_routes_is_dynamic = :isAdmin, core_routes_weight = :weight WHERE core_routes_id = :id";
+                           core_routes_is_dynamic = :isAdmin, core_routes_weight = :weight WHERE core_routes_id = :id';
         $db = DatabaseManager::getInstance();
 
         $req = $db->prepare($sql);

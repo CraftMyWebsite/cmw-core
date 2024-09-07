@@ -19,6 +19,7 @@ class MenuEntity
     private int $isCustomUrl;
     private int $order;
     private int $targetBlank;
+
     /* @var RoleEntity[]|null $restrictedRoles */
     private ?array $restrictedRoles;
 
@@ -65,15 +66,15 @@ class MenuEntity
      */
     public function getUrl(): string
     {
-        if ($this->url === "") {
-            return "#";
+        if ($this->url === '') {
+            return '#';
         }
 
         if (str_starts_with($this->url, 'http')) {
             return $this->url;
         }
 
-        return EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . $this->url;
+        return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . $this->url;
     }
 
     /**
@@ -93,7 +94,7 @@ class MenuEntity
         if (str_contains($_SERVER['REQUEST_URI'], $this->getUrl())) {
             return true;
         }
-        if ($_SERVER['REQUEST_URI'] === "/" && $this->getUrl() === "/home") {
+        if ($_SERVER['REQUEST_URI'] === '/' && $this->getUrl() === '/home') {
             return true;
         }
         return false;

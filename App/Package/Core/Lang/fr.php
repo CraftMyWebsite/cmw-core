@@ -1,83 +1,83 @@
 <?php
 
 return [
-    "home" => "Accueil",
-    "cgu" => "CGU",
-    "cgv" => "CGV",
-    "nolink" => "Pas de lien ou de redirection",
-    "general" => "Général",
-    "package" => "Package",
-    "packages" => "Packages",
-    "games" => "Jeux",
-    "themes" => "Themes",
-    "alt" => [
-        "logo" => "Logo CMW",
+    'home' => 'Accueil',
+    'cgu' => 'CGU',
+    'cgv' => 'CGV',
+    'nolink' => 'Pas de lien ou de redirection',
+    'general' => 'Général',
+    'package' => 'Package',
+    'packages' => 'Packages',
+    'games' => 'Jeux',
+    'themes' => 'Themes',
+    'alt' => [
+        'logo' => 'Logo CMW',
     ],
-    "header" => [
-        "notification" => "Notifications",
-        "cms_ver" => "CMS : Version",
-        "cms_update" => "Une mise à jour du CMS est disponible !",
-        "update_to" => "Veuillez mettre à jour vers la version %version%",
-        "package" => "Package",
-        "theme" => "Thème",
-        "all_is_fine" => "Tout va bien",
-        "is_up" => "Votre site est entièrement à jour",
+    'header' => [
+        'notification' => 'Notifications',
+        'cms_ver' => 'CMS : Version',
+        'cms_update' => 'Une mise à jour du CMS est disponible !',
+        'update_to' => 'Veuillez mettre à jour vers la version %version%',
+        'package' => 'Package',
+        'theme' => 'Thème',
+        'all_is_fine' => 'Tout va bien',
+        'is_up' => 'Votre site est entièrement à jour',
     ],
-    "condition" => [
-        "title" => "Conditions générales",
-        "cgv" => "Conditions générales de vente (CGV)",
-        "cgu" => "Conditions générales d'utilisation (CGU)",
-        "activecgv" => "Activer les CGV",
-        "activecgu" => "Activer les CGU",
-        "content" => "Contenu :",
-        "updateby" => "Mis à jour par %author%",
-        "on" => "le %date%",
+    'condition' => [
+        'title' => 'Conditions générales',
+        'cgv' => 'Conditions générales de vente (CGV)',
+        'cgu' => "Conditions générales d'utilisation (CGU)",
+        'activecgv' => 'Activer les CGV',
+        'activecgu' => 'Activer les CGU',
+        'content' => 'Contenu :',
+        'updateby' => 'Mis à jour par %author%',
+        'on' => 'le %date%',
     ],
-    "dashboard" => [
-        "title" => "Tableau de bord",
-        "desc" => "Bienvenue sur votre panneau d'administration !",
-        "total_member" => "Membres totaux",
-        "best_views" => "Record de visites",
-        "numbers_views" => "Visites",
-        "daily_visits" => "Visites du jour",
-        "monthly_visits" => "Visites du mois",
-        "total_visits" => "Visites totales",
-        "welcome" => "Bienvenue",
-        "site_info" => "Informations du site",
-        "name" => "Nom : %name%",
-        "description" => "Description : %description%",
-        "edit" => "Modifier ces informations",
-        "visits" => "Visites",
-        "registers" => "Inscriptions",
-        "days" => "Jours",
-        "weeks" => "Semaines",
-        "months" => "Mois",
+    'dashboard' => [
+        'title' => 'Tableau de bord',
+        'desc' => "Bienvenue sur votre panneau d'administration !",
+        'total_member' => 'Membres totaux',
+        'best_views' => 'Record de visites',
+        'numbers_views' => 'Visites',
+        'daily_visits' => 'Visites du jour',
+        'monthly_visits' => 'Visites du mois',
+        'total_visits' => 'Visites totales',
+        'welcome' => 'Bienvenue',
+        'site_info' => 'Informations du site',
+        'name' => 'Nom : %name%',
+        'description' => 'Description : %description%',
+        'edit' => 'Modifier ces informations',
+        'visits' => 'Visites',
+        'registers' => 'Inscriptions',
+        'days' => 'Jours',
+        'weeks' => 'Semaines',
+        'months' => 'Mois',
     ],
-    "menus" => [
-        "title" => "Menus",
-        "desc" => "Gérez les menus de votre site",
-        "delete_title" => "Supression de : %menu%",
-        "delete_message" => "Cette suppression est définitive",
-        "send_to" => "Renvoie vers : %url%",
-        "add_sub_menu" => "Ajout d'un sous-menu dans %menu%",
-        "add" => [
-            "sub_menu" => "Ajout d'un sous-menu dans",
-            "name" => "Nom du menu",
-            "name_hint" => "Votes",
-            "targetBlank" => "Ouvrir la page dans un nouvel onglet",
-            "choice" => "Type de lien",
-            "package" => "Package",
-            "package_select" => "Sélection du package",
-            "custom" => "Personnalisé",
-            "custom_hint" => "https://store.monsite.fr",
-            "allowedGroups" => "Autorisez certains rôles à voir ce menu",
-            "group_select" => "Sélection des rôles",
-            "toaster" => [
-                "success" => "Menu ajouté avec succès !",
+    'menus' => [
+        'title' => 'Menus',
+        'desc' => 'Gérez les menus de votre site',
+        'delete_title' => 'Supression de : %menu%',
+        'delete_message' => 'Cette suppression est définitive',
+        'send_to' => 'Renvoie vers : %url%',
+        'add_sub_menu' => "Ajout d'un sous-menu dans %menu%",
+        'add' => [
+            'sub_menu' => "Ajout d'un sous-menu dans",
+            'name' => 'Nom du menu',
+            'name_hint' => 'Votes',
+            'targetBlank' => 'Ouvrir la page dans un nouvel onglet',
+            'choice' => 'Type de lien',
+            'package' => 'Package',
+            'package_select' => 'Sélection du package',
+            'custom' => 'Personnalisé',
+            'custom_hint' => 'https://store.monsite.fr',
+            'allowedGroups' => 'Autorisez certains rôles à voir ce menu',
+            'group_select' => 'Sélection des rôles',
+            'toaster' => [
+                'success' => 'Menu ajouté avec succès !',
             ],
         ],
-        "edit" => [
-            "name" => "Édition du menu",
+        'edit' => [
+            'name' => 'Édition du menu',
         ],
     ],
     "editor" => [
@@ -97,74 +97,74 @@ return [
         "dateFormatTooltip" => "Vous pouvez personnaliser la façon dont vous affichez les dates",
         "custom" => "-- Personnalisez-moi --",
     ],
-    "Lang" => [
-        "title" => "Langues",
-        "desc" => "Configurez les langues de votre site CMW !",
-        "change" => "Changez la langue du site",
+    'Lang' => [
+        'title' => 'Langues',
+        'desc' => 'Configurez les langues de votre site CMW !',
+        'change' => 'Changez la langue du site',
     ],
-    "website" => [
-        "name" => "Nom du site",
-        "description" => "Description du site",
+    'website' => [
+        'name' => 'Nom du site',
+        'description' => 'Description du site',
     ],
     "minecraft" => [
         "ip" => "Addresse IP de votre serveur",
         "register" => "Autorisez uniquement les comptes Minecraft officiels à s'inscrire sur votre site",
     ],
-    "database" => [
-        "error" => "Erreur de base de données : ",
+    'database' => [
+        'error' => 'Erreur de base de données : ',
     ],
-    "toaster" => [
-        "success" => "Succès",
-        "warning" => "Attention",
-        "error" => "Erreur",
-        "internalError" => "Erreur interne",
-        "config" => [
-            "success" => "Configuration modifiée avec succès !",
+    'toaster' => [
+        'success' => 'Succès',
+        'warning' => 'Attention',
+        'error' => 'Erreur',
+        'internalError' => 'Erreur interne',
+        'config' => [
+            'success' => 'Configuration modifiée avec succès !',
         ],
-        "mail" => [
-            "test" => "Mail envoyé à l'adresse %mail%",
+        'mail' => [
+            'test' => "Mail envoyé à l'adresse %mail%",
         ],
-        "theme" => [
-            "regenerate" => "Configuration du thème regénérée",
-            "installed" => "%theme% viens d'être installé et activé.",
-            "reset" => "Configuration du thème réinitialisée",
+        'theme' => [
+            'regenerate' => 'Configuration du thème regénérée',
+            'installed' => "%theme% viens d'être installé et activé.",
+            'reset' => 'Configuration du thème réinitialisée',
         ],
-        "db" => [
-            "config" => [
-                "success" => "Configuration fonctionnelle",
-                "error" => "Configuration invalide",
-                "alreadyInstalled" => "Base de données déjà installée !",
+        'db' => [
+            'config' => [
+                'success' => 'Configuration fonctionnelle',
+                'error' => 'Configuration invalide',
+                'alreadyInstalled' => 'Base de données déjà installée !',
             ],
-            "missing_inputs" => "Merci de remplir tous les champs !",
+            'missing_inputs' => 'Merci de remplir tous les champs !',
         ],
-        "security" => [
-            "healthReport" => [
-                "copied" => "Contenu copié !",
-                "delete" => "Health Reports supprimés",
+        'security' => [
+            'healthReport' => [
+                'copied' => 'Contenu copié !',
+                'delete' => 'Health Reports supprimés',
             ],
         ],
     ],
-    "datatables" => [
-        "list" => [
-            "processing" => "Traitement en cours...",
-            "search" => "Rechercher&nbsp; ",
-            "lenghtmenu" => "Afficher _MENU_ &eacute;l&eacute;ments",
-            "setlimit" => "Afficher {select} &eacute;lement par page",
-            "info" => "Affichage de l\'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-            "info_vanilla" => "Affichage des &eacute;lements {start} &agrave; {end} sur {rows} &eacute;l&eacute;ments",
-            "info_empty" => "Affichage de l\'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
-            "info_filtered" => "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
-            "info_postfix" => "",
-            "loadingrecords" => "Chargement en cours...",
-            "zerorecords" => "Aucun &eacute;l&eacute;ment &agrave; afficher",
-            "emptytable" => "Aucune donnée disponible dans le tableau",
-            "first" => "Premier",
-            "previous" => "Pr&eacute;c&eacute;dent",
-            "next" => "Suivant",
-            "last" => "Dernier",
-            "sort" => [
-                "ascending" => ": activer pour trier la colonne par ordre croissant",
-                "descending" => ": activer pour trier la colonne par ordre décroissant",
+    'datatables' => [
+        'list' => [
+            'processing' => 'Traitement en cours...',
+            'search' => 'Rechercher&nbsp; ',
+            'lenghtmenu' => 'Afficher _MENU_ &eacute;l&eacute;ments',
+            'setlimit' => 'Afficher {select} &eacute;lement par page',
+            'info' => "Affichage de l\'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+            'info_vanilla' => 'Affichage des &eacute;lements {start} &agrave; {end} sur {rows} &eacute;l&eacute;ments',
+            'info_empty' => "Affichage de l\'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+            'info_filtered' => '(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)',
+            'info_postfix' => '',
+            'loadingrecords' => 'Chargement en cours...',
+            'zerorecords' => 'Aucun &eacute;l&eacute;ment &agrave; afficher',
+            'emptytable' => 'Aucune donnée disponible dans le tableau',
+            'first' => 'Premier',
+            'previous' => 'Pr&eacute;c&eacute;dent',
+            'next' => 'Suivant',
+            'last' => 'Dernier',
+            'sort' => [
+                'ascending' => ': activer pour trier la colonne par ordre croissant',
+                'descending' => ': activer pour trier la colonne par ordre décroissant',
             ],
         ],
     ],
@@ -207,13 +207,13 @@ return [
             ],
             "regen_config" => "Regénérer la configuration du thème",
         ],
-        "manage" => [
-            "title" => "Gérez votre thème <b>%Theme%</b>",
-            "description" => "Gérez votre thème pour le personnaliser à votre guise !",
+        'manage' => [
+            'title' => 'Gérez votre thème <b>%Theme%</b>',
+            'description' => 'Gérez votre thème pour le personnaliser à votre guise !',
         ],
-        "toasters" => [
-            "update" => [
-                "success" => "Thème %theme% mis à jour avec succès",
+        'toasters' => [
+            'update' => [
+                'success' => 'Thème %theme% mis à jour avec succès',
             ],
         ],
     ],
@@ -243,45 +243,45 @@ return [
             "install" => [
                 "success" => "Package %package% installé avec succès !",
             ],
-            "delete" => [
-                "success" => "Package %package% supprimé avec succès",
-                "error" => "Impossible de supprimer le package %package%",
+            'delete' => [
+                'success' => 'Package %package% supprimé avec succès',
+                'error' => 'Impossible de supprimer le package %package%',
             ],
-            "update" => [
-                "success" => "Package %package% mis à jour avec succès !",
-            ],
-        ],
-        "versionDistant" => "Dernière version en ligne",
-    ],
-    "mail" => [
-        "config" => [
-            "title" => "Configuration mails",
-            "description" => "Gérez les mails de votre site",
-            "enableSMTP" => "Activation des mails SMTP",
-            "senderMail" => "Adresse mail d'envoi",
-            "replyMail" => "Adresse mail de réponse",
-            "serverSMTP" => "Adresse du serveur SMTP",
-            "userSMTP" => "Utilisateur SMTP",
-            "passwordSMTP" => "Mot de passe",
-            "portSMTP" => "Port SMTP",
-            "protocol" => "Protocole d'envoi",
-            "footer" => "Signature de vos mails",
-            "formatting" => "Mise en forme",
-            "name" => "Nom d'affichage :",
-            "placeholder" => "Nom de votre site",
-            "test" => [
-                "btn" => "Testez votre configuration",
-                "title" => "Essaye dès maintenant ta configuration",
-                "warning" => "Pensez à bien sauvegarder votre configuration avant de débuter le test !",
-                "description" => "Vous pouvez tester votre configuration en envoyant un mail à votre adresse e-mail.",
-                "receiverMail" => "Adresse e-mail du destinataire",
-                "receiverMailPlaceholder" => "Entrez l'adresse mail",
+            'update' => [
+                'success' => 'Package %package% mis à jour avec succès !',
             ],
         ],
+        'versionDistant' => 'Dernière version en ligne',
     ],
-    "downloads" => [
-        "errors" => [
-            "internalError" => "Erreur interne avec la ressource %name% - %version%",
+    'mail' => [
+        'config' => [
+            'title' => 'Configuration mails',
+            'description' => 'Gérez les mails de votre site',
+            'enableSMTP' => 'Activation des mails SMTP',
+            'senderMail' => "Adresse mail d'envoi",
+            'replyMail' => 'Adresse mail de réponse',
+            'serverSMTP' => 'Adresse du serveur SMTP',
+            'userSMTP' => 'Utilisateur SMTP',
+            'passwordSMTP' => 'Mot de passe',
+            'portSMTP' => 'Port SMTP',
+            'protocol' => "Protocole d'envoi",
+            'footer' => 'Signature de vos mails',
+            'formatting' => 'Mise en forme',
+            'name' => "Nom d'affichage :",
+            'placeholder' => 'Nom de votre site',
+            'test' => [
+                'btn' => 'Testez votre configuration',
+                'title' => 'Essaye dès maintenant ta configuration',
+                'warning' => 'Pensez à bien sauvegarder votre configuration avant de débuter le test !',
+                'description' => 'Vous pouvez tester votre configuration en envoyant un mail à votre adresse e-mail.',
+                'receiverMail' => 'Adresse e-mail du destinataire',
+                'receiverMailPlaceholder' => "Entrez l'adresse mail",
+            ],
+        ],
+    ],
+    'downloads' => [
+        'errors' => [
+            'internalError' => 'Erreur interne avec la ressource %name% - %version%',
         ],
     ],
     "updates" => [
@@ -304,21 +304,21 @@ return [
             "deleteFile" => "Impossible de supprimer le fichier %file%",
             "sqlUpdate" => "Impossible de mettre à jour la base de données.",
         ],
-        "success" => "Mise à jour de votre site réussie",
+        'success' => 'Mise à jour de votre site réussie',
     ],
-    "security" => [
-        "title" => "Sécurité",
-        "description" => "Gérez la sécurité de votre site",
-        "no_captcha" => "Pas de captcha",
-        "free_key" => "Obtenez vos clés ici gratuitement :",
-        "captcha" => [
-            "title" => "Gestion du captcha",
-            "type" => "Type de captcha",
+    'security' => [
+        'title' => 'Sécurité',
+        'description' => 'Gérez la sécurité de votre site',
+        'no_captcha' => 'Pas de captcha',
+        'free_key' => 'Obtenez vos clés ici gratuitement :',
+        'captcha' => [
+            'title' => 'Gestion du captcha',
+            'type' => 'Type de captcha',
         ],
-        "healthReport" => [
-            "title" => "Health Report",
-            "subtitle" => "Késako ?",
-            "content" => "<p>Le health report permet à notre équipe de support de vous aider en envoyant un maximum
+        'healthReport' => [
+            'title' => 'Health Report',
+            'subtitle' => 'Késako ?',
+            'content' => "<p>Le health report permet à notre équipe de support de vous aider en envoyant un maximum
                     d'informations (non sensibles) à propos de votre site.</p>
 
                 <p>
@@ -329,84 +329,84 @@ return [
                 <p>
                     <i>Il est <b>impératif</b> d'envoyer vos Health Report uniquement à <b>l'équipe CraftMyWebsite</b> si on vous le demande.</i>
                 </p>",
-            "emplacement" => "Emplacement du Health Report",
-            "copy" => "Copier le contenu",
+            'emplacement' => 'Emplacement du Health Report',
+            'copy' => 'Copier le contenu',
         ],
     ],
-    "maintenance" => [
-        "title" => "Maintenance",
-        "description" => "Gérez les maintenances de votre site",
-        "main_label" => "Mode maintenance",
-        "settings" => [
-            "title" => "Réglages",
-            "targetDateTitle" => "Fin",
-            "useMyCode" => "Utiliser mon code",
-            "loginRegister" => [
-                'title' => "Connexions / Inscriptions",
+    'maintenance' => [
+        'title' => 'Maintenance',
+        'description' => 'Gérez les maintenances de votre site',
+        'main_label' => 'Mode maintenance',
+        'settings' => [
+            'title' => 'Réglages',
+            'targetDateTitle' => 'Fin',
+            'useMyCode' => 'Utiliser mon code',
+            'loginRegister' => [
+                'title' => 'Connexions / Inscriptions',
                 'type' => [
                     0 => 'Tout désactiver',
                     1 => 'Activer les connexions / inscriptions',
                     2 => 'Activer uniquement les connexions',
                 ],
             ],
-            "maintenanceTitle" => [
-                'label' => "Titre",
+            'maintenanceTitle' => [
+                'label' => 'Titre',
                 'placeholder' => 'Nous revenons très vite !',
             ],
-            "maintenanceDescription" => [
-                'label' => "Description",
+            'maintenanceDescription' => [
+                'label' => 'Description',
                 'placeholder' => 'Nous faisons quelques modifications, nous revenons très vite !',
             ],
-            "toaster" => [
-                "enabled" => "Maintenance activée",
-                "disabled" => "Maintenance désactivée",
-                "error" => "Impossible de mettre à jour la maintenance",
+            'toaster' => [
+                'enabled' => 'Maintenance activée',
+                'disabled' => 'Maintenance désactivée',
+                'error' => 'Impossible de mettre à jour la maintenance',
             ],
         ],
     ],
-    "footer" => [
-        "left" => "© 2014 - " . date("Y") . " CraftMyWebsite. Tous droits réservés.",
-        "right" => "Merci d'utiliser <a target='_blank' href='https://craftmywebsite.fr/'>CraftMyWebsite</a>.",
-        "used" => "Vous utilisez la version ",
-        "upgrade" => "Veuillez mettre à jour vers la version",
+    'footer' => [
+        'left' => '© 2014 - ' . date('Y') . ' CraftMyWebsite. Tous droits réservés.',
+        'right' => "Merci d'utiliser <a target='_blank' href='https://craftmywebsite.fr/'>CraftMyWebsite</a>.",
+        'used' => 'Vous utilisez la version ',
+        'upgrade' => 'Veuillez mettre à jour vers la version',
     ],
-    "btn" => [
-        "save" => "Sauvegarder",
-        "delete" => "Supprimer",
-        "delete_forever" => "Supprimer définitivement",
-        "mass_delete" => "Suppression de masse",
-        "close" => "Fermer",
-        "send" => "Envoyer",
-        "download" => "Télécharger",
-        "add" => "Ajouter",
-        "edit" => "Modifier",
-        "action" => "Action",
-        "confirm" => "Confirmer",
-        "next" => "Suivant",
-        "try" => "Tester",
-        "continue" => "Continuer",
-        "generate" => "Générer",
-        "enable" => "Activer",
-        "enabled" => "Activé",
+    'btn' => [
+        'save' => 'Sauvegarder',
+        'delete' => 'Supprimer',
+        'delete_forever' => 'Supprimer définitivement',
+        'mass_delete' => 'Suppression de masse',
+        'close' => 'Fermer',
+        'send' => 'Envoyer',
+        'download' => 'Télécharger',
+        'add' => 'Ajouter',
+        'edit' => 'Modifier',
+        'action' => 'Action',
+        'confirm' => 'Confirmer',
+        'next' => 'Suivant',
+        'try' => 'Tester',
+        'continue' => 'Continuer',
+        'generate' => 'Générer',
+        'enable' => 'Activer',
+        'enabled' => 'Activé',
     ],
-    "months" => [
-        "list" => '["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"]',
-        1 => "Janvier",
-        2 => "Février",
-        3 => "Mars",
-        4 => "Avril",
-        5 => "Mai",
-        6 => "Juin",
-        7 => "Juillet",
-        8 => "Août",
-        9 => "Septembre",
-        10 => "Octobre",
-        11 => "Novembre",
-        12 => "Décembre",
+    'months' => [
+        'list' => '["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"]',
+        1 => 'Janvier',
+        2 => 'Février',
+        3 => 'Mars',
+        4 => 'Avril',
+        5 => 'Mai',
+        6 => 'Juin',
+        7 => 'Juillet',
+        8 => 'Août',
+        9 => 'Septembre',
+        10 => 'Octobre',
+        11 => 'Novembre',
+        12 => 'Décembre',
     ],
-    "week" => "Semaine ",
-    "errors" => [
-        "requests" => [
+    'week' => 'Semaine ',
+    'errors' => [
+        'requests' => [
             'required' => 'Champ %key% manquant',
             'empty' => 'Champ %key% vide',
             'slug' => 'Slug %key% invalide',
@@ -417,9 +417,9 @@ return [
             'getValue' => 'Valeur introuvable %key%',
             'type' => 'Type invalide pour %key%',
         ],
-        "editConfiguration" => "Impossible de modifier la configuration %config%",
-        "upload" => [
-            "image" => "Erreur lors de l'envoie de l'image.",
+        'editConfiguration' => 'Impossible de modifier la configuration %config%',
+        'upload' => [
+            'image' => "Erreur lors de l'envoie de l'image.",
         ],
     ],
     "permissions" => [
@@ -439,18 +439,18 @@ return [
             "security" => "Sécurité",
             "security_healthReport" => "Générer un rapport",
         ],
-        "menu" => "Menus",
-        "update" => "Mises à jour du CORE",
-        "themes" => [
-            "title" => "Thèmes",
-            "edit" => "Éditer l'actif",
-            "manage" => "Gérer les installations",
-            "market" => "Installer depuis le market",
+        'menu' => 'Menus',
+        'update' => 'Mises à jour du CORE',
+        'themes' => [
+            'title' => 'Thèmes',
+            'edit' => "Éditer l'actif",
+            'manage' => 'Gérer les installations',
+            'market' => 'Installer depuis le market',
         ],
-        "packages" => [
-            "title" => "Packages",
-            "manage" => "Gérer les installations",
-            "market" => "Installer depuis le market",
+        'packages' => [
+            'title' => 'Packages',
+            'manage' => 'Gérer les installations',
+            'market' => 'Installer depuis le market',
         ],
     ],
 ];

@@ -14,17 +14,17 @@ use CMW\Manager\Updater\UpdatesManager;
             <img class="w-3/5 mx-auto" src="Installation/Views/Assets/Img/mascottefestive.png">
         </div>
         <div>
-            <p class="text-center text-4xl lg:text-7xl"><?= LangManager::translate("Installation.finish.title") ?></p>
-            <p class="text-center "><?= LangManager::translate("Installation.finish.desc") ?><br></p>
-            <p class="mt-4"><?= LangManager::translate("Installation.finish.review") ?></p>
+            <p class="text-center text-4xl lg:text-7xl"><?= LangManager::translate('Installation.finish.title') ?></p>
+            <p class="text-center "><?= LangManager::translate('Installation.finish.desc') ?><br></p>
+            <p class="mt-4"><?= LangManager::translate('Installation.finish.review') ?></p>
             <ul style="list-style: outside;">
-                <li><?= LangManager::translate("Installation.finish.version") ?>
+                <li><?= LangManager::translate('Installation.finish.version') ?>
                     <b><?= UpdatesManager::getVersion() ?></b>
                 </li>
-                <li><?= LangManager::translate("Installation.finish.Theme") ?>
+                <li><?= LangManager::translate('Installation.finish.Theme') ?>
                     <b><?= ThemeManager::getInstance()->getCurrentTheme()->name() . ' - v' . ThemeManager::getInstance()->getCurrentTheme()->version() ?></b>
                 </li>
-                <li><?= LangManager::translate("Installation.finish.package") ?>
+                <li><?= LangManager::translate('Installation.finish.package') ?>
                     <ul style="list-style: inside;">
                         <?php foreach (PackageController::getInstalledPackages() as $installedPackage): ?>
                             <li><b><?= $installedPackage->name() . ' - v' . $installedPackage->version() ?></b>
@@ -38,7 +38,7 @@ use CMW\Manager\Updater\UpdatesManager;
 
     <div class="card-actions justify-end">
         <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>installer/finish" class="btn btn-primary">
-            <?= LangManager::translate("Installation.finish.goToMySite") ?>
+            <?= LangManager::translate('Installation.finish.goToMySite') ?>
         </a>
     </div>
 </div>

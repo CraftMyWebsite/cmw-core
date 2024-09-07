@@ -13,7 +13,6 @@ use CMW\Manager\Package\AbstractModel;
  */
 class Users2FaModel extends AbstractModel
 {
-
     /**
      * @param int $userId
      * @param string $secret
@@ -22,12 +21,11 @@ class Users2FaModel extends AbstractModel
      */
     public function create(int $userId, string $secret): bool
     {
-        $sql = "INSERT INTO cmw_users_2fa (users_2fa_user_id, users_2fa_is_enabled, users_2fa_secret) 
-                VALUES (:userId, 0, :secret)";
+        $sql = 'INSERT INTO cmw_users_2fa (users_2fa_user_id, users_2fa_is_enabled, users_2fa_secret) 
+                VALUES (:userId, 0, :secret)';
         $db = DatabaseManager::getInstance();
         return $db->prepare($sql)->execute(['userId' => $userId, 'secret' => $secret]);
     }
-
 
     /**
      * @param int $userId
@@ -36,7 +34,7 @@ class Users2FaModel extends AbstractModel
      */
     public function toggle2Fa(int $userId, int $status): bool
     {
-        $sql = "UPDATE cmw_users_2fa SET users_2fa_is_enabled = :status WHERE users_2fa_user_id = :userId";
+        $sql = 'UPDATE cmw_users_2fa SET users_2fa_is_enabled = :status WHERE users_2fa_user_id = :userId';
         $db = DatabaseManager::getInstance();
         return $db->prepare($sql)->execute(['userId' => $userId, 'status' => $status]);
     }
@@ -47,7 +45,7 @@ class Users2FaModel extends AbstractModel
      */
     public function enforce2Fa(int $userId): bool
     {
-        $sql = "UPDATE cmw_users_2fa SET users_2fa_is_enforced = 1 WHERE users_2fa_user_id = :userId";
+        $sql = 'UPDATE cmw_users_2fa SET users_2fa_is_enforced = 1 WHERE users_2fa_user_id = :userId';
         $db = DatabaseManager::getInstance();
         return $db->prepare($sql)->execute(['userId' => $userId]);
     }
@@ -57,7 +55,7 @@ class Users2FaModel extends AbstractModel
      */
     public function clearEnforce2Fa(): bool
     {
-        $sql = "UPDATE cmw_users_2fa SET users_2fa_is_enforced = 0;";
+        $sql = 'UPDATE cmw_users_2fa SET users_2fa_is_enforced = 0;';
         $db = DatabaseManager::getInstance();
         return $db->prepare($sql)->execute();
     }
@@ -69,7 +67,7 @@ class Users2FaModel extends AbstractModel
      */
     public function updateSecret(int $userId, string $secret): bool
     {
-        $sql = "UPDATE cmw_users_2fa SET users_2fa_secret = :secret WHERE users_2fa_user_id = :userId";
+        $sql = 'UPDATE cmw_users_2fa SET users_2fa_secret = :secret WHERE users_2fa_user_id = :userId';
         $db = DatabaseManager::getInstance();
         return $db->prepare($sql)->execute(['userId' => $userId, 'secret' => $secret]);
     }

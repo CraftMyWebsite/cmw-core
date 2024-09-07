@@ -9,11 +9,11 @@ use CMW\Utils\Website;
 /* @var \CMW\Entity\Wiki\WikiCategoriesEntity[] $categories */
 
 if ($article !== null) {
-    Website::setTitle("Wiki - " . $article->getTitle());
+    Website::setTitle('Wiki - ' . $article->getTitle());
     Website::setDescription($article->getTitle());
 } else {
-    Website::setTitle("Wiki");
-    Website::setDescription("Apprenez-en plus sur le site " . Website::getWebsiteName() . " grâce à notre wiki !");
+    Website::setTitle('Wiki');
+    Website::setDescription('Apprenez-en plus sur le site ' . Website::getWebsiteName() . ' grâce à notre wiki !');
 }
 ?>
 
@@ -28,7 +28,7 @@ if ($article !== null) {
                         <ul style="list-style: none">
                             <?php foreach ($categorie?->getArticles() as $menuArticle): ?>
                                 <li>
-                                    <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "wiki/" . $categorie->getSlug() . "/" . $menuArticle->getSlug() ?>">
+                                    <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'wiki/' . $categorie->getSlug() . '/' . $menuArticle->getSlug() ?>">
                                         <i class="<?= $menuArticle->getIcon() ?>"></i> <?= $menuArticle->getTitle() ?>
                                     </a>
                                 </li>
@@ -43,17 +43,17 @@ if ($article !== null) {
                 <?php if ($article !== null): ?>
                 <i class="<?= $article->getIcon() ?>"></i><?= $article->getTitle() ?>
                     <?= $article->getContent() ?>
-                    <?= date("d/m/Y", strtotime($article->getDateCreate())) ?>
+                    <?= date('d/m/Y', strtotime($article->getDateCreate())) ?>
                     <?= $article->getAuthor()->getPseudo() ?>
-                    <?= date("d/m/Y", strtotime($article->getDateUpdate())) ?>
+                    <?= date('d/m/Y', strtotime($article->getDateUpdate())) ?>
                 <?php elseif ($firstArticle === null && $article !== null): ?>
                     You haven't started creating your Wiki yet!
                 <?php else: ?>
                 <i class="<?= $firstArticle->getIcon() ?>"></i><?= $firstArticle->getTitle() ?>
                     <?= $firstArticle->getContent() ?>
-                    <?= date("d/m/Y", strtotime($firstArticle->getDateCreate())) ?>
+                    <?= date('d/m/Y', strtotime($firstArticle->getDateCreate())) ?>
                     <?= $firstArticle->getAuthor()->getPseudo() ?>
-                    <?= date("d/m/Y", strtotime($firstArticle->getDateUpdate())) ?>
+                    <?= date('d/m/Y', strtotime($firstArticle->getDateUpdate())) ?>
                 <?php endif; ?>
             </div>
         </div>

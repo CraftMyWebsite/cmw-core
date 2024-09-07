@@ -13,13 +13,13 @@ use JetBrains\PhpStorm\NoReturn;
 
 class UsersProfilePictureImplementation implements IUsersProfilePicture
 {
-
     public function weight(): int
     {
         return 1;
     }
 
-    #[NoReturn] public function changeMethod(mixed $picture, int $userId): void
+    #[NoReturn]
+    public function changeMethod(mixed $picture, int $userId): void
     {
         UserPictureModel::getInstance()->uploadImage($userId, $picture);
 
@@ -33,7 +33,8 @@ class UsersProfilePictureImplementation implements IUsersProfilePicture
         return UserPictureModel::getInstance()->deleteUserPicture($userId);
     }
 
-    #[NoReturn] public function resetPicture(int $userId): void
+    #[NoReturn]
+    public function resetPicture(int $userId): void
     {
         UserPictureModel::getInstance()->deleteUserPicture($userId);
 
@@ -44,7 +45,7 @@ class UsersProfilePictureImplementation implements IUsersProfilePicture
     {
         if (UserPictureModel::getInstance()->userHasImage($userId)) {
             $img = UserPictureModel::getInstance()->getImageByUserId($userId);
-            $imgPath = EnvManager::getInstance()->getValue("PATH_SUBFOLDER") . "Public/Uploads/Users/" . $img?->getImage();
+            $imgPath = EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Public/Uploads/Users/' . $img?->getImage();
 
             return new UserPictureEntity(
                 $userId,
@@ -58,7 +59,6 @@ class UsersProfilePictureImplementation implements IUsersProfilePicture
             $this->getDefaultProfilePicture(),
             null,
         );
-
     }
 
     public function getDefaultProfilePicture(): string

@@ -2,8 +2,8 @@
 
 namespace CMW\Interface\Core;
 
-
-interface IMenus {
+interface IMenus
+{
     public function getRoutes(): array;
     public function getPackageName(): String;
 }

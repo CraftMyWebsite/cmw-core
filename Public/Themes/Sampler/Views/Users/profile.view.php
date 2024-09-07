@@ -6,7 +6,7 @@ use CMW\Utils\Website;
 
 /* @var \CMW\Entity\Users\UserEntity $user */
 
-Website::setTitle("Profil " . $user->getPseudo());
+Website::setTitle('Profil ' . $user->getPseudo());
 Website::setDescription("Découvrez le profil de l'utilisateur " . $user->getPseudo());
 
 ?>
@@ -101,7 +101,7 @@ Website::setDescription("Découvrez le profil de l'utilisateur " . $user->getPse
                              src="<?= $user->getUserPicture()->getImage() ?>"
                              height="50%" width="50%" alt="Image de profil de <?= $user->getPseudo() ?>">
                     <?php endif; ?>
-                    <form action="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>profile" method="post"
+                    <form action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile" method="post"
                           enctype="multipart/form-data">
                         <?php (new SecurityManager())->insertHiddenToken() ?>
                         <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Changer votre image
@@ -122,7 +122,7 @@ Website::setDescription("Découvrez le profil de l'utilisateur " . $user->getPse
 
                 <p class="mb-2">Nous somme triste de vous voir partir !</p>
                 <a style="margin: auto"
-                   href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>profile/delete/<?= $user->getId() ?>"
+                   href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile/delete/<?= $user->getId() ?>"
                    class="btn btn-primary">Supprimer mon compte</a>
             </div>
         </div>

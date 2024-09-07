@@ -16,28 +16,28 @@ class NotificationModel extends AbstractModel
 {
     public function getNotificationById(int $id): ?NotificationEntity
     {
-        $sql = "SELECT * FROM cmw_notification WHERE notification_id = :notification_id";
+        $sql = 'SELECT * FROM cmw_notification WHERE notification_id = :notification_id';
 
         $db = DatabaseManager::getInstance();
 
         $res = $db->prepare($sql);
 
-        if (!$res->execute(array("notification_id" => $id))) {
+        if (!$res->execute(array('notification_id' => $id))) {
             return null;
         }
 
         $res = $res->fetch();
 
         return new NotificationEntity(
-            $res["notification_id"],
-            $res["notification_package_name"],
-            $res["notification_title"],
-            $res["notification_message"],
-            $res["notification_slug"] ?? null,
-            $res["notification_readed"],
-            $res["notification_readed_silence"],
-            $res["notification_created_at"],
-            $res["notification_updated_at"]
+            $res['notification_id'],
+            $res['notification_package_name'],
+            $res['notification_title'],
+            $res['notification_message'],
+            $res['notification_slug'] ?? null,
+            $res['notification_readed'],
+            $res['notification_readed_silence'],
+            $res['notification_created_at'],
+            $res['notification_updated_at']
         );
     }
 
@@ -46,8 +46,7 @@ class NotificationModel extends AbstractModel
      */
     public function getAllNotification(): array
     {
-
-        $sql = "SELECT notification_id FROM cmw_notification ORDER BY notification_created_at DESC";
+        $sql = 'SELECT notification_id FROM cmw_notification ORDER BY notification_created_at DESC';
         $db = DatabaseManager::getInstance();
 
         $res = $db->prepare($sql);
@@ -59,11 +58,10 @@ class NotificationModel extends AbstractModel
         $toReturn = array();
 
         while ($notif = $res->fetch()) {
-            $toReturn[] = $this->getNotificationById($notif["notification_id"]);
+            $toReturn[] = $this->getNotificationById($notif['notification_id']);
         }
 
         return $toReturn;
-
     }
 
     /**
@@ -71,8 +69,7 @@ class NotificationModel extends AbstractModel
      */
     public function getUnreadNotification(): array
     {
-
-        $sql = "SELECT notification_id FROM cmw_notification WHERE notification_readed = 0 ORDER BY notification_created_at DESC";
+        $sql = 'SELECT notification_id FROM cmw_notification WHERE notification_readed = 0 ORDER BY notification_created_at DESC';
         $db = DatabaseManager::getInstance();
 
         $res = $db->prepare($sql);
@@ -84,27 +81,25 @@ class NotificationModel extends AbstractModel
         $toReturn = array();
 
         while ($notif = $res->fetch()) {
-            $toReturn[] = $this->getNotificationById($notif["notification_id"]);
+            $toReturn[] = $this->getNotificationById($notif['notification_id']);
         }
 
         return $toReturn;
-
     }
 
     public function createNotification(string $packageName, string $title, string $message, ?string $slug, int $silence): ?NotificationEntity
     {
         $data = [
-            "notification_package_name" => $packageName,
-            "notification_title" => $title,
-            "notification_message" => $message,
-            "notification_slug" => $slug,
-            "notification_readed" => $silence,
-            "notification_readed_silence" => $silence,
+            'notification_package_name' => $packageName,
+            'notification_title' => $title,
+            'notification_message' => $message,
+            'notification_slug' => $slug,
+            'notification_readed' => $silence,
+            'notification_readed_silence' => $silence,
         ];
 
-        $sql = "INSERT INTO cmw_notification(notification_package_name, notification_title, notification_message, notification_slug, notification_readed, notification_readed_silence)
-                VALUES (:notification_package_name, :notification_title, :notification_message, :notification_slug, :notification_readed, :notification_readed_silence)";
-
+        $sql = 'INSERT INTO cmw_notification(notification_package_name, notification_title, notification_message, notification_slug, notification_readed, notification_readed_silence)
+                VALUES (:notification_package_name, :notification_title, :notification_message, :notification_slug, :notification_readed, :notification_readed_silence)';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -119,9 +114,9 @@ class NotificationModel extends AbstractModel
 
     public function readNotification(int $notificationId): ?NotificationEntity
     {
-        $data = ["notification_id" => $notificationId];
+        $data = ['notification_id' => $notificationId];
 
-        $sql = "UPDATE cmw_notification SET notification_readed= 1 WHERE notification_id=:notification_id";
+        $sql = 'UPDATE cmw_notification SET notification_readed= 1 WHERE notification_id=:notification_id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -135,9 +130,9 @@ class NotificationModel extends AbstractModel
 
     public function unReadNotification(int $notificationId): ?NotificationEntity
     {
-        $data = ["notification_id" => $notificationId];
+        $data = ['notification_id' => $notificationId];
 
-        $sql = "UPDATE cmw_notification SET notification_readed= 0 WHERE notification_id=:notification_id";
+        $sql = 'UPDATE cmw_notification SET notification_readed= 0 WHERE notification_id=:notification_id';
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
@@ -151,19 +146,19 @@ class NotificationModel extends AbstractModel
 
     public function countUnreadNotification(): int
     {
-        $sql = "SELECT COUNT(*) AS unread_notifications FROM cmw_notification WHERE notification_readed = 0;";
+        $sql = 'SELECT COUNT(*) AS unread_notifications FROM cmw_notification WHERE notification_readed = 0;';
 
         $db = DatabaseManager::getInstance();
 
         $req = $db->prepare($sql);
 
-        if (!$req->execute()){
+        if (!$req->execute()) {
             return 0;
         }
 
         $res = $req->fetch();
 
-        if (!$res){
+        if (!$res) {
             return 0;
         }
 
@@ -180,7 +175,7 @@ class NotificationModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT notification_settings_key FROM cmw_notification_settings WHERE notification_settings_name = ?');
 
-        return ($req->execute(array($name))) ? $req->fetch()["notification_settings_key"] : "";
+        return ($req->execute(array($name))) ? $req->fetch()['notification_settings_key'] : '';
     }
 
     /**
@@ -193,7 +188,7 @@ class NotificationModel extends AbstractModel
     {
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('UPDATE cmw_notification_settings SET notification_settings_key= :notification_settings_key WHERE notification_settings_name= :notification_settings_name');
-        $req->execute(array("notification_settings_name" => $notification_settings_name, "notification_settings_key" => $notification_settings_key));
+        $req->execute(array('notification_settings_name' => $notification_settings_name, 'notification_settings_key' => $notification_settings_key));
     }
 
     /**
@@ -201,13 +196,13 @@ class NotificationModel extends AbstractModel
      */
     public function getRefusedPackages(): array
     {
-        $sql = "SELECT * FROM cmw_notification_refused_package";
+        $sql = 'SELECT * FROM cmw_notification_refused_package';
         $db = DatabaseManager::getInstance();
         $req = $db->query($sql);
 
         $res = $req->fetchAll();
 
-        if (!$res){
+        if (!$res) {
             return [];
         }
 
@@ -224,14 +219,14 @@ class NotificationModel extends AbstractModel
      */
     public function clearRefusedPackage(): bool
     {
-        $sql = "DELETE FROM cmw_notification_refused_package";
+        $sql = 'DELETE FROM cmw_notification_refused_package';
         $db = DatabaseManager::getInstance();
         return $db->prepare($sql)->execute();
     }
 
     public function addRefusedPackage($packageName): bool
     {
-        $sql = "INSERT INTO cmw_notification_refused_package (notification_package_name) VALUES (:packageName)";
+        $sql = 'INSERT INTO cmw_notification_refused_package (notification_package_name) VALUES (:packageName)';
         $db = DatabaseManager::getInstance();
         return $db->prepare($sql)->execute(['packageName' => $packageName]);
     }

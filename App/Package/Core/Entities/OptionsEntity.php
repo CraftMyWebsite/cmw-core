@@ -54,7 +54,4 @@ class OptionsEntity
     {
         return $this->description;
     }
-
-
-
 }

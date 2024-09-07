@@ -11,12 +11,12 @@ class Permissions implements IPermissionInit
     public function permissions(): array
     {
         return [
-            /*DASHBOARD*/
+            /* DASHBOARD */
             new PermissionInitType(
                 code: 'core.dashboard',
                 description: LangManager::translate('core.permissions.dashboard'),
             ),
-            /*SETTINGS*/
+            /* SETTINGS */
             new PermissionInitType(
                 code: 'core.settings',
                 description: LangManager::translate('core.permissions.settings.title'),
@@ -49,17 +49,17 @@ class Permissions implements IPermissionInit
                 code: 'core.settings.security.healthReport',
                 description: LangManager::translate('core.permissions.settings.security_healthReport'),
             ),
-            /*MENU*/
+            /* MENU */
             new PermissionInitType(
                 code: 'core.menu',
                 description: LangManager::translate('core.permissions.menu'),
             ),
-            /*MAJ*/
+            /* MAJ */
             new PermissionInitType(
                 code: 'core.update',
                 description: LangManager::translate('core.permissions.update'),
             ),
-            /*THEMES*/
+            /* THEMES */
             new PermissionInitType(
                 code: 'core.themes',
                 description: LangManager::translate('core.permissions.themes.title'),
@@ -76,7 +76,7 @@ class Permissions implements IPermissionInit
                 code: 'core.themes.market',
                 description: LangManager::translate('core.permissions.themes.market'),
             ),
-            /*PACKAGES*/
+            /* PACKAGES */
             new PermissionInitType(
                 code: 'core.packages',
                 description: LangManager::translate('core.permissions.packages.title'),
@@ -89,7 +89,7 @@ class Permissions implements IPermissionInit
                 code: 'core.packages.market',
                 description: LangManager::translate('core.permissions.packages.market'),
             ),
-            /*NOTIFICATION*/
+            /* NOTIFICATION */
             new PermissionInitType(
                 code: 'core.notification',
                 description: LangManager::translate('core.permissions.notification.notification'),
@@ -104,5 +104,4 @@ class Permissions implements IPermissionInit
             ),
         ];
     }
-
 }

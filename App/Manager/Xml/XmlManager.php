@@ -2,7 +2,6 @@
 
 namespace CMW\Manager\Xml;
 
-
 use CMW\Manager\Manager\AbstractManager;
 use CMW\Utils\File;
 use SimpleXMLElement;

@@ -6,20 +6,20 @@ use CMW\Manager\Security\SecurityManager;
 
 /* @var \CMW\Entity\Core\MaintenanceEntity $maintenance */
 
-$title = LangManager::translate("core.maintenance.title");
-$description = LangManager::translate("core.maintenance.description");
+$title = LangManager::translate('core.maintenance.title');
+$description = LangManager::translate('core.maintenance.description');
 
 ?>
 
 <div class="page-title">
-    <h3><i class="fa-solid fa-helmet-safety"></i> <?= LangManager::translate("core.maintenance.title") ?></h3>
-    <button form="Configuration" class="btn-primary"><?= LangManager::translate("core.btn.save") ?></button>
+    <h3><i class="fa-solid fa-helmet-safety"></i> <?= LangManager::translate('core.maintenance.title') ?></h3>
+    <button form="Configuration" class="btn-primary"><?= LangManager::translate('core.btn.save') ?></button>
 </div>
 
 <form id="Configuration" action="" method="post" enctype="multipart/form-data">
     <?php (new SecurityManager())->insertHiddenToken() ?>
     <label class="toggle">
-        <p class="toggle-label"><?= LangManager::translate("core.maintenance.main_label") ?></p>
+        <p class="toggle-label"><?= LangManager::translate('core.maintenance.main_label') ?></p>
         <input type="checkbox" id="isEnable" name="isEnable" <?= $maintenance->isEnable() ? 'checked' : '' ?>
                class="toggle-input">
         <div class="toggle-slider"></div>
@@ -85,7 +85,7 @@ $description = LangManager::translate("core.maintenance.description");
                  id="editor">
 
                 <div>
-                    <?= htmlspecialchars($maintenance->getOverrideThemeCode() ?? " ") ?>
+                    <?= htmlspecialchars($maintenance->getOverrideThemeCode() ?? ' ') ?>
                 </div>
 
             </div>
@@ -98,7 +98,7 @@ $description = LangManager::translate("core.maintenance.description");
 
 <!-- Set default dateTarget value if we don't set any target value -->
 <script>
-    let targetDateIsNull = <?= $maintenance->getTargetDate() === null ? 'true' : 'false'?>;
+    let targetDateIsNull = <?= $maintenance->getTargetDate() === null ? 'true' : 'false' ?>;
     if (targetDateIsNull) {
         window.addEventListener("load", function () {
             const now = new Date();

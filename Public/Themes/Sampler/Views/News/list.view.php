@@ -4,8 +4,8 @@ use CMW\Controller\Users\UsersController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Utils\Website;
 
-Website::setTitle("News");
-Website::setDescription("Affichage de toutes vos news");
+Website::setTitle('News');
+Website::setDescription('Affichage de toutes vos news');
 
 /* @var \CMW\Entity\News\NewsEntity[] $newsList */
 /* @var \CMW\Model\News\NewsModel $newsModel => $newsModel->getSomeNews(3, 'DESC') */
@@ -19,19 +19,19 @@ Website::setDescription("Affichage de toutes vos news");
                 <div class="text-center"><img style="max-width: 200px" src="<?= $news->getImageLink() ?>" alt="..."/>
                 </div>
                 <h3 class="text-center"><a
-                        href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>news/<?= $news->getSlug() ?>"><?= $news->getTitle() ?></a>
+                        href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>news/<?= $news->getSlug() ?>"><?= $news->getTitle() ?></a>
                 </h3>
 
                 <p>Contenue : <?= $news->getDescription() ?></p>
-                <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>news/<?= $news->getSlug() ?>"></a>
+                <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>news/<?= $news->getSlug() ?>"></a>
                 <?= $news->getLikes()->getTotal() ?>
 
                 <!--YOU CAN CHECK LIKE THIS FOR LIKES -->
                 <?php if ($news->getLikes()->userCanLike()): ?>
                     <?php if (UsersController::isUserLogged()) {
-                        echo "You already love!";
+                        echo 'You already love!';
                     } else {
-                        echo "Log in to like!";
+                        echo 'Log in to like!';
                     } ?>
                 <?php else: ?>
                     <a href="<?= $news->getLikes()->getSendLike() ?>">You will like</a>

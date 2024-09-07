@@ -21,7 +21,7 @@ class Loader
 
     public static function loadProject(): void
     {
-        require_once("AutoLoad.php");
+        require_once ('AutoLoad.php');
         AutoLoad::load();
     }
 
@@ -42,7 +42,7 @@ class Loader
         $packages = PackageController::getAllPackages();
 
         foreach ($packages as $package) {
-            $implementationsFolder = EnvManager::getInstance()->getValue("dir") . "App/Package/{$package->name()}/Implementations";
+            $implementationsFolder = EnvManager::getInstance()->getValue('dir') . "App/Package/{$package->name()}/Implementations";
 
             if (!is_dir($implementationsFolder)) {
                 continue;
@@ -55,9 +55,8 @@ class Loader
                 $implementationsFiles = array_diff(scandir($implementationPackageFolder), ['..', '.']);
 
                 foreach ($implementationsFiles as $implementationsFile) {
-
-                    $implementationsFilePath = EnvManager::getInstance()->getValue("dir") . "App/Package/" .
-                        $package->name() . "/Implementations/" . $implementationsFile;
+                    $implementationsFilePath = EnvManager::getInstance()->getValue('dir') . 'App/Package/'
+                        . $package->name() . '/Implementations/' . $implementationsFile;
 
                     $className = pathinfo($implementationsFilePath, PATHINFO_FILENAME);
 
@@ -83,8 +82,8 @@ class Loader
 
     public static function setLocale(): void
     {
-        EnvManager::getInstance()->addValue("locale", "fr"); //Why fr ?
-        date_default_timezone_set(EnvManager::getInstance()->getValue("TIMEZONE") ?? "Europe/Paris");
+        EnvManager::getInstance()->addValue('locale', 'fr');  // Why fr ?
+        date_default_timezone_set(EnvManager::getInstance()->getValue('TIMEZONE') ?? 'Europe/Paris');
     }
 
     /**
@@ -99,7 +98,6 @@ class Loader
 
     public static function loadLang(string $package, ?string $lang): ?array
     {
-
         $package = ucfirst($package);
 
         $fileName = "App/Package/$package/Lang/$lang.php";
@@ -146,10 +144,10 @@ class Loader
      */
     public static function loadAttributes(): void
     {
-        $files = Directory::getFilesRecursively("App/Package", "php");
+        $files = Directory::getFilesRecursively('App/Package', 'php');
 
         if (EnvManager::getInstance()->getValue('INSTALLSTEP') !== '-1') {
-            $files = [...$files, ...Directory::getFilesRecursively("Installation", "php")];
+            $files = [...$files, ...Directory::getFilesRecursively('Installation', 'php')];
         }
 
         foreach ($files as $file) {
@@ -192,7 +190,6 @@ class Loader
 
             $attrList = $method->getAttributes();
             foreach ($attrList as $attribute) {
-
                 if (!isset(self::getAttributeListPointer()[$attribute->getName()])) {
                     self::getAttributeListPointer()[$attribute->getName()] = [];
                 }
@@ -206,14 +203,13 @@ class Loader
 
     public static function loadInstall(): void
     {
-        if (is_dir("Installation")) {
-            if (EnvManager::getInstance()->getValue("INSTALLSTEP") !== '-1') {
+        if (is_dir('Installation')) {
+            if (EnvManager::getInstance()->getValue('INSTALLSTEP') !== '-1') {
                 ErrorManager::enableErrorDisplays(true);
                 InstallerController::goToInstall();
             }
-        } elseif (!EnvManager::getInstance()->getValue("DEVMODE")) {
-            Directory::delete("Installation");
+        } elseif (!EnvManager::getInstance()->getValue('DEVMODE')) {
+            Directory::delete('Installation');
         }
     }
-
 }

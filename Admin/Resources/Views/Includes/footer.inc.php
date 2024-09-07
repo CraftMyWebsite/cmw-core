@@ -9,16 +9,16 @@ use CMW\Manager\Updater\UpdatesManager;
 </section>
 <footer>
     <div class="md:flex justify-between mt-10">
-        <p><?= LangManager::translate("core.footer.left") ?></p>
+        <p><?= LangManager::translate('core.footer.left') ?></p>
         <?php if (UpdatesManager::checkNewUpdateAvailable()): ?>
             <p class="text-center">
-                <a href="<?= EnvManager::getInstance()->getValue("PATH_SUBFOLDER") ?>cmw-admin/updates/cms">
-                    <span><?= LangManager::translate("core.footer.upgrade") . "<span class='text-success font-bold'> " . UpdatesManager::getCmwLatest()['value'] ?></span>!
+                <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/updates/cms">
+                    <span><?= LangManager::translate('core.footer.upgrade') . "<span class='text-success font-bold'> " . UpdatesManager::getCmwLatest()['value'] ?></span>!
                 </a>
             </p>
         <?php else: ?>
             <p>
-                <?= LangManager::translate("core.footer.right") . " " . UpdatesManager::getVersion() ?>
+                <?= LangManager::translate('core.footer.right') . ' ' . UpdatesManager::getVersion() ?>
             </p>
         <?php endif; ?>
     </div>

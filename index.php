@@ -7,7 +7,7 @@
 use CMW\Controller\Core\MaintenanceController;
 use CMW\Manager\Loader\Loader;
 
-require_once("App/Manager/Loader/Loader.php");
+require_once ('App/Manager/Loader/Loader.php');
 
 Loader::loadProject();
 

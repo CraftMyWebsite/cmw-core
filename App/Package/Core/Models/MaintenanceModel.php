@@ -14,13 +14,12 @@ use CMW\Manager\Package\AbstractModel;
  */
 class MaintenanceModel extends AbstractModel
 {
-
     /**
      * @return \CMW\Entity\Core\MaintenanceEntity
      */
     public function getMaintenance(): MaintenanceEntity
     {
-        $sql = "SELECT * FROM cmw_maintenance LIMIT 1";
+        $sql = 'SELECT * FROM cmw_maintenance LIMIT 1';
         $db = DatabaseManager::getInstance();
 
         $req = $db->query($sql);
@@ -61,14 +60,12 @@ class MaintenanceModel extends AbstractModel
             'overrideThemeCode' => $overrideThemeCode
         ];
 
-        $sql = "UPDATE cmw_maintenance SET maintenance_is_enable = :isEnable, maintenance_title = :title, 
+        $sql = 'UPDATE cmw_maintenance SET maintenance_is_enable = :isEnable, maintenance_title = :title, 
                            maintenance_description = :description, maintenance_type = :type, 
                            maintenance_target_date = :targetDate, maintenance_is_override_theme = :isOverrideTheme,
-                           maintenance_override_theme_code = :overrideThemeCode";
+                           maintenance_override_theme_code = :overrideThemeCode';
         $db = DatabaseManager::getInstance();
 
         return $db->prepare($sql)->execute($var);
     }
-
-
 }

@@ -2,8 +2,8 @@
 
 use CMW\Utils\Website;
 
-Website::setTitle("FAQ");
-Website::setDescription("Affichage de toutes les faq");
+Website::setTitle('FAQ');
+Website::setDescription('Affichage de toutes les faq');
 
 /* @var \CMW\Entity\Faq\FaqEntity[] $faqList */
 
@@ -12,7 +12,7 @@ Website::setDescription("Affichage de toutes les faq");
 <section class="page-section">
     <h1 class="text-center">F.A.Q</h1>
     <div class="container">
-        <?php foreach ($faqList as $faq) : ?>
+        <?php foreach ($faqList as $faq): ?>
             <div class="card mb-4">
                 <p><b>Question : <?= $faq->getQuestion() ?></b></p>
                 <p>Réponse : <?= $faq->getResponse() ?></p>

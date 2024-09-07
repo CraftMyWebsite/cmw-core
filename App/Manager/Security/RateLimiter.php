@@ -1,14 +1,12 @@
 <?php
 
-
 namespace CMW\Manager\Security;
-
 
 use CMW\Manager\Env\EnvManager;
 
 class RateLimiter
 {
-    private string $cookieName = "cmw_rate_limit";
+    private string $cookieName = 'cmw_rate_limit';
     private int $maxCount = 100;
 
     public function __construct()
@@ -23,7 +21,7 @@ class RateLimiter
     private function logic(): void
     {
         // If we are in devmode, we ignore the rateLimiter
-        if (EnvManager::getInstance()->getValue('DEVMODE') === '1'){
+        if (EnvManager::getInstance()->getValue('DEVMODE') === '1') {
             return;
         }
 
@@ -41,7 +39,7 @@ class RateLimiter
      */
     private function getCount(): int
     {
-        return isset($_COOKIE[$this->cookieName]) ? (int)$_COOKIE[$this->cookieName] : 0;
+        return isset($_COOKIE[$this->cookieName]) ? (int) $_COOKIE[$this->cookieName] : 0;
     }
 
     /**
@@ -50,7 +48,6 @@ class RateLimiter
      */
     private function increaseCounter(): void
     {
-        setcookie($this->cookieName, $this->getCount() + 1, time() + 60, "/", false, true);
+        setcookie($this->cookieName, $this->getCount() + 1, time() + 60, '/', false, true);
     }
-
 }

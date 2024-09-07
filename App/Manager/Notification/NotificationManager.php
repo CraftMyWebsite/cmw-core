@@ -9,7 +9,6 @@ use CMW\Manager\Webhook\DiscordWebhook;
 use CMW\Model\Core\MailModel;
 use CMW\Utils\Website;
 
-
 class NotificationManager extends AbstractManager
 {
     /**
@@ -33,30 +32,31 @@ class NotificationManager extends AbstractManager
             }
         } else {
             if ($notification = NotificationModel::getInstance()->createNotification($packageName, $title, $message, $url, 0)) {
-                $showOnDiscord = NotificationModel::getInstance()->getSettingValue("showOnDiscord");
-                $webhookDiscord = NotificationModel::getInstance()->getSettingValue("webhookDiscord");
-                $sendMail = NotificationModel::getInstance()->getSettingValue("sendMail");
-                $mailReceiver = NotificationModel::getInstance()->getSettingValue("mailReceiver");
+                $showOnDiscord = NotificationModel::getInstance()->getSettingValue('showOnDiscord');
+                $webhookDiscord = NotificationModel::getInstance()->getSettingValue('webhookDiscord');
+                $sendMail = NotificationModel::getInstance()->getSettingValue('sendMail');
+                $mailReceiver = NotificationModel::getInstance()->getSettingValue('mailReceiver');
                 if ($showOnDiscord && $webhookDiscord) {
                     DiscordWebhook::createWebhook($webhookDiscord)
                         ->setImageUrl(null)
                         ->setTts(false)
-                        ->setTitle("Notification - ". $packageName)
-                        ->setTitleLink(Website::getUrl().'cmw-admin/notifications')
-                        ->setDescription("### " . $title . "\n". $message)
+                        ->setTitle('Notification - ' . $packageName)
+                        ->setTitleLink(Website::getUrl() . 'cmw-admin/notifications')
+                        ->setDescription('### ' . $title . "\n" . $message)
                         ->setColor('F06E08')
                         ->setFooterText(Website::getWebsiteName())
                         ->setFooterIconUrl(null)
-                        ->setAuthorName("")
-                        ->setAuthorUrl( null)
+                        ->setAuthorName('')
+                        ->setAuthorUrl(null)
                         ->send();
                 }
                 if ($sendMail && $mailReceiver) {
                     if (MailModel::getInstance()->getConfig() !== null && MailModel::getInstance()->getConfig()->isEnable()) {
                         MailController::getInstance()->sendMail(
                             $mailReceiver,
-                            "Notification - " . $packageName,
-                            "Titre : ". $notification->getTitle() . "<br>Message : " . $notification->getMessage() . "<br><a href='".Website::getUrl()."cmw-admin/notifications'>Voir sur le panel</a>");
+                            'Notification - ' . $packageName,
+                            'Titre : ' . $notification->getTitle() . '<br>Message : ' . $notification->getMessage() . "<br><a href='" . Website::getUrl() . "cmw-admin/notifications'>Voir sur le panel</a>"
+                        );
                     }
                 }
 
@@ -73,7 +73,7 @@ class NotificationManager extends AbstractManager
 
         if (isset($backtrace[1]['file'])) {
             $callerFile = $backtrace[1]['file'];
-            $packageDir = EnvManager::getInstance()->getValue('PATH_SUBFOLDER').'App/Package/';
+            $packageDir = EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'App/Package/';
 
             // Check if the caller file is under a package directory
             if (strpos($callerFile, $packageDir) !== false) {
