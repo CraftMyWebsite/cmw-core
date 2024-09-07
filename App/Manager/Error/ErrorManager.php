@@ -5,9 +5,10 @@ namespace CMW\Manager\Error;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Permission\PermissionManager;
 use CMW\Manager\Theme\ThemeManager;
-use JetBrains\PhpStorm\NoReturn;
+use CMW\Manager\Views\View;
 use DateTime;
 use ErrorException;
+use JetBrains\PhpStorm\NoReturn;
 use Throwable;
 
 class ErrorManager
@@ -45,7 +46,7 @@ class ErrorManager
      */
     public static function enableErrorDisplays(bool $force = false): void
     {
-        $devMode = (int) (EnvManager::getInstance()->getValue('devMode') ?? 0);
+        $devMode = (int)(EnvManager::getInstance()->getValue('devMode') ?? 0);
 
         if ($force) {
             $devMode = 1;
@@ -94,7 +95,7 @@ class ErrorManager
             file_put_contents("$this->dirStorage/{$this->getFileLogName()}", $message . PHP_EOL, FILE_APPEND);
         }
 
-        if ((int) ini_get('display_errors') > 0) {
+        if ((int)ini_get('display_errors') > 0) {
             echo $this->displayError($e);
         }
     }
@@ -187,13 +188,18 @@ class ErrorManager
         $defaultErrorFile = EnvManager::getInstance()->getValue('DIR') . "Public/Themes/$currentTheme/Views/Errors/default.view.php";
         $errorFile = EnvManager::getInstance()->getValue('DIR') . "Public/Themes/$currentTheme/Views/Errors/$errorCode.view.php";
 
-        if (file_exists($errorFile)) {
-            include $errorFile;
-            return;
-        }
+        try {
+            if (file_exists($errorFile)) {
+                View::basicPublicView('Errors', $errorCode);
+                return;
+            }
 
-        if (file_exists($defaultErrorFile)) {
-            include $defaultErrorFile;
+            if (file_exists($defaultErrorFile)) {
+                View::basicPublicView('Errors', 'default');
+                return;
+            }
+        } catch (Throwable $_) {
+            self::getFallBackErrorPage($currentTheme);
             return;
         }
 
