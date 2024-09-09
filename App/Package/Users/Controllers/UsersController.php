@@ -12,6 +12,7 @@ use CMW\Event\Users\LogoutEvent;
 use CMW\Event\Users\RegisterEvent;
 use CMW\Interface\Users\IUsersProfilePicture;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Error\ErrorManager;
 use CMW\Manager\Events\Emitter;
 use CMW\Manager\Filter\FilterManager;
 use CMW\Manager\Flash\Alert;
@@ -21,6 +22,7 @@ use CMW\Manager\Loader\Loader;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Security\EncryptManager;
+use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Twofa\TwoFaManager;
 use CMW\Manager\Uploads\ImagesException;
 use CMW\Manager\Uploads\ImagesManager;
@@ -34,6 +36,7 @@ use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
+use function file_exists;
 
 /**
  * Class: @UsersController
@@ -66,7 +69,8 @@ class UsersController extends AbstractController
             if ($weight > $highestWeight) {
                 $index = $i;
                 $highestWeight = $weight;
-            }++$i;
+            }
+            ++$i;
         }
 
         return $implementations[$index];
@@ -446,6 +450,15 @@ class UsersController extends AbstractController
 
     private function showLogin2Fa(): void
     {
+        $filePath = EnvManager::getInstance()->getValue('DIR')
+            . 'Public/Themes/'
+            . ThemeManager::getInstance()->getCurrentTheme()->name()
+            . 'Views/Users/2fa.view.php';
+
+        if (!file_exists($filePath)) {
+            ErrorManager::showCustomErrorPage("File not found", "The file $filePath doesn't exist.");
+        }
+
         $view = new View('Users', '2fa');
         $view->view();
     }
