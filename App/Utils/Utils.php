@@ -2,9 +2,12 @@
 
 namespace CMW\Utils;
 
-use CMW\Manager\Env\EnvManager;
-use CMW\Manager\Lang\LangManager;
-use ReflectionClass;
+use function implode;
+use function preg_replace;
+use function str_shuffle;
+use function strtolower;
+use function substr;
+use function time;
 
 /**
  * Class: @Utils
@@ -63,26 +66,12 @@ class Utils
 
     public static function filterInput(string ...$values): array
     {
-        $toReturn = array();
+        $toReturn = [];
         foreach ($values as $value) {
             $toReturn[] = filter_input(INPUT_POST, $value);
         }
 
         return $toReturn;
-    }
-
-    /**
-     * @param $object
-     * @return array
-     */
-    public static function objectToArray($object): array
-    {
-        $reflectionClass = new ReflectionClass(get_class($object));
-        $array = array();
-        foreach ($reflectionClass->getProperties() as $property) {
-            $array[$property->getName()] = $property->getValue($object);
-        }
-        return $array;
     }
 
     /**
@@ -96,52 +85,35 @@ class Utils
     }
 
     /**
-     * @param int $pastMonths
-     * @return array
-     * @desc Get past months from now to - past months.
+     * @return string
      */
-    public static function getPastMonths(int $pastMonths): array
+    public static function generateUUID(): string
     {
         $toReturn = [];
 
-        for ($i = 0; $i < $pastMonths; $i++) {
-            $targetMonth = idate('m', strtotime("-$i months"));
-            $toReturn[] = LangManager::translate("core.months.$targetMonth");
+        for ($i = 0; $i < 8; $i++) {
+            $toReturn[] = self::genId(4);
         }
 
-        return array_reverse($toReturn);
+        return implode("-", $toReturn) . '-' . time();
     }
 
     /**
-     * @param int $pastDays
-     * @return array
-     * @desc Get past days from now to - past days.
+     * @param int $length
+     * @return string
      */
-    public static function getPastDays(int $pastDays): array
+    public static function generateRandomNumber(int $length): string
     {
-        $toReturn = [];
-
-        for ($i = 0; $i < $pastDays; $i++) {
-            $toReturn[] = date('d/m', strtotime("-$i days"));
-        }
-
-        return array_reverse($toReturn);
+        return substr(str_shuffle("0123456789"), 0, $length);
     }
 
     /**
-     * @param int $pastWeeks
-     * @return array
-     * @desc Get past weeks from now to - past weeks.
+     * @param string $data
+     * @return string
+     * @desc Replace CamelCase to snake_case. Ex: blaBla => bla_bla
      */
-    public static function getPastWeeks(int $pastWeeks): array
+    public function camelCaseToSnakeCase(string $data): string
     {
-        $toReturn = [];
-
-        for ($i = 0; $i < $pastWeeks; $i++) {
-            $targetWeek = date('W', strtotime("-$i weeks"));
-            $toReturn[] = $targetWeek;
-        }
-
-        return array_reverse($toReturn);
+        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $data));
     }
 }

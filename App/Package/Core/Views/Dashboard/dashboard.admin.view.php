@@ -4,9 +4,8 @@ use CMW\Controller\Core\CoreController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Metrics\VisitsMetricsManager;
-use CMW\Model\Core\CoreModel;
 use CMW\Model\Users\UsersModel;
-use CMW\Utils\Utils;
+use CMW\Utils\Date;
 use CMW\Utils\Website;
 
 Website::setTitle(LangManager::translate('core.dashboard.title'));
@@ -60,7 +59,8 @@ Website::setDescription(LangManager::translate('core.dashboard.desc'));
     <div class="space-y-2">
         <div class="card text-center">
             <div class="center-flex items-center gap-6 py-4">
-                <i class="w-24 text-3xl fa-solid fa-user rounded-lg p-3 text-white" style="background-color: #9694FF"></i>
+                <i class="w-24 text-3xl fa-solid fa-user rounded-lg p-3 text-white"
+                   style="background-color: #9694FF"></i>
                 <div class="w-1/2">
                     <p class="text-muted font-semibold"><?= LangManager::translate('core.dashboard.total_member') ?></p>
                     <h6 class="font-extrabold mb-0"><?= UsersModel::getInstance()->countUsers() ?></h6>
@@ -69,7 +69,8 @@ Website::setDescription(LangManager::translate('core.dashboard.desc'));
         </div>
         <div class="card text-center">
             <div class="center-flex items-center gap-6 py-4">
-                <i class="w-24 fa-solid fa-calendar-day text-3xl rounded-lg p-3 text-white" style="background-color: #57CAEB"></i>
+                <i class="w-24 fa-solid fa-calendar-day text-3xl rounded-lg p-3 text-white"
+                   style="background-color: #57CAEB"></i>
                 <div class="w-1/2">
                     <p class="text-muted font-semibold"><?= LangManager::translate('core.dashboard.daily_visits') ?></p>
                     <h6 class="font-extrabold mb-0"><?= (new VisitsMetricsManager())->getVisitsNumber('day') ?></h6>
@@ -78,7 +79,8 @@ Website::setDescription(LangManager::translate('core.dashboard.desc'));
         </div>
         <div class="card text-center">
             <div class="center-flex items-center gap-6 py-4">
-                <i class="w-24 fa-solid fa-calendar-days text-3xl rounded-lg p-3 text-white" style="background-color: #5DDAB4"></i>
+                <i class="w-24 fa-solid fa-calendar-days text-3xl rounded-lg p-3 text-white"
+                   style="background-color: #5DDAB4"></i>
                 <div class="w-1/2">
                     <p class="text-muted font-semibold"><?= LangManager::translate('core.dashboard.monthly_visits') ?></p>
                     <h6 class="font-extrabold mb-0"><?= (new VisitsMetricsManager())->getVisitsNumber('monthly') ?></h6>
@@ -87,7 +89,8 @@ Website::setDescription(LangManager::translate('core.dashboard.desc'));
         </div>
         <div class="card text-center">
             <div class="center-flex items-center gap-6 py-4">
-                <i class="w-24  fa-regular fa-calendar text-3xl rounded-lg p-3 text-white" style="background-color: #FF7976"></i>
+                <i class="w-24  fa-regular fa-calendar text-3xl rounded-lg p-3 text-white"
+                   style="background-color: #FF7976"></i>
                 <div class="w-1/2">
                     <p class="text-muted font-semibold"><?= LangManager::translate('core.dashboard.total_visits') ?></p>
                     <h6 class="font-extrabold mb-0"><?= (new VisitsMetricsManager())->getVisitsNumber('all') ?></h6>
@@ -102,14 +105,13 @@ Website::setDescription(LangManager::translate('core.dashboard.desc'));
 </div>
 
 
-
 <script>
     let daily_options = {
         series: [{
             name: 'Visites',
             data: [<?php foreach ($dailyVisits as $dailyVisit):
-    echo json_encode($dailyVisit, JSON_THROW_ON_ERROR) . ',';
-endforeach; ?>]
+                echo json_encode($dailyVisit, JSON_THROW_ON_ERROR) . ',';
+            endforeach; ?>]
         }],
         chart: {
             height: 350,
@@ -119,7 +121,7 @@ endforeach; ?>]
             curve: 'smooth'
         },
         xaxis: {
-            categories: <?= json_encode(Utils::getPastDays(17), JSON_THROW_ON_ERROR) ?>,
+            categories: <?= json_encode(Date::getPastDays(17), JSON_THROW_ON_ERROR) ?>,
             labels: {
                 show: true,
                 rotate: -45,
@@ -131,8 +133,8 @@ endforeach; ?>]
         series: [{
             name: 'Visites',
             data: [<?php foreach ($weeklyVisits as $weeklyVisit):
-    echo json_encode($weeklyVisit, JSON_THROW_ON_ERROR) . ',';
-endforeach; ?>]
+                echo json_encode($weeklyVisit, JSON_THROW_ON_ERROR) . ',';
+            endforeach; ?>]
         }],
         chart: {
             height: 350,
@@ -142,7 +144,7 @@ endforeach; ?>]
             curve: 'smooth'
         },
         xaxis: {
-            categories: <?= json_encode(Utils::getPastWeeks(17), JSON_THROW_ON_ERROR) ?>,
+            categories: <?= json_encode(Date::getPastWeeks(17), JSON_THROW_ON_ERROR) ?>,
             labels: {
                 show: true,
                 rotate: -45,
@@ -154,8 +156,8 @@ endforeach; ?>]
         series: [{
             name: 'Visites',
             data: [<?php foreach ($monthlyVisits as $monthlyVisit):
-    echo json_encode($monthlyVisit, JSON_THROW_ON_ERROR) . ',';
-endforeach; ?>]
+                echo json_encode($monthlyVisit, JSON_THROW_ON_ERROR) . ',';
+            endforeach; ?>]
         }],
         chart: {
             height: 350,
@@ -165,7 +167,7 @@ endforeach; ?>]
             curve: 'smooth'
         },
         xaxis: {
-            categories: <?= json_encode(Utils::getPastMonths(12), JSON_THROW_ON_ERROR) ?>,
+            categories: <?= json_encode(Date::getPastMonths(12), JSON_THROW_ON_ERROR) ?>,
             labels: {
                 show: true,
                 rotate: -45,

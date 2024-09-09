@@ -8,6 +8,7 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Manager\AbstractManager;
 use CMW\Manager\Permission\PermissionManager;
 use CMW\Manager\Router\Route;
+use CMW\Utils\Client;
 use CMW\Utils\File;
 use CMW\Utils\Website;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -38,7 +39,7 @@ class VisitsMetricsManager extends AbstractManager
 
         $_SESSION['latestVisitPath'] = $path;
 
-        $data = Website::getClientIp() . ',' . date('Y-m-d H:i:s') . ',' . $path . ',' . $package . ',' . http_response_code() . ',' . $isAdmin;
+        $data = Client::getIp() . ',' . date('Y-m-d H:i:s') . ',' . $path . ',' . $package . ',' . http_response_code() . ',' . $isAdmin;
 
         // If we don't have file perms, we ignore temp file writing
         if (!$this->checkPermissions()) {

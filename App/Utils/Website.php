@@ -80,6 +80,7 @@ class Website
     /**
      * @desc Return the client ip, for local users -> 127.0.0.1, if IP not valid -> 0.0.0.0
      * @return string
+     * @deprecated @see Client::getIp()
      */
     public static function getClientIp(): string
     {
