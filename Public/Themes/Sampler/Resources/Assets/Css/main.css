@@ -11415,6 +11415,7 @@ header.masthead {
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-size: cover;
+  background: var(--header-background);
 }
 header.masthead h1, header.masthead .h1 {
   font-size: 2.25rem;
