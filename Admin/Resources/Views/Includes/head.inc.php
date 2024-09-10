@@ -23,7 +23,7 @@ use CMW\Utils\Website;
     <meta name="description" content="<?= $description ?? Website::getDescription() ?>">
     <meta name="robots" content="NOINDEX, NOFOLLOW">
     <link rel="icon" type="image/x-icon"
-          href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Img/favicon.ico"/>
+          href="<?= Website::getFavicon() ?>"/>
     <link rel="stylesheet"
           href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Css/style.css"/>
     <link rel="stylesheet"
