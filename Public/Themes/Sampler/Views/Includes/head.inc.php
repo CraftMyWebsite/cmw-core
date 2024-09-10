@@ -6,6 +6,7 @@ use CMW\Controller\Core\CoreController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
+use CMW\Model\Core\ThemeModel;
 use CMW\Utils\Website;
 
 /* @var string $title */
@@ -45,11 +46,17 @@ $siteName = Website::getWebsiteName();
             rel="stylesheet"/>
 
         <?php
-            View::loadInclude($includes, 'styles');
+        View::loadInclude($includes, 'styles');
         ?>
 
         <?= ImagesManager::getFaviconInclude() ?>
     </head>
+    <style>
+        :root {
+            --header-background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%),
+            url('<?= ThemeModel::getInstance()->fetchImageLink('background') ?>');
+        }
+    </style>
 <body id="page-top">
 <?php View::loadInclude($includes, 'beforeScript', 'beforePhp'); ?>
 <?= CoreController::getInstance()->cmwWarn() ?>

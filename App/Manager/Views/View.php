@@ -6,6 +6,7 @@ use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\MenusController;
 use CMW\Controller\Core\ThemeController;
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Components\ComponentsManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\RouterException;
@@ -24,6 +25,7 @@ class View
     private array $variables;
     private bool $needAdminControl;
     private bool $isAdminFile;
+    private string $themeName;
 
     /**
      * @param string|null $package
@@ -38,6 +40,7 @@ class View
         $this->variables = [];
         $this->needAdminControl = false;
         $this->isAdminFile = $isAdminFile;
+        $this->themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
     }
 
     /**
@@ -260,10 +263,10 @@ class View
         if ($this->customPath !== null) {
             return $this->customPath;
         }
-        $theme = ThemeManager::getInstance()->getCurrentTheme()->name();
+
         return ($this->isAdminFile)
             ? "App/Package/$this->package/Views/$this->viewFile.admin.view.php"
-            : "Public/Themes/$theme/Views/$this->package/$this->viewFile.view.php";
+            : "Public/Themes/$this->themeName/Views/$this->package/$this->viewFile.view.php";
     }
 
     /**
@@ -274,10 +277,10 @@ class View
         if ($this->customTemplate !== null) {
             return $this->customTemplate;
         }
-        $theme = ThemeManager::getInstance()->getCurrentTheme()->name();
+
         return ($this->isAdminFile)
             ? EnvManager::getInstance()->getValue('PATH_ADMIN_VIEW') . 'template.php'
-            : "Public/Themes/$theme/Views/template.php";
+            : "Public/Themes/$this->themeName/Views/template.php";
     }
 
     /**
@@ -364,7 +367,8 @@ class View
             throw new RouterException(null, 404);  // TODO Real errors?
         }
 
-        // Show Alerts
+        //Load Elements
+        ComponentsManager::getInstance()->loadThemeComponents($this->themeName);
 
         ob_start();
         require_once ($path);
