@@ -32,7 +32,7 @@ class UpdatesController extends AbstractController
      */
     public static function groupBy($key, $data): array
     {
-        $result = array();
+        $result = [];
 
         foreach ($data as $val) {
             if (array_key_exists($key, $val)) {
@@ -60,7 +60,7 @@ class UpdatesController extends AbstractController
 
         View::createAdminView('Core', 'Update/updates')
             ->addVariableList(['latestVersion' => $latestVersion, 'latestVersionChangelogGroup' =>
-                    $latestVersionChangelogGroup, 'previousVersions' => $previousVersions,
+                $latestVersionChangelogGroup, 'previousVersions' => $previousVersions,
                 'currentVersion' => $currentVersion])
             ->view();
     }
@@ -72,10 +72,10 @@ class UpdatesController extends AbstractController
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.update');
 
         // We get all the new version id.
-        $targetVersions = PublicAPI::postData('cms/update', ['current_version' => UpdatesManager::getVersion()]);
+        $versions = PublicAPI::postData('cms/update', ['current_version' => UpdatesManager::getVersion()]);
 
-        foreach ($targetVersions as $targetVersion) {
-            (new CMSUpdaterManager())->doUpdate($targetVersion['id']);
+        foreach ($versions as $version) {
+            (new CMSUpdaterManager())->doUpdate($version);
         }
 
         Redirect::redirectPreviousRoute();

@@ -17,13 +17,17 @@ class CMSUpdaterManager
     private static string $archiveUpdatePath = 'Public/Uploads/update.zip';
 
     /**
-     * @param int $targetVersionId
+     * @param array $updateData
      * @return void
      * @desc Execute the whole cms update process
      */
-    public function doUpdate(int $targetVersionId): void
+    public function doUpdate(array $updateData): void
     {
-        $updateData = self::getUpdateLink($targetVersionId);
+        if (!isset($updateData['file_update'])) {
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.updates.errors.fileUpdate'));
+            return;
+        }
 
         if ($this->downloadUpdateFile($updateData) === false) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
@@ -75,7 +79,7 @@ class CMSUpdaterManager
         }
 
         if (!file_put_contents(EnvManager::getInstance()->getValue('DIR') . self::$archivePath,
-                fopen($data, 'rb'))) {
+            fopen($data, 'rb'))) {
             return false;
         }
         return true;
