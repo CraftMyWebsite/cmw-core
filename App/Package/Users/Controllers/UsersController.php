@@ -453,7 +453,7 @@ class UsersController extends AbstractController
         $filePath = EnvManager::getInstance()->getValue('DIR')
             . 'Public/Themes/'
             . ThemeManager::getInstance()->getCurrentTheme()->name()
-            . 'Views/Users/2fa.view.php';
+            . '/Views/Users/2fa.view.php';
 
         if (!file_exists($filePath)) {
             ErrorManager::showCustomErrorPage("File not found", "The file $filePath doesn't exist.");
