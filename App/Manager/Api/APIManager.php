@@ -3,16 +3,20 @@
 namespace CMW\Manager\Api;
 
 use CMW\Manager\Env\EnvManager;
+use CMW\Utils\Log;
 use CurlHandle;
 use JsonException;
 
 class APIManager
 {
-    private const ENV_KEY = 'api_password';
-    private const HEADER_KEY = 'X-CMW-ACCESS';
-    private const HTTP_HEADER_KEY = 'HTTP_X_CMW_ACCESS';
+    private const string ENV_KEY = 'api_password';
+    private const string HEADER_KEY = 'X-CMW-ACCESS';
+    private const string HTTP_HEADER_KEY = 'HTTP_X_CMW_ACCESS';
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
+
 
     public function __invoke(): void
     {
@@ -46,8 +50,8 @@ class APIManager
         $passwordAccess = self::getPassword();
         $headerAccess = self::HEADER_KEY;
         $headers = $secure
-            ? array(self::HEADER_KEY . ': ' . $cmwlToken)
-            : array();
+            ? [self::HEADER_KEY . ': ' . $cmwlToken]
+            : [];
 
         $isPost === true ? $headers[] .= 'Content-Type: application/x-www-form-urlencoded' : '';
 
@@ -91,18 +95,18 @@ class APIManager
         return $response;
     }
 
-    public static function createResponse(string $message = '', int $code = 200, array $data = array(), $secure = true, string $cmwlToken = null): bool|string
+    public static function createResponse(string $message = '', int $code = 200, array $data = [], $secure = true, string $cmwlToken = null): bool|string
     {
         header('Content-Type: application/json; charset=UTF-8');
         if ($secure && !is_null($cmwlToken)) {
             header(self::HEADER_KEY . ': ' . $cmwlToken);
         }
         try {
-            return json_encode(array(
+            return json_encode([
                 'message' => $message,
                 'code' => $code,
-                'data' => $data
-            ), JSON_THROW_ON_ERROR);
+                'data' => $data,
+            ], JSON_THROW_ON_ERROR);
         } catch (JsonException) {
         }
     }
@@ -121,5 +125,40 @@ class APIManager
     private static function verifyPassword($hashedPass, $key): bool
     {
         return password_verify(EnvManager::getInstance()->getValue($key), $hashedPass);
+    }
+
+    /**
+     * @param array $data
+     * @param string $prefix
+     * @return string
+     * @desc
+     * <p>This method build query like http_build_query() but we are not ignoring null,
+     * empty string or empty list.</p>
+     */
+    public static function buildQuery(array $data, string $prefix = ''): string
+    {
+        $query = [];
+
+        foreach ($data as $key => $value) {
+            if ($prefix !== '') {
+                $key = $prefix . '[' . $key . ']';
+            }
+
+            if (is_array($value)) {
+                if (empty($value)) {
+                    $query[] = urlencode($key) . '=';
+                } else {
+                    $query[] = self::buildQuery($value, $key);
+                }
+            } elseif (is_null($value)) {
+                $query[] = urlencode($key) . '=';
+            } elseif ($value === '') {
+                $query[] = urlencode($key) . '=';
+            } else {
+                $query[] = urlencode($key) . '=' . urlencode((string)$value);
+            }
+        }
+
+        return implode('&', $query);
     }
 }
