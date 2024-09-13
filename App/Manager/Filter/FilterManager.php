@@ -2,6 +2,12 @@
 
 namespace CMW\Manager\Filter;
 
+use function filter_input;
+use function is_null;
+use function trim;
+use const FILTER_UNSAFE_RAW;
+use const INPUT_POST;
+
 class FilterManager
 {
     /**
@@ -46,19 +52,26 @@ class FilterManager
 
     /**
      * @param string $data
-     * @param int $maxLength
+     * @param int|null $maxLength
      * @param mixed|null $orElse
      * @return mixed
      * @desc Securely filter data with maxlength parameter => optimized for strings.
      * <p>If <b>orElse</b> parameter is used, you can return anything you want if value is not set or null.</p>
+     * <p>If $maxLength is NULL, we are ignoring this parameter.</p>
      */
-    public static function filterInputStringPost(string $data, int $maxLength = 255, mixed $orElse = false): mixed
+    public static function filterInputStringPost(string $data, ?int $maxLength = 255, mixed $orElse = false): mixed
     {
         if ((!$orElse) && !isset($_POST[$data]) && !is_null($_POST[$data])) {
             return $orElse;
         }
 
-        return mb_substr(trim(filter_input(INPUT_POST, $data, FILTER_UNSAFE_RAW)), 0, $maxLength);
+        $formattedData = trim(filter_input(INPUT_POST, $data, FILTER_UNSAFE_RAW));
+
+        if (!is_null($maxLength)) {
+            return mb_substr($formattedData, 0, $maxLength);
+        }
+
+        return $formattedData;
     }
 
     /**
@@ -69,7 +82,7 @@ class FilterManager
      */
     public static function filterInputIntPost(string $data, int $maxLength = 128): int
     {
-        return (int) mb_substr(trim(filter_input(INPUT_POST, $data, FILTER_SANITIZE_NUMBER_INT)), 0, $maxLength);
+        return (int)mb_substr(trim(filter_input(INPUT_POST, $data, FILTER_SANITIZE_NUMBER_INT)), 0, $maxLength);
     }
 
     /**
