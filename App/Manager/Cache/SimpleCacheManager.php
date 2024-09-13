@@ -2,10 +2,10 @@
 
 namespace CMW\Manager\Cache;
 
-use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Utils\Directory;
 use JsonException;
+use function file_exists;
 
 class SimpleCacheManager
 {
@@ -43,6 +43,7 @@ class SimpleCacheManager
      * @param string $fileName
      * @param string $subFolder
      * @return mixed
+     * @desc Return null if the file does not exist.
      */
     public static function getCache(string $fileName, string $subFolder = '/'): mixed
     {
@@ -56,8 +57,14 @@ class SimpleCacheManager
             $subFolder = '/' . $subFolder;
         }
 
+        $filePath = self::getCompletePath() . $subFolder . $fileName;
+
+        if (!file_exists($filePath)) {
+            return null;
+        }
+
         try {
-            return json_decode(file_get_contents(self::getCompletePath() . $subFolder . $fileName), true, 512, JSON_THROW_ON_ERROR);
+            return json_decode(file_get_contents($filePath), true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
             return $e;
         }
