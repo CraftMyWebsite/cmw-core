@@ -15,7 +15,6 @@ use CMW\Manager\Package\IPackageConfig;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Utils\Directory;
-use CMW\Utils\Log;
 use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
 
@@ -209,14 +208,29 @@ class PackageController extends AbstractController
 
         $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion");
 
+        if (empty($updates)) {
+            Flash::send(
+                Alert::ERROR,
+                LangManager::translate('core.toaster.error'),
+                "No updates available for this package",
+            );
+            Redirect::redirectPreviousRoute();
+        }
+
         if (isset($updates['error'])) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), $updates['error']['code']);
             Redirect::redirectPreviousRoute();
         }
 
         // Update package
-
-        Directory::delete(EnvManager::getInstance()->getValue('DIR') . "App/Package/$packageName");
+        if (!Directory::delete(EnvManager::getInstance()->getValue('DIR') . "App/Package/$packageName")) {
+            Flash::send(
+                Alert::ERROR,
+                LangManager::translate('core.toaster.error'),
+                "Unable to delete folder " . EnvManager::getInstance()->getValue('DIR') . "App/Package/$packageName",
+            );
+            Redirect::redirectPreviousRoute();
+        }
 
         $lastUpdateIndex = count($updates) - 1;
         foreach ($updates as $i => $update) {
@@ -225,7 +239,14 @@ class PackageController extends AbstractController
             }
 
             if ($i === $lastUpdateIndex) {
-                DownloadManager::installPackageWithLink($update['file'], 'package', $packageName);
+                if (!DownloadManager::installPackageWithLink($update['file'], 'package', $packageName)) {
+                    Flash::send(
+                        Alert::ERROR,
+                        LangManager::translate('core.toaster.error'),
+                        "Unable to install the package update " . $update['title'],
+                    );
+                    Redirect::redirectPreviousRoute();
+                }
             }
         }
 

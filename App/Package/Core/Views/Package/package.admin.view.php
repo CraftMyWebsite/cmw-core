@@ -127,7 +127,7 @@ $description = LangManager::translate('core.Package.desc');
                             <div>
                                 <button data-modal-toggle="delete-<?= $packages['id'] ?>" class="btn-danger-sm"
                                         type="button"><?= LangManager::translate('core.Package.delete') ?></button>
-                                <?php if ($localPackage->version() !== $packages['version_name']): ?>
+                                <?php if ($localPackage->version() !== $packages['version_title']): ?>
                                     <a class="btn-warning-sm" type="button"
                                        href="update/<?= $packages['id'] ?>/<?= $localPackage->version() ?>/<?= $localPackage->name() ?>">
                                         <?= LangManager::translate('core.Package.update') ?>
@@ -161,7 +161,7 @@ $description = LangManager::translate('core.Package.desc');
                     <p>Téléchargé <b><?= $packages['downloads'] ?></b> fois</p>
                     <p>Compatible avec <b><?= $packages['version_cmw'] ?></b></p>
                 </div>
-                <?php if ($localPackage->version() !== $packages['version_name']): ?>
+                <?php if ($localPackage->version() !== $packages['version_title']): ?>
                     <div class="absolute"
                          style="transform: rotate(-45deg); left: -4.3em; top: 3.3em; margin: 0; z-index: 10">
                         <div class="bg-warning text-center px-16" style="opacity: .85">
@@ -195,7 +195,7 @@ $description = LangManager::translate('core.Package.desc');
                                     <?= LangManager::translate('core.Package.version') ?>
                                     <i><b><?= $packages['version_name'] ?></b></i><br>
                                 </p>
-                                <?php if ($localPackage->version() !== $packages['version_name']): ?>
+                                <?php if ($localPackage->version() !== $packages['version_title']): ?>
                                     <div class="position-absolute"
                                          style="transform: rotate(-45deg); left: -4em; top: 3.9em; margin: 0; z-index: 50">
                                         <div class="bg-warning text-center px-5"
