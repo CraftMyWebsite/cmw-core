@@ -37,7 +37,7 @@ $description = LangManager::translate('pages.add.desc');
                 <div class="toggle-slider"></div>
             </label>
             <button type="submit" class="btn-primary mt-4 loading-btn btn-center"
-                    data-loading-btn="Sauvegarde ..."><?= LangManager::translate('core.btn.add') ?></button>
+                    data-loading-btn="<?= LangManager::translate('core.btn.saving') ?>"><?= LangManager::translate('core.btn.add') ?></button>
         </div>
     </div>
 </form>

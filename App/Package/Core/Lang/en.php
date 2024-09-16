@@ -385,6 +385,7 @@ return [
         'generate' => 'Generate',
         'enable' => 'Enable',
         'enabled' => 'Enabled',
+        'saving' => 'Saving ...',
     ],
     'months' => [
         'list' => '["January","February","March","April","May","June","July","August","September","October","November","December"]',

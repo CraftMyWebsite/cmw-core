@@ -388,6 +388,7 @@ return [
         'generate' => 'Générer',
         'enable' => 'Activer',
         'enabled' => 'Activé',
+        'saving' => 'Sauvegarde ...',
     ],
     'months' => [
         'list' => '["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"]',
