@@ -6,7 +6,6 @@ use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\PackageController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Utils\Website;
-
 use function is_file;
 
 class AutoLoad
@@ -15,9 +14,9 @@ class AutoLoad
 
     private static function isEnvValid(): bool
     {
-        require_once ('App/Manager/Error/ErrorManager.php');
-        require_once ('App/Manager/Env/EnvManager.php');
-        require_once ('App/Manager/Class/PackageManager.php');
+        require_once('App/Manager/Error/ErrorManager.php');
+        require_once('App/Manager/Env/EnvManager.php');
+        require_once('App/Manager/Class/PackageManager.php');
         return is_file(EnvManager::getInstance()->getValue('DIR') . 'index.php');
     }
 
@@ -125,7 +124,7 @@ class AutoLoad
         }
 
         $namespace = implode('\\', $classPart);
-        $packageName = strtolower($classPart[2]);
+        $packageName = $classPart[2];
         $fileName = $classPart[count($classPart) - 1] . '.php';
 
         $subFolderFile = '';
@@ -134,7 +133,7 @@ class AutoLoad
         }
 
         $dir = EnvManager::getInstance()->getValue('DIR');
-        $filePath = $dir . $startDir . ($packageName === 'installer' ? '' : ucfirst($packageName)) . $folderPackage . $subFolderFile . $fileName;
+        $filePath = $dir . $startDir . ($packageName === 'installer' ? '' : $packageName) . $folderPackage . $subFolderFile . $fileName;
 
         $filePath = str_replace('\\', DIRECTORY_SEPARATOR, $filePath);
 
@@ -155,7 +154,7 @@ class AutoLoad
         }
 
         $namespace = implode('\\', $classPart);
-        $packageName = strtolower($classPart[2]);
+        $packageName = $classPart[2];
         $fileName = $classPart[count($classPart) - 1] . '.php';
 
         if (!PackageController::isInstalled($classPart[3])) {
@@ -168,7 +167,7 @@ class AutoLoad
         }
 
         $dir = EnvManager::getInstance()->getValue('DIR');
-        $filePath = $dir . $startDir . ucfirst($packageName) . $folderPackage . $subFolderFile . $fileName;
+        $filePath = $dir . $startDir . $packageName . $folderPackage . $subFolderFile . $fileName;
 
         $filePath = str_replace('\\', DIRECTORY_SEPARATOR, $filePath);
 
@@ -204,7 +203,7 @@ class AutoLoad
 
         self::$findNameSpace[str_replace('/', '\\', $filePath)] = $namespace;
 
-        require_once ($filePath);
+        require_once($filePath);
         return true;
     }
 
