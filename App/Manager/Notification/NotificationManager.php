@@ -5,7 +5,7 @@ namespace CMW\Manager\Notification;
 use CMW\Controller\Core\MailController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Manager\AbstractManager;
-use CMW\Manager\Webhook\DiscordWebhook;
+use CMW\Manager\Webhook\Discord\DiscordWebhook;
 use CMW\Model\Core\MailModel;
 use CMW\Utils\Website;
 

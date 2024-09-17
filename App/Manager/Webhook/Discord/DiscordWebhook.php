@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Manager\Webhook;
+namespace CMW\Manager\Webhook\Discord;
 
 use JetBrains\PhpStorm\Pure;
 
@@ -34,7 +34,7 @@ class DiscordWebhook
 
     /**
      * @param string $url
-     * @return \CMW\Manager\Webhook\DiscordWebhook
+     * @return \CMW\Manager\Webhook\Discord\DiscordWebhook
      */
     #[Pure]
     public static function createWebhook(string $url): DiscordWebhook
