@@ -4,7 +4,6 @@ namespace CMW\Manager\Package;
 
 class PackageMenuType
 {
-    private string $lang;
     private string $icon;
     private string $title;
     private ?string $url;
@@ -14,29 +13,19 @@ class PackageMenuType
     private ?array $subMenus;
 
     /**
-     * @param string $lang
      * @param string $icon
      * @param string $title
      * @param string|null $url
      * @param string|null $permission
      * @param \CMW\Manager\Package\PackageSubMenuType[]|null $subMenus
      */
-    public function __construct(string $lang, string $icon, string $title, ?string $url, ?string $permission, ?array $subMenus)
+    public function __construct(string $icon, string $title, ?string $url, ?string $permission, ?array $subMenus)
     {
-        $this->lang = $lang;
         $this->icon = $icon;
         $this->title = $title;
         $this->url = $url;
         $this->permission = $permission;
         $this->subMenus = $subMenus;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLang(): string
-    {
-        return $this->lang;
     }
 
     /**

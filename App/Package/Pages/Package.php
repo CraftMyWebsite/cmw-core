@@ -4,7 +4,6 @@ namespace CMW\Package\Pages;
 
 use CMW\Manager\Package\IPackageConfig;
 use CMW\Manager\Package\PackageMenuType;
-use CMW\Manager\Package\PackageSubMenuType;
 
 class Package implements IPackageConfig
 {
@@ -37,20 +36,11 @@ class Package implements IPackageConfig
     {
         return [
             new PackageMenuType(
-                lang: 'fr',
                 icon: 'fa-solid fa-file-lines',
                 title: 'Pages',
                 url: 'pages',
                 permission: 'pages.show',
                 subMenus: []
-            ),
-            new PackageMenuType(
-                lang: 'en',
-                icon: 'fa-solid fa-file-lines',
-                title: 'Pages',
-                url: 'pages',
-                permission: 'pages.show',
-                subMenus: [],
             ),
         ];
     }

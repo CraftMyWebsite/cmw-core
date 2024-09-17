@@ -37,7 +37,6 @@ class Package implements IPackageConfig
     {
         return [
             new PackageMenuType(
-                lang: 'fr',
                 icon: 'fas fa-user',
                 title: 'Utilisateurs',
                 url: null,
@@ -56,30 +55,6 @@ class Package implements IPackageConfig
                     new PackageSubMenuType(
                         title: 'Rôles',
                         permission: 'users.roles',
-                        url: 'roles/manage',
-                    ),
-                ],
-            ),
-            new PackageMenuType(
-                lang: 'en',
-                icon: 'fas fa-user',
-                title: 'Users',
-                url: null,
-                permission: null,
-                subMenus: [
-                    new PackageSubMenuType(
-                        title: 'Settings',
-                        permission: 'user.settings',
-                        url: 'users/settings',
-                    ),
-                    new PackageSubMenuType(
-                        title: 'Management',
-                        permission: 'users.settings',
-                        url: 'users/manage',
-                    ),
-                    new PackageSubMenuType(
-                        title: 'Roles',
-                        permission: 'users.roles.manage',
                         url: 'roles/manage',
                     ),
                 ],
