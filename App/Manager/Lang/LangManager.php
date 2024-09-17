@@ -9,14 +9,14 @@ use CMW\Manager\Loader\Loader;
 class LangManager
 {
     private static array $translations;
-    private static array $langCache = array();
+    private static array $langCache = [];
 
-    private const CANNOT_TRANSLATE = 'NO TRANSLATION FOUND FOR %value%';
+    private const string CANNOT_TRANSLATE = 'NO TRANSLATION FOUND FOR %value%';
 
     private static function setTranslationList(array $array, string $package, string $lang): void
     {
         if (isset(self::$langCache[$package])) {
-            self::$langCache[$package] = array();
+            self::$langCache[$package] = [];
         }
         self::$langCache[$package][$lang] = $array;
     }
@@ -60,7 +60,7 @@ class LangManager
         }
 
         if (is_null(self::getTranslationList($package, $lang))) {
-            if (strtolower($package) === 'installation') {
+            if ($package === 'Installation') {
                 $translationList = InstallerController::loadLang();
             } else {
                 $translationList = Loader::loadLang($package, $lang);
