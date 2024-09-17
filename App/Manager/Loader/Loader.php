@@ -12,7 +12,9 @@ use CMW\Manager\Router\Router;
 use CMW\Manager\Router\RouterException;
 use CMW\Manager\Views\View;
 use CMW\Utils\Directory;
+use CMW\Utils\Log;
 use ReflectionClass;
+use function is_dir;
 
 class Loader
 {
@@ -51,6 +53,10 @@ class Loader
             $implementationsFolders = array_diff(scandir($implementationsFolder), ['..', '.']);
 
             foreach ($implementationsFolders as $folder) {
+                if (!is_dir($implementationsFolder . '/' . $folder)) {
+                    continue;
+                }
+
                 $implementationPackageFolder = $implementationsFolder . '/' . $folder;
                 $implementationsFiles = array_diff(scandir($implementationPackageFolder), ['..', '.']);
 
