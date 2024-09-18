@@ -6,9 +6,10 @@ use JetBrains\PhpStorm\ExpectedValues;
 
 class Alert
 {
-    public const SUCCESS = 'success';
-    public const ERROR = 'error';
-    public const WARNING = 'warning';
+    public const string SUCCESS = 'success';
+    public const string ERROR = 'error';
+    public const string WARNING = 'warning';
+    public const string INFO = 'warning';
 
     public function __construct(
         #[ExpectedValues(flagsFromClass: Alert::class)]
@@ -16,9 +17,10 @@ class Alert
 
         private readonly string $alertTitle,
         private readonly string $alertMessage,
-        private readonly bool $isAdmin
-    ) {
-        $_SESSION['alerts'] ??= array();
+        private readonly bool   $isAdmin,
+    )
+    {
+        $_SESSION['alerts'] ??= [];
     }
 
     /**
