@@ -32,7 +32,6 @@ foreach ($installedPackages as $package) {
 }
 ?>
 
-
 <nav class="nav">
     <div class="px-3 py-[.1rem] lg:px-5 lg:pl-3">
         <div class="flex items-center justify-between">
@@ -51,6 +50,9 @@ foreach ($installedPackages as $package) {
                         class="bg-contain hidden dark:block" alt="Logo"/>
                 </a>
                 <div class="ml-2 sm:ml-11">
+                    <button id="toggleSidebar" class="hidden sm:block"><i id="toggleIcon" class="fa-solid fa-expand fa-lg"></i></button>
+                </div>
+                <div class="ml-2">
                     <div class="px-3">
                         <a href="<?= EnvManager::getInstance()->getValue('PATH_URL') ?>" target="_blank"><i
                                 class="fa-solid fa-arrow-up-right-from-square"></i></a>
@@ -71,8 +73,8 @@ foreach ($installedPackages as $package) {
                         <?php endif; ?>
                     </button>
                 </div>
-                <div style="width: 20rem; padding-right: 16px; max-height: 800px"
-                     class="z-50 hidden space-y-2 overflow-x-auto" id="dropdown-notification">
+                <div style="width: 20rem; padding: 16px; max-height: 800px"
+                     class="z-50 hidden space-y-2 overflow-x-auto border rounded-l bg-white dark:bg-gray-800" id="dropdown-notification">
                     <?php
                     $max_notifications = 3;
                     $notification_count = 0;
@@ -88,9 +90,7 @@ foreach ($installedPackages as $package) {
                                     <p><b><?= $notification->getPackage() ?></b><small>
                                             - <?= mb_strimwidth($notification->getTitle(), 0, 30, '...') ?></small></p>
                                     <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/notification/read/<?= $notification->getId() ?>"
-                                       type="button"
-                                       class="ms-auto -mx-1.5 -my-1.5 bg-white justify-center items-center flex-shrink-0 text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
-                                       data-dismiss-target="#toast-message-cta" aria-label="Close">
+                                       class="ms-auto -mx-1.5 -my-1.5 bg-white justify-center items-center flex-shrink-0 text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700">
                                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                              fill="none" viewBox="0 0 14 14">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -189,9 +189,9 @@ foreach ($installedPackages as $package) {
                     <span class="span-side-nav"><?= LangManager::translate('core.dashboard.title') ?></span>
                 </a>
             </li>
-            <?php
-            foreach (PackageController::getCorePackages() as $package):
-                foreach ($package->menus() as $menu):
+            <?php foreach (PackageController::getCorePackages() as $package): ?>
+                <?php foreach ($package->menus() as $menu): ?>
+                    <?php
                     // Vérifier si le menu a des sous-menus visibles
                     $hasVisibleSubMenu = false;
                     foreach ($menu->getSubMenus() as $submenu) {
@@ -202,19 +202,16 @@ foreach ($installedPackages as $package) {
                     }
 
                     // Si le menu n'a pas d'URL et a des sous-menus visibles
-                    if (is_null($menu->getUrl()) && $hasVisibleSubMenu):
-                        ?>
+                    if (is_null($menu->getUrl()) && $hasVisibleSubMenu): ?>
                         <li>
                             <button type="button"
-                                    class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active" aria-expanded="true"' : '"' ?>"
-                                    aria-controls="dropdown-<?= $menu->getTitle() ?>"
-                                    data-collapse-toggle="dropdown-<?= $menu->getTitle() ?>">
+                                    class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active"' : '"' ?>"
+                                    onclick="toggleSubMenu(this)">
                                 <i class="<?= $menu->getIcon() ?>"></i>
                                 <span class="span-side-nav"><?= $menu->getTitle() ?></span>
                                 <i class="fa-xs fa-solid fa-chevron-down"></i>
                             </button>
-                            <ul id="dropdown-<?= $menu->getTitle() ?>"
-                                class="a-side-nav-dropdown <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? '' : 'hidden' ?>">
+                            <ul class="a-side-nav-dropdown <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'active' : '' ?>">
                                 <?php foreach ($menu->getSubMenus() as $submenu):
                                     if (UsersModel::hasPermission($currentUser, $submenu->getPermission())): ?>
                                         <li>
@@ -227,10 +224,7 @@ foreach ($installedPackages as $package) {
                                 <?php endforeach; ?>
                             </ul>
                         </li>
-                    <?php
-                    // Si le menu a une URL et l'utilisateur a la permission
-                    elseif (!is_null($menu->getUrl()) && UsersModel::hasPermission($currentUser, $menu->getPermission())):
-                        ?>
+                    <?php elseif (!is_null($menu->getUrl()) && UsersModel::hasPermission($currentUser, $menu->getPermission())): ?>
                         <li>
                             <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/<?= $menu->getUrl() ?>"
                                class="a-side-nav <?= MenusController::getInstance()->isActiveNavbarItem($menu->getUrl()) ? 'side-nav-active' : '' ?>">
@@ -267,15 +261,13 @@ foreach ($installedPackages as $package) {
                             if (is_null($menu->getUrl()) && $hasVisibleSubMenu): ?>
                                 <li>
                                     <button type="button"
-                                            class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active" aria-expanded="true"' : '"' ?>"
-                                            aria-controls="dropdown-<?= $menu->getTitle() ?>"
-                                            data-collapse-toggle="dropdown-<?= $menu->getTitle() ?>">
+                                            class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active"' : '"' ?>"
+                                            onclick="toggleSubMenu(this)">
                                         <i class="<?= $menu->getIcon() ?>"></i>
                                         <span class="span-side-nav"><?= $menu->getTitle() ?></span>
                                         <i class="fa-xs fa-solid fa-chevron-down"></i>
                                     </button>
-                                    <ul id="dropdown-<?= $menu->getTitle() ?>"
-                                        class="a-side-nav-dropdown <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? '' : 'hidden' ?>">
+                                    <ul class="a-side-nav-dropdown <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'active' : '' ?>">
                                         <?php foreach ($menu->getSubMenus() as $submenu):
                                             if (UsersModel::hasPermission($currentUser, $submenu->getPermission())): ?>
                                                 <li>
@@ -331,15 +323,14 @@ foreach ($installedPackages as $package) {
                             if (is_null($menu->getUrl()) && $hasVisibleSubMenu): ?>
                                 <li>
                                     <button type="button"
-                                            class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active" aria-expanded="true"' : '"' ?>"
-                                            aria-controls="dropdown-<?= $menu->getTitle() ?>"
-                                            data-collapse-toggle="dropdown-<?= $menu->getTitle() ?>">
+                                            class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active""' : '"' ?>"
+                                            onclick="toggleSubMenu(this)">
                                         <i class="<?= $menu->getIcon() ?>"></i>
                                         <span class="span-side-nav"><?= $menu->getTitle() ?></span>
                                         <i class="fa-xs fa-solid fa-chevron-down"></i>
                                     </button>
-                                    <ul id="dropdown-<?= $menu->getTitle() ?>"
-                                        class="a-side-nav-dropdown <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? '' : 'hidden' ?>">
+                                    <ul
+                                        class="a-side-nav-dropdown <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'active' : '' ?>">
                                         <?php foreach ($menu->getSubMenus() as $submenu):
                                             if (UsersModel::hasPermission($currentUser, $submenu->getPermission())): ?>
                                                 <li>
@@ -376,5 +367,47 @@ foreach ($installedPackages as $package) {
         endforeach; ?>
     </div>
 </aside>
+
+<script>
+    document.getElementById('toggleSidebar').addEventListener('click', function () {
+        document.body.classList.toggle('sidebar-collapsed');
+
+        // Récupérer l'élément de l'icône
+        let icon = document.getElementById('toggleIcon');
+
+        // Ajouter la classe flip pour l'effet de rotation
+        icon.classList.add('flip');
+
+        // Vérifier si la sidebar est masquée et basculer l'icône
+        setTimeout(function() {
+            if (document.body.classList.contains('sidebar-collapsed')) {
+                icon.classList.remove('fa-expand', 'fa-lg');
+                icon.classList.add('fa-bars', 'fa-lg');
+            } else {
+                icon.classList.remove('fa-bars', 'fa-lg');
+                icon.classList.add('fa-expand', 'fa-lg');
+            }
+
+            // Retirer l'effet de flip après le changement
+            icon.classList.remove('flip');
+        }, 300); // Attendez un peu pour l'effet avant de changer l'icône
+    });
+
+
+</script>
+<script>
+    function toggleSubMenu(button) {
+        const submenu = button.nextElementSibling;
+
+        if (submenu.classList.contains('active')) {
+            submenu.style.maxHeight = null;  // Réinitialiser la hauteur à 0
+            submenu.classList.remove('active');
+        } else {
+            submenu.classList.add('active');
+            submenu.style.maxHeight = (submenu.scrollHeight + 16) + "px";  // Ajuste dynamiquement la hauteur
+        }
+    }
+
+</script>
 
 <section class="main-content">
