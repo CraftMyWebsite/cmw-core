@@ -3,11 +3,14 @@
 namespace CMW\Utils;
 
 use function implode;
+use function lcfirst;
 use function preg_replace;
+use function str_replace;
 use function str_shuffle;
 use function strtolower;
 use function substr;
 use function time;
+use function ucwords;
 
 /**
  * Class: @Utils
@@ -112,8 +115,18 @@ class Utils
      * @return string
      * @desc Replace CamelCase to snake_case. Ex: blaBla => bla_bla
      */
-    public function camelCaseToSnakeCase(string $data): string
+    public static function camelToSnakeCase(string $data): string
     {
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $data));
+    }
+
+    /**
+     * @param string $data
+     * @return string
+     * @desc Replace snake_case to CamelCase. Ex: bla_bla => blaBla
+     */
+    public static function snakeToCamelCase(string $data): string
+    {
+        return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $data))));
     }
 }
