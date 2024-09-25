@@ -176,7 +176,7 @@ foreach ($installedPackages as $package) {
 </nav>
 
 <aside id="logo-sidebar" class="aside-nav" aria-label="Sidebar">
-    <div class="h-full overflow-y-auto overflow-x-hidden">
+    <div class="h-full overflow-y-auto overflow-x-hidden pb-40 lg:pb-0">
         <?php foreach ($sideBarImplementations as $package):
             $package->beforeWidgets();
         endforeach; ?>
