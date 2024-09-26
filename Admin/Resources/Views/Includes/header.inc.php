@@ -205,7 +205,7 @@ foreach ($installedPackages as $package) {
                     if (is_null($menu->getUrl()) && $hasVisibleSubMenu): ?>
                         <li>
                             <button type="button"
-                                    class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active"' : '"' ?>"
+                                    class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active' : '"' ?>"
                                     onclick="toggleSubMenu(this)">
                                 <i class="<?= $menu->getIcon() ?>"></i>
                                 <span class="span-side-nav"><?= $menu->getTitle() ?></span>
@@ -261,7 +261,7 @@ foreach ($installedPackages as $package) {
                             if (is_null($menu->getUrl()) && $hasVisibleSubMenu): ?>
                                 <li>
                                     <button type="button"
-                                            class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active"' : '"' ?>"
+                                            class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active' : '"' ?>"
                                             onclick="toggleSubMenu(this)">
                                         <i class="<?= $menu->getIcon() ?>"></i>
                                         <span class="span-side-nav"><?= $menu->getTitle() ?></span>
@@ -323,7 +323,7 @@ foreach ($installedPackages as $package) {
                             if (is_null($menu->getUrl()) && $hasVisibleSubMenu): ?>
                                 <li>
                                     <button type="button"
-                                            class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active""' : '"' ?>"
+                                            class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active' : '"' ?>"
                                             onclick="toggleSubMenu(this)">
                                         <i class="<?= $menu->getIcon() ?>"></i>
                                         <span class="span-side-nav"><?= $menu->getTitle() ?></span>
@@ -408,6 +408,19 @@ foreach ($installedPackages as $package) {
         }
     }
 
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let dropActiveElement = document.querySelector(".side-nav-drop-active");
+        let activeElement = document.querySelector(".side-nav-active");
+        if (dropActiveElement) {
+            dropActiveElement.scrollIntoView({ block: "center" });
+        }
+        else if (activeElement) {
+            activeElement.scrollIntoView({  block: "center" });
+        }
+    });
 </script>
 
 <section class="main-content">
