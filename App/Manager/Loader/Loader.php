@@ -12,8 +12,8 @@ use CMW\Manager\Router\Router;
 use CMW\Manager\Router\RouterException;
 use CMW\Manager\Views\View;
 use CMW\Utils\Directory;
-use CMW\Utils\Log;
 use ReflectionClass;
+use function file_exists;
 use function is_dir;
 
 class Loader
@@ -23,8 +23,9 @@ class Loader
 
     public static function loadProject(): void
     {
-        require_once ('AutoLoad.php');
+        require_once('AutoLoad.php');
         AutoLoad::load();
+        self::loadComposer();
     }
 
     private static function &getAttributeListPointer(): array
@@ -216,6 +217,17 @@ class Loader
             }
         } elseif (!EnvManager::getInstance()->getValue('DEVMODE')) {
             Directory::delete('Installation');
+        }
+    }
+
+    /**
+     * @return void
+     * @desc Load composer autoload if exists
+     */
+    private static function loadComposer(): void
+    {
+        if (file_exists('vendor/autoload.php')) {
+            require_once 'vendor/autoload.php';
         }
     }
 }

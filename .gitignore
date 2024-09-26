@@ -40,3 +40,8 @@ __MACOSX/
 !/Public/Uploads/Favicon/favicon.ico
 !/Public/Uploads/.htaccess
 /Public/Uploads/*
+
+# Ignore composer files and folder
+/vendor/
+/composer.lock
+/composer.json
