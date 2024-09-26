@@ -1651,6 +1651,7 @@ p {
 .grid-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.5rem;
+    overflow-wrap: break-word;
 }
 @media (min-width: 1024px) {
 
@@ -1661,6 +1662,7 @@ p {
 .grid-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.5rem;
+    overflow-wrap: break-word;
 }
 @media (min-width: 1024px) {
 
@@ -1671,6 +1673,7 @@ p {
 .grid-4 {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1.5rem;
+    overflow-wrap: break-word;
 }
 @media (min-width: 1024px) {
 
@@ -1681,6 +1684,7 @@ p {
 .grid-5 {
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 1.5rem;
+    overflow-wrap: break-word;
 }
 @media (min-width: 1024px) {
 
@@ -1691,16 +1695,19 @@ p {
 .grid-6 {
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 1.5rem;
+    overflow-wrap: break-word;
 }
 @media (min-width: 1024px) {
 
   .grid-6 {
     display: grid;
+
   }
 }
 .grid-7 {
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 1.5rem;
+    overflow-wrap: break-word;
 }
 @media (min-width: 1024px) {
 
@@ -1711,6 +1718,7 @@ p {
 .grid-8 {
   grid-template-columns: repeat(8, minmax(0, 1fr));
   gap: 1.5rem;
+    overflow-wrap: break-word;
 }
 @media (min-width: 1024px) {
 
@@ -1721,6 +1729,7 @@ p {
 .grid-9 {
   grid-template-columns: repeat(9, minmax(0, 1fr));
   gap: 1.5rem;
+    overflow-wrap: break-word;
 }
 @media (min-width: 1024px) {
 
@@ -1731,6 +1740,7 @@ p {
 .grid-10 {
   grid-template-columns: repeat(10, minmax(0, 1fr));
   gap: 1.5rem;
+    overflow-wrap: break-word;
 }
 @media (min-width: 1024px) {
 
@@ -1741,6 +1751,7 @@ p {
 .grid-11 {
   grid-template-columns: repeat(11, minmax(0, 1fr));
   gap: 1.5rem;
+    overflow-wrap: break-word;
 }
 @media (min-width: 1024px) {
 
@@ -1751,6 +1762,7 @@ p {
 .grid-12 {
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 3rem;
+    overflow-wrap: break-word;
 }
 @media (min-width: 1024px) {
 
