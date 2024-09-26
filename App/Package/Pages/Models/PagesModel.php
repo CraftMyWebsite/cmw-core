@@ -129,24 +129,10 @@ class PagesModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
         if ($req->execute($var)) {
-            $this->updateEditTime($id);
             return $this->getPageById($id);
         }
 
         return null;
-    }
-
-    public function updateEditTime(int $id): void
-    {
-        $var = [
-            'page_id' => $id,
-        ];
-
-        $sql = 'UPDATE cmw_pages SET page_updated = NOW() WHERE page_id=:page_id';
-
-        $db = DatabaseManager::getInstance();
-        $req = $db->prepare($sql);
-        $req->execute($var);
     }
 
     private function fetchPageResult(PDOStatement $res): ?PageEntity
