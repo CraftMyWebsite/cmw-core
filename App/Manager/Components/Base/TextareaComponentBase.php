@@ -13,7 +13,8 @@ class TextareaComponentBase extends IComponent
     private bool $isDisabled = false;
     private int $minLength = 0;
     private int $maxLength = 1000;
-
+    private int $rows = 4;
+    private int $cols = 20;
     private bool $spellcheck = true;
 
     public function setPlaceholder(string $placeholder): static {
@@ -61,6 +62,16 @@ class TextareaComponentBase extends IComponent
         return $this;
     }
 
+    public function setRows(int $rows): static {
+        $this->rows = $rows;
+        return $this;
+    }
+
+    public function setCols(int $cols): static {
+        $this->cols = $cols;
+        return $this;
+    }
+
     public function showDisabled(): string {
         return $this->isDisabled ? 'disabled' : '';
     }
@@ -82,6 +93,8 @@ class TextareaComponentBase extends IComponent
                          spellcheck='$this->spellcheck'
                          minlength='$this->minLength'
                          maxlength='$this->maxLength'
+                         rows='$this->rows'
+                         cols='$this->cols'
                          {$this->showDisabled()}
                          {$this->showReadOnly()}
                          {$this->showRequired()}></textarea>";

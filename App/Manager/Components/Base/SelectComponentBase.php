@@ -9,7 +9,8 @@ class SelectComponentBase extends IComponent
     private string $name = "undefined";
     private bool $isRequired = true;
     private bool $isDisabled = false;
-    private array $options = [];
+    /* @var SelectOptionComponentBase[] $options */
+    private array $options;
     private string $selected = "";
     private string $placeholder = "Select an option";
 
@@ -66,14 +67,14 @@ class SelectComponentBase extends IComponent
 
     private function printPlaceholder(): void {
         if ($this->placeholder) {
-            print "<option value='' disabled selected>{$this->placeholder}</option>";
+            SelectOptionComponentBase::create()->setIsDisabled(true)->setIsSelected(true)->setText($this->placeholder)->render();
         }
     }
 
     private function printOptions(): void
     {
         foreach ($this->options as $key => $value) {
-            print "<option value='$key' {$this->isSelected($key)}>$value</option>";
+            $value->setIsSelected($this->isSelected($key))->render();
         }
     }
 
