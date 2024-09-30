@@ -3,7 +3,6 @@
 namespace CMW\Model\Installer;
 
 use CMW\Controller\Core\PackageController;
-use CMW\Controller\Users\UsersController;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Env\EnvManager;
@@ -14,6 +13,7 @@ use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Twofa\TwoFaManager;
 use CMW\Model\Users\Users2FaModel;
 use CMW\Model\Users\UsersModel;
+use CMW\Package\Users\Controllers\UsersLoginController;
 use CMW\Utils\Redirect;
 use PDO;
 use PDOException;
@@ -126,7 +126,7 @@ class InstallerModel
             Redirect::redirectPreviousRoute();
         }
 
-        UsersController::getInstance()->loginUser($user, 1);
+        UsersLoginController::getInstance()->loginUser($user, 1);
     }
 
     public static function initCondition(int $userId): void

@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `cmw_users`
     `user_state`     TINYINT(1)   NOT NULL DEFAULT '1',
     `user_key`       VARCHAR(255) NOT NULL,
     `user_created`   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `user_updated`   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `user_updated`   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `user_logged`    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`user_id`),
     UNIQUE KEY `user_email` (`user_email`),
@@ -48,12 +48,27 @@ CREATE INDEX idx_registration_date ON cmw_users (user_created);
 
 CREATE TABLE IF NOT EXISTS `cmw_users_2fa`
 (
-    `users_2fa_user_id`    INT(11)      NOT NULL,
-    `users_2fa_is_enabled` TINYINT(1)   NOT NULL DEFAULT 0,
-    `users_2fa_secret`     VARCHAR(255) NOT NULL,
+    `users_2fa_user_id`     INT(11)      NOT NULL,
+    `users_2fa_is_enabled`  TINYINT(1)   NOT NULL DEFAULT 0,
+    `users_2fa_secret`      VARCHAR(255) NOT NULL,
     `users_2fa_is_enforced` TINYINT(1)   NOT NULL DEFAULT 0,
     PRIMARY KEY (`users_2fa_user_id`),
     CONSTRAINT `cmw_users_2fa_ibfk_1` FOREIGN KEY (`users_2fa_user_id`)
+        REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `cmw_users_oauth`
+(
+    `id`      INT          NOT NULL AUTO_INCREMENT,
+    `methode` VARCHAR(35)  NOT NULL,
+    `data`    VARCHAR(500) NOT NULL,
+    `user_id` INT          NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX (`user_id`),
+    UNIQUE KEY (`methode`, `data`),
+    CONSTRAINT FOREIGN KEY (`user_id`)
         REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
@@ -258,43 +273,43 @@ CREATE TABLE IF NOT EXISTS `cmw_users_blacklist_pseudo`
 
 CREATE TABLE IF NOT EXISTS cmw_users_enforced2fa_roles
 (
-    enforced2fa_roles      INT PRIMARY KEY,
+    enforced2fa_roles INT PRIMARY KEY,
     CONSTRAINT fk_enforced2fa_roles FOREIGN KEY (enforced2fa_roles)
-    REFERENCES `cmw_roles` (`role_id`) ON UPDATE CASCADE ON DELETE CASCADE
-    ) ENGINE = InnoDB
-    CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_ci;
+        REFERENCES `cmw_roles` (`role_id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS cmw_notification
 (
-    notification_id                 INT             AUTO_INCREMENT PRIMARY KEY,
-    notification_package_name       VARCHAR(50)     NOT NULL,
-    notification_title              VARCHAR(255)     NOT NULL,
-    notification_message            VARCHAR(255)    NOT NULL,
-    notification_slug               VARCHAR(255)    NULL,
-    notification_readed             TINYINT(1)      NOT NULL DEFAULT 0,
-    notification_readed_silence     TINYINT(1)      NOT NULL DEFAULT 0,
-    notification_created_at         TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    notification_updated_at         TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    ) ENGINE = InnoDB
-    CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_ci;
+    notification_id             INT AUTO_INCREMENT PRIMARY KEY,
+    notification_package_name   VARCHAR(50)  NOT NULL,
+    notification_title          VARCHAR(255) NOT NULL,
+    notification_message        VARCHAR(255) NOT NULL,
+    notification_slug           VARCHAR(255) NULL,
+    notification_readed         TINYINT(1)   NOT NULL DEFAULT 0,
+    notification_readed_silence TINYINT(1)   NOT NULL DEFAULT 0,
+    notification_created_at     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    notification_updated_at     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS cmw_notification_settings
 (
-    notification_settings_id                 INT             AUTO_INCREMENT PRIMARY KEY,
-    notification_settings_name       VARCHAR(50)     NOT NULL,
-    notification_settings_key              VARCHAR(255)     NOT NULL
-    ) ENGINE = InnoDB
-    CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_ci;
+    notification_settings_id   INT AUTO_INCREMENT PRIMARY KEY,
+    notification_settings_name VARCHAR(50)  NOT NULL,
+    notification_settings_key  VARCHAR(255) NOT NULL
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS cmw_notification_refused_package
 (
-    notification_package_name       VARCHAR(50)     NOT NULL
-    ) ENGINE = InnoDB
-    CHARACTER SET = utf8mb4
-    COLLATE = utf8mb4_unicode_ci;
+    notification_package_name VARCHAR(50) NOT NULL
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 /* INSERT AREA */
 
@@ -344,6 +359,6 @@ VALUES (1, 5, 2);
 
 INSERT INTO `cmw_notification_settings` (`notification_settings_name`, `notification_settings_key`)
 VALUES ('showOnDiscord', '0'),
-    ('webhookDiscord', ''),
-    ('sendMail', '0'),
-    ('mailReceiver', '');
+       ('webhookDiscord', ''),
+       ('sendMail', '0'),
+       ('mailReceiver', '');

@@ -3,18 +3,13 @@
 namespace CMW\Controller\Users;
 
 use CMW\Controller\Core\SecurityController;
-use CMW\Entity\Users\UserEntity;
 use CMW\Entity\Users\UserPictureEntity;
-use CMW\Entity\Users\UserSettingsEntity;
 use CMW\Event\Users\DeleteUserAccountEvent;
-use CMW\Event\Users\LoginEvent;
 use CMW\Event\Users\LogoutEvent;
 use CMW\Event\Users\RegisterEvent;
 use CMW\Interface\Users\IUsersProfilePicture;
 use CMW\Manager\Env\EnvManager;
-use CMW\Manager\Error\ErrorManager;
 use CMW\Manager\Events\Emitter;
-use CMW\Manager\Filter\FilterManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
@@ -22,21 +17,13 @@ use CMW\Manager\Loader\Loader;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Security\EncryptManager;
-use CMW\Manager\Theme\ThemeManager;
-use CMW\Manager\Twofa\TwoFaManager;
-use CMW\Manager\Uploads\ImagesException;
-use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Users\RolesModel;
-use CMW\Model\Users\UserPictureModel;
-use CMW\Model\Users\Users2FaModel;
 use CMW\Model\Users\UsersModel;
-use CMW\Model\Users\UsersSettingsModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
-use function file_exists;
 
 /**
  * Class: @UsersController
@@ -88,52 +75,6 @@ class UsersController extends AbstractController
     public static function hasPermission(string ...$permissions): bool
     {
         return UsersModel::hasPermission(UsersModel::getCurrentUser(), ...$permissions);
-    }
-
-    /**
-     * @param string $mail <b>(Encrypted)</b>
-     * @param string $password
-     * @return \CMW\Controller\Users\LoginStatus
-     * @desc Complete login user.
-     */
-    public function checkLogin(string $mail, string $password): LoginStatus
-    {
-        $credentialStatus = UsersModel::getInstance()->isCredentialsMatch($mail, $password);
-
-        // If all is ok:
-        if (!is_int($credentialStatus)) {
-            return $credentialStatus;
-        }
-
-        $user = UsersModel::getInstance()->getUserById($credentialStatus);
-
-        if ($user === null) {
-            return LoginStatus::INTERNAL_ERROR;
-        }
-
-        if ($user->get2Fa()->isEnforced()) {
-            return $user->get2Fa()->isEnabled() ? LoginStatus::OK_NEED_2FA : LoginStatus::OK_ENFORCE_2FA;
-        } else {
-            return $user->get2Fa()->isEnabled() ? LoginStatus::OK_NEED_2FA : LoginStatus::OK;
-        }
-    }
-
-    /**
-     * @param \CMW\Entity\Users\UserEntity $user
-     * @param bool $cookie
-     * @return void
-     * @throws \ReflectionException
-     */
-    public function loginUser(UserEntity $user, bool $cookie): void
-    {
-        $_SESSION['cmwUser'] = $user;
-
-        if ($cookie) {
-            setcookie('cmw_cookies_user_id', $user->getId(), time() + 60 * 60 * 24 * 30, '/', true, true);
-        }
-
-        UsersModel::getInstance()->updateLoggedTime($user->getId());
-        Emitter::send(LoginEvent::class, $user->getId());
     }
 
     /**
@@ -232,8 +173,7 @@ class UsersController extends AbstractController
             ->view();
     }
 
-    #[Link('/edit/:id', Link::POST, ['id' => '[0-9]+'], '/cmw-admin/users/manage')]
-    #[NoReturn]
+    #[NoReturn] #[Link('/edit/:id', Link::POST, ['id' => '[0-9]+'], '/cmw-admin/users/manage')]
     private function adminUsersEditPost(int $id): void
     {
         self::redirectIfNotHavePermissions('core.dashboard', 'users.manage.edit');
@@ -260,8 +200,7 @@ class UsersController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
-    #[NoReturn]
-    #[Link('/add', Link::POST, [], '/cmw-admin/users')]
+    #[NoReturn] #[Link('/add', Link::POST, [], '/cmw-admin/users')]
     private function adminUsersAddPost(): void
     {
         self::redirectIfNotHavePermissions('core.dashboard', 'users.manage.add');
@@ -290,8 +229,7 @@ class UsersController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link('/manage/state/:id/:state', Link::GET, ['id' => '[0-9]+', 'state' => '[0-9]+'], '/cmw-admin/users')]
-    #[NoReturn]
+    #[NoReturn] #[Link('/manage/state/:id/:state', Link::GET, ['id' => '[0-9]+', 'state' => '[0-9]+'], '/cmw-admin/users')]
     private function adminUserState(int $id, int $state): void
     {
         self::redirectIfNotHavePermissions('core.dashboard', 'users.manage.edit');
@@ -312,8 +250,7 @@ class UsersController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link('/delete/:id', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/users')]
-    #[NoReturn]
+    #[NoReturn] #[Link('/delete/:id', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/users')]
     private function adminUsersDelete(int $id): void
     {
         self::redirectIfNotHavePermissions('core.dashboard', 'users.manage.delete');
@@ -336,8 +273,7 @@ class UsersController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link('/picture/edit/:id', Link::POST, ['id' => '[0-9]+'], '/cmw-admin/users/manage')]
-    #[NoReturn]
+    #[NoReturn] #[Link('/picture/edit/:id', Link::POST, ['id' => '[0-9]+'], '/cmw-admin/users/manage')]
     private function adminUsersEditPicturePost(int $id): void
     {
         self::redirectIfNotHavePermissions('core.dashboard', 'users.manage.edit');
@@ -357,174 +293,6 @@ class UsersController extends AbstractController
 
     // PUBLIC SECTION
 
-    #[Link('/login', Link::POST)]
-    private function loginPost(): void
-    {
-        if (!SecurityController::checkCaptcha()) {
-            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
-                'Captcha invalide.');
-            Redirect::redirectPreviousRoute();
-        }
-
-        [$mail, $password, $previousRoute] = Utils::filterInput('login_email', 'login_password', 'previousRoute');
-
-        if (Utils::containsNullValue($mail, $password)) {
-            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
-                LangManager::translate('core.toaster.db.missing_inputs'));
-            Redirect::redirectPreviousRoute();
-        }
-
-        $encryptedMail = EncryptManager::encrypt(mb_strtolower($mail));
-
-        $cookie = isset($_POST['login_keep_connect']) && $_POST['login_keep_connect'] ? 1 : 0;
-
-        $loginStatus = $this->checkLogin($encryptedMail, $password);
-
-        switch ($loginStatus) {
-            case LoginStatus::NOT_FOUND:
-                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                    LangManager::translate('users.toaster.not_registered_account'));
-                Redirect::redirectPreviousRoute();
-            case LoginStatus::NOT_MATCH:
-                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                    LangManager::translate('users.toaster.mail_pass_matching'));
-                Redirect::redirectPreviousRoute();
-            case LoginStatus::INTERNAL_ERROR:
-                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                    LangManager::translate('core.toaster.internalError'));
-                Redirect::redirectPreviousRoute();
-            case LoginStatus::OK:
-                $user = UsersModel::getInstance()->getUserWithMail($encryptedMail);
-                if (is_null($user)) {
-                    Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                        LangManager::translate('core.toaster.internalError'));
-                    Redirect::redirectPreviousRoute();
-                }
-                $this->loginUser($user, $cookie);
-                if ($previousRoute) {
-                    Redirect::redirectPreviousRoute();
-                } else {
-                    Redirect::redirect('profile');
-                }
-                break;
-            case LoginStatus::OK_NEED_2FA:
-                $user = UsersModel::getInstance()->getUserWithMail($encryptedMail);
-                if (is_null($user)) {
-                    Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                        LangManager::translate('core.toaster.internalError'));
-                    Redirect::redirectPreviousRoute();
-                }
-
-                $_SESSION['cmw_temp_user_id'] = $user->getId();
-                $_SESSION['cmw_temp_use_cookies'] = $cookie;
-
-                $this->showLogin2Fa();
-            case LoginStatus::OK_ENFORCE_2FA:
-                $user = UsersModel::getInstance()->getUserWithMail($encryptedMail);
-                if (is_null($user)) {
-                    Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                        LangManager::translate('core.toaster.internalError'));
-                    Redirect::redirectPreviousRoute();
-                }
-
-                $_SESSION['cmw_temp_user_id'] = $user->getId();
-                $_SESSION['cmw_temp_use_cookies'] = $cookie;
-
-                $this->enforceLogin2Fa($user);
-        }
-    }
-
-    /**
-     * @throws \CMW\Manager\Router\RouterException
-     */
-    #[Link('/login', Link::GET)]
-    private function loginGet(): void
-    {
-        if (self::isUserLogged()) {
-            Redirect::redirectToHome();
-        }
-
-        $view = new View('Users', 'login');
-        $view->view();
-    }
-
-    private function showLogin2Fa(): void
-    {
-        $filePath = EnvManager::getInstance()->getValue('DIR')
-            . 'Public/Themes/'
-            . ThemeManager::getInstance()->getCurrentTheme()->name()
-            . '/Views/Users/2fa.view.php';
-
-        if (!file_exists($filePath)) {
-            ErrorManager::showCustomErrorPage("File not found", "The file $filePath doesn't exist.");
-        }
-
-        $view = new View('Users', '2fa');
-        $view->view();
-    }
-
-    private function enforceLogin2Fa(UserEntity $user): void
-    {
-        $view = new View('Users', 'enforce2fa');
-        $view->addVariableList(['user' => $user]);
-        $view->view();
-    }
-
-    #[Link('/login/validate/tfa', Link::POST)]
-    private function loginCheck2Fa(): void
-    {
-        if (!isset($_POST['code'])) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                'Merci de mettre votre code.');
-            $this->showLogin2Fa();
-            return;
-        }
-
-        $code = FilterManager::filterInputIntPost('code', 6);
-
-        if (strlen($code) !== 6) {
-            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
-                'Code invalide.');
-            $this->showLogin2Fa();
-            return;
-        }
-
-        if (!isset($_SESSION['cmw_temp_user_id'])) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                LangManager::translate('core.toaster.internalError'));
-            $this->showLogin2Fa();
-            return;
-        }
-
-        $user = UsersModel::getInstance()->getUserById($_SESSION['cmw_temp_user_id']);
-
-        if (is_null($user)) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                LangManager::translate('core.toaster.internalError'));
-            $this->showLogin2Fa();
-            return;
-        }
-
-        $tfa = new TwoFaManager();
-        if (!$tfa->isSecretValid($user->get2Fa()->get2FaSecretDecoded(), $code)) {
-            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
-                'Code invalide.');
-            $this->showLogin2Fa();
-            return;
-        }
-
-        $useCookies = isset($_SESSION['cmw_temp_use_cookies']) ? $_SESSION['cmw_temp_use_cookies'] : 0;
-
-        $this->loginUser($user, $useCookies);
-
-        // Clean temp sessions
-        unset($_SESSION['cmw_temp_user_id'],
-            $_SESSION['cmw_temp_use_cookies']);
-
-        // Redirect
-        Redirect::redirect('profile');
-    }
-
     /**
      * @throws \CMW\Manager\Router\RouterException
      */
@@ -539,8 +307,7 @@ class UsersController extends AbstractController
         $view->view();
     }
 
-    #[NoReturn]
-    #[Link('/login/forgot', Link::POST)]
+    #[NoReturn] #[Link('/login/forgot', Link::POST)]
     private function forgotPasswordPost(): void
     {
         if (SecurityController::checkCaptcha()) {
@@ -572,193 +339,7 @@ class UsersController extends AbstractController
         }
     }
 
-    /**
-     * @throws \CMW\Manager\Router\RouterException
-     */
-    #[Link('/register', Link::GET)]
-    private function register(): void
-    {
-        if (self::isUserLogged()) {
-            Redirect::redirectToHome();
-        }
-
-        $view = new View('Users', 'register');
-        $view->view();
-    }
-
-    #[NoReturn]
-    #[Link('/register', Link::POST)]
-    private function registerPost(): void
-    {
-        if (SecurityController::checkCaptcha()) {
-            $mail = FilterManager::filterInputStringPost('register_email');
-            $encryptedMail = EncryptManager::encrypt(mb_strtolower($mail));
-            if (UsersModel::getInstance()->checkPseudo(FilterManager::filterInputStringPost('register_pseudo')) > 0) {
-                Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
-                    LangManager::translate('users.toaster.used_pseudo'));
-                Redirect::redirect('register');
-            } else if (!FilterManager::isEmail($mail) || UsersModel::getInstance()->checkEmail($encryptedMail) > 0) {
-                Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
-                    LangManager::translate('users.toaster.used_mail'));
-                Redirect::redirect('register');
-            } else if (UsersSettingsModel::getInstance()->isPseudoBlacklisted(filter_input(INPUT_POST, 'register_pseudo'))) {
-                Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
-                    LangManager::translate('users.toaster.blacklisted_pseudo'));
-                Redirect::redirect('register');
-            } else {
-                [$pseudo, $password, $passwordVerify] = Utils::filterInput('register_pseudo', 'register_password', 'register_password_verify');
-
-                if (!is_null($password) && $password !== $passwordVerify) {
-                    Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
-                        LangManager::translate('users.toaster.not_same_pass'));
-                    Redirect::redirect('register');
-                }
-
-                $defaultRoles = RolesModel::getInstance()->getDefaultRoles();
-                $defaultRolesId = [];
-
-                foreach ($defaultRoles as $role) {
-                    $defaultRolesId[] = $role->getId();
-                }
-
-                $userEntity = UsersModel::getInstance()->create($encryptedMail, $pseudo, '', '', $defaultRolesId);
-
-                $userId = $userEntity?->getId();
-
-                Emitter::send(RegisterEvent::class, $userId);
-
-                UsersModel::getInstance()->updatePass($userEntity?->getId(), password_hash($password, PASSWORD_BCRYPT));
-
-                /* Connection */
-                $loginCheck = $this->checkLogin($encryptedMail, $password);
-
-                if ($loginCheck->name === LoginStatus::OK->name && !is_null($userEntity)) {
-                    $this->loginUser($userEntity, 1);
-
-                    Flash::send(Alert::SUCCESS, LangManager::translate('users.toaster.success'),
-                        LangManager::translate('users.toaster.welcome'));
-                    Redirect::redirect('profile');
-                } else {
-                    Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                        LangManager::translate('core.toaster.internalError'));
-                    Redirect::redirectPreviousRoute();
-                }
-            }
-        }
-    }
-
-    /**
-     * @throws \CMW\Manager\Router\RouterException
-     */
-    #[Link('/profile', Link::GET)]
-    private function publicProfile(): void
-    {
-        if (!self::isUserLogged() && !UserSettingsEntity::getInstance()->isProfilePageEnabled()) {
-            Redirect::redirect('login');
-        }
-
-        if (!UserSettingsEntity::getInstance()->isProfilePageEnabled()) {
-            Redirect::redirectToHome();
-        }
-
-        if (!self::isUserLogged()) {
-            Redirect::redirect('login');
-        }
-
-        $user = UsersModel::getCurrentUser();
-
-        if (UsersModel::getCurrentUser()?->getId() !== $user->getId()) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), "Vous ne pouvez pas éditer le profile de quelqu'un d'autre !");
-            Redirect::redirectToHome();
-        }
-
-        if (UserSettingsEntity::getInstance()->getProfilePageStatus() === 1) {
-            Redirect::redirect('profile/', ['pseudo' => $user?->getPseudo()]);
-        }
-
-        $view = new View('Users', 'profile');
-        $view->addVariableList(['user' => $user]);
-        $view->view();
-    }
-
-    #[Link('/profile', Link::POST)]
-    private function publicProfilePost(): void
-    {
-        if (!UserSettingsEntity::getInstance()->isProfilePageEnabled()) {
-            Redirect::redirectToHome();
-        }
-
-        if (!self::isUserLogged()) {
-            Redirect::redirectToHome();
-        }
-
-        $image = $_FILES['pictureProfile'];
-
-        try {
-            // Upload image on the server
-            $imageName = ImagesManager::upload($image, 'Users');
-        } catch (ImagesException $e) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                LangManager::translate('core.errors.upload.image') . " => $e");
-            Redirect::redirectPreviousRoute();
-        }
-
-        UserPictureModel::getInstance()->uploadImage(UsersModel::getCurrentUser()?->getId(), $imageName);
-
-        Redirect::redirect('profile');
-    }
-
-    #[Link('/profile/:pseudo', Link::GET, ['pseudo' => '.*?'])]
-    private function publicProfileWithPseudo(string $pseudo): void
-    {
-        if (!self::isUserLogged() && !UserSettingsEntity::getInstance()->isProfilePageEnabled()) {
-            Redirect::redirect('login');
-        }
-
-        if (!UserSettingsEntity::getInstance()->isProfilePageEnabled()) {
-            Redirect::redirectToHome();
-        }
-
-        if (UserSettingsEntity::getInstance()->getProfilePageStatus() === 0) {
-            Redirect::redirect('profile');
-        }
-
-        $user = UsersModel::getInstance()->getUserWithPseudo($pseudo);
-
-        if (UsersModel::getCurrentUser()?->getId() !== $user->getId()) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), "Vous ne pouvez pas éditer le profile de quelqu'un d'autre !");
-            Redirect::redirectToHome();
-        }
-
-        if (is_null($user)) {
-            Redirect::errorPage(404);
-        }
-
-        $view = new View('Users', 'profile');
-        $view->addVariableList(['user' => $user]);
-        $view->view();
-    }
-
-    #[NoReturn]
-    #[Link('/profile/delete/:id', Link::GET, ['id' => '[0-9]+'])]
-    private function publicProfileDelete(int $id): void
-    {
-        // Check if this is the current user account
-        if (UsersModel::getCurrentUser()?->getId() !== $id) {
-            // TODO ERROR MANAGEMENT (MESSAGE TO TELL THE USER CAN'T DELETE THIS ACCOUNT)
-            Redirect::errorPage(403);
-        }
-
-        Emitter::send(DeleteUserAccountEvent::class, $id);
-
-        UsersModel::logOut();
-        UsersModel::getInstance()->delete($id);
-
-        Redirect::redirectToHome();
-    }
-
-    #[NoReturn]
-    #[Link('/logout', Link::GET)]
+    #[NoReturn] #[Link('/logout', Link::GET)]
     private function logOut(): void
     {
         $userId = UsersModel::getCurrentUser()?->getId();
@@ -766,128 +347,4 @@ class UsersController extends AbstractController
         UsersModel::logOut();
         Redirect::redirectToHome();
     }
-
-    #[NoReturn]
-    #[Link('/profile/update', Link::POST)]
-    private function publicProfileUpdate(): void
-    {
-        if (!self::isUserLogged()) {
-            Redirect::redirectToHome();
-        }
-
-        $user = UsersModel::getCurrentUser();
-
-        [$mail, $pseudo, $firstname, $lastname] = Utils::filterInput('email', 'pseudo', 'name', 'lastname');
-
-        if (UsersSettingsModel::getInstance()->isPseudoBlacklisted($pseudo)) {
-            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
-                LangManager::translate('users.toaster.blacklisted_pseudo'));
-            Redirect::redirectPreviousRoute();
-        }
-
-        $roles = UsersModel::getRoles($user?->getId());
-
-        $rolesId = [];
-
-        foreach ($roles as $role) {
-            $rolesId[] = $role->getId();
-        }
-
-        $encryptedMail = EncryptManager::encrypt($mail);
-
-        if (UsersModel::getInstance()->update($user?->getId(), $encryptedMail, $pseudo, $firstname, $lastname, $rolesId)) {
-            Flash::send(Alert::SUCCESS, LangManager::translate('users.toaster.success'), LangManager::translate('users.toaster.user_edited_self'));
-        } else {
-            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'), LangManager::translate('users.toaster.user_edited_self_nop'));
-        }
-
-        [$pass, $passVerif] = Utils::filterInput('password', 'passwordVerif');
-
-        if (!is_null($pass)) {
-            if ($pass === $passVerif) {
-                UsersModel::getInstance()->updatePass($user?->getId(), password_hash($pass, PASSWORD_BCRYPT));
-            } else {
-                // Todo Try to edit that
-                Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'), 'Je sais pas ?');
-            }
-        }
-
-        Redirect::redirectPreviousRoute();
-    }
-
-    #[NoReturn]
-    #[Link('/profile/2fa/toggle', Link::POST)]
-    private function publicProfile2FaToggle(): void
-    {
-        [$enforceMail] = Utils::filterInput('enforce_mail');
-
-        if (!empty($enforceMail)) {
-            $encryptedMail = EncryptManager::encrypt(mb_strtolower($enforceMail));
-            $user = UsersModel::getInstance()->getUserWithMail($encryptedMail);
-            $enforced = true;
-        } else {
-            $user = UsersModel::getCurrentUser();
-            $enforced = false;
-        }
-
-        if (is_null($user)) {
-            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
-                LangManager::translate('core.toaster.internalError'));
-            Redirect::redirectToHome();
-        }
-
-        if (!isset($_POST['secret'])) {
-            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
-                "Merci de remplir le code d'authentification");
-            return;
-        }
-
-        $secret = FilterManager::filterInputIntPost('secret', 6);
-
-        if (strlen($secret) !== 6) {
-            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
-                'Code invalide.');
-            Redirect::redirectPreviousRoute();
-        }
-
-        $tfa = new TwoFaManager();
-        if (!$tfa->isSecretValid($user->get2Fa()->get2FaSecretDecoded(), $secret)) {
-            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
-                'Code invalide.');
-            Redirect::redirectPreviousRoute();
-        }
-
-        $status = $user->get2Fa()->isEnabled() ? 0 : 1;
-
-        if ($user->get2Fa()->isEnforced() && $user->get2Fa()->isEnabled()) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), 'Vous ne pouvez pas désactiver le double facteur sur ce compte !');
-        } else {
-            if (Users2FaModel::getInstance()->toggle2Fa($user->getId(), $status)) {
-                UsersModel::updateStoredUser($user->getId());
-                if ($enforced) {
-                    Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-                        '2fa activée, veuillez vous reconnecter.');
-                } else {
-                    Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-                        $status ? '2fa activée' : '2fa désactivée');
-                }
-            } else {
-                Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-                    LangManager::translate('core.toaster.internalError'));
-            }
-        }
-
-        Redirect::redirectPreviousRoute();
-    }
-}
-
-// TODO Use different file (need to change autoloader)
-enum LoginStatus
-{
-    case NOT_FOUND;
-    case NOT_MATCH;
-    case INTERNAL_ERROR;
-    case OK;
-    case OK_NEED_2FA;
-    case OK_ENFORCE_2FA;
 }

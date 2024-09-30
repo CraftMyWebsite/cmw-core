@@ -314,6 +314,7 @@ return [
         'captcha' => [
             'title' => 'Gestion du captcha',
             'type' => 'Type de captcha',
+            'invalid' => 'Captcha invalide'
         ],
         'healthReport' => [
             'title' => 'Health Report',
