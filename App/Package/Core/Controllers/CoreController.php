@@ -40,6 +40,9 @@ class CoreController extends AbstractController
         return (empty($themeName = self::$themeName)) ? '' : "./Public/Themes/$themeName/";
     }
 
+    /**
+     * @deprecated @see Date::formatDate($value);
+     */
     public static function formatDate(string $date): string
     {
         return date(CoreModel::getInstance()->fetchOption('dateFormat'), strtotime($date));

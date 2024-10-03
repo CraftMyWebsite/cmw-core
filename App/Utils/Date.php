@@ -3,6 +3,7 @@
 namespace CMW\Utils;
 
 use CMW\Manager\Lang\LangManager;
+use CMW\Model\Core\CoreModel;
 use function array_reverse;
 use function date;
 use function idate;
@@ -10,6 +11,16 @@ use function strtotime;
 
 class Date
 {
+    /**
+     * @param string $date
+     * @return string
+     * @desc Convert DateTime into formatted Date.
+     */
+    public static function formatDate(string $date): string
+    {
+        return date(CoreModel::getInstance()->fetchOption('dateFormat'), strtotime($date));
+    }
+
     /**
      * @param int $seconds
      * @return string
