@@ -2,7 +2,7 @@
 
 namespace CMW\Entity\Users;
 
-use CMW\Controller\Core\CoreController;
+use CMW\Utils\Date;
 
 class BlacklistedPseudoEntity
 {
@@ -51,6 +51,6 @@ class BlacklistedPseudoEntity
      */
     public function getDateBlacklistedFormatted(): string
     {
-        return CoreController::formatDate($this->dateBlacklisted);
+        return Date::formatDate($this->dateBlacklisted);
     }
 }

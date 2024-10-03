@@ -2,7 +2,7 @@
 
 namespace CMW\Entity\Core;
 
-use CMW\Controller\Core\CoreController;
+use CMW\Utils\Date;
 
 class MaintenanceEntity
 {
@@ -82,7 +82,7 @@ class MaintenanceEntity
      */
     public function getTargetDateFormatted(): ?string
     {
-        return CoreController::formatDate($this->targetDate);
+        return Date::formatDate($this->targetDate);
     }
 
     /**
@@ -98,7 +98,7 @@ class MaintenanceEntity
      */
     public function getLastUpdateDateFormatted(): string
     {
-        return CoreController::formatDate($this->lastUpdateDate);
+        return Date::formatDate($this->lastUpdateDate);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace CMW\Manager\Notification;
 
-use CMW\Controller\Core\CoreController;
+use CMW\Utils\Date;
 
 class NotificationEntity
 {
@@ -76,11 +76,11 @@ class NotificationEntity
 
     public function getCreatedAt(): string
     {
-        return CoreController::formatDate($this->createdAt);
+        return Date::formatDate($this->createdAt);
     }
 
     public function getUpdatedAt(): string
     {
-        return CoreController::formatDate($this->UpdatedAt);
+        return Date::formatDate($this->UpdatedAt);
     }
 }
