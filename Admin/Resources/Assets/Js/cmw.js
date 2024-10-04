@@ -351,7 +351,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const elements = document.querySelectorAll('.choices');
     elements.forEach(element => {
         new Choices(element, {
-            removeItemButton: false,
+            removeItemButton: true,
             searchEnabled: true,
             placeholderValue: 'Choisissez en plusieurs !',
             loadingText: 'Chargement...',
