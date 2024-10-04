@@ -336,6 +336,10 @@ return [
         'description' => 'Manage your website maintenance',
         'main_label' => 'Maintenance mode',
         'settings' => [
+            'info' => 'Informations',
+            'noEnd' => 'Specify an end date',
+            'activated' => 'Enabled',
+            'deactivated' => 'Disabled',
             'title' => 'Settings',
             'targetDateTitle' => 'Target date',
             'useMyCode' => 'Use my code',

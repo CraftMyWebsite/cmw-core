@@ -33,6 +33,8 @@ class MaintenanceController extends AbstractController
 
         View::createAdminView('Core', 'Maintenance/maintenance')
             ->addVariableList(['maintenance' => $maintenance])
+            ->addScriptBefore('Admin/Resources/Vendors/Tinymce/tinymce.min.js',
+                'Admin/Resources/Vendors/Tinymce/Config/full_absolute_links.js')
             ->view();
     }
 
@@ -48,11 +50,16 @@ class MaintenanceController extends AbstractController
         [$title, $description, $targetDate, $type, $overrideThemeCode] = Utils::filterInput('title', 'description', 'target-date', 'type', 'overrideThemeCode');
 
         $isEnable = isset($_POST['isEnable']) ? 1 : 0;
+        $noEnd = isset($_POST['noEnd']) ? 1 : 0;
         $isOverrideTheme = isset($_POST['isOverrideTheme']) ? 1 : 0;
 
-        $targetDate = date('Y-m-d H:i:s', strtotime($targetDate));
+        if ($noEnd) {
+            $targetDate = date('Y-m-d H:i:s', strtotime($targetDate));
+        } else {
+            $targetDate = null;
+        }
 
-        $updateMaintenance = MaintenanceModel::getInstance()->updateMaintenance($isEnable, $title, $description,
+        $updateMaintenance = MaintenanceModel::getInstance()->updateMaintenance($isEnable, $noEnd, $title, $description,
             $type, $targetDate, $isOverrideTheme, $overrideThemeCode);
 
         if ($isEnable === 1 && $updateMaintenance) {
@@ -89,13 +96,16 @@ class MaintenanceController extends AbstractController
         }
 
         // Check date
-        if (time() >= strtotime($maintenance->getTargetDate())) {
-            MaintenanceModel::getInstance()->updateMaintenance(0,
-                $maintenance->getTitle(), $maintenance->getDescription(),
-                $maintenance->getType(), $maintenance->getTargetDate(), $maintenance->isOverrideTheme(),
-                $maintenance->getOverrideThemeCode());
-            $this->redirectMaintenance();
+        if ($maintenance->noEnd()) {
+            if (time() >= strtotime($maintenance->getTargetDate())) {
+                MaintenanceModel::getInstance()->updateMaintenance(0,0,
+                    $maintenance->getTitle(), $maintenance->getDescription(),
+                    $maintenance->getType(), $maintenance->getTargetDate(), $maintenance->isOverrideTheme(),
+                    $maintenance->getOverrideThemeCode());
+                $this->redirectMaintenance();
+            }
         }
+
 
         $userCanByPass = UsersController::isAdminLogged() && UsersController::hasPermission('core.settings.maintenance.bypass');
 

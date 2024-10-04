@@ -28,6 +28,7 @@ class MaintenanceModel extends AbstractModel
 
         return new MaintenanceEntity(
             $res['maintenance_is_enable'],
+            $res['maintenance_no_end'],
             $res['maintenance_title'],
             $res['maintenance_description'],
             $res['maintenance_type'],
@@ -40,6 +41,7 @@ class MaintenanceModel extends AbstractModel
 
     /**
      * @param int $isEnable
+     * @param int $noEnd
      * @param string $title
      * @param string $description
      * @param int $type
@@ -48,10 +50,11 @@ class MaintenanceModel extends AbstractModel
      * @param string $overrideThemeCode
      * @return bool
      */
-    public function updateMaintenance(int $isEnable, string $title, string $description, int $type, string $targetDate, int $isOverrideTheme, string $overrideThemeCode): bool
+    public function updateMaintenance(int $isEnable, int $noEnd, string $title, string $description, int $type, ?string $targetDate, int $isOverrideTheme, string $overrideThemeCode): bool
     {
         $var = [
             'isEnable' => $isEnable,
+            'noEnd' => $noEnd,
             'title' => $title,
             'description' => $description,
             'type' => $type,
@@ -60,7 +63,7 @@ class MaintenanceModel extends AbstractModel
             'overrideThemeCode' => $overrideThemeCode
         ];
 
-        $sql = 'UPDATE cmw_maintenance SET maintenance_is_enable = :isEnable, maintenance_title = :title, 
+        $sql = 'UPDATE cmw_maintenance SET maintenance_is_enable = :isEnable, maintenance_no_end = :noEnd, maintenance_title = :title, 
                            maintenance_description = :description, maintenance_type = :type, 
                            maintenance_target_date = :targetDate, maintenance_is_override_theme = :isOverrideTheme,
                            maintenance_override_theme_code = :overrideThemeCode';

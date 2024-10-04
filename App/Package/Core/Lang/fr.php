@@ -338,8 +338,12 @@ return [
         'description' => 'Gérez les maintenances de votre site',
         'main_label' => 'Mode maintenance',
         'settings' => [
+            'info' => 'Informations',
+            'noEnd' => 'Préciser une date de fin',
+            'activated' => 'Activé',
+            'deactivated' => 'Désactivé',
             'title' => 'Réglages',
-            'targetDateTitle' => 'Fin',
+            'targetDateTitle' => 'Se termine le',
             'useMyCode' => 'Utiliser mon code',
             'loginRegister' => [
                 'title' => 'Connexions / Inscriptions',

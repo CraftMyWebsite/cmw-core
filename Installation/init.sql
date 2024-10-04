@@ -232,6 +232,7 @@ CREATE INDEX idx_visits_date ON cmw_visits (visits_date);
 CREATE TABLE IF NOT EXISTS `cmw_maintenance`
 (
     `maintenance_id`                  INT(11)                               NOT NULL AUTO_INCREMENT,
+    `maintenance_no_end`              TINYINT(1)                            NOT NULL DEFAULT '0',
     `maintenance_is_enable`           TINYINT(1)                            NOT NULL DEFAULT '0',
     `maintenance_is_override_theme`   TINYINT(1)                            NOT NULL DEFAULT '0',
     `maintenance_override_theme_code` LONGTEXT                              NULL,
