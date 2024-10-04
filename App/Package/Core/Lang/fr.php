@@ -93,6 +93,7 @@ return [
         "favicon" => "Modifiez le favicon",
         "favicon_tips" => 'CraftMyWebsite accepte uniquement les images <a href="https://www.icoconverter.com" target="_blank">.ico</a> pour des soucis de performances.',
         "alert_img" => "Faites CTRL + F5 pour afficher votre nouvelle icône",
+        "alert_img_no_ico" => "Votre image doit être au format .ico",
         "dateFormat" => "Format des dates",
         "dateFormatTooltip" => "Vous pouvez personnaliser la façon dont vous affichez les dates",
         "custom" => "-- Personnalisez-moi --",

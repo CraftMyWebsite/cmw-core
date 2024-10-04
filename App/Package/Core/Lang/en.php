@@ -93,6 +93,7 @@ return [
         'favicon' => 'Edit your favicon',
         'favicon_tips' => 'CraftMyWebsite allow only <a href="https://www.icoconverter.com" target="_blank">.ico</a> for better performances.',
         'alert_img' => 'Do CTRL + F5 display for your new icon',
+        "alert_img_no_ico" => "Your image must be in .ico format",
         'dateFormat' => 'Date formatting',
         'dateFormatTooltip' => 'You can customise the way you display the dates',
         'custom' => '-- Customize-moi --',

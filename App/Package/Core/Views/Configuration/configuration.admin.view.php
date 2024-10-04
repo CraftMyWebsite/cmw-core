@@ -90,7 +90,7 @@ $description = LangManager::translate('core.config.desc');
                     <img width="16px"
                          src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Public/Uploads/Favicon/favicon.ico">
                 </div>
-                <div class="drop-img-area" data-input-name="favicon" data-img-accept="image/*"></div>
+                <div class="drop-img-area" data-input-name="favicon" data-img-accept="image/x-icon"></div>
                 <p><small>*<?= LangManager::translate('core.config.favicon_tips') ?></small></p>
             </div>
 

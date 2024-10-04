@@ -128,7 +128,8 @@ class CoreController extends AbstractController
                 // Show error
                 if ($imgStatus !== 'favicon.ico') {
                     Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                        LangManager::translate($imgStatus));
+                        LangManager::translate('core.config.alert_img_no_ico'));
+                    ImagesManager::deleteImage($imgStatus, 'Favicon');
                 } else {
                     Flash::send(Alert::SUCCESS, 'Icon', LangManager::translate('core.config.alert_img'));
                 }
