@@ -451,4 +451,32 @@ return [
             'market' => 'Install from the market',
         ],
     ],
+    'menu' => [
+        'setting' => [
+            'main' => 'Settings',
+            'settings' => 'Site Settings',
+            'maintenance' => 'Maintenance mode',
+            'mail' => 'SMTP and mails',
+            'cg' => 'General conditions',
+            'security' => 'Security',
+        ],
+        'update' => 'CMW Updates',
+        'themes' => [
+            'main' => 'Themes',
+            'edit' => 'Edit ',
+            'installed' => 'Installed Themes',
+            'market' => 'Browse the Market',
+        ],
+        'package' => [
+            'main' => 'Packages',
+            'installed' => 'Installed packages',
+            'market' => 'Browse the Market',
+        ],
+        'user' => [
+            'main' => 'Users',
+            'settings' => 'Settings',
+            'manage' => 'Manage',
+            'roles' => 'Roles',
+        ],
+    ],
 ];

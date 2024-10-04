@@ -2,6 +2,7 @@
 
 namespace CMW\Package\Users;
 
+use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\IPackageConfig;
 use CMW\Manager\Package\PackageMenuType;
 use CMW\Manager\Package\PackageSubMenuType;
@@ -38,22 +39,22 @@ class Package implements IPackageConfig
         return [
             new PackageMenuType(
                 icon: 'fas fa-user',
-                title: 'Utilisateurs',
+                title: LangManager::translate('core.menu.user.main'),
                 url: null,
                 permission: null,
                 subMenus: [
                     new PackageSubMenuType(
-                        title: 'Paramètres',
+                        title: LangManager::translate('core.menu.user.settings'),
                         permission: 'user.settings',
                         url: 'users/settings',
                     ),
                     new PackageSubMenuType(
-                        title: 'Gestion',
+                        title: LangManager::translate('core.menu.user.manage'),
                         permission: 'users.manage',
                         url: 'users/manage',
                     ),
                     new PackageSubMenuType(
-                        title: 'Rôles',
+                        title: LangManager::translate('core.menu.user.roles'),
                         permission: 'users.roles',
                         url: 'roles/manage',
                     ),

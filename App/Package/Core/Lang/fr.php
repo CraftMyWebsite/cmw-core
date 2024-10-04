@@ -454,4 +454,32 @@ return [
             'market' => 'Installer depuis le market',
         ],
     ],
+    'menu' => [
+        'setting' => [
+            'main' => 'Paramètres',
+            'settings' => 'Réglages du site',
+            'maintenance' => 'Mode maintenance',
+            'mail' => 'SMTP et mails',
+            'cg' => 'Conditions générales',
+            'security' => 'Sécurité',
+        ],
+        'update' => 'Mises à jour',
+        'themes' => [
+            'main' => 'Thèmes',
+            'edit' => 'Modifier ',
+            'installed' => 'Thèmes installés',
+            'market' => 'Parcourir le Market',
+        ],
+        'package' => [
+            'main' => 'Packages',
+            'installed' => 'Packages installés',
+            'market' => 'Parcourir le Market',
+        ],
+        'user' => [
+            'main' => 'Utilisateurs',
+            'settings' => 'Paramètres',
+            'manage' => 'Gestion',
+            'roles' => 'Rôles',
+        ],
+    ],
 ];
