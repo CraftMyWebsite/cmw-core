@@ -30,11 +30,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     'emoticons charmap |' +
                     'preview fullscreen help',
                 menubar: false,
-                min_height: parseInt(minHeight, 10),
                 images_file_types: 'jpg,svg,webp',
                 file_picker_types: 'file image media',
                 statusbar: false,
                 relative_urls: false,
+                setup: function(editor) {
+                    editor.on('init', function() {
+                        const currentTextarea = editor.getElement();
+                        const minHeight = currentTextarea.getAttribute('data-tiny-height') || 350;
+                        editor.editorContainer.style.minHeight = `${minHeight}px`;
+                    });
+                }
             });
         });
     }
