@@ -2,9 +2,8 @@
 
 namespace CMW\Entity\Users;
 
-use CMW\Controller\Core\CoreController;
 use CMW\Model\Users\UsersModel;
-use function is_null;
+use CMW\Utils\Date;
 
 class UserEntity
 {
@@ -131,7 +130,7 @@ class UserEntity
      */
     public function getLastConnection(): string
     {
-        return CoreController::formatDate($this->userLastConnection);
+        return Date::formatDate($this->userLastConnection);
     }
 
     /**
@@ -156,7 +155,7 @@ class UserEntity
      */
     public function getCreated(): string
     {
-        return CoreController::formatDate($this->userCreated);
+        return Date::formatDate($this->userCreated);
     }
 
     /**
@@ -165,7 +164,7 @@ class UserEntity
      */
     public function getUpdated(): string
     {
-        return CoreController::formatDate($this->userUpdated);
+        return Date::formatDate($this->userUpdated);
     }
 
     /**

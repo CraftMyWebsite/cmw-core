@@ -2,7 +2,7 @@
 
 namespace CMW\Entity\Core;
 
-use CMW\Controller\Core\CoreController;
+use CMW\Utils\Date;
 use CMW\Entity\Users\UserEntity;
 
 class ConditionEntity
@@ -66,7 +66,7 @@ class ConditionEntity
      */
     public function getUpdateFormatted(): string
     {
-        return CoreController::formatDate($this->update);
+        return Date::formatDate($this->update);
     }
 
     /**

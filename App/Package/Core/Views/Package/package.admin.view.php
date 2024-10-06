@@ -1,6 +1,6 @@
 <?php
 
-use CMW\Controller\Core\CoreController;
+use CMW\Utils\Date;
 use CMW\Controller\Core\PackageController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
@@ -155,7 +155,7 @@ $description = LangManager::translate('core.Package.desc');
                             class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i
                             class="fa-regular fa-star"></i> (0)
                     </p>
-                    <p><?= CoreController::formatDate($packages['date_release']) ?></p>
+                    <p><?= Date::formatDate($packages['date_release']) ?></p>
                 </div>
                 <div class="flex justify-between">
                     <p>Téléchargé <b><?= $packages['downloads'] ?></b> fois</p>

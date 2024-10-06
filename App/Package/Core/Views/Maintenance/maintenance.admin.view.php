@@ -12,30 +12,23 @@ $description = LangManager::translate('core.maintenance.description');
 ?>
 
 <div class="page-title">
-    <h3><i class="fa-solid fa-helmet-safety"></i> <?= LangManager::translate('core.maintenance.title') ?></h3>
+    <h3><i class="fa-solid fa-helmet-safety"></i> <?= LangManager::translate('core.maintenance.title') ?> <?= $maintenance->isEnable() ? ' - <i class="fa-solid fa-check text-success"></i> '. LangManager::translate('core.maintenance.settings.activated') : ' - <i class="fa-solid fa-xmark text-danger"></i> '. LangManager::translate('core.maintenance.settings.deactivated') ?></h3>
     <button form="Configuration" class="btn-primary"><?= LangManager::translate('core.btn.save') ?></button>
 </div>
 
 <form id="Configuration" action="" method="post" enctype="multipart/form-data">
     <?php (new SecurityManager())->insertHiddenToken() ?>
     <label class="toggle">
-        <p class="toggle-label"><?= LangManager::translate('core.maintenance.main_label') ?></p>
         <input type="checkbox" id="isEnable" name="isEnable" <?= $maintenance->isEnable() ? 'checked' : '' ?>
                class="toggle-input">
         <div class="toggle-slider"></div>
+        <h5 class="toggle-label"><?= LangManager::translate('core.maintenance.main_label') ?></h5>
     </label>
 
-    <section id="mainCard" style="display: <?= $maintenance->isEnable() ? 'block' : 'none' ?>;">
-        <div class="card">
-            <div class="grid-4">
-                <div>
-                    <label for="target-date"><?= LangManager::translate('core.maintenance.settings.targetDateTitle') ?> :</label>
-                    <div class="input-group">
-                        <i class="fa-regular fa-clock"></i>
-                        <input type="datetime-local" id="target-date" name="target-date"
-                               value="<?= $maintenance->getTargetDate() ?>" required>
-                    </div>
-                </div>
+    <section class="mt-4" id="mainCard" style="display: <?= $maintenance->isEnable() ? 'block' : 'none' ?>;">
+        <div class="grid-2">
+            <div class="card">
+                <h6><?= LangManager::translate('core.maintenance.settings.info') ?></h6>
                 <div>
                     <label for="title"><?= LangManager::translate('core.maintenance.settings.maintenanceTitle.label') ?> :</label>
                     <div class="input-group">
@@ -46,52 +39,61 @@ $description = LangManager::translate('core.maintenance.description');
                                required>
                     </div>
                 </div>
-                <div>
-                    <label for="description"><?= LangManager::translate('core.maintenance.settings.maintenanceDescription.label') ?> :</label>
-                    <div class="input-group">
-                        <i class="fa-solid fa-circle-info"></i>
-                        <input type="text" id="description" name="description"
-                               value="<?= $maintenance->getDescription() ?>" maxlength="255"
-                               placeholder="<?= LangManager::translate('core.maintenance.settings.maintenanceDescription.placeholder') ?>"
-                               required>
+            </div>
+            <div class="card">
+                <h6><?= LangManager::translate('core.maintenance.settings.title') ?></h6>
+                <label class="toggle">
+                    <p class="toggle-label"><?= LangManager::translate('core.maintenance.settings.noEnd') ?></p>
+                    <input type="checkbox" id="noEnd" name="noEnd" <?= $maintenance->noEnd() ? 'checked' : '' ?>
+                           class="toggle-input">
+                    <div class="toggle-slider"></div>
+                </label>
+                    <div id="Date">
+                        <label for="target-date"><?= LangManager::translate('core.maintenance.settings.targetDateTitle') ?> :</label>
+                        <div class="input-group">
+                            <i class="fa-regular fa-clock"></i>
+                            <input type="datetime-local" id="target-date" name="target-date"
+                                   value="<?= $maintenance->getTargetDate() ?>" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="type"><?= LangManager::translate('core.maintenance.settings.loginRegister.title') ?> :</label>
+                        <select id="type" name="type" required>
+                            <option value="0" <?= $maintenance->getType() === 0 ? 'selected' : '' ?>>
+                                <?= LangManager::translate('core.maintenance.settings.loginRegister.type.0') ?>
+                            </option>
+                            <option value="1" <?= $maintenance->getType() === 1 ? 'selected' : '' ?>>
+                                <?= LangManager::translate('core.maintenance.settings.loginRegister.type.1') ?>
+                            </option>
+                            <option value="2" <?= $maintenance->getType() === 2 ? 'selected' : '' ?>>
+                                <?= LangManager::translate('core.maintenance.settings.loginRegister.type.2') ?>
+                            </option>
+                        </select>
+                    </div>
+            </div>
+        </div>
+
+            <div class="card mt-4">
+                <label class="toggle">
+                    <p class="toggle-label">Ajouter une description</p>
+                    <input type="checkbox" id="isOverrideTheme" name="isOverrideTheme"
+                           value="1" <?= $maintenance->isOverrideTheme() ? 'checked' : '' ?>
+                           class="toggle-input">
+                    <div class="toggle-slider"></div>
+                    <p class="toggle-label"><?= LangManager::translate('core.maintenance.settings.useMyCode') ?></p>
+                </label>
+                <div id="desc">
+                    <textarea name="description" id="description" class="tinymce"><?= $maintenance->getDescription() ?></textarea>
+                </div>
+                <div style="height: 40vh; display: <?= $maintenance->isOverrideTheme() ? 'block' : 'none' ?>;" id="editor">
+                    <div>
+                        <?= htmlspecialchars($maintenance->getOverrideThemeCode() ?? ' ') ?>
                     </div>
                 </div>
-                <div>
-                    <label for="type"><?= LangManager::translate('core.maintenance.settings.loginRegister.title') ?> :</label>
-                    <select id="type" name="type" required>
-                        <option value="0" <?= $maintenance->getType() === 0 ? 'selected' : '' ?>>
-                            <?= LangManager::translate('core.maintenance.settings.loginRegister.type.0') ?>
-                        </option>
-                        <option value="1" <?= $maintenance->getType() === 1 ? 'selected' : '' ?>>
-                            <?= LangManager::translate('core.maintenance.settings.loginRegister.type.1') ?>
-                        </option>
-                        <option value="2" <?= $maintenance->getType() === 2 ? 'selected' : '' ?>>
-                            <?= LangManager::translate('core.maintenance.settings.loginRegister.type.2') ?>
-                        </option>
-                    </select>
-                </div>
+                <input type="hidden" name="overrideThemeCode" id="overrideThemeCode"
+                       value="<?= htmlspecialchars($maintenance->getOverrideThemeCode()) ?>">
             </div>
-        </div>
 
-        <div class="card mt-4">
-            <label class="toggle">
-                <p class="toggle-label"><?= LangManager::translate('core.maintenance.settings.useMyCode') ?></p>
-                <input type="checkbox" id="isOverrideTheme" name="isOverrideTheme"
-                       value="1" <?= $maintenance->isOverrideTheme() ? 'checked' : '' ?>
-                       class="toggle-input">
-                <div class="toggle-slider"></div>
-            </label>
-            <div style="height: 40vh; display: <?= $maintenance->isOverrideTheme() ? 'block' : 'none' ?>;"
-                 id="editor">
-
-                <div>
-                    <?= htmlspecialchars($maintenance->getOverrideThemeCode() ?? ' ') ?>
-                </div>
-
-            </div>
-            <input type="hidden" name="overrideThemeCode" id="overrideThemeCode"
-                   value="<?= htmlspecialchars($maintenance->getOverrideThemeCode()) ?>">
-        </div>
     </section>
 </form>
 
@@ -116,7 +118,6 @@ $description = LangManager::translate('core.maintenance.description');
     const checkbox = document.getElementById('isEnable')
     checkbox.addEventListener('click', function () {
         const mainCard = document.getElementById('mainCard')
-
         if (checkbox.checked) {
             mainCard.style.display = 'block'
         } else {
@@ -127,15 +128,21 @@ $description = LangManager::translate('core.maintenance.description');
 
 <!-- Display editor when enable -->
 <script>
-    const checkboxCustomCode = document.getElementById('isOverrideTheme')
-    checkboxCustomCode.addEventListener('click', function () {
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkboxCustomCode = document.getElementById('isOverrideTheme')
         const editorCard = document.getElementById('editor')
-
-        if (checkboxCustomCode.checked) {
-            editorCard.style.display = 'block'
-        } else {
-            editorCard.style.display = 'none'
+        const descCard = document.getElementById('desc')
+        function updateDisplay() {
+            if (checkboxCustomCode.checked) {
+                editorCard.style.display = 'block'
+                descCard.style.display = 'none'
+            } else {
+                editorCard.style.display = 'none'
+                descCard.style.display = 'block'
+            }
         }
+        updateDisplay()
+        checkboxCustomCode.addEventListener('click', updateDisplay)
     })
 </script>
 
@@ -227,4 +234,20 @@ $description = LangManager::translate('core.maintenance.description');
         editorInput.value = editor.getValue()
     })
 
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkbox = document.getElementById('noEnd');
+        const targetDateDiv = document.querySelector('#Date').closest('div');
+        function toggleTargetDateDisplay() {
+            if (checkbox.checked) {
+                targetDateDiv.style.display = 'block';
+            } else {
+                targetDateDiv.style.display = 'none';
+            }
+        }
+
+        toggleTargetDateDisplay();
+        checkbox.addEventListener('change', toggleTargetDateDisplay);
+    });
 </script>

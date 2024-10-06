@@ -93,6 +93,7 @@ return [
         "favicon" => "Modifiez le favicon",
         "favicon_tips" => 'CraftMyWebsite accepte uniquement les images <a href="https://www.icoconverter.com" target="_blank">.ico</a> pour des soucis de performances.',
         "alert_img" => "Faites CTRL + F5 pour afficher votre nouvelle icône",
+        "alert_img_no_ico" => "Votre image doit être au format .ico",
         "dateFormat" => "Format des dates",
         "dateFormatTooltip" => "Vous pouvez personnaliser la façon dont vous affichez les dates",
         "custom" => "-- Personnalisez-moi --",
@@ -339,8 +340,12 @@ return [
         'description' => 'Gérez les maintenances de votre site',
         'main_label' => 'Mode maintenance',
         'settings' => [
+            'info' => 'Informations',
+            'noEnd' => 'Préciser une date de fin',
+            'activated' => 'Activé',
+            'deactivated' => 'Désactivé',
             'title' => 'Réglages',
-            'targetDateTitle' => 'Fin',
+            'targetDateTitle' => 'Se termine le',
             'useMyCode' => 'Utiliser mon code',
             'loginRegister' => [
                 'title' => 'Connexions / Inscriptions',
@@ -453,6 +458,34 @@ return [
             'title' => 'Packages',
             'manage' => 'Gérer les installations',
             'market' => 'Installer depuis le market',
+        ],
+    ],
+    'menu' => [
+        'setting' => [
+            'main' => 'Paramètres',
+            'settings' => 'Réglages du site',
+            'maintenance' => 'Mode maintenance',
+            'mail' => 'SMTP et mails',
+            'cg' => 'Conditions générales',
+            'security' => 'Sécurité',
+        ],
+        'update' => 'Mises à jour',
+        'themes' => [
+            'main' => 'Thèmes',
+            'edit' => 'Modifier ',
+            'installed' => 'Thèmes installés',
+            'market' => 'Parcourir le Market',
+        ],
+        'package' => [
+            'main' => 'Packages',
+            'installed' => 'Packages installés',
+            'market' => 'Parcourir le Market',
+        ],
+        'user' => [
+            'main' => 'Utilisateurs',
+            'settings' => 'Paramètres',
+            'manage' => 'Gestion',
+            'roles' => 'Rôles',
         ],
     ],
 ];

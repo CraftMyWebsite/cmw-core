@@ -2,11 +2,12 @@
 
 namespace CMW\Entity\Core;
 
-use CMW\Controller\Core\CoreController;
+use CMW\Utils\Date;
 
 class MaintenanceEntity
 {
     private bool $isEnable;
+    private bool $noEnd;
     private ?string $title;
     private ?string $description;
     private ?int $type;
@@ -17,6 +18,7 @@ class MaintenanceEntity
 
     /**
      * @param bool $isEnable
+     * @param bool $noEnd
      * @param string|null $title
      * @param string|null $description
      * @param int|null $type
@@ -25,9 +27,10 @@ class MaintenanceEntity
      * @param bool $isOverrideTheme
      * @param string|null $overrideThemeCode
      */
-    public function __construct(bool $isEnable, ?string $title, ?string $description, ?int $type, ?string $targetDate, string $lastUpdateDate, bool $isOverrideTheme, ?string $overrideThemeCode)
+    public function __construct(bool $isEnable, bool $noEnd, ?string $title, ?string $description, ?int $type, ?string $targetDate, string $lastUpdateDate, bool $isOverrideTheme, ?string $overrideThemeCode)
     {
         $this->isEnable = $isEnable;
+        $this->noEnd = $noEnd;
         $this->title = $title;
         $this->description = $description;
         $this->type = $type;
@@ -43,6 +46,14 @@ class MaintenanceEntity
     public function isEnable(): bool
     {
         return $this->isEnable;
+    }
+
+    /**
+     * @return bool
+     */
+    public function noEnd(): bool
+    {
+        return $this->noEnd;
     }
 
     /**
@@ -82,7 +93,11 @@ class MaintenanceEntity
      */
     public function getTargetDateFormatted(): ?string
     {
-        return CoreController::formatDate($this->targetDate);
+        if (is_null($this->targetDate)) {
+            return "non définie";
+        } else {
+            return Date::formatDate($this->targetDate);
+        }
     }
 
     /**
@@ -98,7 +113,7 @@ class MaintenanceEntity
      */
     public function getLastUpdateDateFormatted(): string
     {
-        return CoreController::formatDate($this->lastUpdateDate);
+        return Date::formatDate($this->lastUpdateDate);
     }
 
     /**

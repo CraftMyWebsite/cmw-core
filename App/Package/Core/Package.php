@@ -2,6 +2,7 @@
 
 namespace CMW\Package\Core;
 
+use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\IPackageConfig;
 use CMW\Manager\Package\PackageMenuType;
 use CMW\Manager\Package\PackageSubMenuType;
@@ -39,32 +40,32 @@ class Package implements IPackageConfig
         return [
             new PackageMenuType(
                 icon: 'fas fa-gear',
-                title: 'Paramètres',
+                title: LangManager::translate('core.menu.setting.main'),
                 url: null,
                 permission: null,
                 subMenus: [
                     new PackageSubMenuType(
-                        title: 'Réglages du site',
+                        title: LangManager::translate('core.menu.setting.settings'),
                         permission: 'core.settings.website',
                         url: 'configuration',
                     ),
                     new PackageSubMenuType(
-                        title: 'Mode maintenance',
+                        title: LangManager::translate('core.menu.setting.maintenance'),
                         permission: 'core.settings.maintenance',
                         url: 'maintenance/manage',
                     ),
                     new PackageSubMenuType(
-                        title: 'SMTP et mails',
+                        title: LangManager::translate('core.menu.setting.mail'),
                         permission: 'core.settings.mails',
                         url: 'mail/configuration',
                     ),
                     new PackageSubMenuType(
-                        title: 'Conditions générales',
+                        title: LangManager::translate('core.menu.setting.cg'),
                         permission: 'core.settings.conditions',
                         url: 'condition',
                     ),
                     new PackageSubMenuType(
-                        title: 'Sécurité',
+                        title: LangManager::translate('core.menu.setting.security'),
                         permission: 'core.settings.security',
                         url: 'security',
                     ),
@@ -79,29 +80,29 @@ class Package implements IPackageConfig
             ),
             new PackageMenuType(
                 icon: 'fas fa-cloud-arrow-down',
-                title: 'Mises à jour',
+                title: LangManager::translate('core.menu.update'),
                 url: 'updates/cms',
                 permission: 'core.update',
                 subMenus: [],
             ),
             new PackageMenuType(
                 icon: 'fas fa-palette',
-                title: 'Thèmes',
+                title: LangManager::translate('core.menu.themes.main'),
                 url: null,
                 permission: null,
                 subMenus: [
                     new PackageSubMenuType(
-                        title: 'Modifier ' . ThemeManager::getInstance()->getCurrentTheme()->name(),
+                        title: LangManager::translate('core.menu.themes.edit') . ThemeManager::getInstance()->getCurrentTheme()->name(),
                         permission: 'core.themes.edit',
                         url: 'theme/manage',
                     ),
                     new PackageSubMenuType(
-                        title: 'Thèmes installés',
+                        title: LangManager::translate('core.menu.themes.installed'),
                         permission: 'core.themes.manage',
                         url: 'theme/theme',
                     ),
                     new PackageSubMenuType(
-                        title: 'Parcourir le Market',
+                        title: LangManager::translate('core.menu.themes.market'),
                         permission: 'core.themes.market',
                         url: 'theme/market',
                     ),
@@ -109,17 +110,17 @@ class Package implements IPackageConfig
             ),
             new PackageMenuType(
                 icon: 'fas fa-puzzle-piece',
-                title: 'Packages',
+                title: LangManager::translate('core.menu.package.main'),
                 url: null,
                 permission: null,
                 subMenus: [
                     new PackageSubMenuType(
-                        title: 'Mes packages',
+                        title: LangManager::translate('core.menu.package.installed'),
                         permission: 'core.packages.manage',
                         url: 'packages/package',
                     ),
                     new PackageSubMenuType(
-                        title: 'Market',
+                        title: LangManager::translate('core.menu.package.market'),
                         permission: 'core.packages.market',
                         url: 'packages/market',
                     ),

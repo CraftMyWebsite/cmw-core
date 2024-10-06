@@ -231,6 +231,7 @@ function initDropArea(dropArea) {
         if (files.length > 0) {
             if (files[0].type.startsWith('image/') && checkFileAccept(files[0], imgAccept)) {
                 errorMessage.classList.add('hidden');
+                fileInput.files = files;
                 previewFile(files[0]);
             } else {
                 errorMessage.classList.remove('hidden');
@@ -351,7 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const elements = document.querySelectorAll('.choices');
     elements.forEach(element => {
         new Choices(element, {
-            removeItemButton: false,
+            removeItemButton: true,
             searchEnabled: true,
             placeholderValue: 'Choisissez en plusieurs !',
             loadingText: 'Chargement...',

@@ -1,6 +1,6 @@
 <?php
 
-use CMW\Controller\Core\CoreController;
+use CMW\Utils\Date;
 use CMW\Controller\Core\UpdatesController;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Updater\UpdatesManager;
@@ -47,7 +47,7 @@ $description = LangManager::translate('core.updates.description');
         </div>
         <p>
             <?= LangManager::translate('core.updates.availableFrom') ?>
-            <?= CoreController::formatDate($latestVersion['date_upload']) ?>
+            <?= Date::formatDate($latestVersion['date_upload']) ?>
         </p>
         <h6><?= LangManager::translate('core.updates.lastNote') ?></h6>
         <?php foreach ($latestVersionChangelogGroup as $groupedType): ?>
@@ -75,7 +75,7 @@ $description = LangManager::translate('core.updates.description');
             <div class="accordion">
                 <button class="accordion-btn font-bold"><?= $previousVersion['value'] ?></button>
                 <div class="accordion-content">
-                    <p><?= LangManager::translate('core.updates.publishAt') ?> <?= CoreController::formatDate($previousVersion['date_upload']) ?></p>
+                    <p><?= LangManager::translate('core.updates.publishAt') ?> <?= Date::formatDate($previousVersion['date_upload']) ?></p>
                     <?php foreach ($previousVersionChangelogGroup = UpdatesController::groupBy('type', $previousVersion['changelog']) as $previousGroupedType): ?>
                         <?php if ($previousGroupedType[0]['content']): ?>
                         <div class="border rounded-lg p-2 dark:border-gray-700 mb-1">

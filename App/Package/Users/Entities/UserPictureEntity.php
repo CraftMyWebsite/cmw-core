@@ -2,7 +2,7 @@
 
 namespace CMW\Entity\Users;
 
-use CMW\Controller\Core\CoreController;
+use CMW\Utils\Date;
 use CMW\Model\Users\UsersModel;
 
 class UserPictureEntity
@@ -38,7 +38,7 @@ class UserPictureEntity
     public function getLastUpdate(): ?string
     {
         if (!is_null($this->lastUpdate)) {
-            return CoreController::formatDate($this->lastUpdate);
+            return Date::formatDate($this->lastUpdate);
         }
         return (new UsersModel())->getUserById($this->userId)?->getCreated();
     }

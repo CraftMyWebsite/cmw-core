@@ -93,6 +93,7 @@ return [
         'favicon' => 'Edit your favicon',
         'favicon_tips' => 'CraftMyWebsite allow only <a href="https://www.icoconverter.com" target="_blank">.ico</a> for better performances.',
         'alert_img' => 'Do CTRL + F5 display for your new icon',
+        "alert_img_no_ico" => "Your image must be in .ico format",
         'dateFormat' => 'Date formatting',
         'dateFormatTooltip' => 'You can customise the way you display the dates',
         'custom' => '-- Customize-moi --',
@@ -337,6 +338,10 @@ return [
         'description' => 'Manage your website maintenance',
         'main_label' => 'Maintenance mode',
         'settings' => [
+            'info' => 'Informations',
+            'noEnd' => 'Specify an end date',
+            'activated' => 'Enabled',
+            'deactivated' => 'Disabled',
             'title' => 'Settings',
             'targetDateTitle' => 'Target date',
             'useMyCode' => 'Use my code',
@@ -450,6 +455,34 @@ return [
             'title' => 'Packages',
             'manage' => 'Manage facilities',
             'market' => 'Install from the market',
+        ],
+    ],
+    'menu' => [
+        'setting' => [
+            'main' => 'Settings',
+            'settings' => 'Site Settings',
+            'maintenance' => 'Maintenance mode',
+            'mail' => 'SMTP and mails',
+            'cg' => 'General conditions',
+            'security' => 'Security',
+        ],
+        'update' => 'CMW Updates',
+        'themes' => [
+            'main' => 'Themes',
+            'edit' => 'Edit ',
+            'installed' => 'Installed Themes',
+            'market' => 'Browse the Market',
+        ],
+        'package' => [
+            'main' => 'Packages',
+            'installed' => 'Installed packages',
+            'market' => 'Browse the Market',
+        ],
+        'user' => [
+            'main' => 'Users',
+            'settings' => 'Settings',
+            'manage' => 'Manage',
+            'roles' => 'Roles',
         ],
     ],
 ];

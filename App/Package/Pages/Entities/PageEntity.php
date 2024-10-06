@@ -2,7 +2,7 @@
 
 namespace CMW\Entity\Pages;
 
-use CMW\Controller\Core\CoreController;
+use CMW\Utils\Date;
 use CMW\Entity\Users\UserEntity;
 
 class PageEntity
@@ -126,7 +126,7 @@ class PageEntity
      */
     public function getCreated(): string
     {
-        return CoreController::formatDate($this->pageCreated);
+        return Date::formatDate($this->pageCreated);
     }
 
     /**
@@ -134,6 +134,6 @@ class PageEntity
      */
     public function getEdited(): string
     {
-        return CoreController::formatDate($this->pageEdited);
+        return Date::formatDate($this->pageEdited);
     }
 }
