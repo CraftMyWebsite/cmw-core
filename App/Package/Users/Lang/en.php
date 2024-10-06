@@ -163,6 +163,7 @@ return [
             'reset' => 'Reset image',
         ],
         'link_profile' => 'Go to my profile',
+        'login_methode' => 'Login methode',
     ],
     'settings' => [
         'title' => 'Users settings',
@@ -220,7 +221,14 @@ return [
     'flush' => [
         'modal' => [
             'warning' => 'This will reset all your roles! (except Administrator)',
-            'text' => 'Flushing Permissions is a debugging tool often used by developers who want to force the manual addition of permissions to their Permissions.php files located in the Init folder.'
+            'text' => 'Flushing Permissions is a debugging tool often used by developers who want to force the manual addition of permissions to their Permissions.php files located in the Init folder.',
+        ],
+    ],
+    'oauth' => [
+        'manage' => [
+            'title' => 'Manage oAuth',
+            'desc' => 'Manage oAuth methods',
+            'subtitle' => 'Manage oAuth methods',
         ],
     ],
     'permissions' => [

@@ -45,7 +45,7 @@ class Package implements IPackageConfig
                 subMenus: [
                     new PackageSubMenuType(
                         title: LangManager::translate('core.menu.user.settings'),
-                        permission: 'user.settings',
+                        permission: 'users.settings',
                         url: 'users/settings',
                     ),
                     new PackageSubMenuType(
@@ -57,6 +57,11 @@ class Package implements IPackageConfig
                         title: LangManager::translate('core.menu.user.roles'),
                         permission: 'users.roles',
                         url: 'roles/manage',
+                    ),
+                    new PackageSubMenuType(
+                        title: 'oAuth',
+                        permission: 'users.oauth',
+                        url: 'users/oauth',
                     ),
                 ],
             ),

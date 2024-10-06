@@ -163,6 +163,7 @@ return [
             "reset" => "Réinitialisez l'image",
         ],
         'link_profile' => 'Accéder à mon profil',
+        'login_methode' => 'Méthode de connexion',
     ],
     "settings" => [
         "title" => "Paramètres utilisateur",
@@ -223,6 +224,13 @@ return [
             'warning' => 'Ceci va réinitialiser tous vos rôles ! (sauf Administrateur)',
             'text' => "Flusher les permissions est un outil de débogage souvent utilisé par les développeurs qui souhaitent forcer l'ajout manuel des permissions de leurs fichiers Permissions.php se trouvant dans le dossier Init."
         ],
+    ],
+    'oauth' => [
+      'manage' => [
+          'title' => 'Gestion des oAuth',
+          'desc' => 'Gérez les méthodes de connexion oAuth',
+          'subtitle' => 'Configuration des méthodes oAuth',
+      ],
     ],
     'permissions' => [
         'settings' => [

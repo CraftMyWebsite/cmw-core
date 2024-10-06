@@ -22,6 +22,7 @@ class UserEntity
     private string $userCreated;
     private string $userUpdated;
     private ?UserPictureEntity $userPicture;
+    private ?string $loginMethode;
 
     /**
      * @param int $userId
@@ -38,8 +39,9 @@ class UserEntity
      * @param string $userCreated
      * @param string $userUpdated
      * @param \CMW\Entity\Users\UserPictureEntity|null $userPicture
+     * @param string|null $loginMethode
      */
-    public function __construct(int $userId, string $userMail, string $userPseudo, string $userFirstName, string $userLastName, int $userState, string $userKey, User2FaEntity $user2Fa, string $userLastConnection, array $userRoles, ?RoleEntity $userHighestRole, string $userCreated, string $userUpdated, ?UserPictureEntity $userPicture)
+    public function __construct(int $userId, string $userMail, string $userPseudo, string $userFirstName, string $userLastName, int $userState, string $userKey, User2FaEntity $user2Fa, string $userLastConnection, array $userRoles, ?RoleEntity $userHighestRole, string $userCreated, string $userUpdated, ?UserPictureEntity $userPicture, null|string $loginMethode)
     {
         $this->userId = $userId;
         $this->userMail = $userMail;
@@ -55,6 +57,7 @@ class UserEntity
         $this->userCreated = $userCreated;
         $this->userUpdated = $userUpdated;
         $this->userPicture = $userPicture;
+        $this->loginMethode = $loginMethode;
     }
 
     /**
@@ -170,6 +173,22 @@ class UserEntity
     public function getUserPicture(): ?UserPictureEntity
     {
         return $this->userPicture;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLoginMethode(): string
+    {
+        return $this->loginMethode ?? 'native';
+    }
+
+    /**
+     * @return bool
+     */
+    public function useNativeLoginMethode(): bool
+    {
+        return is_null($this->loginMethode);
     }
 
     /**

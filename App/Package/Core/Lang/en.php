@@ -315,6 +315,7 @@ return [
         'captcha' => [
             'title' => 'Manage your captcha',
             'type' => 'Captcha type',
+            'invalid' => 'Invalid captcha'
         ],
         'healthReport' => [
             'title' => 'Health Report',

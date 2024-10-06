@@ -34,7 +34,7 @@ class RolesController extends AbstractController
         $permissionModel = PermissionsModel::getInstance();
         $rolesModel = RolesModel::getInstance();
 
-        require_once (EnvManager::getInstance()->getValue('DIR') . 'App/Package/Users/Functions/loadPermissions.php');
+        require_once(EnvManager::getInstance()->getValue('DIR') . 'App/Package/Users/Functions/loadPermissions.php');
 
         View::createAdminView('Users', 'roles')
             ->addStyle('Admin/Resources/Vendors/Izitoast/iziToast.min.css')
@@ -77,16 +77,16 @@ class RolesController extends AbstractController
         $permissionModel = new PermissionsModel();
 
         // Todo Try to improve that ?
-        require_once (EnvManager::getInstance()->getValue('DIR') . 'App/Package/Users/Functions/loadPermissions.php');
+        require_once(EnvManager::getInstance()->getValue('DIR') . 'App/Package/Users/Functions/loadPermissions.php');
 
         View::createAdminView('Users', 'roles.edit')
             ->addScriptBefore('App/Package/Users/Views/Assets/Js/autoPermsChecker.js')
-            ->addVariableList(array(
+            ->addVariableList([
                 'permissionController' => $permissionController,
                 'permissionModel' => $permissionModel,
                 'roleModel' => $roleModel,
-                'role' => $role
-            ))
+                'role' => $role,
+            ])
             ->view();
     }
 
@@ -167,7 +167,7 @@ class RolesController extends AbstractController
             'name' => $role?->getName(),
             'weight' => $role?->getWeight(),
             'description' => $role?->getDescription(),
-            'permissions' => $rolePermissions
+            'permissions' => $rolePermissions,
         ];
 
         try {
@@ -199,7 +199,7 @@ class RolesController extends AbstractController
                 'name' => $role?->getName(),
                 'weight' => $role?->getWeight(),
                 'description' => $role?->getDescription(),
-                'permissions' => $rolePermissions
+                'permissions' => $rolePermissions,
             ];
         endforeach;
 
@@ -208,5 +208,15 @@ class RolesController extends AbstractController
         } catch (JsonException) {
             print ('ERROR');
         }
+    }
+
+    public function getDefaultRolesId(): array
+    {
+        $defaultRoles = RolesModel::getInstance()->getDefaultRoles();
+        $defaultRolesId = [];
+        foreach ($defaultRoles as $role) {
+            $defaultRolesId[] = $role->getId();
+        }
+        return $defaultRolesId;
     }
 }

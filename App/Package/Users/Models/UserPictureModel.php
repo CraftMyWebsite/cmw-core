@@ -65,7 +65,7 @@ class UserPictureModel extends AbstractModel
      * @param string $imageName
      * @return UserPictureEntity|null
      */
-    public function updateUserImage(int $userId, string $imageName): ?UserPictureEntity
+    private function updateUserImage(int $userId, string $imageName): ?UserPictureEntity
     {
         // Get older imageName
         $userPictureEntity = $this->getImageByUserId($userId);

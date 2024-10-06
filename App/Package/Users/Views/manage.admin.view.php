@@ -66,6 +66,7 @@ $description = LangManager::translate('users.manage.desc');
                 <th><?= LangManager::translate('users.users.role') ?></th>
                 <th><?= LangManager::translate('users.users.creation') ?></th>
                 <th><?= LangManager::translate('users.users.last_connection') ?></th>
+                <th><?= LangManager::translate('users.users.login_methode') ?></th>
                 <th class="text-center">2fa</th>
                 <th class="text-center"><?= LangManager::translate('core.btn.edit') ?></th>
             </tr>
@@ -78,26 +79,32 @@ $description = LangManager::translate('users.manage.desc');
                     <td><?= $user->getHighestRole()?->getName() ?></td>
                     <td><?= $user->getCreated() ?></td>
                     <td><?= $user->getLastConnection() ?></td>
-                    <td class="text-center"><?php if ($user->get2Fa()->isEnabled()): ?> <i class="text-success fa-solid fa-check fa-lg"></i> <?php else: ?> <i class="text-danger fa-solid fa-xmark fa-lg"></i> <?php endif; ?></td>
+                    <td><?= ucfirst($user->getLoginMethode()) ?></td>
+                    <td class="text-center"><?php if ($user->get2Fa()->isEnabled()): ?> <i
+                            class="text-success fa-solid fa-check fa-lg"></i> <?php else: ?> <i
+                            class="text-danger fa-solid fa-xmark fa-lg"></i> <?php endif; ?></td>
                     <td class="text-center space-x-2">
                         <a class=""
                            href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/users/manage/edit/<?= $user->getId() ?>">
                             <i class="text-info fa-solid fa-gears"></i>
                         </a>
-                        <button data-modal-toggle="modal-danger-<?= $user->getId() ?>" type="button"><i class="text-danger fas fa-trash-alt"></i></button>
+                        <button data-modal-toggle="modal-danger-<?= $user->getId() ?>" type="button"><i
+                                class="text-danger fas fa-trash-alt"></i></button>
                         <!--MODAL DANGER-->
                         <div id="modal-danger-<?= $user->getId() ?>" class="modal-container">
                             <div class="modal">
                                 <div class="modal-header-danger">
                                     <h6><?= LangManager::translate('users.modal.delete') ?> <?= $user->getPseudo() ?>
                                         ?</h6>
-                                    <button type="button" data-modal-hide="modal-danger-<?= $user->getId() ?>"><i class="fa-solid fa-xmark"></i></button>
+                                    <button type="button" data-modal-hide="modal-danger-<?= $user->getId() ?>"><i
+                                            class="fa-solid fa-xmark"></i></button>
                                 </div>
                                 <div class="modal-body">
                                     <?= LangManager::translate('users.modal.delete_message') ?>
                                 </div>
                                 <div class="modal-footer">
-                                    <a href="/cmw-admin/users/delete/<?= $user->getId() ?>" type="button" class="btn-danger"><?= LangManager::translate('core.btn.delete') ?></a>
+                                    <a href="/cmw-admin/users/delete/<?= $user->getId() ?>" type="button"
+                                       class="btn-danger"><?= LangManager::translate('core.btn.delete') ?></a>
                                 </div>
                             </div>
                         </div>
