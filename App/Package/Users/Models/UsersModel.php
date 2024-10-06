@@ -108,7 +108,8 @@ class UsersModel extends AbstractModel
             $highestRole,
             $res['user_created'],
             $res['user_updated'],
-            UsersController::getInstance()->getUserProfilePicture($res['user_id'])
+            UsersController::getInstance()->getUserProfilePicture($res['user_id']),
+            $this->getLoginMethode($res['user_id'])
         );
     }
 
@@ -692,7 +693,7 @@ class UsersModel extends AbstractModel
         $req = $db->prepare($sql);
 
         if ($req->execute(["mail" => $mail])) {
-            return $req->fetchAll();
+            return $req->columnCount() > 0;
         }
 
         return false;
@@ -700,50 +701,26 @@ class UsersModel extends AbstractModel
 
     /**
      * @param int $userId
-     * @param string $oAuthId
-     * @param string $methode
-     * @return bool
+     * @return string|null
+     * @desc Return the implementation identifier. If NULL, the user is not an OAuth user.
      */
-    public function createOAuthUser(int $userId, string $oAuthId, string $methode): bool
+    public function getLoginMethode(int $userId): ?string
     {
-        $data = [
-            'user_id' => $userId,
-            'oauth_id' => $oAuthId,
-            'methode' => $methode,
-        ];
-
-        $sql = 'INSERT INTO cmw_users_oauth (user_id, oauth_id, methode) VALUES (:user_id, :oauth_id, :methode)';
-
+        $sql = "SELECT methode FROM cmw_users_oauth WHERE user_id = :user_id";
         $db = DatabaseManager::getInstance();
-        return $db->prepare($sql)->execute($data);
-    }
 
-    /**
-     * @param int $userId
-     * @param string $oAuthId
-     * @param string $methode
-     * @return bool
-     */
-    public function isOAuthAccountExist(int $userId, string $oAuthId, string $methode): bool
-    {
-        $data = [
-            'user_id' => $userId,
-            'oauth_id' => $oAuthId,
-            'methode' => $methode,
-        ];
-
-        $sql = 'SELECT user_id FROM cmw_users_oauth 
-                WHERE user_id = :user_id 
-                    AND oauth_id = :oauth_id 
-                    AND methode = :methode';
-
-        $db = DatabaseManager::getInstance();
         $req = $db->prepare($sql);
 
-        if ($req->execute($data)) {
-            return $req->fetchAll();
+        if (!$req->execute(['user_id' => $userId])) {
+            return null;
         }
 
-        return false;
+        $res = $req->fetch();
+
+        if (!$res) {
+            return null;
+        }
+
+        return $res['methode'];
     }
 }

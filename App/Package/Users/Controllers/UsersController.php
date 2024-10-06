@@ -183,7 +183,7 @@ class UsersController extends AbstractController
 
         $encryptedMail = EncryptManager::encrypt($mail);
 
-        if ($pass === '') {
+        if (!isset($_POST['pass']) || $pass === '') {
             UsersModel::getInstance()->update($id, $encryptedMail, $username, $firstname, $lastname, $_POST['roles']);
             Flash::send(Alert::SUCCESS, LangManager::translate('users.toaster.success'),
                 LangManager::translate('users.toaster.edited_not_pass_change'));

@@ -223,4 +223,49 @@ class ImagesManager
 
         return '<link rel="icon" type="image/x-icon" href="' . $path . '">';
     }
+
+    /**
+     * @throws \Random\RandomException
+     * @throws \CMW\Manager\Uploads\ImagesException
+     */
+    public static function downloadFromLink(string $url, string $dirName = ''): string
+    {
+        if (!empty(mb_substr($dirName, -1))) {
+            $dirName .= '/';
+        }
+
+        self::createDirectory($dirName);  // Create the directory if this is necessary
+
+        $path = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName;
+
+        if (!empty($dirName) && $dirName !== '/' && !is_dir($path)) {
+            throw new ImagesException('ERROR_FOLDER_DONT_EXIST');
+        }
+
+        $file = file_get_contents($url);
+
+        if ($file === false) {
+            throw new ImagesException('ERROR_CANT_DOWNLOAD_FILE');
+        }
+
+        $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
+        $fileType = finfo_buffer($fileInfo, $file);
+
+        if (!array_key_exists($fileType, self::$allowedTypes)) {
+            throw new ImagesException('ERROR_FILE_NOT_ALLOWED');
+        }
+
+        $fileName = Utils::genId(random_int(15, 35));
+        $extension = self::$allowedTypes[$fileType];
+
+        self::$returnName = $fileName . '.' . $extension;
+
+        $newFilePath = $path . self::$returnName;
+
+        if (!file_put_contents($newFilePath, $file)) {
+            throw new ImagesException('ERROR_CANT_MOVE_FILE');
+        }
+
+        return self::$returnName;
+    }
 }

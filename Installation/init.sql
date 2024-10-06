@@ -74,6 +74,15 @@ CREATE TABLE IF NOT EXISTS `cmw_users_oauth`
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `cmw_users_oauth_methods_enabled`
+(
+    `id`           INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `methode`      VARCHAR(35) NOT NULL UNIQUE KEY,
+    `date_enabled` TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `cmw_users_pictures`
 (
     `users_pictures_user_id`     INT          NOT NULL,

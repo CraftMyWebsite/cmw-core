@@ -2,6 +2,9 @@
 
 namespace CMW\Interface\Users;
 
+use CMW\Type\Users\OAuthLoginStatus;
+use JetBrains\PhpStorm\NoReturn;
+
 interface IUsersOAuth
 {
     /**
@@ -24,15 +27,34 @@ interface IUsersOAuth
     public function methodeIconLink(): string;
 
     /**
-     * @return bool
-     * @desc Register the user, and return the oAuth id
+     * @return void
+     * @desc Redirect the client to the consent page
      */
-    public function register(): bool;
+    #[NoReturn] public function redirectToConsent(): void;
 
     /**
-     * @return bool
-     * @desc Login the user, and return the oAuth id
+     * @return OAuthLoginStatus
+     * @desc Register the user
      */
-    public function login(): bool;
+    public function register(): OAuthLoginStatus;
+
+    /**
+     * @return OAuthLoginStatus
+     * @desc Login the user
+     */
+    public function login(): OAuthLoginStatus;
+
+    /**
+     * @return void
+     * @desc Print the admin form of the oAuth implementation
+     */
+    public function adminForm(): void;
+
+
+    /**
+     * @return void
+     * @desc Call when the form fields are posted
+     */
+    public function adminFormPost(): void;
 }
 

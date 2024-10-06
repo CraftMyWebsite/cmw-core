@@ -44,7 +44,7 @@ class Package implements IPackageConfig
                 subMenus: [
                     new PackageSubMenuType(
                         title: 'Paramètres',
-                        permission: 'user.settings',
+                        permission: 'users.settings',
                         url: 'users/settings',
                     ),
                     new PackageSubMenuType(
@@ -56,6 +56,11 @@ class Package implements IPackageConfig
                         title: 'Rôles',
                         permission: 'users.roles',
                         url: 'roles/manage',
+                    ),
+                    new PackageSubMenuType(
+                        title: 'oAuth',
+                        permission: 'users.oauth',
+                        url: 'users/oauth',
                     ),
                 ],
             ),
