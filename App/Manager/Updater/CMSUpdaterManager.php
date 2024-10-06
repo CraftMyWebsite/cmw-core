@@ -156,8 +156,7 @@ class CMSUpdaterManager
 
         $db = DatabaseManager::getLiteInstance();
 
-        $querySqlFile = file_get_contents($content);
-        if (!$req = $db->query($querySqlFile)) {
+        if (!$req = $db->query($content)) {
             return false;
         }
 
