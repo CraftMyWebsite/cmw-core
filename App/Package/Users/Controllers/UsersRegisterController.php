@@ -39,7 +39,7 @@ class UsersRegisterController extends AbstractController
             Redirect::redirectToHome();
         }
 
-        $oAuths = UsersOAuthController::getInstance()->getImplementations();
+        $oAuths = UsersOAuthController::getInstance()->getEnabledImplementations();
 
         $view = new View('Users', 'register');
         $view->addVariableList(['oAuths' => $oAuths]);

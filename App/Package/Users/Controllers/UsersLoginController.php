@@ -174,7 +174,7 @@ class UsersLoginController extends AbstractController
             Redirect::redirectToHome();
         }
 
-        $oAuths = UsersOAuthController::getInstance()->getImplementations();
+        $oAuths = UsersOAuthController::getInstance()->getEnabledImplementations();
 
         $view = new View('Users', 'login');
         $view->addVariableList(['oAuths' => $oAuths]);

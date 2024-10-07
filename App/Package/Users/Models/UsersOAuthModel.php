@@ -5,7 +5,6 @@ namespace CMW\Model\Users;
 use CMW\Entity\Users\UserEntity;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Package\AbstractModel;
-use CMW\Utils\Log;
 
 class UsersOAuthModel extends AbstractModel
 {
@@ -42,6 +41,28 @@ class UsersOAuthModel extends AbstractModel
         }
 
         return $req->rowCount() > 0;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMethodEnabled(): array
+    {
+        $sql = "SELECT methode FROM `cmw_users_oauth_methods_enabled`";
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare($sql);
+
+        if (!$req->execute()) {
+            return [];
+        }
+
+        $res = $req->fetchAll(\PDO::FETCH_COLUMN, 0);
+
+        if (!$res) {
+            return [];
+        }
+
+        return $res;
     }
 
     /**

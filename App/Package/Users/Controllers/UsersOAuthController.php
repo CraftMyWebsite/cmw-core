@@ -176,6 +176,26 @@ class UsersOAuthController extends AbstractController
     }
 
     /**
+     * @return \CMW\Interface\Users\IUsersOAuth[]
+     */
+    public function getEnabledImplementations(): array
+    {
+        $implementations = $this->getImplementations();
+
+        $enabledImplementations = UsersOAuthModel::getInstance()->getMethodEnabled();
+
+        $toReturn = [];
+
+        foreach ($implementations as $implementation) {
+            if (in_array($implementation->methodIdentifier(), $enabledImplementations, true)) {
+                $toReturn[] = $implementation;
+            }
+        }
+
+        return $toReturn;
+    }
+
+    /**
      * @param string $methodeIdentifier
      * @return \CMW\Interface\Users\IUsersOAuth|null
      * @desc Get implementation by methode identifier
