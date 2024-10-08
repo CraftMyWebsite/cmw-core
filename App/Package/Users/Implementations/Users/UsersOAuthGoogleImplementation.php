@@ -86,11 +86,11 @@ class UsersOAuthGoogleImplementation implements IUsersOAuth
             return OAuthLoginStatus::EMAIL_ALREADY_EXIST;
         }
 
-        $pseudo = Utils::normalizeForSlug(explode('@', $mail)[0]);
+        $pseudo = ucfirst(Utils::normalizeForSlug(explode('@', $mail)[0]));
 
         //If pseudo already exist, we add a random id after the pseudo
         if (UsersModel::getInstance()->checkPseudo($pseudo)) {
-            $pseudo .= Utils::genId(3);
+            $pseudo .= Utils::generateRandomNumber(3);
         }
 
         $user = UsersModel::getInstance()->create(

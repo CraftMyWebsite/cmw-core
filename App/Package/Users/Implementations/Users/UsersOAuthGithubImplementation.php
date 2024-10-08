@@ -89,11 +89,11 @@ class UsersOAuthGithubImplementation implements IUsersOAuth
         }
 
         // Create a pseudo from the username or email
-        $pseudo = Utils::normalizeForSlug($userInfo['login']);
+        $pseudo = ucfirst(Utils::normalizeForSlug($userInfo['login']));
 
         // If the pseudo already exists, add a random string
         if (UsersModel::getInstance()->checkPseudo($pseudo)) {
-            $pseudo .= Utils::genId(3);
+            $pseudo .= Utils::generateRandomNumber(3);
         }
 
         // Create a new user

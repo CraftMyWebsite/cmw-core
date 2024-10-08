@@ -91,12 +91,12 @@ class UsersOAuthDiscordImplementation implements IUsersOAuth
 
         //If pseudo already exist, we add a random id after the pseudo
         if (UsersModel::getInstance()->checkPseudo($userInfo['username'])) {
-            $userInfo['username'] .= "_" . Utils::genId(4);
+            $userInfo['username'] .= "_" . Utils::generateRandomNumber(3);
         }
 
         $user = UsersModel::getInstance()->create(
             $encryptedMail,
-            $userInfo['username'],
+            ucfirst($userInfo['username']),
             $userInfo['given_name'] ?? null,
             $userInfo['family_name'] ?? null,
             RolesController::getInstance()->getDefaultRolesId(),
