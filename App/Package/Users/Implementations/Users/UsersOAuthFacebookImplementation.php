@@ -103,7 +103,6 @@ class UsersOAuthFacebookImplementation implements IUsersOAuth
             return OAuthLoginStatus::UNABLE_TO_CREATE_OAUTH_USER;
         }
 
-        // Connexion de l'utilisateur
         UsersLoginController::getInstance()->loginUser($user, true);
 
         return OAuthLoginStatus::SUCCESS_REGISTER;
@@ -133,14 +132,12 @@ class UsersOAuthFacebookImplementation implements IUsersOAuth
         $mail = $userInfo['email'];
         $encryptedMail = EncryptManager::encrypt($mail);
 
-        // Si le compte n'existe pas, on enregistre l'utilisateur...
         $user = UsersOAuthModel::getInstance()->getUser($id, $encryptedMail, $this->methodIdentifier());
 
         if (is_null($user)) {
             return $this->register();
         }
 
-        // Connexion de l'utilisateur
         UsersLoginController::getInstance()->loginUser($user, true);
 
         return OAuthLoginStatus::SUCCESS_LOGIN;
