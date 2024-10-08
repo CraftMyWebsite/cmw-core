@@ -24,6 +24,12 @@ use CMW\Utils\Log;
 use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
 
+/**
+ * Class: @ThemeController
+ * @package Core
+ * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
+ * @version 0.0.1
+ */
 class ThemeController extends AbstractController
 {
     /* ADMINISTRATION */

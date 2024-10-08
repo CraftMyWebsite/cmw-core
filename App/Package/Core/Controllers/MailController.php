@@ -26,7 +26,7 @@ require_once (EnvManager::getInstance()->getValue('DIR') . 'App/Package/Core/Ven
  * Class: @MailController
  * @package Core
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
- * @version 1.0
+ * @version 0.0.1
  */
 class MailController extends AbstractController
 {

@@ -21,6 +21,12 @@ use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
 use function is_null;
 
+/**
+ * Class: @UsersOAuthController
+ * @package Users
+ * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
+ * @version 0.0.1
+ */
 class UsersOAuthController extends AbstractController
 {
     #[NoReturn] #[Link('/oauth', Link::GET, [], '/cmw-admin/users')]

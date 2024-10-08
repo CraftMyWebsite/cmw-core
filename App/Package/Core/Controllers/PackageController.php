@@ -18,6 +18,12 @@ use CMW\Utils\Directory;
 use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
 
+/**
+ * Class: @PackageController
+ * @package CORE
+ * @author Teyir
+ * @version 0.0.1
+ */
 class PackageController extends AbstractController
 {
     public static array $corePackages = ['Core', 'Users'];

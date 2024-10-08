@@ -29,6 +29,12 @@ use function password_hash;
 use function strlen;
 use const PASSWORD_BCRYPT;
 
+/**
+ * Class: @UsersProfileController
+ * @package Users
+ * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
+ * @version 0.0.1
+ */
 class UsersProfileController extends AbstractController
 {
     /**

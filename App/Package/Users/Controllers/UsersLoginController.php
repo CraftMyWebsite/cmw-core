@@ -31,6 +31,12 @@ use function mb_strtolower;
 use function strlen;
 use function time;
 
+/**
+ * Class: @UsersLoginController
+ * @package Users
+ * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
+ * @version 0.0.1
+ */
 class UsersLoginController extends AbstractController
 {
     /**

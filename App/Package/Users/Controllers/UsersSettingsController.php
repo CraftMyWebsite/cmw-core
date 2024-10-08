@@ -24,7 +24,7 @@ use JsonException;
  * Class: @UsersSettingsController
  * @package Users
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
- * @version 1.0
+ * @version 0.0.1
  */
 class UsersSettingsController extends AbstractController
 {

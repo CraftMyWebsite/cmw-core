@@ -12,6 +12,12 @@ use CMW\Manager\Views\View;
 use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
 
+/**
+ * Class: @UpdatesController
+ * @package Core
+ * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
+ * @version 0.0.1
+ */
 class UpdatesController extends AbstractController
 {
     /**

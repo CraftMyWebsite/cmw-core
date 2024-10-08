@@ -26,6 +26,12 @@ use function mb_strtolower;
 use function password_hash;
 use const PASSWORD_BCRYPT;
 
+/**
+ * Class: @UsersRegisterController
+ * @package Users
+ * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
+ * @version 0.0.1
+ */
 class UsersRegisterController extends AbstractController
 {
 
