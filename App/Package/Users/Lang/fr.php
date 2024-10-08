@@ -230,7 +230,18 @@ return [
           'title' => 'Gestion des oAuth',
           'desc' => 'Gérez les méthodes de connexion oAuth',
           'subtitle' => 'Configuration des méthodes oAuth',
+          'enabled' => 'Méthodes active',
+          'disabled' => 'Méthodes inactive',
       ],
+        'flash' => [
+            'saveSettingFailed' => 'Une erreur s\'est produite lors de l\'enregistrement des paramètres.',
+            'saved' => 'Paramètres enregistrés avec succès.',
+            'accessDenied' => 'Accès refusé.',
+            'userInfo' => 'Impossible d\'obtenir les informations de l\'utilisateur.',
+            'emailUsed' => 'Cet email est déjà utilisé.',
+            'userCreate' => 'Impossible de créer l\'utilisateur.',
+            'userOauthCreate' => 'Impossible de créer un utilisateur oAuth.',
+        ],
     ],
     'permissions' => [
         'settings' => [

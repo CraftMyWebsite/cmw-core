@@ -229,6 +229,17 @@ return [
             'title' => 'Manage oAuth',
             'desc' => 'Manage oAuth methods',
             'subtitle' => 'Manage oAuth methods',
+            'enabled' => 'Active methods',
+            'disabled' => 'Inactive methods',
+        ],
+        'flash' => [
+            'saveSettingFailed' => 'An error occurred while saving the settings.',
+            'saved' => 'Settings saved successfully.',
+            'accessDenied' => 'Access denied.',
+            'userInfo' => 'Unable to get user information.',
+            'emailUsed' => 'This email is already used.',
+            'userCreate' => 'Unable to create user.',
+            'userOauthCreate' => 'Unable to create oAuth user.',
         ],
     ],
     'permissions' => [

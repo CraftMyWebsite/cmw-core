@@ -53,7 +53,7 @@ class UsersOAuthController extends AbstractController
             Flash::send(
                 Alert::ERROR,
                 LangManager::translate('core.toaster.error'),
-                'An error occurred while saving the settings.',
+                LangManager::translate('users.oauth.flash.saveSettingFailed'),
             );
             Redirect::redirectPreviousRoute();
         }
@@ -84,7 +84,7 @@ class UsersOAuthController extends AbstractController
         Flash::send(
             Alert::SUCCESS,
             LangManager::translate('core.toaster.success'),
-            'Settings saved successfully.',
+            LangManager::translate('users.oauth.flash.saved'),
         );
         Redirect::redirectPreviousRoute();
     }
@@ -110,35 +110,35 @@ class UsersOAuthController extends AbstractController
                 Flash::send(
                     Alert::ERROR,
                     LangManager::translate('core.toaster.error'),
-                    'Access denied.',
+                    LangManager::translate('users.oauth.flash.accessDenied')
                 );
                 break;
             case OAuthLoginStatus::INVALID_USER_INFO:
                 Flash::send(
                     Alert::ERROR,
                     LangManager::translate('core.toaster.error'),
-                    'Unable to get user information.',
+                    LangManager::translate('users.oauth.flash.userInfo')
                 );
                 break;
             case OAuthLoginStatus::EMAIL_ALREADY_EXIST:
                 Flash::send(
                     Alert::WARNING,
                     LangManager::translate('core.toaster.error'),
-                    'This email is already used.',
+                    LangManager::translate('users.oauth.flash.emailUsed')
                 );
                 break;
             case OAuthLoginStatus::UNABLE_TO_CREATE_USER:
                 Flash::send(
                     Alert::ERROR,
                     LangManager::translate('core.toaster.error'),
-                    'Unable to create user.',
+                    LangManager::translate('users.oauth.flash.userCreate')
                 );
                 break;
             case OAuthLoginStatus::UNABLE_TO_CREATE_OAUTH_USER:
                 Flash::send(
                     Alert::ERROR,
                     LangManager::translate('core.toaster.error'),
-                    'Unable to create oAuth user.',
+                    LangManager::translate('users.oauth.flash.userOauthCreate')
                 );
                 break;
             case OAuthLoginStatus::SUCCESS_REGISTER:
