@@ -136,4 +136,41 @@ class PublicAPI
             return [];
         }
     }
+
+    /**
+     * @return array
+     * @desc Use Stream context to post data
+     */
+    public static function clearCache(): mixed
+    {
+        $url = self::getUrl() . 'cache/clear';
+
+        $adminKey = UsersModel::getCurrentUser()?->getUserKey();
+
+        $ch = curl_init();
+
+        // Configurer les options de cURL
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/x-www-form-urlencoded',
+            "Adminkey: $adminKey",
+        ]);
+
+        $response = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            curl_close($ch);
+            return [];
+        }
+
+        curl_close($ch);
+
+        try {
+            return json_decode($response, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException) {
+            return [];
+        }
+    }
 }
