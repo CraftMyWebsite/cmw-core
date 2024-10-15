@@ -4,13 +4,15 @@ use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Updater\UpdatesManager;
 
+/* @var bool $isUpToDate */
+
 ?>
 
 </section>
 <footer>
     <div class="md:flex justify-between mt-10">
         <p><?= LangManager::translate('core.footer.left') ?></p>
-        <?php if (UpdatesManager::checkNewUpdateAvailable()): ?>
+        <?php if ($isUpToDate): ?>
             <p class="text-center">
                 <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/updates/cms">
                     <span><?= LangManager::translate('core.footer.upgrade') . "<span class='text-success font-bold'> " . UpdatesManager::getCmwLatest()['value'] ?></span>!

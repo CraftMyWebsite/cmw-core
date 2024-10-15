@@ -52,6 +52,8 @@ return [
         'days' => 'Days',
         'weeks' => 'Weeks',
         'months' => 'Months',
+        'alpha' => 'Please note that CraftMyWebsite2 is currently in alpha phase and is not yet complete. <br>Its use in a production environment is strongly discouraged. Key features may be missing or may not work as expected. <br><b>During this phase, complete system reinstalls may be required.</b> <br>We appreciate your understanding and patience while we work on CraftMyWebsite.',
+        'updateWarning' => '<strong>Attention :</strong>The current version of your CMS is not the latest available. It is strongly recommended to <a class="link" href="updates/cms">update your CMS</a> to benefit from the latest security fixes as well as new features added.',
     ],
     'menus' => [
         'title' => 'Menus',
@@ -467,6 +469,7 @@ return [
             'security' => 'Security',
         ],
         'update' => 'CMW Updates',
+        'updateMe' => 'CMW Updates <i style="color:#da3434;" class="absolute ml-1 fa-solid fa-circle-exclamation"></i>',
         'themes' => [
             'main' => 'Themes',
             'edit' => 'Edit ',

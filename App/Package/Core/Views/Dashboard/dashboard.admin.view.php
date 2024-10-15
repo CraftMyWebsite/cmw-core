@@ -15,13 +15,18 @@ Website::setDescription(LangManager::translate('core.dashboard.desc'));
 /* @var array $dailyVisits */
 /* @var array $weeklyVisits */
 /* @var array $registers */
+/* @var bool $isUpToDate */
 ?>
-<div class="alert-warning">Veuillez noter que CraftMyWebsite2 est actuellement en phase alpha et n'est pas encore
-    achevé. <br>Son utilisation en environnement de production est fortement déconseillée. Des fonctionnalités clés
-    peuvent manquer ou ne pas fonctionner comme prévu. <br><b>Pendant cette phase, des réinstallations complètes du
-        système pourront être nécessaires.</b> <br>Nous vous remercions de votre compréhension et de votre patience
-    pendant que nous travaillons sur CraftMyWebsite.
+<div class="alert-warning">
+    <?= LangManager::translate('core.dashboard.alpha') ?>
 </div>
+
+<?php if (!$isUpToDate): ?>
+    <div class="alert-danger mt-2">
+        <?= LangManager::translate('core.dashboard.updateWarning') ?>
+    </div>
+<?php endif; ?>
+
 
 <h3><i class="fa-solid fa-chart-pie"></i> <?= LangManager::translate('core.dashboard.title') ?></h3>
 
