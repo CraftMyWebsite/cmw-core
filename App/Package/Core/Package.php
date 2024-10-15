@@ -8,6 +8,10 @@ use CMW\Manager\Package\PackageMenuType;
 use CMW\Manager\Package\PackageSubMenuType;
 use CMW\Manager\Theme\ThemeManager;
 
+/**
+ * @var $isUpToDate bool
+ */
+
 class Package implements IPackageConfig
 {
     public function name(): string
@@ -80,7 +84,7 @@ class Package implements IPackageConfig
             ),
             new PackageMenuType(
                 icon: 'fas fa-cloud-arrow-down',
-                title: LangManager::translate('core.menu.update'),
+                title: $isUpToDate ? LangManager::translate('core.menu.update') : LangManager::translate('core.menu.updateMe'),
                 url: 'updates/cms',
                 permission: 'core.update',
                 subMenus: [],

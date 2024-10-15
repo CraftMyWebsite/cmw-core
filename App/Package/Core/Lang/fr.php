@@ -52,6 +52,8 @@ return [
         'days' => 'Jours',
         'weeks' => 'Semaines',
         'months' => 'Mois',
+        'alpha' => 'Veuillez noter que CraftMyWebsite2 est actuellement en phase alpha et n\'est pas encore achevé. <br>Son utilisation en environnement de production est fortement déconseillée. Des fonctionnalités clés peuvent manquer ou ne pas fonctionner comme prévu. <br><b>Pendant cette phase, des réinstallations complètes du système pourront être nécessaires.</b> <br>Nous vous remercions de votre compréhension et de votre patience pendant que nous travaillons sur CraftMyWebsite.',
+        'updateWarning' => '<strong>Attention :</strong> La version actuelle de votre CMS n\'est pas la dernière disponible.Il est fortement conseillé de <a class="link" href="updates/cms">mettre à jour</a> votre CMS pour bénéficier des derniers correctifs de sécurité ainsi que des nouvelles fonctionnalités ajoutées.',
     ],
     'menus' => [
         'title' => 'Menus',
@@ -470,6 +472,7 @@ return [
             'security' => 'Sécurité',
         ],
         'update' => 'Mises à jour',
+        'updateMe' => 'Mises à jour <i style="color:#da3434;" class="absolute ml-1 fa-solid fa-circle-exclamation"></i>',
         'themes' => [
             'main' => 'Thèmes',
             'edit' => 'Modifier ',
