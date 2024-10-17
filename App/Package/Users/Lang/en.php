@@ -264,4 +264,9 @@ return [
             ],
         ],
     ],
+    'security' => [
+        'captcha' => [
+            'invalid' => 'invalid Captcha',
+        ],
+    ],
 ];
