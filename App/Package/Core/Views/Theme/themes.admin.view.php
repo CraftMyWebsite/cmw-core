@@ -62,7 +62,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                                class="btn btn-sm btn-warning"><?= LangManager::translate('core.Theme.reset') ?></a>
                         </div>
                     </div>
-                    <div class="grid-2">
+                    <div class="modal-body grid-2">
                         <div style="height:20rem">
                             <img style="height: 100%; width: 100%;"
                                  src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Img/local-theme.jpg"
@@ -156,7 +156,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                                class="btn-danger"><?= LangManager::translate('core.Theme.reinstall') ?></a>
                         </div>
                     </div>
-                    <div class="grid-2">
+                    <div class="modal-body grid-2">
                         <div style="height:20rem">
                             <img style="height: 100%; width: 100%;"
                                  src="<?= $theme['icon'] ?>"
@@ -166,12 +166,12 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                             <p class="">
                                 <b><?= LangManager::translate('core.Theme.description') ?></b>
                             </p>
-                            <p><?= $theme['description'] ?></p>
+                            <p><?= htmlspecialchars_decode($theme['description']) ?></p>
                             <hr>
                             <p class="small">
                                 <?= LangManager::translate('core.Theme.author') ?><a
-                                    href=""
-                                    target="_blank"><?= $theme['author_pseudo'] ?>
+                                    href="https://craftmywebsite.fr/market/user/<?= $theme['author_pseudo'] ?>"
+                                    target="_blank" class="link"><?= $theme['author_pseudo'] ?>
                                 </a>
                             </p>
                             <p>
@@ -251,7 +251,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                             </form>
                         </div>
                     </div>
-                    <div class="grid-2">
+                    <div class="grid-2 modal-body">
                         <div style="height:20rem">
                             <img style="height: 100%; width: 100%;"
                                  src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Img/local-theme.jpg"
@@ -346,7 +346,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                             </form>
                         </div>
                     </div>
-                    <div class="grid-2">
+                    <div class="grid-2 modal-body">
                         <div style="height:20rem">
                             <img style="height: 100%; width: 100%;"
                                  src="<?= $theme['icon'] ?>"
@@ -356,12 +356,12 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                             <p class="">
                                 <b><?= LangManager::translate('core.Theme.description') ?></b>
                             </p>
-                            <p><?= $theme['description'] ?></p>
+                            <?= htmlspecialchars_decode($theme['description']) ?>
                             <hr>
                             <p class="small">
                                 <?= LangManager::translate('core.Theme.author') ?><a
-                                    href=""
-                                    target="_blank"><?= $theme['author_pseudo'] ?>
+                                    href="https://craftmywebsite.fr/market/user/<?= $theme['author_pseudo'] ?>"
+                                    target="_blank" class="link"><?= $theme['author_pseudo'] ?>
                                 </a>
                             </p>
                             <p>

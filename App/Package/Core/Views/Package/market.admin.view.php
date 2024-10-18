@@ -39,7 +39,10 @@ $description = LangManager::translate('core.Package.desc');
                             </p>
                             <p>
                                 <?= LangManager::translate('core.Package.author') ?>
-                                <?= $apiPackages['author_pseudo'] ?>
+                                <a
+                                    href="https://craftmywebsite.fr/market/user/<?= $apiPackages['author_pseudo'] ?>"
+                                    target="_blank" class="link"><?= $apiPackages['author_pseudo'] ?>
+                                </a>
                             </p>
                         </div>
                     </div>
@@ -78,7 +81,10 @@ $description = LangManager::translate('core.Package.desc');
                                 <?= htmlspecialchars_decode($apiPackages['description']) ?>
                                 <p class="small">
                                     <?= LangManager::translate('core.Package.author') ?>
-                                    <?= $apiPackages['author_pseudo'] ?>
+                                    <a
+                                        href="https://craftmywebsite.fr/market/user/<?= $apiPackages['author_pseudo'] ?>"
+                                        target="_blank" class="link"><?= $apiPackages['author_pseudo'] ?>
+                                    </a>
                                 </p>
                                 <p class="small">
                                     <?= LangManager::translate('core.Package.version') ?>

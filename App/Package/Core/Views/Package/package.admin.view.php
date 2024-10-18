@@ -189,7 +189,10 @@ $description = LangManager::translate('core.Package.desc');
                                 <?= html_entity_decode($packages['description']) ?>
                                 <p class="small">
                                     <?= LangManager::translate('core.Package.author') ?>
-                                    <?= $packages['author_pseudo'] ?>
+                                    <a
+                                        href="https://craftmywebsite.fr/market/user/<?= $packages['author_pseudo'] ?>"
+                                        target="_blank" class="link"><?= $packages['author_pseudo'] ?>
+                                    </a>
                                 </p>
                                 <p class="small">
                                     <?= LangManager::translate('core.Package.version') ?>
