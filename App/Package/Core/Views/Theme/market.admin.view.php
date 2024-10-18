@@ -33,7 +33,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                 </div>
             </div>
             <div id="modal-<?= $theme['id'] ?>" class="modal-container">
-                <div class="modal-lg">
+                <div class="modal-xl overflow-auto">
                     <div class="modal-header">
                         <h6><?= $theme['name'] ?></h6>
                         <div>
@@ -43,7 +43,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                             </button>
                         </div>
                     </div>
-                    <div class="grid-2">
+                    <div class="modal-body grid-2">
                         <div style="height:20rem">
                             <img style="height: 100%; width: 100%;"
                                  src="<?= $theme['icon'] ?>"
@@ -53,7 +53,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                             <p class="">
                                 <b><?= LangManager::translate('core.Theme.description') ?></b>
                             </p>
-                            <p><?= $theme['description'] ?></p>
+                            <?= htmlspecialchars_decode($theme['description']) ?>
                             <hr>
                             <p class="small">
                                 <?= LangManager::translate('core.Theme.author') ?><a

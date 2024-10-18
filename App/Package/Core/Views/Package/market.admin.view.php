@@ -59,7 +59,7 @@ $description = LangManager::translate('core.Package.desc');
             </div>
             <!--Details modal -->
             <div id="modal-<?= $apiPackages['id'] ?>" class="modal-container">
-                <div class="modal-lg">
+                <div class="modal-xl">
                     <div class="modal-header">
                         <h6><?= $apiPackages['name'] ?></h6>
                         <button
@@ -75,7 +75,7 @@ $description = LangManager::translate('core.Package.desc');
                                  alt="img">
                             <div class="px-4 w-full">
                                 <p><b><?= LangManager::translate('core.Package.description') ?></b></p>
-                                <?= html_entity_decode($apiPackages['description']) ?>
+                                <?= htmlspecialchars_decode($apiPackages['description']) ?>
                                 <p class="small">
                                     <?= LangManager::translate('core.Package.author') ?>
                                     <?= $apiPackages['author_pseudo'] ?>
