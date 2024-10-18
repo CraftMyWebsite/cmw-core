@@ -133,7 +133,7 @@ class AutoLoad
         }
 
         $dir = EnvManager::getInstance()->getValue('DIR');
-        $filePath = $dir . $startDir . ($packageName === 'installer' ? '' : $packageName) . $folderPackage . $subFolderFile . $fileName;
+        $filePath = $dir . $startDir . ($packageName === 'Installer' ? '' : $packageName) . $folderPackage . $subFolderFile . $fileName;
 
         $filePath = str_replace('\\', DIRECTORY_SEPARATOR, $filePath);
 
