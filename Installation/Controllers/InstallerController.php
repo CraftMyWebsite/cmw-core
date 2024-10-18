@@ -142,14 +142,14 @@ class InstallerController extends AbstractController
     }
 
     #[Link(path: '/lang/:code', method: Link::GET, variables: ['code' => '.*?'], scope: '/installer')]
-    public function changeLang(string $code): void
+    private function changeLang(string $code): void
     {
         EnvManager::getInstance()->setOrEditValue('LOCALE', $code);
         header('location: ../../installer');
     }
 
     #[Link(path: '/', method: Link::GET, scope: '/installer')]
-    public function getInstallPage(): void
+    private function getInstallPage(): void
     {
         if (self::getInstallationStep() === -1) {
             Redirect::redirectToHome();
@@ -209,7 +209,7 @@ class InstallerController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
-    public function welcomeInstallPost(): void
+    private function welcomeInstallPost(): void
     {
         if (!isset($_POST['cgu'])) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
@@ -271,7 +271,7 @@ class InstallerController extends AbstractController
         }
     }
 
-    public function firstInstallPost(): void
+    private function firstInstallPost(): void
     {
         if (Utils::isValuesEmpty($_POST, 'bdd_name', 'bdd_login', 'bdd_address', 'bdd_port', 'install_folder')) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
@@ -284,7 +284,7 @@ class InstallerController extends AbstractController
         $db = filter_input(INPUT_POST, 'bdd_name') ?? 'cmw';
 
         $subFolder = filter_input(INPUT_POST, 'install_folder');
-        $devMode = isset($_POST['dev_mode']);
+        $devMode = isset($_POST['dev_mode']) ? 1 : 0;
         $timezone = date_default_timezone_get();  // TODO GET BROWSER TIMEZONE
 
         if (!InstallerModel::tryDatabaseConnection($host, $username, $password, $port)) {
@@ -336,7 +336,7 @@ class InstallerController extends AbstractController
         EnvManager::getInstance()->setOrEditValue('DEVMODE', $devMode);
     }
 
-    public function secondInstallPost(): void
+    private function secondInstallPost(): void
     {
         if (Utils::isValuesEmpty($_POST, 'config_name', 'config_description')) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
@@ -352,7 +352,7 @@ class InstallerController extends AbstractController
         EnvManager::getInstance()->editValue('installStep', 3);
     }
 
-    public function thirdInstallPost(): void
+    private function thirdInstallPost(): void
     {
         $isCustom = false;
 
@@ -388,7 +388,7 @@ class InstallerController extends AbstractController
         EnvManager::getInstance()->editValue('installStep', 6);
     }
 
-    public function fourthInstallPost(): void
+    private function fourthInstallPost(): void
     {
         if (!isset($_POST['packages'])) {
             EnvManager::getInstance()->editValue('installStep', 5);
@@ -410,7 +410,7 @@ class InstallerController extends AbstractController
         EnvManager::getInstance()->editValue('installStep', 5);
     }
 
-    public function fifthInstallPost(): void
+    private function fifthInstallPost(): void
     {
         if (!isset($_POST['theme'])) {
             EnvManager::getInstance()->editValue('installStep', 6);
@@ -435,7 +435,7 @@ class InstallerController extends AbstractController
         EnvManager::getInstance()->editValue('installStep', 6);
     }
 
-    public function sixInstallPost(): void
+    private function sixInstallPost(): void
     {
         if (Utils::isValuesEmpty($_POST, 'email', 'pseudo', 'password') || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
@@ -456,14 +456,16 @@ class InstallerController extends AbstractController
 
     #[NoReturn]
     #[Link(path: '/finish', method: Link::GET, scope: '/installer')]
-    public function endInstallation(): void
+    private function endInstallation(): void
     {
         // Reset to Default settings (with dev mode or not)
         ErrorManager::enableErrorDisplays();
         EnvManager::getInstance()->editValue('installStep', -1);
 
         if (EnvManager::getInstance()->getValue('DEVMODE') === '0') {
-            Directory::delete(EnvManager::getInstance()->getValue('DIR') . 'Installation');
+            if (!Directory::delete(EnvManager::getInstance()->getValue('DIR') . 'Installation')) {
+                Flash::send(Alert::ERROR, 'Installation', 'La suppression du dossier d\'installation à échoué !');
+            }
         }
 
         // Init sitemap
