@@ -25,14 +25,14 @@ use CMW\Manager\Lang\LangManager;
 
         <div class="lg:pl-2 lg:w-1/2">
             <div class="form-control  w-full">
-                <label class="label">
+                <!--<label class="label">
                     <span class="label-text">
                         <?= LangManager::translate('Installation.themes.compatibility') ?> :
                     </span>
                 </label>
                 <select class="select select-sm select-bordered" disabled>
                     <option selected>-- SOON --</option>
-                </select>
+                </select>-->
             </div>
 
         </div>
@@ -50,11 +50,11 @@ use CMW\Manager\Lang\LangManager;
                     <div class="bg-gray-800">
                         <figure><img src="<?= $theme['icon'] ?>" alt="Icon <?= $theme['icon'] ?>"/></figure>
                         <div class="p-2">
-                            <p><?= $theme['description'] ?></p>
                             <?php foreach ($theme['tags'] as $tag): ?>
                                 <small class="px-1 bg-primary rounded mr-2"><?= $tag['value'] ?></small>
                             <?php endforeach; ?>
                         </div>
+
                     </div>
                 </label>
                 <div class="flex justify-between p-2 bg-gray-700 rounded-b-2xl">

@@ -54,10 +54,9 @@ use CMW\Manager\Lang\LangManager;
 
                         $tags = implode(',', $tags);
                         ?>
-                        <li onmouseenter="showInfoPackage('<?= $package['name'] ?>','<?= $package['description'] ?>', '<?= $tags ?>',
-                            '<?= $package['author_pseudo'] ?>', '<?= $package['price'] ?>', '<?= $package['downloads'] ?>',
-                            '<?= $package['version_name'] ?>', '<?= $package['code_link'] ?>', '<?= $package['demo_link'] ?>')"
-                            class="p-1 bg-cmw-gray-sec hover:bg-gray-800 mb-px">
+                        <li data-package='<?= htmlspecialchars(json_encode($package), ENT_QUOTES, 'UTF-8') ?>'
+                            class="p-1 bg-cmw-gray-sec hover:bg-gray-800 mb-px"
+                            onmouseenter="handlePackageInfo(this)">
                             <input class="hidden" id="package_<?= $package['id'] ?>" type="checkbox" name="packages[]"
                                    value="<?= $package['id'] ?>">
                             <label class="label flex justify-start gap-2" for="package_<?= $package['id'] ?>">
@@ -117,48 +116,64 @@ use CMW\Manager\Lang\LangManager;
     let codeLinkParent = document.getElementById("CodeLink")
     let demoLinkParent = document.getElementById("DemoLink")
 
+    function handlePackageInfo(element) {
+        // Récupérer l'attribut data-package
+        const packageData = JSON.parse(element.getAttribute('data-package'));
+
+        // Extraire les données du package
+        const { name, description, tags, author_pseudo, price, downloads, version_name, code_link, demo_link } = packageData;
+
+        // Utiliser ces données dans la fonction showInfoPackage
+        showInfoPackage(name, description, tags, author_pseudo, price, downloads, version_name, code_link, demo_link);
+    }
+
     function showInfoPackage(title, description, tags, author, price, downloads, version, codeLink, demoLink) {
-        /* * * * * * * * TAGS SYS * * * * * * */
-        if (tags !== '') {
-            const tagsList = tags.split(",");
+        if (Array.isArray(tags)) {
             tagsParent.innerHTML = "";
-            let i = 0;
-            while (i < tagsList.length) {
+            tags.forEach(tag => {
                 let div = document.createElement('small');
                 div.className = 'px-1 bg-primary rounded mr-2';
-                let text = document.createTextNode(tagsList[i]);
+                let text = document.createTextNode(tag.value); // Utilise "value" pour accéder au nom du tag
                 div.appendChild(text);
-                tagsParent.appendChild(div)
-                i++;
-            }
+                tagsParent.appendChild(div);
+            });
         } else {
             tagsParent.innerHTML = "";
         }
         /* * * * * * * * * * * * * * * * * * * * */
 
+        // Décodage de la description pour gérer les entités HTML
+        let tempElement = document.createElement('div');
+        tempElement.innerHTML = description;
+        let decodedDescription = tempElement.textContent || tempElement.innerText;
+
         titleParent.innerHTML = title;
-        descriptionParent.innerHTML = description;
+        descriptionParent.innerHTML = decodedDescription;
         authorParent.innerHTML = "<i class='fa-solid fa-at'></i><i> " + author + "</i>";
+
         if (price > 0) {
             priceParent.innerHTML = new Intl.NumberFormat('fr-FR', {style: 'currency', currency: 'EUR'}).format(price);
         } else {
             priceParent.innerHTML = "<b><?= LangManager::translate('Installation.packages.free') ?></b>";
         }
+
         downloadParent.innerHTML = "<i class='fa-solid fa-download'></i> " + downloads;
         packageVersionParent.innerHTML = "<?= LangManager::translate('Installation.packages.version') ?>: " + version;
 
         if (codeLink !== "") {
-            codeLinkParent.innerHTML = "<a href='" + codeLink + "' target='_blank'><i class='fa-brands fa-github'></i></a>"
+            codeLinkParent.innerHTML = "<a href='" + codeLink + "' target='_blank'><i class='fa-brands fa-github'></i></a>";
         } else {
-            codeLinkParent.innerHTML = ""
+            codeLinkParent.innerHTML = "";
         }
 
         if (demoLink !== "") {
-            demoLinkParent.innerHTML = "<a href='" + codeLink + "' target='_blank'><?= LangManager::translate('Installation.packages.demo') ?></a>"
+            demoLinkParent.innerHTML = "<a href='" + demoLink + "' target='_blank'><?= LangManager::translate('Installation.packages.demo') ?></a>";
         } else {
-            demoLinkParent.innerHTML = ""
+            demoLinkParent.innerHTML = "";
         }
     }
+
+
 
     //TODO Tags
     function tagsFunction() {
