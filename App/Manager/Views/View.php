@@ -2,9 +2,6 @@
 
 namespace CMW\Manager\Views;
 
-use CMW\Controller\Core\CoreController;
-use CMW\Controller\Core\MenusController;
-use CMW\Controller\Core\ThemeController;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Components\ComponentsManager;
 use CMW\Manager\Env\EnvManager;
@@ -14,6 +11,9 @@ use CMW\Manager\Theme\ThemeManager;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
+use function is_file;
+use function print_r;
+use function var_dump;
 
 class View
 {
@@ -53,6 +53,16 @@ class View
     {
         $view = new self($package, $viewFile);
         $view->view();
+    }
+
+    /**
+     * @param string $package
+     * @param string $viewFile
+     * @return \CMW\Manager\Views\View
+     */
+    public static function createPublicView(string $package, string $viewFile): View
+    {
+        return new self($package, $viewFile);
     }
 
     /**
@@ -340,7 +350,7 @@ class View
         $includes = $this->includes;
 
         ob_start();
-        require ($path);
+        require($path);
         return ob_get_clean();
     }
 
@@ -358,24 +368,44 @@ class View
         $includes = $this->includes;
 
         if (is_null($this->customPath) && Utils::containsNullValue($this->package, $this->viewFile)) {
-            throw new RouterException(null, 404);  // TODO Real errors?
-        }
-
-        $path = $this->getViewPath();
-
-        if (!is_file($path)) {
-            throw new RouterException(null, 404);  // TODO Real errors?
+            throw new RouterException("Invalid View usage. Please set a correct path.", 404);
         }
 
         //Load Elements
         ComponentsManager::getInstance()->loadThemeComponents($this->themeName);
 
         ob_start();
-        require_once ($path);
+        $this->loadViewFile();
         echo $this->callAlerts();
         $content = ob_get_clean();
 
-        require_once ($this->getTemplateFile());
+        require_once($this->getTemplateFile());
+    }
+
+    /**
+     * @return void
+     * @desc Load the  view if the file exist
+     * @throws \CMW\Manager\Router\RouterException
+     */
+    private function loadViewFile(): void
+    {
+        //Load theme View File if exist
+        $themePath = $this->getViewPath();
+
+        if (is_file($themePath)) {
+            require $themePath;
+            return;
+        }
+
+        //Load Package Fallback
+        $packageFallbackPath = "App/Package/$this->package/Public/$this->viewFile.view.php";
+
+        if (is_file($packageFallbackPath)) {
+            require_once($packageFallbackPath);
+            return;
+        }
+
+        throw new RouterException(null, 404);
     }
 
     /**
