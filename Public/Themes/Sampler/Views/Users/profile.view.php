@@ -101,7 +101,7 @@ Website::setDescription("Découvrez le profil de l'utilisateur " . $user->getPse
                              src="<?= $user->getUserPicture()->getImage() ?>"
                              height="50%" width="50%" alt="Image de profil de <?= $user->getPseudo() ?>">
                     <?php endif; ?>
-                    <form action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile" method="post"
+                    <form action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile/update/picture" method="post"
                           enctype="multipart/form-data">
                         <?php (new SecurityManager())->insertHiddenToken() ?>
                         <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Changer votre image

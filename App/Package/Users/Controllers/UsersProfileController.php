@@ -75,29 +75,37 @@ class UsersProfileController extends AbstractController
         $view->view();
     }
 
-    #[Link('/profile', Link::POST)]
+    #[Link('/profile/update/picture', Link::POST)]
     private function publicProfilePost(): void
     {
         if (!UserSettingsEntity::getInstance()->isProfilePageEnabled()) {
             Redirect::redirectToHome();
         }
 
-        if (!UsersController::isUserLogged()) {
+        $user = UsersModel::getCurrentUser();
+
+        if (is_null($user)) {
             Redirect::redirectToHome();
         }
 
-        $image = $_FILES['pictureProfile'];
+        if (!empty($_FILES['pictureProfile']['name'])) {
+            $image = $_FILES['pictureProfile'];
 
-        try {
-            // Upload image on the server
-            $imageName = ImagesManager::upload($image, 'Users');
-        } catch (ImagesException $e) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                LangManager::translate('core.errors.upload.image') . " => $e");
-            Redirect::redirectPreviousRoute();
+            try {
+                // Upload image on the server
+                $imageName = ImagesManager::upload($image, 'Users');
+
+                if (!UserPictureModel::getInstance()->updateUserImage($user->getId(), $imageName)) {
+                    Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                        LangManager::translate('core.errors.upload.image'));
+                    Redirect::redirectPreviousRoute();
+                }
+            } catch (ImagesException $e) {
+                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                    LangManager::translate('core.errors.upload.image') . " => $e");
+                Redirect::redirectPreviousRoute();
+            }
         }
-
-        UserPictureModel::getInstance()->uploadImage(UsersModel::getCurrentUser()?->getId(), $imageName);
 
         Redirect::redirect('profile');
     }
@@ -158,6 +166,10 @@ class UsersProfileController extends AbstractController
         }
 
         $user = UsersModel::getCurrentUser();
+
+        if (is_null($user)) {
+            Redirect::redirectToHome();
+        }
 
         [$mail, $pseudo, $firstname, $lastname] = Utils::filterInput('email', 'pseudo', 'name', 'lastname');
 
