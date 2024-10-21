@@ -469,7 +469,7 @@ return [
             'security' => 'Security',
         ],
         'update' => 'CMW Updates',
-        'updateMe' => 'CMW Updates <i style="color:#da3434;" class="absolute ml-1 fa-solid fa-circle-exclamation"></i>',
+        'updateMe' => 'CMW Updates <i style="color:#da3434;" class="ml-1 fa-solid fa-circle-exclamation"></i>',
         'themes' => [
             'main' => 'Themes',
             'edit' => 'Edit ',

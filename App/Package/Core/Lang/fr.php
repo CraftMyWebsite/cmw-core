@@ -472,7 +472,7 @@ return [
             'security' => 'Sécurité',
         ],
         'update' => 'Mises à jour',
-        'updateMe' => 'Mises à jour <i style="color:#da3434;" class="absolute ml-1 fa-solid fa-circle-exclamation"></i>',
+        'updateMe' => 'Mises à jour <i style="color:#da3434;" class="ml-1 fa-solid fa-circle-exclamation"></i>',
         'themes' => [
             'main' => 'Thèmes',
             'edit' => 'Modifier ',
