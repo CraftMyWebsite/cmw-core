@@ -4,6 +4,7 @@ namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Api\PublicAPI;
+use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Updater\CMSUpdaterManager;
@@ -83,6 +84,8 @@ class UpdatesController extends AbstractController
         foreach ($versions as $version) {
             (new CMSUpdaterManager())->doUpdate($version);
         }
+
+        SimpleCacheManager::deleteAllFiles();
 
         Redirect::redirectPreviousRoute();
     }

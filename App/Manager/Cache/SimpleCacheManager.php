@@ -6,6 +6,12 @@ use CMW\Manager\Env\EnvManager;
 use CMW\Utils\Directory;
 use JsonException;
 use function file_exists;
+use function glob;
+use function is_dir;
+use function is_file;
+use function pathinfo;
+use function unlink;
+use const PATHINFO_EXTENSION;
 
 class SimpleCacheManager
 {
@@ -138,6 +144,25 @@ class SimpleCacheManager
         }
 
         unlink(self::getCompletePath() . $subFolder . $fileName);
+    }
+
+    /**
+     * @param string|null $dir
+     * @return void
+     * @desc This method delete all cache files (recursively)
+     */
+    public static function deleteAllFiles(?string $dir = null): void
+    {
+        $dir ??= self::getCompletePath();
+        $files = glob("$dir/*");
+
+        foreach ($files as $file) {
+            if (is_file($file) && pathinfo($file, PATHINFO_EXTENSION) === "cache") {
+                unlink($file);
+            } elseif (is_dir($file)) {
+                self::deleteAllFiles($file);
+            }
+        }
     }
 
     /**

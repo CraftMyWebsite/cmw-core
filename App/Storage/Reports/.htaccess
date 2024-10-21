@@ -1,3 +1,0 @@
-RewriteRule .*$ - [F]
-
-Options -Indexes
