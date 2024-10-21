@@ -12,8 +12,6 @@ use CMW\Utils\Utils;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
 use function is_file;
-use function print_r;
-use function var_dump;
 
 class View
 {
@@ -274,9 +272,17 @@ class View
             return $this->customPath;
         }
 
-        return ($this->isAdminFile)
-            ? "App/Package/$this->package/Views/$this->viewFile.admin.view.php"
-            : "Public/Themes/$this->themeName/Views/$this->package/$this->viewFile.view.php";
+        if ($this->isAdminFile) {
+            return "App/Package/$this->package/Views/$this->viewFile.admin.view.php";
+        }
+
+        $publicPath = "Public/Themes/$this->themeName/Views/$this->package/$this->viewFile.view.php";
+
+        if (is_file($publicPath)) {
+            return $publicPath;
+        }
+
+        return "App/Package/$this->package/Public/$this->viewFile.view.php";
     }
 
     /**
@@ -371,41 +377,21 @@ class View
             throw new RouterException("Invalid View usage. Please set a correct path.", 404);
         }
 
+        $path = $this->getViewPath();
+
+        if (!is_file($path)) {
+            throw new RouterException(null, 404);
+        }
+
         //Load Elements
         ComponentsManager::getInstance()->loadThemeComponents($this->themeName);
 
         ob_start();
-        $this->loadViewFile();
+        require_once $path;
         echo $this->callAlerts();
         $content = ob_get_clean();
 
         require_once($this->getTemplateFile());
-    }
-
-    /**
-     * @return void
-     * @desc Load the  view if the file exist
-     * @throws \CMW\Manager\Router\RouterException
-     */
-    private function loadViewFile(): void
-    {
-        //Load theme View File if exist
-        $themePath = $this->getViewPath();
-
-        if (is_file($themePath)) {
-            require $themePath;
-            return;
-        }
-
-        //Load Package Fallback
-        $packageFallbackPath = "App/Package/$this->package/Public/$this->viewFile.view.php";
-
-        if (is_file($packageFallbackPath)) {
-            require_once($packageFallbackPath);
-            return;
-        }
-
-        throw new RouterException(null, 404);
     }
 
     /**
