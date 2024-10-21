@@ -33,29 +33,22 @@
     Require all denied
 </FilesMatch>
 
-# Deny access to .htaccess
-<Files ~ "^\.ht">
+# Deny access to all files starting with .
+<Files ~ "^\.">
     Order allow,deny
     Deny from all
     satisfy all
 </Files>
 
-# Deny access to .env
-<Files .env>
-    Order allow,deny
-    Deny from all
-    satisfy all
-</Files>
-
-# Deny access to .cmw-version
-<Files .cmw-version>
-    Order allow,deny
-    Deny from all
-    satisfy all
-</Files>
-
-# Deny access to .cmw-version
+# Deny access to cmw file
 <Files cmw>
+    Order allow,deny
+    Deny from all
+    satisfy all
+</Files>
+
+# Deny access to pretty-php.phar file
+<Files "pretty-php.phar">
     Order allow,deny
     Deny from all
     satisfy all
