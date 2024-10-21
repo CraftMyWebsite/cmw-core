@@ -19,7 +19,7 @@ Website::setDescription("Découvrez le profil de l'utilisateur " . $user->getPse
             <div class="col-lg-6 p-2">
                 <div class="card p-2">
                     <h4 class="text-center">Informations personnel</h4>
-                    <form class="space-y-6" action="profile/update" method="post">
+                    <form class="space-y-6" action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'profile/update' ?>" method="post">
                         <?php (new SecurityManager())->insertHiddenToken() ?>
                         <div class="row">
                             <div class="col-lg-6">
