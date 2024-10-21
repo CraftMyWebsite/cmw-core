@@ -1,45 +1,47 @@
-# A Propos : Pour fonctionner sur NGinx, veuillez indiquer la configuration serveur suivante :
-    add_header X-Frame-Options "SAMEORIGIN";
-    add_header X-XSS-Protection "1; mode=block";
-    add_header Referrer-Policy "strict-origin-when-cross-origin";
+server {
+    listen 80;
+    server_name example.com; //Use your domain
+    root /var/www/html; //Use your path
+    index index.php index.html index.htm;
 
-    index index.html index.htm index.php;
+    autoindex off;
 
-    charset utf-8;
+    location / {
+        rewrite ^/(.*)/$ /$1 permanent;
 
-	error_page 401 /error/401;
-	error_page 403 /error/403;
-	error_page 404 /error/404;
-	error_page 500 /error/500;
+        try_files $uri $uri/ /index.php?url=$uri&$args;
+    }
 
-    location = /cmw {
+    location ~* ^/App/Storage/ {
         deny all;
     }
 
-	location / {
-		rewrite ^/(.+)/$ /$1 permanent;
-		try_files $uri $uri/ /index.php?url=$uri;
-	}
-
-
-    location = /favicon.ico { access_log off; log_not_found off; }
-
-	location ~ /\.(ht|env|cmw-version)$ {
+    location ~ /\. {
         deny all;
-	}
+        access_log off;
+        log_not_found off;
+    }
 
-	location ~* \.(ico|jpg|jpeg|png|gif|webp|svg)$ {
-		expires 1w;
-		add_header Cache-Control "public, max-age=84600";
-	}
+    location ~* ^/\.cmw-version$ {
+        deny all;
+    }
 
-	location ~* \.(js|css)$ {
-		expires 1M;
-		add_header Cache-Control "public, max-age=2592000";
-	}
+    location ~* \.(ico|jpg|jpeg|png|gif|js|css|webp|svg|woff2|otf)$ {
+        expires 1m;
+        add_header Cache-Control "public, max-age=84600";
+    }
 
-	location ~ \.php$ {
+    error_page 401 /error/401;
+    error_page 403 /error/403;
+    error_page 404 /error/404;
+    error_page 500 /error/500;
+
+    location ~ \.php$ {
         include snippets/fastcgi-php.conf;
-        fastcgi_pass php_upstream;
+        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
     }
+
+    fastcgi_param PHP_VALUE "session.cookie_lifetime=600480 \n session.gc_maxlifetime=600480";
 }
