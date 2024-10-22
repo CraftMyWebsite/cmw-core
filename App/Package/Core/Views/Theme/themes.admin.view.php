@@ -185,7 +185,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                                 <i><b><?= $theme['version_cmw'] ?></b></i>
                             </p>
                             <div class="flex gap-3">
-                                <?php if ($theme['demo']): ?>
+                                <?php if (isset($theme['demo'])): ?>
                                     <a class="btn-primary-sm"
                                        href="<?= $theme['demo'] ?>" target="_blank"><i
                                             class="fa-solid fa-arrow-up-right-from-square"></i> <?= LangManager::translate('core.Theme.demo') ?>
@@ -375,7 +375,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                                 <i><b><?= $theme['version_cmw'] ?></b></i>
                             </p>
                             <div class="flex gap-3">
-                                <?php if ($theme['demo']): ?>
+                                <?php if (isset($theme['demo'])): ?>
                                     <a class="btn-primary-sm"
                                        href="<?= $theme['demo'] ?>" target="_blank"><i
                                             class="fa-solid fa-arrow-up-right-from-square"></i> <?= LangManager::translate('core.Theme.demo') ?>
