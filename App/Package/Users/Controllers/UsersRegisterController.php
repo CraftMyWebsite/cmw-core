@@ -47,9 +47,9 @@ class UsersRegisterController extends AbstractController
 
         $oAuths = UsersOAuthController::getInstance()->getEnabledImplementations();
 
-        $view = new View('Users', 'register');
-        $view->addVariableList(['oAuths' => $oAuths]);
-        $view->view();
+        View::createPublicView('Users', 'register')
+            ->addVariableList(['oAuths' => $oAuths])
+            ->view();
     }
 
     #[NoReturn] #[Link('/register', Link::POST)]

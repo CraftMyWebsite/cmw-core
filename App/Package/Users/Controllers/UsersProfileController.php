@@ -70,9 +70,9 @@ class UsersProfileController extends AbstractController
             Redirect::redirect('profile/', ['pseudo' => $user?->getPseudo()]);
         }
 
-        $view = new View('Users', 'profile');
-        $view->addVariableList(['user' => $user]);
-        $view->view();
+        View::createPublicView('Users', 'profile')
+            ->addVariableList(['user' => $user])
+            ->view();
     }
 
     #[Link('/profile/update/picture', Link::POST)]
@@ -136,9 +136,9 @@ class UsersProfileController extends AbstractController
             Redirect::redirectToHome();
         }
 
-        $view = new View('Users', 'profile');
-        $view->addVariableList(['user' => $user]);
-        $view->view();
+        View::createPublicView('Users', 'profile')
+            ->addVariableList(['user' => $user])
+            ->view();
     }
 
     #[NoReturn] #[Link('/profile/delete/:id', Link::GET, ['id' => '[0-9]+'])]

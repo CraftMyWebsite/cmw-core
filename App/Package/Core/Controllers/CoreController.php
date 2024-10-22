@@ -162,8 +162,7 @@ class CoreController extends AbstractController
     #[Link('/', Link::GET)]
     private function frontHome(): void
     {
-        $view = new View('Core', 'home');
-        $view->view();
+        View::createPublicView('Core', 'home')->view();
     }
 
     /* //////////////////////////////////////////////////////////////////////////// */

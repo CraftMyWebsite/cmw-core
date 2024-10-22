@@ -152,11 +152,10 @@ class PagesController extends AbstractController
 
         // If page slug exist
         if (!is_null($pageEntity)) {
-            // Include the Public view file ("Public/Themes/$themePath/Views/Pages/main.view.php")
-            $view = new View('Pages', 'main');
-            $view->addScriptBefore('Admin/Resources/Vendors/Prismjs/prism.js');
-            $view->addVariableList(['page' => $pageEntity]);
-            $view->view();
+            View::createPublicView('Pages', 'main')
+                ->addVariableList(['page' => $pageEntity])
+                ->addScriptBefore('Admin/Resources/Vendors/Prismjs/prism.js')
+                ->view();
             return;
         }
 

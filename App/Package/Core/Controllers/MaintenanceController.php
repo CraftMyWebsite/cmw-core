@@ -141,9 +141,7 @@ class MaintenanceController extends AbstractController
         if ($maintenance->isOverrideTheme()) {
             eval('?>' . $maintenance->getOverrideThemeCode());
         } else {
-            $view = new View('Core', 'maintenance');
-            $view->addVariableList(['maintenance' => $maintenance]);
-            $view->view();
+            View::createPublicView('Core', 'maintenance')->addVariableList(['maintenance' => $maintenance])->view();
         }
     }
 }

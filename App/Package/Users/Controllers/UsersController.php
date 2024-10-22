@@ -303,8 +303,7 @@ class UsersController extends AbstractController
             Redirect::redirectToHome();
         }
 
-        $view = new View('Users', 'forgot_password');
-        $view->view();
+        View::createPublicView('Users', 'forgot_password')->view();
     }
 
     #[NoReturn] #[Link('/login/forgot', Link::POST)]

@@ -182,9 +182,9 @@ class UsersLoginController extends AbstractController
 
         $oAuths = UsersOAuthController::getInstance()->getEnabledImplementations();
 
-        $view = new View('Users', 'login');
-        $view->addVariableList(['oAuths' => $oAuths]);
-        $view->view();
+        View::createPublicView('Users', 'login')
+            ->addVariableList(['oAuths' => $oAuths])
+            ->view();
     }
 
     private function showLogin2Fa(): void
@@ -198,15 +198,14 @@ class UsersLoginController extends AbstractController
             ErrorManager::showCustomErrorPage("File not found", "The file $filePath doesn't exist.");
         }
 
-        $view = new View('Users', '2fa');
-        $view->view();
+        View::createPublicView('Users', '2fa')->view();
     }
 
     private function enforceLogin2Fa(UserEntity $user): void
     {
-        $view = new View('Users', 'enforce2fa');
-        $view->addVariableList(['user' => $user]);
-        $view->view();
+        View::createPublicView('Users', 'enforce2fa')
+            ->addVariableList(['user' => $user])
+            ->view();
     }
 
     #[Link('/login/validate/tfa', Link::POST)]

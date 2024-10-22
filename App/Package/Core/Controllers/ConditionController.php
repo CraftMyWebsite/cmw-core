@@ -78,10 +78,7 @@ class ConditionController extends AbstractController
             Redirect::redirectToHome();
         }
 
-        // Include the Public view file ("Public/Themes/$themePath/Views/Core/cgv.view.php")
-        $view = new View('Core', 'cgv');
-        $view->addVariableList(['cgv' => $cgv]);
-        $view->view();
+        View::createPublicView('Core', 'cgv')->addVariableList(['cgv' => $cgv])->view();
     }
 
     #[Link('/cgu', Link::GET)]
@@ -93,9 +90,6 @@ class ConditionController extends AbstractController
             Redirect::redirectToHome();
         }
 
-        // Include the Public view file ("Public/Themes/$themePath/Views/Core/cgu.view.php")
-        $view = new View('Core', 'cgu');
-        $view->addVariableList(['cgu' => $cgu]);
-        $view->view();
+        View::createPublicView('Core', 'cgu')->addVariableList(['cgu' => $cgu])->view();
     }
 }
