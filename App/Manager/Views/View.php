@@ -415,9 +415,9 @@ class View
         $alertContent = '';
         foreach ($alerts as $alert) {
             if (!$alert->isAdmin()) {
-                $view = new View('Alerts', $alert->getType());
+                $view = new View('Core', 'Alerts/'.$alert->getType());
             } else {
-                $view = new View('Core', "Alerts/{$alert->getType()}", true);
+                $view = new View('Core', 'Alerts/'.$alert->getType(), true);
             }
             $view->addVariable('alert', $alert);
             $alertContent .= $view->loadFile();
