@@ -8,6 +8,10 @@ use CMW\Manager\Requests\HttpMethodsType;
 use CMW\Manager\Router\Route;
 use CMW\Manager\Router\Router;
 use JetBrains\PhpStorm\NoReturn;
+use function header;
+use function http_response_code;
+use function implode;
+use function is_null;
 
 class Redirect
 {
@@ -41,6 +45,17 @@ class Redirect
 
         http_response_code(302);
         header('Location: ' . EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . $route->getUrl() . '/' . $strParams);
+        die();
+    }
+
+    /**
+     * @param string $url Url or Route Name.
+     */
+    #[NoReturn]
+    public static function external(string $url, int $responseCode = 302): void
+    {
+        http_response_code($responseCode);
+        header("Location: $url");
         die();
     }
 
