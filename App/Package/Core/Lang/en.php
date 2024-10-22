@@ -475,6 +475,11 @@ return [
             'edit' => 'Edit ',
             'installed' => 'Installed Themes',
             'market' => 'Browse the Market',
+            'toasters' => [
+                'update' => [
+                    'success' => 'Theme %theme% update with success',
+                ],
+            ],
         ],
         'package' => [
             'main' => 'Packages',

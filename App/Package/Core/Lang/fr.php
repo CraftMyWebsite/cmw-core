@@ -317,7 +317,7 @@ return [
         'captcha' => [
             'title' => 'Gestion du captcha',
             'type' => 'Type de captcha',
-            'invalid' => 'Captcha invalide'
+            'invalid' => 'Captcha invalide',
         ],
         'healthReport' => [
             'title' => 'Health Report',
@@ -478,6 +478,11 @@ return [
             'edit' => 'Modifier ',
             'installed' => 'Thèmes installés',
             'market' => 'Parcourir le Market',
+            'toasters' => [
+                'update' => [
+                    'success' => 'Thème %theme% mis à jour avec succès',
+                ],
+            ],
         ],
         'package' => [
             'main' => 'Packages',
