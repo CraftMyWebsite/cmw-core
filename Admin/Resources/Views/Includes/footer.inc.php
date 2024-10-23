@@ -4,7 +4,7 @@ use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Updater\UpdatesManager;
 
-/* @var bool $isUpToDate */
+$isUpToDate = UpdatesManager::checkNewUpdateAvailable()
 
 ?>
 

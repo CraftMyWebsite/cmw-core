@@ -11,10 +11,7 @@ header('Cache-Control: max-age=2592000');
  */
 
 use CMW\Manager\Env\EnvManager;
-use CMW\Manager\Updater\UpdatesManager;
 use CMW\Utils\Website;
-
-$isUpToDate = UpdatesManager::checkNewUpdateAvailable();
 
 ?>
 <!DOCTYPE html>

@@ -4,6 +4,7 @@ use CMW\Controller\Core\CoreController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Metrics\VisitsMetricsManager;
+use CMW\Manager\Updater\UpdatesManager;
 use CMW\Model\Users\UsersModel;
 use CMW\Utils\Date;
 use CMW\Utils\Website;
@@ -15,13 +16,14 @@ Website::setDescription(LangManager::translate('core.dashboard.desc'));
 /* @var array $dailyVisits */
 /* @var array $weeklyVisits */
 /* @var array $registers */
-/* @var bool $isUpToDate */
+
+$isUpToDate = UpdatesManager::checkNewUpdateAvailable()
 ?>
 <div class="alert-warning">
     <?= LangManager::translate('core.dashboard.alpha') ?>
 </div>
 
-<?php if (!$isUpToDate): ?>
+<?php if ($isUpToDate): ?>
     <div class="alert-danger mt-2">
         <?= LangManager::translate('core.dashboard.updateWarning') ?>
     </div>
