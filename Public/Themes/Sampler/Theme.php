@@ -18,7 +18,7 @@ class Theme implements IThemeConfig
 
     public function cmwVersion(): string
     {
-        return '2.0';
+        return 'alpha-01';
     }
 
     public function author(): ?string
