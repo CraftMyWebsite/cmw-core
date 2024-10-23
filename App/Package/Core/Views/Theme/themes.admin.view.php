@@ -310,16 +310,16 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                            href="update/<?= $theme['id'] ?>/<?= $localTheme->version() ?>/<?= $localTheme->name() ?>">
                             <?= LangManager::translate('core.Package.update') ?>
                         </a>
+                    <?php else: ?>
+                    <form action="" method="post">
+                        <?php (new SecurityManager())->insertHiddenToken() ?>
+                        <input hidden type="text" name="theme"
+                               value="<?= $theme['name'] ?>">
+                        <button type="submit"
+                                class="btn-success-sm"><?= LangManager::translate('core.Theme.activate') ?>
+                        </button>
+                    </form>
                     <?php endif; ?>
-                    <a href="manage" type="button"
-                       class="btn-primary-sm"><?= LangManager::translate('core.Theme.configure') ?></a>
-                </div>
-                <div class="absolute"
-                     style="transform: rotate(-45deg); left: -3em; top: 3em; margin: 0; z-index: 10">
-                    <div class="text-center"
-                         style="opacity: .85; padding-left: 4.5rem; padding-right: 4.5rem; background-color: #3ab757; color: white">
-                        <?= LangManager::translate('core.Theme.active') ?>
-                    </div>
                 </div>
                 <?php if ($localTheme->version() !== $theme['version_title']): ?>
                     <div class="absolute"
