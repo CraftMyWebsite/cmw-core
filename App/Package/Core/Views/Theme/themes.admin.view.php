@@ -52,7 +52,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
             </div>
 
             <div id="modal-<?= $theme->name() ?>" class="modal-container">
-                <div class="modal-lg">
+                <div class="modal-xl">
                     <div class="modal-header">
                         <h6><?= $theme->name() ?></h6>
                         <div>
@@ -144,7 +144,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                 <?php endif; ?>
             </div>
             <div id="modal-<?= $theme['id'] ?>" class="modal-container">
-                <div class="modal-lg">
+                <div class="modal-xl">
                     <div class="modal-header">
                         <h6><?= $theme['name'] ?></h6>
                         <div>
@@ -238,7 +238,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                 </div>
             </div>
             <div id="modal-<?= $theme->name() ?>" class="modal-container">
-                <div class="modal-lg">
+                <div class="modal-xl">
                     <div class="modal-header">
                         <h6><?= $theme->name() ?></h6>
                         <div>
@@ -332,7 +332,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                 <?php endif; ?>
             </div>
             <div id="modal-<?= $theme['id'] ?>" class="modal-container">
-                <div class="modal-lg">
+                <div class="modal-xl">
                     <div class="modal-header">
                         <h6><?= $theme['name'] ?></h6>
                         <div>

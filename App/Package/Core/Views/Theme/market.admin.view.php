@@ -56,9 +56,10 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                             <?= htmlspecialchars_decode($theme['description']) ?>
                             <hr>
                             <p class="small">
-                                <?= LangManager::translate('core.Theme.author') ?><a
-                                    href=""
-                                    target="_blank"><?= $theme['author_pseudo'] ?>
+                                <?= LangManager::translate('core.Theme.author') ?>
+                                <a
+                                    href="https://craftmywebsite.fr/market/user/<?= $theme['author_pseudo'] ?>"
+                                    target="_blank" class="link"><?= $theme['author_pseudo'] ?>
                                 </a>
                             </p>
                             <p>

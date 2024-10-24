@@ -38,10 +38,6 @@ $description = LangManager::translate('core.Package.desc');
                         <p>
                             <?= LangManager::translate('core.Package.descriptionNotAvailable') ?>
                         </p>
-                        <small class="align-items-end">
-                            <?= LangManager::translate('core.Package.author') ?>
-                            <?= 'TODO' ?>
-                        </small>
                     </div>
 
                 </div>
@@ -144,7 +140,10 @@ $description = LangManager::translate('core.Package.desc');
                             </p>
                             <p>
                                 <?= LangManager::translate('core.Package.author') ?>
-                                <?= $packages['author_pseudo'] ?>
+                                <a
+                                    href="https://craftmywebsite.fr/market/user/<?= $packages['author_pseudo'] ?>"
+                                    target="_blank" class="link"><?= $packages['author_pseudo'] ?>
+                                </a>
                             </p>
                         </div>
                     </div>
