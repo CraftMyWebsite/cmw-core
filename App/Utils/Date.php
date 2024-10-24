@@ -11,6 +11,8 @@ use function strtotime;
 
 class Date
 {
+    public static array $exampleDateFormat = ['d-m-Y H:i:s', 'd-m-Y Hh im ss', 'd/m/Y H:i:s', 'd/m/Y à H\h i\m s\s', 'd/m/Y à H\h i\m', 'd/m/Y at H\h i\m s\s', 'd F \à H\hi', 'd F \at H\hi'];
+
     /**
      * @param string $date
      * @return string
