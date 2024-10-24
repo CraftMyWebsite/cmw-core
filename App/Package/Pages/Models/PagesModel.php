@@ -4,6 +4,7 @@ namespace CMW\Model\Pages;
 
 use CMW\Entity\Pages\PageEntity;
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Manager\Editor\EditorManager;
 use CMW\Manager\Package\AbstractModel;
 use CMW\Model\Users\UsersModel;
 use PDOStatement;
@@ -102,6 +103,9 @@ class PagesModel extends AbstractModel
 
     public function deletePage(int $id): bool
     {
+        $pageContent = $this->getPageById($id)->getContent();
+        EditorManager::getInstance()->deleteEditorImageInContent($pageContent);
+
         $var = [
             'page_id' => $id,
         ];
