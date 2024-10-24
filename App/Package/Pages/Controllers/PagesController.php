@@ -46,7 +46,6 @@ class PagesController extends AbstractController
     private function adminPagesAdd(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'pages.show.add');
-
         // Todo "pack script" to avoid that
         View::createAdminView('Pages', 'add')
             ->addScriptBefore('Admin/Resources/Vendors/Tinymce/tinymce.min.js',
@@ -54,15 +53,20 @@ class PagesController extends AbstractController
             ->view();
     }
 
-    #[Link('/add', Link::POST, [], '/cmw-admin/pages', secure: false)]
+    #[Link('/add', Link::POST, [], '/cmw-admin/pages')]
     private function adminPagesAddPost(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'pages.show.add');
 
         $userId = UsersModel::getCurrentUser()?->getId();
-        $slug = Utils::normalizeForSlug(filter_input(INPUT_POST, 'page_slug'));
 
-        [$title, $content, $state] = Utils::filterInput('title', 'content', 'state');
+        [$title, $content, $state, $slug] = Utils::filterInput('title', 'content', 'state', 'page_slug');
+
+        if ($slug === "") {
+            $slug = Utils::normalizeForSlug($title);
+        } else {
+            $slug = Utils::normalizeForSlug($slug);
+        }
 
         PagesModel::getInstance()->createPage($title, $slug, $content, $userId, $state === NULL ? 0 : 1);
 
@@ -72,7 +76,7 @@ class PagesController extends AbstractController
 
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'), LangManager::translate('pages.alert.added'));
 
-        Redirect::redirectPreviousRoute();
+        Redirect::redirect('cmw-admin/pages');
     }
 
     #[Link('/edit/:slug', Link::GET, ['slug' => '.*?'], '/cmw-admin/pages')]
@@ -152,10 +156,15 @@ class PagesController extends AbstractController
 
         // If page slug exist
         if (!is_null($pageEntity)) {
-            View::createPublicView('Pages', 'main')
-                ->addVariableList(['page' => $pageEntity])
-                ->addScriptBefore('Admin/Resources/Vendors/Prismjs/prism.js')
-                ->view();
+            if ($pageEntity->getState() == 1 && !UsersController::isAdminLogged()) {
+                 Flash::send(Alert::INFO, 'Pages', 'Cette page n\'est pas encore publique !');
+                 Redirect::redirectToHome();
+            } else {
+                View::createPublicView('Pages', 'main')
+                    ->addVariableList(['page' => $pageEntity])
+                    ->addScriptBefore('Admin/Resources/Vendors/Prismjs/prism.js')
+                    ->view();
+            }
             return;
         }
 
