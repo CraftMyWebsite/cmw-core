@@ -7,7 +7,7 @@ Ce projet a pour ambition de proposer à l'ensemble des administrateurs de serve
 ses joueurs une plateforme web performante et pertinente.
 
 [![License](https://img.shields.io/badge/License-GNU%20GPL-%239f9f9f)](https://www.gnu.org/licenses/gpl-3.0.fr.html)
-[![Latest release](https://img.shields.io/badge/v2.0.0-%234c29cc)](https://github.com/CraftMyWebsite/cmw-core)
+[![Latest release](https://img.shields.io/badge/v2.0.0-alpha?color=%23FB2388)](https://github.com/CraftMyWebsite/cmw-core)
 
 Contributions
 ------------
@@ -27,9 +27,8 @@ Support, infos et communauté
 
 Liens utiles :
 
-- **Discord**: https://discord.gg/tscRZCU
+- **Discord**: https://craftmywebsite.fr/discord
 - **Doc**: https://craftmywebsite.fr/docs
-- **Contact**: https://craftmywebsite.fr/contactez/nous
 - **Twitter**: https://twitter.com/CraftMyWebsite
 
 Nos partenaires
@@ -43,8 +42,8 @@ Nos partenaires
 
 CraftMyWebsite est mis à disposition selon les termes de
 la [licence Creative Commons Attribution - Pas d'Utilisation Commerciale - Pas de Modification 4.0 International](http://creativecommons.org/licenses/by-nc-nd/4.0/).
-Fondé(e) sur une œuvre à [https://craftmywebsite.fr/telecharger](http://craftmywebsite.fr/telecharger). Les
+Fondé(e) sur une œuvre à [https://craftmywebsite.fr/download](http://craftmywebsite.fr/download). Les
 autorisations au-delà du champ de cette licence peuvent être obtenues
-à [https://craftmywebsite.fr/cgu](https://craftmywebsite.fr/cgu/).
+à [https://craftmywebsite.fr/cgu](https://craftmywebsite.fr/cgu).
 
 Copyright © CraftMyWebsite 2014-2024
