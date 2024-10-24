@@ -2,8 +2,8 @@
 
 namespace CMW\Manager\Notification;
 
-use CMW\Controller\Core\MailController;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Mail\MailManager;
 use CMW\Manager\Manager\AbstractManager;
 use CMW\Manager\Webhook\Discord\DiscordWebhook;
 use CMW\Model\Core\MailModel;
@@ -52,7 +52,7 @@ class NotificationManager extends AbstractManager
                 }
                 if ($sendMail && $mailReceiver) {
                     if (MailModel::getInstance()->getConfig() !== null && MailModel::getInstance()->getConfig()->isEnable()) {
-                        MailController::getInstance()->sendMail(
+                        MailManager::getInstance()->sendMail(
                             $mailReceiver,
                             'Notification - ' . $packageName,
                             'Titre : ' . $notification->getTitle() . '<br>Message : ' . $notification->getMessage() . "<br><a href='" . Website::getUrl() . "cmw-admin/notifications'>Voir sur le panel</a>"

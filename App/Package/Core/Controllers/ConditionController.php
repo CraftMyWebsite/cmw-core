@@ -13,6 +13,7 @@ use CMW\Model\Core\ConditionModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
+use JetBrains\PhpStorm\NoReturn;
 
 /**
  * Class: @ConditionController
@@ -36,7 +37,7 @@ class ConditionController extends AbstractController
             ->view();
     }
 
-    #[Link('/condition', Link::POST, [], '/cmw-admin')]
+    #[NoReturn] #[Link('/condition', Link::POST, [], '/cmw-admin')]
     private function conditionDashboardPost(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.settings.conditions');

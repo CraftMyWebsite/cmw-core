@@ -2,13 +2,13 @@
 
 namespace CMW\Model\Users;
 
-use CMW\Controller\Core\MailController;
 use CMW\Controller\Users\UsersController;
 use CMW\Entity\Users\RoleEntity;
 use CMW\Entity\Users\User2FaEntity;
 use CMW\Entity\Users\UserEntity;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Mail\MailManager;
 use CMW\Manager\Package\AbstractModel;
 use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Twofa\TwoFaManager;
@@ -657,8 +657,7 @@ class UsersModel extends AbstractModel
      */
     public function sendResetPassword(string $email, string $password): void
     {
-        $mailController = new MailController();
-        $mailController->sendMail($email, LangManager::translate('users.login.forgot_password.mail.object',
+        MailManager::getInstance()->sendMail($email, LangManager::translate('users.login.forgot_password.mail.object',
             ['site_name' => (new CoreModel())->fetchOption('name')]),
             LangManager::translate('users.login.forgot_password.mail.body',
                 ['password' => $password]));

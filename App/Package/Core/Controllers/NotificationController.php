@@ -14,6 +14,7 @@ use CMW\Manager\Views\View;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\NoReturn;
+use function is_null;
 
 /**
  * Class: @NotificationController
@@ -75,6 +76,10 @@ class NotificationController extends AbstractController
 
         $notification = NotificationModel::getInstance()->readNotification($id);
 
+        if (is_null($notification)){
+            Redirect::errorPage(404);
+        }
+
         Redirect::redirect(EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/' . $notification->getSlug());
     }
 
@@ -99,7 +104,7 @@ class NotificationController extends AbstractController
             ->view();
     }
 
-    #[Link('/notifications', Link::POST, [], '/cmw-admin')]
+    #[NoReturn] #[Link('/notifications', Link::POST, [], '/cmw-admin')]
     private function adminPostSettingsNotification(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.notification.settings');

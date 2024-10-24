@@ -4,6 +4,7 @@ use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Model\Core\CoreModel;
+use CMW\Utils\Date;
 
 $title = LangManager::translate('core.config.title');
 $description = LangManager::translate('core.config.desc');
@@ -58,7 +59,7 @@ $description = LangManager::translate('core.config.desc');
                     </label>
                     <select name="dateFormat" id="dateFormatSelect"
                             onchange="if(this.options[this.selectedIndex].value === 'custom'){toggleField(this, document.getElementById('dateFormatCustom'));this.selectedIndex='0';}">
-                        <?php foreach (CoreController::$exampleDateFormat as $dateFormat): ?>
+                        <?php foreach (Date::$exampleDateFormat as $dateFormat): ?>
                             <option value="<?= $dateFormat ?>"
                                 <?= CoreModel::getOptionValue('dateFormat') === $dateFormat ? 'selected' : '' ?>>
                                 <?= $dateFormat ?>
@@ -70,7 +71,7 @@ $description = LangManager::translate('core.config.desc');
                                disabled="disabled"
                                onblur="if(this.value === ''){toggleField(this, document.getElementById('dateFormatSelect'));}">
 
-                        <?php if (!in_array(CoreModel::getOptionValue('dateFormat'), CoreController::$exampleDateFormat, true)): ?>
+                        <?php if (!in_array(CoreModel::getOptionValue('dateFormat'), Date::$exampleDateFormat, true)): ?>
                             <script>
                                 document.getElementById('dateFormatSelect').style.display = "none";
                                 document.getElementById('dateFormatSelect').disabled = true;
