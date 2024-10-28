@@ -193,7 +193,7 @@ class PackageController extends AbstractController
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.manage');
 
         if (!$this->uninstallPackage($package)) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.package.error'),
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
                 LangManager::translate('core.Package.toasters.delete.error',
                     ['package' => $package]));
             Redirect::redirectPreviousRoute();
@@ -285,12 +285,16 @@ class PackageController extends AbstractController
         $uninstallSqlFile = EnvManager::getInstance()->getValue('DIR') . "App/Package/$packageName/Init/uninstall.sql";
 
         if (file_exists($uninstallSqlFile)) {
-            $sql = file_get_contents($uninstallSqlFile);
-            $db = DatabaseManager::getInstance();
+            $db = DatabaseManager::getLiteInstance();
 
-            if (!$db->query($sql)) {
+            $querySqlFile = file_get_contents($uninstallSqlFile);
+            $req = $db->query($querySqlFile);
+
+            if (!$req) {
                 return false;
             }
+
+            $req->closeCursor();
         }
 
         // Check Package uninstall override
