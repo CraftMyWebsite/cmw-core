@@ -289,6 +289,11 @@ class PackageController extends AbstractController
 
             $querySqlFile = file_get_contents($uninstallSqlFile);
             $req = $db->query($querySqlFile);
+
+            if (!$req) {
+                return false;
+            }
+
             $req->closeCursor();
         }
 
