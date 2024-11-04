@@ -82,8 +82,11 @@ class DownloadManager
                 $devMode = EnvManager::getInstance()->getValue('DEVMODE');
 
                 $querySqlFile = file_get_contents($sqlFile);
-                $req = $db->query($querySqlFile);
-                $req->closeCursor();
+
+                if (!empty($querySqlFile)) {
+                    $req = $db->query($querySqlFile);
+                    $req->closeCursor();
+                }
 
                 if ($devMode === '0') {
                     unlink($sqlFile);
