@@ -1,0 +1,26 @@
+services:
+  server:
+    build:
+      context: .
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:latest
+    container_name: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: cmw_root_password
+      MYSQL_DATABASE: cmw
+      MYSQL_USER: user
+      MYSQL_PASSWORD: cmw_user_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
