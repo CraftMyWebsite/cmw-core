@@ -4,4 +4,4 @@ Disallow: /Admin/
 Disallow: /installation/
 Disallow: /installer/
 Disallow: /Router/
-Sitemap: sitemap.xml
+Sitemap: http://localhost//sitemap.xml

@@ -98,7 +98,7 @@ class SitemapManager extends AbstractManager
         $loc = EnvManager::getInstance()->getValue('PATH_URL') . $slug;
 
         foreach ($content->url as $url) {
-            if ((string) $url->loc === $loc) {
+            if ((string)$url->loc === $loc) {
                 $url->lastmod = date('c');
                 $url->priority = $priority;
 
@@ -138,7 +138,7 @@ class SitemapManager extends AbstractManager
         for ($i = 0, $iMax = count($content->url); $i < $iMax; $i++) {
             $url = $content->url[$i];
 
-            if ((string) $url->loc === $loc) {
+            if ((string)$url->loc === $loc) {
                 unset($content->url[$i]);
 
                 $formattedData = $content->asXML();
@@ -151,5 +151,26 @@ class SitemapManager extends AbstractManager
             }
         }
         return false;
+    }
+
+    public function initRobotsFile(): void
+    {
+        $file = EnvManager::getInstance()->getValue('DIR') . 'robots.txt';
+
+        //If file doesn't exist, we create it
+        if (!file_exists($file)) {
+            File::write($file, '');
+        }
+
+        $content = File::read($file);
+
+        //If file contains sitemap, we don't add it
+        if (stripos($content, 'Sitemap:') === 0) {
+            return;
+        }
+
+        $url = EnvManager::getInstance()->getValue('PATH_URL');
+
+        File::write($file, "\nSitemap: " . $url . "sitemap.xml\n", FILE_APPEND);
     }
 }
