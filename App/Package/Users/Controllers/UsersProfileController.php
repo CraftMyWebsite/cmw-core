@@ -93,7 +93,7 @@ class UsersProfileController extends AbstractController
 
             try {
                 // Upload image on the server
-                $imageName = ImagesManager::upload($image, 'Users');
+                $imageName = ImagesManager::convertAndUpload($image, 'Users');
 
                 if (!UserPictureModel::getInstance()->updateUserImage($user->getId(), $imageName)) {
                     Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),

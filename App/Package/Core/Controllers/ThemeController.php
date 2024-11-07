@@ -161,7 +161,7 @@ class ThemeController extends AbstractController
             // If file is empty, we don't update the config.
             if ($file['name'] !== '') {
                 try {
-                    $imageName = ImagesManager::upload($file, ThemeManager::getInstance()->getCurrentTheme()->name() . '/Img');
+                    $imageName = ImagesManager::convertAndUpload($file, ThemeManager::getInstance()->getCurrentTheme()->name() . '/Img');
                 } catch (ImagesException $e) {
                     Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
                         $conf . ' => ' . $e);

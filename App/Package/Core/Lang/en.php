@@ -493,4 +493,22 @@ return [
             'roles' => 'Roles',
         ],
     ],
+    'imageManager' => [
+        'converter' => [
+            'saving' => 'Error saving image.',
+            'target' => 'Invalid target format. Original kept!',
+            'conversion' => 'Conversion format not supported, Original kept!',
+            'converting' => 'Error converting image. Original kept!',
+        ],
+        'error' => [
+            'fileDefinition' => 'This extension is not supported!',
+            'folderDontExist' => 'Target folder not found',
+            'emptyFile' => 'No image sent!',
+            'tooLarge' => 'Image too big!',
+            'notAllowed' => 'Document type not allowed!',
+            'move' => 'Unable to move image.',
+            'download' => 'Unable to download image.',
+            'createFolder' => 'Unable to create target folder, permission problem on Public/Uploads',
+        ],
+    ],
 ];

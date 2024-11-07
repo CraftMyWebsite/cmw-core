@@ -496,4 +496,22 @@ return [
             'roles' => 'Rôles',
         ],
     ],
+    'imageManager' => [
+        'converter' => [
+            'saving' => 'Erreur lors de la sauvegarde de l\'image.',
+            'target' => 'Format cible invalide. Original conservé !',
+            'conversion' => 'Format de conversion non supporté, Original conservé !',
+            'converting' => 'Erreur lors de la conversion de l\'image. Original conservé !',
+        ],
+        'error' => [
+            'fileDefinition' => 'Cette extension n\'est pas prise en charge !',
+            'folderDontExist' => 'Dossier cible introuvable',
+            'emptyFile' => 'Aucune image envoyé !',
+            'tooLarge' => 'Image trop volumineuse !',
+            'notAllowed' => 'Type de document non autorisé !',
+            'move' => 'Impossible de déplacer l\'image.',
+            'download' => 'Impossible télécharger l\'image.',
+            'createFolder' => 'Impossible de créer le dossier cible, problème de permission sur Public/Uploads',
+        ],
+    ],
 ];
