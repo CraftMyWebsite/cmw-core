@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Manager\Uploads;
+namespace CMW\Manager\Uploads\Errors;
 
 enum ImagesConvertedStatus
 {
