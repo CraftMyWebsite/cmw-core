@@ -77,7 +77,7 @@ class UsersSettingsController extends AbstractController
             $defaultPicture = $_FILES['defaultPicture'];
 
             try {
-                $newDefaultImage = ImagesManager::upload($defaultPicture, 'Users/Default');
+                $newDefaultImage = ImagesManager::convertAndUpload($defaultPicture, 'Users/Default');
                 UsersSettingsModel::updateSetting('defaultImage', $newDefaultImage);
             } catch (ImagesException $e) {
                 Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
