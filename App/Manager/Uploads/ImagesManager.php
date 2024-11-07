@@ -5,6 +5,7 @@ namespace CMW\Manager\Uploads;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
+use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Uploads\Errors\ImagesConvertedStatus;
 use CMW\Manager\Uploads\Errors\ImagesStatus;
 use CMW\Manager\Uploads\Format\ImagesFormat;
@@ -210,7 +211,7 @@ class ImagesManager
         }
 
         if (!file_exists(EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName) && !mkdir($concurrentDirectory = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName) && !is_dir($concurrentDirectory)) {
-            Flash::send(Alert::WARNING, 'Dossier', 'Impossible de créer le dossier "%s", vous avez certainement des problème de permissions sur /Uploads', $concurrentDirectory);
+            Flash::send(Alert::WARNING, 'Images', LangManager::translate('core.imageManager.error.createFolder'));
             Redirect::redirectPreviousRoute();
         }
 
