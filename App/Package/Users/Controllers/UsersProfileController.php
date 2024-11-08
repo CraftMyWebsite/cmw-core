@@ -95,7 +95,7 @@ class UsersProfileController extends AbstractController
                 // Upload image on the server
                 $imageName = ImagesManager::convertAndUpload($image, 'Users');
 
-                if (!UserPictureModel::getInstance()->updateUserImage($user->getId(), $imageName)) {
+                if (!UserPictureModel::getInstance()->uploadImage($user->getId(), $imageName)) {
                     Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
                         LangManager::translate('core.errors.upload.image'));
                     Redirect::redirectPreviousRoute();
