@@ -2,7 +2,9 @@
 
 namespace CMW\Entity\Core;
 
-class OptionsEntity
+use CMW\Manager\Package\AbstractEntity;
+
+class OptionsEntity extends AbstractEntity
 {
     public string $theme;
     public array $menu;
