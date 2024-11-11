@@ -3,6 +3,7 @@
 namespace CMW\Model\Users;
 
 use CMW\Controller\Users\UsersController;
+use CMW\Controller\Users\UsersSessionsController;
 use CMW\Entity\Users\RoleEntity;
 use CMW\Entity\Users\User2FaEntity;
 use CMW\Entity\Users\UserEntity;
@@ -28,7 +29,7 @@ class UsersModel extends AbstractModel
 {
     /**
      * @param int $id
-     * @return \CMW\Entity\Users\UserEntity|null
+     * @return UserEntity|null
      */
     public function getUserById(int $id): ?UserEntity
     {
@@ -115,7 +116,7 @@ class UsersModel extends AbstractModel
 
     /**
      * @param string $pseudo
-     * @return \CMW\Entity\Users\UserEntity|null
+     * @return UserEntity|null
      */
     public function getUserWithPseudo(string $pseudo): ?UserEntity
     {
@@ -142,7 +143,7 @@ class UsersModel extends AbstractModel
 
     /**
      * @param string $mail
-     * @return \CMW\Entity\Users\UserEntity|null
+     * @return UserEntity|null
      */
     public function getUserWithMail(string $mail): ?UserEntity
     {
@@ -168,43 +169,13 @@ class UsersModel extends AbstractModel
     }
 
     /**
-     * @return \CMW\Entity\Users\UserEntity|null
+     * @return UserEntity|null
+     * @deprecated Deprecated since version alpha-03
+     * @see UsersSessionsController::getInstance()->getCurrentUser()
      */
     public static function getCurrentUser(): ?UserEntity
     {
-        // return !isset($_SESSION['cmwUserId']) ? null : (new self)->getUserById($_SESSION['cmwUserId']);
-
-        if (isset($_SESSION['cmwUser']) && $_SESSION['cmwUser'] instanceof UserEntity) {
-            return $_SESSION['cmwUser'];
-        }
-
-        if (isset($_COOKIE['cmw_cookies_user_id']) && filter_var($_COOKIE['cmw_cookies_user_id'], FILTER_VALIDATE_INT)) {
-            return self::getInstance()->getUserById($_COOKIE['cmw_cookies_user_id']);
-        }
-
-        return null;
-    }
-
-    /**
-     * @param int|\CMW\Entity\Users\UserEntity $user
-     * @return bool
-     * @desc This method is useful to update session user. If you pass @UserEntity, we are using this User instance.
-     */
-    public static function updateStoredUser(int|UserEntity $user): bool
-    {
-        if (isset($_SESSION['cmwUser']) && $_SESSION['cmwUser'] instanceof UserEntity) {
-            if ($user instanceof UserEntity) {
-                $_SESSION['cmwUser'] = $user;
-                return true;
-            }
-
-            $newUser = self::getInstance()->getUserById($user);
-            $_SESSION['cmwUser'] = $newUser;
-
-            return $newUser !== null;
-        }
-
-        return false;
+        return UsersSessionsController::getInstance()->getCurrentUser();
     }
 
     /**
@@ -273,27 +244,12 @@ class UsersModel extends AbstractModel
     }
 
     /**
-     * @return void
-     */
-    public static function logOut(): void
-    {
-        $_SESSION = [];
-        $params = session_get_cookie_params();
-        setcookie(session_name(), '', time() - 42000,
-            $params['path'], $params['domain'],
-            $params['secure'], $params['httponly']);
-        session_destroy();
-
-        setcookie('cmw_cookies_user_id', '', time() + 60 * 60 * 24 * 30, '/', true, true);
-    }
-
-    /**
      * @param string $mail
      * @param string|null $username
      * @param string|null $firstName
      * @param string|null $lastName
      * @param array $roles
-     * @return \CMW\Entity\Users\UserEntity|null
+     * @return UserEntity|null
      */
     public function create(string $mail, ?string $username, ?string $firstName, ?string $lastName, array $roles): ?UserEntity
     {
@@ -355,7 +311,7 @@ class UsersModel extends AbstractModel
      * @param string|null $firstname
      * @param string|null $lastname
      * @param array $roles
-     * @return \CMW\Entity\Users\UserEntity|null
+     * @return UserEntity|null
      */
     public function update(int $id, string $mail, ?string $username, ?string $firstname, ?string $lastname, array $roles): ?UserEntity
     {
@@ -490,7 +446,7 @@ class UsersModel extends AbstractModel
     }
 
     /**
-     * @param \CMW\Entity\Users\UserEntity|null $user
+     * @param UserEntity|null $user
      * @param string ...$permCode
      * @return bool
      */

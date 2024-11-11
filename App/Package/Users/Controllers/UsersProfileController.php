@@ -152,7 +152,7 @@ class UsersProfileController extends AbstractController
 
         Emitter::send(DeleteUserAccountEvent::class, $id);
 
-        UsersModel::logOut();
+        UsersSessionsController::getInstance()->logOut();
         UsersModel::getInstance()->delete($id);
 
         Redirect::redirectToHome();
@@ -256,7 +256,7 @@ class UsersProfileController extends AbstractController
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), 'Vous ne pouvez pas désactiver le double facteur sur ce compte !');
         } else {
             if (Users2FaModel::getInstance()->toggle2Fa($user->getId(), $status)) {
-                UsersModel::updateStoredUser($user->getId());
+                UsersSessionsController::getInstance()->updateStoredUser($user->getId());
                 if ($enforced) {
                     Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
                         '2fa activée, veuillez vous reconnecter.');

@@ -2,10 +2,11 @@
 
 namespace CMW\Entity\Users;
 
+use CMW\Manager\Package\AbstractEntity;
 use CMW\Model\Users\UsersSettingsModel;
 use CMW\Utils\Redirect;
 
-class UserSettingsEntity
+class UserSettingsEntity extends AbstractEntity
 {
     private string $defaultImage;
     private int $profilePageStatus;
@@ -16,8 +17,8 @@ class UserSettingsEntity
     public function __construct()
     {
         $this->defaultImage = UsersSettingsModel::getSetting('defaultImage');
-        $this->profilePageStatus = (int) UsersSettingsModel::getSetting('profilePage');
-        $this->resetPasswordMethod = (int) UsersSettingsModel::getSetting('resetPasswordMethod');
+        $this->profilePageStatus = (int)UsersSettingsModel::getSetting('profilePage');
+        $this->resetPasswordMethod = (int)UsersSettingsModel::getSetting('resetPasswordMethod');
     }
 
     public static function getInstance(): self
@@ -72,7 +73,7 @@ class UserSettingsEntity
         match ($this->profilePageStatus) {
             0 => Redirect::redirect('profile'),
             1 => Redirect::redirect("profile/$pseudo"),
-            2 => Redirect::redirectToHome()
+            2 => Redirect::redirectToHome(),
         };
     }
 }
