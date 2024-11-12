@@ -20,7 +20,7 @@ $description = LangManager::translate('users.manage.desc');
         <button form="adduser" type="submit" class="btn-primary"><?= LangManager::translate('core.btn.add') ?></button>
     </div>
     <form id="adduser" method="post" action="add" class="grid-4">
-        <?php (new SecurityManager())->insertHiddenToken() ?>
+        <?php SecurityManager::getInstance()->insertHiddenToken() ?>
         <div>
             <label for="email"><?= LangManager::translate('users.users.mail') ?> :</label>
             <div class="input-group">

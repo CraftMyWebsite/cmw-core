@@ -230,7 +230,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                 </div>
                 <div class="text-center pb-2">
                     <form action="" method="post">
-                        <?php (new SecurityManager())->insertHiddenToken() ?>
+                        <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                         <input hidden type="text" name="theme" value="<?= $theme->name() ?>">
                         <button type="submit"
                                 class="btn-success-sm"><?= LangManager::translate('core.Theme.activate') ?></button>
@@ -243,7 +243,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                         <h6><?= $theme->name() ?></h6>
                         <div>
                             <form action="" method="post">
-                                <?php (new SecurityManager())->insertHiddenToken() ?>
+                                <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                                 <input hidden type="text" name="theme"
                                        value="<?= $theme->name() ?>">
                                 <button type="submit"
@@ -312,7 +312,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                         </a>
                     <?php else: ?>
                     <form action="" method="post">
-                        <?php (new SecurityManager())->insertHiddenToken() ?>
+                        <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                         <input hidden type="text" name="theme"
                                value="<?= $theme['name'] ?>">
                         <button type="submit"
@@ -337,7 +337,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                         <h6><?= $theme['name'] ?></h6>
                         <div>
                             <form action="" method="post">
-                                <?php (new SecurityManager())->insertHiddenToken() ?>
+                                <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                                 <input hidden type="text" name="theme"
                                        value="<?= $theme['name'] ?>">
                                 <button type="submit"

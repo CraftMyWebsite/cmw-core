@@ -71,7 +71,7 @@ $description = LangManager::translate('users.settings.desc');
                                         <button type="button" data-modal-hide="modal-edit-<?= $pseudo->getId() ?>"><i class="fa-solid fa-xmark"></i></button>
                                     </div>
                                     <form action="settings/blacklist/pseudo/edit/<?= $pseudo->getId() ?>" method="post">
-                                        <?php (new SecurityManager())->insertHiddenToken() ?>
+                                        <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                                     <div class="modal-body">
                                         <div class="input-group">
                                             <i class="fas fa-user"></i>
@@ -94,7 +94,7 @@ $description = LangManager::translate('users.settings.desc');
         <div class="card">
                 <h6><?= LangManager::translate('users.settings.blacklisted.pseudo.title') ?></h6>
                 <form method="post" action="settings/blacklist/pseudo">
-                    <?php (new SecurityManager())->insertHiddenToken() ?>
+                    <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                     <div class="input-group">
                         <i class="fas fa-user"></i>
                         <input type="text" id="pseudo" name="pseudo" placeholder="BadUserName" required>
@@ -108,7 +108,7 @@ $description = LangManager::translate('users.settings.desc');
     </div>
 
     <form action="" id="setting" method="post" enctype="multipart/form-data">
-        <?php (new SecurityManager())->insertHiddenToken() ?>
+        <?php SecurityManager::getInstance()->insertHiddenToken() ?>
 
         <div class="card mb-4">
             <div class="card-title">

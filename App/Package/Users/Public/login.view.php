@@ -24,7 +24,7 @@ Website::setDescription('Connectez-vous sur ' . Website::getWebsiteName());
 <section style="border: 1px #b4aaaa solid; border-radius: 9px; padding: .5rem; max-width: 50%; margin: auto">
 
     <form class="space-y-6" action="" method="post">
-        <?php (new SecurityManager())->insertHiddenToken() ?>
+        <?php SecurityManager::getInstance()->insertHiddenToken() ?>
         <input hidden name="previousRoute" type="text" value="<?= $_SERVER['HTTP_REFERER'] ?>">
         <div>
             <label for="email">Mail</label>
