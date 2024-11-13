@@ -2,8 +2,8 @@
 
 namespace CMW\Entity\Users;
 
+use CMW\Controller\Users\UsersSessionsController;
 use CMW\Manager\Package\AbstractEntity;
-use CMW\Model\Users\UsersModel;
 use CMW\Utils\Date;
 
 class UserEntity extends AbstractEntity
@@ -198,6 +198,6 @@ class UserEntity extends AbstractEntity
      */
     public function isViewerIsCurrentUser(): bool
     {
-        return UsersModel::getCurrentUser()?->userId === $this->userId;
+        return UsersSessionsController::getInstance()->getCurrentUser()?->userId === $this->userId;
     }
 }

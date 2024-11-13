@@ -55,13 +55,13 @@ class UsersProfileController extends AbstractController
             Redirect::redirect('login');
         }
 
-        $user = UsersModel::getCurrentUser();
+        $user = UsersSessionsController::getInstance()->getCurrentUser();
 
         if (is_null($user)) {
             Redirect::redirectToHome();
         }
 
-        if (UsersModel::getCurrentUser()?->getId() !== $user->getId()) {
+        if (UsersSessionsController::getInstance()->getCurrentUser()?->getId() !== $user->getId()) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), "Vous ne pouvez pas éditer le profile de quelqu'un d'autre !");
             Redirect::redirectToHome();
         }
@@ -82,7 +82,7 @@ class UsersProfileController extends AbstractController
             Redirect::redirectToHome();
         }
 
-        $user = UsersModel::getCurrentUser();
+        $user = UsersSessionsController::getInstance()->getCurrentUser();
 
         if (is_null($user)) {
             Redirect::redirectToHome();
@@ -131,7 +131,7 @@ class UsersProfileController extends AbstractController
             Redirect::errorPage(404);
         }
 
-        if (UsersModel::getCurrentUser()?->getId() !== $user->getId()) {
+        if (UsersSessionsController::getInstance()->getCurrentUser()?->getId() !== $user->getId()) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), "Vous ne pouvez pas éditer le profile de quelqu'un d'autre !");
             Redirect::redirectToHome();
         }
@@ -145,7 +145,7 @@ class UsersProfileController extends AbstractController
     private function publicProfileDelete(int $id): void
     {
         // Check if this is the current user account
-        if (UsersModel::getCurrentUser()?->getId() !== $id) {
+        if (UsersSessionsController::getInstance()->getCurrentUser()?->getId() !== $id) {
             // TODO ERROR MANAGEMENT (MESSAGE TO TELL THE USER CAN'T DELETE THIS ACCOUNT)
             Redirect::errorPage(403);
         }
@@ -165,7 +165,7 @@ class UsersProfileController extends AbstractController
             Redirect::redirectToHome();
         }
 
-        $user = UsersModel::getCurrentUser();
+        $user = UsersSessionsController::getInstance()->getCurrentUser();
 
         if (is_null($user)) {
             Redirect::redirectToHome();
@@ -219,7 +219,7 @@ class UsersProfileController extends AbstractController
             $user = UsersModel::getInstance()->getUserWithMail($encryptedMail);
             $enforced = true;
         } else {
-            $user = UsersModel::getCurrentUser();
+            $user = UsersSessionsController::getInstance()->getCurrentUser();
             $enforced = false;
         }
 

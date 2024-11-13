@@ -35,7 +35,7 @@ class UsersController extends AbstractController
 {
     public static function isAdminLogged(): bool
     {
-        return UsersModel::hasPermission(UsersModel::getCurrentUser(), 'core.dashboard');
+        return UsersModel::hasPermission(UsersSessionsController::getInstance()->getCurrentUser(), 'core.dashboard');
     }
 
     /**
@@ -44,12 +44,12 @@ class UsersController extends AbstractController
      */
     public static function isUserLogged(): bool
     {
-        return UsersModel::getCurrentUser() !== null;
+        return UsersSessionsController::getInstance()->getCurrentUser() !== null;
     }
 
     public static function hasPermission(string ...$permissions): bool
     {
-        return UsersModel::hasPermission(UsersModel::getCurrentUser(), ...$permissions);
+        return UsersModel::hasPermission(UsersSessionsController::getInstance()->getCurrentUser(), ...$permissions);
     }
 
     /**
@@ -59,7 +59,7 @@ class UsersController extends AbstractController
     public function getUserProfilePicture(?int $userId = null): ?UserPictureEntity
     {
         if ($userId === null) {
-            $user = UsersModel::getCurrentUser();
+            $user = UsersSessionsController::getInstance()->getCurrentUser();
 
             if ($user === null) {
                 return null;
@@ -209,7 +209,7 @@ class UsersController extends AbstractController
     {
         self::redirectIfNotHavePermissions('core.dashboard', 'users.manage.edit');
 
-        if (UsersModel::getCurrentUser()?->getId() === $id) {
+        if (UsersSessionsController::getInstance()->getCurrentUser()?->getId() === $id) {
             Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
                 LangManager::translate('users.toaster.impossible'));
             Redirect::redirectPreviousRoute();
@@ -230,7 +230,7 @@ class UsersController extends AbstractController
     {
         self::redirectIfNotHavePermissions('core.dashboard', 'users.manage.delete');
 
-        if (UsersModel::getCurrentUser()?->getId() === $id) {
+        if (UsersSessionsController::getInstance()->getCurrentUser()?->getId() === $id) {
             // Todo Try to remove that
             Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
                 LangManager::translate('users.toaster.impossible_user'));

@@ -148,10 +148,10 @@ class UsersOAuthController extends AbstractController
                 );
                 break;
             case OAuthLoginStatus::SUCCESS_REGISTER:
-                Emitter::send(RegisterEvent::class, UsersModel::getCurrentUser()?->getId());
+                Emitter::send(RegisterEvent::class, UsersSessionsController::getInstance()->getCurrentUser()?->getId());
                 Redirect::redirect('profile');
             case OAuthLoginStatus::SUCCESS_LOGIN:
-                Emitter::send(LoginEvent::class, UsersModel::getCurrentUser()?->getId());
+                Emitter::send(LoginEvent::class, UsersSessionsController::getInstance()->getCurrentUser()?->getId());
                 Redirect::redirect('profile');
         }
 

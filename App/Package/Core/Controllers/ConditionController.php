@@ -3,6 +3,7 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
+use CMW\Controller\Users\UsersSessionsController;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
@@ -10,7 +11,6 @@ use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\ConditionModel;
-use CMW\Model\Users\UsersModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\NoReturn;
@@ -46,7 +46,7 @@ class ConditionController extends AbstractController
             'cguContent', 'cguState', 'cgvContent', 'cgvState'
         );
 
-        $user = UsersModel::getCurrentUser();
+        $user = UsersSessionsController::getInstance()->getCurrentUser();
 
         if (is_null($user)) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
@@ -55,7 +55,7 @@ class ConditionController extends AbstractController
             Redirect::redirectPreviousRoute();
         }
 
-        $userId = UsersModel::getCurrentUser()?->getId();
+        $userId = UsersSessionsController::getInstance()->getCurrentUser()?->getId();
 
         $cguState = $cguState === NULL ? 0 : 1;
         $cgvState = $cgvState === NULL ? 0 : 1;

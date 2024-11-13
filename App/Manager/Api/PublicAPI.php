@@ -2,8 +2,8 @@
 
 namespace CMW\Manager\Api;
 
+use CMW\Controller\Users\UsersSessionsController;
 use CMW\Manager\Env\EnvManager;
-use CMW\Model\Users\UsersModel;
 use JsonException;
 
 class PublicAPI
@@ -45,7 +45,7 @@ class PublicAPI
         $url .= '&lang=' . EnvManager::getInstance()->getValue('LOCALE');
         $url .= '&website_key=' . self::getWebsiteKeyEncoded();
 
-        $adminKey = UsersModel::getCurrentUser()?->getUserKey();
+        $adminKey = UsersSessionsController::getInstance()->getCurrentUser()?->getUserKey();
 
         $ch = curl_init();
 
@@ -92,7 +92,7 @@ class PublicAPI
                 'method' => 'GET',
                 'ignore_errors' => true,
                 'header' => [
-                    'Adminkey: ' . UsersModel::getCurrentUser()?->getUserKey(),
+                    'Adminkey: ' . UsersSessionsController::getInstance()->getCurrentUser()?->getUserKey(),
                 ],
             ],
         ];
@@ -123,7 +123,7 @@ class PublicAPI
                 'method' => 'PUT',
                 'ignore_errors' => true,
                 'header' => [
-                    'Adminkey: ' . UsersModel::getCurrentUser()?->getUserKey(),
+                    'Adminkey: ' . UsersSessionsController::getInstance()->getCurrentUser()?->getUserKey(),
                 ],
             ],
         ];

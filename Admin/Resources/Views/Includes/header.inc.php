@@ -3,6 +3,7 @@
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\MenusController;
 use CMW\Controller\Core\PackageController;
+use CMW\Controller\Users\UsersSessionsController;
 use CMW\Entity\Users\UserEntity;
 use CMW\Interface\Core\ISideBarElements;
 use CMW\Manager\Env\EnvManager;
@@ -11,13 +12,12 @@ use CMW\Manager\Loader\Loader;
 use CMW\Manager\Notification\NotificationModel;
 use CMW\Model\Users\UsersModel;
 
-$user = UsersModel::getCurrentUser();
-$currentUser = UsersModel::getCurrentUser();
+$currentUser = UsersSessionsController::getInstance()->getCurrentUser();
 $sideBarImplementations = Loader::loadImplementations(ISideBarElements::class);
 $notificationNumber = NotificationModel::getInstance()->countUnreadNotification();
 $notifications = NotificationModel::getInstance()->getUnreadNotification();
 
-/* @var UserEntity $userAdmin */
+/* @var UserEntity $currentUserAdmin */
 /* @var CoreController $coreAdmin */
 
 $installedPackages = PackageController::getInstalledPackages();
@@ -136,7 +136,7 @@ foreach ($installedPackages as $package) {
                 <div class="flex items-center ml-2">
                     <div>
                         <button type="button" class="flex rounded-full" data-dropdown-toggle="dropdown-user">
-                            <img class="w-8 h-8 rounded-full" src="<?= $user->getUserPicture()->getImage() ?>"
+                            <img class="w-8 h-8 rounded-full" src="<?= $currentUser->getUserPicture()->getImage() ?>"
                                  alt="user">
                         </button>
                     </div>
@@ -145,17 +145,17 @@ foreach ($installedPackages as $package) {
                         id="dropdown-user">
                         <div class="px-4 py-3" role="none">
                             <p class="text-sm text-gray-900 dark:text-white" role="none">
-                                <?= $user->getPseudo() ?>
+                                <?= $currentUser->getPseudo() ?>
                             </p>
                             <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                                <?= $user->getHighestRole()->getName() ?>
+                                <?= $currentUser->getHighestRole()->getName() ?>
                             </p>
                         </div>
                         <ul class="py-1" role="none">
                             <li>
                                 <a class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-600"
                                    role="menuitem"
-                                   href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/users/manage/edit/' . $user->getId() ?>">
+                                   href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/users/manage/edit/' . $currentUser->getId() ?>">
                                     <i class="fa-solid fa-user"></i>
                                     <?= LangManager::translate('users.users.link_profile') ?>
                                 </a>
