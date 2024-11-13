@@ -39,31 +39,6 @@ class UsersController extends AbstractController
     }
 
     /**
-     * @param string $interface
-     * @return mixed
-     */
-    private function getHighestImplementation(string $interface): mixed
-    {
-        $implementations = Loader::loadImplementations($interface);
-
-        $index = 0;
-        $highestWeight = 1;
-
-        $i = 0;
-        foreach ($implementations as $implementation) {
-            $weight = $implementation->weight();
-
-            if ($weight > $highestWeight) {
-                $index = $i;
-                $highestWeight = $weight;
-            }
-            ++$i;
-        }
-
-        return $implementations[$index];
-    }
-
-    /**
      * @return bool
      * @desc Return true if the current user / client is logged.
      */
@@ -92,7 +67,7 @@ class UsersController extends AbstractController
 
             $userId = $user->getId();
         }
-        return $this->getHighestImplementation(IUsersProfilePicture::class)->getUserProfilePicture($userId);
+        return Loader::getHighestImplementation(IUsersProfilePicture::class)->getUserProfilePicture($userId);
     }
 
     #[Link(path: '/', method: Link::GET, scope: '/cmw-admin/users')]
@@ -279,7 +254,7 @@ class UsersController extends AbstractController
         self::redirectIfNotHavePermissions('core.dashboard', 'users.manage.edit');
 
         $image = $_FILES['profilePicture'];
-        $this->getHighestImplementation(IUsersProfilePicture::class)->changeMethod($image, $id);
+        Loader::getHighestImplementation(IUsersProfilePicture::class)->changeMethod($image, $id);
     }
 
     #[Link('/picture/reset/:id', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/users/manage')]
@@ -288,7 +263,7 @@ class UsersController extends AbstractController
     {
         self::redirectIfNotHavePermissions('core.dashboard', 'users.edit');
 
-        $this->getHighestImplementation(IUsersProfilePicture::class)->resetPicture($id);
+        Loader::getHighestImplementation(IUsersProfilePicture::class)->resetPicture($id);
     }
 
     // PUBLIC SECTION
@@ -341,9 +316,9 @@ class UsersController extends AbstractController
     #[NoReturn] #[Link('/logout', Link::GET)]
     private function logOut(): void
     {
-        $userId = UsersModel::getCurrentUser()?->getId();
+        $userId = UsersSessionsController::getInstance()->getCurrentUser()?->getId();
         Emitter::send(LogoutEvent::class, $userId);
-        UsersModel::logOut();
+        UsersSessionsController::getInstance()->logOut();
         Redirect::redirectToHome();
     }
 }

@@ -20,7 +20,7 @@ Website::setDescription("Découvrez le profil de l'utilisateur " . $user->getPse
                 <div class="card p-2">
                     <h4 class="text-center">Informations personnel</h4>
                     <form class="space-y-6" action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'profile/update' ?>" method="post">
-                        <?php (new SecurityManager())->insertHiddenToken() ?>
+                        <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-floating mb-3">
@@ -78,7 +78,7 @@ Website::setDescription("Découvrez le profil de l'utilisateur " . $user->getPse
                             <form class="space-y-6"
                                   action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile/2fa/toggle"
                                   method="post">
-                                <?php (new SecurityManager())->insertHiddenToken() ?>
+                                <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                                 <div class="form-floating mb-3">
                                     <input class="form-control" name="secret" type="number" maxlength="7" required>
                                     <label for="name">Code d'authentification</label>
@@ -103,7 +103,7 @@ Website::setDescription("Découvrez le profil de l'utilisateur " . $user->getPse
                     <?php endif; ?>
                     <form action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile/update/picture" method="post"
                           enctype="multipart/form-data">
-                        <?php (new SecurityManager())->insertHiddenToken() ?>
+                        <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                         <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Changer votre image
                             :</label>
                         <div class="flex">

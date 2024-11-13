@@ -2,7 +2,9 @@
 
 namespace CMW\Entity\Core;
 
-class MailConfigEntity
+use CMW\Manager\Package\AbstractEntity;
+
+class MailConfigEntity extends AbstractEntity
 {
     private ?int $id;
     private ?string $mail;
@@ -27,8 +29,8 @@ class MailConfigEntity
      * @param string|null $footer
      * @param int|null $enable
      */
-    public function __construct(?int $id, ?string $mail, ?string $mailReply, ?string $addressSMTP, ?string $user,
-        ?string $password, ?int $port, ?string $protocol, ?string $footer, ?int $enable)
+    public function __construct(?int    $id, ?string $mail, ?string $mailReply, ?string $addressSMTP, ?string $user,
+                                ?string $password, ?int $port, ?string $protocol, ?string $footer, ?int $enable)
     {
         $this->id = $id;
         $this->mail = $mail;

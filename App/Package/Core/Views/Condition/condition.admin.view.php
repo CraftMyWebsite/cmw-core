@@ -16,7 +16,7 @@ $description = LangManager::translate('core.config.desc');
 </div>
 
 <form id="condition" action="" method="post" enctype="multipart/form-data">
-    <?php (new SecurityManager())->insertHiddenToken() ?>
+    <?php SecurityManager::getInstance()->insertHiddenToken() ?>
     <div class="grid-2">
 
         <div class="card">

@@ -13,7 +13,7 @@ Website::setDescription('Retrouvez votre mot de passe');
 
         <h1 class="text-center">Mot de passe oublié</h1>
         <form action="" method="post">
-            <?php (new SecurityManager())->insertHiddenToken() ?>
+            <?php SecurityManager::getInstance()->insertHiddenToken() ?>
             <div class="input-group mb-3">
                 <input type="email" class="form-control" name="mail"
                        placeholder="<?= LangManager::translate('users.users.mail') ?>">

@@ -2,10 +2,11 @@
 
 namespace CMW\Entity\Users;
 
+use CMW\Manager\Package\AbstractEntity;
 use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Twofa\TwoFaManager;
 
-class User2FaEntity
+class User2FaEntity extends AbstractEntity
 {
     private int $userId;
     private bool $isEnabled;

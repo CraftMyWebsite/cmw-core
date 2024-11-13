@@ -2,10 +2,11 @@
 
 namespace CMW\Entity\Users;
 
-use CMW\Utils\Date;
+use CMW\Manager\Package\AbstractEntity;
 use CMW\Model\Users\UsersModel;
+use CMW\Utils\Date;
 
-class UserPictureEntity
+class UserPictureEntity extends AbstractEntity
 {
     private ?int $userId;
     private ?string $image;

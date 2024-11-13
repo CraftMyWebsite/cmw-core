@@ -17,7 +17,7 @@ $description = LangManager::translate('core.menus.desc');
 <div class="center-flex">
     <div class="flex-content-lg card">
         <form action="" method="post" class="space-y-2">
-            <?php (new SecurityManager())->insertHiddenToken() ?>
+            <?php SecurityManager::getInstance()->insertHiddenToken() ?>
             <div>
                 <label for="name"><?= LangManager::translate('core.menus.add.name') ?> :</label>
                 <div class="input-group">

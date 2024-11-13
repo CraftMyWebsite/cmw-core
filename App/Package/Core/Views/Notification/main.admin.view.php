@@ -104,7 +104,7 @@ $description = 'Notifications'
             <button type="button" data-modal-hide="modal"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <form method="post">
-            <?php (new SecurityManager())->insertHiddenToken() ?>
+            <?php SecurityManager::getInstance()->insertHiddenToken() ?>
         <div class="modal-body">
             <!--DISCORD-->
             <div>

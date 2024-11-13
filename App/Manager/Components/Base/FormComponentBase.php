@@ -99,7 +99,7 @@ class FormComponentBase extends IComponent
                     name='$this->name'
                     class='$this->classes'
                     onsubmit='$this->onSubmit'>";
-        (new SecurityManager())->insertHiddenToken();
+        SecurityManager::getInstance()->insertHiddenToken();
         $this->printChildren();
         print "</form>";
     }

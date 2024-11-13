@@ -23,7 +23,7 @@ Website::setDescription('Éditez votre profil');
 <section style="border: 1px #b4aaaa solid; border-radius: 9px; padding: .5rem; margin: auto">
     <h5 style="text-align: center">Informations personnel</h5>
     <form action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'profile/update' ?>" method="post">
-        <?php (new SecurityManager())->insertHiddenToken() ?>
+        <?php SecurityManager::getInstance()->insertHiddenToken() ?>
             <div>
                 <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Votre mail</label>
                 <input type="email" name="email" id="email" style="display: block; width: 100%" value="<?= $user->getMail() ?>" required>
@@ -67,7 +67,7 @@ Website::setDescription('Éditez votre profil');
             <form
                 action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile/2fa/toggle"
                 method="post">
-                <?php (new SecurityManager())->insertHiddenToken() ?>
+                <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                 <div class="mt-2">
                     <label for="secret">Code d'authentification</label>
                     <input type="text" name="secret" id="secret" style="display: block; width: 100%" required>
@@ -86,7 +86,7 @@ Website::setDescription('Éditez votre profil');
         </div>
         <?php endif; ?>
         <form action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile/update/picture" method="post" enctype="multipart/form-data">
-            <?php (new SecurityManager())->insertHiddenToken() ?>
+            <?php SecurityManager::getInstance()->insertHiddenToken() ?>
             <label >Changer votre image :</label>
             <input style="display: block; width: 100%" type="file" id="pictureProfile" name="pictureProfile" accept=".png, .jpg, .jpeg, .webp, .gif" required>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">PNG, JPG, JPEG, WEBP, GIF (MAX. 400px400px).</p>

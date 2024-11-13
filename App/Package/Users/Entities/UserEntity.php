@@ -2,10 +2,11 @@
 
 namespace CMW\Entity\Users;
 
+use CMW\Manager\Package\AbstractEntity;
 use CMW\Model\Users\UsersModel;
 use CMW\Utils\Date;
 
-class UserEntity
+class UserEntity extends AbstractEntity
 {
     private int $userId;
     private string $userMail;

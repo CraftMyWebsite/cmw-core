@@ -2,12 +2,12 @@
 
 namespace CMW\Implementation\Users\Users;
 
+use CMW\Controller\Users\UsersSessionsController;
 use CMW\Controller\Users\UsersSettingsController;
 use CMW\Entity\Users\UserPictureEntity;
 use CMW\Interface\Users\IUsersProfilePicture;
 use CMW\Manager\Env\EnvManager;
 use CMW\Model\Users\UserPictureModel;
-use CMW\Model\Users\UsersModel;
 use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
 
@@ -23,7 +23,7 @@ class UsersProfilePictureImplementation implements IUsersProfilePicture
     {
         UserPictureModel::getInstance()->uploadImage($userId, $picture);
 
-        UsersModel::updateStoredUser(UsersModel::getInstance()->getUserById($userId));
+        UsersSessionsController::getInstance()->updateStoredUser($userId);
 
         Redirect::redirectPreviousRoute();
     }

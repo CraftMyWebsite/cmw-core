@@ -23,7 +23,7 @@ Website::setDescription(LangManager::translate('core.Theme.manage.description'))
 
 <div class="page-loader">
     <form id="ThemeSettings" action="" method="post" enctype="multipart/form-data">
-        <?php (new SecurityManager())->insertHiddenToken() ?>
+        <?php SecurityManager::getInstance()->insertHiddenToken() ?>
         <div class="card">
             <?php ThemeManager::getInstance()->getCurrentThemeConfigFile(); ?>
         </div>

@@ -2,7 +2,9 @@
 
 namespace CMW\Entity\Users;
 
-class RoleEntity
+use CMW\Manager\Package\AbstractEntity;
+
+class RoleEntity extends AbstractEntity
 {
     private int $roleId;
     private string $roleName;

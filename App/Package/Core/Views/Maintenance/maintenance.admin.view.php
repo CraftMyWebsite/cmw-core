@@ -17,7 +17,7 @@ $description = LangManager::translate('core.maintenance.description');
 </div>
 
 <form id="Configuration" action="" method="post" enctype="multipart/form-data">
-    <?php (new SecurityManager())->insertHiddenToken() ?>
+    <?php SecurityManager::getInstance()->insertHiddenToken() ?>
     <label class="toggle">
         <input type="checkbox" id="isEnable" name="isEnable" <?= $maintenance->isEnable() ? 'checked' : '' ?>
                class="toggle-input">

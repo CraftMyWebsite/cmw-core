@@ -2,9 +2,9 @@
 
 namespace CMW\Entity\Users;
 
-use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Package\AbstractEntity;
 
-class PermissionEntity
+class PermissionEntity extends AbstractEntity
 {
     private int $permissionId;
     private ?PermissionEntity $permissionParent;

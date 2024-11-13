@@ -2,10 +2,11 @@
 
 namespace CMW\Entity\Pages;
 
-use CMW\Utils\Date;
 use CMW\Entity\Users\UserEntity;
+use CMW\Manager\Package\AbstractEntity;
+use CMW\Utils\Date;
 
-class PageEntity
+class PageEntity extends AbstractEntity
 {
     private int $pageId;
     private string $pageSlug;

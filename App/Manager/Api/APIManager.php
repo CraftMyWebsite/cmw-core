@@ -3,6 +3,7 @@
 namespace CMW\Manager\Api;
 
 use CMW\Manager\Env\EnvManager;
+use CMW\Utils\ArrayFormatter;
 use CMW\Utils\Log;
 use CurlHandle;
 use JsonException;
@@ -101,13 +102,24 @@ class APIManager
         if ($secure && !is_null($cmwlToken)) {
             header(self::HEADER_KEY . ': ' . $cmwlToken);
         }
+
+        if (empty($data)) {
+            $code = 204;
+        }
+
+        if (!empty($message)) {
+            $json['message'] = $message;
+        }
+
+        $json = [
+            'code' => $code,
+            'data' => $data,
+        ];
+
         try {
-            return json_encode([
-                'message' => $message,
-                'code' => $code,
-                'data' => $data,
-            ], JSON_THROW_ON_ERROR);
+            return json_encode(ArrayFormatter::convertToArray($json), JSON_THROW_ON_ERROR);
         } catch (JsonException) {
+            return false;
         }
     }
 

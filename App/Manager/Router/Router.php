@@ -2,6 +2,7 @@
 
 namespace CMW\Manager\Router;
 
+use Closure;
 use CMW\Manager\Error\ErrorManager;
 use CMW\Manager\Metrics\VisitsMetricsManager;
 use CMW\Manager\Requests\HttpMethodsType;
@@ -9,7 +10,7 @@ use CMW\Manager\Requests\Request;
 use CMW\Manager\Security\RateLimiter;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Utils\Website;
-use Closure;
+use ReflectionException;
 use ReflectionMethod;
 
 /**
@@ -82,7 +83,7 @@ class Router
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function callRegisteredRoute(ReflectionMethod $method, Request $request, string ...$values): void
     {
@@ -90,7 +91,7 @@ class Router
         if (!$method->isPrivate()) {
             ErrorManager::showCustomWarning('Warning', "You can't call a public method in a route.");
         }
-        new RateLimiter();
+        RateLimiter::getInstance()->init();
 
         $args = [...$values, $request];
 

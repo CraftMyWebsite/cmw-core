@@ -22,7 +22,7 @@ Website::setDescription("C'est pas très bien d'oublié son mot de passe ...");
 <h1 style="text-align: center">Mot de passe oublié</h1>
 <section style="border: 1px #b4aaaa solid; border-radius: 9px; padding: .5rem; max-width: 50%; margin: auto">
     <form class="space-y-6" action="" method="post">
-        <?php (new SecurityManager())->insertHiddenToken() ?>
+        <?php SecurityManager::getInstance()->insertHiddenToken() ?>
         <div>
             <label for="email" >Mail</label>
             <input name="mail" id="email" type="email" style="display: block; width: 100%" placeholder="mail@craftmywebsite.fr" required>
