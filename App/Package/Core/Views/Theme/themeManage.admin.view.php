@@ -74,6 +74,7 @@ Website::setDescription(LangManager::translate('core.Theme.manage.description'))
 
                 // Gérer la réponse réussie
                 if (result.success) {
+                    //TODO : Improve CSRF AJAX
                     const csrfTokenField = document.querySelector('[name="security-csrf-token"]');
                     const csrfTokenIdField = document.querySelector('[name="security-csrf-token-id"]');
 

@@ -157,6 +157,7 @@ class ThemeController extends AbstractController
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.edit');
 
         try {
+            //TODO : Improve CSRF AJAX
             $newCsrfTokenId = bin2hex(random_bytes(8));
             $newCsrfToken = SecurityManager::getInstance()->getCSRFToken($newCsrfTokenId);
 
