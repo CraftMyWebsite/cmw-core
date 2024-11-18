@@ -74,6 +74,16 @@ Website::setDescription(LangManager::translate('core.Theme.manage.description'))
 
                 // Gérer la réponse réussie
                 if (result.success) {
+                    const csrfTokenField = document.querySelector('[name="security-csrf-token"]');
+                    const csrfTokenIdField = document.querySelector('[name="security-csrf-token-id"]');
+
+                    if (csrfTokenField && csrfTokenIdField) {
+                        csrfTokenField.value = result.new_csrf_token;
+                        csrfTokenIdField.value = result.new_csrf_token_id;
+                    } else {
+                        console.error("Champs CSRF introuvables");
+                    }
+
                     iziToast.show({
                         titleSize: '14',
                         messageSize: '12',

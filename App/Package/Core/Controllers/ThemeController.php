@@ -13,6 +13,7 @@ use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
+use CMW\Manager\Security\SecurityManager;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Uploads\ImagesException;
 use CMW\Manager\Uploads\ImagesManager;
@@ -148,7 +149,7 @@ class ThemeController extends AbstractController
     }
 
     #[NoReturn]
-    #[Link('/manage', Link::POST, [], '/cmw-admin/theme', secure: false)]
+    #[Link('/manage', Link::POST, [], '/cmw-admin/theme', secure: true)]
     private function adminThemeManagePost(): void
     {
         header('Content-Type: application/json');
@@ -156,6 +157,9 @@ class ThemeController extends AbstractController
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.edit');
 
         try {
+            $newCsrfTokenId = bin2hex(random_bytes(8));
+            $newCsrfToken = SecurityManager::getInstance()->getCSRFToken($newCsrfTokenId);
+
             $aresFiles = [];
 
             foreach ($_FILES as $conf => $file) {
@@ -189,6 +193,8 @@ class ThemeController extends AbstractController
 
             echo json_encode([
                 'success' => true,
+                'new_csrf_token' => $newCsrfToken,
+                'new_csrf_token_id' => $newCsrfTokenId,
             ], JSON_THROW_ON_ERROR);
             exit;
         } catch (Exception $e) {
