@@ -13,6 +13,7 @@ use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
+use CMW\Manager\Security\SecurityManager;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Uploads\ImagesException;
 use CMW\Manager\Uploads\ImagesManager;
@@ -147,12 +148,18 @@ class ThemeController extends AbstractController
     }
 
     #[NoReturn]
-    #[Link('/manage', Link::POST, [], '/cmw-admin/theme')]
+
+    #[Link('/manage', Link::POST, [], '/cmw-admin/theme', secure: true)]
     private function adminThemeManagePost(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.edit');
 
-        $aresFiles = [];
+        try {
+            //TODO : Improve CSRF AJAX
+            $newCsrfTokenId = bin2hex(random_bytes(8));
+            $newCsrfToken = SecurityManager::getInstance()->getCSRFToken($newCsrfTokenId);
+
+            $aresFiles = [];
 
         // Manage files
         foreach ($_FILES as $conf => $file) {
@@ -185,9 +192,21 @@ class ThemeController extends AbstractController
                 continue;
             }
 
-            if (!isset($_POST[$conf]) || !empty($_POST[$conf])) {
-                ThemeModel::getInstance()->getInstance()->updateThemeConfig($conf, $_POST[$conf] ?? '0', ThemeManager::getInstance()->getCurrentTheme()->name());
-            }
+            $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs(ThemeManager::getInstance()->getCurrentTheme()->name());
+            SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . ThemeManager::getInstance()->getCurrentTheme()->name());
+
+            echo json_encode([
+                'success' => true,
+                'new_csrf_token' => $newCsrfToken,
+                'new_csrf_token_id' => $newCsrfTokenId,
+            ], JSON_THROW_ON_ERROR);
+            exit;
+        } catch (Exception $e) {
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage(),
+            ], JSON_THROW_ON_ERROR);
+            exit;
         }
 
         $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs(ThemeManager::getInstance()->getCurrentTheme()->name());
