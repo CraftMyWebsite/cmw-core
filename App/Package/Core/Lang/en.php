@@ -131,6 +131,12 @@ return [
             'regenerate' => 'Theme configuration regenerate',
             'installed' => '%theme% just installed and activated.',
             'reset' => 'Theme configuration reset',
+            'updateBeforeInstall' => 'Please update CMS before installing this theme!',
+            'updateBeforeUpdate' => 'Please update the CMS before updating your themes!',
+        ],
+        'package' => [
+            'updateBeforeInstall' => 'Please update CMS before installing this package!',
+            'updateBeforeUpdate' => 'Please update the CMS before updating your packages!',
         ],
         'db' => [
             'config' => [
@@ -171,7 +177,7 @@ return [
             ],
         ],
     ],
-    'Theme' => [
+    'theme' => [
         'myThemes' => 'My themes',
         'market' => 'Market',
         'details' => 'Details',

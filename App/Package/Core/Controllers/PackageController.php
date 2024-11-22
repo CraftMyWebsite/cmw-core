@@ -13,6 +13,7 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Package\IPackageConfig;
 use CMW\Manager\Router\Link;
+use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Views\View;
 use CMW\Utils\Directory;
 use CMW\Utils\Redirect;
@@ -165,6 +166,12 @@ class PackageController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.market');
 
+        $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
+        if ($CoreNeedUpdate) {
+            Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.package.updateBeforeUpdate'));
+            Redirect::redirect('cmw-admin/updates/cms');
+        }
+
         $package = PublicAPI::putData("market/resources/install/$id");
 
         if (empty($package)) {
@@ -211,6 +218,12 @@ class PackageController extends AbstractController
     private function adminPackageUpdate(int $id, string $actualVersion, string $packageName): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.manage');
+
+        $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
+        if ($CoreNeedUpdate) {
+            Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.package.updateBeforeUpdate'));
+            Redirect::redirect('cmw-admin/updates/cms');
+        }
 
         $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion");
 

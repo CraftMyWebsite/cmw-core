@@ -131,6 +131,12 @@ return [
             'regenerate' => 'Configuration du thème regénérée',
             'installed' => "%theme% viens d'être installé et activé.",
             'reset' => 'Configuration du thème réinitialisée',
+            'updateBeforeInstall' => 'Veuillez mettre à jour le CMS avant d\'installer ce thème !',
+            'updateBeforeUpdate' => 'Veuillez mettre à jour le CMS avant de mettre à jour vos thèmes !',
+        ],
+        'package' => [
+            'updateBeforeInstall' => 'Veuillez mettre à jour le CMS avant d\'installer ce package !',
+            'updateBeforeUpdate' => 'Veuillez mettre à jour le CMS avant de mettre à jours vos packages !',
         ],
         'db' => [
             'config' => [

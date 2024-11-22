@@ -15,6 +15,7 @@ use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Manager\Theme\ThemeManager;
+use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesException;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
@@ -111,6 +112,12 @@ class ThemeController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
 
+        $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
+        if ($CoreNeedUpdate) {
+            Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.theme.updateBeforeInstall'));
+            Redirect::redirect('cmw-admin/updates/cms');
+        }
+
         $theme = PublicAPI::putData("market/resources/install/$id");
 
         if (empty($theme)) {
@@ -134,7 +141,7 @@ class ThemeController extends AbstractController
         SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . $theme['name']);
 
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-            LangManager::translate('core.toaster.Theme.installed', ['theme' => $theme['name']]));
+            LangManager::translate('core.toaster.theme.installed', ['theme' => $theme['name']]));
 
         Redirect::redirect('cmw-admin/theme/manage');
     }
@@ -212,6 +219,12 @@ class ThemeController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
 
+        $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
+        if ($CoreNeedUpdate) {
+            Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.theme.updateBeforeUpdate'));
+            Redirect::redirect('cmw-admin/updates/cms');
+        }
+
         $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion");
 
         Log::debug($updates);
@@ -230,7 +243,7 @@ class ThemeController extends AbstractController
         SimpleCacheManager::deleteSpecificCacheFile("config", "Themes/$themeName");
 
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-            LangManager::translate('core.theme.toasters.update.success', ['theme' => $themeName]));
+            LangManager::translate('core.Theme.toasters.update.success', ['theme' => $themeName]));
 
         Redirect::redirectPreviousRoute();
     }
