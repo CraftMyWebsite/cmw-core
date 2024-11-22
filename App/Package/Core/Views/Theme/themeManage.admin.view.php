@@ -14,7 +14,7 @@ Website::setDescription(LangManager::translate('core.Theme.manage.description'))
     <div class="flex gap-2">
         <button data-modal-toggle="modal-danger" class="btn-warning" type="button"><?= LangManager::translate('core.Theme.reset') ?></button>
         <div>
-            <button id="submitButton" form="ThemeSettings" type="submit" class="btn-primary">
+            <button form="ThemeSettings" type="submit" class="btn-primary">
                 <?= LangManager::translate('core.btn.save') ?>
             </button>
         </div>
@@ -22,7 +22,7 @@ Website::setDescription(LangManager::translate('core.Theme.manage.description'))
 </div>
 
 <div class="page-loader">
-    <form id="ThemeSettings" action="/cmw-admin/theme/manage" method="post" enctype="multipart/form-data">
+    <form id="ThemeSettings" action="" method="post" enctype="multipart/form-data">
         <?php SecurityManager::getInstance()->insertHiddenToken() ?>
         <div class="card">
             <?php ThemeManager::getInstance()->getCurrentThemeConfigFile(); ?>
