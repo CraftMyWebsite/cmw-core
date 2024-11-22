@@ -117,7 +117,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                 </div>
 
                 <div class="text-center pb-2">
-                    <?php if ($localTheme->version() !== $theme['version_title']): ?>
+                    <?php if ($localTheme->version() !== $theme['version_name']): ?>
                         <a class="btn-warning-sm" type="button"
                            href="update/<?= $theme['id'] ?>/<?= $localTheme->version() ?>/<?= $localTheme->name() ?>">
                             <?= LangManager::translate('core.Package.update') ?>
@@ -133,7 +133,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                         <?= LangManager::translate('core.Theme.active') ?>
                     </div>
                 </div>
-                <?php if ($localTheme->version() !== $theme['version_title']): ?>
+                <?php if ($localTheme->version() !== $theme['version_name']): ?>
                     <div class="absolute"
                          style="transform: rotate(-45deg); left: -4em; top: 5em; margin: 0; z-index: 10">
                         <div class="text-center"
@@ -305,7 +305,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                 </div>
 
                 <div class="text-center pb-2">
-                    <?php if ($localTheme->version() !== $theme['version_title']): ?>
+                    <?php if ($localTheme->version() !== $theme['version_name']): ?>
                         <a class="btn-warning-sm" type="button"
                            href="update/<?= $theme['id'] ?>/<?= $localTheme->version() ?>/<?= $localTheme->name() ?>">
                             <?= LangManager::translate('core.Package.update') ?>
@@ -321,7 +321,7 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                     </form>
                     <?php endif; ?>
                 </div>
-                <?php if ($localTheme->version() !== $theme['version_title']): ?>
+                <?php if ($localTheme->version() !== $theme['version_name']): ?>
                     <div class="absolute"
                          style="transform: rotate(-45deg); left: -4em; top: 5em; margin: 0; z-index: 10">
                         <div class="text-center"
