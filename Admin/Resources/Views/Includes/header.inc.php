@@ -30,8 +30,36 @@ foreach ($installedPackages as $package) {
         break;  // Pas besoin de continuer à vérifier les autres paquets
     }
 }
-?>
 
+function renderSubSubMenu(array $subMenus, $currentUser): string {
+    $html = '<ul style="margin-left: .9rem;">';
+
+    foreach ($subMenus as $submenu) {
+        if (UsersModel::hasPermission($currentUser, $submenu->getPermission())) {
+            if (is_null($submenu->getUrl())) {
+                $html .= '<li class="cursor-pointer">';
+                $html .= '<div class="a-side-nav-drop-sub flex justify-between items-center">';
+                $html .= '<span class="a-side-nav-drop-sub-title">' . $submenu->getTitle() . '</span>';
+                $html .= '<i class="fa-xs fa-solid fa-chevron-down"></i>';
+                $html .= '</div>';
+                $html .= renderSubSubMenu($submenu->getSubMenus(), $currentUser);
+                $html .= '</li>';
+            } else {
+                $html .= '<li>';
+                $html .= '<a href="' . EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/' . $submenu->getUrl() . '" class="a-side-nav-drop-sub a-side-nav-drop-sub-link ' . (MenusController::getInstance()->isActiveNavbarItem($submenu->getUrl()) ? 'side-nav-drop-active a-side-nav-drop-sub-link-active ' : '') . '">';
+                $html .= $submenu->getTitle();
+                $html .= '</a>';
+                $html .= '</li>';
+            }
+        }
+    }
+
+    $html .= '</ul>';
+
+    return $html;
+}
+
+?>
 <nav class="nav">
     <div class="px-3 py-[.1rem] lg:px-5 lg:pl-3">
         <div class="flex items-center justify-between">
@@ -212,14 +240,24 @@ foreach ($installedPackages as $package) {
                                 <i class="fa-xs fa-solid fa-chevron-down"></i>
                             </button>
                             <ul class="a-side-nav-dropdown <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'active' : '' ?>">
-                                <?php foreach ($menu->getSubMenus() as $submenu):
-                                    if (UsersModel::hasPermission($currentUser, $submenu->getPermission())): ?>
-                                        <li>
-                                            <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/<?= $submenu->getUrl() ?>"
-                                               class="a-side-nav-drop <?= MenusController::getInstance()->isActiveNavbarItem($submenu->getUrl()) ? 'side-nav-drop-active' : '' ?>">
-                                                <?= $submenu->getTitle() ?>
-                                            </a>
-                                        </li>
+                                <?php foreach ($menu->getSubMenus() as $submenu): ?>
+                                    <?php if (UsersModel::hasPermission($currentUser, $submenu->getPermission())): ?>
+                                        <?php if (empty($submenu->getUrl()) && !empty($submenu->getSubMenus())): ?>
+                                            <li>
+                                                <div class="a-side-nav-drop-sub flex justify-between items-center cursor-pointer">
+                                                    <span class="a-side-nav-drop-sub-title"><?= $submenu->getTitle() ?></span>
+                                                    <i class="fa-xs fa-solid fa-chevron-down"></i>
+                                                </div>
+                                                <?= renderSubSubMenu($submenu->getSubMenus(), $currentUser) ?>
+                                            </li>
+                                        <?php else: ?>
+                                            <li>
+                                                <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/<?= $submenu->getUrl() ?>"
+                                                   class="a-side-nav-drop <?= MenusController::getInstance()->isActiveNavbarItem($submenu->getUrl()) ? 'side-nav-drop-active' : '' ?>">
+                                                    <?= $submenu->getTitle() ?>
+                                                </a>
+                                            </li>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
                             </ul>
@@ -268,14 +306,24 @@ foreach ($installedPackages as $package) {
                                         <i class="fa-xs fa-solid fa-chevron-down"></i>
                                     </button>
                                     <ul class="a-side-nav-dropdown <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'active' : '' ?>">
-                                        <?php foreach ($menu->getSubMenus() as $submenu):
-                                            if (UsersModel::hasPermission($currentUser, $submenu->getPermission())): ?>
-                                                <li>
-                                                    <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/<?= $submenu->getUrl() ?>"
-                                                       class="a-side-nav-drop <?= MenusController::getInstance()->isActiveNavbarItem($submenu->getUrl()) ? 'side-nav-drop-active' : '' ?>">
-                                                        <?= $submenu->getTitle() ?>
-                                                    </a>
-                                                </li>
+                                        <?php foreach ($menu->getSubMenus() as $submenu): ?>
+                                            <?php if (UsersModel::hasPermission($currentUser, $submenu->getPermission())): ?>
+                                                <?php if (empty($submenu->getUrl()) && !empty($submenu->getSubMenus())): ?>
+                                                    <li>
+                                                        <div class="a-side-nav-drop-sub flex justify-between items-center cursor-pointer">
+                                                            <span class="a-side-nav-drop-sub-title"><?= $submenu->getTitle() ?></span>
+                                                            <i class="fa-xs fa-solid fa-chevron-down"></i>
+                                                        </div>
+                                                        <?= renderSubSubMenu($submenu->getSubMenus(), $currentUser) ?>
+                                                    </li>
+                                                <?php else: ?>
+                                                    <li>
+                                                        <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/<?= $submenu->getUrl() ?>"
+                                                           class="a-side-nav-drop <?= MenusController::getInstance()->isActiveNavbarItem($submenu->getUrl()) ? 'side-nav-drop-active' : '' ?>">
+                                                            <?= $submenu->getTitle() ?>
+                                                        </a>
+                                                    </li>
+                                                <?php endif; ?>
                                             <?php endif; ?>
                                         <?php endforeach; ?>
                                     </ul>
@@ -329,16 +377,25 @@ foreach ($installedPackages as $package) {
                                         <span class="span-side-nav"><?= $menu->getTitle() ?></span>
                                         <i class="fa-xs fa-solid fa-chevron-down"></i>
                                     </button>
-                                    <ul
-                                        class="a-side-nav-dropdown <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'active' : '' ?>">
-                                        <?php foreach ($menu->getSubMenus() as $submenu):
-                                            if (UsersModel::hasPermission($currentUser, $submenu->getPermission())): ?>
-                                                <li>
-                                                    <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/<?= $submenu->getUrl() ?>"
-                                                       class="a-side-nav-drop <?= MenusController::getInstance()->isActiveNavbarItem($submenu->getUrl()) ? 'side-nav-drop-active' : '' ?>">
-                                                        <?= $submenu->getTitle() ?>
-                                                    </a>
-                                                </li>
+                                    <ul class="a-side-nav-dropdown <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'active' : '' ?>">
+                                        <?php foreach ($menu->getSubMenus() as $submenu): ?>
+                                            <?php if (UsersModel::hasPermission($currentUser, $submenu->getPermission())): ?>
+                                                <?php if (empty($submenu->getUrl()) && !empty($submenu->getSubMenus())): ?>
+                                                    <li>
+                                                        <div class="a-side-nav-drop-sub flex justify-between items-center cursor-pointer">
+                                                            <span class="a-side-nav-drop-sub-title"><?= $submenu->getTitle() ?></span>
+                                                            <i class="fa-xs fa-solid fa-chevron-down"></i>
+                                                        </div>
+                                                        <?= renderSubSubMenu($submenu->getSubMenus(), $currentUser) ?>
+                                                    </li>
+                                                <?php else: ?>
+                                                    <li>
+                                                        <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/<?= $submenu->getUrl() ?>"
+                                                           class="a-side-nav-drop <?= MenusController::getInstance()->isActiveNavbarItem($submenu->getUrl()) ? 'side-nav-drop-active' : '' ?>">
+                                                            <?= $submenu->getTitle() ?>
+                                                        </a>
+                                                    </li>
+                                                <?php endif; ?>
                                             <?php endif; ?>
                                         <?php endforeach; ?>
                                     </ul>
@@ -393,9 +450,6 @@ foreach ($installedPackages as $package) {
         }, 300); // Attendez un peu pour l'effet avant de changer l'icône
     });
 
-
-</script>
-<script>
     function toggleSubMenu(button) {
         const submenu = button.nextElementSibling;
 
@@ -408,9 +462,47 @@ foreach ($installedPackages as $package) {
         }
     }
 
-</script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const openActiveMenus = () => {
+            document.querySelectorAll('.a-side-nav-dropdown ul').forEach(subMenu => {
+                const activeItem = subMenu.querySelector('.side-nav-drop-active');
+                if (activeItem) {
+                    subMenu.classList.add('open');
 
-<script>
+                    const parentMenu = subMenu.previousElementSibling;
+                    if (parentMenu && parentMenu.querySelector('.fa-chevron-down')) {
+                        parentMenu.querySelector('.fa-chevron-down').classList.add('rotate-180');
+                    }
+                }
+            });
+        };
+
+        document.querySelectorAll('.a-side-nav-drop-sub').forEach(menu => {
+            menu.addEventListener('click', (event) => {
+                event.stopPropagation();
+
+                const subMenu = menu.nextElementSibling;
+
+                if (subMenu && subMenu.tagName.toLowerCase() === 'ul') {
+                    const isOpen = subMenu.classList.contains('open');
+                    if (isOpen) {
+                        subMenu.classList.remove('open');
+                    } else {
+                        subMenu.classList.add('open');
+                    }
+
+                    const chevron = menu.querySelector('.fa-chevron-down');
+                    if (chevron) {
+                        chevron.classList.toggle('rotate-180', !isOpen);
+                    }
+                }
+            });
+        });
+
+        openActiveMenus();
+    });
+
+
     document.addEventListener("DOMContentLoaded", function() {
         let dropActiveElement = document.querySelector(".side-nav-drop-active");
         let activeElement = document.querySelector(".side-nav-active");
@@ -421,6 +513,7 @@ foreach ($installedPackages as $package) {
             activeElement.scrollIntoView({  block: "center" });
         }
     });
+
 </script>
 
 <section class="main-content">
