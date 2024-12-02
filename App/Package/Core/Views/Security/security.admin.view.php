@@ -20,7 +20,7 @@ $description = LangManager::translate('core.security.description');
         <div class="card">
             <h6><?= LangManager::translate('core.security.captcha.title') ?></h6>
             <form id="captchaConfig" action="security/edit/captcha" method="post">
-                <?php (new SecurityManager())->insertHiddenToken() ?>
+                <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                 <select id="captcha" name="captcha" required
                         onchange="generateCaptchaInputs()">
                     <option value="none" <?= $currentCaptcha === 'none' ? 'selected' : '' ?>>

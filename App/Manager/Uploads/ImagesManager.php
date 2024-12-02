@@ -3,9 +3,14 @@
 namespace CMW\Manager\Uploads;
 
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Flash\Alert;
+use CMW\Manager\Flash\Flash;
+use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Uploads\Errors\ImagesConvertedStatus;
+use CMW\Manager\Uploads\Errors\ImagesStatus;
+use CMW\Manager\Uploads\Format\ImagesFormat;
+use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
-use Exception;
-use RuntimeException;
 
 class ImagesManager
 {
@@ -29,7 +34,6 @@ class ImagesManager
      * @return array
      *
      * * @desc Upload images on the uploads' folder. Files accepted [png, jpeg, jpg, gif, webp].
-     * @throws Exception
      */
     public static function uploadMultiple(array $files, string $dirName = ''): array
     {
@@ -50,25 +54,26 @@ class ImagesManager
      * @param string $customName
      * @return string fileName
      *
-     * @throws \CMW\Manager\Uploads\ImagesException
      * @desc Upload image on the uploads' folder. Files accepted [png, jpeg, jpg, gif, webp, ico, svg].
      */
     public static function upload(array $file, string $dirName = '', bool $keepName = false, string $customName = ''): string
     {
         if (is_uploaded_file($file['tmp_name']) === false) {
-            throw new ImagesException('ERROR_INVALID_FILE_DEFINITION');
+            ImagesException::handleImageError(ImagesStatus::ERROR_INVALID_FILE_DEFINITION);
         }
 
         if (!empty(mb_substr($dirName, -1))) {
             $dirName .= '/';
         }
 
-        self::createDirectory($dirName);  // Create the directory if this is necessary
+        if (!self::createDirectory($dirName)) {
+            ImagesException::handleImageError(ImagesStatus::ERROR_CANT_CREATE_FOLDER);
+        }
 
         $path = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName;
 
         if (!empty($dirName) && $dirName !== '/' && !is_dir($path)) {
-            throw new ImagesException('ERROR_FOLDER_DONT_EXIST');
+            ImagesException::handleImageError(ImagesStatus::ERROR_FOLDER_DONT_EXIST);
         }
 
         $filePath = $file['tmp_name'];
@@ -80,15 +85,15 @@ class ImagesManager
         $maxFileSize = self::getUploadMaxSizeFileSize();
 
         if (empty($fileSize2) || ($fileSize2[0] === 0) || ($fileSize2[1] === 0 || filesize($filePath) <= 0)) {
-            throw new ImagesException('ERROR_EMPTY_FILE');
+            ImagesException::handleImageError(ImagesStatus::ERROR_EMPTY_FILE);
         }
 
         if ($fileSize > $maxFileSize) {
-            throw new ImagesException('ERROR_FILE_TOO_LARGE');
+            ImagesException::handleImageError(ImagesStatus::ERROR_FILE_TOO_LARGE);
         }
 
         if (!array_key_exists($fileType, self::$allowedTypes)) {
-            throw new ImagesException('ERROR_FILE_NOT_ALLOWED');
+            ImagesException::handleImageError(ImagesStatus::ERROR_FILE_NOT_ALLOWED);
         }
 
         // If $keepName is false, we generate a random name
@@ -107,7 +112,7 @@ class ImagesManager
         $newFilePath = $path . self::$returnName;
 
         if (!copy($filePath, $newFilePath)) {
-            throw new ImagesException('ERROR_CANT_MOVE_FILE');
+            ImagesException::handleImageError(ImagesStatus::ERROR_CANT_MOVE_FILE);
         }
 
         // Clear image metadata
@@ -120,14 +125,15 @@ class ImagesManager
 
     /**
      * @param string $dirName
-     * @return void
+     * @return bool
      * @Desc Create directory on the upload folder
      */
-    private static function createDirectory(string $dirName): void
+    private static function createDirectory(string $dirName): bool
     {
         if (!file_exists(EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName) && !mkdir($concurrentDirectory = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName, 0777, true) && !is_dir($concurrentDirectory)) {
-            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+            return false;
         }
+        return true;
     }
 
     /**
@@ -205,7 +211,8 @@ class ImagesManager
         }
 
         if (!file_exists(EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName) && !mkdir($concurrentDirectory = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName) && !is_dir($concurrentDirectory)) {
-            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+            Flash::send(Alert::WARNING, 'Images', LangManager::translate('core.imageManager.error.createFolder'));
+            Redirect::redirectPreviousRoute();
         }
 
         $path = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName;
@@ -224,35 +231,33 @@ class ImagesManager
         return '<link rel="icon" type="image/x-icon" href="' . $path . '">';
     }
 
-    /**
-     * @throws \Random\RandomException
-     * @throws \CMW\Manager\Uploads\ImagesException
-     */
     public static function downloadFromLink(string $url, string $dirName = ''): string
     {
         if (!empty(mb_substr($dirName, -1))) {
             $dirName .= '/';
         }
 
-        self::createDirectory($dirName);  // Create the directory if this is necessary
+        if (!self::createDirectory($dirName)) {
+            ImagesException::handleImageError(ImagesStatus::ERROR_CANT_CREATE_FOLDER);
+        }
 
         $path = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName;
 
         if (!empty($dirName) && $dirName !== '/' && !is_dir($path)) {
-            throw new ImagesException('ERROR_FOLDER_DONT_EXIST');
+            ImagesException::handleImageError(ImagesStatus::ERROR_FOLDER_DONT_EXIST);
         }
 
         $file = file_get_contents($url);
 
         if ($file === false) {
-            throw new ImagesException('ERROR_CANT_DOWNLOAD_FILE');
+            ImagesException::handleImageError(ImagesStatus::ERROR_CANT_DOWNLOAD_FILE);
         }
 
         $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
         $fileType = finfo_buffer($fileInfo, $file);
 
         if (!array_key_exists($fileType, self::$allowedTypes)) {
-            throw new ImagesException('ERROR_FILE_NOT_ALLOWED');
+            ImagesException::handleImageError(ImagesStatus::ERROR_FILE_NOT_ALLOWED);
         }
 
         $fileName = Utils::genId(random_int(15, 35));
@@ -263,9 +268,75 @@ class ImagesManager
         $newFilePath = $path . self::$returnName;
 
         if (!file_put_contents($newFilePath, $file)) {
-            throw new ImagesException('ERROR_CANT_MOVE_FILE');
+            ImagesException::handleImageError(ImagesStatus::ERROR_CANT_MOVE_FILE);
         }
 
         return self::$returnName;
     }
+
+    /**
+     * @desc permet de changer le type d'image, idéal pour les optimiser !
+     * @param array $file
+     * @param string $dirName
+     * @param string $targetExtension
+     * @param int $quality
+     * @param bool $keepName
+     * @param string $customName
+     * @return string
+     */
+    public static function convertAndUpload(array $file, string $dirName = '', ImagesFormat $targetFormat = ImagesFormat::WEBP, int $quality = 80, bool $keepName = false, string $customName = ''): string
+    {
+        $originalFileName = self::upload($file, $dirName, $keepName, $customName);
+
+        $path = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName;
+        $originalFilePath = $path . '/' . $originalFileName;
+
+        $originalExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
+        if (strtolower($originalExtension) === $targetFormat->value) {
+            return $originalFileName;
+        }
+
+        $newFileName = pathinfo($originalFileName, PATHINFO_FILENAME) . '.' . $targetFormat->value;
+        $newFilePath = $path . '/' . $newFileName;
+
+        $image = imagecreatefromstring(file_get_contents($originalFilePath));
+        if (!$image) {
+            ImagesException::handleConverterError(ImagesConvertedStatus::ERROR_CONVERTING_IMAGE);
+            return $originalFileName;
+        }
+
+        switch ($targetFormat) {
+            case ImagesFormat::JPEG:
+            case ImagesFormat::JPG:
+                imagejpeg($image, $newFilePath, $quality);
+                break;
+            case ImagesFormat::PNG:
+                imagepng($image, $newFilePath, 9 - (int)($quality / 10));
+                break;
+            case ImagesFormat::GIF:
+                imagegif($image, $newFilePath);
+                break;
+            case ImagesFormat::WEBP:
+                imagewebp($image, $newFilePath, $quality);
+                break;
+            case ImagesFormat::ICO:
+            case ImagesFormat::SVG:
+                ImagesException::handleConverterError(ImagesConvertedStatus::ERROR_UNSUPPORTED_CONVERSION_FORMAT);
+                return $originalFileName;
+            default:
+                ImagesException::handleConverterError(ImagesConvertedStatus::ERROR_INVALID_TARGET_FORMAT);
+                return $originalFileName;
+        }
+
+        imagedestroy($image);
+        self::deleteImage($originalFileName, $dirName);
+
+        if (!file_exists($newFilePath)) {
+            ImagesException::handleConverterError(ImagesConvertedStatus::ERROR_SAVING_FILE);
+            return '';
+        }
+
+        return $newFileName;
+    }
+
 }

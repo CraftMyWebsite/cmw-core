@@ -24,7 +24,7 @@ $scripts = '<script src="' . EnvManager::getInstance()->getValue('PATH_SUBFOLDER
         <?php if ($user->useNativeLoginMethode()): ?>
             <form method="post"
                   action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>login/forgot">
-                <?php (new SecurityManager())->insertHiddenToken() ?>
+                <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                 <input type="hidden" value="<?= $user->getMail() ?>" name="mail">
                 <button type="submit" class="btn btn-warning">
                     <i class="fa fa-arrows-rotate"></i>
@@ -39,7 +39,7 @@ $scripts = '<script src="' . EnvManager::getInstance()->getValue('PATH_SUBFOLDER
 
 <div class="grid-3">
     <form action="" method="post" id="userprofile" class="col-span-2 grid-2">
-        <?php (new SecurityManager())->insertHiddenToken() ?>
+        <?php SecurityManager::getInstance()->insertHiddenToken() ?>
         <div class="card">
             <div>
                 <label for="email"><?= LangManager::translate('users.users.mail') ?> :</label>
@@ -113,7 +113,7 @@ $scripts = '<script src="' . EnvManager::getInstance()->getValue('PATH_SUBFOLDER
     <div class="card">
         <form action="../picture/edit/<?= $user->getId() ?>" method="post"
               enctype="multipart/form-data">
-            <?php (new SecurityManager())->insertHiddenToken() ?>
+            <?php SecurityManager::getInstance()->insertHiddenToken() ?>
             <div class="grid-2">
                 <img class="rounded-lg bg-contain"
                      src="<?= $user->getUserPicture()->getImage() ?>"

@@ -51,7 +51,7 @@ Website::setDescription('Affichage de la news ' . $news->getTitle());
         <?php endforeach; ?>
         <div class="card">
             <form method="post" action="<?= $news->sendComments() ?>" class="">
-                <?php (new SecurityManager())->insertHiddenToken() ?>
+                <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                 <h4>Votre commentaire :</h4>
                 <textarea style="width: 100%" name="comments" placeholder="Bonjour," required></textarea>
                 <div class="text-center mt-4">

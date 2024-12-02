@@ -298,12 +298,21 @@ class MenusController extends AbstractController
         $currentSlug = str_replace(EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/', '', $_SERVER['REQUEST_URI']);
 
         foreach ($subMenus as $subMenu) {
-            if (str_starts_with($currentSlug, $subMenu->getUrl())) {
-                return true;
+            $url = $subMenu->getUrl();
+            if ($url) {
+                if (str_starts_with($currentSlug, $url) || str_contains($currentSlug, $url)) {
+                    return true;
+                }
+            }
+            if (!empty($subMenu->getSubMenus())) {
+                if ($this->isActiveNavbar($subMenu->getSubMenus())) {
+                    return true;
+                }
             }
         }
         return false;
     }
+
 
     /**
      * @param string $url

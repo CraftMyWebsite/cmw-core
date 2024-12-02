@@ -28,7 +28,7 @@ $description = LangManager::translate('users.oauth.manage.description');
 
 
 <form method="post" id="oauth-config">
-    <?php (new SecurityManager())->insertHiddenToken() ?>
+    <?php SecurityManager::getInstance()->insertHiddenToken() ?>
     <h5><?= LangManager::translate('users.oauth.manage.enabled') ?> : </h5>
     <div class="grid-3">
         <?php foreach ($implementations as $implementation):

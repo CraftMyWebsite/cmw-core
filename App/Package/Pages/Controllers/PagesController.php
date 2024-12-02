@@ -3,6 +3,7 @@
 namespace CMW\Controller\Pages;
 
 use CMW\Controller\Users\UsersController;
+use CMW\Controller\Users\UsersSessionsController;
 use CMW\Manager\Error\ErrorManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
@@ -15,7 +16,6 @@ use CMW\Manager\Uploads\ImagesException;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Pages\PagesModel;
-use CMW\Model\Users\UsersModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\NoReturn;
@@ -58,7 +58,7 @@ class PagesController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'pages.show.add');
 
-        $userId = UsersModel::getCurrentUser()?->getId();
+        $userId = UsersSessionsController::getInstance()->getCurrentUser()?->getId();
 
         [$title, $content, $state, $slug] = Utils::filterInput('title', 'content', 'state', 'page_slug');
 
@@ -138,7 +138,7 @@ class PagesController extends AbstractController
         UsersController::hasPermission('core.dashboard', 'pages.show.' . (($type === 'add') ? 'add' : 'edit'));
 
         try {
-            print (json_encode(ImagesManager::upload($_FILES['image'], 'Editor'), JSON_THROW_ON_ERROR));
+            print (json_encode(ImagesManager::convertAndUpload($_FILES['image'], 'Editor'), JSON_THROW_ON_ERROR));
         } catch (ImagesException $e) {
             echo $e;  // todo error
         }

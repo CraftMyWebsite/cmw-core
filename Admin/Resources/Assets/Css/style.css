@@ -1266,7 +1266,7 @@ hr {
 
 /* Lorsque le sous-menu est visible */
 .a-side-nav-dropdown.active {
-    max-height: 1500px;
+    max-height: 9000px !important;
     opacity: 1;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -1293,6 +1293,53 @@ hr {
   margin-left: 0.5rem;
   color: var(--nav-sky);
 }
+
+.a-side-nav-drop-sub {
+    transition: none;
+    width: 100%;
+    display: block;
+    align-items: center;
+    padding-left: 1rem;
+    padding-right: 0.25rem;
+    padding-top: 0.25rem;
+    font-size: 0.9rem;
+    line-height: 1.25rem;
+}
+
+.a-side-nav-drop-sub-title {
+    transition: margin-left 200ms, color 200ms;
+    margin-left: 0;
+}
+
+.a-side-nav-drop-sub:hover .a-side-nav-drop-sub-title {
+    margin-left: 0.5rem;
+    color: var(--nav-sky);
+}
+
+.a-side-nav-drop-sub-link {
+    transition: margin-left 200ms, color 200ms;
+    margin-left: 0;
+}
+.a-side-nav-drop-sub-link:hover {
+    margin-left: 0.5rem;
+    color: var(--nav-sky);
+}
+.a-side-nav-drop-sub-link-active {
+    margin-left: 0.5rem;
+}
+.a-side-nav-dropdown ul {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+    will-change: max-height, opacity;
+}
+
+.a-side-nav-dropdown ul.open {
+    opacity: 1;
+    max-height: 9000px !important;
+}
+
 .span-side-nav {
   margin-left: 0.75rem;
   flex: 1 1 0%;

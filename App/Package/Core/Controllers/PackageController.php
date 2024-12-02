@@ -13,6 +13,7 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Package\IPackageConfig;
 use CMW\Manager\Router\Link;
+use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Views\View;
 use CMW\Utils\Directory;
 use CMW\Utils\Redirect;
@@ -165,6 +166,12 @@ class PackageController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.market');
 
+        $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
+        if ($CoreNeedUpdate) {
+            Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.package.updateBeforeUpdate'));
+            Redirect::redirect('cmw-admin/updates/cms');
+        }
+
         $package = PublicAPI::putData("market/resources/install/$id");
 
         if (empty($package)) {
@@ -193,7 +200,7 @@ class PackageController extends AbstractController
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.manage');
 
         if (!$this->uninstallPackage($package)) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.package.error'),
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
                 LangManager::translate('core.Package.toasters.delete.error',
                     ['package' => $package]));
             Redirect::redirectPreviousRoute();
@@ -211,6 +218,12 @@ class PackageController extends AbstractController
     private function adminPackageUpdate(int $id, string $actualVersion, string $packageName): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.manage');
+
+        $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
+        if ($CoreNeedUpdate) {
+            Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.package.updateBeforeUpdate'));
+            Redirect::redirect('cmw-admin/updates/cms');
+        }
 
         $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion");
 
@@ -285,12 +298,16 @@ class PackageController extends AbstractController
         $uninstallSqlFile = EnvManager::getInstance()->getValue('DIR') . "App/Package/$packageName/Init/uninstall.sql";
 
         if (file_exists($uninstallSqlFile)) {
-            $sql = file_get_contents($uninstallSqlFile);
-            $db = DatabaseManager::getInstance();
+            $db = DatabaseManager::getLiteInstance();
 
-            if (!$db->query($sql)) {
+            $querySqlFile = file_get_contents($uninstallSqlFile);
+            $req = $db->query($querySqlFile);
+
+            if (!$req) {
                 return false;
             }
+
+            $req->closeCursor();
         }
 
         // Check Package uninstall override

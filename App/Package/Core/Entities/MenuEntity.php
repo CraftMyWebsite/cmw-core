@@ -2,15 +2,14 @@
 
 namespace CMW\Entity\Core;
 
-use CMW\Controller\Users\UsersController;
+use CMW\Controller\Users\UsersSessionsController;
 use CMW\Entity\Users\RoleEntity;
 use CMW\Manager\Env\EnvManager;
-use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Package\AbstractEntity;
 use CMW\Model\Core\MenusModel;
 use CMW\Model\Users\RolesModel;
-use CMW\Model\Users\UsersModel;
 
-class MenuEntity
+class MenuEntity extends AbstractEntity
 {
     private int $id;
     private string $name;
@@ -125,7 +124,9 @@ class MenuEntity
             return true;
         }
 
-        if (!UsersController::isUserLogged() && $this->isRestricted()) {
+        $currentUser = UsersSessionsController::getInstance()->getCurrentUser();
+
+        if (is_null($currentUser) && $this->isRestricted()) {
             return false;
         }
 
@@ -133,8 +134,9 @@ class MenuEntity
             return true;
         }
 
+        //TODO Bulk check
         foreach ($this->restrictedRoles as $restrictedRole) {
-            if (RolesModel::playerHasRole(UsersModel::getCurrentUser()?->getId(), $restrictedRole?->getId())) {
+            if (RolesModel::playerHasRole($currentUser->getId(), $restrictedRole->getId())) {
                 return true;
             }
         }
@@ -159,6 +161,7 @@ class MenuEntity
     }
 
     /**
+     * @param int $id
      * @return int
      */
     public function getLastSubMenuOrder(int $id): int

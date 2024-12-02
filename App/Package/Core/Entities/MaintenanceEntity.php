@@ -2,9 +2,10 @@
 
 namespace CMW\Entity\Core;
 
+use CMW\Manager\Package\AbstractEntity;
 use CMW\Utils\Date;
 
-class MaintenanceEntity
+class MaintenanceEntity extends AbstractEntity
 {
     private bool $isEnable;
     private bool $noEnd;
@@ -94,10 +95,10 @@ class MaintenanceEntity
     public function getTargetDateFormatted(): ?string
     {
         if (is_null($this->targetDate)) {
-            return "non définie";
-        } else {
-            return Date::formatDate($this->targetDate);
+            return "undefined"; //TODO: Translate
         }
+
+        return Date::formatDate($this->targetDate);
     }
 
     /**

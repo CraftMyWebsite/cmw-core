@@ -2,15 +2,14 @@
 
 namespace CMW\Entity\Users;
 
-use CMW\Manager\Security\EncryptManager;
-use CMW\Manager\Twofa\TwoFaManager;
+use CMW\Manager\Package\AbstractEntity;
 
-class UserEnforced2FaEntity
+class UserEnforced2FaEntity extends AbstractEntity
 {
     private RoleEntity $roleId;
 
     /**
-     * @param \CMW\Entity\Users\RoleEntity $roleId
+     * @param RoleEntity $roleId
      */
     public function __construct(RoleEntity $roleId)
     {

@@ -86,7 +86,7 @@ class AutoLoad
     {
         $startDir = static function ($elementName) {
             return match ($elementName) {
-                'Controller', 'Model', 'Entity', 'Implementation', 'Interface', 'Event', 'Exception', 'Type', 'PackageInfo', 'Package', 'Permissions' => 'App/Package/',
+                'Controller', 'Model', 'Mapper', 'Entity', 'Implementation', 'Interface', 'Event', 'Exception', 'Type', 'PackageInfo', 'Package', 'Permissions' => 'App/Package/',
                 'Manager' => 'App/Manager/',
                 'Utils' => 'App/Utils/',
                 'Theme' => 'Public/Themes/',
@@ -98,6 +98,7 @@ class AutoLoad
             return match ($elementName) {
                 'Controller' => 'Controllers/',
                 'Model' => 'Models/',
+                'Mapper' => 'Mappers/',
                 'Entity' => 'Entities/',
                 'Implementation' => 'Implementations/',
                 'Interface' => 'Interfaces/',

@@ -131,6 +131,12 @@ return [
             'regenerate' => 'Configuration du thème regénérée',
             'installed' => "%theme% viens d'être installé et activé.",
             'reset' => 'Configuration du thème réinitialisée',
+            'updateBeforeInstall' => 'Veuillez mettre à jour le CMS avant d\'installer ce thème !',
+            'updateBeforeUpdate' => 'Veuillez mettre à jour le CMS avant de mettre à jour vos thèmes !',
+        ],
+        'package' => [
+            'updateBeforeInstall' => 'Veuillez mettre à jour le CMS avant d\'installer ce package !',
+            'updateBeforeUpdate' => 'Veuillez mettre à jour le CMS avant de mettre à jours vos packages !',
         ],
         'db' => [
             'config' => [
@@ -494,6 +500,24 @@ return [
             'settings' => 'Paramètres',
             'manage' => 'Gestion',
             'roles' => 'Rôles',
+        ],
+    ],
+    'imageManager' => [
+        'converter' => [
+            'saving' => 'Erreur lors de la sauvegarde de l\'image.',
+            'target' => 'Format cible invalide. Original conservé !',
+            'conversion' => 'Format de conversion non supporté, Original conservé !',
+            'converting' => 'Erreur lors de la conversion de l\'image. Original conservé !',
+        ],
+        'error' => [
+            'fileDefinition' => 'Cette extension n\'est pas prise en charge !',
+            'folderDontExist' => 'Dossier cible introuvable',
+            'emptyFile' => 'Aucune image envoyé !',
+            'tooLarge' => 'Image trop volumineuse !',
+            'notAllowed' => 'Type de document non autorisé !',
+            'move' => 'Impossible de déplacer l\'image.',
+            'download' => 'Impossible télécharger l\'image.',
+            'createFolder' => 'Impossible de créer le dossier cible, problème de permission sur Public/Uploads',
         ],
     ],
 ];

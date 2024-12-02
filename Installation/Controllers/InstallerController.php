@@ -471,6 +471,9 @@ class InstallerController extends AbstractController
         // Init sitemap
         SitemapManager::getInstance()->init();
 
+        // Init robots.txt data
+        SitemapManager::getInstance()->initRobotsFile();
+
         Redirect::redirectToHome();
     }
 }

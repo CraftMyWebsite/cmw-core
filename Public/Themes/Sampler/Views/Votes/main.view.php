@@ -1,7 +1,7 @@
 <?php
 
+use CMW\Controller\Users\UsersSessionsController;
 use CMW\Manager\Env\EnvManager;
-use CMW\Model\Users\UsersModel;
 use CMW\Utils\Website;
 
 Website::setTitle('Voter');
@@ -18,7 +18,7 @@ Website::setDescription('Votez dès maintenant pour le site ' . Website::getWebs
     <div class="container">
         <div class="row">
             <div class="card col-lg-4">
-                <?php if (UsersModel::getCurrentUser()?->getId() === -1): ?>
+                <?php if (UsersSessionsController::getInstance()->getCurrentUser()?->getId() === -1): ?>
                     <!-- Si le joueur n'est pas connecté -->
                     <div>
                         <h1>Connectez-vous</h1>

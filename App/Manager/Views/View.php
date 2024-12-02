@@ -3,6 +3,7 @@
 namespace CMW\Manager\Views;
 
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Api\APIManager;
 use CMW\Manager\Components\ComponentsManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Flash;
@@ -373,6 +374,9 @@ class View
         extract($this->variables);
         $includes = $this->includes;
 
+        //Backend mode view logic
+        $this->backendView();
+
         if (is_null($this->customPath) && Utils::containsNullValue($this->package, $this->viewFile)) {
             throw new RouterException("Invalid View usage. Please set a correct path.", 404);
         }
@@ -415,14 +419,38 @@ class View
         $alertContent = '';
         foreach ($alerts as $alert) {
             if (!$alert->isAdmin()) {
-                $view = new View('Core', 'Alerts/'.$alert->getType());
+                $view = new View('Core', 'Alerts/' . $alert->getType());
             } else {
-                $view = new View('Core', 'Alerts/'.$alert->getType(), true);
+                $view = new View('Core', 'Alerts/' . $alert->getType(), true);
             }
             $view->addVariable('alert', $alert);
             $alertContent .= $view->loadFile();
         }
         Flash::clear();
         return $alertContent;
+    }
+
+    /**
+     * @return void
+     * @desc Return the view data if the backend mode is enabled
+     */
+    private function backendView(): void
+    {
+        $isBackendModeEnabled = EnvManager::getInstance()->getValue('ENABLE_BACKEND_MODE') === 'true';
+
+        if ($isBackendModeEnabled && !$this->needAdminControl) {
+            print_r(
+                APIManager::createResponse(
+                    data: [
+                        'package' => $this->package,
+                        'viewFile' => $this->viewFile,
+                        'viewFilePath' => $this->getViewPath(),
+                        'variables' => $this->variables,
+                        'includes' => $this->includes,
+                    ],
+                )
+            );
+            die();
+        }
     }
 }

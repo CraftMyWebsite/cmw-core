@@ -2,10 +2,11 @@
 
 namespace CMW\Entity\Core;
 
-use CMW\Utils\Date;
 use CMW\Entity\Users\UserEntity;
+use CMW\Manager\Package\AbstractEntity;
+use CMW\Utils\Date;
 
-class ConditionEntity
+class ConditionEntity extends AbstractEntity
 {
     private int $id;
     private string $content;
@@ -18,7 +19,7 @@ class ConditionEntity
      * @param string $content
      * @param bool $state
      * @param string $update
-     * @param ?\CMW\Entity\Users\UserEntity $lastEditor
+     * @param ?UserEntity $lastEditor
      */
     public function __construct(int $id, string $content, bool $state, string $update, ?UserEntity $lastEditor)
     {
@@ -70,7 +71,7 @@ class ConditionEntity
     }
 
     /**
-     * @return ?\CMW\Entity\Users\UserEntity
+     * @return ?UserEntity
      */
     public function getLastEditor(): ?UserEntity
     {

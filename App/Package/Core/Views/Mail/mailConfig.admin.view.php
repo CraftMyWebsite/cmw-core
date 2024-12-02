@@ -16,7 +16,7 @@ $description = LangManager::translate('core.mail.config.description');
 </div>
 
 <form id="smtpConfig" action="" method="post">
-    <?php (new SecurityManager())->insertHiddenToken() ?>
+    <?php SecurityManager::getInstance()->insertHiddenToken() ?>
     <div class="grid-2">
         <div class="card">
             <div>
@@ -123,7 +123,7 @@ $description = LangManager::translate('core.mail.config.description');
                 <?= LangManager::translate('core.mail.config.test.description') ?>
             </p>
             <form id="sendMail" action="" method="post">
-                <?php (new SecurityManager())->insertHiddenToken() ?>
+                <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                 <label for="receiver"><?= LangManager::translate('core.mail.config.test.receiverMail') ?> :</label>
                 <div class="form-group position-relative has-icon-left">
                     <div class="input-group">

@@ -19,7 +19,7 @@ class EditorController extends AbstractController
     {
         try {
             $file = $_FILES['file'];
-            $uploadedFileName = ImagesManager::upload($file, 'Editor');
+            $uploadedFileName = ImagesManager::convertAndUpload($file, 'Editor');
             $fileUrl = '/Public/Uploads/Editor/' . $uploadedFileName;
             echo json_encode(['location' => $fileUrl]);
         } catch (Exception $e) {

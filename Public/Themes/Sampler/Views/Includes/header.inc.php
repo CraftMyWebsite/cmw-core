@@ -1,9 +1,9 @@
 <?php
 
 use CMW\Controller\Users\UsersController;
+use CMW\Controller\Users\UsersSessionsController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Model\Core\MenusModel;
-use CMW\Model\Users\UsersModel;
 use CMW\Utils\Website;
 
 $menus = MenusModel::getInstance();
@@ -34,7 +34,7 @@ $menus = MenusModel::getInstance();
             <ul class="navbar-nav ms-auto my-2 my-lg-0">
                 <?php if (UsersController::isUserLogged()): ?>
                     <li class="drop nav-item">
-                        <a href="#" class="nav-link"><?= UsersModel::getCurrentUser()->getPseudo() ?></a>
+                        <a href="#" class="nav-link"><?= UsersSessionsController::getInstance()->getCurrentUser()->getPseudo() ?></a>
                         <div class="drop-content">
                             <a class="nav-link" style="color: #0b0b0b; padding: 5px" href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile">Profile</a>
                             <?php if (UsersController::isAdminLogged()): ?>

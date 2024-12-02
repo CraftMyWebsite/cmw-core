@@ -35,32 +35,7 @@ class UsersController extends AbstractController
 {
     public static function isAdminLogged(): bool
     {
-        return UsersModel::hasPermission(UsersModel::getCurrentUser(), 'core.dashboard');
-    }
-
-    /**
-     * @param string $interface
-     * @return mixed
-     */
-    private function getHighestImplementation(string $interface): mixed
-    {
-        $implementations = Loader::loadImplementations($interface);
-
-        $index = 0;
-        $highestWeight = 1;
-
-        $i = 0;
-        foreach ($implementations as $implementation) {
-            $weight = $implementation->weight();
-
-            if ($weight > $highestWeight) {
-                $index = $i;
-                $highestWeight = $weight;
-            }
-            ++$i;
-        }
-
-        return $implementations[$index];
+        return UsersModel::hasPermission(UsersSessionsController::getInstance()->getCurrentUser(), 'core.dashboard');
     }
 
     /**
@@ -69,12 +44,12 @@ class UsersController extends AbstractController
      */
     public static function isUserLogged(): bool
     {
-        return UsersModel::getCurrentUser() !== null;
+        return UsersSessionsController::getInstance()->getCurrentUser() !== null;
     }
 
     public static function hasPermission(string ...$permissions): bool
     {
-        return UsersModel::hasPermission(UsersModel::getCurrentUser(), ...$permissions);
+        return UsersModel::hasPermission(UsersSessionsController::getInstance()->getCurrentUser(), ...$permissions);
     }
 
     /**
@@ -84,7 +59,7 @@ class UsersController extends AbstractController
     public function getUserProfilePicture(?int $userId = null): ?UserPictureEntity
     {
         if ($userId === null) {
-            $user = UsersModel::getCurrentUser();
+            $user = UsersSessionsController::getInstance()->getCurrentUser();
 
             if ($user === null) {
                 return null;
@@ -92,7 +67,7 @@ class UsersController extends AbstractController
 
             $userId = $user->getId();
         }
-        return $this->getHighestImplementation(IUsersProfilePicture::class)->getUserProfilePicture($userId);
+        return Loader::getHighestImplementation(IUsersProfilePicture::class)->getUserProfilePicture($userId);
     }
 
     #[Link(path: '/', method: Link::GET, scope: '/cmw-admin/users')]
@@ -234,7 +209,7 @@ class UsersController extends AbstractController
     {
         self::redirectIfNotHavePermissions('core.dashboard', 'users.manage.edit');
 
-        if (UsersModel::getCurrentUser()?->getId() === $id) {
+        if (UsersSessionsController::getInstance()->getCurrentUser()?->getId() === $id) {
             Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
                 LangManager::translate('users.toaster.impossible'));
             Redirect::redirectPreviousRoute();
@@ -255,7 +230,7 @@ class UsersController extends AbstractController
     {
         self::redirectIfNotHavePermissions('core.dashboard', 'users.manage.delete');
 
-        if (UsersModel::getCurrentUser()?->getId() === $id) {
+        if (UsersSessionsController::getInstance()->getCurrentUser()?->getId() === $id) {
             // Todo Try to remove that
             Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
                 LangManager::translate('users.toaster.impossible_user'));
@@ -279,7 +254,7 @@ class UsersController extends AbstractController
         self::redirectIfNotHavePermissions('core.dashboard', 'users.manage.edit');
 
         $image = $_FILES['profilePicture'];
-        $this->getHighestImplementation(IUsersProfilePicture::class)->changeMethod($image, $id);
+        Loader::getHighestImplementation(IUsersProfilePicture::class)->changeMethod($image, $id);
     }
 
     #[Link('/picture/reset/:id', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/users/manage')]
@@ -288,7 +263,7 @@ class UsersController extends AbstractController
     {
         self::redirectIfNotHavePermissions('core.dashboard', 'users.edit');
 
-        $this->getHighestImplementation(IUsersProfilePicture::class)->resetPicture($id);
+        Loader::getHighestImplementation(IUsersProfilePicture::class)->resetPicture($id);
     }
 
     // PUBLIC SECTION
@@ -341,9 +316,9 @@ class UsersController extends AbstractController
     #[NoReturn] #[Link('/logout', Link::GET)]
     private function logOut(): void
     {
-        $userId = UsersModel::getCurrentUser()?->getId();
+        $userId = UsersSessionsController::getInstance()->getCurrentUser()?->getId();
         Emitter::send(LogoutEvent::class, $userId);
-        UsersModel::logOut();
+        UsersSessionsController::getInstance()->logOut();
         Redirect::redirectToHome();
     }
 }

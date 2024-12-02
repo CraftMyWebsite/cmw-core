@@ -28,7 +28,7 @@ Website::setDescription("Merci d'activer le 2fa !");
                     <span><?= $user->get2Fa()->get2FaSecretDecoded() ?></span>
                 </div>
                 <form class="space-y-6" action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile/2fa/toggle" method="post">
-                    <?php (new SecurityManager())->insertHiddenToken() ?>
+                    <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                     <input type="text" hidden="" name="enforce_mail" value="<?= $user->getMail() ?>">
                     <div>
                         <label for="code" class="block mb-2 text-sm font-medium">Code d'authentification</label>

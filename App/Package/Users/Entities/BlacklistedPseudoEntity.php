@@ -2,9 +2,10 @@
 
 namespace CMW\Entity\Users;
 
+use CMW\Manager\Package\AbstractEntity;
 use CMW\Utils\Date;
 
-class BlacklistedPseudoEntity
+class BlacklistedPseudoEntity extends AbstractEntity
 {
     private int $id;
     private string $pseudo;

@@ -2,15 +2,13 @@
 
 namespace CMW\Manager\Security;
 
-use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\PackageController;
-use CMW\Controller\Core\ThemeController;
+use CMW\Controller\Users\UsersSessionsController;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Model\Core\CoreModel;
-use CMW\Model\Users\UsersModel;
 use DateTime;
 
 class HealthReport
@@ -25,7 +23,7 @@ class HealthReport
     public function generateReport(): string
     {
         $generationDate = date(CoreModel::getInstance()->fetchOption('dateFormat'));
-        $generatorName = UsersModel::getCurrentUser()?->getPseudo();
+        $generatorName = UsersSessionsController::getInstance()->getCurrentUser()?->getPseudo();
 
         // PHP
         $phpVersion = $this->getPhpVersion();

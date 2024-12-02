@@ -131,6 +131,12 @@ return [
             'regenerate' => 'Theme configuration regenerate',
             'installed' => '%theme% just installed and activated.',
             'reset' => 'Theme configuration reset',
+            'updateBeforeInstall' => 'Please update CMS before installing this theme!',
+            'updateBeforeUpdate' => 'Please update the CMS before updating your themes!',
+        ],
+        'package' => [
+            'updateBeforeInstall' => 'Please update CMS before installing this package!',
+            'updateBeforeUpdate' => 'Please update the CMS before updating your packages!',
         ],
         'db' => [
             'config' => [
@@ -171,7 +177,7 @@ return [
             ],
         ],
     ],
-    'Theme' => [
+    'theme' => [
         'myThemes' => 'My themes',
         'market' => 'Market',
         'details' => 'Details',
@@ -491,6 +497,24 @@ return [
             'settings' => 'Settings',
             'manage' => 'Manage',
             'roles' => 'Roles',
+        ],
+    ],
+    'imageManager' => [
+        'converter' => [
+            'saving' => 'Error saving image.',
+            'target' => 'Invalid target format. Original kept!',
+            'conversion' => 'Conversion format not supported, Original kept!',
+            'converting' => 'Error converting image. Original kept!',
+        ],
+        'error' => [
+            'fileDefinition' => 'This extension is not supported!',
+            'folderDontExist' => 'Target folder not found',
+            'emptyFile' => 'No image sent!',
+            'tooLarge' => 'Image too big!',
+            'notAllowed' => 'Document type not allowed!',
+            'move' => 'Unable to move image.',
+            'download' => 'Unable to download image.',
+            'createFolder' => 'Unable to create target folder, permission problem on Public/Uploads',
         ],
     ],
 ];

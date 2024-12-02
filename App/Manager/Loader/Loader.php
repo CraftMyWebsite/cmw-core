@@ -87,6 +87,32 @@ class Loader
         return $toReturn;
     }
 
+    /**
+     * @param string $interface
+     * @return mixed
+     * @desc Get the highest implementation of an interface. The Interface need to have a weight method.
+     */
+    public static function getHighestImplementation(string $interface): mixed
+    {
+        $implementations = self::loadImplementations($interface);
+
+        $index = 0;
+        $highestWeight = 1;
+
+        $i = 0;
+        foreach ($implementations as $implementation) {
+            $weight = $implementation->weight();
+
+            if ($weight > $highestWeight) {
+                $index = $i;
+                $highestWeight = $weight;
+            }
+            ++$i;
+        }
+
+        return $implementations[$index];
+    }
+
     public static function setLocale(): void
     {
         EnvManager::getInstance()->addValue('locale', 'fr');  // Why fr ?

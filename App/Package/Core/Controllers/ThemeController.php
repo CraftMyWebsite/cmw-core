@@ -13,7 +13,9 @@ use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
+use CMW\Manager\Security\SecurityManager;
 use CMW\Manager\Theme\ThemeManager;
+use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesException;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
@@ -22,6 +24,7 @@ use CMW\Model\Core\ThemeModel;
 use CMW\Utils\Directory;
 use CMW\Utils\Log;
 use CMW\Utils\Redirect;
+use Exception;
 use JetBrains\PhpStorm\NoReturn;
 
 /**
@@ -109,6 +112,12 @@ class ThemeController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
 
+        $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
+        if ($CoreNeedUpdate) {
+            Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.theme.updateBeforeInstall'));
+            Redirect::redirect('cmw-admin/updates/cms');
+        }
+
         $theme = PublicAPI::putData("market/resources/install/$id");
 
         if (empty($theme)) {
@@ -132,7 +141,7 @@ class ThemeController extends AbstractController
         SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . $theme['name']);
 
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-            LangManager::translate('core.toaster.Theme.installed', ['theme' => $theme['name']]));
+            LangManager::translate('core.toaster.theme.installed', ['theme' => $theme['name']]));
 
         Redirect::redirect('cmw-admin/theme/manage');
     }
@@ -147,56 +156,61 @@ class ThemeController extends AbstractController
     }
 
     #[NoReturn]
-    #[Link('/manage', Link::POST, [], '/cmw-admin/theme')]
+    #[Link('/manage', Link::POST, [], '/cmw-admin/theme', secure: true)]
     private function adminThemeManagePost(): void
     {
+        header('Content-Type: application/json');
+
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.edit');
 
-        $aresFiles = [];
+        try {
+            $newCsrfTokenId = bin2hex(random_bytes(8));
+            $newCsrfToken = SecurityManager::getInstance()->getCSRFToken($newCsrfTokenId);
 
-        // Manage files
-        foreach ($_FILES as $conf => $file) {
-            $aresFiles['__images__'][$conf] = true;
+            $aresFiles = [];
 
-            // If file is empty, we don't update the config.
-            if ($file['name'] !== '') {
-                try {
-                    $imageName = ImagesManager::upload($file, ThemeManager::getInstance()->getCurrentTheme()->name() . '/Img');
-                } catch (ImagesException $e) {
-                    Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                        $conf . ' => ' . $e);
+            foreach ($_FILES as $conf => $file) {
+                $aresFiles['__images__'][$conf] = true;
+
+                if ($file['name'] !== '') {
+                    $imageName = ImagesManager::convertAndUpload($file, ThemeManager::getInstance()->getCurrentTheme()->name() . '/Img');
+                    $remoteImageValue = ThemeModel::getInstance()->getInstance()->fetchConfigValue($conf);
+                    $localImageValue = ThemeManager::getInstance()->getCurrentThemeConfigSetting($conf);
+
+                    if ($remoteImageValue !== $file && $remoteImageValue !== $localImageValue) {
+                        ImagesManager::deleteImage(ThemeManager::getInstance()->getCurrentTheme()->name() . "/Img/$remoteImageValue");
+                    }
+
+                    ThemeModel::getInstance()->getInstance()->updateThemeConfig($conf, $imageName, ThemeManager::getInstance()->getCurrentTheme()->name());
+                }
+            }
+
+            foreach (ThemeManager::getInstance()->getCurrentThemeConfigSettings() as $conf => $value) {
+                if (isset($aresFiles['__images__'][$conf])) {
                     continue;
                 }
 
-                $remoteImageValue = ThemeModel::getInstance()->getInstance()->fetchConfigValue($conf);
-                $localImageValue = ThemeManager::getInstance()->getCurrentThemeConfigSetting($conf);
-
-                if ($remoteImageValue !== $file && $remoteImageValue !== $localImageValue) {
-                    ImagesManager::deleteImage(ThemeManager::getInstance()->getCurrentTheme()->name() . "/Img/$remoteImageValue");
+                if (!isset($_POST[$conf]) || !empty($_POST[$conf])) {
+                    ThemeModel::getInstance()->getInstance()->updateThemeConfig($conf, $_POST[$conf] ?? '0', ThemeManager::getInstance()->getCurrentTheme()->name());
                 }
-
-                ThemeModel::getInstance()->getInstance()->updateThemeConfig($conf, $imageName, ThemeManager::getInstance()->getCurrentTheme()->name());
             }
+
+            $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs(ThemeManager::getInstance()->getCurrentTheme()->name());
+            SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . ThemeManager::getInstance()->getCurrentTheme()->name());
+
+            echo json_encode([
+                'success' => true,
+                'new_csrf_token' => $newCsrfToken,
+                'new_csrf_token_id' => $newCsrfTokenId,
+            ], JSON_THROW_ON_ERROR);
+            exit;
+        } catch (Exception $e) {
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage(),
+            ], JSON_THROW_ON_ERROR);
+            exit;
         }
-
-        // Manage inputs
-        foreach (ThemeManager::getInstance()->getCurrentThemeConfigSettings() as $conf => $value) {
-            if (isset($aresFiles['__images__'][$conf])) {
-                continue;
-            }
-
-            if (!isset($_POST[$conf]) || !empty($_POST[$conf])) {
-                ThemeModel::getInstance()->getInstance()->updateThemeConfig($conf, $_POST[$conf] ?? '0', ThemeManager::getInstance()->getCurrentTheme()->name());
-            }
-        }
-
-        $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs(ThemeManager::getInstance()->getCurrentTheme()->name());
-        SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . ThemeManager::getInstance()->getCurrentTheme()->name());
-
-        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-            LangManager::translate('core.toaster.config.success'));
-
-        Redirect::redirectPreviousRoute();
     }
 
     #[Link('/update/:id/:actualVersion/:themeName', Link::GET, ['id' => '[0-9]+', 'actualVersion' => '.*?', 'themeName' => '.*?'], '/cmw-admin/theme')]
@@ -204,6 +218,12 @@ class ThemeController extends AbstractController
     private function adminThemeUpdate(int $id, string $actualVersion, string $themeName): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
+
+        $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
+        if ($CoreNeedUpdate) {
+            Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.theme.updateBeforeUpdate'));
+            Redirect::redirect('cmw-admin/updates/cms');
+        }
 
         $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion");
 
@@ -223,7 +243,7 @@ class ThemeController extends AbstractController
         SimpleCacheManager::deleteSpecificCacheFile("config", "Themes/$themeName");
 
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-            LangManager::translate('core.theme.toasters.update.success', ['theme' => $themeName]));
+            LangManager::translate('core.Theme.toasters.update.success', ['theme' => $themeName]));
 
         Redirect::redirectPreviousRoute();
     }

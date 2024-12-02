@@ -11,7 +11,7 @@ ses joueurs une plateforme web performante et pertinente.
 
 Contributions
 ------------
-Avant de contribuer, merci de respecter nos conventions: https://reborn.craftmywebsite.fr/docs/fr/technical/conventions/general
+Avant de contribuer, merci de respecter nos conventions: https://craftmywebsite.fr/docs/fr/technical/conventions/general
 
 Merci de formatter votre code avant chaque PR avec la commande:
 ```bash

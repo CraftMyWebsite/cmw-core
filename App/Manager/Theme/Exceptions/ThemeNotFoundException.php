@@ -58,7 +58,7 @@ class ThemeNotFoundException extends Exception
                 <p>Use the default theme <b>Sampler</b> ?</p>
                 <form method="post" action="{$pathUrl}cmw-admin/theme/force/reset">
             HTML;
-        (new SecurityManager())->insertHiddenToken();
+        SecurityManager::getInstance()->insertHiddenToken();
         SecurityController::getPublicData();
         print <<<HTML
                     <button type="submit" name="theme" value="Sampler">Use Sampler</button>

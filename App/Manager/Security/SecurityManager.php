@@ -7,13 +7,23 @@ use Exception;
 
 class SecurityManager extends HoneyInput
 {
+    protected static ?self $_instance = null;
+
+    public static function getInstance(): self
+    {
+        if (is_null(self::$_instance)) {
+            self::$_instance = new self();
+        }
+        return self::$_instance;
+    }
+
     private string $formTokenLabel = 'security-csrf-token';
     private string $formTokenIdLabel = 'security-csrf-token-id';
     private string $sessionTokenPrefix = 'CSRF_TOKEN_SESS_ID_';
     private array $post = [];
     private array $session = [];
     private array $server = [];
-    private mixed $excludeUrl = [];
+    protected mixed $excludeUrl = [];
     private string $hashAlgo = 'sha256';
     private bool $hmac_ip = true;
     private string $hmacData = 'ABCeNBHVe3kmAqvU2s7yyuJSF2gpxKLC';

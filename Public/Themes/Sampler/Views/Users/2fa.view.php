@@ -21,7 +21,7 @@ Website::setDescription('Double authentification');
             <div class="col-lg-6">
                 <form action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'login/validate/tfa' ?>"
                       method="post" class="mb-4">
-                    <?php (new SecurityManager())->insertHiddenToken() ?>
+                    <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                     <div class="form-floating mb-3">
                         <input class="form-control" name="code" type="text" placeholder="123456" maxlength="7" required>
                         <label for="name">Code d'authentification</label>

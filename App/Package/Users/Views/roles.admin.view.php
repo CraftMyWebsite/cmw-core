@@ -119,7 +119,7 @@ $description = LangManager::translate('users.roles.manage.desc');
             <button type="button" data-modal-hide="modal-create"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <form method="post" action="add">
-            <?php (new SecurityManager())->insertHiddenToken() ?>
+            <?php SecurityManager::getInstance()->insertHiddenToken() ?>
             <div class="modal-body">
                 <div class="grid-4">
                     <div>

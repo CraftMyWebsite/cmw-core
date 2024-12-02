@@ -39,8 +39,7 @@ class Package implements IPackageConfig
                 icon: 'fa-solid fa-file-lines',
                 title: 'Pages',
                 url: 'pages',
-                permission: 'pages.show',
-                subMenus: []
+                permission: 'pages.show'
             ),
         ];
     }

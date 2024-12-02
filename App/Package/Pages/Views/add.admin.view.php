@@ -12,7 +12,7 @@ $description = LangManager::translate('pages.add.desc');
 <h3><i class="fa-solid fa-file-lines"></i> <?= LangManager::translate('pages.add.title') ?></h3>
 
 <form action="" method="post">
-    <?php (new SecurityManager())->insertHiddenToken() ?>
+    <?php SecurityManager::getInstance()->insertHiddenToken() ?>
     <div class="grid-5">
         <div class="col-span-4">
             <input type="hidden" id="page_id" name="id" value="">

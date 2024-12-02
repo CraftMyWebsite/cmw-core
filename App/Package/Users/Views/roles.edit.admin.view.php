@@ -23,7 +23,7 @@ $description = LangManager::translate('users.roles.manage.desc');
 </div>
 
 <form id="editRole" method="post" action="">
-    <?php (new SecurityManager())->insertHiddenToken() ?>
+    <?php SecurityManager::getInstance()->insertHiddenToken() ?>
 <div class="card">
 
         <div class="grid-3">

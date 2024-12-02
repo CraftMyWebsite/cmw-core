@@ -3,13 +3,14 @@
 namespace CMW\Manager\Security;
 
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Package\GlobalObject;
 
-class RateLimiter
+class RateLimiter extends GlobalObject
 {
     private string $cookieName = 'cmw_rate_limit';
     private int $maxCount = 100;
 
-    public function __construct()
+    public function init(): void
     {
         $this->logic();
     }
@@ -39,7 +40,7 @@ class RateLimiter
      */
     private function getCount(): int
     {
-        return isset($_COOKIE[$this->cookieName]) ? (int) $_COOKIE[$this->cookieName] : 0;
+        return isset($_COOKIE[$this->cookieName]) ? (int)$_COOKIE[$this->cookieName] : 0;
     }
 
     /**
