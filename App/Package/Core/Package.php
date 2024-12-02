@@ -54,26 +54,31 @@ class Package implements IPackageConfig
                         title: LangManager::translate('core.menu.setting.settings'),
                         permission: 'core.settings.website',
                         url: 'configuration',
+                        subMenus: []
                     ),
                     new PackageSubMenuType(
                         title: LangManager::translate('core.menu.setting.maintenance'),
                         permission: 'core.settings.maintenance',
                         url: 'maintenance/manage',
+                        subMenus: []
                     ),
                     new PackageSubMenuType(
                         title: LangManager::translate('core.menu.setting.mail'),
                         permission: 'core.settings.mails',
                         url: 'mail/configuration',
+                        subMenus: []
                     ),
                     new PackageSubMenuType(
                         title: LangManager::translate('core.menu.setting.cg'),
                         permission: 'core.settings.conditions',
                         url: 'condition',
+                        subMenus: []
                     ),
                     new PackageSubMenuType(
                         title: LangManager::translate('core.menu.setting.security'),
                         permission: 'core.settings.security',
                         url: 'security',
+                        subMenus: []
                     ),
                 ],
             ),
@@ -101,16 +106,19 @@ class Package implements IPackageConfig
                         title: LangManager::translate('core.menu.themes.edit') . ThemeManager::getInstance()->getCurrentTheme()->name(),
                         permission: 'core.themes.edit',
                         url: 'theme/manage',
+                        subMenus: []
                     ),
                     new PackageSubMenuType(
                         title: LangManager::translate('core.menu.themes.installed'),
                         permission: 'core.themes.manage',
                         url: 'theme/theme',
+                        subMenus: []
                     ),
                     new PackageSubMenuType(
                         title: LangManager::translate('core.menu.themes.market'),
                         permission: 'core.themes.market',
                         url: 'theme/market',
+                        subMenus: []
                     ),
                 ],
             ),
@@ -124,11 +132,13 @@ class Package implements IPackageConfig
                         title: LangManager::translate('core.menu.package.installed'),
                         permission: 'core.packages.manage',
                         url: 'packages/package',
+                        subMenus: []
                     ),
                     new PackageSubMenuType(
                         title: LangManager::translate('core.menu.package.market'),
                         permission: 'core.packages.market',
                         url: 'packages/market',
+                        subMenus: []
                     ),
                 ],
             ),
