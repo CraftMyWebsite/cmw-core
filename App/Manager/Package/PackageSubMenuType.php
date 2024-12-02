@@ -8,16 +8,16 @@ class PackageSubMenuType
     private string $permission;
     private ?string $url;
 
-    /* @var \CMW\Manager\Package\PackageSubMenuType[]|null $subMenus */
-    private ?array $subMenus;
+    /* @var PackageSubMenuType[] $subMenus */
+    private array $subMenus;
 
     /**
      * @param string $title
      * @param string $permission
      * @param ?string $url
-     * @param \CMW\Manager\Package\PackageSubMenuType[]|null $subMenus
+     * @param PackageSubMenuType[] $subMenus
      */
-    public function __construct(string $title, string $permission, ?string $url, ?array $subMenus)
+    public function __construct(string $title, string $permission, ?string $url, array $subMenus = [])
     {
         $this->title = $title;
         $this->permission = $permission;
@@ -50,9 +50,9 @@ class PackageSubMenuType
     }
 
     /**
-     * @return array|null
+     * @return array
      */
-    public function getSubMenus(): ?array
+    public function getSubMenus(): array
     {
         return $this->subMenus;
     }

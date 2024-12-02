@@ -86,15 +86,13 @@ class Package implements IPackageConfig
                 icon: 'fas fa-bars',
                 title: 'Menus',
                 url: 'menus',
-                permission: 'core.menu',
-                subMenus: [],
+                permission: 'core.menu'
             ),
             new PackageMenuType(
                 icon: 'fas fa-cloud-arrow-down',
                 title: $isUpToDate ? LangManager::translate('core.menu.updateMe') : LangManager::translate('core.menu.update'),
                 url: 'updates/cms',
-                permission: 'core.update',
-                subMenus: [],
+                permission: 'core.update'
             ),
             new PackageMenuType(
                 icon: 'fas fa-palette',
