@@ -10,6 +10,7 @@ use CMW\Event\Users\RegisterEvent;
 use CMW\Interface\Users\IUsersProfilePicture;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Events\Emitter;
+use CMW\Manager\Filter\FilterManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
@@ -22,6 +23,7 @@ use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
+use http\Client\Curl\User;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 
@@ -305,6 +307,59 @@ class UsersController extends AbstractController
             if (str_starts_with($_SERVER['HTTP_REFERER'], EnvManager::getInstance()->getValue('PATH_URL') . 'cmw-admin/')) {
                 Redirect::redirectPreviousRoute();
             }
+
+            Redirect::redirect('login');
+        } else {
+            // TODO Toaster invalid captcha
+            Redirect::redirectPreviousRoute();
+        }
+    }
+
+    /**
+     * @desc database contain encrypted, and user have the decrypted so the secret in db can't pass this verification
+     */
+    #[NoReturn] #[Link('/resetPassword/:secret', Link::GET)]
+    private function resetPasswordSecret(string $secret): void
+    {
+        $encryptedLink = EncryptManager::encrypt($secret);
+        $dbSecret = UsersModel::getInstance()->getSecretLink($encryptedLink);
+
+        if (is_null($dbSecret)) {
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), LangManager::translate('users.toaster.reset_link_not_found'));
+            Redirect::redirectToHome();
+        } else {
+            $userMail = UsersModel::getInstance()->getMailBySecretLink($encryptedLink);
+            if (UsersModel::getInstance()->isLinkOlderThan15Minutes($userMail)) {
+                UsersModel::getInstance()->deleteSecretLink($userMail);
+                Flash::send(Alert::WARNING, LangManager::translate('core.toaster.error'), LangManager::translate('users.toaster.reset_link_not_available'));
+                Redirect::redirect('login');
+            } else {
+                View::createPublicView('Users', 'newPassword')->view();
+            }
+        }
+    }
+
+    #[NoReturn] #[Link('/resetPassword/:secret', Link::POST)]
+    private function resetPasswordSecretPost(string $secret): void
+    {
+        if (UsersSessionsController::getInstance()->getCurrentUser()) {
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), LangManager::translate('users.toaster.reset_link_log_out'));
+            Redirect::redirect('login');
+        }
+        if (SecurityController::checkCaptcha()) {
+            $encryptedLink = EncryptManager::encrypt($secret);
+            $encryptedMail = UsersModel::getInstance()->getMailBySecretLink($encryptedLink);
+
+            $password = FilterManager::filterInputStringPost('reset_password');
+            $passwordVerify = FilterManager::filterInputStringPost('reset_password_verify');
+
+            UsersRegisterController::getInstance()->checkIfPasswordMatches($password, $passwordVerify);
+
+            UsersModel::getInstance()->updatePassWithMail($encryptedMail, password_hash($password, PASSWORD_BCRYPT));
+
+            UsersModel::getInstance()->deleteSecretLink($encryptedMail);
+
+            Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'), LangManager::translate('users.toaster.reset_link_pass_changed'));
 
             Redirect::redirect('login');
         } else {

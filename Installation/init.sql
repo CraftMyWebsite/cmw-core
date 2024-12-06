@@ -105,6 +105,16 @@ CREATE TABLE IF NOT EXISTS `cmw_users_settings`
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `cmw_users_reset_password_link`
+(
+    `users_mail`        VARCHAR(255) NOT NULL,
+    `secret_link`       VARCHAR(255) NOT NULL,
+    `secret_date`       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY (`users_mail`)
+    ) ENGINE = InnoDB
+    CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `cmw_roles`
 (
     `role_id`          INT(11)  NOT NULL AUTO_INCREMENT,

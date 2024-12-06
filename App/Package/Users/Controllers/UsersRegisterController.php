@@ -173,7 +173,7 @@ class UsersRegisterController extends AbstractController
                 LangManager::translate('users.toaster.error'),
                 LangManager::translate('users.toaster.not_same_pass')
             );
-            Redirect::redirect('register');
+            Redirect::redirectPreviousRoute();
         }
     }
 

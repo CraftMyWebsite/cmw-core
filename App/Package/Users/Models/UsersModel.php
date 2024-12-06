@@ -8,6 +8,10 @@ use CMW\Entity\Users\RoleEntity;
 use CMW\Entity\Users\User2FaEntity;
 use CMW\Entity\Users\UserEntity;
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Error\ErrorManager;
+use CMW\Manager\Flash\Alert;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Mail\MailManager;
 use CMW\Manager\Package\AbstractModel;
@@ -15,8 +19,12 @@ use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Twofa\TwoFaManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Type\Users\LoginStatus;
+use CMW\Utils\Log;
+use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
+use CMW\Utils\Website;
 use Exception;
+use http\Client\Curl\User;
 use function count;
 
 /**
@@ -608,12 +616,177 @@ class UsersModel extends AbstractModel
 
     /**
      * @param string $email
+     * @return void
+     */
+    public function resetPasswordMethodUniqueLinkSendByMail(string $email): void
+    {
+        $linkToken = $this->generateRandomString();
+
+        $encryptedLink = EncryptManager::encrypt($linkToken);
+        if ($userMail = $this->secretExistByMail($email)) {
+            if ($this->isLinkOlderThan15Minutes($userMail)) {
+                $this->deleteSecretLink($email);
+            } else {
+                Flash::send(Alert::WARNING, LangManager::translate('core.toaster.error'), LangManager::translate('users.toaster.reset_in_progress'));
+                Redirect::redirect('login');
+            }
+        }
+
+        $this->addSecretLink($email, $encryptedLink);
+
+        $this->sendResetLinkPassword($email, $linkToken);
+    }
+
+    /**
+     * @throws \Random\RandomException
+     */
+    private function generateRandomString($length = 100): string
+    {
+        $characters = '-_0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    /**
+     * @return void
+     */
+    private function addSecretLink(string $email, string $encryptedLink): void
+    {
+        $var = [
+            'users_mail' => $email,
+            'secret_link' => $encryptedLink,
+        ];
+        $sql = 'INSERT INTO cmw_users_reset_password_link (users_mail, secret_link) VALUES (:users_mail, :secret_link)';
+
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare($sql);
+        $req->execute($var);
+    }
+
+    /**
+     * @param string $secret
+     * @return ?string
+     */
+    public function getSecretLink(string $secret): ?string
+    {
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare('SELECT secret_link FROM cmw_users_reset_password_link WHERE secret_link = ?');
+        $req->execute(array($secret));
+        $option = $req->fetch();
+
+        return $option['secret_link'] ?? null;
+    }
+
+    /**
+     * @param string $secret
+     * @return ?string
+     */
+    public function getMailBySecretLink(string $secret): ?string
+    {
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare('SELECT users_mail FROM cmw_users_reset_password_link WHERE secret_link = ?');
+        $req->execute(array($secret));
+        $option = $req->fetch();
+
+        return $option['users_mail'] ?? null;
+    }
+
+    /**
+     * @param string $secret
+     * @return void
+     */
+    public function deleteSecretLink(string $email): void
+    {
+        $var = [
+            'users_mail' => $email,
+        ];
+        $sql = 'DELETE FROM cmw_users_reset_password_link WHERE users_mail=:users_mail';
+
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare($sql);
+        $req->execute($var);
+    }
+
+    /**
+     * @param string $email
+     * @return ?string
+     */
+    public function secretExistByMail(string $email): ?string
+    {
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare('SELECT users_mail FROM cmw_users_reset_password_link WHERE users_mail = ?');
+        $req->execute(array($email));
+        $option = $req->fetch();
+
+        return $option['users_mail'] ?? null;
+    }
+
+    /**
+     * @param string $secret
+     * @return ?string
+     */
+    public function getSecretLinkDate(string $email): ?string
+    {
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare('SELECT secret_date FROM cmw_users_reset_password_link WHERE users_mail = ?');
+        $req->execute(array($email));
+        $option = $req->fetch();
+
+        return $option['secret_date'] ?? null;
+    }
+
+    public function isLinkOlderThan15Minutes(string $email): bool
+    {
+        $linkDate = $this->getSecretLinkDate($email);
+
+        if (is_null($linkDate)) {
+            return false;
+        }
+
+        $linkTimestamp = strtotime($linkDate);
+
+        $timeDifference = time() - $linkTimestamp;
+
+
+        return $timeDifference > 900;
+    }
+
+    /**
+     * @param string $email
+     * @param string $link
+     * @return void
+     */
+    public function sendResetLinkPassword(string $email, string $link): void
+    {
+        $decryptedMail = EncryptManager::decrypt($email);
+        $fullLink = EnvManager::getInstance()->getValue('PATH_URL') . 'resetPassword/'.$link;
+
+        $body = '
+        <b>'. LangManager::translate('users.toaster.reset_link_body_mail_1') . Website::getWebsiteName() .'</b><br>
+        <p>'. LangManager::translate('users.toaster.reset_link_body_mail_2') .'</p>
+        <p>'. LangManager::translate('users.toaster.reset_link_body_mail_3') .'</p>
+        <a href="'. $fullLink .'">'. LangManager::translate('users.toaster.reset_link_body_mail_4') .'</a>
+        <br><br>
+        <p>'. LangManager::translate('users.toaster.reset_link_body_mail_5') .'</p>
+        ';
+
+        MailManager::getInstance()->sendMail($decryptedMail, LangManager::translate('users.login.forgot_password.mail.object',
+            ['site_name' => (new CoreModel())->fetchOption('name')]),$body);
+    }
+
+    /**
+     * @param string $email
      * @param string $password
      * @return void
      */
     public function sendResetPassword(string $email, string $password): void
     {
-        MailManager::getInstance()->sendMail($email, LangManager::translate('users.login.forgot_password.mail.object',
+        $decryptedMail = EncryptManager::decrypt($email);
+        MailManager::getInstance()->sendMail($decryptedMail, LangManager::translate('users.login.forgot_password.mail.object',
             ['site_name' => (new CoreModel())->fetchOption('name')]),
             LangManager::translate('users.login.forgot_password.mail.body',
                 ['password' => $password]));
