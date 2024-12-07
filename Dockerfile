@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     unzip && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install -j$(nproc) mysqli pdo pdo_mysql
+RUN docker-php-ext-install -j$(nproc) zip mysqli pdo pdo_mysql
 
 RUN a2enmod rewrite
 RUN a2enmod headers
