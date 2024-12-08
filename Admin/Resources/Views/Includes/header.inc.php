@@ -31,7 +31,8 @@ foreach ($installedPackages as $package) {
     }
 }
 
-function renderSubSubMenu(array $subMenus, $currentUser): string {
+function renderSubSubMenu(array $subMenus, $currentUser): string
+{
     $html = '<ul style="margin-left: .9rem;">';
 
     foreach ($subMenus as $submenu) {
@@ -78,7 +79,8 @@ function renderSubSubMenu(array $subMenus, $currentUser): string {
                         class="bg-contain hidden dark:block" alt="Logo"/>
                 </a>
                 <div class="ml-2 sm:ml-11">
-                    <button id="toggleSidebar" class="hidden sm:block"><i id="toggleIcon" class="fa-solid fa-expand fa-lg"></i></button>
+                    <button id="toggleSidebar" class="hidden sm:block"><i id="toggleIcon"
+                                                                          class="fa-solid fa-expand fa-lg"></i></button>
                 </div>
                 <div class="ml-2">
                     <div class="px-3">
@@ -86,9 +88,7 @@ function renderSubSubMenu(array $subMenus, $currentUser): string {
                                 class="fa-solid fa-arrow-up-right-from-square"></i></a>
                     </div>
                 </div>
-                <div class="ml-2">
-                    <?php CoreController::getInstance()->getPackagesTopBarElements(); ?>
-                </div>
+                <?php CoreController::getInstance()->getPackagesTopBarElements(); ?>
             </div>
             <div class="flex items-center">
                 <div>
@@ -102,7 +102,8 @@ function renderSubSubMenu(array $subMenus, $currentUser): string {
                     </button>
                 </div>
                 <div style="width: 20rem; padding: 16px; max-height: 800px"
-                     class="z-50 hidden space-y-2 overflow-x-auto border rounded-l bg-white dark:bg-gray-800" id="dropdown-notification">
+                     class="z-50 hidden space-y-2 overflow-x-auto border rounded-l bg-white dark:bg-gray-800"
+                     id="dropdown-notification">
                     <?php
                     $max_notifications = 3;
                     $notification_count = 0;
@@ -244,8 +245,10 @@ function renderSubSubMenu(array $subMenus, $currentUser): string {
                                     <?php if (UsersModel::hasPermission($currentUser, $submenu->getPermission())): ?>
                                         <?php if (empty($submenu->getUrl()) && !empty($submenu->getSubMenus())): ?>
                                             <li>
-                                                <div class="a-side-nav-drop-sub flex justify-between items-center cursor-pointer">
-                                                    <span class="a-side-nav-drop-sub-title"><?= $submenu->getTitle() ?></span>
+                                                <div
+                                                    class="a-side-nav-drop-sub flex justify-between items-center cursor-pointer">
+                                                    <span
+                                                        class="a-side-nav-drop-sub-title"><?= $submenu->getTitle() ?></span>
                                                     <i class="fa-xs fa-solid fa-chevron-down"></i>
                                                 </div>
                                                 <?= renderSubSubMenu($submenu->getSubMenus(), $currentUser) ?>
@@ -310,8 +313,10 @@ function renderSubSubMenu(array $subMenus, $currentUser): string {
                                             <?php if (UsersModel::hasPermission($currentUser, $submenu->getPermission())): ?>
                                                 <?php if (empty($submenu->getUrl()) && !empty($submenu->getSubMenus())): ?>
                                                     <li>
-                                                        <div class="a-side-nav-drop-sub flex justify-between items-center cursor-pointer">
-                                                            <span class="a-side-nav-drop-sub-title"><?= $submenu->getTitle() ?></span>
+                                                        <div
+                                                            class="a-side-nav-drop-sub flex justify-between items-center cursor-pointer">
+                                                            <span
+                                                                class="a-side-nav-drop-sub-title"><?= $submenu->getTitle() ?></span>
                                                             <i class="fa-xs fa-solid fa-chevron-down"></i>
                                                         </div>
                                                         <?= renderSubSubMenu($submenu->getSubMenus(), $currentUser) ?>
@@ -382,8 +387,10 @@ function renderSubSubMenu(array $subMenus, $currentUser): string {
                                             <?php if (UsersModel::hasPermission($currentUser, $submenu->getPermission())): ?>
                                                 <?php if (empty($submenu->getUrl()) && !empty($submenu->getSubMenus())): ?>
                                                     <li>
-                                                        <div class="a-side-nav-drop-sub flex justify-between items-center cursor-pointer">
-                                                            <span class="a-side-nav-drop-sub-title"><?= $submenu->getTitle() ?></span>
+                                                        <div
+                                                            class="a-side-nav-drop-sub flex justify-between items-center cursor-pointer">
+                                                            <span
+                                                                class="a-side-nav-drop-sub-title"><?= $submenu->getTitle() ?></span>
                                                             <i class="fa-xs fa-solid fa-chevron-down"></i>
                                                         </div>
                                                         <?= renderSubSubMenu($submenu->getSubMenus(), $currentUser) ?>
@@ -436,7 +443,7 @@ function renderSubSubMenu(array $subMenus, $currentUser): string {
         icon.classList.add('flip');
 
         // Vérifier si la sidebar est masquée et basculer l'icône
-        setTimeout(function() {
+        setTimeout(function () {
             if (document.body.classList.contains('sidebar-collapsed')) {
                 icon.classList.remove('fa-expand', 'fa-lg');
                 icon.classList.add('fa-bars', 'fa-lg');
@@ -503,14 +510,13 @@ function renderSubSubMenu(array $subMenus, $currentUser): string {
     });
 
 
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         let dropActiveElement = document.querySelector(".side-nav-drop-active");
         let activeElement = document.querySelector(".side-nav-active");
         if (dropActiveElement) {
-            dropActiveElement.scrollIntoView({ block: "center" });
-        }
-        else if (activeElement) {
-            activeElement.scrollIntoView({  block: "center" });
+            dropActiveElement.scrollIntoView({block: "center"});
+        } else if (activeElement) {
+            activeElement.scrollIntoView({block: "center"});
         }
     });
 
