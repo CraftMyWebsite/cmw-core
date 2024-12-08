@@ -18,6 +18,16 @@ use CMW\Manager\Views\View;
 use CMW\Utils\Directory;
 use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
+use function array_diff;
+use function array_merge;
+use function class_exists;
+use function count;
+use function file_exists;
+use function file_get_contents;
+use function in_array;
+use function is_null;
+use function is_subclass_of;
+use function scandir;
 
 /**
  * Class: @PackageController
@@ -254,7 +264,18 @@ class PackageController extends AbstractController
         $lastUpdateIndex = count($updates) - 1;
         foreach ($updates as $i => $update) {
             if (!empty($update['sql_updater'])) {
-                DatabaseManager::getLiteInstance()->query($update['sql_updater']);
+                $file = file_get_contents($update['sql_updater']);
+
+                if (!$file) {
+                    Flash::send(
+                        Alert::ERROR,
+                        LangManager::translate('core.toaster.error'),
+                        $update['sql_updater'],
+                    );
+                    Redirect::redirectPreviousRoute();
+                }
+
+                DatabaseManager::getLiteInstance()->query($file);
             }
 
             if ($i === $lastUpdateIndex) {
