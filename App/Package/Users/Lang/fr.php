@@ -14,7 +14,8 @@ return [
             'desc' => 'Récupérez votre mot de passe',
             'btn' => 'Confirmation',
             'mail' => [
-                'object' => 'Votre nouveau mot de passe %site_name%',
+                'object_pass' => 'Votre nouveau mot de passe %site_name%',
+                'object_link' => 'Changer votre mot de passe sur %site_name%',
                 'body' => 'Voici votre nouveau mot de passe à changer rapidement après votre connexion : <b> %password% </b>',
             ],
         ],
@@ -56,6 +57,7 @@ return [
         "reset_link_not_available" => "Ce lien de réinitialisation n'est plus valide !",
         "reset_link_log_out" => "Vous ne pouvez pas être connecter pour faire ceci !",
         "reset_link_pass_changed" => "Mot de passe changé !",
+        "reset_link_follow_the_link" => "Veuillez suivre le lien que vous avez reçu par mail",
         "reset_link_body_mail_1" => "Réinitialiser votre mot de passe sur ",
         "reset_link_body_mail_2" => "Vous venez de faire une demande de réinitialisation de mot de passe.",
         "reset_link_body_mail_3" => "Voici le lien à suivre pour réaliser ce changement (vous avez 15 minutes pour le faire)",

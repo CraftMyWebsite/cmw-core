@@ -14,7 +14,8 @@ return [
             'desc' => 'Retrieve a new password',
             'btn' => 'Request new password',
             'mail' => [
-                'object' => 'This is your new password %site_name%',
+                'object_pass' => 'This is your new password %site_name%',
+                'object_link' => 'Change your password on %site_name%',
                 'body' => 'This is your new password, please change this password fast <b> %password% </b>',
             ],
         ],
@@ -56,6 +57,7 @@ return [
         "reset_link_not_available" => "This reset link is no longer valid!",
         "reset_link_log_out" => "You can't be logged in to do this!",
         "reset_link_pass_changed" => "Password changed!",
+        "reset_link_follow_the_link" => "Please follow the link you received by email",
         "reset_link_body_mail_1" => "Reset your password on ",
         "reset_link_body_mail_2" => "You have just requested a password reset.",
         "reset_link_body_mail_3" => "Here is the link to follow to make this change (you have 15 minutes to do it)",

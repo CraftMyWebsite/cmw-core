@@ -589,58 +589,9 @@ class UsersModel extends AbstractModel
     }
 
     /**
-     * @param string $email
      * @return void
      */
-    public function resetPassword(string $email): void
-    {
-        if (UsersSettingsModel::getSetting('resetPasswordMethod') === '0') {
-            $this->resetPasswordMethodPasswordSendByMail($email);
-        } elseif (UsersSettingsModel::getSetting('resetPasswordMethod') === '1') {
-            $this->resetPasswordMethodUniqueLinkSendByMail($email);
-        }
-    }
-
-    /**
-     * @param string $email
-     * @return void
-     */
-    public function resetPasswordMethodPasswordSendByMail(string $email): void
-    {
-        $newPassword = $this->generatePassword();
-
-        $this->updatePassWithMail($email, password_hash($newPassword, PASSWORD_BCRYPT));
-
-        $this->sendResetPassword($email, $newPassword);
-    }
-
-    /**
-     * @param string $email
-     * @return void
-     */
-    public function resetPasswordMethodUniqueLinkSendByMail(string $email): void
-    {
-        $linkToken = Utils::genId(100);
-
-        $encryptedLink = EncryptManager::encrypt($linkToken);
-        if ($userMail = $this->secretExistByMail($email)) {
-            if ($this->isLinkOlderThan15Minutes($userMail)) {
-                $this->deleteSecretLink($email);
-            } else {
-                Flash::send(Alert::WARNING, LangManager::translate('core.toaster.error'), LangManager::translate('users.toaster.reset_in_progress'));
-                Redirect::redirect('login');
-            }
-        }
-
-        $this->addSecretLink($email, $encryptedLink);
-
-        $this->sendResetLinkPassword($email, $linkToken);
-    }
-
-    /**
-     * @return void
-     */
-    private function addSecretLink(string $email, string $encryptedLink): void
+    public function addSecretLink(string $email, string $encryptedLink): void
     {
         $var = [
             'users_mail' => $email,
@@ -723,72 +674,6 @@ class UsersModel extends AbstractModel
         $option = $req->fetch();
 
         return $option['secret_date'] ?? null;
-    }
-
-    public function isLinkOlderThan15Minutes(string $email): bool
-    {
-        $linkDate = $this->getSecretLinkDate($email);
-
-        if (is_null($linkDate)) {
-            return false;
-        }
-
-        $linkTimestamp = strtotime($linkDate);
-
-        $timeDifference = time() - $linkTimestamp;
-
-
-        return $timeDifference > 900;
-    }
-
-    /**
-     * @param string $email
-     * @param string $link
-     * @return void
-     */
-    public function sendResetLinkPassword(string $email, string $link): void
-    {
-        $decryptedMail = EncryptManager::decrypt($email);
-        $fullLink = EnvManager::getInstance()->getValue('PATH_URL') . 'resetPassword/'.$link;
-
-        $body = '
-        <b>'. LangManager::translate('users.toaster.reset_link_body_mail_1') . Website::getWebsiteName() .'</b><br>
-        <p>'. LangManager::translate('users.toaster.reset_link_body_mail_2') .'</p>
-        <p>'. LangManager::translate('users.toaster.reset_link_body_mail_3') .'</p>
-        <a href="'. $fullLink .'">'. LangManager::translate('users.toaster.reset_link_body_mail_4') .'</a>
-        <br><br>
-        <p>'. LangManager::translate('users.toaster.reset_link_body_mail_5') .'</p>
-        ';
-
-        MailManager::getInstance()->sendMail($decryptedMail, LangManager::translate('users.login.forgot_password.mail.object',
-            ['site_name' => (new CoreModel())->fetchOption('name')]),$body);
-    }
-
-    /**
-     * @param string $email
-     * @param string $password
-     * @return void
-     */
-    public function sendResetPassword(string $email, string $password): void
-    {
-        $decryptedMail = EncryptManager::decrypt($email);
-        MailManager::getInstance()->sendMail($decryptedMail, LangManager::translate('users.login.forgot_password.mail.object',
-            ['site_name' => (new CoreModel())->fetchOption('name')]),
-            LangManager::translate('users.login.forgot_password.mail.body',
-                ['password' => $password]));
-    }
-
-    /**
-     * @return string
-     * @desc Generate random password
-     */
-    private function generatePassword(): string
-    {
-        try {
-            return bin2hex(Utils::genId(random_int(7, 12)));
-        } catch (Exception) {
-            return bin2hex(Utils::genId(10));
-        }
     }
 
     /**
