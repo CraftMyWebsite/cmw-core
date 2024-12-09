@@ -8,6 +8,10 @@ use CMW\Entity\Users\RoleEntity;
 use CMW\Entity\Users\User2FaEntity;
 use CMW\Entity\Users\UserEntity;
 use CMW\Manager\Database\DatabaseManager;
+use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Error\ErrorManager;
+use CMW\Manager\Flash\Alert;
+use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Mail\MailManager;
 use CMW\Manager\Package\AbstractModel;
@@ -15,8 +19,12 @@ use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Twofa\TwoFaManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Type\Users\LoginStatus;
+use CMW\Utils\Log;
+use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
+use CMW\Utils\Website;
 use Exception;
+use http\Client\Curl\User;
 use function count;
 
 /**
@@ -581,55 +589,91 @@ class UsersModel extends AbstractModel
     }
 
     /**
-     * @param string $email
      * @return void
      */
-    public function resetPassword(string $email): void
+    public function addSecretLink(string $email, string $encryptedLink): void
     {
-        if (UsersSettingsModel::getSetting('resetPasswordMethod') === '0') {
-            $this->resetPasswordMethodPasswordSendByMail($email);
-        } elseif (UsersSettingsModel::getSetting('resetPasswordMethod') === '1') {
-            $this->resetPasswordMethodUniqueLinkSendByMail($email);
-        }
+        $var = [
+            'users_mail' => $email,
+            'secret_link' => $encryptedLink,
+        ];
+        $sql = 'INSERT INTO cmw_users_reset_password_link (users_mail, secret_link) VALUES (:users_mail, :secret_link)';
+
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare($sql);
+        $req->execute($var);
+    }
+
+    /**
+     * @param string $secret
+     * @return ?string
+     */
+    public function getSecretLink(string $secret): ?string
+    {
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare('SELECT secret_link FROM cmw_users_reset_password_link WHERE secret_link = ?');
+        $req->execute(array($secret));
+        $option = $req->fetch();
+
+        return $option['secret_link'] ?? null;
+    }
+
+    /**
+     * @param string $secret
+     * @return ?string
+     */
+    public function getMailBySecretLink(string $secret): ?string
+    {
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare('SELECT users_mail FROM cmw_users_reset_password_link WHERE secret_link = ?');
+        $req->execute(array($secret));
+        $option = $req->fetch();
+
+        return $option['users_mail'] ?? null;
+    }
+
+    /**
+     * @param string $secret
+     * @return void
+     */
+    public function deleteSecretLink(string $email): void
+    {
+        $var = [
+            'users_mail' => $email,
+        ];
+        $sql = 'DELETE FROM cmw_users_reset_password_link WHERE users_mail=:users_mail';
+
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare($sql);
+        $req->execute($var);
     }
 
     /**
      * @param string $email
-     * @return void
+     * @return ?string
      */
-    public function resetPasswordMethodPasswordSendByMail(string $email): void
+    public function secretExistByMail(string $email): ?string
     {
-        $newPassword = $this->generatePassword();
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare('SELECT users_mail FROM cmw_users_reset_password_link WHERE users_mail = ?');
+        $req->execute(array($email));
+        $option = $req->fetch();
 
-        $this->updatePassWithMail($email, password_hash($newPassword, PASSWORD_BCRYPT));
-
-        $this->sendResetPassword($email, $newPassword);
+        return $option['users_mail'] ?? null;
     }
 
     /**
-     * @param string $email
-     * @param string $password
-     * @return void
+     * @param string $secret
+     * @return ?string
      */
-    public function sendResetPassword(string $email, string $password): void
+    public function getSecretLinkDate(string $email): ?string
     {
-        MailManager::getInstance()->sendMail($email, LangManager::translate('users.login.forgot_password.mail.object',
-            ['site_name' => (new CoreModel())->fetchOption('name')]),
-            LangManager::translate('users.login.forgot_password.mail.body',
-                ['password' => $password]));
-    }
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare('SELECT secret_date FROM cmw_users_reset_password_link WHERE users_mail = ?');
+        $req->execute(array($email));
+        $option = $req->fetch();
 
-    /**
-     * @return string
-     * @desc Generate random password
-     */
-    private function generatePassword(): string
-    {
-        try {
-            return bin2hex(Utils::genId(random_int(7, 12)));
-        } catch (Exception) {
-            return bin2hex(Utils::genId(10));
-        }
+        return $option['secret_date'] ?? null;
     }
 
     /**

@@ -154,9 +154,9 @@ $description = LangManager::translate('users.settings.desc');
                 <option value="0" <?= $settings->getResetPasswordMethod() === 0 ? 'selected' : '' ?>>
                     <?= LangManager::translate('users.settings.resetPasswordMethod.options.0') ?>
                 </option>
-                <!--<option value="1" <?= $settings->getResetPasswordMethod() === 1 ? 'selected' : '' ?>>
+                <option value="1" <?= $settings->getResetPasswordMethod() === 1 ? 'selected' : '' ?>>
                     <?= LangManager::translate('users.settings.resetPasswordMethod.options.1') ?>
-                </option>-->
+                </option>
             </select>
         </div>
 

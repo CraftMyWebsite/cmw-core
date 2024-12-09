@@ -34,9 +34,8 @@ Liens utiles :
 Nos partenaires
 ------------
 
-- [WebStrator.fr](https://www.webstrator.fr): Hébergeur web
-- [MineStrator.com](https://www.minestrator.com): Hébergeur de serveurs Minecraft
-  Copyright
+- [WebStrator.com](https://webstrator.com): Votre hébergeur web par excellence
+- [MineStrator.com](https://minestrator.com): Votre hébergeur de serveurs de jeux haut de gamme
 
 ------------
 
