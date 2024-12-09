@@ -620,7 +620,7 @@ class UsersModel extends AbstractModel
      */
     public function resetPasswordMethodUniqueLinkSendByMail(string $email): void
     {
-        $linkToken = $this->generateRandomString();
+        $linkToken = Utils::genId(100);
 
         $encryptedLink = EncryptManager::encrypt($linkToken);
         if ($userMail = $this->secretExistByMail($email)) {
@@ -635,20 +635,6 @@ class UsersModel extends AbstractModel
         $this->addSecretLink($email, $encryptedLink);
 
         $this->sendResetLinkPassword($email, $linkToken);
-    }
-
-    /**
-     * @throws \Random\RandomException
-     */
-    private function generateRandomString($length = 100): string
-    {
-        $characters = '-_0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[random_int(0, $charactersLength - 1)];
-        }
-        return $randomString;
     }
 
     /**
