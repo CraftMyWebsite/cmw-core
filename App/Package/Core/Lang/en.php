@@ -517,4 +517,9 @@ return [
             'createFolder' => 'Unable to create target folder, permission problem on Public/Uploads',
         ],
     ],
+    'imageDropper' => [
+        'fileDrop' => 'Drag & Drop your images here',
+        'fileSize' => 'max allowed!',
+        'fileFormat' => 'Format not allowed.',
+    ],
 ];

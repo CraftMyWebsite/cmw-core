@@ -520,4 +520,9 @@ return [
             'createFolder' => 'Impossible de créer le dossier cible, problème de permission sur Public/Uploads',
         ],
     ],
+    'imageDropper' => [
+        'fileDrop' => 'Glissez & Déposez vos images ici',
+        'fileSize' => 'max autorisé !',
+        'fileFormat' => 'Format non autorisé.',
+    ],
 ];
