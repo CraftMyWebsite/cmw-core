@@ -5,7 +5,6 @@ namespace CMW\Controller\Users;
 use CMW\Entity\Users\UserSettingsEntity;
 use CMW\Event\Users\DeleteUserAccountEvent;
 use CMW\Manager\Events\Emitter;
-use CMW\Manager\Filter\FilterManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
@@ -235,7 +234,7 @@ class UsersProfileController extends AbstractController
             return;
         }
 
-        $secret = FilterManager::filterInputIntPost('secret', 6);
+        $secret = $_POST['secret'];
 
         if (strlen($secret) !== 6) {
             Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),

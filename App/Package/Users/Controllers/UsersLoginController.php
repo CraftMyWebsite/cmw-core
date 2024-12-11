@@ -218,7 +218,7 @@ class UsersLoginController extends AbstractController
             return;
         }
 
-        $code = FilterManager::filterInputIntPost('code', 6);
+        $code = $_POST['code'];
 
         if (strlen($code) !== 6) {
             Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
