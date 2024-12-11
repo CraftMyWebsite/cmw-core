@@ -5,6 +5,8 @@ namespace CMW\Manager\Xml;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Manager\AbstractManager;
 use CMW\Utils\File;
+use CMW\Utils\Log;
+use function str_starts_with;
 
 class SitemapManager extends AbstractManager
 {
@@ -60,7 +62,8 @@ class SitemapManager extends AbstractManager
         }
 
         $date = date('c');
-        $loc = EnvManager::getInstance()->getValue('PATH_URL') . $slug;
+
+        $loc = $this->getLocation($slug);
 
         $object = $content->addChild('url');
         $object?->addChild('loc', $loc);
@@ -95,10 +98,12 @@ class SitemapManager extends AbstractManager
             return false;
         }
 
-        $loc = EnvManager::getInstance()->getValue('PATH_URL') . $slug;
+        $loc = $this->getLocation($slug);
 
         foreach ($content->url as $url) {
+            Log::debug($url);
             if ((string)$url->loc === $loc) {
+
                 $url->lastmod = date('c');
                 $url->priority = $priority;
 
@@ -133,7 +138,7 @@ class SitemapManager extends AbstractManager
             return false;
         }
 
-        $loc = EnvManager::getInstance()->getValue('PATH_URL') . $slug;
+        $loc = $this->getLocation($slug);
 
         for ($i = 0, $iMax = count($content->url); $i < $iMax; $i++) {
             $url = $content->url[$i];
@@ -172,5 +177,24 @@ class SitemapManager extends AbstractManager
         $url = EnvManager::getInstance()->getValue('PATH_URL');
 
         File::write($file, "\nSitemap: " . $url . "sitemap.xml\n", FILE_APPEND);
+    }
+
+    /**
+     * @param string $slug
+     * @return string
+     */
+    private function getLocation(string $slug): string
+    {
+        $pathUrl = EnvManager::getInstance()->getValue('PATH_URL');
+
+        if (str_starts_with($slug, $pathUrl)) {
+            $slug = str_replace($pathUrl, '', $slug);
+        }
+
+        if (str_starts_with($slug, '/')) {
+            $slug = substr($slug, 1);
+        }
+
+        return $pathUrl . $slug;
     }
 }
