@@ -141,14 +141,14 @@ $description = LangManager::translate('users.edit.desc');
         <div class="card">
             <div class="flex flex-col w-1/2">
                 <?php if (!$user->get2Fa()->isEnabled()): ?>
-                    <b>2FA Désactivé</b>
+                    <b>2FA  <?= LangManager::translate('core.btn.disabled') ?></b>
                     <a href="../2fa/status/toggle/<?= $user->getId() ?>" class="btn-danger mt-2">
                         <?= LangManager::translate('core.btn.enable') ?>
                     </a>
                 <?php else: ?>
-                    <b>2FA Activé</b>
+                    <b>2FA  <?= LangManager::translate('core.btn.enabled') ?></b>
                     <a href="../2fa/status/toggle/<?= $user->getId() ?>" class="btn-danger mt-2">
-                        <?= LangManager::translate('core.btn.enable') ?>
+                        <?= LangManager::translate('core.btn.disable') ?>
                     </a>
                 <?php endif; ?>
                 <a href="../2fa/key/regenerate/<?= $user->getId() ?>" class="btn-danger mt-2">
