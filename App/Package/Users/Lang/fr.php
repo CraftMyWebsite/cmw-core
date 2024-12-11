@@ -282,4 +282,24 @@ return [
             'invalid' => 'Captcha invalide',
         ],
     ],
+    'long_date' => [
+        'setting' => [
+            'label' => 'Renforcé la sécurité des comptes utilisateur',
+            'no' => 'Non (non recommandé)',
+            'yes' => 'Oui',
+            'small' => 'Pour les utilisateurs n\'ayant pas de 2Fa s\'ils ne se sont pas connecté depuis + de 90 jours ils reçoivent un code de confirmation d\'identité par mail. (l\'envoie de mail doit être fonctionnel)',
+        ],
+        'toaster' => [
+            'title' => 'Verification d\'identité',
+            'receive_by_mail' => 'Vous allez recevoir le code par mail',
+            'put_the_code' => 'Merci de mettre votre code.',
+            'invalid_code' => 'Code invalide.',
+            'too_late' => 'Ce code est trop vieux vous avez max 15 min pour le valider',
+        ],
+        'mail' => [
+            'body_1' => 'Nous avons besoin de vérifier votre identité sur ',
+            'body_2' => 'Voici le CODE permettant de vérifier qu\'il s\'agisse bien de vous :',
+            'body_3' => 'Si vous n\'êtes pas à l\'origine de cette demande, nous vous conseillons de changer votre mot de passe !',
+        ],
+    ],
 ];

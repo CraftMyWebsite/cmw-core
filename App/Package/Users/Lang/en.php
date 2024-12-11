@@ -281,4 +281,24 @@ return [
             'invalid' => 'invalid Captcha',
         ],
     ],
+    'long_date' => [
+        'setting' => [
+            'label' => 'Strengthened user account security',
+            'no' => 'No (not recommended)',
+            'yes' => 'Yes',
+            'small' => 'For users who do not have 2Fa if they have not logged in for more than 90 days they receive an identity confirmation code by email. (the email must be functional)',
+        ],
+        'toaster' => [
+            'title' => 'Identity verification',
+            'receive_by_mail' => 'You will receive the code by email',
+            'put_the_code' => 'Please enter your code.',
+            'invalid_code' => 'Invalid code.',
+            'too_late' => 'This code is too old, you have max 15 min to validate it',
+        ],
+        'mail' => [
+            'body_1' => 'We need to verify your identity on ',
+            'body_2' => 'Here is the CODE to verify that it is you:',
+            'body_3' => 'If you are not the originator of this request, we advise you to change your password!',
+        ],
+    ],
 ];

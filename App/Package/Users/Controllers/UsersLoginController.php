@@ -8,20 +8,25 @@ use CMW\Event\Users\LoginEvent;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Error\ErrorManager;
 use CMW\Manager\Events\Emitter;
-use CMW\Manager\Filter\FilterManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Mail\MailManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Twofa\TwoFaManager;
 use CMW\Manager\Views\View;
+use CMW\Model\Core\CoreModel;
+use CMW\Model\Core\MailModel;
 use CMW\Model\Users\UsersModel;
+use CMW\Model\Users\UsersSettingsModel;
 use CMW\Type\Users\LoginStatus;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
+use CMW\Utils\Website;
+use DateTime;
 use Exception;
 use function error_log;
 use function file_exists;
@@ -62,6 +67,12 @@ class UsersLoginController extends AbstractController
 
         if ($user->get2Fa()->isEnforced()) {
             return $user->get2Fa()->isEnabled() ? LoginStatus::OK_NEED_2FA : LoginStatus::OK_ENFORCE_2FA;
+        }
+
+        $userLastConnect = $user->getLastConnectionUnformatted();
+
+        if ((UsersSettingsModel::getSetting('securityReinforced') === '1') && $this->isUserInactiveFor90Days($userLastConnect) && !$user->get2Fa()->isEnabled() && MailModel::getInstance()->getConfig() !== null && MailModel::getInstance()->getConfig()->isEnable()) {
+            return LoginStatus::OK_LONG_DATE;
         }
 
         return $user->get2Fa()->isEnabled() ? LoginStatus::OK_NEED_2FA : LoginStatus::OK;
@@ -167,6 +178,28 @@ class UsersLoginController extends AbstractController
 
                 $this->enforceLogin2Fa($user);
                 break;
+            case LoginStatus::OK_LONG_DATE:
+                $user = UsersModel::getInstance()->getUserWithMail($encryptedMail);
+                if (is_null($user)) {
+                    Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                        LangManager::translate('core.toaster.internalError'));
+                    Redirect::redirectPreviousRoute();
+                }
+
+                $_SESSION['cmw_temp_user_id'] = $user->getId();
+                $_SESSION['cmw_temp_use_cookies'] = $cookie;
+
+                $code = Utils::generateRandomNumber(6);
+                $encryptedCode = EncryptManager::encrypt($code);
+                $encryptedMail = EncryptManager::encrypt($mail);
+                $this->sendLongDateCodeByMail($user->getMail(), $code);
+                $userModel = UsersModel::getInstance();
+                $userModel->deleteLongDateCode($encryptedMail);
+                $userModel->addLongDateCode($encryptedMail, $encryptedCode);
+
+                Flash::send(Alert::SUCCESS, LangManager::translate('users.long_date.toaster.title'), LangManager::translate('users.long_date.toaster.receive_by_mail'));
+                $this->needMailCodeCheck();
+                break;
         }
     }
 
@@ -213,7 +246,7 @@ class UsersLoginController extends AbstractController
     {
         if (!isset($_POST['code'])) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                'Merci de mettre votre code.');
+                LangManager::translate('users.long_date.toaster.put_the_code'));
             $this->showLogin2Fa();
             return;
         }
@@ -222,7 +255,7 @@ class UsersLoginController extends AbstractController
 
         if (strlen($code) !== 6) {
             Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
-                'Code invalide.');
+                LangManager::translate('users.long_date.toaster.invalid_code'));
             $this->showLogin2Fa();
             return;
         }
@@ -261,5 +294,129 @@ class UsersLoginController extends AbstractController
 
         // Redirect
         Redirect::redirect('profile');
+    }
+
+    private function needMailCodeCheck(): void
+    {
+        View::createPublicView('Users', 'longDateCheck')
+            ->view();
+    }
+
+    #[Link('/login/validate/longDate', Link::POST)]
+    private function loginCheckLongDate(): void
+    {
+        if (!isset($_POST['code'])) {
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('users.long_date.toaster.put_the_code'));
+            $this->needMailCodeCheck();
+            return;
+        }
+
+        $code = $_POST['code'];
+
+        if (strlen($code) !== 6) {
+            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
+                LangManager::translate('users.long_date.toaster.invalid_code'));
+            $this->needMailCodeCheck();
+            return;
+        }
+
+        if (!isset($_SESSION['cmw_temp_user_id'])) {
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.toaster.internalError'));
+            $this->needMailCodeCheck();
+            return;
+        }
+
+        $user = UsersModel::getInstance()->getUserById($_SESSION['cmw_temp_user_id']);
+
+        if (is_null($user)) {
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.toaster.internalError'));
+            $this->needMailCodeCheck();
+            return;
+        }
+
+        $userModel = UsersModel::getInstance();
+        $encryptedCode = EncryptManager::encrypt($code);
+        $encryptedMail = EncryptManager::encrypt($user->getMail());
+        $dbCode = $userModel->getCodeByCodeAndUserMail($encryptedMail, $encryptedCode);
+        if (!is_null($dbCode)) {
+            if ($this->isCodeOlderThan15Minutes($encryptedMail)) {
+                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), LangManager::translate('users.long_date.toaster.too_late'));
+                $userModel->deleteLongDateCode($encryptedMail);
+                Redirect::redirect('login');
+            }
+            $decryptedDbCode = EncryptManager::decrypt($dbCode);
+            if ($code !== $decryptedDbCode) {
+                Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
+                    LangManager::translate('users.long_date.toaster.invalid_code'));
+                $this->needMailCodeCheck();
+                return;
+            }
+        } else {
+            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
+                LangManager::translate('users.long_date.toaster.invalid_code'));
+            $this->needMailCodeCheck();
+            return;
+        }
+
+        $userModel->deleteLongDateCode($encryptedMail);
+
+        $useCookies = isset($_SESSION['cmw_temp_use_cookies']) ? $_SESSION['cmw_temp_use_cookies'] : 0;
+
+        $this->loginUser($user, $useCookies);
+
+        // Clean temp sessions
+        unset($_SESSION['cmw_temp_user_id'],
+            $_SESSION['cmw_temp_use_cookies']);
+
+        // Redirect
+        Redirect::redirect('profile');
+    }
+
+    /**
+     * @param string $email
+     * @param string $code
+     * @return void
+     */
+    public function sendLongDateCodeByMail(string $email, string $code): void
+    {
+        $body = '
+        <b>'. LangManager::translate('users.long_date.mail.body_1') . Website::getWebsiteName() .'</b><br>
+        <p>'. LangManager::translate('users.long_date.mail.body_2') .'</p>
+        <h2 style="text-align: center">'.  $code  .'</h2>
+        <p>'. LangManager::translate('users.long_date.mail.body_3') .'</p>
+        ';
+
+        MailManager::getInstance()->sendMail($email, LangManager::translate('users.login.forgot_password.mail.object_link',
+            ['site_name' => (new CoreModel())->fetchOption('name')]),$body);
+    }
+
+    public function isCodeOlderThan15Minutes(string $email): bool
+    {
+        $linkDate = UsersModel::getInstance()->getLongDateCodeDate($email);
+
+        if (is_null($linkDate)) {
+            return false;
+        }
+
+        $linkTimestamp = strtotime($linkDate);
+
+        $timeDifference = time() - $linkTimestamp;
+
+
+        return $timeDifference > 900;
+    }
+
+    public function isUserInactiveFor90Days($userLastConnect): bool
+    {
+        $lastConnectionDate = new DateTime($userLastConnect);
+
+        $currentDate = new DateTime();
+
+        $interval = $currentDate->diff($lastConnectionDate);
+
+        return $interval->days >= 90;
     }
 }
