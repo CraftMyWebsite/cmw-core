@@ -1,5 +1,6 @@
 services:
   server:
+    restart: always
     build:
       context: .
     ports:
