@@ -402,6 +402,8 @@ return [
         'generate' => 'Générer',
         'enable' => 'Activer',
         'enabled' => 'Activé',
+        'disable' => 'Désactiver',
+        'disabled' => 'Désactivée',
         'saving' => 'Sauvegarde ...',
     ],
     'months' => [

@@ -26,7 +26,6 @@ return [
     'files' => 'Files allowed : png, jpg, jpeg, webp, svg, gif',
     'toaster' => [
         'error' => 'Error',
-        'success' => 'Success',
         'used_pseudo' => 'This username is already taken.',
         'used_mail' => 'This email is already taken.',
         'not_registered_account' => 'This account is not registered',
@@ -63,6 +62,18 @@ return [
         "reset_link_body_mail_3" => "Here is the link to follow to make this change (you have 15 minutes to do it)",
         "reset_link_body_mail_4" => "Click here to change my password.",
         "reset_link_body_mail_5" => "If you are not the originator of this request, simply ignore this email.",
+        "errors" => [
+            '2fa' => [
+                "toggle" => "Unable to change 2FA status for %pseudo%",
+                'regen' => "Unable to regenerate 2FA secret for %pseudo%",
+            ],
+        ],
+        'success' => [
+            '2fa' => [
+                'toggle' => "2FA status changed for %pseudo%",
+                'regen' => "2FA secret regenerated for %pseudo%",
+            ],
+        ],
     ],
     'manage' => [
         'title' => 'Manage users',
@@ -70,7 +81,7 @@ return [
         'card_title_list' => 'List of registered users',
         'card_title_add' => 'Add a new user',
         'edit' => [
-            'title' => 'Editing of ',
+            'title' => 'Editing of %pseudo%',
             'about' => 'About  ',
         ],
         'randomPasswordTooltip' => 'Generate a secure random password. The password will be past on your clipboard',
@@ -176,6 +187,9 @@ return [
         ],
         'link_profile' => 'Go to my profile',
         'login_methode' => 'Login methode',
+        '2fa' => [
+            'regen_key' => 'Regenerate the key',
+        ],
     ],
     'settings' => [
         'title' => 'Users settings',
