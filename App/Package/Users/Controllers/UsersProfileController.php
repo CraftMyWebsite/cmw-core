@@ -189,7 +189,7 @@ class UsersProfileController extends AbstractController
         $encryptedMail = EncryptManager::encrypt($mail);
 
         if (UsersModel::getInstance()->update($user?->getId(), $encryptedMail, $pseudo, $firstname, $lastname, $rolesId)) {
-            Flash::send(Alert::SUCCESS, LangManager::translate('users.toaster.success'), LangManager::translate('users.toaster.user_edited_self'));
+            Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'), LangManager::translate('users.toaster.user_edited_self'));
         } else {
             Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'), LangManager::translate('users.toaster.user_edited_self_nop'));
         }

@@ -399,6 +399,8 @@ return [
         'generate' => 'Generate',
         'enable' => 'Enable',
         'enabled' => 'Enabled',
+        'disable' => 'Disable',
+        'disabled' => 'Disabled',
         'saving' => 'Saving ...',
     ],
     'months' => [

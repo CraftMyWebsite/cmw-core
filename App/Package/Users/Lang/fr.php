@@ -26,7 +26,6 @@ return [
     "files" => "Fichiers autorisés : png, jpg, jpeg, webp, svg, gif",
     "toaster" => [
         "error" => "Erreur",
-        "success" => "Succès",
         "used_pseudo" => "Ce pseudo n'est pas disponible.",
         "used_mail" => "Un compte existe déjà avec cette adresse mail.",
         "not_registered_account" => "Ce compte n'existe pas",
@@ -63,6 +62,18 @@ return [
         "reset_link_body_mail_3" => "Voici le lien à suivre pour réaliser ce changement (vous avez 15 minutes pour le faire)",
         "reset_link_body_mail_4" => "Cliquez-ici pour changer mon mot de passe.",
         "reset_link_body_mail_5" => "Si vous n'êtes pas à l'origine de cette demande, ignorez simplement ce mail.",
+        "errors" => [
+            '2fa' => [
+                "toggle" => "Impossible de changer le status 2FA de %pseudo%",
+                'regen' => 'Impossible de régénérer la clé 2FA de %pseudo%',
+            ],
+        ],
+        'success' => [
+            '2fa' => [
+                'toggle' => "Status 2FA de %pseudo% changé avec succès",
+                'regen' => 'Clé 2FA de %pseudo% régénérée avec succès',
+            ],
+        ],
     ],
     'manage' => [
         'title' => 'Gestion des utilisateurs',
@@ -70,7 +81,7 @@ return [
         'card_title_list' => 'Liste des utilisateurs inscrits',
         'card_title_add' => 'Ajouter un utilisateur',
         'edit' => [
-            'title' => 'Edition de ',
+            'title' => 'Édition de %pseudo%',
             'about' => 'A propos',
         ],
         'randomPasswordTooltip' => 'Générez un mot de passe aléatoire et sécurisé en un clic. Le mot de passe sera copié dans votre presse papier',
@@ -176,6 +187,9 @@ return [
         ],
         'link_profile' => 'Accéder à mon profil',
         'login_methode' => 'Méthode de connexion',
+        '2fa' => [
+            'regen_key' => 'Régénérer la clé',
+        ],
     ],
     "settings" => [
         "title" => "Paramètres utilisateur",

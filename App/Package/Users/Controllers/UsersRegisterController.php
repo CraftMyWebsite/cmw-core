@@ -189,7 +189,7 @@ class UsersRegisterController extends AbstractController
 
             Flash::send(
                 Alert::SUCCESS,
-                LangManager::translate('users.toaster.success'),
+                LangManager::translate('core.toaster.success'),
                 LangManager::translate('users.toaster.welcome'),
             );
             Redirect::redirect('profile');

@@ -18,10 +18,13 @@ use CMW\Manager\Loader\Loader;
 use CMW\Manager\Mail\MailManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
+use CMW\Manager\Router\RouterException;
 use CMW\Manager\Security\EncryptManager;
+use CMW\Manager\Twofa\TwoFaManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Users\RolesModel;
+use CMW\Model\Users\Users2FaModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Users\UsersSettingsModel;
 use CMW\Utils\Redirect;
@@ -31,6 +34,7 @@ use Exception;
 use http\Client\Curl\User;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
+use function is_null;
 
 /**
  * Class: @UsersController
@@ -61,7 +65,7 @@ class UsersController extends AbstractController
 
     /**
      * @param int|null $userId
-     * @return \CMW\Entity\Users\UserPictureEntity|null
+     * @return UserPictureEntity|null
      */
     public function getUserProfilePicture(?int $userId = null): ?UserPictureEntity
     {
@@ -167,12 +171,12 @@ class UsersController extends AbstractController
 
         if (!isset($_POST['pass']) || $pass === '') {
             UsersModel::getInstance()->update($id, $encryptedMail, $username, $firstname, $lastname, $_POST['roles']);
-            Flash::send(Alert::SUCCESS, LangManager::translate('users.toaster.success'),
+            Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
                 LangManager::translate('users.toaster.edited_not_pass_change'));
         } else if ($pass === $passVerif) {
             UsersModel::getInstance()->updatePass($id, password_hash($pass, PASSWORD_BCRYPT));
             UsersModel::getInstance()->update($id, $encryptedMail, $username, $firstname, $lastname, $_POST['roles']);
-            Flash::send(Alert::SUCCESS, LangManager::translate('users.toaster.success'),
+            Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
                 LangManager::translate('users.toaster.edited_pass_change'));
         } else {
             Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
@@ -226,7 +230,7 @@ class UsersController extends AbstractController
 
         UsersModel::getInstance()->changeState($id, $state);
 
-        Flash::send(Alert::SUCCESS, LangManager::translate('users.toaster.success'),
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('users.toaster.status'));
 
         Redirect::redirectPreviousRoute();
@@ -249,7 +253,7 @@ class UsersController extends AbstractController
         UsersModel::getInstance()->delete($id);
 
         // Todo Try to remove that
-        Flash::send(Alert::SUCCESS, LangManager::translate('users.toaster.success'),
+        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('users.toaster.user_deleted'));
 
         Redirect::redirectPreviousRoute();
@@ -273,10 +277,71 @@ class UsersController extends AbstractController
         Loader::getHighestImplementation(IUsersProfilePicture::class)->resetPicture($id);
     }
 
+    #[NoReturn]
+    #[Link('/2fa/status/toggle/:userId', Link::GET, ['userId' => '[0-9]+'], '/cmw-admin/users/manage')]
+    private function adminUsersToggle2Fa(int $userId): void
+    {
+        self::redirectIfNotHavePermissions('core.dashboard', 'users.edit');
+
+        $user = UsersModel::getInstance()->getUserById($userId);
+
+        if (is_null($user)) {
+            Redirect::errorPage(404);
+        }
+
+        if (!Users2FaModel::getInstance()->toggle2Fa($userId, !$user->get2Fa()->isEnabled())) {
+            Flash::send(
+                Alert::ERROR,
+                LangManager::translate('core.toaster.error'),
+                LangManager::translate('users.toaster.errors.2fa.toggle', ['pseudo' => $user->getPseudo()]),
+            );
+        } else {
+            Flash::send(
+                Alert::SUCCESS,
+                LangManager::translate('core.toaster.success'),
+                LangManager::translate('users.toaster.success.2fa.toggle', ['pseudo' => $user->getPseudo()]),
+            );
+        }
+
+        Redirect::redirectPreviousRoute();
+    }
+
+    #[NoReturn]
+    #[Link('/2fa/key/regenerate/:userId', Link::GET, ['userId' => '[0-9]+'], '/cmw-admin/users/manage')]
+    private function adminUsersRegen2FaKey(int $userId): void
+    {
+        self::redirectIfNotHavePermissions('core.dashboard', 'users.edit');
+
+        $user = UsersModel::getInstance()->getUserById($userId);
+
+        if (is_null($user)) {
+            Redirect::errorPage(404);
+        }
+
+        $key = EncryptManager::encrypt((new TwoFaManager())->generateSecret());
+
+        if (!Users2FaModel::getInstance()->updateSecret($userId, $key)) {
+            Flash::send(
+                Alert::ERROR,
+                LangManager::translate('core.toaster.error'),
+                LangManager::translate('users.toaster.errors.2fa.regen', ['pseudo' => $user->getPseudo()]),
+            );
+        } else {
+            Flash::send(
+                Alert::SUCCESS,
+                LangManager::translate('core.toaster.success'),
+                LangManager::translate('users.toaster.success.2fa.regen', ['pseudo' => $user->getPseudo()]),
+            );
+        }
+
+        Redirect::redirectPreviousRoute();
+    }
+    
+
     // PUBLIC SECTION
 
     /**
-     * @throws \CMW\Manager\Router\RouterException
+     * @throws RouterException
      */
     #[Link('/login/forgot', Link::GET)]
     private function forgotPassword(): void
