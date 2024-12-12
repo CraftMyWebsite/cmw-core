@@ -294,6 +294,7 @@ return [
             'put_the_code' => 'Please enter your code.',
             'invalid_code' => 'Invalid code.',
             'too_late' => 'This code is too old, you have max 15 min to validate it',
+            'unable_to_create_code' => 'Unable to create code',
         ],
         'mail' => [
             'body_1' => 'We need to verify your identity on ',

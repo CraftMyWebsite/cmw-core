@@ -195,11 +195,15 @@ class UsersLoginController extends AbstractController
                 $this->sendLongDateCodeByMail($user->getMail(), $code);
                 $userModel = UsersModel::getInstance();
                 $userModel->deleteLongDateCode($encryptedMail);
-                $userModel->addLongDateCode($encryptedMail, $encryptedCode);
 
-                Flash::send(Alert::SUCCESS, LangManager::translate('users.long_date.toaster.title'), LangManager::translate('users.long_date.toaster.receive_by_mail'));
-                $this->needMailCodeCheck();
-                break;
+                if ($userModel->addLongDateCode($encryptedMail, $encryptedCode)) {
+                    Flash::send(Alert::SUCCESS, LangManager::translate('users.long_date.toaster.title'), LangManager::translate('users.long_date.toaster.receive_by_mail'));
+                    $this->needMailCodeCheck();
+                    break;
+                }
+
+                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), LangManager::translate('users.long_date.toaster.unable_to_create_code'));
+                Redirect::redirectToHome();
         }
     }
 

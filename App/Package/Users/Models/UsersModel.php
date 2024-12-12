@@ -683,9 +683,11 @@ class UsersModel extends AbstractModel
      *        SECRET CODE LONG DATE CONNECTION
      * ------------------------------------------------*/
     /**
-     * @return void
+     * @param string $email
+     * @param string $encryptedCode
+     * @return bool
      */
-    public function addLongDateCode(string $email, string $encryptedCode): void
+    public function addLongDateCode(string $email, string $encryptedCode): bool
     {
         $var = [
             'users_mail' => $email,
@@ -694,15 +696,15 @@ class UsersModel extends AbstractModel
         $sql = 'INSERT INTO cmw_users_long_date_code (users_mail, long_date_code) VALUES (:users_mail, :long_date_code)';
 
         $db = DatabaseManager::getInstance();
-        $req = $db->prepare($sql);
-        $req->execute($var);
+
+        return $db->prepare($sql)->execute($var);
     }
 
     /**
-     * @param string $secret
-     * @return void
+     * @param string $email
+     * @return bool
      */
-    public function deleteLongDateCode(string $email): void
+    public function deleteLongDateCode(string $email): bool
     {
         $var = [
             'users_mail' => $email,
@@ -710,8 +712,8 @@ class UsersModel extends AbstractModel
         $sql = 'DELETE FROM cmw_users_long_date_code WHERE users_mail=:users_mail';
 
         $db = DatabaseManager::getInstance();
-        $req = $db->prepare($sql);
-        $req->execute($var);
+
+        return $db->prepare($sql)->execute($var);
     }
 
     /**
@@ -730,6 +732,10 @@ class UsersModel extends AbstractModel
         $req->execute($var);
         $option = $req->fetch();
 
+        if (!$option){
+            return null;
+        }
+
         return $option['long_date_code'] ?? null;
     }
 
@@ -743,6 +749,10 @@ class UsersModel extends AbstractModel
         $req = $db->prepare('SELECT long_date_date FROM cmw_users_long_date_code WHERE users_mail = ?');
         $req->execute(array($email));
         $option = $req->fetch();
+
+        if (!$option){
+            return null;
+        }
 
         return $option['long_date_date'] ?? null;
     }

@@ -156,46 +156,53 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                                class="btn-danger"><?= LangManager::translate('core.Theme.reinstall') ?></a>
                         </div>
                     </div>
-                    <div class="modal-body grid-2">
-                        <div style="height:20rem">
-                            <img style="height: 100%; width: 100%;"
-                                 src="<?= $theme['icon'] ?>"
-                                 alt="img <?= $theme['name'] ?>">
-                        </div>
-                        <div>
-                            <p class="">
-                                <b><?= LangManager::translate('core.Theme.description') ?></b>
-                            </p>
-                            <p><?= htmlspecialchars_decode($theme['description']) ?></p>
-                            <hr>
-                            <p class="small">
-                                <?= LangManager::translate('core.Theme.author') ?><a
-                                    href="https://craftmywebsite.fr/market/user/<?= $theme['author_pseudo'] ?>"
-                                    target="_blank" class="link"><?= $theme['author_pseudo'] ?>
-                                </a>
-                            </p>
-                            <p>
-                                <?= LangManager::translate('core.Theme.downloads') ?>
-                                <i><b><?= $theme['downloads'] ?></b></i>
-                            </p>
-                            <p class="small">
-                                <?= LangManager::translate('core.Theme.themeVersion') ?>
-                                <i><b><?= $theme['version_name'] ?></b></i><br>
-                                <?= LangManager::translate('core.Theme.CMWVersion') ?>
-                                <i><b><?= $theme['version_cmw'] ?></b></i>
-                            </p>
-                            <div class="flex gap-3">
-                                <?php if (isset($theme['demo'])): ?>
-                                    <a class="btn-primary-sm"
-                                       href="<?= $theme['demo'] ?>" target="_blank"><i
-                                            class="fa-solid fa-arrow-up-right-from-square"></i> <?= LangManager::translate('core.Theme.demo') ?>
+                    <div class="modal-body">
+                        <?php if ($localTheme->version() !== $theme['version_name']): ?>
+                            <div class="alert-warning">
+                                Vous utilisez la version <b><?= $localTheme->version() ?></b>, veuillez mettre à jour vers <b><?= $theme['version_name'] ?></b> !
+                            </div>
+                        <?php endif; ?>
+                        <div class="grid-2">
+                            <div style="height:20rem">
+                                <img style="height: 100%; width: 100%;"
+                                     src="<?= $theme['icon'] ?>"
+                                     alt="img <?= $theme['name'] ?>">
+                            </div>
+                            <div>
+                                <p class="">
+                                    <b><?= LangManager::translate('core.Theme.description') ?></b>
+                                </p>
+                                <p><?= htmlspecialchars_decode($theme['description']) ?></p>
+                                <hr>
+                                <p class="small">
+                                    <?= LangManager::translate('core.Theme.author') ?><a
+                                        href="https://craftmywebsite.fr/market/user/<?= $theme['author_pseudo'] ?>"
+                                        target="_blank" class="link"><?= $theme['author_pseudo'] ?>
                                     </a>
-                                <?php endif; ?>
-                                <?php if ($theme['code_link']): ?>
-                                    <a class="btn-primary-sm"
-                                       href="<?= $theme['code_link'] ?>" target="_blank"><i
-                                            class="fa-brands fa-github"></i> GitHub</a>
-                                <?php endif; ?>
+                                </p>
+                                <p>
+                                    <?= LangManager::translate('core.Theme.downloads') ?>
+                                    <i><b><?= $theme['downloads'] ?></b></i>
+                                </p>
+                                <p class="small">
+                                    <?= LangManager::translate('core.Theme.themeVersion') ?>
+                                    <i><b><?= $theme['version_name'] ?></b></i><br>
+                                    <?= LangManager::translate('core.Theme.CMWVersion') ?>
+                                    <i><b><?= $theme['version_cmw'] ?></b></i>
+                                </p>
+                                <div class="flex gap-3">
+                                    <?php if (isset($theme['demo'])): ?>
+                                        <a class="btn-primary-sm"
+                                           href="<?= $theme['demo'] ?>" target="_blank"><i
+                                                class="fa-solid fa-arrow-up-right-from-square"></i> <?= LangManager::translate('core.Theme.demo') ?>
+                                        </a>
+                                    <?php endif; ?>
+                                    <?php if ($theme['code_link']): ?>
+                                        <a class="btn-primary-sm"
+                                           href="<?= $theme['code_link'] ?>" target="_blank"><i
+                                                class="fa-brands fa-github"></i> GitHub</a>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -346,46 +353,53 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                             </form>
                         </div>
                     </div>
-                    <div class="grid-2 modal-body">
-                        <div style="height:20rem">
-                            <img style="height: 100%; width: 100%;"
-                                 src="<?= $theme['icon'] ?>"
-                                 alt="img <?= $theme['name'] ?>">
+                    <div class="modal-body">
+                        <?php if ($localTheme->version() !== $theme['version_name']): ?>
+                        <div class="alert-warning">
+                            Vous utilisez la version <b><?= $localTheme->version() ?></b>, veuillez mettre à jour vers <b><?= $theme['version_name'] ?></b> !
                         </div>
-                        <div>
-                            <p class="">
-                                <b><?= LangManager::translate('core.Theme.description') ?></b>
-                            </p>
-                            <?= htmlspecialchars_decode($theme['description']) ?>
-                            <hr>
-                            <p class="small">
-                                <?= LangManager::translate('core.Theme.author') ?><a
-                                    href="https://craftmywebsite.fr/market/user/<?= $theme['author_pseudo'] ?>"
-                                    target="_blank" class="link"><?= $theme['author_pseudo'] ?>
-                                </a>
-                            </p>
-                            <p>
-                                <?= LangManager::translate('core.Theme.downloads') ?>
-                                <i><b><?= $theme['downloads'] ?></b></i>
-                            </p>
-                            <p class="small">
-                                <?= LangManager::translate('core.Theme.themeVersion') ?>
-                                <i><b><?= $theme['version_name'] ?></b></i><br>
-                                <?= LangManager::translate('core.Theme.CMWVersion') ?>
-                                <i><b><?= $theme['version_cmw'] ?></b></i>
-                            </p>
-                            <div class="flex gap-3">
-                                <?php if (isset($theme['demo'])): ?>
-                                    <a class="btn-primary-sm"
-                                       href="<?= $theme['demo'] ?>" target="_blank"><i
-                                            class="fa-solid fa-arrow-up-right-from-square"></i> <?= LangManager::translate('core.Theme.demo') ?>
+                        <?php endif; ?>
+                        <div class="grid-2">
+                            <div style="height:20rem">
+                                <img style="height: 100%; width: 100%;"
+                                     src="<?= $theme['icon'] ?>"
+                                     alt="img <?= $theme['name'] ?>">
+                            </div>
+                            <div>
+                                <p class="">
+                                    <b><?= LangManager::translate('core.Theme.description') ?></b>
+                                </p>
+                                <?= htmlspecialchars_decode($theme['description']) ?>
+                                <hr>
+                                <p class="small">
+                                    <?= LangManager::translate('core.Theme.author') ?><a
+                                        href="https://craftmywebsite.fr/market/user/<?= $theme['author_pseudo'] ?>"
+                                        target="_blank" class="link"><?= $theme['author_pseudo'] ?>
                                     </a>
-                                <?php endif; ?>
-                                <?php if ($theme['code_link']): ?>
-                                    <a class="btn-primary-sm"
-                                       href="<?= $theme['code_link'] ?>" target="_blank"><i
-                                            class="fa-brands fa-github"></i> GitHub</a>
-                                <?php endif; ?>
+                                </p>
+                                <p>
+                                    <?= LangManager::translate('core.Theme.downloads') ?>
+                                    <i><b><?= $theme['downloads'] ?></b></i>
+                                </p>
+                                <p class="small">
+                                    <?= LangManager::translate('core.Theme.themeVersion') ?>
+                                    <i><b><?= $theme['version_name'] ?></b></i><br>
+                                    <?= LangManager::translate('core.Theme.CMWVersion') ?>
+                                    <i><b><?= $theme['version_cmw'] ?></b></i>
+                                </p>
+                                <div class="flex gap-3">
+                                    <?php if (isset($theme['demo'])): ?>
+                                        <a class="btn-primary-sm"
+                                           href="<?= $theme['demo'] ?>" target="_blank"><i
+                                                class="fa-solid fa-arrow-up-right-from-square"></i> <?= LangManager::translate('core.Theme.demo') ?>
+                                        </a>
+                                    <?php endif; ?>
+                                    <?php if ($theme['code_link']): ?>
+                                        <a class="btn-primary-sm"
+                                           href="<?= $theme['code_link'] ?>" target="_blank"><i
+                                                class="fa-brands fa-github"></i> GitHub</a>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         </div>
                     </div>
