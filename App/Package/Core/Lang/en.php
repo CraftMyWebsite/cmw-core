@@ -13,6 +13,7 @@ return [
     'alt' => [
         'logo' => 'Logo CMW',
     ],
+    'source_code' => 'Source code',
     'header' => [
         'notification' => 'Notifications',
         'cms_ver' => 'CMS : Version',
@@ -219,6 +220,7 @@ return [
         'manage' => [
             'title' => 'Manage your Theme <b>%Theme%</b>',
             'description' => 'Manage your Theme to have a Theme that suits you ! ',
+            'theme_need_update' => 'You are using <b>%version%</b> version, please update to <b>%target%</b> !',
         ],
         'toasters' => [
             'update' => [

@@ -588,6 +588,9 @@ class UsersModel extends AbstractModel
         return 0;
     }
 
+    /*------------------------------------------------
+     *          SECRET LINK RESET PASSWORD
+     * ------------------------------------------------*/
     /**
      * @return void
      */
@@ -674,6 +677,84 @@ class UsersModel extends AbstractModel
         $option = $req->fetch();
 
         return $option['secret_date'] ?? null;
+    }
+
+    /*------------------------------------------------
+     *        SECRET CODE LONG DATE CONNECTION
+     * ------------------------------------------------*/
+    /**
+     * @param string $email
+     * @param string $encryptedCode
+     * @return bool
+     */
+    public function addLongDateCode(string $email, string $encryptedCode): bool
+    {
+        $var = [
+            'users_mail' => $email,
+            'long_date_code' => $encryptedCode,
+        ];
+        $sql = 'INSERT INTO cmw_users_long_date_code (users_mail, long_date_code) VALUES (:users_mail, :long_date_code)';
+
+        $db = DatabaseManager::getInstance();
+
+        return $db->prepare($sql)->execute($var);
+    }
+
+    /**
+     * @param string $email
+     * @return bool
+     */
+    public function deleteLongDateCode(string $email): bool
+    {
+        $var = [
+            'users_mail' => $email,
+        ];
+        $sql = 'DELETE FROM cmw_users_long_date_code WHERE users_mail=:users_mail';
+
+        $db = DatabaseManager::getInstance();
+
+        return $db->prepare($sql)->execute($var);
+    }
+
+    /**
+     * @param string $email
+     * @param string $encryptedCode
+     * @return ?string
+     */
+    public function getCodeByCodeAndUserMail(string $email, string $encryptedCode): ?string
+    {
+        $var = [
+            'long_date_code' => $encryptedCode,
+            'users_mail' => $email,
+        ];
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare('SELECT long_date_code FROM cmw_users_long_date_code WHERE long_date_code = :long_date_code AND users_mail = :users_mail');
+        $req->execute($var);
+        $option = $req->fetch();
+
+        if (!$option){
+            return null;
+        }
+
+        return $option['long_date_code'] ?? null;
+    }
+
+    /**
+     * @param string $email
+     * @return ?string
+     */
+    public function getLongDateCodeDate(string $email): ?string
+    {
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare('SELECT long_date_date FROM cmw_users_long_date_code WHERE users_mail = ?');
+        $req->execute(array($email));
+        $option = $req->fetch();
+
+        if (!$option){
+            return null;
+        }
+
+        return $option['long_date_date'] ?? null;
     }
 
     /**

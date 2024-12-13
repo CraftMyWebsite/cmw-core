@@ -164,7 +164,7 @@ $description = LangManager::translate('core.Package.desc');
                     <div class="absolute"
                          style="transform: rotate(-45deg); left: -4.3em; top: 3.3em; margin: 0; z-index: 10">
                         <div class="bg-warning text-center px-16" style="opacity: .85">
-                            <?= LangManager::translate('core.Theme.update') ?>
+                            <?= LangManager::translate('core.theme.update') ?>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -202,7 +202,7 @@ $description = LangManager::translate('core.Package.desc');
                                          style="transform: rotate(-45deg); left: -4em; top: 3.9em; margin: 0; z-index: 50">
                                         <div class="bg-warning text-center px-5"
                                              style="opacity: .85;">
-                                            <?= LangManager::translate('core.Theme.update') ?>
+                                            <?= LangManager::translate('core.theme.update') ?>
                                         </div>
                                     </div>
                                 <?php endif; ?>

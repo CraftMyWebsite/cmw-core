@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS `cmw_core_options`
 (
     `option_name`    VARCHAR(255) NOT NULL PRIMARY KEY,
     `option_value`   VARCHAR(500) NOT NULL,
-    `option_updated` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `option_updated` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `cmw_mail_config_smtp`
     `mail_config_port`         INT(5)       NOT NULL,
     `mail_config_protocol`     VARCHAR(50)  NOT NULL,
     `mail_config_footer`       MEDIUMTEXT   NULL,
-    `mail_config_enable`       TINYINT(1)   NOT NULL DEFAULT 1,
+    `mail_config_enable`       TINYINT(1)   NOT NULL DEFAULT 1
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `cmw_users_settings`
 (
     `users_settings_name`    VARCHAR(255) NOT NULL PRIMARY KEY,
     `users_settings_value`   VARCHAR(255) NOT NULL,
-    `users_settings_updated` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `users_settings_updated` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
@@ -102,7 +102,16 @@ CREATE TABLE IF NOT EXISTS `cmw_users_reset_password_link`
 (
     `users_mail`        VARCHAR(255) NOT NULL PRIMARY KEY,
     `secret_link`       VARCHAR(255) NOT NULL,
-    `secret_date`       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `secret_date`       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE = InnoDB
+    CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `cmw_users_long_date_code`
+(
+    `users_mail`           VARCHAR(255) NOT NULL PRIMARY KEY,
+    `long_date_code`       VARCHAR(255) NOT NULL,
+    `long_date_date`       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
     ) ENGINE = InnoDB
     CHARACTER SET = utf8mb4
     COLLATE = utf8mb4_unicode_ci;
@@ -113,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `cmw_roles`
     `role_name`        TINYTEXT NOT NULL,
     `role_description` TEXT,
     `role_weight`      INT        DEFAULT 0,
-    `role_is_default`  TINYINT(1) DEFAULT 0,
+    `role_is_default`  TINYINT(1) DEFAULT 0
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
@@ -211,7 +220,7 @@ CREATE TABLE IF NOT EXISTS `cmw_theme_config`
     `theme_config_id`    INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `theme_config_name`  VARCHAR(255) NOT NULL,
     `theme_config_value` MEDIUMTEXT   NULL,
-    `theme_config_theme` VARCHAR(255) NOT NULL,
+    `theme_config_theme` VARCHAR(255) NOT NULL
 ) ENGINE = InnoDB
   CHARSET = utf8mb4;
 
@@ -226,7 +235,7 @@ CREATE TABLE IF NOT EXISTS `cmw_core_routes`
     `core_routes_is_dynamic`    TINYINT(1)                            NOT NULL DEFAULT '0',
     `core_routes_weight`        INT                                   NOT NULL DEFAULT '1',
     `core_routes_last_edit`     TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `core_routes_date_creation` TIMESTAMP                             NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `core_routes_date_creation` TIMESTAMP                             NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB
   CHARSET = utf8mb4;
 
@@ -238,7 +247,7 @@ CREATE TABLE IF NOT EXISTS `cmw_visits`
     `visits_path`     VARCHAR(255) NOT NULL,
     `visits_package`  VARCHAR(255)          DEFAULT NULL,
     `visits_code`     INT(4)       NOT NULL,
-    `visits_is_admin` TINYINT(4)   NOT NULL DEFAULT '0',
+    `visits_is_admin` TINYINT(4)   NOT NULL DEFAULT '0'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
@@ -256,7 +265,7 @@ CREATE TABLE IF NOT EXISTS `cmw_maintenance`
     `maintenance_description`         LONGTEXT                              NULL,
     `maintenance_type`                TINYINT(1)                            NULL,
     `maintenance_target_date`         TIMESTAMP                             NULL,
-    `maintenance_last_updated_at`     TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `maintenance_last_updated_at`     TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
@@ -344,7 +353,8 @@ INSERT INTO `cmw_users_settings` (users_settings_name, users_settings_value)
 VALUES ('defaultImage', 'defaultImage.jpg'),
        ('resetPasswordMethod', '1'),
        ('listEnforcedToggle', '0'),
-       ('profilePage', '1');
+       ('profilePage', '1'),
+       ('securityReinforced', '0');
 
 INSERT INTO `cmw_maintenance` (maintenance_is_enable, maintenance_title, maintenance_description, maintenance_type,
                                maintenance_target_date)

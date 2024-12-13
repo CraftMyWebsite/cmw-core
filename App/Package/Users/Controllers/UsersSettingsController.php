@@ -86,10 +86,11 @@ class UsersSettingsController extends AbstractController
             }
         }
 
-        [$resetPasswordMethod, $profilePage] = Utils::filterInput('reset_password_method', 'profile_page');
+        [$resetPasswordMethod, $profilePage, $securityReinforced] = Utils::filterInput('reset_password_method', 'profile_page', 'security_reinforced');
 
         UsersSettingsModel::updateSetting('resetPasswordMethod', $resetPasswordMethod);
         UsersSettingsModel::updateSetting('profilePage', $profilePage);
+        UsersSettingsModel::updateSetting('securityReinforced', $securityReinforced);
 
         [$listEnforcedToggle] = Utils::filterInput('listEnforcedToggle');
 
