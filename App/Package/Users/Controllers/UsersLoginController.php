@@ -394,7 +394,7 @@ class UsersLoginController extends AbstractController
         ';
 
         MailManager::getInstance()->sendMail($email, LangManager::translate('users.login.forgot_password.mail.object_link',
-            ['site_name' => (new CoreModel())->fetchOption('name')]),$body);
+            ['site_name' => CoreModel::getInstance()->fetchOption('name')]),$body);
     }
 
     public function isCodeOlderThan15Minutes(string $email): bool

@@ -3,11 +3,12 @@
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
+use CMW\Manager\Theme\IThemeConfig;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Utils\Website;
 
-/* @var $currentTheme \CMW\Manager\Theme\IThemeConfig */
-/* @var $installedThemes \CMW\Manager\Theme\IThemeConfig[] */
+/* @var $currentTheme IThemeConfig */
+/* @var $installedThemes IThemeConfig[] */
 /* @var $themesList */
 
 Website::setTitle(LangManager::translate('core.Theme.config.title'));
@@ -25,7 +26,8 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
             <div class="card p-0 relative" style="overflow: hidden;">
                 <div class="flex justify-between px-2 pt-2">
                     <p class="font-bold"><?= $theme->name() ?></p>
-                    <button data-modal-toggle="modal-<?= $theme->name() ?>" class="btn-primary-sm" type="button"><?= LangManager::translate('core.Theme.details') ?></button>
+                    <button data-modal-toggle="modal-<?= $theme->name() ?>" class="btn-primary-sm"
+                            type="button"><?= LangManager::translate('core.Theme.details') ?></button>
                 </div>
                 <div class="relative">
                     <?php if ($theme->name() !== 'Sampler'): ?>
@@ -93,7 +95,9 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button data-modal-hide="modal-<?= $theme->name() ?>" type="button" class="btn-danger">Fermer</button>
+                        <button data-modal-hide="modal-<?= $theme->name() ?>" type="button" class="btn-danger">
+                            <?= LangManager::translate('core.btn.close') ?>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -105,11 +109,12 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
     -------------------------------------------------->
     <?php foreach ($themesList as $theme): ?>
         <?php if ($theme['name'] === $currentTheme->name()): ?>
-        <?php $localTheme = ThemeManager::getInstance()->getTheme($theme['name']); ?>
+            <?php $localTheme = ThemeManager::getInstance()->getTheme($theme['name']); ?>
             <div class="card p-0 relative" style="overflow: hidden;">
                 <div class="flex justify-between px-2 pt-2">
                     <p class="font-bold"><?= $theme['name'] ?></p>
-                    <button data-modal-toggle="modal-<?= $theme['id'] ?>" class="btn-primary-sm" type="button"><?= LangManager::translate('core.Theme.details') ?></button>
+                    <button data-modal-toggle="modal-<?= $theme['id'] ?>" class="btn-primary-sm"
+                            type="button"><?= LangManager::translate('core.Theme.details') ?></button>
                 </div>
                 <div class="relative">
                     <img style="height: 200px; width: 100%; object-fit: cover" src="<?= $theme['icon'] ?>"
@@ -159,7 +164,8 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                     <div class="modal-body">
                         <?php if ($localTheme->version() !== $theme['version_name']): ?>
                             <div class="alert-warning">
-                                Vous utilisez la version <b><?= $localTheme->version() ?></b>, veuillez mettre à jour vers <b><?= $theme['version_name'] ?></b> !
+                                <?= LangManager::translate('core.theme.manage.theme_need_update',
+                                    ['version' => $localTheme->version(), 'target' => $theme['version_name']]) ?>
                             </div>
                         <?php endif; ?>
                         <div class="grid-2">
@@ -199,15 +205,19 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                                     <?php endif; ?>
                                     <?php if ($theme['code_link']): ?>
                                         <a class="btn-primary-sm"
-                                           href="<?= $theme['code_link'] ?>" target="_blank"><i
-                                                class="fa-brands fa-github"></i> GitHub</a>
+                                           href="<?= $theme['code_link'] ?>" target="_blank">
+                                            <i class="fa-brands fa-git"></i>
+                                            <?= LangManager::translate('core.source_code') ?>
+                                        </a>
                                     <?php endif; ?>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button data-modal-hide="modal-<?= $theme['id'] ?>" type="button" class="btn-danger">Fermer</button>
+                        <button data-modal-hide="modal-<?= $theme['id'] ?>" type="button" class="btn-danger">
+                            <?= LangManager::translate('core.btn.close') ?>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -222,7 +232,8 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
             <div class="card p-0 relative" style="overflow: hidden;">
                 <div class="flex justify-between px-2 pt-2">
                     <p class="font-bold"><?= $theme->name() ?></p>
-                    <button data-modal-toggle="modal-<?= $theme->name() ?>" class="btn-primary-sm" type="button"><?= LangManager::translate('core.Theme.details') ?></button>
+                    <button data-modal-toggle="modal-<?= $theme->name() ?>" class="btn-primary-sm"
+                            type="button"><?= LangManager::translate('core.Theme.details') ?></button>
                 </div>
                 <div class="relative">
                     <?php if ($theme->name() !== 'Sampler'): ?>
@@ -289,7 +300,9 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button data-modal-hide="modal-<?= $theme->name() ?>" type="button" class="btn-danger">Fermer</button>
+                        <button data-modal-hide="modal-<?= $theme->name() ?>" type="button" class="btn-danger">
+                            <?= LangManager::translate('core.btn.close') ?>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -300,11 +313,12 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
     -------------------------------------------------->
     <?php foreach ($themesList as $theme): ?>
         <?php if ($theme['name'] !== $currentTheme->name() && ThemeManager::getInstance()->isThemeInstalled($theme['name'])): ?>
-        <?php $localTheme = ThemeManager::getInstance()->getTheme($theme['name']); ?>
+            <?php $localTheme = ThemeManager::getInstance()->getTheme($theme['name']); ?>
             <div class="card p-0 relative" style="overflow: hidden;">
                 <div class="flex justify-between px-2 pt-2">
                     <p class="font-bold"><?= $theme['name'] ?></p>
-                    <button data-modal-toggle="modal-<?= $theme['id'] ?>" class="btn-primary-sm" type="button"><?= LangManager::translate('core.Theme.details') ?></button>
+                    <button data-modal-toggle="modal-<?= $theme['id'] ?>" class="btn-primary-sm"
+                            type="button"><?= LangManager::translate('core.Theme.details') ?></button>
                 </div>
                 <div class="relative">
                     <img style="height: 200px; width: 100%; object-fit: cover" src="<?= $theme['icon'] ?>"
@@ -318,14 +332,14 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                             <?= LangManager::translate('core.Package.update') ?>
                         </a>
                     <?php else: ?>
-                    <form action="" method="post">
-                        <?php SecurityManager::getInstance()->insertHiddenToken() ?>
-                        <input hidden type="text" name="theme"
-                               value="<?= $theme['name'] ?>">
-                        <button type="submit"
-                                class="btn-success-sm"><?= LangManager::translate('core.Theme.activate') ?>
-                        </button>
-                    </form>
+                        <form action="" method="post">
+                            <?php SecurityManager::getInstance()->insertHiddenToken() ?>
+                            <input hidden type="text" name="theme"
+                                   value="<?= $theme['name'] ?>">
+                            <button type="submit"
+                                    class="btn-success-sm"><?= LangManager::translate('core.Theme.activate') ?>
+                            </button>
+                        </form>
                     <?php endif; ?>
                 </div>
                 <?php if ($localTheme->version() !== $theme['version_name']): ?>
@@ -355,9 +369,10 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                     </div>
                     <div class="modal-body">
                         <?php if ($localTheme->version() !== $theme['version_name']): ?>
-                        <div class="alert-warning">
-                            Vous utilisez la version <b><?= $localTheme->version() ?></b>, veuillez mettre à jour vers <b><?= $theme['version_name'] ?></b> !
-                        </div>
+                            <div class="alert-warning">
+                                <?= LangManager::translate('core.theme.manage.theme_need_update',
+                                    ['version' => $localTheme->version(), 'target' => $theme['version_name']]) ?>
+                            </div>
                         <?php endif; ?>
                         <div class="grid-2">
                             <div style="height:20rem">
@@ -396,15 +411,19 @@ Website::setDescription(LangManager::translate('core.Theme.config.description'))
                                     <?php endif; ?>
                                     <?php if ($theme['code_link']): ?>
                                         <a class="btn-primary-sm"
-                                           href="<?= $theme['code_link'] ?>" target="_blank"><i
-                                                class="fa-brands fa-github"></i> GitHub</a>
+                                           href="<?= $theme['code_link'] ?>" target="_blank">
+                                            <i class="fa-brands fa-git"></i>
+                                            <?= LangManager::translate('core.source_code') ?>
+                                        </a>
                                     <?php endif; ?>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button data-modal-hide="modal-<?= $theme['id'] ?>" type="button" class="btn-danger">Fermer</button>
+                        <button data-modal-hide="modal-<?= $theme['id'] ?>" type="button" class="btn-danger">
+                            <?= LangManager::translate('core.btn.close') ?>
+                        </button>
                     </div>
                 </div>
             </div>
