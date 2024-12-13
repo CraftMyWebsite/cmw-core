@@ -318,6 +318,7 @@ return [
             "deletedFiles" => "Impossible de supprimer les anciens fichiers.",
             "deleteFile" => "Impossible de supprimer le fichier %file%",
             "sqlUpdate" => "Impossible de mettre à jour la base de données.",
+            'devVersion' => 'Vous utilisez une version de développement de CraftMyWebsite, impossible de mettre à jour.',
         ],
         'success' => 'Mise à jour de votre site réussie',
     ],
