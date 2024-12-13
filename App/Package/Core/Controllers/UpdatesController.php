@@ -5,6 +5,9 @@ namespace CMW\Controller\Core;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Cache\SimpleCacheManager;
+use CMW\Manager\Flash\Alert;
+use CMW\Manager\Flash\Flash;
+use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Updater\CMSUpdaterManager;
@@ -77,6 +80,14 @@ class UpdatesController extends AbstractController
     private function adminUpdatesInstall(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.update');
+
+        $currentVersion = UpdatesManager::getVersion();
+
+        if ($currentVersion === 'DEV') {
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.updates.errors.devVersion'));
+            Redirect::redirectPreviousRoute();
+        }
 
         // We get all the new version id.
         $versions = PublicAPI::postData('cms/update', ['current_version' => UpdatesManager::getVersion()]);

@@ -318,6 +318,7 @@ return [
             'deletedFiles' => 'Unable to delete old files.',
             'deleteFile' => 'Unable to delete file %file%',
             'sqlUpdate' => 'Unable to update your database.',
+            'devVersion' => 'You are using a development version of CraftMyWebsite, updates are not available.',
         ],
         'success' => 'Website update with success',
     ],

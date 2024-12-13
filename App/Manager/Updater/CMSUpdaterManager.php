@@ -25,7 +25,7 @@ class CMSUpdaterManager
     {
         if (!isset($updateData['file_update'])) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                LangManager::translate('core.updates.errors.fileUpdate'));
+                LangManager::translate('core.updates.errors.nullFileUpdate'));
             return;
         }
 
