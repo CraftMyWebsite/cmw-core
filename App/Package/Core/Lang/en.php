@@ -134,6 +134,8 @@ return [
             'reset' => 'Theme configuration reset',
             'updateBeforeInstall' => 'Please update CMS before installing this theme!',
             'updateBeforeUpdate' => 'Please update the CMS before updating your themes!',
+            'unableUpdate' => 'Unable to install this theme! : ',
+            'unableDeleteFolder' => 'Unable to remove folder : ',
         ],
         'package' => [
             'updateBeforeInstall' => 'Please update CMS before installing this package!',

@@ -149,6 +149,12 @@ $description = LangManager::translate('core.Package.desc');
                     </div>
                 </div>
                 <hr>
+                <?php if ($localPackage->version() !== $packages['version_name']): ?>
+                    <div class="alert-warning text-center">
+                        <?= LangManager::translate('core.theme.manage.theme_need_update',
+                            ['version' => $localPackage->version(), 'target' => $packages['version_name']]) ?>
+                    </div>
+                <?php endif; ?>
                 <div class="flex justify-between">
                     <p><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i
                             class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i

@@ -297,6 +297,9 @@ class PackageController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('core.Package.toasters.update.success', ['package' => $packageName]));
 
+        //Reload too fast redirect not refresh correctly
+        sleep(1);
+
         Redirect::redirectPreviousRoute();
     }
 
