@@ -312,6 +312,7 @@ return [
             'unable_to_create_code' => 'Impossible de créer le code',
         ],
         'mail' => [
+            'object' => '%site_name% - Vérification d\'identité',
             'body_1' => 'Nous avons besoin de vérifier votre identité sur ',
             'body_2' => 'Voici le CODE permettant de vérifier qu\'il s\'agisse bien de vous :',
             'body_3' => 'Si vous n\'êtes pas à l\'origine de cette demande, nous vous conseillons de changer votre mot de passe !',

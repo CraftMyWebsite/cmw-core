@@ -393,7 +393,7 @@ class UsersLoginController extends AbstractController
         <p>'. LangManager::translate('users.long_date.mail.body_3') .'</p>
         ';
 
-        MailManager::getInstance()->sendMail($email, LangManager::translate('users.login.forgot_password.mail.object_link',
+        MailManager::getInstance()->sendMail($email, LangManager::translate('users.long_date.mail.object',
             ['site_name' => CoreModel::getInstance()->fetchOption('name')]),$body);
     }
 

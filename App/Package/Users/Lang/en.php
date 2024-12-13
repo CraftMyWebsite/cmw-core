@@ -311,6 +311,7 @@ return [
             'unable_to_create_code' => 'Unable to create code',
         ],
         'mail' => [
+            'object' => '%site_name% - Identity verification',
             'body_1' => 'We need to verify your identity on ',
             'body_2' => 'Here is the CODE to verify that it is you:',
             'body_3' => 'If you are not the originator of this request, we advise you to change your password!',
