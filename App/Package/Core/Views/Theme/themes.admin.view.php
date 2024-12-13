@@ -122,7 +122,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                 </div>
 
                 <div class="text-center pb-2">
-                    <?php if ($localTheme->version() !== $theme['version_name']): ?>
+                    <?php if ($theme['version_status'] === 0 && $localTheme->version() !== $theme['version_name']): ?>
                         <a class="btn-warning-sm" type="button"
                            href="update/<?= $theme['id'] ?>/<?= $localTheme->version() ?>/<?= $localTheme->name() ?>">
                             <?= LangManager::translate('core.Package.update') ?>
@@ -138,7 +138,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                         <?= LangManager::translate('core.theme.active') ?>
                     </div>
                 </div>
-                <?php if ($localTheme->version() !== $theme['version_name']): ?>
+                <?php if ($theme['version_status'] === 0 && $localTheme->version() !== $theme['version_name']): ?>
                     <div class="absolute"
                          style="transform: rotate(-45deg); left: -4em; top: 5em; margin: 0; z-index: 10">
                         <div class="text-center"
@@ -162,7 +162,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                         </div>
                     </div>
                     <div class="modal-body">
-                        <?php if ($localTheme->version() !== $theme['version_name']): ?>
+                        <?php if ($theme['version_status'] === 0 && $localTheme->version() !== $theme['version_name']): ?>
                             <div class="alert-warning">
                                 <?= LangManager::translate('core.theme.manage.theme_need_update',
                                     ['version' => $localTheme->version(), 'target' => $theme['version_name']]) ?>
@@ -191,8 +191,14 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                                     <i><b><?= $theme['downloads'] ?></b></i>
                                 </p>
                                 <p class="small">
+                                    <?= LangManager::translate('core.theme.localThemeVersion') ?>
+                                    <i><b><?= $localTheme->version() ?></b></i><br>
                                     <?= LangManager::translate('core.theme.themeVersion') ?>
-                                    <i><b><?= $theme['version_name'] ?></b></i><br>
+                                    <i><b><?= $theme['version_name'] ?></b>
+                                        <?php if ($theme['version_status'] !== 0): ?>
+                                            <small class="text-warning">En cours de vérification</small>
+                                        <?php endif; ?></i>
+                                    <br>
                                     <?= LangManager::translate('core.theme.CMWVersion') ?>
                                     <i><b><?= $theme['version_cmw'] ?></b></i>
                                 </p>
@@ -326,7 +332,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                 </div>
 
                 <div class="text-center pb-2">
-                    <?php if ($localTheme->version() !== $theme['version_name']): ?>
+                    <?php if ($theme['version_status'] === 0 && $localTheme->version() !== $theme['version_name']): ?>
                         <a class="btn-warning-sm" type="button"
                            href="update/<?= $theme['id'] ?>/<?= $localTheme->version() ?>/<?= $localTheme->name() ?>">
                             <?= LangManager::translate('core.Package.update') ?>
@@ -342,7 +348,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                         </form>
                     <?php endif; ?>
                 </div>
-                <?php if ($localTheme->version() !== $theme['version_name']): ?>
+                <?php if ($theme['version_status'] === 0 && $localTheme->version() !== $theme['version_name']): ?>
                     <div class="absolute"
                          style="transform: rotate(-45deg); left: -4em; top: 5em; margin: 0; z-index: 10">
                         <div class="text-center"
@@ -368,7 +374,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                         </div>
                     </div>
                     <div class="modal-body">
-                        <?php if ($localTheme->version() !== $theme['version_name']): ?>
+                        <?php if ($theme['version_status'] === 0 && $localTheme->version() !== $theme['version_name']): ?>
                             <div class="alert-warning">
                                 <?= LangManager::translate('core.theme.manage.theme_need_update',
                                     ['version' => $localTheme->version(), 'target' => $theme['version_name']]) ?>
@@ -397,8 +403,14 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                                     <i><b><?= $theme['downloads'] ?></b></i>
                                 </p>
                                 <p class="small">
+                                    <?= LangManager::translate('core.theme.localThemeVersion') ?>
+                                    <i><b><?= $localTheme->version() ?></b></i><br>
                                     <?= LangManager::translate('core.theme.themeVersion') ?>
-                                    <i><b><?= $theme['version_name'] ?></b></i><br>
+                                    <i><b><?= $theme['version_name'] ?></b>
+                                        <?php if ($theme['version_status'] !== 0): ?>
+                                            <small class="text-warning">En cours de vérification</small>
+                                        <?php endif; ?></i>
+                                    <br>
                                     <?= LangManager::translate('core.theme.CMWVersion') ?>
                                     <i><b><?= $theme['version_cmw'] ?></b></i>
                                 </p>
