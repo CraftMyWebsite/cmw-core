@@ -1,16 +1,15 @@
 CREATE TABLE IF NOT EXISTS `cmw_core_options`
 (
-    `option_name`    VARCHAR(255) NOT NULL,
+    `option_name`    VARCHAR(255) NOT NULL PRIMARY KEY,
     `option_value`   VARCHAR(500) NOT NULL,
-    `option_updated` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE KEY `option_name` (`option_name`)
+    `option_updated` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `cmw_mail_config_smtp`
 (
-    `mail_config_id`           INT(11)      NOT NULL AUTO_INCREMENT,
+    `mail_config_id`           INT(11)      NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `mail_config_mail`         VARCHAR(255) NOT NULL,
     `mail_config_mail_reply`   VARCHAR(255) NOT NULL,
     `mail_config_address_smtp` VARCHAR(255) NOT NULL,
@@ -18,15 +17,14 @@ CREATE TABLE IF NOT EXISTS `cmw_mail_config_smtp`
     `mail_config_port`         INT(5)       NOT NULL,
     `mail_config_protocol`     VARCHAR(50)  NOT NULL,
     `mail_config_footer`       MEDIUMTEXT   NULL,
-    `mail_config_enable`       TINYINT(1)   NOT NULL DEFAULT 1,
-    PRIMARY KEY (`mail_config_id`)
+    `mail_config_enable`       TINYINT(1)   NOT NULL DEFAULT 1
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `cmw_users`
 (
-    `user_id`        INT(11)      NOT NULL AUTO_INCREMENT,
+    `user_id`        INT(11)      NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `user_email`     VARCHAR(500) NOT NULL,
     `user_pseudo`    VARCHAR(255)          DEFAULT NULL,
     `user_firstname` VARCHAR(255)          DEFAULT NULL,
@@ -37,7 +35,6 @@ CREATE TABLE IF NOT EXISTS `cmw_users`
     `user_created`   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `user_updated`   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `user_logged`    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (`user_id`),
     UNIQUE KEY `user_email` (`user_email`),
     UNIQUE KEY `user_pseudo` (`user_pseudo`)
 ) ENGINE = InnoDB
@@ -48,11 +45,10 @@ CREATE INDEX idx_registration_date ON cmw_users (user_created);
 
 CREATE TABLE IF NOT EXISTS `cmw_users_2fa`
 (
-    `users_2fa_user_id`     INT(11)      NOT NULL,
+    `users_2fa_user_id`     INT(11)      NOT NULL PRIMARY KEY,
     `users_2fa_is_enabled`  TINYINT(1)   NOT NULL DEFAULT 0,
     `users_2fa_secret`      VARCHAR(255) NOT NULL,
     `users_2fa_is_enforced` TINYINT(1)   NOT NULL DEFAULT 0,
-    PRIMARY KEY (`users_2fa_user_id`),
     CONSTRAINT `cmw_users_2fa_ibfk_1` FOREIGN KEY (`users_2fa_user_id`)
         REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
@@ -61,11 +57,10 @@ CREATE TABLE IF NOT EXISTS `cmw_users_2fa`
 
 CREATE TABLE IF NOT EXISTS `cmw_users_oauth`
 (
-    `id`      INT          NOT NULL AUTO_INCREMENT,
+    `id`      INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `methode` VARCHAR(35)  NOT NULL,
     `data`    VARCHAR(500) NOT NULL,
     `user_id` INT          NOT NULL,
-    PRIMARY KEY (`id`),
     INDEX (`user_id`),
     UNIQUE KEY (`methode`, `data`),
     CONSTRAINT FOREIGN KEY (`user_id`)
@@ -85,10 +80,9 @@ CREATE TABLE IF NOT EXISTS `cmw_users_oauth_methods_enabled`
 
 CREATE TABLE IF NOT EXISTS `cmw_users_pictures`
 (
-    `users_pictures_user_id`     INT          NOT NULL,
+    `users_pictures_user_id`     INT          NOT NULL PRIMARY KEY,
     `users_pictures_image_name`  VARCHAR(255) NOT NULL,
     `users_pictures_last_update` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (`users_pictures_user_id`),
     CONSTRAINT `cmw_users_pictures_ibfk_1` FOREIGN KEY (`users_pictures_user_id`)
         REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
@@ -97,22 +91,38 @@ CREATE TABLE IF NOT EXISTS `cmw_users_pictures`
 
 CREATE TABLE IF NOT EXISTS `cmw_users_settings`
 (
-    `users_settings_name`    VARCHAR(255) NOT NULL,
+    `users_settings_name`    VARCHAR(255) NOT NULL PRIMARY KEY,
     `users_settings_value`   VARCHAR(255) NOT NULL,
-    `users_settings_updated` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE KEY (`users_settings_name`)
+    `users_settings_updated` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `cmw_users_reset_password_link`
+(
+    `users_mail`        VARCHAR(255) NOT NULL PRIMARY KEY,
+    `secret_link`       VARCHAR(255) NOT NULL,
+    `secret_date`       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE = InnoDB
+    CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `cmw_users_long_date_code`
+(
+    `users_mail`           VARCHAR(255) NOT NULL PRIMARY KEY,
+    `long_date_code`       VARCHAR(255) NOT NULL,
+    `long_date_date`       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE = InnoDB
+    CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `cmw_roles`
 (
-    `role_id`          INT(11)  NOT NULL AUTO_INCREMENT,
+    `role_id`          INT(11)  NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `role_name`        TINYTEXT NOT NULL,
     `role_description` TEXT,
     `role_weight`      INT        DEFAULT 0,
-    `role_is_default`  TINYINT(1) DEFAULT 0,
-    PRIMARY KEY (`role_id`)
+    `role_is_default`  TINYINT(1) DEFAULT 0
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
@@ -120,10 +130,9 @@ CREATE TABLE IF NOT EXISTS `cmw_roles`
 
 CREATE TABLE IF NOT EXISTS `cmw_users_roles`
 (
-    `id`      INT(11) NOT NULL AUTO_INCREMENT,
+    `id`      INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `user_id` INT(11) NOT NULL,
     `role_id` INT(11) NOT NULL,
-    PRIMARY KEY (`id`),
     KEY `user_id` (`user_id`),
     KEY `role_id` (`role_id`),
     CONSTRAINT `cmw_users_roles_ibfk_1` FOREIGN KEY (`user_id`)
@@ -136,8 +145,7 @@ CREATE TABLE IF NOT EXISTS `cmw_users_roles`
 
 CREATE TABLE IF NOT EXISTS cmw_permissions
 (
-    permission_id          INT AUTO_INCREMENT
-        PRIMARY KEY,
+    permission_id          INT AUTO_INCREMENT PRIMARY KEY,
     permission_parent_id   INT                         NULL,
     permission_code        VARCHAR(50) CHARSET utf8mb4 NOT NULL,
     permission_description VARCHAR(255)                NULL,
@@ -150,9 +158,8 @@ CREATE TABLE IF NOT EXISTS cmw_permissions
 
 CREATE TABLE IF NOT EXISTS cmw_roles_permissions
 (
-    permission_id INT NOT NULL,
-    role_id       INT NOT NULL,
-    PRIMARY KEY (role_id, permission_id),
+    permission_id INT NOT NULL PRIMARY KEY,
+    role_id       INT NOT NULL PRIMARY KEY,
     INDEX (role_id),
     CONSTRAINT FK_ROLE_PERMISSION_PERMISSION_ID
         FOREIGN KEY (permission_id) REFERENCES cmw_permissions (permission_id) ON DELETE CASCADE,
@@ -163,7 +170,7 @@ CREATE TABLE IF NOT EXISTS cmw_roles_permissions
 
 CREATE TABLE IF NOT EXISTS `cmw_menus`
 (
-    `menu_id`            INT(11)             NOT NULL AUTO_INCREMENT,
+    `menu_id`            INT(11)             NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `menu_name`          VARCHAR(255)        NOT NULL,
     `menu_url`           VARCHAR(255)        NOT NULL,
     `menu_parent_id`     INT(11) DEFAULT NULL,
@@ -171,7 +178,6 @@ CREATE TABLE IF NOT EXISTS `cmw_menus`
     `menu_is_custom_url` INT(1)  DEFAULT 0,
     `menu_order`         INT(10) UNSIGNED    NOT NULL,
     `menu_target_blank`  TINYINT(1) UNSIGNED NOT NULL,
-    PRIMARY KEY (`menu_id`),
     KEY `menu_parent_id` (`menu_parent_id`),
     CONSTRAINT `cmw_menus_ibfk_1` FOREIGN KEY (`menu_parent_id`)
         REFERENCES `cmw_menus` (`menu_id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -181,10 +187,9 @@ CREATE TABLE IF NOT EXISTS `cmw_menus`
 
 CREATE TABLE IF NOT EXISTS `cmw_menus_groups_allowed`
 (
-    `menus_groups_id`       INT(11) NOT NULL AUTO_INCREMENT,
+    `menus_groups_id`       INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `menus_groups_group_id` INT(11) NOT NULL,
     `menus_groups_menu_id`  INT(11) NOT NULL,
-    PRIMARY KEY (`menus_groups_id`),
     KEY `menus_groups_group_id` (`menus_groups_group_id`),
     KEY `menus_groups_menu_id` (`menus_groups_menu_id`),
     CONSTRAINT `cmw_menus_groups_allowed_ibfk_1` FOREIGN KEY (`menus_groups_group_id`)
@@ -197,12 +202,11 @@ CREATE TABLE IF NOT EXISTS `cmw_menus_groups_allowed`
 
 CREATE TABLE IF NOT EXISTS `cmw_core_condition`
 (
-    `condition_id`          INT(11)    NOT NULL AUTO_INCREMENT,
+    `condition_id`          INT(11)    NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `condition_content`     LONGTEXT   NOT NULL,
     `condition_state`       TINYINT(1) NOT NULL DEFAULT '1',
     `condition_updated`     TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `condition_last_editor` INT(11)             DEFAULT NULL,
-    PRIMARY KEY (`condition_id`),
     KEY `condition_author` (`condition_last_editor`),
     KEY `condition_last_editor` (`condition_last_editor`),
     CONSTRAINT `cmw_core_condition_ibfk_1` FOREIGN KEY (`condition_last_editor`)
@@ -213,17 +217,16 @@ CREATE TABLE IF NOT EXISTS `cmw_core_condition`
 
 CREATE TABLE IF NOT EXISTS `cmw_theme_config`
 (
-    `theme_config_id`    INT          NOT NULL AUTO_INCREMENT,
+    `theme_config_id`    INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `theme_config_name`  VARCHAR(255) NOT NULL,
     `theme_config_value` MEDIUMTEXT   NULL,
-    `theme_config_theme` VARCHAR(255) NOT NULL,
-    PRIMARY KEY (`theme_config_id`)
+    `theme_config_theme` VARCHAR(255) NOT NULL
 ) ENGINE = InnoDB
   CHARSET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `cmw_core_routes`
 (
-    `core_routes_id`            INT                                   NOT NULL AUTO_INCREMENT,
+    `core_routes_id`            INT                                   NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `core_routes_slug`          VARCHAR(300)                          NOT NULL,
     `core_routes_package`       VARCHAR(50)                           NOT NULL DEFAULT 'core',
     `core_routes_title`         VARCHAR(75)                           NOT NULL,
@@ -232,21 +235,19 @@ CREATE TABLE IF NOT EXISTS `cmw_core_routes`
     `core_routes_is_dynamic`    TINYINT(1)                            NOT NULL DEFAULT '0',
     `core_routes_weight`        INT                                   NOT NULL DEFAULT '1',
     `core_routes_last_edit`     TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `core_routes_date_creation` TIMESTAMP                             NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (`core_routes_id`)
+    `core_routes_date_creation` TIMESTAMP                             NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB
   CHARSET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `cmw_visits`
 (
-    `visits_id`       INT(11)      NOT NULL AUTO_INCREMENT,
+    `visits_id`       INT(11)      NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `visits_ip`       VARCHAR(39)  NOT NULL,
     `visits_date`     TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `visits_path`     VARCHAR(255) NOT NULL,
     `visits_package`  VARCHAR(255)          DEFAULT NULL,
     `visits_code`     INT(4)       NOT NULL,
-    `visits_is_admin` TINYINT(4)   NOT NULL DEFAULT '0',
-    PRIMARY KEY (`visits_id`)
+    `visits_is_admin` TINYINT(4)   NOT NULL DEFAULT '0'
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
@@ -255,7 +256,7 @@ CREATE INDEX idx_visits_date ON cmw_visits (visits_date);
 
 CREATE TABLE IF NOT EXISTS `cmw_maintenance`
 (
-    `maintenance_id`                  INT(11)                               NOT NULL AUTO_INCREMENT,
+    `maintenance_id`                  INT(11)                               NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `maintenance_no_end`              TINYINT(1)                            NOT NULL DEFAULT '0',
     `maintenance_is_enable`           TINYINT(1)                            NOT NULL DEFAULT '0',
     `maintenance_is_override_theme`   TINYINT(1)                            NOT NULL DEFAULT '0',
@@ -264,8 +265,7 @@ CREATE TABLE IF NOT EXISTS `cmw_maintenance`
     `maintenance_description`         LONGTEXT                              NULL,
     `maintenance_type`                TINYINT(1)                            NULL,
     `maintenance_target_date`         TIMESTAMP                             NULL,
-    `maintenance_last_updated_at`     TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (`maintenance_id`)
+    `maintenance_last_updated_at`     TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
@@ -351,9 +351,10 @@ VALUES ('1', '5');
 #Insert the Default profile picture image
 INSERT INTO `cmw_users_settings` (users_settings_name, users_settings_value)
 VALUES ('defaultImage', 'defaultImage.jpg'),
-       ('resetPasswordMethod', '0'),
+       ('resetPasswordMethod', '1'),
        ('listEnforcedToggle', '0'),
-       ('profilePage', '1');
+       ('profilePage', '1'),
+       ('securityReinforced', '0');
 
 INSERT INTO `cmw_maintenance` (maintenance_is_enable, maintenance_title, maintenance_description, maintenance_type,
                                maintenance_target_date)

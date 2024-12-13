@@ -18,6 +18,16 @@ use CMW\Manager\Views\View;
 use CMW\Utils\Directory;
 use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
+use function array_diff;
+use function array_merge;
+use function class_exists;
+use function count;
+use function file_exists;
+use function file_get_contents;
+use function in_array;
+use function is_null;
+use function is_subclass_of;
+use function scandir;
 
 /**
  * Class: @PackageController
@@ -166,10 +176,12 @@ class PackageController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.market');
 
-        $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
-        if ($CoreNeedUpdate) {
-            Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.package.updateBeforeUpdate'));
-            Redirect::redirect('cmw-admin/updates/cms');
+        if (!EnvManager::getInstance()->getValue('DEVMODE')) {
+            $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
+            if ($CoreNeedUpdate) {
+                Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.package.updateBeforeUpdate'));
+                Redirect::redirect('cmw-admin/updates/cms');
+            }
         }
 
         $package = PublicAPI::putData("market/resources/install/$id");
@@ -219,10 +231,12 @@ class PackageController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.manage');
 
-        $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
-        if ($CoreNeedUpdate) {
-            Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.package.updateBeforeUpdate'));
-            Redirect::redirect('cmw-admin/updates/cms');
+        if (!EnvManager::getInstance()->getValue('DEVMODE')) {
+            $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
+            if ($CoreNeedUpdate) {
+                Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.package.updateBeforeUpdate'));
+                Redirect::redirect('cmw-admin/updates/cms');
+            }
         }
 
         $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion");
@@ -254,7 +268,18 @@ class PackageController extends AbstractController
         $lastUpdateIndex = count($updates) - 1;
         foreach ($updates as $i => $update) {
             if (!empty($update['sql_updater'])) {
-                DatabaseManager::getLiteInstance()->query($update['sql_updater']);
+                $file = file_get_contents($update['sql_updater']);
+
+                if (!$file) {
+                    Flash::send(
+                        Alert::ERROR,
+                        LangManager::translate('core.toaster.error'),
+                        $update['sql_updater'],
+                    );
+                    Redirect::redirectPreviousRoute();
+                }
+
+                DatabaseManager::getLiteInstance()->query($file);
             }
 
             if ($i === $lastUpdateIndex) {
@@ -271,6 +296,9 @@ class PackageController extends AbstractController
 
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('core.Package.toasters.update.success', ['package' => $packageName]));
+
+        //Reload too fast redirect not refresh correctly
+        sleep(1);
 
         Redirect::redirectPreviousRoute();
     }

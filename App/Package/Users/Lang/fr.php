@@ -14,7 +14,8 @@ return [
             'desc' => 'Récupérez votre mot de passe',
             'btn' => 'Confirmation',
             'mail' => [
-                'object' => 'Votre nouveau mot de passe %site_name%',
+                'object_pass' => 'Votre nouveau mot de passe %site_name%',
+                'object_link' => 'Changer votre mot de passe sur %site_name%',
                 'body' => 'Voici votre nouveau mot de passe à changer rapidement après votre connexion : <b> %password% </b>',
             ],
         ],
@@ -25,7 +26,6 @@ return [
     "files" => "Fichiers autorisés : png, jpg, jpeg, webp, svg, gif",
     "toaster" => [
         "error" => "Erreur",
-        "success" => "Succès",
         "used_pseudo" => "Ce pseudo n'est pas disponible.",
         "used_mail" => "Un compte existe déjà avec cette adresse mail.",
         "not_registered_account" => "Ce compte n'existe pas",
@@ -51,6 +51,29 @@ return [
         "edited_pass_change" => "Utilisateur mis à jour avec modification de mot de passe",
         "load_permissions_error" => "Impossible de charger les permissions du package %package%",
         "load_permissions_success" => "Permissions chargées avec succès !",
+        "reset_in_progress" => "Votre demande de réinitialisation est déjà en cours ...",
+        "reset_link_not_found" => "Ce lien de réinitialisation n'existe pas !",
+        "reset_link_not_available" => "Ce lien de réinitialisation n'est plus valide !",
+        "reset_link_log_out" => "Vous ne pouvez pas être connecter pour faire ceci !",
+        "reset_link_pass_changed" => "Mot de passe changé !",
+        "reset_link_follow_the_link" => "Veuillez suivre le lien que vous avez reçu par mail",
+        "reset_link_body_mail_1" => "Réinitialiser votre mot de passe sur ",
+        "reset_link_body_mail_2" => "Vous venez de faire une demande de réinitialisation de mot de passe.",
+        "reset_link_body_mail_3" => "Voici le lien à suivre pour réaliser ce changement (vous avez 15 minutes pour le faire)",
+        "reset_link_body_mail_4" => "Cliquez-ici pour changer mon mot de passe.",
+        "reset_link_body_mail_5" => "Si vous n'êtes pas à l'origine de cette demande, ignorez simplement ce mail.",
+        "errors" => [
+            '2fa' => [
+                "toggle" => "Impossible de changer le status 2FA de %pseudo%",
+                'regen' => 'Impossible de régénérer la clé 2FA de %pseudo%',
+            ],
+        ],
+        'success' => [
+            '2fa' => [
+                'toggle' => "Status 2FA de %pseudo% changé avec succès",
+                'regen' => 'Clé 2FA de %pseudo% régénérée avec succès',
+            ],
+        ],
     ],
     'manage' => [
         'title' => 'Gestion des utilisateurs',
@@ -58,7 +81,7 @@ return [
         'card_title_list' => 'Liste des utilisateurs inscrits',
         'card_title_add' => 'Ajouter un utilisateur',
         'edit' => [
-            'title' => 'Edition de ',
+            'title' => 'Édition de %pseudo%',
             'about' => 'A propos',
         ],
         'randomPasswordTooltip' => 'Générez un mot de passe aléatoire et sécurisé en un clic. Le mot de passe sera copié dans votre presse papier',
@@ -164,6 +187,9 @@ return [
         ],
         'link_profile' => 'Accéder à mon profil',
         'login_methode' => 'Méthode de connexion',
+        '2fa' => [
+            'regen_key' => 'Régénérer la clé',
+        ],
     ],
     "settings" => [
         "title" => "Paramètres utilisateur",
@@ -268,6 +294,28 @@ return [
     'security' => [
         'captcha' => [
             'invalid' => 'Captcha invalide',
+        ],
+    ],
+    'long_date' => [
+        'setting' => [
+            'label' => 'Renforcé la sécurité des comptes utilisateur',
+            'no' => 'Non (non recommandé)',
+            'yes' => 'Oui',
+            'small' => 'Pour les utilisateurs n\'ayant pas de 2Fa s\'ils ne se sont pas connecté depuis + de 90 jours ils reçoivent un code de confirmation d\'identité par mail. (l\'envoie de mail doit être fonctionnel)',
+        ],
+        'toaster' => [
+            'title' => 'Verification d\'identité',
+            'receive_by_mail' => 'Vous allez recevoir le code par mail',
+            'put_the_code' => 'Merci de mettre votre code.',
+            'invalid_code' => 'Code invalide.',
+            'too_late' => 'Ce code est trop vieux vous avez max 15 min pour le valider',
+            'unable_to_create_code' => 'Impossible de créer le code',
+        ],
+        'mail' => [
+            'object' => '%site_name% - Vérification d\'identité',
+            'body_1' => 'Nous avons besoin de vérifier votre identité sur ',
+            'body_2' => 'Voici le CODE permettant de vérifier qu\'il s\'agisse bien de vous :',
+            'body_3' => 'Si vous n\'êtes pas à l\'origine de cette demande, nous vous conseillons de changer votre mot de passe !',
         ],
     ],
 ];

@@ -26,3 +26,8 @@ Your application will be available at http://localhost:80.
 #### Step 4: Follow the installation steps
 
 More help: [Discord](https://craftmywebsite.fr/discord)
+
+### Access phpMyAdmin
+Go to [http://localhost:8090](http://localhost:8090) and login with the following credentials:
+- user: `root`
+- password: `cmw_root_password`

@@ -13,6 +13,7 @@ return [
     'alt' => [
         'logo' => 'Logo CMW',
     ],
+    'source_code' => 'Source code',
     'header' => [
         'notification' => 'Notifications',
         'cms_ver' => 'CMS : Version',
@@ -133,6 +134,8 @@ return [
             'reset' => 'Theme configuration reset',
             'updateBeforeInstall' => 'Please update CMS before installing this theme!',
             'updateBeforeUpdate' => 'Please update the CMS before updating your themes!',
+            'unableUpdate' => 'Unable to install this theme! : ',
+            'unableDeleteFolder' => 'Unable to remove folder : ',
         ],
         'package' => [
             'updateBeforeInstall' => 'Please update CMS before installing this package!',
@@ -196,6 +199,7 @@ return [
         'activate' => 'Enable',
         'downloads' => 'Downloads : ',
         'themeVersion' => 'Version of the theme : ',
+        "localThemeVersion" => "Installed version theme : ",
         'CMWVersion' => 'Recommended CMW version : ',
         'close' => 'Close',
         'appearance' => 'Appearance of ',
@@ -219,6 +223,7 @@ return [
         'manage' => [
             'title' => 'Manage your Theme <b>%Theme%</b>',
             'description' => 'Manage your Theme to have a Theme that suits you ! ',
+            'theme_need_update' => 'You are using <b>%version%</b> version, please update to <b>%target%</b> !',
         ],
         'toasters' => [
             'update' => [
@@ -243,6 +248,7 @@ return [
         'downloads' => 'Downloads: ',
         'version' => 'Package version: ',
         'versionCMW' => 'Recommended CMW version: ',
+        "localPackageVersion" => "Installed package version : ",
         'notVerified' => 'Not verified by CMW.',
         'updateAvailable' => 'An update is available !',
         'desc' => 'Manage your packages',
@@ -399,6 +405,8 @@ return [
         'generate' => 'Generate',
         'enable' => 'Enable',
         'enabled' => 'Enabled',
+        'disable' => 'Disable',
+        'disabled' => 'Disabled',
         'saving' => 'Saving ...',
     ],
     'months' => [
@@ -517,4 +525,23 @@ return [
             'createFolder' => 'Unable to create target folder, permission problem on Public/Uploads',
         ],
     ],
+    'imageDropper' => [
+        'fileDrop' => 'Drag & Drop your images here',
+        'fileSize' => 'max allowed!',
+        'fileFormat' => 'Format not allowed.',
+    ],
+    'themeNotFoundException' => [
+        'title' => 'Error - Theme Not Found',
+        'message1' => 'cannot be your active theme because we cannot find it!',
+        'message2' => 'Please check that the theme is installed correctly or that its name is correct!',
+        'path' => 'Path: ',
+        'use_sampler' => 'Would you like to activate the <b>Sampler</b> theme?',
+        'button' => 'Activate Sampler',
+        'user' => [
+            'title' => 'Configuration Issue!',
+            'message1' => 'Please contact the site administrator.',
+            'error' => '<b>Error:</b> Invalid theme name!',
+        ],
+    ],
+
 ];

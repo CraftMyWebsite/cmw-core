@@ -5,6 +5,7 @@ namespace CMW\Controller\Core;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Cache\SimpleCacheManager;
+use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Filter\FilterManager;
@@ -16,7 +17,6 @@ use CMW\Manager\Router\Link;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Updater\UpdatesManager;
-use CMW\Manager\Uploads\ImagesException;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
@@ -112,10 +112,12 @@ class ThemeController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
 
-        $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
-        if ($CoreNeedUpdate) {
-            Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.theme.updateBeforeInstall'));
-            Redirect::redirect('cmw-admin/updates/cms');
+        if (!EnvManager::getInstance()->getValue('DEVMODE')) {
+            $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
+            if ($CoreNeedUpdate) {
+                Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.theme.updateBeforeInstall'));
+                Redirect::redirect('cmw-admin/updates/cms');
+            }
         }
 
         $theme = PublicAPI::putData("market/resources/install/$id");
@@ -219,31 +221,60 @@ class ThemeController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
 
-        $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
-        if ($CoreNeedUpdate) {
-            Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.theme.updateBeforeUpdate'));
-            Redirect::redirect('cmw-admin/updates/cms');
+        if (!EnvManager::getInstance()->getValue('DEVMODE')) {
+            $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
+            if ($CoreNeedUpdate) {
+                Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.theme.updateBeforeUpdate'));
+                Redirect::redirect('cmw-admin/updates/cms');
+            }
         }
 
         $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion");
 
         Log::debug($updates);
 
-        // Update package
 
-        Directory::delete(EnvManager::getInstance()->getValue('DIR') . "App/Public/Theme/$themeName");
+        if (Directory::delete(EnvManager::getInstance()->getValue('DIR') . "Public/Theme/$themeName")) {
+            $lastUpdateIndex = count($updates) - 1;
+            foreach ($updates as $i => $update) {
+                if (!empty($update['sql_updater'])) {
+                    $file = file_get_contents($update['sql_updater']);
 
-        $lastUpdateIndex = count($updates) - 1;
-        foreach ($updates as $i => $update) {
-            if ($i === $lastUpdateIndex) {
-                DownloadManager::installPackageWithLink($update['file'], 'Theme', $themeName);
+                    if (!$file) {
+                        Flash::send(
+                            Alert::ERROR,
+                            LangManager::translate('core.toaster.error'),
+                            $update['sql_updater'],
+                        );
+                        Redirect::redirectPreviousRoute();
+                    }
+
+                    DatabaseManager::getLiteInstance()->query($file);
+                }
+
+                if ($i === $lastUpdateIndex) {
+                    if (!DownloadManager::installPackageWithLink($update['file'], 'Theme', $themeName)) {
+                        Flash::send(
+                            Alert::ERROR,
+                            LangManager::translate('core.toaster.error'),
+                            LangManager::translate('core.toaster.theme.unableUpdate') . $update['title'],
+                        );
+                        Redirect::redirectPreviousRoute();
+                    }
+                }
             }
+
+            SimpleCacheManager::deleteSpecificCacheFile("config", "Themes/$themeName");
+
+            Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+                LangManager::translate('core.theme.toasters.update.success', ['theme' => $themeName]));
+        } else {
+            Flash::send(
+                Alert::ERROR,
+                LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.toaster.theme.unableDeleteFolder') . EnvManager::getInstance()->getValue('DIR') . "Public/Theme/$themeName",
+            );
         }
-
-        SimpleCacheManager::deleteSpecificCacheFile("config", "Themes/$themeName");
-
-        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-            LangManager::translate('core.Theme.toasters.update.success', ['theme' => $themeName]));
 
         Redirect::redirectPreviousRoute();
     }

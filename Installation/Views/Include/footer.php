@@ -14,10 +14,10 @@ use CMW\Manager\Updater\UpdatesManager;
         </div>
         <div class="px-4 py-2 w-full sm:w-auto">
             <div class="flex-wrap inline-flex space-x-3">
-                <a href="https://craftmywebsite.fr/r/install-discord" target="_blank" class="hover:text-blue-600">
+                <a href="https://craftmywebsite.fr/discord" target="_blank" class="hover:text-blue-600">
                     <i class="fa-xl fa-brands fa-discord"></i>
                 </a>
-                <a href="https://craftmywebsite.fr/r/install-twitter" target="_blank" class="hover:text-blue-600">
+                <a href="https://x.com/CraftMyWebsite" target="_blank" class="hover:text-blue-600">
                     <i class="fa-xl fa-brands fa-twitter"></i>
                 </a>
             </div>

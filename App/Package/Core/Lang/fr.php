@@ -13,6 +13,7 @@ return [
     'alt' => [
         'logo' => 'Logo CMW',
     ],
+    'source_code' => 'Code source',
     'header' => [
         'notification' => 'Notifications',
         'cms_ver' => 'CMS : Version',
@@ -133,6 +134,8 @@ return [
             'reset' => 'Configuration du thème réinitialisée',
             'updateBeforeInstall' => 'Veuillez mettre à jour le CMS avant d\'installer ce thème !',
             'updateBeforeUpdate' => 'Veuillez mettre à jour le CMS avant de mettre à jour vos thèmes !',
+            'unableUpdate' => 'Impossible d\'installer la mises à jour du thème : ',
+            'unableDeleteFolder' => 'Impossible du supprimer le dossier : ',
         ],
         'package' => [
             'updateBeforeInstall' => 'Veuillez mettre à jour le CMS avant d\'installer ce package !',
@@ -177,7 +180,7 @@ return [
             ],
         ],
     ],
-    "Theme" => [
+    "theme" => [
         "myThemes" => "Mes thèmes",
         "market" => "Market",
         "details" => "Détails",
@@ -196,6 +199,7 @@ return [
         "activate" => "Activer",
         "downloads" => "Téléchargements : ",
         "themeVersion" => "Version du thème : ",
+        "localThemeVersion" => "Version du thème installé : ",
         "CMWVersion" => "Version CMW recommandée : ",
         "close" => "Fermer",
         "appearance" => "Apparence de ",
@@ -219,6 +223,7 @@ return [
         'manage' => [
             'title' => 'Gérez votre thème <b>%Theme%</b>',
             'description' => 'Gérez votre thème pour le personnaliser à votre guise !',
+            'theme_need_update' => 'Vous utilisez la version <b>%version%</b>, veuillez mettre à jour vers <b>%target%</b> !',
         ],
         'toasters' => [
             'update' => [
@@ -242,6 +247,7 @@ return [
         "author" => "Auteur : ",
         "downloads" => "Téléchargements : ",
         "version" => "Version du package : ",
+        "localPackageVersion" => "Version du package installé : ",
         "versionCMW" => "Version CMW recommandée : ",
         "notVerified" => "Non verifié par CMW.",
         "updateAvailable" => "Mise à jour disponible !",
@@ -402,6 +408,8 @@ return [
         'generate' => 'Générer',
         'enable' => 'Activer',
         'enabled' => 'Activé',
+        'disable' => 'Désactiver',
+        'disabled' => 'Désactivée',
         'saving' => 'Sauvegarde ...',
     ],
     'months' => [
@@ -520,4 +528,23 @@ return [
             'createFolder' => 'Impossible de créer le dossier cible, problème de permission sur Public/Uploads',
         ],
     ],
+    'imageDropper' => [
+        'fileDrop' => 'Glissez & Déposez vos images ici',
+        'fileSize' => 'max autorisé !',
+        'fileFormat' => 'Format non autorisé.',
+    ],
+    'themeNotFoundException' => [
+        'title' => 'Erreur - Thème introuvable',
+        'message1' => 'ne peut pas être votre thème actif, car nous ne le trouvons pas !',
+        'message2' => 'Vérifiez que le thème est installé correctement ou que son nom est correct !',
+        'path' => 'Chemin d\'accès : ',
+        'use_sampler' => 'Voulez-vous activer le thème <b>Sampler</b> ?',
+        'button' => 'Activer Sampler',
+        'user' => [
+            'title' => 'Problème de configuration !',
+            'message1' => 'Merci de contacter l\'administrateur du site.',
+            'error' => '<b>Erreur :</b> Nom de thème invalide !',
+        ],
+    ],
+
 ];

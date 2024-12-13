@@ -135,6 +135,15 @@ class UserEntity extends AbstractEntity
     }
 
     /**
+     * @return string
+     * @Desc date
+     */
+    public function getLastConnectionUnformatted(): string
+    {
+        return $this->userLastConnection;
+    }
+
+    /**
      * @return \CMW\Entity\Users\RoleEntity[]
      */
     public function getRoles(): array

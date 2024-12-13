@@ -18,7 +18,11 @@ return [
         "cgu" => "Conditions Générales d'Utilisation",
         "error" => [
             "cgu" => "Merci d'accepter les CGU avant de procéder à l'installation de votre site CraftMyWebsite"
-        ]
+        ],
+        'folder_check_fix_it' => 'Veuillez corriger les problèmes d\'accès pour garantir le bon fonctionnement de CraftMyWebsite !',
+        'folder_check_button' => 'Verifier les droits d\'accès',
+        'folder_check_no_access' => 'Non accessible en écriture',
+        'folder_check_not_found' => 'Non trouvé',
     ],
     "bundle" => [
         "custom" => "Personnalisé",

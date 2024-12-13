@@ -58,9 +58,9 @@ $description = LangManager::translate('core.updates.description');
                     <?php foreach ($groupedType as $changelogInfos): ?>
                         <li><?= $changelogInfos['content'] ?>
                             <?php if ($changelogInfos['code_link']): ?>
-                                <small><a class="text-bg-primary px-1 rounded-2"
+                                <small><a style="background: #4b79bf; color: white; font-size: .7rem" class="px-2 rounded-lg"
                                           href="<?= $changelogInfos['code_link'] ?>" target="_blank"><i
-                                            class="fa-solid fa-link fa-xs"></i> d534333</a></small>
+                                            class="fa-solid fa-link fa-xs"></i> <?= (parse_url($changelogInfos['code_link'], PHP_URL_HOST)) ?></a></small>
                             <?php endif; ?>
                         </li>
                     <?php endforeach; ?>
@@ -84,10 +84,9 @@ $description = LangManager::translate('core.updates.description');
                                     <?php foreach ($previousGroupedType as $previousChangelogInfos): ?>
                                         <li><?= $previousChangelogInfos['content'] ?>
                                             <?php if ($previousChangelogInfos['code_link']): ?>
-                                                <small><a class="link"
-                                                          href="<?= $previousChangelogInfos['code_link'] ?>"
-                                                          target="_blank"><i class="fa-solid fa-link fa-xs"></i>
-                                                        Code</a></small>
+                                                <small><a style="background: #4b79bf; color: white; font-size: .7rem" class="px-2 rounded-lg"
+                                                          href="<?= $previousChangelogInfos['code_link'] ?>" target="_blank"><i
+                                                            class="fa-solid fa-link fa-xs"></i> <?= (parse_url($previousChangelogInfos['code_link'], PHP_URL_HOST)) ?></a></small>
                                             <?php endif; ?>
                                         </li>
                                     <?php endforeach; ?>
