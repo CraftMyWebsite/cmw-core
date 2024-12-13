@@ -1,12 +1,14 @@
 <?php
 
+use CMW\Entity\Users\RoleEntity;
+use CMW\Entity\Users\UserEntity;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 
-/** @var \CMW\Entity\Users\UserEntity $user */
-/** @var \CMW\Entity\Users\RoleEntity[] $roles */
-/** @var \CMW\Entity\Users\UserEntity[] $userList */
+/** @var UserEntity $user */
+/** @var RoleEntity[] $roles */
+/** @var UserEntity[] $userList */
 $title = LangManager::translate('users.manage.title');
 $description = LangManager::translate('users.manage.desc');
 ?>
@@ -73,7 +75,7 @@ $description = LangManager::translate('users.manage.desc');
             </thead>
             <tbody>
             <?php foreach ($userList as $user): ?>
-                <tr>
+                <tr class="<?= !$user->getState() ? 'line-through' : '' ?>">
                     <td><?= $user->getMail() ?></td>
                     <td><?= $user->getPseudo() ?></td>
                     <td><?= $user->getHighestRole()?->getName() ?></td>
@@ -103,8 +105,10 @@ $description = LangManager::translate('users.manage.desc');
                                     <?= LangManager::translate('users.modal.delete_message') ?>
                                 </div>
                                 <div class="modal-footer">
-                                    <a href="/cmw-admin/users/delete/<?= $user->getId() ?>" type="button"
-                                       class="btn-danger"><?= LangManager::translate('core.btn.delete') ?></a>
+                                    <a href="<?= EnvManager::getInstance()->getValue('PATH_URL') ?>cmw-admin/users/delete/<?= $user->getId() ?>"
+                                       type="button" class="btn-danger">
+                                        <?= LangManager::translate('core.btn.delete') ?>
+                                    </a>
                                 </div>
                             </div>
                         </div>
