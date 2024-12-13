@@ -29,13 +29,15 @@ class CMSUpdaterManager
             return;
         }
 
-        if ($this->downloadUpdateFile($updateData) === false) {
+        $updateFile = $this->downloadUpdateFile($updateData);
+
+        if ($updateFile === false) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
                 LangManager::translate('core.updates.errors.download'));
             return;
         }
 
-        if ($this->downloadUpdateFile($updateData) === null) {
+        if ($updateFile === null) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
                 LangManager::translate('core.updates.errors.nullFileUpdate'));
             return;
