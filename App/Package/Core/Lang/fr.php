@@ -178,7 +178,7 @@ return [
             ],
         ],
     ],
-    "Theme" => [
+    "theme" => [
         "myThemes" => "Mes thèmes",
         "market" => "Market",
         "details" => "Détails",

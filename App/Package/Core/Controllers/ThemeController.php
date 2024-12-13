@@ -243,7 +243,7 @@ class ThemeController extends AbstractController
         SimpleCacheManager::deleteSpecificCacheFile("config", "Themes/$themeName");
 
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-            LangManager::translate('core.Theme.toasters.update.success', ['theme' => $themeName]));
+            LangManager::translate('core.theme.toasters.update.success', ['theme' => $themeName]));
 
         Redirect::redirectPreviousRoute();
     }
