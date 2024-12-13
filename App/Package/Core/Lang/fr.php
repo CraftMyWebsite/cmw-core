@@ -529,4 +529,18 @@ return [
         'fileSize' => 'max autorisé !',
         'fileFormat' => 'Format non autorisé.',
     ],
+    'themeNotFoundException' => [
+        'title' => 'Erreur - Thème introuvable',
+        'message1' => 'ne peut pas être votre thème actif, car nous ne le trouvons pas !',
+        'message2' => 'Vérifiez que le thème est installé correctement ou que son nom est correct !',
+        'path' => 'Chemin d\'accès : ',
+        'use_sampler' => 'Voulez-vous activer le thème <b>Sampler</b> ?',
+        'button' => 'Activer Sampler',
+        'user' => [
+            'title' => 'Problème de configuration !',
+            'message1' => 'Merci de contacter l\'administrateur du site.',
+            'error' => '<b>Erreur :</b> Nom de thème invalide !',
+        ],
+    ],
+
 ];

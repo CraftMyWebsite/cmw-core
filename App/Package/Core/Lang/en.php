@@ -526,4 +526,18 @@ return [
         'fileSize' => 'max allowed!',
         'fileFormat' => 'Format not allowed.',
     ],
+    'themeNotFoundException' => [
+        'title' => 'Error - Theme Not Found',
+        'message1' => 'cannot be your active theme because we cannot find it!',
+        'message2' => 'Please check that the theme is installed correctly or that its name is correct!',
+        'path' => 'Path: ',
+        'use_sampler' => 'Would you like to activate the <b>Sampler</b> theme?',
+        'button' => 'Activate Sampler',
+        'user' => [
+            'title' => 'Configuration Issue!',
+            'message1' => 'Please contact the site administrator.',
+            'error' => '<b>Error:</b> Invalid theme name!',
+        ],
+    ],
+
 ];
