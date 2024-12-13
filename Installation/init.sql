@@ -158,8 +158,9 @@ CREATE TABLE IF NOT EXISTS cmw_permissions
 
 CREATE TABLE IF NOT EXISTS cmw_roles_permissions
 (
-    permission_id INT NOT NULL PRIMARY KEY,
-    role_id       INT NOT NULL PRIMARY KEY,
+    permission_id INT NOT NULL,
+    role_id       INT NOT NULL,
+    PRIMARY KEY (role_id, permission_id),
     INDEX (role_id),
     CONSTRAINT FK_ROLE_PERMISSION_PERMISSION_ID
         FOREIGN KEY (permission_id) REFERENCES cmw_permissions (permission_id) ON DELETE CASCADE,
