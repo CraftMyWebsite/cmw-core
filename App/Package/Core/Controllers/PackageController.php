@@ -176,10 +176,12 @@ class PackageController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.market');
 
-        $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
-        if ($CoreNeedUpdate) {
-            Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.package.updateBeforeUpdate'));
-            Redirect::redirect('cmw-admin/updates/cms');
+        if (!EnvManager::getInstance()->getValue('DEVMODE')) {
+            $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
+            if ($CoreNeedUpdate) {
+                Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.package.updateBeforeUpdate'));
+                Redirect::redirect('cmw-admin/updates/cms');
+            }
         }
 
         $package = PublicAPI::putData("market/resources/install/$id");
@@ -229,10 +231,12 @@ class PackageController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.manage');
 
-        $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
-        if ($CoreNeedUpdate) {
-            Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.package.updateBeforeUpdate'));
-            Redirect::redirect('cmw-admin/updates/cms');
+        if (!EnvManager::getInstance()->getValue('DEVMODE')) {
+            $CoreNeedUpdate = UpdatesManager::checkNewUpdateAvailable();
+            if ($CoreNeedUpdate) {
+                Flash::send(Alert::ERROR, 'CORE', LangManager::translate('core.toaster.package.updateBeforeUpdate'));
+                Redirect::redirect('cmw-admin/updates/cms');
+            }
         }
 
         $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion");
