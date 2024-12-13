@@ -1,10 +1,13 @@
 <?php
 
 use CMW\Controller\Core\SecurityController;
+use CMW\Interface\Users\IUsersOAuth;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Model\Core\ThemeModel;
 use CMW\Utils\Website;
+
+/* @var IUsersOAuth[] $oAuths */
 
 Website::setTitle('Connexion');
 Website::setDescription('Connectez-vous à votre compte ' . Website::getWebsiteName());
@@ -44,6 +47,16 @@ Website::setDescription('Connectez-vous à votre compte ' . Website::getWebsiteN
                             <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>login/forgot">Mot de
                                 passe oublié</a>
                         </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center mb-2 mt-2">
+                        <?php foreach ($oAuths as $oAuth): ?>
+                            <a href="oauth/<?= $oAuth->methodIdentifier() ?>" class="btn "
+                               aria-label="<?= $oAuth->methodeName() ?>">
+                                <img src="<?= $oAuth->methodeIconLink() ?>"
+                                     alt="<?= $oAuth->methodeName() ?>" width="32" height="32"/>
+                            </a>
+                        <?php endforeach; ?>
                     </div>
 
                     <?php SecurityController::getPublicData(); ?>
