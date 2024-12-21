@@ -2,6 +2,7 @@
 
 namespace CMW\Controller\Users;
 
+use CMW\Entity\Users\Settings\BulkSettingsEntity;
 use CMW\Entity\Users\UserSettingsEntity;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Filter\FilterManager;
@@ -18,7 +19,6 @@ use CMW\Model\Users\UsersSettingsModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\NoReturn;
-use JsonException;
 
 /**
  * Class: @UsersSettingsController
@@ -30,7 +30,7 @@ class UsersSettingsController extends AbstractController
 {
     public static function getDefaultImageLink(): string
     {
-        $defaultImg = UsersSettingsModel::getSetting('defaultImage');
+        $defaultImg = UsersSettingsModel::getInstance()->getSetting('defaultImage');
         return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Public/Uploads/Users/Default/' . $defaultImg;
     }
 
@@ -55,12 +55,12 @@ class UsersSettingsController extends AbstractController
             ->view();
     }
 
-    #[Link('/settings/resetImg', Link::GET, [], '/cmw-admin/users')]
+    #[NoReturn] #[Link('/settings/resetImg', Link::GET, [], '/cmw-admin/users')]
     private function resetDefaultImg(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'users.settings');
 
-        UsersSettingsModel::updateSetting('defaultImage', 'defaultImage.jpg');
+        UsersSettingsModel::getInstance()->updateSetting('defaultImage', 'defaultImage.jpg');
 
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('core.toaster.config.success'));
@@ -78,7 +78,7 @@ class UsersSettingsController extends AbstractController
 
             try {
                 $newDefaultImage = ImagesManager::convertAndUpload($defaultPicture, 'Users/Default');
-                UsersSettingsModel::updateSetting('defaultImage', $newDefaultImage);
+                UsersSettingsModel::getInstance()->updateSetting('defaultImage', $newDefaultImage);
             } catch (ImagesException $e) {
                 Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
                     LangManager::translate('core.errors.upload.image') . ' => ' . $e->getMessage());
@@ -88,9 +88,17 @@ class UsersSettingsController extends AbstractController
 
         [$resetPasswordMethod, $profilePage, $securityReinforced] = Utils::filterInput('reset_password_method', 'profile_page', 'security_reinforced');
 
-        UsersSettingsModel::updateSetting('resetPasswordMethod', $resetPasswordMethod);
-        UsersSettingsModel::updateSetting('profilePage', $profilePage);
-        UsersSettingsModel::updateSetting('securityReinforced', $securityReinforced);
+        $settingsStatus = UsersSettingsModel::getInstance()->bulkUpdateSettings(
+            new BulkSettingsEntity('resetPasswordMethod', $resetPasswordMethod),
+            new BulkSettingsEntity('profilePage', $profilePage),
+            new BulkSettingsEntity('securityReinforced', $securityReinforced)
+        );
+
+        if (!$settingsStatus) {
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.toaster.config.error'));
+            Redirect::redirectPreviousRoute();
+        }
 
         [$listEnforcedToggle] = Utils::filterInput('listEnforcedToggle');
 
@@ -118,7 +126,7 @@ class UsersSettingsController extends AbstractController
             }
         }
 
-        UsersSettingsModel::updateSetting('listEnforcedToggle', $listEnforcedToggle);
+        UsersSettingsModel::getInstance()->updateSetting('listEnforcedToggle', $listEnforcedToggle);
 
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('core.toaster.config.success'));

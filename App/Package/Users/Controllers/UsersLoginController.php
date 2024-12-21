@@ -71,7 +71,7 @@ class UsersLoginController extends AbstractController
 
         $userLastConnect = $user->getLastConnectionUnformatted();
 
-        if ((UsersSettingsModel::getSetting('securityReinforced') === '1') && $this->isUserInactiveFor90Days($userLastConnect) && !$user->get2Fa()->isEnabled() && MailModel::getInstance()->getConfig() !== null && MailModel::getInstance()->getConfig()->isEnable()) {
+        if ((UsersSettingsModel::getInstance()->getSetting('securityReinforced') === '1') && $this->isUserInactiveFor90Days($userLastConnect) && !$user->get2Fa()->isEnabled() && MailModel::getInstance()->getConfig() !== null && MailModel::getInstance()->getConfig()->isEnable()) {
             return LoginStatus::OK_LONG_DATE;
         }
 
