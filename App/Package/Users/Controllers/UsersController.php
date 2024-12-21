@@ -369,13 +369,13 @@ class UsersController extends AbstractController
                 Redirect::redirectPreviousRoute();
             }
             // We send a verification link for this mail
-            if (UsersSettingsModel::getSetting('resetPasswordMethod') === '0') {
+            if (UsersSettingsModel::getInstance()->getSetting('resetPasswordMethod') === '0') {
                 $this->resetPasswordMethodPasswordSendByMail($encryptedMail);
 
                 Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
                     LangManager::translate('users.toaster.password_reset', ['mail' => $mail]));
 
-            } elseif (UsersSettingsModel::getSetting('resetPasswordMethod') === '1') {
+            } elseif (UsersSettingsModel::getInstance()->getSetting('resetPasswordMethod') === '1') {
                 $this->resetPasswordMethodUniqueLinkSendByMail($encryptedMail);
 
                 Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'), LangManager::translate('users.toaster.reset_link_follow_the_link'));
