@@ -136,10 +136,6 @@ return [
             'updateBeforeUpdate' => 'Please update the CMS before updating your themes!',
             'unableUpdate' => 'Unable to install this theme! : ',
             'unableDeleteFolder' => 'Unable to remove folder : ',
-            'delete' => [
-                'success' => 'Theme %theme% deleted successfully',
-                'error' => 'Unable to delete theme %theme%',
-            ],
         ],
         'package' => [
             'updateBeforeInstall' => 'Please update CMS before installing this package!',
@@ -232,11 +228,6 @@ return [
         'toasters' => [
             'update' => [
                 'success' => 'Theme %theme% update with success',
-            ],
-            'delete' => [
-                'title' => 'Delete',
-                'confirm' => 'Do you really want to delete ',
-                'config' => 'This deletion will also erase the theme configuration.',
             ],
         ],
     ],
