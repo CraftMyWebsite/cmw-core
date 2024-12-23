@@ -15,7 +15,6 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Security\SecurityManager;
-use CMW\Manager\Theme\IThemeConfig;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
@@ -23,7 +22,6 @@ use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\ThemeModel;
 use CMW\Utils\Directory;
-use CMW\Utils\Log;
 use CMW\Utils\Redirect;
 use Exception;
 use JetBrains\PhpStorm\NoReturn;
@@ -232,9 +230,6 @@ class ThemeController extends AbstractController
 
         $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion");
 
-        Log::debug($updates);
-
-
         if (Directory::delete(EnvManager::getInstance()->getValue('DIR') . "Public/Theme/$themeName")) {
             $lastUpdateIndex = count($updates) - 1;
             foreach ($updates as $i => $update) {
@@ -297,23 +292,6 @@ class ThemeController extends AbstractController
         Redirect::redirectToHome();
     }
 
-    public static function getTheme(string $themeName): ?IThemeConfig
-    {
-        $namespace = 'CMW\\Theme\\' . $themeName . '\Theme';
-
-        if (!class_exists($namespace)) {
-            return null;
-        }
-
-        $classInstance = new $namespace();
-
-        if (!is_subclass_of($classInstance, IThemeConfig::class)) {
-            return null;
-        }
-
-        return $classInstance;
-    }
-
     #[Link('/theme/delete/:theme', Link::GET, ['theme' => '.*?'], '/cmw-admin/theme')]
     #[NoReturn]
     private function adminThemeDelete(string $theme): void
@@ -344,7 +322,7 @@ class ThemeController extends AbstractController
      */
     private function uninstallTheme(string $themeName): bool
     {
-        $theme = self::getTheme($themeName);
+        $theme = ThemeManager::getInstance()->getTheme($themeName);
 
         if (is_null($theme)) {
             return false;
