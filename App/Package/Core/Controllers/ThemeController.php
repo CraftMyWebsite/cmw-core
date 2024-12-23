@@ -296,20 +296,21 @@ class ThemeController extends AbstractController
     #[NoReturn]
     private function adminThemeDelete(string $theme): void
     {
+        $themeName = base64_decode($theme);
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
 
-        if ($theme === ThemeManager::getInstance()->getCurrentTheme()->name() && $this->uninstallTheme($theme)) {
+        if ($themeName === ThemeManager::getInstance()->getCurrentTheme()->name() && $this->uninstallTheme($themeName)) {
             CoreModel::getInstance()->updateOption('theme', 'Sampler');
-        } elseif (!$this->uninstallTheme($theme)) {
+        } elseif (!$this->uninstallTheme($themeName)) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
                 LangManager::translate('core.toaster.theme.delete.error',
-                    ['theme' => $theme]));
+                    ['theme' => $themeName]));
             Redirect::redirectPreviousRoute();
         }
 
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('core.toaster.theme.delete.success',
-                ['theme' => $theme]));
+                ['theme' => $themeName]));
 
         Redirect::redirectPreviousRoute();
     }

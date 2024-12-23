@@ -120,7 +120,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                             <p><?= LangManager::translate('core.theme.toasters.delete.config') ?></p>
                         </div>
                         <div class="modal-footer">
-                            <a href="theme/delete/<?= $theme->name() ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.title') ?></a>
+                            <a href="theme/delete/<?= base64_encode($theme->name()) ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.title') ?></a>
                         </div>
                     </div>
                 </div>
@@ -267,7 +267,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                         <p><?= LangManager::translate('core.theme.toasters.delete.config') ?></p>
                     </div>
                     <div class="modal-footer">
-                        <a href="theme/delete/<?= $theme['name'] ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.title') ?></a>
+                        <a href="theme/delete/<?= base64_encode($theme['name']) ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.title') ?></a>
                     </div>
                 </div>
             </div>
@@ -375,7 +375,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                             <p><?= LangManager::translate('core.theme.toasters.delete.config') ?></p>
                         </div>
                         <div class="modal-footer">
-                            <a href="theme/delete/<?= $theme->name() ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.title') ?></a>
+                            <a href="theme/delete/<?= base64_encode($theme->name()) ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.title') ?></a>
                         </div>
                     </div>
                 </div>
@@ -523,7 +523,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                         <p><?= LangManager::translate('core.theme.toasters.delete.config') ?></p>
                     </div>
                     <div class="modal-footer">
-                        <a href="theme/delete/<?= $theme['name'] ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.title') ?></a>
+                        <a href="theme/delete/<?= base64_encode($theme['name']) ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.title') ?></a>
                     </div>
                 </div>
             </div>
