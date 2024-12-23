@@ -28,6 +28,12 @@ interface IThemeConfig
 
     /**
      * @return string|null
+     * @desc Return the image link of the theme (optional). Return null if not exist.
+     */
+    public function imageLink(): ?string;
+
+    /**
+     * @return string|null
      * @desc The theme author.
      */
     public function author(): ?string;

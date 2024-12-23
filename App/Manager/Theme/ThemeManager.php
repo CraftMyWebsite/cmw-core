@@ -11,6 +11,11 @@ use CMW\Model\Core\ThemeModel;
 
 class ThemeManager extends AbstractManager
 {
+    public function defaultImageLink(): string
+    {
+        return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Admin/Resources/Assets/Img/local-theme.jpg';
+    }
+
     public function getCurrentTheme(): IThemeConfig
     {
         $currentThemeName = 'Sampler';
@@ -29,7 +34,7 @@ class ThemeManager extends AbstractManager
 
     /**
      * @param string $themeName
-     * @return \CMW\Manager\Theme\IThemeConfig|null
+     * @return IThemeConfig|null
      */
     public function getTheme(string $themeName): ?IThemeConfig
     {

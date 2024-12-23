@@ -48,4 +48,9 @@ class Theme implements IThemeConfig
     {
         return ['Core', 'Users'];
     }
+
+    public function imageLink(): ?string
+    {
+        return null;
+    }
 }

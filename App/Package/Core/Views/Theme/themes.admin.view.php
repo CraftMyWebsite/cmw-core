@@ -37,7 +37,8 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                         </div>
                     <?php endif; ?>
                     <img style="height: 200px; width: 100%; object-fit: cover"
-                         src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Img/local-theme.jpg"
+                         src="<?= $theme->imageLink() ?? ThemeManager::getInstance()->defaultImageLink() ?>"
+                         loading="lazy"
                          alt="img">
                 </div>
                 <div class="text-center pb-2">
@@ -67,7 +68,8 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                     <div class="modal-body grid-2">
                         <div style="height:20rem">
                             <img style="height: 100%; width: 100%;"
-                                 src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Img/local-theme.jpg"
+                                 src="<?= $theme->imageLink() ?? ThemeManager::getInstance()->defaultImageLink() ?>"
+                                 loading="lazy"
                                  alt="img">
                         </div>
                         <div>
@@ -118,6 +120,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                 </div>
                 <div class="relative">
                     <img style="height: 200px; width: 100%; object-fit: cover" src="<?= $theme['icon'] ?>"
+                         loading="lazy"
                          alt="Icon <?= $theme['name'] ?>">
                 </div>
 
@@ -172,6 +175,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                             <div style="height:20rem">
                                 <img style="height: 100%; width: 100%;"
                                      src="<?= $theme['icon'] ?>"
+                                     loading="lazy"
                                      alt="img <?= $theme['name'] ?>">
                             </div>
                             <div>
@@ -249,7 +253,8 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                         </div>
                     <?php endif; ?>
                     <img class="rounded-bottom" style="height: 200px; width: 100%; object-fit: cover"
-                         src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Img/local-theme.jpg"
+                         src="<?= $theme->imageLink() ?? ThemeManager::getInstance()->defaultImageLink() ?>"
+                         loading="lazy"
                          alt="im">
                 </div>
                 <div class="text-center pb-2">
@@ -278,7 +283,8 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                     <div class="grid-2 modal-body">
                         <div style="height:20rem">
                             <img style="height: 100%; width: 100%;"
-                                 src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Img/local-theme.jpg"
+                                 src="<?= $theme->imageLink() ?? ThemeManager::getInstance()->defaultImageLink() ?>"
+                                 loading="lazy"
                                  alt="img">
                         </div>
                         <div>
@@ -328,6 +334,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                 </div>
                 <div class="relative">
                     <img style="height: 200px; width: 100%; object-fit: cover" src="<?= $theme['icon'] ?>"
+                         loading="lazy"
                          alt="Icon <?= $theme['name'] ?>">
                 </div>
 
@@ -384,6 +391,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                             <div style="height:20rem">
                                 <img style="height: 100%; width: 100%;"
                                      src="<?= $theme['icon'] ?>"
+                                     loading="lazy"
                                      alt="img <?= $theme['name'] ?>">
                             </div>
                             <div>
