@@ -234,9 +234,10 @@ return [
                 'success' => 'Theme %theme% update with success',
             ],
             'delete' => [
-                'title' => 'Delete',
-                'confirm' => 'Do you really want to delete ',
+                'title' => 'Delete %theme% ?',
+                'confirm' => 'Do you really want to delete %theme% ?',
                 'config' => 'This deletion will also erase the theme configuration.',
+                'btn' => 'Delete',
             ],
         ],
     ],

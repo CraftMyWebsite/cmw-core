@@ -113,14 +113,14 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                 <div id="modal-delete-<?= $theme->name() ?>" class="modal-container">
                     <div class="modal">
                         <div class="modal-header-danger">
-                            <h6><?= LangManager::translate('core.theme.toasters.delete.title') ?> <?= $theme->name() ?> ?</h6>
+                            <h6><?= LangManager::translate('core.theme.toasters.delete.title', ['theme' => $theme->name()]) ?></h6>
                         </div>
                         <div class="modal-body">
-                            <p><?= LangManager::translate('core.theme.toasters.delete.confirm') ?> <?= $theme->name() ?> ?</p>
+                            <p><?= LangManager::translate('core.theme.toasters.delete.confirm', ['theme' => $theme->name()]) ?></p>
                             <p><?= LangManager::translate('core.theme.toasters.delete.config') ?></p>
                         </div>
                         <div class="modal-footer">
-                            <a href="theme/delete/<?= base64_encode($theme->name()) ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.title') ?></a>
+                            <a href="theme/delete/<?= base64_encode($theme->name()) ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.btn') ?></a>
                         </div>
                     </div>
                 </div>
@@ -260,14 +260,14 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
             <div id="modal-delete-<?= $theme['id'] ?>" class="modal-container">
                 <div class="modal">
                     <div class="modal-header-danger">
-                        <h6><?= LangManager::translate('core.theme.toasters.delete.title') ?> <?= $theme['name'] ?> ?</h6>
+                        <h6><?= LangManager::translate('core.theme.toasters.delete.title', ['theme' => $theme['name']]) ?></h6>
                     </div>
                     <div class="modal-body">
-                        <p><?= LangManager::translate('core.theme.toasters.delete.confirm') ?> <?= $theme['name'] ?> ?</p>
+                        <p><?= LangManager::translate('core.theme.toasters.delete.confirm', ['theme' => $theme['name']]) ?></p>
                         <p><?= LangManager::translate('core.theme.toasters.delete.config') ?></p>
                     </div>
                     <div class="modal-footer">
-                        <a href="theme/delete/<?= base64_encode($theme['name']) ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.title') ?></a>
+                        <a href="theme/delete/<?= base64_encode($theme['name']) ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.btn') ?></a>
                     </div>
                 </div>
             </div>
@@ -368,14 +368,14 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                 <div id="modal-delete-<?= $theme->name() ?>" class="modal-container">
                     <div class="modal">
                         <div class="modal-header-danger">
-                            <h6><?= LangManager::translate('core.theme.toasters.delete.title') ?> <?= $theme->name() ?> ?</h6>
+                            <h6><?= LangManager::translate('core.theme.toasters.delete.title', ['theme' => $theme->name()]) ?></h6>
                         </div>
                         <div class="modal-body">
-                            <p><?= LangManager::translate('core.theme.toasters.delete.confirm') ?> <?= $theme->name() ?> ?</p>
+                            <p><?= LangManager::translate('core.theme.toasters.delete.confirm', ['theme' => $theme->name()]) ?></p>
                             <p><?= LangManager::translate('core.theme.toasters.delete.config') ?></p>
                         </div>
                         <div class="modal-footer">
-                            <a href="theme/delete/<?= base64_encode($theme->name()) ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.title') ?></a>
+                            <a href="theme/delete/<?= base64_encode($theme->name()) ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.btn') ?></a>
                         </div>
                     </div>
                 </div>
@@ -516,14 +516,14 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
             <div id="modal-delete-<?= $theme['id'] ?>" class="modal-container">
                 <div class="modal">
                     <div class="modal-header-danger">
-                        <h6><?= LangManager::translate('core.theme.toasters.delete.title') ?> <?= $theme['name'] ?> ?</h6>
+                        <h6><?= LangManager::translate('core.theme.toasters.delete.title', ['theme' => $theme['name']]) ?></h6>
                     </div>
                     <div class="modal-body">
-                        <p><?= LangManager::translate('core.theme.toasters.delete.confirm') ?> <?= $theme['name'] ?> ?</p>
+                        <p><?= LangManager::translate('core.theme.toasters.delete.confirm', ['theme' => $theme['name']]) ?></p>
                         <p><?= LangManager::translate('core.theme.toasters.delete.config') ?></p>
                     </div>
                     <div class="modal-footer">
-                        <a href="theme/delete/<?= base64_encode($theme['name']) ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.title') ?></a>
+                        <a href="theme/delete/<?= base64_encode($theme['name']) ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.btn') ?></a>
                     </div>
                 </div>
             </div>
