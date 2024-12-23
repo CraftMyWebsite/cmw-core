@@ -15,7 +15,6 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Security\SecurityManager;
-use CMW\Manager\Theme\IThemeConfig;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
@@ -295,70 +294,5 @@ class ThemeController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('core.toaster.theme.reset'));
         Redirect::redirectToHome();
-    }
-
-    public static function getTheme(string $themeName): ?IThemeConfig
-    {
-        $namespace = 'CMW\\Theme\\' . $themeName . '\Theme';
-
-        if (!class_exists($namespace)) {
-            return null;
-        }
-
-        $classInstance = new $namespace();
-
-        if (!is_subclass_of($classInstance, IThemeConfig::class)) {
-            return null;
-        }
-
-        return $classInstance;
-    }
-
-    #[Link('/theme/delete/:theme', Link::GET, ['theme' => '.*?'], '/cmw-admin/theme')]
-    #[NoReturn]
-    private function adminThemeDelete(string $theme): void
-    {
-        UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
-
-        if ($theme === ThemeManager::getInstance()->getCurrentTheme()->name() && $this->uninstallTheme($theme)) {
-            CoreModel::getInstance()->updateOption('theme', 'Sampler');
-        } elseif (!$this->uninstallTheme($theme)) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                LangManager::translate('core.toaster.theme.delete.error',
-                    ['theme' => $theme]));
-            Redirect::redirectPreviousRoute();
-        }
-
-        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-            LangManager::translate('core.toaster.theme.delete.success',
-                ['theme' => $theme]));
-
-        Redirect::redirectPreviousRoute();
-    }
-
-    /**
-     * @param string $themeName
-     * @return bool
-     * @desc
-     * <p>Uninstall theme (sql and override methods)</p>
-     */
-    private function uninstallTheme(string $themeName): bool
-    {
-        $theme = self::getTheme($themeName);
-
-        if (is_null($theme)) {
-            return false;
-        }
-
-        // We can't delete Sampler
-        if ($theme->name() === "Sampler") {
-            return false;
-        }
-
-        // First we uninstall DB
-        ThemeModel::getInstance()->getInstance()->deleteThemeConfig($themeName);
-
-        // Uninstall theme:
-        return Directory::delete(EnvManager::getInstance()->getValue('DIR') . "Public/Themes/$themeName");
     }
 }
