@@ -138,7 +138,12 @@ return [
             'unableDeleteFolder' => 'Unable to remove folder : ',
             'delete' => [
                 'success' => 'Theme %theme% deleted successfully',
-                'error' => 'Unable to delete theme %theme%',
+                'error' => [
+                    'not_found' => 'Unable to find %theme% theme',
+                    'theme_is_default' => 'Unable to delete the default theme',
+                    'delete_database' => 'Unable to delete the theme database',
+                    'delete_files' => 'Unable to delete theme files',
+                ],
             ],
         ],
         'package' => [

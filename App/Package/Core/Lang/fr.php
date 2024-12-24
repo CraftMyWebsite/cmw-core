@@ -138,7 +138,12 @@ return [
             'unableDeleteFolder' => 'Impossible du supprimer le dossier : ',
             'delete' => [
                 'success' => 'Theme %theme% supprimé avec succès',
-                'error' => 'Impossible de supprimer le theme %theme%',
+                'error' => [
+                    'not_found' => 'Theme %theme% introuvable',
+                    'theme_is_default' => 'Impossible de supprimer le thème par défaut',
+                    'delete_database' => 'Impossible de supprimer la configuration du thème',
+                    'delete_files' => 'Impossible de supprimer les fichiers du thème',
+                ],
             ],
         ],
         'package' => [
