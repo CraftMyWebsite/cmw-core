@@ -136,6 +136,15 @@ return [
             'updateBeforeUpdate' => 'Veuillez mettre à jour le CMS avant de mettre à jour vos thèmes !',
             'unableUpdate' => 'Impossible d\'installer la mises à jour du thème : ',
             'unableDeleteFolder' => 'Impossible du supprimer le dossier : ',
+            'delete' => [
+                'success' => 'Theme %theme% supprimé avec succès',
+                'error' => [
+                    'not_found' => 'Theme %theme% introuvable',
+                    'theme_is_default' => 'Impossible de supprimer le thème par défaut',
+                    'delete_database' => 'Impossible de supprimer la configuration du thème',
+                    'delete_files' => 'Impossible de supprimer les fichiers du thème',
+                ],
+            ],
         ],
         'package' => [
             'updateBeforeInstall' => 'Veuillez mettre à jour le CMS avant d\'installer ce package !',
@@ -228,6 +237,12 @@ return [
         'toasters' => [
             'update' => [
                 'success' => 'Thème %theme% mis à jour avec succès',
+            ],
+            'delete' => [
+                'title' => 'Supprimer %theme% ?',
+                'confirm' => 'Voulez-vous vraiment supprimer %theme% ?',
+                'config' => 'Cette suppression effacera également la configuration du thème.',
+                'btn' => 'Supprimer',
             ],
         ],
     ],

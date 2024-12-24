@@ -8,9 +8,12 @@ use CMW\Manager\Manager\AbstractManager;
 use CMW\Manager\Theme\Exceptions\ThemeNotFoundException;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\ThemeModel;
+use CMW\Utils\Directory;
 
 class ThemeManager extends AbstractManager
 {
+    public static string $defaultThemeName = "Sampler";
+
     public function defaultImageLink(): string
     {
         return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Admin/Resources/Assets/Img/local-theme.jpg';
@@ -18,7 +21,7 @@ class ThemeManager extends AbstractManager
 
     public function getCurrentTheme(): IThemeConfig
     {
-        $currentThemeName = 'Sampler';
+        $currentThemeName = self::$defaultThemeName;
         $isInstallation = EnvManager::getInstance()->getValue('INSTALLSTEP') !== '-1';
 
         if (!$isInstallation) {
@@ -183,5 +186,36 @@ class ThemeManager extends AbstractManager
     public function isLocalThemeExist(string $name): bool
     {
         return file_exists("Public/Themes/$name/Theme.php");
+    }
+
+    /**
+     * @param string $name
+     * @return UninstallThemeType
+     * @desc Completely uninstall a local theme (delete files and database)
+     */
+    public function uninstallLocalTheme(string $name): UninstallThemeType
+    {
+        if (!$this->isLocalThemeExist($name)) {
+            return UninstallThemeType::ERROR_THEME_NOT_FOUND;
+        }
+
+        //Prevent default theme uninstallation
+        if ($name === self::$defaultThemeName) {
+            return UninstallThemeType::ERROR_THEME_IS_DEFAULT;
+        }
+
+        // Uninstall DB
+        $configPdo = ThemeModel::getInstance()->getInstance()->transactionalDeleteThemeConfig($name);
+
+        // Uninstall files
+        if (!Directory::delete(EnvManager::getInstance()->getValue('DIR') . "Public/Themes/$name")) {
+            $configPdo->rollBack();
+            return UninstallThemeType::ERROR_THEME_DELETE_FILES;
+        }
+
+        //If all is good, we commit the transaction
+        $configPdo->commit();
+
+        return UninstallThemeType::SUCCESS;
     }
 }

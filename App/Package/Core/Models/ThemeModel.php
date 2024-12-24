@@ -144,11 +144,23 @@ class ThemeModel extends AbstractModel
         $req->execute(['theme_config_name' => $configName, 'theme_config_value' => $configValue, 'theme' => $theme]);
     }
 
-    public function deleteThemeConfig(string $themeName): void
+    public function deleteThemeConfig(string $themeName): bool
     {
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('DELETE FROM cmw_theme_config WHERE theme_config_theme = :themeName');
 
+        return $req->execute(['themeName' => $themeName]);
+    }
+
+    public function transactionalDeleteThemeConfig(string $themeName): \PDO
+    {
+        $db = DatabaseManager::getInstance();
+        $db->beginTransaction();
+
+        $req = $db->prepare('DELETE FROM cmw_theme_config WHERE theme_config_theme = :themeName');
+
         $req->execute(['themeName' => $themeName]);
+
+        return $db;
     }
 }
