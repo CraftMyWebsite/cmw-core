@@ -205,14 +205,16 @@ class ThemeManager extends AbstractManager
         }
 
         // Uninstall DB
-        if (!ThemeModel::getInstance()->getInstance()->deleteThemeConfig($name)) {
-            return UninstallThemeType::ERROR_THEME_DELETE_DATABASE;
-        }
+        $configPdo = ThemeModel::getInstance()->getInstance()->transactionalDeleteThemeConfig($name);
 
         // Uninstall files
         if (!Directory::delete(EnvManager::getInstance()->getValue('DIR') . "Public/Themes/$name")) {
+            $configPdo->rollBack();
             return UninstallThemeType::ERROR_THEME_DELETE_FILES;
         }
+
+        //If all is good, we commit the transaction
+        $configPdo->commit();
 
         return UninstallThemeType::SUCCESS;
     }

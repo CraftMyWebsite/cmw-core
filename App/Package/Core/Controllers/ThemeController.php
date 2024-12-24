@@ -325,12 +325,6 @@ class ThemeController extends AbstractController
                     LangManager::translate('core.toaster.theme.delete.error.theme_is_default'),
                 );
                 break;
-            case UninstallThemeType::ERROR_THEME_DELETE_DATABASE:
-                Flash::send(Alert::ERROR,
-                    LangManager::translate('core.toaster.error'),
-                    LangManager::translate('core.toaster.theme.delete.error.delete_database'),
-                );
-                break;
             case UninstallThemeType::ERROR_THEME_DELETE_FILES:
                 Flash::send(Alert::ERROR,
                     LangManager::translate('core.toaster.error'),
