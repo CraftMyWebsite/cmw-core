@@ -16,9 +16,9 @@ class UserSettingsEntity extends AbstractEntity
 
     public function __construct()
     {
-        $this->defaultImage = UsersSettingsModel::getSetting('defaultImage');
-        $this->profilePageStatus = (int)UsersSettingsModel::getSetting('profilePage');
-        $this->resetPasswordMethod = (int)UsersSettingsModel::getSetting('resetPasswordMethod');
+        $this->defaultImage = UsersSettingsModel::getInstance()->getSetting('defaultImage');
+        $this->profilePageStatus = (int)UsersSettingsModel::getInstance()->getSetting('profilePage');
+        $this->resetPasswordMethod = (int)UsersSettingsModel::getInstance()->getSetting('resetPasswordMethod');
     }
 
     public static function getInstance(): self

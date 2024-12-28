@@ -13,8 +13,13 @@ use CMW\Manager\Router\RouterException;
 use CMW\Manager\Views\View;
 use CMW\Utils\Directory;
 use ReflectionClass;
+use function array_diff;
+use function class_exists;
 use function file_exists;
 use function is_dir;
+use function pathinfo;
+use function scandir;
+use const PATHINFO_FILENAME;
 
 class Loader
 {
@@ -87,10 +92,54 @@ class Loader
         return $toReturn;
     }
 
+    public static function loadManagerImplementations($interface, string $managerName): array
+    {
+        $envDir = EnvManager::getInstance()->getValue('dir');
+        $packages = PackageController::getAllPackages();
+        $implementations = [];
+
+        foreach ($packages as $package) {
+            $packagePath = $envDir . "App/Package/{$package->name()}/Implementations/Manager/$managerName";
+
+            if (!is_dir($packagePath)) {
+                continue;
+            }
+
+            $files = array_diff(scandir($packagePath), ['..', '.']);
+            foreach ($files as $file) {
+                $filePath = $packagePath . '/' . $file;
+
+                if (!file_exists($filePath)) {
+                    continue;
+                }
+
+                require_once $filePath;
+
+                $className = pathinfo($file, PATHINFO_FILENAME);
+                $namespace = "CMW\\Implementation\\{$package->name()}\\Manager\\$managerName\\$className";
+
+                if (!class_exists($namespace)) {
+                    continue;
+                }
+
+                $instance = $namespace::getInstance();
+
+                if (!($instance instanceof $interface)) {
+                    continue;
+                }
+
+                $implementations[] = $instance;
+            }
+        }
+
+        return $implementations;
+    }
+
     /**
      * @param string $interface
      * @return mixed
      * @desc Get the highest implementation of an interface. The Interface need to have a weight method.
+     * <p>Return <b>NULL</b> if we don't have any implementation !!</p>
      */
     public static function getHighestImplementation(string $interface): mixed
     {
@@ -110,7 +159,7 @@ class Loader
             ++$i;
         }
 
-        return $implementations[$index];
+        return empty($implementations) ? null : $implementations[$index];
     }
 
     public static function setLocale(): void
@@ -195,9 +244,6 @@ class Loader
         }, $name, $weight);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public static function listAttributes(string $file): void
     {
         if (in_array($file, self::$fileLoadedAttr, true)) {

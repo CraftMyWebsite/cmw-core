@@ -1,10 +1,13 @@
 <?php
 
 use CMW\Controller\Core\SecurityController;
+use CMW\Interface\Users\IUsersOAuth;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Model\Core\ThemeModel;
 use CMW\Utils\Website;
+
+/* @var IUsersOAuth[] $oAuths */
 
 Website::setTitle('Inscription');
 Website::setDescription('Inscrivez-vous sur le site ' . Website::getWebsiteName());
@@ -43,6 +46,17 @@ Website::setDescription('Inscrivez-vous sur le site ' . Website::getWebsiteName(
                                placeholder="<?= LangManager::translate('users.users.repeat_pass') ?>">
                         <label for="email">Mot de passe</label>
                     </div>
+
+                    <div class="d-flex justify-content-center mb-2 mt-2">
+                        <?php foreach ($oAuths as $oAuth): ?>
+                            <a href="oauth/<?= $oAuth->methodIdentifier() ?>" class="btn "
+                               aria-label="<?= $oAuth->methodeName() ?>">
+                                <img src="<?= $oAuth->methodeIconLink() ?>"
+                                     alt="<?= $oAuth->methodeName() ?>" width="32" height="32"/>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+
                     <?php SecurityController::getPublicData(); ?>
                     <div class="d-grid">
                         <button style="background: <?= ThemeModel::getInstance()->fetchConfigValue('buttonColor') ?>"

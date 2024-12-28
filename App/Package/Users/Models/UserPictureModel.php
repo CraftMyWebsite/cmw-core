@@ -57,7 +57,7 @@ class UserPictureModel extends AbstractModel
 
     public function userHasDefaultImage(int $userId): bool
     {
-        return is_file(EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/Users/Default/' . UsersSettingsModel::getSetting('defaultImage')) && !$this->userHasImage($userId);
+        return is_file(EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/Users/Default/' . UsersSettingsModel::getInstance()->getSetting('defaultImage')) && !$this->userHasImage($userId);
     }
 
     /**

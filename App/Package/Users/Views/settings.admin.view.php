@@ -67,10 +67,10 @@ $description = LangManager::translate('users.settings.desc');
             <div>
                 <label for="security_reinforced"><?= LangManager::translate('users.long_date.setting.label') ?></label>
                 <select class="form-select" id="security_reinforced" name="security_reinforced" required>
-                    <option value="0" <?= UsersSettingsModel::getSetting('securityReinforced') === '0' ? 'selected' : '' ?>>
+                    <option value="0" <?= UsersSettingsModel::getInstance()->getSetting('securityReinforced') === '0' ? 'selected' : '' ?>>
                         <?= LangManager::translate('users.long_date.setting.no') ?>
                     </option>
-                    <option value="1" <?= UsersSettingsModel::getSetting('securityReinforced') === '1' ? 'selected' : '' ?>>
+                    <option value="1" <?= UsersSettingsModel::getInstance()->getSetting('securityReinforced') === '1' ? 'selected' : '' ?>>
                         <?= LangManager::translate('users.long_date.setting.yes') ?>
                     </option>
                 </select>
@@ -81,8 +81,8 @@ $description = LangManager::translate('users.settings.desc');
                 <label>Double facteur obligatoire</label>
                 <fieldset class="form-group">
                     <select class="form-select" id="listEnforcedToggle" name="listEnforcedToggle" required>
-                        <option value="0" <?php if (!UsersSettingsModel::getSetting('listEnforcedToggle')) { echo 'selected'; } ?>>Pas d'obligation</option>
-                        <option value="1" <?php if (UsersSettingsModel::getSetting('listEnforcedToggle')) { echo 'selected'; } ?>>Ayant le rôle :</option>
+                        <option value="0" <?php if (!UsersSettingsModel::getInstance()->getSetting('listEnforcedToggle')) { echo 'selected'; } ?>>Pas d'obligation</option>
+                        <option value="1" <?php if (UsersSettingsModel::getInstance()->getSetting('listEnforcedToggle')) { echo 'selected'; } ?>>Ayant le rôle :</option>
                     </select>
                 </fieldset>
                 <div class="mt-2" id="listEnforcedRoles">

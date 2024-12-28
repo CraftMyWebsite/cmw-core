@@ -26,8 +26,14 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
             <div class="card p-0 relative" style="overflow: hidden;">
                 <div class="flex justify-between px-2 pt-2">
                     <p class="font-bold"><?= $theme->name() ?></p>
-                    <button data-modal-toggle="modal-<?= $theme->name() ?>" class="btn-primary-sm"
-                            type="button"><?= LangManager::translate('core.theme.details') ?></button>
+                    <div>
+                        <button data-modal-toggle="modal-<?= $theme->name() ?>" class="btn-primary-sm"
+                                type="button"><?= LangManager::translate('core.theme.details') ?></button>
+                        <?php if ($theme->name() !== 'Sampler'): ?>
+                            <button data-modal-toggle="modal-delete-<?= $theme->name() ?>" class="btn-danger-sm"
+                                    type="button"><i class="fa-solid fa-trash"></i></button>
+                        <?php endif; ?>
+                    </div>
                 </div>
                 <div class="relative">
                     <?php if ($theme->name() !== 'Sampler'): ?>
@@ -37,7 +43,8 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                         </div>
                     <?php endif; ?>
                     <img style="height: 200px; width: 100%; object-fit: cover"
-                         src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Img/local-theme.jpg"
+                         src="<?= $theme->imageLink() ?? ThemeManager::getInstance()->defaultImageLink() ?>"
+                         loading="lazy"
                          alt="img">
                 </div>
                 <div class="text-center pb-2">
@@ -67,7 +74,8 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                     <div class="modal-body grid-2">
                         <div style="height:20rem">
                             <img style="height: 100%; width: 100%;"
-                                 src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Img/local-theme.jpg"
+                                 src="<?= $theme->imageLink() ?? ThemeManager::getInstance()->defaultImageLink() ?>"
+                                 loading="lazy"
                                  alt="img">
                         </div>
                         <div>
@@ -101,6 +109,22 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                     </div>
                 </div>
             </div>
+            <?php if ($theme->name() !== 'Sampler'): ?>
+                <div id="modal-delete-<?= $theme->name() ?>" class="modal-container">
+                    <div class="modal">
+                        <div class="modal-header-danger">
+                            <h6><?= LangManager::translate('core.theme.toasters.delete.title', ['theme' => $theme->name()]) ?></h6>
+                        </div>
+                        <div class="modal-body">
+                            <p><?= LangManager::translate('core.theme.toasters.delete.confirm', ['theme' => $theme->name()]) ?></p>
+                            <p><?= LangManager::translate('core.theme.toasters.delete.config') ?></p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="theme/delete/<?= base64_encode($theme->name()) ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.btn') ?></a>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
         <?php endif; ?>
     <?php endforeach; ?>
 
@@ -113,11 +137,16 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
             <div class="card p-0 relative" style="overflow: hidden;">
                 <div class="flex justify-between px-2 pt-2">
                     <p class="font-bold"><?= $theme['name'] ?></p>
-                    <button data-modal-toggle="modal-<?= $theme['id'] ?>" class="btn-primary-sm"
-                            type="button"><?= LangManager::translate('core.theme.details') ?></button>
+                    <div>
+                        <button data-modal-toggle="modal-<?= $theme['id'] ?>" class="btn-primary-sm"
+                                type="button"><?= LangManager::translate('core.theme.details') ?></button>
+                        <button data-modal-toggle="modal-delete-<?= $theme['id'] ?>" class="btn-danger-sm"
+                                type="button"><i class="fa-solid fa-trash"></i></button>
+                    </div>
                 </div>
                 <div class="relative">
                     <img style="height: 200px; width: 100%; object-fit: cover" src="<?= $theme['icon'] ?>"
+                         loading="lazy"
                          alt="Icon <?= $theme['name'] ?>">
                 </div>
 
@@ -172,6 +201,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                             <div style="height:20rem">
                                 <img style="height: 100%; width: 100%;"
                                      src="<?= $theme['icon'] ?>"
+                                     loading="lazy"
                                      alt="img <?= $theme['name'] ?>">
                             </div>
                             <div>
@@ -227,6 +257,20 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                     </div>
                 </div>
             </div>
+            <div id="modal-delete-<?= $theme['id'] ?>" class="modal-container">
+                <div class="modal">
+                    <div class="modal-header-danger">
+                        <h6><?= LangManager::translate('core.theme.toasters.delete.title', ['theme' => $theme['name']]) ?></h6>
+                    </div>
+                    <div class="modal-body">
+                        <p><?= LangManager::translate('core.theme.toasters.delete.confirm', ['theme' => $theme['name']]) ?></p>
+                        <p><?= LangManager::translate('core.theme.toasters.delete.config') ?></p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="theme/delete/<?= base64_encode($theme['name']) ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.btn') ?></a>
+                    </div>
+                </div>
+            </div>
         <?php endif; ?>
     <?php endforeach; ?>
 
@@ -238,8 +282,14 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
             <div class="card p-0 relative" style="overflow: hidden;">
                 <div class="flex justify-between px-2 pt-2">
                     <p class="font-bold"><?= $theme->name() ?></p>
-                    <button data-modal-toggle="modal-<?= $theme->name() ?>" class="btn-primary-sm"
-                            type="button"><?= LangManager::translate('core.theme.details') ?></button>
+                    <div>
+                        <button data-modal-toggle="modal-<?= $theme->name() ?>" class="btn-primary-sm"
+                                type="button"><?= LangManager::translate('core.theme.details') ?></button>
+                        <?php if ($theme->name() !== 'Sampler'): ?>
+                            <button data-modal-toggle="modal-delete-<?= $theme->name() ?>" class="btn-danger-sm"
+                                    type="button"><i class="fa-solid fa-trash"></i></button>
+                        <?php endif; ?>
+                    </div>
                 </div>
                 <div class="relative">
                     <?php if ($theme->name() !== 'Sampler'): ?>
@@ -249,7 +299,8 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                         </div>
                     <?php endif; ?>
                     <img class="rounded-bottom" style="height: 200px; width: 100%; object-fit: cover"
-                         src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Img/local-theme.jpg"
+                         src="<?= $theme->imageLink() ?? ThemeManager::getInstance()->defaultImageLink() ?>"
+                         loading="lazy"
                          alt="im">
                 </div>
                 <div class="text-center pb-2">
@@ -278,7 +329,8 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                     <div class="grid-2 modal-body">
                         <div style="height:20rem">
                             <img style="height: 100%; width: 100%;"
-                                 src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Img/local-theme.jpg"
+                                 src="<?= $theme->imageLink() ?? ThemeManager::getInstance()->defaultImageLink() ?>"
+                                 loading="lazy"
                                  alt="img">
                         </div>
                         <div>
@@ -312,6 +364,22 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                     </div>
                 </div>
             </div>
+            <?php if ($theme->name() !== 'Sampler'): ?>
+                <div id="modal-delete-<?= $theme->name() ?>" class="modal-container">
+                    <div class="modal">
+                        <div class="modal-header-danger">
+                            <h6><?= LangManager::translate('core.theme.toasters.delete.title', ['theme' => $theme->name()]) ?></h6>
+                        </div>
+                        <div class="modal-body">
+                            <p><?= LangManager::translate('core.theme.toasters.delete.confirm', ['theme' => $theme->name()]) ?></p>
+                            <p><?= LangManager::translate('core.theme.toasters.delete.config') ?></p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="theme/delete/<?= base64_encode($theme->name()) ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.btn') ?></a>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
         <?php endif; ?>
     <?php endforeach; ?>
     <!------------------------------------------------
@@ -323,11 +391,16 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
             <div class="card p-0 relative" style="overflow: hidden;">
                 <div class="flex justify-between px-2 pt-2">
                     <p class="font-bold"><?= $theme['name'] ?></p>
-                    <button data-modal-toggle="modal-<?= $theme['id'] ?>" class="btn-primary-sm"
-                            type="button"><?= LangManager::translate('core.theme.details') ?></button>
+                    <div>
+                        <button data-modal-toggle="modal-<?= $theme['id'] ?>" class="btn-primary-sm"
+                                type="button"><?= LangManager::translate('core.theme.details') ?></button>
+                        <button data-modal-toggle="modal-delete-<?= $theme['id'] ?>" class="btn-danger-sm"
+                                type="button"><i class="fa-solid fa-trash"></i></button>
+                    </div>
                 </div>
                 <div class="relative">
                     <img style="height: 200px; width: 100%; object-fit: cover" src="<?= $theme['icon'] ?>"
+                         loading="lazy"
                          alt="Icon <?= $theme['name'] ?>">
                 </div>
 
@@ -384,6 +457,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                             <div style="height:20rem">
                                 <img style="height: 100%; width: 100%;"
                                      src="<?= $theme['icon'] ?>"
+                                     loading="lazy"
                                      alt="img <?= $theme['name'] ?>">
                             </div>
                             <div>
@@ -436,6 +510,20 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                         <button data-modal-hide="modal-<?= $theme['id'] ?>" type="button" class="btn-danger">
                             <?= LangManager::translate('core.btn.close') ?>
                         </button>
+                    </div>
+                </div>
+            </div>
+            <div id="modal-delete-<?= $theme['id'] ?>" class="modal-container">
+                <div class="modal">
+                    <div class="modal-header-danger">
+                        <h6><?= LangManager::translate('core.theme.toasters.delete.title', ['theme' => $theme['name']]) ?></h6>
+                    </div>
+                    <div class="modal-body">
+                        <p><?= LangManager::translate('core.theme.toasters.delete.confirm', ['theme' => $theme['name']]) ?></p>
+                        <p><?= LangManager::translate('core.theme.toasters.delete.config') ?></p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="theme/delete/<?= base64_encode($theme['name']) ?>" type="button" class="btn-danger"><?= LangManager::translate('core.theme.toasters.delete.btn') ?></a>
                     </div>
                 </div>
             </div>

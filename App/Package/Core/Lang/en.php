@@ -136,6 +136,15 @@ return [
             'updateBeforeUpdate' => 'Please update the CMS before updating your themes!',
             'unableUpdate' => 'Unable to install this theme! : ',
             'unableDeleteFolder' => 'Unable to remove folder : ',
+            'delete' => [
+                'success' => 'Theme %theme% deleted successfully',
+                'error' => [
+                    'not_found' => 'Unable to find %theme% theme',
+                    'theme_is_default' => 'Unable to delete the default theme',
+                    'delete_database' => 'Unable to delete the theme database',
+                    'delete_files' => 'Unable to delete theme files',
+                ],
+            ],
         ],
         'package' => [
             'updateBeforeInstall' => 'Please update CMS before installing this package!',
@@ -229,6 +238,12 @@ return [
             'update' => [
                 'success' => 'Theme %theme% update with success',
             ],
+            'delete' => [
+                'title' => 'Delete %theme% ?',
+                'confirm' => 'Do you really want to delete %theme% ?',
+                'config' => 'This deletion will also erase the theme configuration.',
+                'btn' => 'Delete',
+            ],
         ],
     ],
     'Package' => [
@@ -318,6 +333,7 @@ return [
             'deletedFiles' => 'Unable to delete old files.',
             'deleteFile' => 'Unable to delete file %file%',
             'sqlUpdate' => 'Unable to update your database.',
+            'devVersion' => 'You are using a development version of CraftMyWebsite, updates are not available.',
         ],
         'success' => 'Website update with success',
     ],

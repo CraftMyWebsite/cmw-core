@@ -2,6 +2,7 @@
 
 namespace CMW\Theme\Sampler;
 
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Theme\IThemeConfig;
 
 class Theme implements IThemeConfig
@@ -47,5 +48,10 @@ class Theme implements IThemeConfig
     public function requiredPackages(): array
     {
         return ['Core', 'Users'];
+    }
+
+    public function imageLink(): ?string
+    {
+        return EnvManager::getInstance()->getValue('PATH_SUBFOLDER'). 'Public/Themes/Sampler/Resources/default.jpg';
     }
 }
