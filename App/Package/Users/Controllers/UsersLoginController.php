@@ -34,6 +34,7 @@ use function is_int;
 use function is_null;
 use function mb_strtolower;
 use function strlen;
+use function strtotime;
 use function time;
 
 /**
@@ -235,7 +236,9 @@ class UsersLoginController extends AbstractController
             ErrorManager::showCustomErrorPage("File not found", "The file $filePath doesn't exist.");
         }
 
-        View::createPublicView('Users', '2fa')->view();
+        View::createPublicView('Users', '2fa')
+            ->setOverrideBackendMode(true)
+            ->view();
     }
 
     private function enforceLogin2Fa(UserEntity $user): void
