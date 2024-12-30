@@ -155,6 +155,10 @@ hr {
     padding-bottom: 0.4rem;
 }
 
+.a-side-nav-dropdown:is(.dark *) {
+    background-color: var(--nav-sky-dark);
+}
+
 .a-side-nav-drop {
     transition: margin-left 200ms;
     @apply flex items-center w-full text-sm pl-4 pr-1 pt-1 hover:ml-2 hover:text-nav-sky;
@@ -971,4 +975,16 @@ kbd {
 
 .tooltip-content {
     @apply absolute z-[9000] invisible inline-block px-3 py-2 text-sm font-medium text-light-primary bg-light-third rounded-lg shadow-sm opacity-0 tooltip dark:bg-dark-third dark:text-dark-text-primary;
+}
+
+.flex {
+    display: flex !important;
+}
+
+.justify-center {
+    justify-content: center !important;
+}
+
+.items-center {
+    align-items: center !important;
 }
