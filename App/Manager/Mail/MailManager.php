@@ -26,7 +26,7 @@ class MailManager extends AbstractManager
      * @Param string $subject -> subject of mail
      * @Param string $body -> html content with data
      */
-    public function sendMailSMTP(string $receiver, string $subject, string $body, ?string $senderMail, ?string $senderName): void
+    public function sendMailSMTP(string $receiver, string $subject, string $body, ?string $senderMail, ?string $senderName): bool
     {
         $config = MailModel::getInstance()->getConfig();
 
@@ -66,10 +66,17 @@ class MailManager extends AbstractManager
             $mail->Body = $body . '<br>' . $config?->getFooter();
 
             // Send mail
-            $mail->send();
+            $status = $mail->send();
+
+            if (!$status) {
+                error_log("Message could not be sent. Mailer Error: $mail->ErrorInfo");
+            }
+
+            return $status;
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: $e";
             error_log("Message could not be sent. Mailer Error: $e");
+            return false;
         }
     }
 
@@ -77,28 +84,28 @@ class MailManager extends AbstractManager
      * @param string $receiver
      * @param string $object
      * @param string $body
-     * @return void
+     * @return bool
      * @desc Send mail with the Default php function
      */
-    private function sendMailPHP(string $receiver, string $object, string $body): void
+    private function sendMailPHP(string $receiver, string $object, string $body): bool
     {
-        mail($receiver, $object, $body);
+        return mail($receiver, $object, $body);
     }
 
     /**
      * @param string $receiver
      * @param string $object
      * @param string $body
-     * @return void
+     * @return bool
      * @desc Send mail (SMTP OR PHP MAIL function)
      */
-    public function sendMail(string $receiver, string $object, string $body): void
+    public function sendMail(string $receiver, string $object, string $body): bool
     {
         if (MailModel::getInstance()->getConfig() !== null && MailModel::getInstance()->getConfig()->isEnable()) {
-            $this->sendMailSMTP($receiver, $object, $body, '', '');
-        } else {
-            $this->sendMailPHP($receiver, $object, $body);
+            return $this->sendMailSMTP($receiver, $object, $body, '', '');
         }
+
+        return $this->sendMailPHP($receiver, $object, $body);
     }
 
     /**
