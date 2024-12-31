@@ -25,7 +25,7 @@ use CMW\Utils\Website;
     <link rel="icon" type="image/x-icon"
           href="<?= Website::getFavicon() ?>"/>
     <link rel="stylesheet"
-          href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Css/test.css"/>
+          href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Css/style.css"/>
     <link rel="stylesheet"
           href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Vendors/Choices.js/choices.css"/>
     <link rel="stylesheet"
