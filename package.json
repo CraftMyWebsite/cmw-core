@@ -4,7 +4,7 @@
   "description": "Compilation de TailwindCss pou le CORE - npm run tw-core",
   "main": "index.js",
   "scripts": {
-    "tw-core": "npx tailwindcss -i Admin/Tailwind/tailwindInput.css -o Admin/Resources/Assets/Css/test.css --config ./Admin/Tailwind/tailwind-dashboard.config.js --watch "
+    "tw-core": "npx tailwindcss -i Admin/Tailwind/tailwindInput.css -o Admin/Resources/Assets/Css/style.css --config ./Admin/Tailwind/tailwind-dashboard.config.js --watch --minify"
   },
   "repository": {
     "type": "git",
