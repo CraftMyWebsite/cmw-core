@@ -2,7 +2,7 @@
 module.exports = {
     darkMode: "class",
     content: [
-        './Admin/Resources/Views/**/*.{php,html,js}',
+        './Admin/**/*.{php,html,js}',
         './Admin/Tailwind/**/*.{php,html,js}',
         './App/Package/**/Views/**/*.{php,html,js}',
         './node_modules/flowbite/**/*.js'
