@@ -133,7 +133,7 @@ function initializeSliders() {
         function renderSlides() {
             images.forEach((img, index) => {
                 const slideDiv = document.createElement("div");
-                slideDiv.classList.add("slide", "w-full", "h-auto", "flex", "items-center", "justify-center", "text-white", "text-2xl");
+                slideDiv.classList.add("slide", "w-full", "h-auto", "items-center", "justify-center", "text-white", "text-2xl");
                 slideDiv.style.display = index === 0 ? "block" : "none";
                 if (index === 0) {
                     img.classList.remove("hidden");
