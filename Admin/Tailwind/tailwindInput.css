@@ -974,7 +974,7 @@ kbd {
 }
 
 .tooltip-content {
-    @apply absolute z-[9000] invisible inline-block px-3 py-2 text-sm font-medium text-light-primary bg-light-third rounded-lg shadow-sm opacity-0 tooltip dark:bg-dark-third dark:text-dark-text-primary;
+    @apply absolute z-[9000] invisible inline-block px-3 py-2 text-sm font-medium text-light-primary bg-gray-600 rounded-lg shadow-sm opacity-0 tooltip dark:bg-dark-third dark:text-dark-text-primary;
 }
 
 .flex {
@@ -987,4 +987,20 @@ kbd {
 
 .items-center {
     align-items: center !important;
+}
+
+.visible {
+    visibility: visible !important;
+}
+
+.invisible {
+    visibility: hidden  !important;
+}
+
+.opacity-0 {
+    opacity: 0 !important;
+}
+
+.opacity-100 {
+    opacity: 1 !important;
 }
