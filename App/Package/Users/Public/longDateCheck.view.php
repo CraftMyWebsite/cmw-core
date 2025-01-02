@@ -9,13 +9,7 @@ Website::setTitle('Verification d\'identité');
 Website::setDescription('Verification d\'identité');
 
 ?>
-<?php if (\CMW\Controller\Users\UsersController::isAdminLogged()): ?>
-    <div style="background-color: orange; padding: 6px; margin-bottom: 10px">
-        <span>Votre thème ne gère pas cette page !</span>
-        <br>
-        <small>Seuls les administrateurs voient ce message !</small>
-    </div>
-<?php endif;?>
+<section style="width: 70%;padding-bottom: 6rem;margin: 1rem auto auto;">
 
 <h1 style="text-align: center">Verification d'identité</h1>
 <p style="text-align: center">Cela fait longtemps que vous ne vous êtes pas connecté sur <?= Website::getWebsiteName() ?><br>Vérifions que c'est bien vous !</p>
@@ -32,4 +26,5 @@ Website::setDescription('Verification d\'identité');
             <button type="submit" style="display: block; width: 100%;">Connexion</button>
         </div>
     </form>
+</section>
 </section>

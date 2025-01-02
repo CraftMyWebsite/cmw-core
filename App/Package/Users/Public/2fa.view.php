@@ -9,13 +9,7 @@ Website::setTitle('Double facteur');
 Website::setDescription('Activer le double facteur');
 
 ?>
-<?php if (\CMW\Controller\Users\UsersController::isAdminLogged()): ?>
-    <div style="background-color: orange; padding: 6px; margin-bottom: 10px">
-        <span>Votre thème ne gère pas cette page !</span>
-        <br>
-        <small>Seuls les administrateurs voient ce message !</small>
-    </div>
-<?php endif;?>
+<section style="width: 70%;padding-bottom: 6rem;margin: 1rem auto auto;">
 
 <h1 style="text-align: center">Code d'authentification</h1>
 
@@ -32,4 +26,5 @@ Website::setDescription('Activer le double facteur');
             <button type="submit" style="display: block; width: 100%;">Connexion</button>
         </div>
     </form>
+</section>
 </section>

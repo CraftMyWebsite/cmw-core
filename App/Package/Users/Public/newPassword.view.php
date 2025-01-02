@@ -9,13 +9,7 @@ Website::setTitle('Nouveau mot de passe');
 Website::setDescription('Nouveau mot de passe');
 ?>
 
-<?php if (\CMW\Controller\Users\UsersController::isAdminLogged()): ?>
-    <div style="background-color: orange; padding: 6px; margin-bottom: 10px">
-        <span>Votre thème ne gère pas cette page !</span>
-        <br>
-        <small>Seuls les administrateurs voient ce message !</small>
-    </div>
-<?php endif;?>
+<section style="width: 70%;padding-bottom: 6rem;margin: 1rem auto auto;">
 
 <h1 style="text-align: center">Nouveau mot de passe</h1>
 <section style="border: 1px #b4aaaa solid; border-radius: 9px; padding: .5rem; max-width: 50%; margin: auto">
@@ -45,7 +39,7 @@ Website::setDescription('Nouveau mot de passe');
         </button>
     </form>
 </section>
-
+</section>
 <script>
     function showPassword() {
         var x = document.getElementById("passwordInput");

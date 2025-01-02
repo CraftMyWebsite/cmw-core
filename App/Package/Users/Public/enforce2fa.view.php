@@ -10,13 +10,7 @@ use CMW\Utils\Website;
 Website::setTitle('Double facteur obligatoire');
 Website::setDescription("Merci d'activer le 2fa !");
 ?>
-<?php if (\CMW\Controller\Users\UsersController::isAdminLogged()): ?>
-    <div style="background-color: orange; padding: 6px; margin-bottom: 10px">
-        <span>Votre thème ne gère pas cette page !</span>
-        <br>
-        <small>Seuls les administrateurs voient ce message !</small>
-    </div>
-<?php endif;?>
+<section style="width: 70%;padding-bottom: 6rem;margin: 1rem auto auto;">
 
 <h1 style="text-align: center">Veuillez activer le double facteur pour pouvoir vous connecter</h1>
 
@@ -39,4 +33,5 @@ Website::setDescription("Merci d'activer le 2fa !");
             <button type="submit" style="display: block; width: 100%;">Activer</button>
         </div>
     </form>
+</section>
 </section>
