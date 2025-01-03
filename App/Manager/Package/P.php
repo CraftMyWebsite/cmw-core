@@ -40,8 +40,6 @@ class P
 
         self::$callable = $callable();
 
-        $callable();
-
         return new self;
     }
 
