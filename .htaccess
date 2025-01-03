@@ -35,30 +35,22 @@
 
 # Deny access to all files starting with .
 <Files ~ "^\.">
-    Order allow,deny
-    Deny from all
-    satisfy all
+    Require all denied
 </Files>
 
 # Deny access to cmw file
 <Files cmw>
-    Order allow,deny
-    Deny from all
-    satisfy all
+    Require all denied
 </Files>
 
 # Deny access to pretty-php.phar file
 <Files "pretty-php.phar">
-    Order allow,deny
-    Deny from all
-    satisfy all
+    Require all denied
 </Files>
 
 # Deny access to LICENSE file
 <Files "LICENSE">
-    Order allow,deny
-    Deny from all
-    satisfy all
+    Require all denied
 </Files>
 
 #Cache images / scripts
