@@ -9,6 +9,9 @@
     #Deny access to App/Storage files (cache)
     RewriteRule ^App/Storage/.*$ - [F,L]
 
+    #Deny access to App/Package/*/Init files
+    RewriteRule ^App/Package/.*/Init/.*$ - [F,L]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
