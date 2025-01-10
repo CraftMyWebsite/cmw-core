@@ -1008,7 +1008,3 @@ kbd {
 .transform-none {
     transform: none !important;
 }
-
-.hidden {
-    display: none !important;
-}
