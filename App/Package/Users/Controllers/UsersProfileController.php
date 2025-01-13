@@ -5,11 +5,13 @@ namespace CMW\Controller\Users;
 use CMW\Entity\Users\UserSettingsEntity;
 use CMW\Event\Users\DeleteUserAccountEvent;
 use CMW\Manager\Events\Emitter;
+use CMW\Manager\Filter\FilterManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
+use CMW\Manager\Router\RouterException;
 use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Twofa\TwoFaManager;
 use CMW\Manager\Uploads\ImagesException;
@@ -37,27 +39,24 @@ use const PASSWORD_BCRYPT;
 class UsersProfileController extends AbstractController
 {
     /**
-     * @throws \CMW\Manager\Router\RouterException
+     * @throws RouterException
      */
     #[Link('/profile', Link::GET)]
     private function publicProfile(): void
     {
-        if (!UsersController::isUserLogged() && !UserSettingsEntity::getInstance()->isProfilePageEnabled()) {
+        $user = UsersSessionsController::getInstance()->getCurrentUser();
+        $isProfilePageEnabled = UserSettingsEntity::getInstance()->isProfilePageEnabled();
+
+        if (is_null($user) && !$isProfilePageEnabled) {
             Redirect::redirect('login');
         }
 
-        if (!UserSettingsEntity::getInstance()->isProfilePageEnabled()) {
+        if (!$isProfilePageEnabled) {
             Redirect::redirectToHome();
         }
-
-        if (!UsersController::isUserLogged()) {
-            Redirect::redirect('login');
-        }
-
-        $user = UsersSessionsController::getInstance()->getCurrentUser();
 
         if (is_null($user)) {
-            Redirect::redirectToHome();
+            Redirect::redirect('login');
         }
 
         if (UsersSessionsController::getInstance()->getCurrentUser()?->getId() !== $user->getId()) {
@@ -66,7 +65,7 @@ class UsersProfileController extends AbstractController
         }
 
         if (UserSettingsEntity::getInstance()->getProfilePageStatus() === 1) {
-            Redirect::redirect('profile/', ['pseudo' => $user?->getPseudo()]);
+            Redirect::redirect('profile/', ['pseudo' => $user->getPseudo()]);
         }
 
         View::createPublicView('Users', 'profile')
@@ -112,19 +111,20 @@ class UsersProfileController extends AbstractController
     #[Link('/profile/:pseudo', Link::GET, ['pseudo' => '.*?'])]
     private function publicProfileWithPseudo(string $pseudo): void
     {
-        if (!UsersController::isUserLogged() && !UserSettingsEntity::getInstance()->isProfilePageEnabled()) {
+        $user = UsersSessionsController::getInstance()->getCurrentUser();
+        $isProfilePageEnabled = UserSettingsEntity::getInstance()->isProfilePageEnabled();
+
+        if (is_null($user) && !$isProfilePageEnabled) {
             Redirect::redirect('login');
         }
 
-        if (!UserSettingsEntity::getInstance()->isProfilePageEnabled()) {
+        if (!$isProfilePageEnabled) {
             Redirect::redirectToHome();
         }
 
         if (UserSettingsEntity::getInstance()->getProfilePageStatus() === 0) {
             Redirect::redirect('profile');
         }
-
-        $user = UsersModel::getInstance()->getUserWithPseudo($pseudo);
 
         if (is_null($user)) {
             Redirect::errorPage(404);
@@ -160,17 +160,22 @@ class UsersProfileController extends AbstractController
     #[NoReturn] #[Link('/profile/update', Link::POST)]
     private function publicProfileUpdate(): void
     {
-        if (!UsersController::isUserLogged()) {
-            Redirect::redirectToHome();
-        }
-
         $user = UsersSessionsController::getInstance()->getCurrentUser();
 
         if (is_null($user)) {
             Redirect::redirectToHome();
         }
 
-        [$mail, $pseudo, $firstname, $lastname] = Utils::filterInput('email', 'pseudo', 'name', 'lastname');
+        $mail = FilterManager::filterInputStringPost('mail', 500);
+        $pseudo = FilterManager::filterInputStringPost('pseudo');
+        $firstname = FilterManager::filterInputStringPost('name', orElse: '');
+        $lastname = FilterManager::filterInputStringPost('lastname', orElse: '');
+
+        if (!FilterManager::isEmail($mail)) {
+            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
+                LangManager::translate('users.toaster.invalid_mail'));
+            Redirect::redirectPreviousRoute();
+        }
 
         if (UsersSettingsModel::getInstance()->isPseudoBlacklisted($pseudo)) {
             Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
@@ -194,11 +199,12 @@ class UsersProfileController extends AbstractController
             Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'), LangManager::translate('users.toaster.user_edited_self_nop'));
         }
 
-        [$pass, $passVerif] = Utils::filterInput('password', 'passwordVerif');
+        $password = FilterManager::filterInputStringPost('password');
+        $passwordVerif = FilterManager::filterInputStringPost('passwordVerif');
 
-        if (!is_null($pass)) {
-            if ($pass === $passVerif) {
-                UsersModel::getInstance()->updatePass($user?->getId(), password_hash($pass, PASSWORD_BCRYPT));
+        if (!is_null($password)) {
+            if ($password === $passwordVerif) {
+                UsersModel::getInstance()->updatePass($user?->getId(), password_hash($password, PASSWORD_BCRYPT));
             } else {
                 // Todo Try to edit that
                 Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'), 'Je sais pas ?');
@@ -271,5 +277,4 @@ class UsersProfileController extends AbstractController
 
         Redirect::redirectPreviousRoute();
     }
-
 }
