@@ -105,7 +105,7 @@ class AutoLoad
         $startDir = static function ($elementName) use ($namespace) { //Don't remove use $namespace
             try {
                 return match ($elementName) {
-                    'Controller', 'Model', 'Mapper', 'Entity', 'Implementation', 'Interface', 'Event', 'Exception', 'Type', 'Components', 'PackageInfo', 'Package', 'Permissions' => 'App/Package/',
+                    'Controller', 'Model', 'Mapper', 'Entity', 'Implementation', 'Interface', 'Event', 'Exception', 'Type', 'Component', 'PackageInfo', 'Package', 'Permissions' => 'App/Package/',
                     'Manager' => 'App/Manager/',
                     'Utils' => 'App/Utils/',
                     'Theme' => 'Public/Themes/',
