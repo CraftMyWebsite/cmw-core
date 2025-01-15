@@ -3,9 +3,17 @@
 namespace CMW\Manager\Filter;
 
 use function filter_input;
+use function filter_var;
+use function html_entity_decode;
 use function is_null;
+use function mb_substr;
+use function preg_replace;
 use function trim;
+use const ENT_QUOTES;
+use const FILTER_SANITIZE_NUMBER_INT;
 use const FILTER_UNSAFE_RAW;
+use const FILTER_VALIDATE_EMAIL;
+use const INPUT_GET;
 use const INPUT_POST;
 
 class FilterManager
@@ -77,33 +85,48 @@ class FilterManager
     /**
      * @param string $data
      * @param int $maxLength
+     * @param mixed|false $orElse
      * @return int
-     * @desc Securely filter data with maxlength parameter => optimized for strings
+     * @desc Securely filter data with maxlength parameter => optimized for int
      */
-    public static function filterInputIntPost(string $data, int $maxLength = 128): int
+    public static function filterInputIntPost(string $data, int $maxLength = 11, mixed $orElse = false): mixed
     {
+        if ((!$orElse) && !isset($_POST[$data]) && !is_null($_POST[$data])) {
+            return $orElse;
+        }
+
         return (int)mb_substr(trim(filter_input(INPUT_POST, $data, FILTER_SANITIZE_NUMBER_INT)), 0, $maxLength);
     }
 
     /**
      * @param string $data
      * @param int $maxLength
+     * @param mixed|false $orElse
      * @return string
      * @desc Securely filter data with maxlength parameter => optimized for strings
      */
-    public static function filterInputStringGet(string $data, int $maxLength = 128): string
+    public static function filterInputStringGet(string $data, int $maxLength = 128, mixed $orElse = false): mixed
     {
+        if ((!$orElse) && !isset($_GET[$data]) && !is_null($_GET[$data])) {
+            return $orElse;
+        }
+
         return mb_substr(trim(filter_input(INPUT_GET, $data, FILTER_UNSAFE_RAW)), 0, $maxLength);
     }
 
     /**
      * @param string $data
      * @param int $maxLength
+     * @param mixed|false $orElse
      * @return int
-     * @desc Securely filter data with maxlength parameter => optimized for strings
+     * @desc Securely filter data with maxlength parameter => optimized for int
      */
-    public static function filterInputIntGet(string $data, int $maxLength = 128): int
+    public static function filterInputIntGet(string $data, int $maxLength = 11, mixed $orElse = false): mixed
     {
+        if ((!$orElse) && !isset($_GET[$data]) && !is_null($_GET[$data])) {
+            return $orElse;
+        }
+
         return mb_substr(trim(filter_input(INPUT_GET, $data, FILTER_SANITIZE_NUMBER_INT)), 0, $maxLength);
     }
 
