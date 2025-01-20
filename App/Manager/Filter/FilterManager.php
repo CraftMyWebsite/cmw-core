@@ -36,7 +36,7 @@ class FilterManager
      * @desc Securely filter data with maxlength parameter and custom filter, see @link
      * @link https://www.php.net/manual/en/filter.filters.sanitize.php
      */
-    public static function filterData(string $data, int $maxLength = 128, int $filter = FILTER_UNSAFE_RAW): string
+    public static function filterData(string $data, int $maxLength = 128, int $filter = FILTER_UNSAFE_RAW): mixed
     {
         $data = trim(preg_replace('/<\?.*\?>/', '', $data));  // Remove scripts tags
         $data = mb_substr($data, 0, $maxLength);
