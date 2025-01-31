@@ -5,8 +5,26 @@ namespace CMW\Manager\Loader;
 use CMW\Controller\Core\CoreController;
 use CMW\Controller\Core\PackageController;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Error\ErrorManager;
 use CMW\Utils\Website;
+use UnhandledMatchError;
+use function array_pop;
+use function array_slice;
+use function count;
+use function dirname;
+use function explode;
+use function get_declared_classes;
+use function implode;
+use function in_array;
+use function ini_set;
 use function is_file;
+use function session_start;
+use function session_status;
+use function spl_autoload_register;
+use function str_replace;
+use function ucfirst;
+use const DIRECTORY_SEPARATOR;
+use const PHP_SESSION_ACTIVE;
 
 class AutoLoad
 {
@@ -84,31 +102,50 @@ class AutoLoad
 
     private static function getPackageElements(array $namespace, string $elementName): ?string
     {
-        $startDir = static function ($elementName) {
-            return match ($elementName) {
-                'Controller', 'Model', 'Mapper', 'Entity', 'Implementation', 'Interface', 'Event', 'Exception', 'Type', 'PackageInfo', 'Package', 'Permissions' => 'App/Package/',
-                'Manager' => 'App/Manager/',
-                'Utils' => 'App/Utils/',
-                'Theme' => 'Public/Themes/',
-                default => '',
-            };
+        $startDir = static function ($elementName) use ($namespace) { //Don't remove use $namespace
+            try {
+                return match ($elementName) {
+                    'Controller', 'Model', 'Mapper', 'Entity', 'Implementation', 'Interface', 'Event', 'Exception', 'Type', 'Component', 'PackageInfo', 'Package', 'Permissions' => 'App/Package/',
+                    'Manager' => 'App/Manager/',
+                    'Utils' => 'App/Utils/',
+                    'Theme' => 'Public/Themes/',
+                    default => '',
+                };
+            } catch (UnhandledMatchError $e) {
+                $nameSpaceImploded = implode('\\', $namespace);
+
+                ErrorManager::showCustomErrorPage(
+                    "UnhandledMatchError",
+                    "Unable to load <b>$elementName</b> element. Full namespace: <b>$nameSpaceImploded</b>",
+                );
+            }
         };
 
-        $folderPackage = static function ($elementName) {
-            return match ($elementName) {
-                'Controller' => 'Controllers/',
-                'Model' => 'Models/',
-                'Mapper' => 'Mappers/',
-                'Entity' => 'Entities/',
-                'Implementation' => 'Implementations/',
-                'Interface' => 'Interfaces/',
-                'Event' => 'Events/',
-                'Exception' => 'Exception/',
-                'Type' => 'Type/',
-                'PackageInfo', 'Manager' => '',
-                'Package', 'Theme' => '/',
-                'Permissions' => 'Init/',
-            };
+        $folderPackage = static function ($elementName) use ($namespace) { //Don't remove use $namespace
+            try {
+                return match ($elementName) {
+                    'Controller' => 'Controllers/',
+                    'Model' => 'Models/',
+                    'Mapper' => 'Mappers/',
+                    'Entity' => 'Entities/',
+                    'Implementation' => 'Implementations/',
+                    'Interface' => 'Interfaces/',
+                    'Event' => 'Events/',
+                    'Exception' => 'Exception/',
+                    'Type' => 'Type/',
+                    'Component' => 'Components/',
+                    'PackageInfo', 'Manager' => '',
+                    'Package', 'Theme' => '/',
+                    'Permissions' => 'Init/',
+                };
+            } catch (UnhandledMatchError $e) {
+                $nameSpaceImploded = implode('\\', $namespace);
+
+                ErrorManager::showCustomErrorPage(
+                    "UnhandledMatchError",
+                    "Unable to load <b>$elementName</b> element. Full namespace: <b>$nameSpaceImploded</b>",
+                );
+            }
         };
 
         return match ($elementName) {

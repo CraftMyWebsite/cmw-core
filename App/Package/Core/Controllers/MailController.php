@@ -15,6 +15,8 @@ use CMW\Model\Core\MailModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\NoReturn;
+use function http_response_code;
+use function is_null;
 
 /**
  * Class: @MailController
@@ -80,6 +82,12 @@ class MailController extends AbstractController
         }
 
         $receiver = FilterManager::filterInputStringPost('receiver');
-        MailManager::getInstance()->sendMail($receiver, 'Test CraftMyWebsite - MAILS', '<p>Hello World !</p>');
+        $status = MailManager::getInstance()->sendMail($receiver, 'Test CraftMyWebsite - MAILS', '<p>Hello World !</p>');
+
+        if ($status) {
+            http_response_code(204);
+        } else {
+            http_response_code(500);
+        }
     }
 }

@@ -12,7 +12,13 @@ use CMW\Manager\Theme\ThemeManager;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
+use function extract;
+use function in_array;
 use function is_file;
+use function is_null;
+use function ob_get_clean;
+use function ob_start;
+use function print_r;
 
 class View
 {
@@ -25,6 +31,7 @@ class View
     private bool $needAdminControl;
     private bool $isAdminFile;
     private string $themeName;
+    private bool $overrideBackendMode;
 
     /**
      * @param string|null $package
@@ -40,13 +47,14 @@ class View
         $this->needAdminControl = false;
         $this->isAdminFile = $isAdminFile;
         $this->themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
+        $this->overrideBackendMode = false;
     }
 
     /**
      * @param string $package
      * @param string $viewFile
      * @return void
-     * @throws \CMW\Manager\Router\RouterException
+     * @throws RouterException
      */
     public static function basicPublicView(string $package, string $viewFile): void
     {
@@ -57,7 +65,7 @@ class View
     /**
      * @param string $package
      * @param string $viewFile
-     * @return \CMW\Manager\Views\View
+     * @return View
      */
     public static function createPublicView(string $package, string $viewFile): View
     {
@@ -67,7 +75,7 @@ class View
     /**
      * @param string $package
      * @param string $viewFile
-     * @return \CMW\Manager\Views\View
+     * @return View
      */
     public static function createAdminView(string $package, string $viewFile): View
     {
@@ -265,6 +273,17 @@ class View
     }
 
     /**
+     * @param bool $overrideBackendMode
+     * @return View
+     * If true, the view will be displayed even if the backend mode is enabled
+     */
+    public function setOverrideBackendMode(bool $overrideBackendMode): self
+    {
+        $this->overrideBackendMode = $overrideBackendMode;
+        return $this;
+    }
+
+    /**
      * @return string
      */
     private function getViewPath(): string
@@ -437,6 +456,10 @@ class View
     private function backendView(): void
     {
         $isBackendModeEnabled = EnvManager::getInstance()->getValue('ENABLE_BACKEND_MODE') === 'true';
+
+        if ($this->overrideBackendMode) {
+            return;
+        }
 
         if ($isBackendModeEnabled && !$this->needAdminControl) {
             print_r(

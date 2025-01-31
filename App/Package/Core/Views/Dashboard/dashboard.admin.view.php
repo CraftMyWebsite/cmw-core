@@ -19,15 +19,18 @@ Website::setDescription(LangManager::translate('core.dashboard.desc'));
 
 $isUpToDate = UpdatesManager::checkNewUpdateAvailable()
 ?>
-<div class="alert-warning">
-    <?= LangManager::translate('core.dashboard.alpha') ?>
+<div class="space-y-2">
+    <div class="alert-warning">
+        <?= LangManager::translate('core.dashboard.alpha') ?>
+    </div>
+
+    <?php if ($isUpToDate): ?>
+        <div class="alert-danger">
+            <?= LangManager::translate('core.dashboard.updateWarning') ?>
+        </div>
+    <?php endif; ?>
 </div>
 
-<?php if ($isUpToDate): ?>
-    <div class="alert-danger mt-2">
-        <?= LangManager::translate('core.dashboard.updateWarning') ?>
-    </div>
-<?php endif; ?>
 
 
 <h3><i class="fa-solid fa-chart-pie"></i> <?= LangManager::translate('core.dashboard.title') ?></h3>

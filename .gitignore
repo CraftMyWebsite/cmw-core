@@ -36,12 +36,16 @@ __MACOSX/
 
 
 # Exclude all uploads folders and files except the Default profile image
+/Public/Uploads/*
 !/Public/Uploads/Users/Default/defaultImage.jpg
 !/Public/Uploads/Favicon/favicon.ico
 !/Public/Uploads/.htaccess
-/Public/Uploads/*
 
 # Ignore composer files and folder
 /vendor/
 /composer.lock
 /composer.json
+
+# Ignore node_modules files and folder
+/node_modules/
+package-lock.json

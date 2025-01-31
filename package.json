@@ -1,0 +1,28 @@
+{
+  "name": "cmw-core",
+  "version": "1.0.0",
+  "description": "Compilation de TailwindCss pou le CORE - npm run tw-core",
+  "main": "index.js",
+  "scripts": {
+    "tw-core": "npx tailwindcss -i Admin/Tailwind/tailwindInput.css -o Admin/Resources/Assets/Css/style.css --config ./Admin/Tailwind/tailwind-dashboard.config.js --watch --minify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+"
+  },
+  "keywords": [],
+  "author": "Zomb",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CraftMyWebsite/cmw-core/issues/new/choose"
+  },
+  "homepage": "https://craftmywebsite.fr/",
+  "devDependencies": {
+    "autoprefixer": "^10.4.13",
+    "postcss-cli": "^10.0.0",
+    "tailwindcss": "^3.2.2"
+  },
+  "dependencies": {
+    "flowbite": "^1.6.3"
+  }
+}

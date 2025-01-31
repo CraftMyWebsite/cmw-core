@@ -10,13 +10,7 @@ use CMW\Utils\Website;
 Website::setTitle('Votre profil');
 Website::setDescription('Éditez votre profil');
 ?>
-<?php if (\CMW\Controller\Users\UsersController::isAdminLogged()): ?>
-    <div style="background-color: orange; padding: 6px; margin-bottom: 10px">
-        <span>Votre thème ne gère pas cette page !</span>
-        <br>
-        <small>Seuls les administrateurs voient ce message !</small>
-    </div>
-<?php endif;?>
+<section style="width: 70%;padding-bottom: 6rem;margin: 1rem auto auto;">
 
 <h1 style="text-align: center"><?= $user->getPseudo() ?></h1>
 
@@ -100,3 +94,4 @@ Website::setDescription('Éditez votre profil');
     <p class="mb-2">Nous sommes triste de vous voir partir !</p>
     <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile/delete/<?= $user->getId() ?>" style="color: red">Supprimer mon compte</a>
 </div>
+</section>
