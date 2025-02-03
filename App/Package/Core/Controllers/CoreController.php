@@ -11,16 +11,17 @@ use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Loader\Loader;
-use CMW\Manager\Metrics\VisitsMetricsManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Uploads\ImagesException;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
-use CMW\Model\Users\UsersMetricsModel;
 use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
+use function date;
+use function is_dir;
+use function strtotime;
 
 /**
  * Class: @coreController
@@ -59,14 +60,8 @@ class CoreController extends AbstractController
             Redirect::redirect(EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
         }
 
-        $monthlyVisits = VisitsMetricsManager::getInstance()->getPastMonthsVisits(12);
-        $dailyVisits = VisitsMetricsManager::getInstance()->getPastDaysVisits(17);
-        $weeklyVisits = VisitsMetricsManager::getInstance()->getPastWeeksVisits(17);
-        $registers = UsersMetricsModel::getInstance()->getPastMonthsRegisterNumbers(12);
-
         View::createAdminView('Core', 'Dashboard/dashboard')
-            ->addVariableList(['monthlyVisits' => $monthlyVisits, 'dailyVisits' => $dailyVisits,
-                'weeklyVisits' => $weeklyVisits, 'registers' => $registers])
+            ->addVariableList([])
             ->addScriptBefore('Admin/Resources/Vendors/Apexcharts/Js/apexcharts.js')
             ->view();
     }
@@ -149,10 +144,7 @@ class CoreController extends AbstractController
 
     /* PUBLIC FRONT */
 
-    /**
-     * @throws \CMW\Manager\Router\RouterException
-     */
-    #[Link('home', Link::GET)]
+    #[NoReturn] #[Link('home', Link::GET)]
     private function redirectToHome(): void
     {
         Redirect::redirectToHome();

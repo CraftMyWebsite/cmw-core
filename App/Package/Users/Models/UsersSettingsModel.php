@@ -42,11 +42,16 @@ class UsersSettingsModel extends AbstractModel
         return ($req->execute()) ? $req->fetchAll() : [];
     }
 
-    public function updateSetting(string $settingName, string $settingValue): void
+    /**
+     * @param string $settingName
+     * @param string $settingValue
+     * @return bool
+     */
+    public function updateSetting(string $settingName, string $settingValue): bool
     {
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('UPDATE cmw_users_settings SET users_settings_value=:settingValue, users_settings_updated=now() WHERE users_settings_name=:settingName');
-        $req->execute(['settingName' => $settingName, 'settingValue' => $settingValue]);
+        return $req->execute(['settingName' => $settingName, 'settingValue' => $settingValue]);
     }
 
     /**

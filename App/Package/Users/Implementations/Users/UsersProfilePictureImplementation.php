@@ -3,11 +3,11 @@
 namespace CMW\Implementation\Users\Users;
 
 use CMW\Controller\Users\UsersSessionsController;
-use CMW\Controller\Users\UsersSettingsController;
 use CMW\Entity\Users\UserPictureEntity;
 use CMW\Interface\Users\IUsersProfilePicture;
 use CMW\Manager\Env\EnvManager;
 use CMW\Model\Users\UserPictureModel;
+use CMW\Model\Users\UsersSettingsModel;
 use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
 
@@ -63,6 +63,7 @@ class UsersProfilePictureImplementation implements IUsersProfilePicture
 
     public function getDefaultProfilePicture(): string
     {
-        return UsersSettingsController::getDefaultImageLink();
+        $defaultImg = UsersSettingsModel::getInstance()->getSetting('defaultImage');
+        return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Public/Uploads/Users/Default/' . $defaultImg;
     }
 }

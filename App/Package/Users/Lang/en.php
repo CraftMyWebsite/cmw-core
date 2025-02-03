@@ -317,4 +317,17 @@ return [
             'body_3' => 'If you are not the originator of this request, we advise you to change your password!',
         ],
     ],
+    'pages' => [
+        'settings' => [
+            'general' => [
+                'menu' => 'General',
+            ],
+            'security' => [
+                'menu' => 'Security',
+            ],
+            'blacklist' => [
+                'menu' => 'Blacklist',
+            ],
+        ],
+    ],
 ];

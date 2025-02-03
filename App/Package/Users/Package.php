@@ -46,8 +46,27 @@ class Package implements IPackageConfig
                     new PackageSubMenuType(
                         title: LangManager::translate('core.menu.user.settings'),
                         permission: 'users.settings',
-                        url: 'users/settings',
-                        subMenus: []
+                        url: null,
+                        subMenus: [
+                            new PackageSubMenuType(
+                                title: LangManager::translate('users.pages.settings.general.menu'),
+                                permission: 'users.settings',
+                                url: 'users/settings/general',
+                                subMenus: []
+                            ),
+                            new PackageSubMenuType(
+                                title: LangManager::translate('users.pages.settings.security.menu'),
+                                permission: 'users.settings',
+                                url: 'users/settings/security',
+                                subMenus: []
+                            ),
+                            new PackageSubMenuType(
+                                title: LangManager::translate('users.pages.settings.blacklist.menu'),
+                                permission: 'users.settings',
+                                url: 'users/settings/blacklist/pseudo',
+                                subMenus: []
+                            ),
+                        ]
                     ),
                     new PackageSubMenuType(
                         title: LangManager::translate('core.menu.user.manage'),

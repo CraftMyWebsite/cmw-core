@@ -4,25 +4,48 @@ namespace CMW\Manager\Metrics;
 
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
-use CMW\Manager\Lang\LangManager;
-use CMW\Manager\Manager\AbstractManager;
 use CMW\Manager\Permission\PermissionManager;
 use CMW\Manager\Router\Route;
 use CMW\Utils\Client;
 use CMW\Utils\File;
-use CMW\Utils\Website;
 use JetBrains\PhpStorm\ExpectedValues;
+use PDO;
+use function count;
+use function date;
+use function explode;
+use function file;
+use function fopen;
+use function http_response_code;
+use function mb_substr;
+use function str_contains;
+use function str_starts_with;
+use function stream_resolve_include_path;
+use function strtotime;
+use const FILE_APPEND;
+use const FILE_SKIP_EMPTY_LINES;
+use const LOCK_EX;
+use const PHP_EOL;
 
-class VisitsMetricsManager extends AbstractManager
+class VisitsMetricsManager
 {
     private int $maxLines = 50;  // Variable data ?
     private string $filePath;
     private string $dirStorage;
+    private static ?VisitsMetricsManager $instance = null;
+    private ?array $cachedVisits = null;
 
     public function __construct()
     {
         $this->dirStorage = EnvManager::getInstance()->getValue('DIR') . 'App/Storage/Visits';
         $this->filePath = "$this->dirStorage/history.log";
+    }
+
+    public static function getInstance(): self
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
     }
 
     public function registerVisit(Route $route): void
@@ -123,53 +146,35 @@ class VisitsMetricsManager extends AbstractManager
 
     public function getVisitsNumber(#[ExpectedValues(['all', 'monthly', 'week', 'day', 'hour'])] $period): ?int
     {
-        $rangeStart = null;
-        $rangeFinish = null;
+        if ($this->cachedVisits === null) {
+            $db = DatabaseManager::getInstance();
 
-        if ($period === 'monthly' || $period === 'week' || $period === 'day' || $period === 'hour'):
-            switch ($period):
-                case 'monthly':
-                    $rangeStart = date('Y-m-d 00:00:00', strtotime('first day of this month'));
-                    $rangeFinish = date('Y-m-d 00:00:00', strtotime('last day of this month'));
-                    break;
-                case 'week':
-                    $rangeStart = date('Y-m-d 00:00:00', strtotime('monday this week'));
-                    $rangeFinish = date('Y-m-d 00:00:00', strtotime('sunday this week'));
-                    break;
-                case 'day':
-                    $rangeStart = date('Y-m-d 00:00:00');
-                    $rangeFinish = date('Y-m-d 23:59:59');
-                    break;
-                case 'hour':
-                    $rangeStart = date('Y-m-d h:00:00');
-                    $rangeFinish = date('Y-m-d h:00:00', strtotime('+1 hour'));
-                    break;
-            endswitch;
-
-            $var = [
-                'range_start' => $rangeStart,
-                'range_finish' => $rangeFinish,
+            $queries = [
+                'all' => "SELECT COUNT(DISTINCT visits_ip) AS result FROM cmw_visits",
+                'day' => "SELECT COUNT(DISTINCT visits_ip) AS result FROM cmw_visits WHERE visits_date >= CURDATE()",
+                'monthly' => "SELECT COUNT(DISTINCT visits_ip) AS result FROM cmw_visits WHERE visits_date >= DATE_FORMAT(NOW(), '%Y-%m-01')",
             ];
 
-            $sql = 'SELECT COUNT(DISTINCT visits_ip) AS `result` FROM cmw_visits WHERE visits_date BETWEEN (:range_start) AND (:range_finish)';
+            foreach ($queries as $key => $sql) {
+                $req = $db->prepare($sql);
 
-            $db = DatabaseManager::getInstance();
-            $req = $db->prepare($sql);
-            $res = $req->execute($var);
-        else:
-            $sql = 'SELECT COUNT(DISTINCT visits_ip) AS `result` FROM cmw_visits';
+                if (!$req->execute()) {
+                    return 0;
+                }
 
-            $db = DatabaseManager::getInstance();
-            $req = $db->prepare($sql);
-            $res = $req->execute();
-        endif;
+                $res = $req->fetch();
 
-        if ($res) {
-            return $req->fetch()['result'] + $this->getFileLineNumber();
+                if (!$res) {
+                    return 0;
+                }
+
+                $this->cachedVisits[$key] = $res['result'] ?? 0;
+            }
         }
 
-        return $this->getFileLineNumber();
+        return ($this->cachedVisits[$period] ?? 0) + $this->getFileLineNumber();
     }
+
 
     /**
      * @param string $rangeStart
@@ -222,25 +227,24 @@ class VisitsMetricsManager extends AbstractManager
      */
     public function getPastMonthsVisits(int $pastMonths): array
     {
-        $currentMonth = idate('m');
+        $sql = "SELECT DATE_FORMAT(visits_date, '%Y-%m') AS month, COUNT(*) AS visits
+            FROM cmw_visits
+            WHERE visits_date >= STR_TO_DATE(:date_limit, '%Y-%m-%d')
+            GROUP BY month
+            ORDER BY month;";
 
-        $toReturn = [];
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare($sql);
 
-        for ($i = 0; $i < $pastMonths; $i++) {
-            $targetMonth = idate('m', strtotime("-$i months"));
-            $targetMonthTranslate = LangManager::translate("core.months.$targetMonth");
+        $dateLimit = date('Y-m-d', strtotime("-$pastMonths months")); // Pré-calcul de la date limite
 
-            $rangeStart = date('Y-m-d 00:00:00', strtotime("first day of -$i months"));
-            $rangeFinish = date('Y-m-d 23:59:59', strtotime("last day of -$i months"));
-
-            $toReturn[$targetMonthTranslate] = $this->getDataVisits($rangeStart, $rangeFinish);
-
-            if ($targetMonth === $currentMonth) {
-                $toReturn[$targetMonthTranslate] += $this->getFileLineNumber();
-            }
+        if (!$req->execute(['date_limit' => $dateLimit])) {
+            return [];
         }
-        return array_reverse($toReturn);
+
+        return $req->fetchAll(PDO::FETCH_KEY_PAIR) ?: [];
     }
+
 
     /**
      * @param int $pastDays
@@ -248,28 +252,24 @@ class VisitsMetricsManager extends AbstractManager
      */
     public function getPastDaysVisits(int $pastDays): array
     {
-        $currentDay = idate('d');
+        $sql = "SELECT DATE(visits_date) AS day, COUNT(*) AS visits
+            FROM cmw_visits
+            WHERE visits_date >= STR_TO_DATE(:date_limit, '%Y-%m-%d')
+            GROUP BY day
+            ORDER BY day;";
 
-        $toReturn = [];
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare($sql);
 
-        for ($i = 0; $i < $pastDays; $i++) {
-            $targetDay = date('d', strtotime("-$i days"));
+        $dateLimit = date('Y-m-d', strtotime("-$pastDays days"));
 
-            if ($targetDay === $currentDay) {
-                $rangeStart = date('Y-m-d 00:00:00', strtotime("-$i days"));
-                $rangeFinish = date('Y-m-d 23:59:59', strtotime("-$i days"));
-
-                $dataVisits = $this->getDataVisits($rangeStart, $rangeFinish);
-                $toReturn[] = $dataVisits + $this->getFileLineNumber();
-            } else {
-                $rangeStart = date('Y-m-d 00:00:00', strtotime("-$i days"));
-                $rangeFinish = date('Y-m-d 23:59:59', strtotime("-$i days"));
-                $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish);
-            }
+        if (!$req->execute(['date_limit' => $dateLimit])) {
+            return [];
         }
 
-        return array_reverse($toReturn);
+        return $req->fetchAll(PDO::FETCH_KEY_PAIR) ?: [];
     }
+
 
     /**
      * @param int $pastWeeks
@@ -277,23 +277,22 @@ class VisitsMetricsManager extends AbstractManager
      */
     public function getPastWeeksVisits(int $pastWeeks): array
     {
-        $currentWeeks = idate('W');
+        $sql = "SELECT WEEK(visits_date, 1) AS week, COUNT(*) AS visits
+            FROM cmw_visits
+            WHERE visits_date >= STR_TO_DATE(:date_limit, '%Y-%m-%d')
+            GROUP BY week
+            ORDER BY week;";
 
-        $toReturn = [];
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare($sql);
 
-        for ($i = 0; $i < $pastWeeks; $i++) {
-            $targetWeek = idate('W', strtotime("-$i weeks"));
+        $dateLimit = date('Y-m-d', strtotime("-$pastWeeks weeks"));
 
-            $rangeStart = date('Y-m-d 00:00:00', strtotime("-$i monday this week"));
-            $rangeFinish = date('Y-m-d 23:59:59', strtotime("-$i sunday this week"));
-
-            $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish);
-
-            if ($targetWeek === $currentWeeks) {
-                $toReturn[] = $this->getDataVisits($rangeStart, $rangeFinish) + $this->getFileLineNumber();
-            }
+        if (!$req->execute(['date_limit' => $dateLimit])) {
+            return [];
         }
-        return array_reverse($toReturn);
+
+        return $req->fetchAll(PDO::FETCH_KEY_PAIR) ?: [];
     }
 
     /**
