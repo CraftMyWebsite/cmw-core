@@ -248,17 +248,17 @@ return [
     'flush' => [
         'modal' => [
             'warning' => 'Ceci va réinitialiser tous vos rôles ! (sauf Administrateur)',
-            'text' => "Flusher les permissions est un outil de débogage souvent utilisé par les développeurs qui souhaitent forcer l'ajout manuel des permissions de leurs fichiers Permissions.php se trouvant dans le dossier Init."
+            'text' => "Flusher les permissions est un outil de débogage souvent utilisé par les développeurs qui souhaitent forcer l'ajout manuel des permissions de leurs fichiers Permissions.php se trouvant dans le dossier Init.",
         ],
     ],
     'oauth' => [
-      'manage' => [
-          'title' => 'Gestion des oAuth',
-          'desc' => 'Gérez les méthodes de connexion oAuth',
-          'subtitle' => 'Configuration des méthodes oAuth',
-          'enabled' => 'Méthodes active',
-          'disabled' => 'Méthodes inactive',
-      ],
+        'manage' => [
+            'title' => 'Gestion des oAuth',
+            'desc' => 'Gérez les méthodes de connexion oAuth',
+            'subtitle' => 'Configuration des méthodes oAuth',
+            'enabled' => 'Méthodes active',
+            'disabled' => 'Méthodes inactive',
+        ],
         'flash' => [
             'saveSettingFailed' => 'Une erreur s\'est produite lors de l\'enregistrement des paramètres.',
             'saved' => 'Paramètres enregistrés avec succès.',
@@ -316,6 +316,19 @@ return [
             'body_1' => 'Nous avons besoin de vérifier votre identité sur ',
             'body_2' => 'Voici le CODE permettant de vérifier qu\'il s\'agisse bien de vous :',
             'body_3' => 'Si vous n\'êtes pas à l\'origine de cette demande, nous vous conseillons de changer votre mot de passe !',
+        ],
+    ],
+    'pages' => [
+        'settings' => [
+            'general' => [
+                'menu' => 'Généraux',
+            ],
+            'security' => [
+                'menu' => 'Sécurité',
+            ],
+            'blacklist' => [
+                'menu' => 'Blacklist',
+            ],
         ],
     ],
 ];
