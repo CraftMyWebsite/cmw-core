@@ -11,5 +11,6 @@ enum LoginStatus
     case OK_NEED_2FA;
     case OK_ENFORCE_2FA;
     case OK_LONG_DATE;
+    case OK_SEND_ACCOUNT_LOGGED;
 }
 

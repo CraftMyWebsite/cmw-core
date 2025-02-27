@@ -23,6 +23,7 @@ use CMW\Model\Core\MailModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Users\UsersSettingsModel;
 use CMW\Type\Users\LoginStatus;
+use CMW\Utils\Date;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use CMW\Utils\Website;
@@ -74,6 +75,10 @@ class UsersLoginController extends AbstractController
 
         if ((UsersSettingsModel::getInstance()->getSetting('securityReinforced') === '1') && $this->isUserInactiveFor90Days($userLastConnect) && !$user->get2Fa()->isEnabled() && MailModel::getInstance()->getConfig() !== null && MailModel::getInstance()->getConfig()->isEnable()) {
             return LoginStatus::OK_LONG_DATE;
+        }
+
+        if ((UsersSettingsModel::getInstance()->getSetting('securityReinforced') === '1')) {
+            return LoginStatus::OK_SEND_ACCOUNT_LOGGED;
         }
 
         return $user->get2Fa()->isEnabled() ? LoginStatus::OK_NEED_2FA : LoginStatus::OK;
@@ -148,7 +153,7 @@ class UsersLoginController extends AbstractController
                 }
                 $this->loginUser($user, $cookie);
                 if ($previousRoute) {
-                    Redirect::redirectPreviousRoute();
+                    Redirect::external($previousRoute);
                 }
 
                 Redirect::redirect('profile');
@@ -205,6 +210,21 @@ class UsersLoginController extends AbstractController
 
                 Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), LangManager::translate('users.long_date.toaster.unable_to_create_code'));
                 Redirect::redirectToHome();
+            case LoginStatus::OK_SEND_ACCOUNT_LOGGED:
+                if (MailModel::getInstance()->getConfig() !== null && MailModel::getInstance()->getConfig()->isEnable()) {
+                    $user = UsersModel::getInstance()->getUserWithMail($encryptedMail);
+                    $ip = $_SERVER['REMOTE_ADDR'];
+                    $date = date('Y-m-d H:i:s');
+                    $dateFormatted = Date::formatDate($date);
+                    MailManager::getInstance()->sendMail($mail,Website::getWebsiteName() . LangManager::translate('users.security.connected.object'), LangManager::translate('users.security.connected.body', ['user_name' => $user->getPseudo(), 'website' => Website::getWebsiteName(), 'date' => $dateFormatted, 'ip' => $ip]));
+                    $this->loginUser($user, $cookie);
+                    Flash::send(Alert::SUCCESS, 'd', $previousRoute);
+                    if ($previousRoute) {
+                        Redirect::external($previousRoute);
+                    }
+                    Redirect::redirect('profile');
+                }
+                break;
         }
     }
 

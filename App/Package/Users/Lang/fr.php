@@ -295,13 +295,17 @@ return [
         'captcha' => [
             'invalid' => 'Captcha invalide',
         ],
+        'connected' => [
+            'object' => ' - Nouvelle connexion détectée sur votre compte',
+            'body' => 'Bonjour %user_name%. <br>Nous avons détecté une nouvelle connexion à votre compte sur <b>%website%</b>.<br><br>📍 Détails de la connexion :<br>- Date et heure : %date%<br>- Adresse IP : %ip%<br><br>Si vous êtes à l\'origine de cette connexion, vous pouvez ignorer ce message.<br><br><b>⚠️ Si cette connexion ne vient pas de vous, nous vous recommandons fortement de :</b><br>- Changer immédiatement votre mot de passe depuis votre espace personnel.<br>- Vérifier l’activité récente de votre compte pour détecter d’éventuelles actions suspectes.<br>- Activer l’authentification à deux facteurs (2FA) si ce n’est pas encore fait.',
+        ],
     ],
     'long_date' => [
         'setting' => [
             'label' => 'Renforcé la sécurité des comptes utilisateur',
             'no' => 'Non (non recommandé)',
             'yes' => 'Oui',
-            'small' => 'Pour les utilisateurs n\'ayant pas de 2Fa s\'ils ne se sont pas connecté depuis + de 90 jours ils reçoivent un code de confirmation d\'identité par mail. (l\'envoie de mail doit être fonctionnel)',
+            'small' => 'Pour les utilisateurs sans 2FA, un code de confirmation est envoyé par mail s\'ils ne se sont pas connectés depuis plus de 90 jours (l\'envoi de mail doit être fonctionnel).<br>Ce paramètre déclenche également un mail à chaque connexion.',
         ],
         'toaster' => [
             'title' => 'Verification d\'identité',
