@@ -6,7 +6,7 @@ use CMW\Manager\Lang\LangManager;
 ?>
 <h2 class="text-2xl font-medium text-center"><?= LangManager::translate('Installation.details.title') ?></h2>
 <form action="installer/submit" method="post" id="mainForm">
-    <div class="lg:grid grid-cols-2 gap-8">
+    <div class="lg:grid grid-cols-2 gap-8 mb-4">
         <div class="form-control">
             <p class="font-light"><?= LangManager::translate('Installation.details.website.name') ?> :</p>
             <label class="input-group input-group">

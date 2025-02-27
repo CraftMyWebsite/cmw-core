@@ -9,7 +9,16 @@
 };*/
 
 
-const launchLoader = () => {
+const launchLoader = (event) => {
+    const form = document.getElementById('mainForm');
+
+    // Vérifie si le formulaire est valide
+    if (!form.checkValidity()) {
+        event.preventDefault(); // Empêche l'envoi du formulaire si invalide
+        form.reportValidity(); // Affiche les messages d'erreur natifs
+        return;
+    }
+
     let loader = document.getElementById('loader')
     let body = document.getElementById('body')
 
@@ -20,11 +29,3 @@ const launchLoader = () => {
 const btn = document.getElementById('formBtn')
 
 btn.addEventListener('click', launchLoader)
-
-const customLaunchLoader = () => {
-    let loader = document.getElementById('loader')
-    let body = document.getElementById('body')
-
-    loader.classList.remove('hidden')
-    body.classList.add("hidden")
-}
