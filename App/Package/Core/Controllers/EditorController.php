@@ -27,4 +27,18 @@ class EditorController extends AbstractController
             echo json_encode(['error' => $e->getMessage()]);
         }
     }
+
+    #[Link('/upload/noConvert/image', Link::POST, [], '/editor', secure: false)]
+    private function tinyMceUploadNoConvertImage(): void
+    {
+        try {
+            $file = $_FILES['file'];
+            $uploadedFileName = ImagesManager::upload($file, 'Editor');
+            $fileUrl = '/Public/Uploads/Editor/' . $uploadedFileName;
+            echo json_encode(['location' => $fileUrl]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['error' => $e->getMessage()]);
+        }
+    }
 }
