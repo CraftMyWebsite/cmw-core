@@ -218,7 +218,6 @@ class UsersLoginController extends AbstractController
                     $dateFormatted = Date::formatDate($date);
                     MailManager::getInstance()->sendMail($mail,Website::getWebsiteName() . LangManager::translate('users.security.connected.object'), LangManager::translate('users.security.connected.body', ['user_name' => $user->getPseudo(), 'website' => Website::getWebsiteName(), 'date' => $dateFormatted, 'ip' => $ip]));
                     $this->loginUser($user, $cookie);
-                    Flash::send(Alert::SUCCESS, 'd', $previousRoute);
                     if ($previousRoute) {
                         Redirect::external($previousRoute);
                     }
