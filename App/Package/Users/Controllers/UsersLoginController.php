@@ -77,10 +77,6 @@ class UsersLoginController extends AbstractController
             return LoginStatus::OK_LONG_DATE;
         }
 
-        if ((UsersSettingsModel::getInstance()->getSetting('securityReinforced') === '1')) {
-            return LoginStatus::OK_SEND_ACCOUNT_LOGGED;
-        }
-
         return $user->get2Fa()->isEnabled() ? LoginStatus::OK_NEED_2FA : LoginStatus::OK;
     }
 
@@ -98,6 +94,16 @@ class UsersLoginController extends AbstractController
         }
 
         UsersModel::getInstance()->updateLoggedTime($user->getId());
+
+        if ((UsersSettingsModel::getInstance()->getSetting('securityReinforced') === '1')) {
+            if (MailModel::getInstance()->getConfig() !== null && MailModel::getInstance()->getConfig()->isEnable()) {
+                $ip = $_SERVER['REMOTE_ADDR'];
+                $date = date('Y-m-d H:i:s');
+                $dateFormatted = Date::formatDate($date);
+                MailManager::getInstance()->sendMail($user->getMail(),Website::getWebsiteName() . LangManager::translate('users.security.connected.object'), LangManager::translate('users.security.connected.body', ['user_name' => $user->getPseudo(), 'website' => Website::getWebsiteName(), 'date' => $dateFormatted, 'ip' => $ip]));
+            }
+        }
+
         try {
             Emitter::send(LoginEvent::class, $user->getId());
         } catch (Exception) {
@@ -210,20 +216,6 @@ class UsersLoginController extends AbstractController
 
                 Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), LangManager::translate('users.long_date.toaster.unable_to_create_code'));
                 Redirect::redirectToHome();
-            case LoginStatus::OK_SEND_ACCOUNT_LOGGED:
-                if (MailModel::getInstance()->getConfig() !== null && MailModel::getInstance()->getConfig()->isEnable()) {
-                    $user = UsersModel::getInstance()->getUserWithMail($encryptedMail);
-                    $ip = $_SERVER['REMOTE_ADDR'];
-                    $date = date('Y-m-d H:i:s');
-                    $dateFormatted = Date::formatDate($date);
-                    MailManager::getInstance()->sendMail($mail,Website::getWebsiteName() . LangManager::translate('users.security.connected.object'), LangManager::translate('users.security.connected.body', ['user_name' => $user->getPseudo(), 'website' => Website::getWebsiteName(), 'date' => $dateFormatted, 'ip' => $ip]));
-                    $this->loginUser($user, $cookie);
-                    if ($previousRoute) {
-                        Redirect::external($previousRoute);
-                    }
-                    Redirect::redirect('profile');
-                }
-                break;
         }
     }
 
