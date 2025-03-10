@@ -50,7 +50,7 @@ $description = LangManager::translate('users.manage.desc');
             <label for="roles"><?= LangManager::translate('users.users.role') ?> :</label>
             <select id="roles" class="choices choices__list--multiple" name="roles[]" multiple required>
                 <?php foreach ($roles as $role): ?>
-                    <option value="<?= $role->getId() ?>"><?= $role->getName() ?></option>
+                    <option <?= $role->isDefault() ? 'selected' : '' ?> value="<?= $role->getId() ?>"><?= $role->getName() ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
