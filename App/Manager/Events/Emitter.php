@@ -2,18 +2,15 @@
 
 namespace CMW\Manager\Events;
 
-use CMW\Manager\Collections\Collection;
-use CMW\Manager\Collections\CollectionEntity;
 use CMW\Manager\Loader\Loader;
-use CMW\Utils\Log;
 use JetBrains\PhpStorm\ExpectedValues;
-use Closure;
 use ReflectionClass;
 use ReflectionMethod;
+use function usort;
 
 class Emitter
 {
-    private static array $listenerCounter = array();
+    private static array $listenerCounter = [];
     private static AbstractEvent $actualEvent;
 
     private static function loadAttributeByEvent(array $attributeList, #[ExpectedValues(AbstractEvent::class)] string $eventName, array &$eventAttributes): void
@@ -27,7 +24,7 @@ class Emitter
             $attributeInstance = $attr->newInstance();
 
             // todo use GlobalObject getInstance
-            if ($eventName !== $attributeInstance->getEventName()) {
+            if ($eventName !== $attributeInstance->getEventName() && $attributeInstance->getEventName() !== '*') {
                 continue;
             }
 
@@ -77,7 +74,7 @@ class Emitter
     private static function invokeEventMethod(#[ExpectedValues(AbstractEvent::class)] string $eventName, ReflectionMethod $method, mixed $data): void
     {
         $controller = $method->getDeclaringClass()->getMethod('getInstance')->invoke(null);
-        $method->invoke($controller, $data);
+        $method->invoke($controller, $data, self::$actualEvent->getName());
 
         self::increment($eventName, $method);
     }
@@ -113,14 +110,14 @@ class Emitter
     public static function send(#[ExpectedValues(AbstractEvent::class)] string $eventName, mixed $data): void
     {
         $attributeList = Loader::getAttributeList()[Listener::class];
-        $eventAttributes = array();
+        $eventAttributes = [];
 
         if (empty($attributeList)) {
             return;
         }
 
         if (!isset(self::$listenerCounter[$eventName])) {
-            self::$listenerCounter[$eventName] = array();
+            self::$listenerCounter[$eventName] = [];
         }
 
         self::loadAttributeByEvent($attributeList, $eventName, $eventAttributes);
