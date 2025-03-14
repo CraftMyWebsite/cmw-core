@@ -162,14 +162,20 @@ class UsersProfileController extends AbstractController
         $lastname = FilterManager::filterInputStringPost('lastname', orElse: '');
 
         if (!FilterManager::isEmail($mail)) {
-            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
-                LangManager::translate('users.toaster.invalid_mail'));
+            Flash::send(
+                Alert::ERROR,
+                LangManager::translate('users.toaster.error'),
+                LangManager::translate('users.toaster.invalid_mail'),
+            );
             Redirect::redirectPreviousRoute();
         }
 
         if (UsersSettingsModel::getInstance()->isPseudoBlacklisted($pseudo)) {
-            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
-                LangManager::translate('users.toaster.blacklisted_pseudo'));
+            Flash::send(
+                Alert::ERROR,
+                LangManager::translate('users.toaster.error'),
+                LangManager::translate('users.toaster.blacklisted_pseudo'),
+            );
             Redirect::redirectPreviousRoute();
         }
 
@@ -184,9 +190,17 @@ class UsersProfileController extends AbstractController
         $encryptedMail = EncryptManager::encrypt($mail);
 
         if (UsersModel::getInstance()->update($user?->getId(), $encryptedMail, $pseudo, $firstname, $lastname, $rolesId)) {
-            Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'), LangManager::translate('users.toaster.user_edited_self'));
+            Flash::send(
+                Alert::SUCCESS,
+                LangManager::translate('core.toaster.success'),
+                LangManager::translate('users.toaster.user_edited_self'),
+            );
         } else {
-            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'), LangManager::translate('users.toaster.user_edited_self_nop'));
+            Flash::send(
+                Alert::ERROR,
+                LangManager::translate('users.toaster.error'),
+                LangManager::translate('users.toaster.user_edited_self_nop'),
+            );
         }
 
         $password = FilterManager::filterInputStringPost('password');
@@ -196,8 +210,11 @@ class UsersProfileController extends AbstractController
             if ($password === $passwordVerif) {
                 UsersModel::getInstance()->updatePass($user?->getId(), password_hash($password, PASSWORD_BCRYPT));
             } else {
-                // Todo Try to edit that
-                Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'), 'Je sais pas ?');
+                Flash::send(
+                    Alert::ERROR,
+                    LangManager::translate('users.toaster.error'),
+                    LangManager::translate('users.toaster.password_not_same'),
+                );
             }
         }
 
