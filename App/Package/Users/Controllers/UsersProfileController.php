@@ -203,10 +203,10 @@ class UsersProfileController extends AbstractController
             );
         }
 
-        $password = FilterManager::filterInputStringPost('password');
-        $passwordVerif = FilterManager::filterInputStringPost('passwordVerif');
+        $password = FilterManager::filterInputStringPost('password', orElse: '');
+        $passwordVerif = FilterManager::filterInputStringPost('passwordVerif', orElse: '');
 
-        if (!is_null($password)) {
+        if (!empty($password)) {
             if ($password === $passwordVerif) {
                 UsersModel::getInstance()->updatePass($user?->getId(), password_hash($password, PASSWORD_BCRYPT));
             } else {
@@ -218,6 +218,7 @@ class UsersProfileController extends AbstractController
             }
         }
 
+        UsersSessionsController::getInstance()->updateStoredUser($user->getId());
         Redirect::redirectPreviousRoute();
     }
 
