@@ -14,6 +14,7 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Mail\MailManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
+use CMW\Manager\Router\RouterException;
 use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Twofa\TwoFaManager;
@@ -42,14 +43,13 @@ use function time;
  * Class: @UsersLoginController
  * @package Users
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
- * @version 0.0.1
  */
 class UsersLoginController extends AbstractController
 {
     /**
      * @param string $mail <b>(Encrypted)</b>
      * @param string $password
-     * @return \CMW\Type\Users\LoginStatus
+     * @return LoginStatus
      * @desc Complete login user.
      */
     public function checkLogin(string $mail, string $password): LoginStatus
@@ -81,7 +81,7 @@ class UsersLoginController extends AbstractController
     }
 
     /**
-     * @param \CMW\Entity\Users\UserEntity $user
+     * @param UserEntity $user
      * @param bool $cookie
      * @return void
      */
@@ -138,10 +138,6 @@ class UsersLoginController extends AbstractController
         $loginStatus = $this->checkLogin($encryptedMail, $password);
 
         switch ($loginStatus) {
-            case LoginStatus::NOT_FOUND:
-                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                    LangManager::translate('users.toaster.not_registered_account'));
-                Redirect::redirectPreviousRoute();
             case LoginStatus::NOT_MATCH:
                 Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
                     LangManager::translate('users.toaster.mail_pass_matching'));
@@ -220,7 +216,7 @@ class UsersLoginController extends AbstractController
     }
 
     /**
-     * @throws \CMW\Manager\Router\RouterException
+     * @throws RouterException
      */
     #[Link('/login', Link::GET)]
     private function loginGet(): void

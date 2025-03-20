@@ -4,7 +4,6 @@ namespace CMW\Type\Users;
 
 enum LoginStatus
 {
-    case NOT_FOUND;
     case NOT_MATCH;
     case INTERNAL_ERROR;
     case OK;

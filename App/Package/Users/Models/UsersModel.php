@@ -245,7 +245,7 @@ class UsersModel extends AbstractModel
         $res = $req->fetch();
 
         if (!$res) {
-            return LoginStatus::NOT_FOUND;
+            return LoginStatus::NOT_MATCH;
         }
 
         return password_verify($password, $res['user_password']) ? $res['user_id'] : LoginStatus::NOT_MATCH;
