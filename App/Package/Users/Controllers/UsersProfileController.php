@@ -130,7 +130,7 @@ class UsersProfileController extends AbstractController
             ->view();
     }
 
-    #[NoReturn] #[Link('/profile/delete/:id', Link::GET, ['id' => '[0-9]+'])]
+    #[NoReturn] #[Link('/account/delete/:id', Link::GET, ['id' => '[0-9]+'])]
     private function publicProfileDelete(int $id): void
     {
         // Check if this is the current user account
