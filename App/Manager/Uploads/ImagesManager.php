@@ -11,6 +11,49 @@ use CMW\Manager\Uploads\Errors\ImagesStatus;
 use CMW\Manager\Uploads\Format\ImagesFormat;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
+use function array_key_exists;
+use function copy;
+use function fclose;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
+use function filesize;
+use function finfo_buffer;
+use function finfo_file;
+use function finfo_open;
+use function fopen;
+use function fread;
+use function fseek;
+use function fwrite;
+use function getimagesize;
+use function imagealphablending;
+use function imagecreatefromstring;
+use function imagedestroy;
+use function imagegif;
+use function imagejpeg;
+use function imagepalettetotruecolor;
+use function imagepng;
+use function imagesavealpha;
+use function imagewebp;
+use function ini_get;
+use function is_dir;
+use function is_numeric;
+use function is_uploaded_file;
+use function mb_substr;
+use function mkdir;
+use function ord;
+use function pathinfo;
+use function preg_match;
+use function random_int;
+use function strlen;
+use function strtolower;
+use function substr;
+use function unlink;
+use const FILEINFO_MIME_TYPE;
+use const PATHINFO_EXTENSION;
+use const PATHINFO_FILENAME;
+use const PREG_OFFSET_CAPTURE;
+use const SEEK_CUR;
 
 class ImagesManager
 {
@@ -317,6 +360,9 @@ class ImagesManager
                 imagegif($image, $newFilePath);
                 break;
             case ImagesFormat::WEBP:
+                imagepalettetotruecolor($image);
+                imagealphablending($image, true);
+                imagesavealpha($image, true);
                 imagewebp($image, $newFilePath, $quality);
                 break;
             case ImagesFormat::ICO:
