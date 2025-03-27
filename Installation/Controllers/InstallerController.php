@@ -24,7 +24,6 @@ use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use CMW\Utils\Website;
 use JetBrains\PhpStorm\NoReturn;
-
 use function array_key_exists;
 use function base64_decode;
 use function date_default_timezone_get;
@@ -40,7 +39,6 @@ use function json_encode;
 use function mb_strtolower;
 use function ob_start;
 use function password_hash;
-
 use const FILTER_VALIDATE_EMAIL;
 use const FILTER_VALIDATE_IP;
 use const INPUT_POST;
@@ -236,8 +234,8 @@ class InstallerController extends AbstractController
             EnvManager::getInstance()->setOrEditValue('CMW_KEY', $apiReturn['uuid']);
         } else {
             EnvManager::getInstance()->setOrEditValue('CMW_KEY', 'ERROR');
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                LangManager::translate('core.toaster.internalError' . ' (CMW_KEY)'));
+            Flash::send(Alert::WARNING, LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.toaster.internalError') . ' (CMW_KEY)');
             Website::refresh();
         }
 
@@ -258,15 +256,15 @@ class InstallerController extends AbstractController
 
         if (!InstallerModel::tryDatabaseConnection($host, $username, $password, $port)) {
             print (json_encode(['status' => 0,
-                    'content' => LangManager::translate('core.toaster.db.config.error')],
+                'content' => LangManager::translate('core.toaster.db.config.error')],
                 JSON_THROW_ON_ERROR));
         } else if (InstallerModel::checkIfDatabaseAlreadyInstalled($host, $username, $password, $db, $port)) {
             print (json_encode(['status' => 0, 'content' =>
-                    LangManager::translate('core.toaster.db.config.alreadyInstalled')],
+                LangManager::translate('core.toaster.db.config.alreadyInstalled')],
                 JSON_THROW_ON_ERROR));
         } else {
             print (json_encode(['status' => 1, 'content' =>
-                    LangManager::translate('core.toaster.db.config.success')],
+                LangManager::translate('core.toaster.db.config.success')],
                 JSON_THROW_ON_ERROR));
         }
     }
