@@ -15,6 +15,7 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Security\SecurityManager;
+use CMW\Manager\Theme\Editor\EditorMenu;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Theme\UninstallThemeType;
 use CMW\Manager\Updater\UpdatesManager;
@@ -96,10 +97,10 @@ class ThemeController extends AbstractController
 
         $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
         ThemeModel::getInstance()->getInstance()->deleteThemeConfig($themeName);
-        ThemeManager::getInstance()->installThemeSettings($themeName);
+        //ThemeManager::getInstance()->installThemeSettings($themeName);
 
-        $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs($themeName);
-        SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . $themeName);
+        //$themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs($themeName);
+        //SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . $themeName);
 
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('core.toaster.theme.regenerate'));
@@ -153,9 +154,58 @@ class ThemeController extends AbstractController
     private function adminThemeManage(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.edit');
-        View::createAdminView('Core', 'Theme/themeManage')
-            ->addScriptBefore('Admin/Resources/Vendors/Tinymce/tinymce.min.js', 'Admin/Resources/Vendors/Tinymce/Config/full.js', 'Admin/Resources/Vendors/PageLoader/main.js')
-            ->view();
+
+        //Vérifie si la valeur par défaut est en base de donnée si ce n'est pas le cas, on l'ajoute, cela permet aux mises à jour des thèmes de gérer les nouvelles valeurs :)
+        $themeMenus = $this->getThemeMenus();
+        $currentTheme = ThemeManager::getInstance()->getCurrentTheme()->name();
+        $themeConfigs = ThemeModel::getInstance()->fetchThemeConfigs($currentTheme);
+        $configNames = array_column($themeConfigs, 'theme_config_name');
+
+        foreach ($themeMenus as $themeMenu) {
+            $menuKey = $themeMenu->getMenuKey();
+
+            foreach ($themeMenu->getValues() as $value) {
+                $key = $value->getThemeKey();
+                $dbKey = $menuKey ? $menuKey . '_' . $key : $key;
+
+                if (!in_array($dbKey, $configNames)) {
+                    ThemeModel::getInstance()->storeThemeConfig($dbKey, $value->getDefaultValue(), $currentTheme);
+                    // Ajoute ici aussi à $themeConfigs pour éviter de devoir reload
+                    $themeConfigs[] = [
+                        'theme_config_name' => $dbKey,
+                        'theme_config_value' => $value->getDefaultValue(),
+                        'theme_config_theme' => $currentTheme,
+                    ];
+                }
+            }
+        }
+
+        $view = new View();
+        $view
+            ->addVariableList(['themeMenus' => $themeMenus, 'themeConfigs' => $themeConfigs])
+            ->setCustomPath(EnvManager::getInstance()->getValue('DIR') . "App/Package/Core/Views/Theme/Editor/themeManage.admin.view.php")
+            ->setCustomTemplate(EnvManager::getInstance()->getValue('DIR') . 'App/Package/Core/Views/Theme/Editor/template.php');
+
+        $view->view();
+    }
+
+    /**
+     * @return EditorMenu[]
+     */
+    private function getThemeMenus(): array {
+        $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
+
+        $configPath = EnvManager::getInstance()->getValue('DIR') . "Public/Themes/{$themeName}/Config/config.settings.php";
+
+        if (!file_exists($configPath)) {
+            return [];
+        }
+
+        $menus = include $configPath;
+
+        return array_filter($menus, function ($menu) {
+            return !isset($menu->requiredPackage) || PackageController::isInstalled($menu->requiredPackage);
+        });
     }
 
     #[NoReturn]

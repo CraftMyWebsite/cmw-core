@@ -157,6 +157,7 @@ class ThemeManager extends AbstractManager
      */
     public function installThemeSettings(string $theme): void
     {
+        //TODO : theme editor auto install : Il faut que sa créer le clé comme ceci header_site_title au lieu de site_title
         $themeConfigFile = "Public/Themes/$theme/Config/config.settings.php";
 
         if (!file_exists($themeConfigFile)) {

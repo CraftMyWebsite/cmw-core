@@ -9,6 +9,7 @@ use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\RouterException;
 use CMW\Manager\Theme\ThemeManager;
+use CMW\Model\Core\ThemeModel;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\ExpectedValues;
@@ -30,6 +31,7 @@ class View
     private array $variables;
     private bool $needAdminControl;
     private bool $isAdminFile;
+    private bool $isPublicView;
     private string $themeName;
     private bool $overrideBackendMode;
 
@@ -46,6 +48,7 @@ class View
         $this->variables = [];
         $this->needAdminControl = false;
         $this->isAdminFile = $isAdminFile;
+        $this->isPublicView = false;
         $this->themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
         $this->overrideBackendMode = false;
     }
@@ -69,7 +72,11 @@ class View
      */
     public static function createPublicView(string $package, string $viewFile): View
     {
-        return new self($package, $viewFile);
+        $view = new self($package, $viewFile);
+
+        $view->isPublicView = true;
+
+        return $view;
     }
 
     /**
@@ -412,9 +419,41 @@ class View
         ob_start();
         require_once $path;
         echo $this->callAlerts();
-        $content = ob_get_clean();
+        if ($this->isPublicView) {
+            $content = ob_get_clean();
+            $editorMode = isset($_GET['editor']) && $_GET['editor'] == '1';
+            $content = $this->replaceThemeValues($content, $editorMode);
+        } else {
+            $content = ob_get_clean();
+        }
 
         require_once($this->getTemplateFile());
+    }
+
+    private function replaceThemeValues(string $html, bool $editorMode = false): string
+    {
+        //TODO : Ne fonctionne pas pour les classes !!!
+        $html = preg_replace_callback(
+            '/\/\* CMW:([\w-]+):([\w-]+) \*\//',
+            function ($matches) use ($editorMode) {
+                if ($editorMode) {
+                    return '/* CMW:' . $matches[1] . ':' . $matches[2] . ' */';
+                }
+                return ThemeModel::getInstance()->fetchConfigValue($matches[1], $matches[2]);
+            },
+            $html
+        );
+
+        return preg_replace_callback(
+            '/<!-- CMW:([\w-]+):([\w-]+) -->/',
+            function ($matches) use ($editorMode) {
+                if ($editorMode) {
+                    return '<!-- CMW:' . $matches[1] . ':' . $matches[2] . ' -->';
+                }
+                return ThemeModel::getInstance()->fetchConfigValue($matches[1], $matches[2]);
+            },
+            $html
+        );
     }
 
     /**
