@@ -3,11 +3,16 @@
 namespace CMW\Model\Pages;
 
 use CMW\Entity\Pages\PageEntity;
+use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Editor\EditorManager;
 use CMW\Manager\Package\AbstractModel;
 use CMW\Model\Users\UsersModel;
+use JsonException;
 use PDOStatement;
+use ReflectionException;
+use function is_null;
+use function mb_strimwidth;
 
 /**
  * Class: @PagesModel
@@ -21,6 +26,15 @@ class PagesModel extends AbstractModel
 
     public function getPageById(int $id): ?PageEntity
     {
+        $cachedData = SimpleCacheManager::getCache("page_id_$id", 'Pages');
+
+        if (!is_null($cachedData)) {
+            try {
+                return PageEntity::toEntity($cachedData);
+            } catch (ReflectionException) {
+            }
+        }
+
         $sql = 'SELECT page_id, page_title, page_slug, user_id, page_content, page_state, page_created, page_updated 
                 FROM cmw_pages WHERE page_id = :page_id';
 
@@ -32,11 +46,26 @@ class PagesModel extends AbstractModel
             return null;
         }
 
-        return $this->fetchPageResult($res);
+        $toReturn = $this->fetchPageResult($res);
+
+        if (!is_null($toReturn)) {
+            SimpleCacheManager::storeCache($toReturn->toArray(), "page_id_$id", 'Pages');
+        }
+
+        return $toReturn;
     }
 
     public function getPageBySlug(string $slug): ?PageEntity
     {
+        $cachedData = SimpleCacheManager::getCache("page_slug_$slug", 'Pages');
+
+        if (!is_null($cachedData)) {
+            try {
+                return PageEntity::toEntity($cachedData);
+            } catch (ReflectionException) {
+            }
+        }
+
         $sql = 'SELECT page_id, page_title, page_slug, user_id, page_content, page_state, 
                 page_created, page_updated FROM cmw_pages WHERE page_slug = :page_slug';
 
@@ -47,14 +76,29 @@ class PagesModel extends AbstractModel
             return null;
         }
 
-        return $this->fetchPageResult($res);
+        $toReturn = $this->fetchPageResult($res);
+
+        if (!is_null($toReturn)) {
+            SimpleCacheManager::storeCache($toReturn->toArray(), "page_slug_$slug", 'Pages');
+        }
+
+        return $toReturn;
     }
 
     /**
-     * @return \CMW\Entity\Pages\PageEntity[]
+     * @return PageEntity[]
      */
     public function getPages(): array
     {
+        $cachedData = SimpleCacheManager::getCache('pages', 'Pages');
+
+        if (!is_null($cachedData)) {
+            try {
+                return PageEntity::fromJsonList($cachedData);
+            } catch (JsonException|ReflectionException) {
+            }
+        }
+
         $sql = 'SELECT page_id FROM cmw_pages';
         $db = DatabaseManager::getInstance();
 
@@ -68,6 +112,11 @@ class PagesModel extends AbstractModel
 
         while ($page = $res->fetch()) {
             $toReturn[] = $this->getPageById($page['page_id']);
+        }
+
+        try {
+            SimpleCacheManager::storeCache(PageEntity::toJsonList($toReturn), 'pages', 'Pages');
+        } catch (JsonException) {
         }
 
         return $toReturn;
@@ -103,7 +152,7 @@ class PagesModel extends AbstractModel
 
     public function deletePage(int $id): bool
     {
-        $pageContent = $this->getPageById($id)->getContent();
+        $pageContent = $this->getPageById($id)?->getContent();
         EditorManager::getInstance()->deleteEditorImageInContent($pageContent);
 
         $var = [
