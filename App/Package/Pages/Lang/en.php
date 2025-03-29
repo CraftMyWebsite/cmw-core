@@ -2,7 +2,7 @@
 
 return [
     'add' => [
-        'title' => 'Create',
+        'title' => 'Create a page',
         'desc' => 'Create a new page',
         'create' => 'Create to save',
     ],
@@ -28,6 +28,7 @@ return [
         'deleted' => 'The page no longer exists',
         'errors' => [
             'emptyFields' => 'Please, fill all fields',
+            'update' => 'Unable to edit the page',
         ],
     ],
     'publish' => 'Publishing the page',
@@ -35,6 +36,7 @@ return [
     'title' => 'Title',
     'author' => 'Author',
     'link' => 'Link',
+    'content' => 'Page content',
     'creation' => [
         'date' => 'Creation date',
         'update' => 'Modification date',

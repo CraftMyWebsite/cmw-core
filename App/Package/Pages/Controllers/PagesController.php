@@ -4,6 +4,8 @@ namespace CMW\Controller\Pages;
 
 use CMW\Controller\Users\UsersController;
 use CMW\Controller\Users\UsersSessionsController;
+use CMW\Manager\Cache\SimpleCacheManager;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Error\ErrorManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
@@ -12,19 +14,23 @@ use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Router\LinkStorage;
 use CMW\Manager\Router\Router;
+use CMW\Manager\Router\RouterException;
 use CMW\Manager\Uploads\ImagesException;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
+use CMW\Manager\Xml\SitemapManager;
 use CMW\Model\Pages\PagesModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\NoReturn;
+use function is_null;
+use function json_encode;
+use const JSON_THROW_ON_ERROR;
 
 /**
  * Class: @pagesController
  * @package Pages
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
- * @version 0.0.1
  */
 class PagesController extends AbstractController
 {
@@ -46,14 +52,15 @@ class PagesController extends AbstractController
     private function adminPagesAdd(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'pages.show.add');
-        // Todo "pack script" to avoid that
+
         View::createAdminView('Pages', 'add')
             ->addScriptBefore('Admin/Resources/Vendors/Tinymce/tinymce.min.js',
                 'Admin/Resources/Vendors/Tinymce/Config/full.js')
+            ->addScriptAfter('App/Package/Pages/Views/Assets/Js/slugGenerator.js')
             ->view();
     }
 
-    #[Link('/add', Link::POST, [], '/cmw-admin/pages')]
+    #[NoReturn] #[Link('/add', Link::POST, [], '/cmw-admin/pages')]
     private function adminPagesAddPost(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'pages.show.add');
@@ -62,7 +69,7 @@ class PagesController extends AbstractController
 
         [$title, $content, $state, $slug] = Utils::filterInput('title', 'content', 'state', 'page_slug');
 
-        if ($slug === "") {
+        if ($slug === '') {
             $slug = Utils::normalizeForSlug($title);
         } else {
             $slug = Utils::normalizeForSlug($slug);
@@ -74,7 +81,11 @@ class PagesController extends AbstractController
         LinkStorage::getInstance()->storeRoute('p/' . $slug, 'page', 'Page | ' . $title, 'GET',
             'false', 'false', 1);
 
+        SitemapManager::getInstance()->add($slug, 0.75);
+
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'), LangManager::translate('pages.alert.added'));
+
+        $this->clearSingleCachePage();
 
         Redirect::redirect('cmw-admin/pages');
     }
@@ -86,20 +97,36 @@ class PagesController extends AbstractController
 
         $page = PagesModel::getInstance()->getPageBySlug($slug);
 
-        // Todo "pack script" to avoid that
+        if (is_null($page)) {
+            Redirect::errorPage(404);
+        }
+
         View::createAdminView('Pages', 'edit')
             ->addScriptBefore('Admin/Resources/Vendors/Tinymce/tinymce.min.js',
                 'Admin/Resources/Vendors/Tinymce/Config/full.js')
+            ->addScriptAfter('App/Package/Pages/Views/Assets/Js/slugGenerator.js')
             ->addVariableList(['page' => $page])
             ->view();
     }
 
-    #[Link('/edit/:slug', Link::POST, [], '/cmw-admin/pages')]
+    #[NoReturn] #[Link('/edit/:slug', Link::POST, [], '/cmw-admin/pages')]
     private function adminPagesEditPost(string $slug): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'pages.show.edit');
 
-        [$id, $title, $content, $state] = Utils::filterInput('id', 'title', 'content', 'state');
+        $page = PagesModel::getInstance()->getPageBySlug($slug);
+
+        if (is_null($page)) {
+            Redirect::errorPage(404);
+        }
+
+        [$id, $title, $content, $state, $updatedSlug] = Utils::filterInput('id', 'title', 'content', 'state', 'slug');
+
+        if ($updatedSlug === '') {
+            $updatedSlug = Utils::normalizeForSlug($title);
+        } else {
+            $updatedSlug = Utils::normalizeForSlug($updatedSlug);
+        }
 
         if (Utils::containsNullValue($id, $title, $content)) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
@@ -107,10 +134,30 @@ class PagesController extends AbstractController
             Redirect::redirectPreviousRoute();
         }
 
-        PagesModel::getInstance()->updatePage($id, $slug, $title, $content, $state === NULL ? 0 : 1);
+        $updatedPage = PagesModel::getInstance()->updatePage($id, $updatedSlug, $title, $content, $state === NULL ? 0 : 1);
+
+        if (is_null($updatedPage)) {
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                LangManager::translate('pages.toaster.errors.update'));
+            Redirect::redirectPreviousRoute();
+        }
+
+        //Update sitemap
+        if (($page->getState() === 1 && $updatedPage->getState() === 1) && $updatedPage->getSlug() === $page->getSlug()) {
+            SitemapManager::getInstance()->update($page->getSlug(), 0.75);
+        } else if ($updatedPage->getState() === 1 && $page->getState() === 1) {
+            SitemapManager::getInstance()->delete($page->getSlug());
+            SitemapManager::getInstance()->add($updatedPage->getSlug(), 0.75);
+        } else if ($updatedPage->getState() === 1 && $page->getState() !== 1) {
+            SitemapManager::getInstance()->add($updatedPage->getSlug(), 0.75);
+        } else if ($updatedPage->getState() !== 1) {
+            SitemapManager::getInstance()->delete($page->getSlug());
+        }
+
+        $this->clearSingleCachePage($id, $slug);
 
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'), LangManager::translate('pages.alert.edited'));
-        Redirect::redirectPreviousRoute();
+        Redirect::redirectToAdmin('pages/edit/', ['slug' => $updatedSlug]);
     }
 
     #[Link('/delete/:id', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/pages')]
@@ -119,10 +166,20 @@ class PagesController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'pages.show.delete');
 
+        $page = PagesModel::getInstance()->getPageById($id);
+
+        if (is_null($page)) {
+            Redirect::errorPage(404);
+        }
+
         PagesModel::getInstance()->deletePage($id);
 
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('pages.toaster.deleted'));
+
+        SitemapManager::getInstance()->delete($page->getSlug());
+
+        $this->clearSingleCachePage($id, $page->getSlug());
 
         Redirect::redirectPreviousRoute();
     }
@@ -147,7 +204,7 @@ class PagesController extends AbstractController
     /* Public section */
 
     /**
-     * @throws \CMW\Manager\Router\RouterException
+     * @throws RouterException
      */
     #[Link('/:slug', Link::GET, ['slug' => '.*?'], weight: 0)]
     private function publicShowPage(string $slug): void
@@ -156,9 +213,9 @@ class PagesController extends AbstractController
 
         // If page slug exist
         if (!is_null($pageEntity)) {
-            if ($pageEntity->getState() == 1 && !UsersController::isAdminLogged()) {
-                 Flash::send(Alert::INFO, 'Pages', 'Cette page n\'est pas encore publique !');
-                 Redirect::redirectToHome();
+            if ($pageEntity->getState() === 1 && !UsersController::isAdminLogged()) {
+                Flash::send(Alert::INFO, 'Pages', 'Cette page n\'est pas encore publique !');
+                Redirect::redirectToHome();
             } else {
                 View::createPublicView('Pages', 'main')
                     ->addVariableList(['page' => $pageEntity])
@@ -174,5 +231,35 @@ class PagesController extends AbstractController
             ErrorManager::showError(404);
             die();
         }
+    }
+
+    /**
+     * <p>Clear all pages cache files (App/Storage/Cache/Pages)</p>
+     * @return void
+     */
+    private function clearPagesCache(): void
+    {
+        $dir = EnvManager::getInstance()->getValue('DIR') . 'App/Storage/Cache/Pages/';
+        SimpleCacheManager::deleteAllFiles($dir);
+    }
+
+    /**
+     * <p>Clear a specific page cache file (App/Storage/Cache/Pages)</p>
+     * @param int|null $id
+     * @param string|null $slug
+     * @return void
+     */
+    private function clearSingleCachePage(?int $id = null, ?string $slug = null): void
+    {
+        if (!is_null($id)) {
+            SimpleCacheManager::deleteSpecificCacheFile("page_id_$id", 'Pages');
+        }
+
+        if (!is_null($slug)) {
+            SimpleCacheManager::deleteSpecificCacheFile("page_slug_$slug", 'Pages');
+        }
+
+        //Delete list of pages cache file
+        SimpleCacheManager::deleteSpecificCacheFile('pages', 'Pages');
     }
 }
