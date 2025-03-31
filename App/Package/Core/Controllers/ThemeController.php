@@ -138,6 +138,7 @@ class ThemeController extends AbstractController
         }
 
         // Install Theme settings
+        //TODO : On init les defaut value prendre en compte le menu_key et gérer le cache manager !
         ThemeManager::getInstance()->installThemeSettings($theme['name']);
         CoreModel::getInstance()->updateOption('theme', $theme['name']);
 
@@ -160,6 +161,8 @@ class ThemeController extends AbstractController
         $currentTheme = ThemeManager::getInstance()->getCurrentTheme()->name();
         $themeConfigs = ThemeModel::getInstance()->fetchThemeConfigs($currentTheme);
         $configNames = array_column($themeConfigs, 'theme_config_name');
+
+        //TODO : il serais bien de verifier si dans un menu, plusieur theme key sont egal, si c'est le cas on warning ! dans le menu X vous avez plusieru clé egal (themeKey)
 
         foreach ($themeMenus as $themeMenu) {
             $menuKey = $themeMenu->getMenuKey();
@@ -222,6 +225,7 @@ class ThemeController extends AbstractController
 
             $aresFiles = [];
 
+            //TODO : manage correctly images with db key
             foreach ($_FILES as $conf => $file) {
                 $aresFiles['__images__'][$conf] = true;
 
@@ -238,18 +242,19 @@ class ThemeController extends AbstractController
                 }
             }
 
-            foreach (ThemeManager::getInstance()->getCurrentThemeConfigSettings() as $conf => $value) {
+            foreach (ThemeManager::getInstance()->getFlattenedThemeConfigSettings() as $conf => $defaultValue) {
                 if (isset($aresFiles['__images__'][$conf])) {
                     continue;
                 }
 
-                if (!isset($_POST[$conf]) || !empty($_POST[$conf])) {
-                    ThemeModel::getInstance()->getInstance()->updateThemeConfig($conf, $_POST[$conf] ?? '0', ThemeManager::getInstance()->getCurrentTheme()->name());
+                if (isset($_POST[$conf])) {
+                    ThemeModel::getInstance()->updateThemeConfig($conf, $_POST[$conf], ThemeManager::getInstance()->getCurrentTheme()->name());
                 }
             }
 
-            $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs(ThemeManager::getInstance()->getCurrentTheme()->name());
-            SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . ThemeManager::getInstance()->getCurrentTheme()->name());
+
+            /*$themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs(ThemeManager::getInstance()->getCurrentTheme()->name());
+            SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . ThemeManager::getInstance()->getCurrentTheme()->name());*/
 
             echo json_encode([
                 'success' => true,

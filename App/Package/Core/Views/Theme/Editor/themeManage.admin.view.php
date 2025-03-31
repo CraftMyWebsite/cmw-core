@@ -18,7 +18,7 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
 
 //TODO Gérer les element visible ou non en js peut être un commentaire : <!-- CMW:IF:key1:key2--> jusqu'a <!-- CMW:ENDIF:key1:key2-->
 //TODO Gérer les images (en se basant sur le type de value)
-//TODO Ajouter des truc colle comme le fa picker etc ...
+//TODO Ajouter des truc colle comme le fa picker, slider
 ?>
 <style>
     input[type='color'] {
@@ -124,7 +124,7 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
                 return `
         <div class="mx-auto">
             <label for="${value.themeKey}">${value.title}</label>
-            <input type="color" data-menu-key="${menuKey}" id="${value.themeKey}" name="${value.themeKey}" class="input"
+            <input type="color" id="${value.themeKey}" name="${menuKey}_${value.themeKey}" class="input"
                 value="${configValues[fullKey] ?? value.defaultValue ?? ''}">
         </div>
         `;
@@ -133,7 +133,7 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
                 return `
         <div>
             <label for="${value.themeKey}">${value.title}</label>
-            <input type="number" data-menu-key="${menuKey}" id="${value.themeKey}" name="${value.themeKey}" class="input"
+            <input type="number" id="${value.themeKey}" name="${menuKey}_${value.themeKey}" class="input"
                 value="${configValues[fullKey] ?? value.defaultValue ?? ''}">
         </div>
         `;
@@ -142,7 +142,7 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
                 return `
         <div>
             <label for="${value.themeKey}">${value.title}</label>
-            <input type="text" data-menu-key="${menuKey}" id="${value.themeKey}" name="${value.themeKey}" class="input" placeholder="Default"
+            <input type="text" id="${value.themeKey}" name="${menuKey}_${value.themeKey}" class="input" placeholder="Default"
                 value="${configValues[fullKey] ?? value.defaultValue ?? ''}">
         </div>
         `;
@@ -152,7 +152,7 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
                 return `
         <div>
             <label for="${value.themeKey}">${value.title}</label>
-            <textarea id="${value.themeKey}" data-menu-key="${menuKey}" name="${value.themeKey}" class="textarea">${configValues[fullKey] ?? value.defaultValue ?? ''}</textarea>
+            <textarea id="${value.themeKey}" name="${menuKey}_${value.themeKey}" class="textarea">${configValues[fullKey] ?? value.defaultValue ?? ''}</textarea>
         </div>
         `;
 
@@ -165,7 +165,7 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
                 return `
         <label for="${value.themeKey}" class="toggle">
             <p class="toggle-label">${value.title}</p>
-            <input id="${value.themeKey}" data-menu-key="${menuKey}" name="${value.themeKey}" type="checkbox" class="toggle-input"
+            <input id="${value.themeKey}" name="${menuKey}_${value.themeKey}" type="checkbox" class="toggle-input"
                 ${(configValues[fullKey] === "1" || (configValues[fullKey] === undefined && value.defaultValue === "1")) ? "checked" : ""}>
             <div class="toggle-slider"></div>
         </label>
@@ -181,7 +181,7 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
                 return `
         <div>
             <label for="${value.themeKey}">${value.title}</label>
-            <select data-menu-key="${menuKey}" id="${value.themeKey}" name="${value.themeKey}" class="input">
+            <select id="${value.themeKey}" name="${menuKey}_${value.themeKey}" class="input">
                 ${optionsHtml}
             </select>
         </div>
@@ -191,7 +191,7 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
                 return `
         <div>
             <label for="${value.themeKey}">${value.title}</label>
-            <input type="text" data-menu-key="${menuKey}" id="${value.themeKey}" name="${value.themeKey}" class="input" placeholder="Default"
+            <input type="text" id="${value.themeKey}" name="${menuKey}_${value.themeKey}" class="input" placeholder="Default"
                 value="${configValues[fullKey] ?? value.defaultValue ?? ''}">
         </div>
         `;
@@ -316,25 +316,19 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
 
         // 🔹 Écoute les modifications des inputs et met à jour uniquement l'élément concerné
         document.getElementById("sectionContent").addEventListener("input", (event) => {
-            const menuKey = event.target.dataset.menuKey;
             const valueKey = event.target.name;
-            if (!menuKey || !valueKey) return;
-
-            const fullKey = `${menuKey}_${valueKey}`;
-            configValues[fullKey] = event.target.value.trim();
-            updateThemePreview(fullKey);
+            if (!valueKey) return;
+            configValues[valueKey] = event.target.value.trim();
+            updateThemePreview(valueKey);
         });
 
         // 🔹 Gère aussi les cases à cocher
         document.getElementById("sectionContent").addEventListener("change", (event) => {
             if (event.target.type === "checkbox") {
-                const menuKey = event.target.dataset.menuKey;
                 const valueKey = event.target.name;
-                if (!menuKey || !valueKey) return;
-
-                const fullKey = `${menuKey}_${valueKey}`;
-                configValues[fullKey] = event.target.checked ? "1" : "0";
-                updateThemePreview(fullKey);
+                if (!valueKey) return;
+                configValues[valueKey] = event.target.checked ? "1" : "0";
+                updateThemePreview(valueKey);
             }
         });
     });

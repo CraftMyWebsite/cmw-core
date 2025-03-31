@@ -28,7 +28,6 @@ class ThemeModel extends AbstractModel
      */
     public function fetchConfigValue(string $MenuKey, string $themeKey, string $themeName = null): ?string
     {
-        //TODO gére le menukey pour en db selectionner les bonne choses ! et eviter les doublon
         //TODO Gérer les images ici !
         if ($themeName === null) {
             $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();

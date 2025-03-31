@@ -317,7 +317,7 @@ $notifications = NotificationModel::getInstance()->getUnreadNotification();
     <div id="modal-reset" class="modal-container">
         <div class="modal">
             <div class="modal-header-warning">
-                <h6>Titre de la modal</h6>
+                <h6>Réinitialisation</h6>
                 <button type="button" data-modal-hide="modal-reset"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">

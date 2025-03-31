@@ -2,6 +2,7 @@
 
 namespace CMW\Manager\Theme;
 
+use CMW\Controller\Core\PackageController;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Manager\AbstractManager;
@@ -108,6 +109,7 @@ class ThemeManager extends AbstractManager
 
     /**
      * @return array
+     * @deprecated Sera supprimé en alpha-10
      */
     public function getCurrentThemeConfigSettings(): array
     {
@@ -125,6 +127,36 @@ class ThemeManager extends AbstractManager
 
         return $content;
     }
+
+    /**
+     * @return array
+     */
+    public function getFlattenedThemeConfigSettings(): array
+    {
+        $themeName = $this->getCurrentTheme()->name();
+        $configPath = EnvManager::getInstance()->getValue('DIR') . "Public/Themes/{$themeName}/Config/config.settings.php";
+
+        if (!file_exists($configPath)) {
+            return [];
+        }
+
+        $menus = include $configPath;
+        $flat = [];
+
+        foreach ($menus as $menu) {
+            if (isset($menu->requiredPackage) && !PackageController::isInstalled($menu->requiredPackage)) {
+                continue;
+            }
+
+            foreach ($menu->values as $value) {
+                $key = $menu->key . '_' . $value->themeKey;
+                $flat[$key] = $value->defaultValue;
+            }
+        }
+
+        return $flat;
+    }
+
 
     /**
      * @param string $setting

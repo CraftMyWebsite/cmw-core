@@ -423,16 +423,21 @@ class View
             $content = ob_get_clean();
             $editorMode = isset($_GET['editor']) && $_GET['editor'] == '1';
             $content = $this->replaceThemeValues($content, $editorMode);
+
+            // bufferisation de template pour la gestion de replaceThemeValue
+            ob_start();
+            require_once($this->getTemplateFile());
+            $templateContent = ob_get_clean();
+            $templateContent = $this->replaceThemeValues($templateContent, $editorMode);
+            echo $templateContent;
         } else {
             $content = ob_get_clean();
+            require_once($this->getTemplateFile());
         }
-
-        require_once($this->getTemplateFile());
     }
 
     private function replaceThemeValues(string $html, bool $editorMode = false): string
     {
-        //TODO : Ne fonctionne pas pour les classes !!!
         $html = preg_replace_callback(
             '/\/\* CMW:([\w-]+):([\w-]+) \*\//',
             function ($matches) use ($editorMode) {
