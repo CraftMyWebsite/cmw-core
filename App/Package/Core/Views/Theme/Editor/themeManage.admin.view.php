@@ -17,8 +17,6 @@ Website::setTitle(LangManager::translate('core.theme.manage.title', ['Theme' => 
 Website::setDescription(LangManager::translate('core.theme.manage.description'));
 
 //TODO Gérer les element visible ou non en js peut être un commentaire : <!-- CMW:IF:key1:key2--> jusqu'a <!-- CMW:ENDIF:key1:key2-->
-//TODO Gérer les images (en se basant sur le type de value)
-//TODO Ajouter des truc colle comme le fa picker, slider
 ?>
 <style>
     input[type='color'] {
@@ -78,29 +76,29 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
     function showSection(index) {
         const button = document.querySelectorAll("#menuSections ul li button")[index];
         const title = button.getAttribute("data-title");
-        const values = JSON.parse(button.getAttribute("data-values"));
         const scope = button.getAttribute("data-scope");
         const menuKey = button.getAttribute("data-menukey");
 
         document.getElementById("menuSections").classList.add("hidden");
         document.getElementById("editorSection").classList.remove("hidden");
-
         document.getElementById("sectionTitle").innerText = title;
 
         const iframe = document.getElementById("previewFrame");
         const targetUrl = getEditorUrl(scope);
+        if (!urlsAreEqual(iframe.src, targetUrl)) iframe.src = targetUrl;
 
-        if (!urlsAreEqual(iframe.src, targetUrl)) {
-            iframe.src = targetUrl;
-        }
+        // cacher toutes les sections
+        document.querySelectorAll(".theme-section").forEach(el => el.classList.add("hidden"));
 
-        let contentHtml = "";
-        values.forEach(value => {
-            contentHtml += generateInputField(value, menuKey);
-        });
+        // afficher la bonne
+        const section = document.getElementById(`section_${menuKey}`);
+        section.classList.remove("hidden");
 
-        document.getElementById("sectionContent").innerHTML = contentHtml;
+        // déplacer dans le container d'édition
+        document.getElementById("sectionContent").innerHTML = "";
+        document.getElementById("sectionContent").appendChild(section);
     }
+
 
     function backToMenu() {
         document.getElementById("editorSection").classList.add("hidden");
@@ -108,7 +106,11 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
 
         const iframe = document.getElementById("previewFrame");
         const targetUrl = getEditorUrl();
-
+        const section = document.querySelector("#sectionContent .theme-section");
+        if (section) {
+            section.classList.add("hidden");
+            document.getElementById("allSections").appendChild(section);
+        }
         if (!urlsAreEqual(iframe.src, targetUrl)) {
             iframe.src = targetUrl;
         }
@@ -116,88 +118,6 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
 
 
     let configValues = <?= json_encode($formattedConfigs) ?>;
-    function generateInputField(value, menuKey) {
-        const fullKey = `${menuKey}_${value.themeKey}`;
-
-        switch (value.type) {
-            case 'color':
-                return `
-        <div class="mx-auto">
-            <label for="${value.themeKey}">${value.title}</label>
-            <input type="color" id="${value.themeKey}" name="${menuKey}_${value.themeKey}" class="input"
-                value="${configValues[fullKey] ?? value.defaultValue ?? ''}">
-        </div>
-        `;
-
-            case 'number':
-                return `
-        <div>
-            <label for="${value.themeKey}">${value.title}</label>
-            <input type="number" id="${value.themeKey}" name="${menuKey}_${value.themeKey}" class="input"
-                value="${configValues[fullKey] ?? value.defaultValue ?? ''}">
-        </div>
-        `;
-
-            case 'text':
-                return `
-        <div>
-            <label for="${value.themeKey}">${value.title}</label>
-            <input type="text" id="${value.themeKey}" name="${menuKey}_${value.themeKey}" class="input" placeholder="Default"
-                value="${configValues[fullKey] ?? value.defaultValue ?? ''}">
-        </div>
-        `;
-
-            case 'textarea':
-            case 'css':
-                return `
-        <div>
-            <label for="${value.themeKey}">${value.title}</label>
-            <textarea id="${value.themeKey}" name="${menuKey}_${value.themeKey}" class="textarea">${configValues[fullKey] ?? value.defaultValue ?? ''}</textarea>
-        </div>
-        `;
-
-            case 'image':
-                return `
-        <div class="drop-img-area" data-input-name="${value.themeKey}" data-menu-key="${menuKey}"></div>
-        `;
-
-            case 'boolean':
-                return `
-        <label for="${value.themeKey}" class="toggle">
-            <p class="toggle-label">${value.title}</p>
-            <input id="${value.themeKey}" name="${menuKey}_${value.themeKey}" type="checkbox" class="toggle-input"
-                ${(configValues[fullKey] === "1" || (configValues[fullKey] === undefined && value.defaultValue === "1")) ? "checked" : ""}>
-            <div class="toggle-slider"></div>
-        </label>
-        `;
-
-            case 'select':
-                let optionsHtml = value.selectOptions.map(option => `
-        <option value="${option.value}" ${(configValues[fullKey] ?? value.defaultValue) === option.value ? 'selected' : ''}>
-            ${option.text}
-        </option>
-    `).join('');
-
-                return `
-        <div>
-            <label for="${value.themeKey}">${value.title}</label>
-            <select id="${value.themeKey}" name="${menuKey}_${value.themeKey}" class="input">
-                ${optionsHtml}
-            </select>
-        </div>
-    `;
-
-            default:
-                return `
-        <div>
-            <label for="${value.themeKey}">${value.title}</label>
-            <input type="text" id="${value.themeKey}" name="${menuKey}_${value.themeKey}" class="input" placeholder="Default"
-                value="${configValues[fullKey] ?? value.defaultValue ?? ''}">
-        </div>
-        `;
-        }
-    }
-
 
     document.getElementById("previewFrame").addEventListener("load", () => {
         const iframe = document.getElementById("previewFrame");

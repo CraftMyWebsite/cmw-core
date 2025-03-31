@@ -217,8 +217,104 @@ $notifications = NotificationModel::getInstance()->getUnreadNotification();
             <p id="sectionTitle" class="text-center text-lg"></p>
             <div id="sectionContent" class="mt-3 space-y-3 px-4"></div>
         </div>
+        <div id="allSections">
+            <?php foreach ($themeMenus as $index => $package): ?>
+                <div class="theme-section hidden" id="section_<?= $package->getMenuKey() ?>"
+                     data-scope="<?= $package->getScope() ?>">
+                    <?php foreach ($package->values as $value): ?>
+                        <?= renderInput($value, $package->getMenuKey(), $formattedConfigs[$package->getMenuKey().'_'.$value->themeKey] ?? $value->defaultValue ?? '') ?>
+                    <?php endforeach; ?>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
     </form>
 </aside>
+
+<?php
+//TODO Ajouter des truc colle comme le fa picker, slider
+function renderInput($value, $menuKey, $val)
+{
+    $inputName = $menuKey . '_' . $value->themeKey;
+    $inputId = htmlspecialchars($value->themeKey);
+    $label = htmlspecialchars($value->title);
+    $valEscaped = htmlspecialchars($val);
+
+    switch ($value->type) {
+        case 'color':
+            return <<<HTML
+<div>
+    <label for="{$inputId}">{$label}</label>
+    <input type="color" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}">
+</div>
+HTML;
+
+        case 'number':
+            return <<<HTML
+<div>
+    <label for="{$inputId}">{$label}</label>
+    <input type="number" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}">
+</div>
+HTML;
+
+        case 'text':
+            return <<<HTML
+<div>
+    <label for="{$inputId}">{$label}</label>
+    <input type="text" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}" placeholder="Default">
+</div>
+HTML;
+
+        case 'textarea':
+        case 'css':
+            return <<<HTML
+<div>
+    <label for="{$inputId}">{$label}</label>
+    <textarea id="{$inputId}" name="{$inputName}" class="textarea">{$valEscaped}</textarea>
+</div>
+HTML;
+
+        case 'boolean':
+            $checked = ($val === "1" || ($val === null && $value->defaultValue === "1")) ? "checked" : "";
+            return <<<HTML
+<label for="{$inputId}" class="toggle">
+    <p class="toggle-label">{$label}</p>
+    <input id="{$inputId}" name="{$inputName}" type="checkbox" class="toggle-input" {$checked}>
+    <div class="toggle-slider"></div>
+</label>
+HTML;
+
+        case 'select':
+            $optionsHtml = '';
+            foreach ($value->selectOptions ?? [] as $option) {
+                $selected = ($val === $option->value || ($val === null && $value->defaultValue === $option->value)) ? 'selected' : '';
+                $optVal = htmlspecialchars($option->value);
+                $optText = htmlspecialchars($option->text);
+                $optionsHtml .= "<option value=\"{$optVal}\" {$selected}>{$optText}</option>";
+            }
+            return <<<HTML
+<div>
+    <label for="{$inputId}">{$label}</label>
+    <select id="{$inputId}" name="{$inputName}" class="input">{$optionsHtml}</select>
+</div>
+HTML;
+
+        case 'image':
+            return <<<HTML
+<div class="drop-img-area" data-input-name="{$value->themeKey}" data-menu-key="{$menuKey}"></div>
+HTML;
+
+        default:
+            return <<<HTML
+<div>
+    <label for="{$inputId}">{$label}</label>
+    <input type="text" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}" placeholder="Default">
+</div>
+HTML;
+    }
+}
+
+?>
 
 
 
