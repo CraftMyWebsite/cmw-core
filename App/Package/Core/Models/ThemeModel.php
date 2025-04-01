@@ -7,6 +7,7 @@ use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Package\AbstractModel;
+use CMW\Manager\Theme\Editor\EditorType;
 use CMW\Manager\Theme\ThemeManager;
 
 /**
@@ -48,9 +49,26 @@ class ThemeModel extends AbstractModel
         $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config
                                     WHERE theme_config_name = :config AND theme_config_theme = :theme');
 
-        $req->execute(['config' => $MenuKey. '_' .$themeKey, 'theme' => $themeName]);
+        $req->execute([
+            'config' => $MenuKey . '_' . $themeKey,
+            'theme' => $themeName
+        ]);
 
-        return $req->fetch()['theme_config_value'] ?? $this->getDefaultThemeValue($MenuKey, $themeKey);
+        $value = $req->fetch()['theme_config_value'] ?? null;
+
+        $type = ThemeManager::getInstance()->getEditorType($MenuKey, $themeKey);
+
+        if ($type === EditorType::IMAGE) {
+            $default = $this->getDefaultThemeValue($MenuKey, $themeKey);
+
+            if (!$value || $value === $default) {
+                return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . "Public/Themes/{$themeName}/{$default}";
+            }
+
+            return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . "Public/Uploads/{$themeName}/Img/{$value}";
+        }
+
+        return $value ?? $this->getDefaultThemeValue($MenuKey, $themeKey);
     }
 
     /**
@@ -95,7 +113,7 @@ class ThemeModel extends AbstractModel
      * </p>
      * @return string|null
      * @desc Fetch config data
-     * @deprecated Sera supprimé en alpha-10
+     * @deprecated Sera supprimé en alpha-10 gérer nativement dans fetchConfigValue
      */
     public function fetchImageLink(string $configName, string $theme = null): ?string
     {
@@ -127,7 +145,7 @@ class ThemeModel extends AbstractModel
      * </p>
      * @return string|null
      * @desc Fetch config data
-     * @deprecated Sera supprimé en alpha-10
+     * @deprecated Sera supprimé en alpha-10 gérer nativement dans fetchConfigValue
      */
     public function fetchVideoLink(string $configName, string $theme = null): ?string
     {
