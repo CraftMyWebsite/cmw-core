@@ -157,7 +157,7 @@ class ThemeController extends AbstractController
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.edit');
 
         //Vérifie si la valeur par défaut est en base de donnée si ce n'est pas le cas, on l'ajoute, cela permet aux mises à jour des thèmes de gérer les nouvelles valeurs :)
-        $themeMenus = $this->getThemeMenus();
+        $themeMenus = ThemeManager::getInstance()->getThemeMenus();
         $currentTheme = ThemeManager::getInstance()->getCurrentTheme()->name();
         $themeConfigs = ThemeModel::getInstance()->fetchThemeConfigs($currentTheme);
         $configNames = array_column($themeConfigs, 'theme_config_name');
@@ -190,25 +190,6 @@ class ThemeController extends AbstractController
             ->setCustomTemplate(EnvManager::getInstance()->getValue('DIR') . 'App/Package/Core/Views/Theme/Editor/template.php');
 
         $view->view();
-    }
-
-    /**
-     * @return EditorMenu[]
-     */
-    private function getThemeMenus(): array {
-        $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
-
-        $configPath = EnvManager::getInstance()->getValue('DIR') . "Public/Themes/{$themeName}/Config/config.settings.php";
-
-        if (!file_exists($configPath)) {
-            return [];
-        }
-
-        $menus = include $configPath;
-
-        return array_filter($menus, function ($menu) {
-            return !isset($menu->requiredPackage) || PackageController::isInstalled($menu->requiredPackage);
-        });
     }
 
     #[NoReturn]

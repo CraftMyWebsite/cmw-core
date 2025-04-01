@@ -6,6 +6,7 @@ use CMW\Controller\Core\PackageController;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Manager\AbstractManager;
+use CMW\Manager\Theme\Editor\EditorMenu;
 use CMW\Manager\Theme\Exceptions\ThemeNotFoundException;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\ThemeModel;
@@ -109,7 +110,7 @@ class ThemeManager extends AbstractManager
 
     /**
      * @return array
-     * @deprecated Sera supprimé en alpha-10
+     * @deprecated Sera supprimé en alpha-10 remplacé par : getFlattenedThemeConfigSettings
      */
     public function getCurrentThemeConfigSettings(): array
     {
@@ -127,36 +128,6 @@ class ThemeManager extends AbstractManager
 
         return $content;
     }
-
-    /**
-     * @return array
-     */
-    public function getFlattenedThemeConfigSettings(): array
-    {
-        $themeName = $this->getCurrentTheme()->name();
-        $configPath = EnvManager::getInstance()->getValue('DIR') . "Public/Themes/{$themeName}/Config/config.settings.php";
-
-        if (!file_exists($configPath)) {
-            return [];
-        }
-
-        $menus = include $configPath;
-        $flat = [];
-
-        foreach ($menus as $menu) {
-            if (isset($menu->requiredPackage) && !PackageController::isInstalled($menu->requiredPackage)) {
-                continue;
-            }
-
-            foreach ($menu->values as $value) {
-                $key = $menu->key . '_' . $value->themeKey;
-                $flat[$key] = $value->defaultValue;
-            }
-        }
-
-        return $flat;
-    }
-
 
     /**
      * @param string $setting
@@ -250,5 +221,75 @@ class ThemeManager extends AbstractManager
         $configPdo->commit();
 
         return UninstallThemeType::SUCCESS;
+    }
+
+    /*--EDITOR--*/
+
+    /**
+     * @return EditorMenu[]
+     */
+    public function getThemeMenus(): array {
+        $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
+
+        $configPath = EnvManager::getInstance()->getValue('DIR') . "Public/Themes/{$themeName}/Config/config.settings.php";
+
+        if (!file_exists($configPath)) {
+            return [];
+        }
+
+        $menus = include $configPath;
+
+        return array_filter($menus, function ($menu) {
+            return !isset($menu->requiredPackage) || PackageController::isInstalled($menu->requiredPackage);
+        });
+    }
+
+    /**
+     * @return array
+     */
+    public function getFlattenedThemeConfigSettings(): array
+    {
+        $themeName = $this->getCurrentTheme()->name();
+        $configPath = EnvManager::getInstance()->getValue('DIR') . "Public/Themes/{$themeName}/Config/config.settings.php";
+
+        if (!file_exists($configPath)) {
+            return [];
+        }
+
+        $menus = include $configPath;
+        $flat = [];
+
+        foreach ($menus as $menu) {
+            if (isset($menu->requiredPackage) && !PackageController::isInstalled($menu->requiredPackage)) {
+                continue;
+            }
+
+            foreach ($menu->values as $value) {
+                $key = $menu->key . '_' . $value->themeKey;
+                $flat[$key] = $value->defaultValue;
+            }
+        }
+
+        return $flat;
+    }
+
+    /**
+     * @param string $menuKey
+     * @param string $themeKey
+     * @return string|null
+     */
+    public function getEditorType(string $menuKey, string $themeKey): ?string
+    {
+        foreach ($this->getThemeMenus() as $menu) {
+            if ($menu->getMenuKey() === $menuKey) {
+                foreach ($menu->values as $value) {
+                    if ($value->themeKey === $themeKey) {
+                        return $value->type;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 }
