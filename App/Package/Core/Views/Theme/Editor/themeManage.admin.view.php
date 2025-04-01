@@ -44,6 +44,131 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
     <iframe id="previewFrame" width="98%" style="height: 100%;" src="<?= Website::getUrl() ?>/?editor=1"></iframe>
 </div>
 
+<!--  MENU ET NAVIGATION DYNAMIQUE  -->
+<script>
+    function showSection(index) {
+        const button = document.querySelectorAll("#menuSections ul li button")[index];
+        const title = button.getAttribute("data-title");
+        const scope = button.getAttribute("data-scope");
+        const menuKey = button.getAttribute("data-menukey");
+
+        document.getElementById("menuSections").classList.add("hidden");
+        document.getElementById("editorSection").classList.remove("hidden");
+        document.getElementById("sectionTitle").innerText = title;
+
+        const iframe = document.getElementById("previewFrame");
+        const targetUrl = getEditorUrl(scope);
+        if (!urlsAreEqual(iframe.src, targetUrl)) iframe.src = targetUrl;
+
+        // cacher toutes les sections
+        document.querySelectorAll(".theme-section").forEach(el => el.classList.add("hidden"));
+
+        // afficher la bonne
+        const section = document.getElementById(`section_${menuKey}`);
+        section.classList.remove("hidden");
+
+        // déplacer dans le container d'édition
+        document.getElementById("sectionContent").innerHTML = "";
+        document.getElementById("sectionContent").appendChild(section);
+    }
+
+    function backToMenu() {
+        document.getElementById("editorSection").classList.add("hidden");
+        document.getElementById("menuSections").classList.remove("hidden");
+
+        const iframe = document.getElementById("previewFrame");
+        const targetUrl = getEditorUrl();
+        const section = document.querySelector("#sectionContent .theme-section");
+        if (section) {
+            section.classList.add("hidden");
+            document.getElementById("allSections").appendChild(section);
+        }
+        if (!urlsAreEqual(iframe.src, targetUrl)) {
+            iframe.src = targetUrl;
+        }
+    }
+</script>
+
+<!--  MISES à JOUR EN LIVE DE L'IFRAME  -->
+<script>
+    let configValues = <?= json_encode($formattedConfigs) ?>;
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const iframe = document.getElementById("previewFrame");
+
+        iframe.onload = function () {
+            updateThemePreview();
+        };
+
+        function updateThemePreview(keyToUpdate = null) {
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            if (!iframeDoc) return;
+
+            // 🔹 Mise à jour des valeurs des commentaires textuels (ex: <!-- CMW:header:site_title -->)
+            const iterator = iframeDoc.createNodeIterator(iframeDoc.body, NodeFilter.SHOW_COMMENT, {
+                acceptNode: (node) => node.nodeValue.includes("CMW:") ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
+            });
+
+            let currentNode;
+            while ((currentNode = iterator.nextNode())) {
+                const match = currentNode.nodeValue.trim().match(/CMW:([\w-]+):([\w-]+)/);
+                if (match) {
+                    const menuKey = match[1];
+                    const valueKey = match[2];
+                    const fullKey = `${menuKey}_${valueKey}`;
+
+                    if (keyToUpdate && fullKey !== keyToUpdate) continue;
+
+                    const themeValue = configValues[fullKey] || "";
+
+                    let previousNode = currentNode.previousSibling;
+                    if (previousNode && previousNode.nodeType === Node.TEXT_NODE) {
+                        previousNode.textContent = themeValue;
+                    } else {
+                        const newElement = document.createTextNode(themeValue);
+                        currentNode.parentNode.insertBefore(newElement, currentNode);
+                    }
+                }
+            }
+
+            // 🔹 Mise à jour des styles dynamiques et des attributs (ex: style="color: /* CMW:header:text_color */")
+            iframeDoc.querySelectorAll("*").forEach(element => {
+                Array.from(element.attributes).forEach(attr => {
+                    if (attr.value.includes("/* CMW:")) {
+                        const regex = /([\w#\d]+)?\s*\/\* CMW:([\w-]+):([\w-]+) \*\//g;
+                        let newValue = attr.value.replace(regex, (match, oldValue, menuKey, valueKey) => {
+                            const fullKey = `${menuKey}_${valueKey}`;
+                            return (configValues[fullKey] || "").trim() + ` /* CMW:${menuKey}:${valueKey} */`;
+                        });
+
+                        newValue = newValue.replace(/(\S+)\s+\1/g, "$1"); // Supprime les doublons
+                        element.setAttribute(attr.name, newValue.trim());
+                    }
+                });
+            });
+        }
+
+        // Écoute les modifications des inputs et met à jour uniquement l'élément concerné
+        document.getElementById("sectionContent").addEventListener("input", (event) => {
+            const valueKey = event.target.name;
+            if (!valueKey) return;
+            configValues[valueKey] = event.target.value.trim();
+            updateThemePreview(valueKey);
+        });
+
+        // Gère aussi les cases à cocher
+        document.getElementById("sectionContent").addEventListener("change", (event) => {
+            if (event.target.type === "checkbox") {
+                const valueKey = event.target.name;
+                if (!valueKey) return;
+                configValues[valueKey] = event.target.checked ? "1" : "0";
+                updateThemePreview(valueKey);
+            }
+        });
+    });
+</script>
+
+<!--  UTILITAIRES  -->
 <script>
     function getEditorUrl(scope = null) {
         const baseUrl = "<?= Website::getUrl() ?>";
@@ -72,53 +197,10 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
             return url1 === url2;
         }
     }
+</script>
 
-    function showSection(index) {
-        const button = document.querySelectorAll("#menuSections ul li button")[index];
-        const title = button.getAttribute("data-title");
-        const scope = button.getAttribute("data-scope");
-        const menuKey = button.getAttribute("data-menukey");
-
-        document.getElementById("menuSections").classList.add("hidden");
-        document.getElementById("editorSection").classList.remove("hidden");
-        document.getElementById("sectionTitle").innerText = title;
-
-        const iframe = document.getElementById("previewFrame");
-        const targetUrl = getEditorUrl(scope);
-        if (!urlsAreEqual(iframe.src, targetUrl)) iframe.src = targetUrl;
-
-        // cacher toutes les sections
-        document.querySelectorAll(".theme-section").forEach(el => el.classList.add("hidden"));
-
-        // afficher la bonne
-        const section = document.getElementById(`section_${menuKey}`);
-        section.classList.remove("hidden");
-
-        // déplacer dans le container d'édition
-        document.getElementById("sectionContent").innerHTML = "";
-        document.getElementById("sectionContent").appendChild(section);
-    }
-
-
-    function backToMenu() {
-        document.getElementById("editorSection").classList.add("hidden");
-        document.getElementById("menuSections").classList.remove("hidden");
-
-        const iframe = document.getElementById("previewFrame");
-        const targetUrl = getEditorUrl();
-        const section = document.querySelector("#sectionContent .theme-section");
-        if (section) {
-            section.classList.add("hidden");
-            document.getElementById("allSections").appendChild(section);
-        }
-        if (!urlsAreEqual(iframe.src, targetUrl)) {
-            iframe.src = targetUrl;
-        }
-    }
-
-
-    let configValues = <?= json_encode($formattedConfigs) ?>;
-
+<!--  PROTEGE LES LIENS ET LES POSTS  -->
+<script>
     document.getElementById("previewFrame").addEventListener("load", () => {
         const iframe = document.getElementById("previewFrame");
         const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
@@ -178,82 +260,9 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
 
         observer.observe(iframeDoc.body, { childList: true, subtree: true });
     });
-
-    document.addEventListener("DOMContentLoaded", () => {
-        const iframe = document.getElementById("previewFrame");
-
-        iframe.onload = function () {
-            updateThemePreview();
-        };
-
-        function updateThemePreview(keyToUpdate = null) {
-            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-            if (!iframeDoc) return;
-
-            // 🔹 Mise à jour des valeurs des commentaires textuels (ex: <!-- CMW:header:site_title -->)
-            const iterator = iframeDoc.createNodeIterator(iframeDoc.body, NodeFilter.SHOW_COMMENT, {
-                acceptNode: (node) => node.nodeValue.includes("CMW:") ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
-            });
-
-            let currentNode;
-            while ((currentNode = iterator.nextNode())) {
-                const match = currentNode.nodeValue.trim().match(/CMW:([\w-]+):([\w-]+)/);
-                if (match) {
-                    const menuKey = match[1];
-                    const valueKey = match[2];
-                    const fullKey = `${menuKey}_${valueKey}`;
-
-                    if (keyToUpdate && fullKey !== keyToUpdate) continue;
-
-                    const themeValue = configValues[fullKey] || "";
-
-                    let previousNode = currentNode.previousSibling;
-                    if (previousNode && previousNode.nodeType === Node.TEXT_NODE) {
-                        previousNode.textContent = themeValue;
-                    } else {
-                        const newElement = document.createTextNode(themeValue);
-                        currentNode.parentNode.insertBefore(newElement, currentNode);
-                    }
-                }
-            }
-
-            // 🔹 Mise à jour des styles dynamiques et des attributs (ex: style="color: /* CMW:header:text_color */")
-            iframeDoc.querySelectorAll("*").forEach(element => {
-                Array.from(element.attributes).forEach(attr => {
-                    if (attr.value.includes("/* CMW:")) {
-                        const regex = /([\w#\d]+)?\s*\/\* CMW:([\w-]+):([\w-]+) \*\//g;
-                        let newValue = attr.value.replace(regex, (match, oldValue, menuKey, valueKey) => {
-                            const fullKey = `${menuKey}_${valueKey}`;
-                            return (configValues[fullKey] || "").trim() + ` /* CMW:${menuKey}:${valueKey} */`;
-                        });
-
-                        newValue = newValue.replace(/(\S+)\s+\1/g, "$1"); // Supprime les doublons
-                        element.setAttribute(attr.name, newValue.trim());
-                    }
-                });
-            });
-        }
-
-        // 🔹 Écoute les modifications des inputs et met à jour uniquement l'élément concerné
-        document.getElementById("sectionContent").addEventListener("input", (event) => {
-            const valueKey = event.target.name;
-            if (!valueKey) return;
-            configValues[valueKey] = event.target.value.trim();
-            updateThemePreview(valueKey);
-        });
-
-        // 🔹 Gère aussi les cases à cocher
-        document.getElementById("sectionContent").addEventListener("change", (event) => {
-            if (event.target.type === "checkbox") {
-                const valueKey = event.target.name;
-                if (!valueKey) return;
-                configValues[valueKey] = event.target.checked ? "1" : "0";
-                updateThemePreview(valueKey);
-            }
-        });
-    });
 </script>
 
+<!--  SAUVEGARDE AJAX -->
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const form = document.getElementById("ThemeSettings");
