@@ -232,7 +232,7 @@ $notifications = NotificationModel::getInstance()->getUnreadNotification();
 </aside>
 
 <?php
-//TODO Ajouter des truc colle comme le fa picker, slider
+//TODO Ajouter des truc colle comme le fa picker, slider (avec prefix ou sufix min max step)
 function renderInput($value, $menuKey, $val)
 {
     $inputName = $menuKey . '_' . $value->themeKey;
@@ -315,8 +315,6 @@ HTML;
 }
 
 ?>
-
-
 
 <script>
     document.getElementById('toggleSidebar').addEventListener('click', function () {

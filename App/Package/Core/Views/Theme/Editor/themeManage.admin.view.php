@@ -104,47 +104,111 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
             const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
             if (!iframeDoc) return;
 
-            // 🔹 Mise à jour des valeurs des commentaires textuels (ex: <!-- CMW:header:site_title -->)
-            const iterator = iframeDoc.createNodeIterator(iframeDoc.body, NodeFilter.SHOW_COMMENT, {
-                acceptNode: (node) => node.nodeValue.includes("CMW:") ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
+            // 🔹 Texte brut : <span data-cmw="menu:key">
+            iframeDoc.querySelectorAll('[data-cmw]').forEach(el => {
+                const ref = el.getAttribute("data-cmw");
+                if (!ref || !ref.includes(":")) return;
+
+                const [menuKey, valueKey] = ref.split(":");
+                const fullKey = `${menuKey}_${valueKey}`;
+                if (keyToUpdate && fullKey !== keyToUpdate) return;
+
+                el.textContent = configValues[fullKey] || "";
             });
 
-            let currentNode;
-            while ((currentNode = iterator.nextNode())) {
-                const match = currentNode.nodeValue.trim().match(/CMW:([\w-]+):([\w-]+)/);
-                if (match) {
-                    const menuKey = match[1];
-                    const valueKey = match[2];
+            // 🔹 Attributs : <span data-cmw-attr="src:menu:key">
+            iframeDoc.querySelectorAll('[data-cmw-attr]').forEach(el => {
+                const attrDefs = el.getAttribute("data-cmw-attr").trim().split(/\s+/);
+
+                attrDefs.forEach(def => {
+                    const [attrName, menuKey, valueKey] = def.split(":");
+                    const fullKey = `${menuKey}_${valueKey}`;
+                    if (keyToUpdate && fullKey !== keyToUpdate) return;
+
+                    const value = configValues[fullKey] || "";
+                    el.setAttribute(attrName, value);
+                });
+            });
+
+
+            // 🔹 Style CSS : <span data-cmw-style="color:menu:key">
+            iframeDoc.querySelectorAll('[data-cmw-style]').forEach(el => {
+                const styles = el.getAttribute("data-cmw-style").split(";");
+
+                styles.forEach(entry => {
+                    const parts = entry.split(":");
+                    if (parts.length < 3) return;
+
+                    const cssProp = parts[0].trim();
+                    const menuKey = parts[1];
+                    const valueKey = parts.slice(2).join(":");
                     const fullKey = `${menuKey}_${valueKey}`;
 
-                    if (keyToUpdate && fullKey !== keyToUpdate) continue;
+                    if (keyToUpdate && fullKey !== keyToUpdate) return;
 
-                    const themeValue = configValues[fullKey] || "";
+                    let value = configValues[fullKey] || "";
 
-                    let previousNode = currentNode.previousSibling;
-                    if (previousNode && previousNode.nodeType === Node.TEXT_NODE) {
-                        previousNode.textContent = themeValue;
-                    } else {
-                        const newElement = document.createTextNode(themeValue);
-                        currentNode.parentNode.insertBefore(newElement, currentNode);
+                    // 🔹 Propriétés CSS nécessitant une transformation en url(...)
+                    const urlProps = ["background-image", "background", "list-style-image", "mask-image"];
+
+                    if (urlProps.includes(cssProp) && !value.includes("url(")) {
+                        value = `url('${value}')`;
                     }
-                }
-            }
 
-            // 🔹 Mise à jour des styles dynamiques et des attributs (ex: style="color: /* CMW:header:text_color */")
-            iframeDoc.querySelectorAll("*").forEach(element => {
-                Array.from(element.attributes).forEach(attr => {
-                    if (attr.value.includes("/* CMW:")) {
-                        const regex = /([\w#\d]+)?\s*\/\* CMW:([\w-]+):([\w-]+) \*\//g;
-                        let newValue = attr.value.replace(regex, (match, oldValue, menuKey, valueKey) => {
-                            const fullKey = `${menuKey}_${valueKey}`;
-                            return (configValues[fullKey] || "").trim() + ` /* CMW:${menuKey}:${valueKey} */`;
-                        });
+                    // 🔹 Appliquer le style
+                    el.style.setProperty(cssProp, value);
+                });
+            });
 
-                        newValue = newValue.replace(/(\S+)\s+\1/g, "$1"); // Supprime les doublons
-                        element.setAttribute(attr.name, newValue.trim());
+
+            // 🔹 Classe dynamique : <div data-cmw-class="menu:key">
+            iframeDoc.querySelectorAll('[data-cmw-class]').forEach(el => {
+                const refs = el.getAttribute("data-cmw-class").trim().split(/\s+/);
+
+                refs.forEach(ref => {
+                    const [menuKey, valueKey] = ref.split(":");
+                    const fullKey = `${menuKey}_${valueKey}`;
+                    if (keyToUpdate && fullKey !== keyToUpdate) return;
+
+                    const className = (configValues[fullKey] || "").trim();
+                    const attrKey = `data-cmw-last-class-${fullKey}`;
+
+                    // Supprimer l'ancienne classe
+                    const oldClass = el.getAttribute(attrKey);
+                    if (oldClass) el.classList.remove(oldClass);
+
+                    // Ajouter la nouvelle classe si elle existe
+                    if (className) {
+                        el.classList.add(className);
+                        el.setAttribute(attrKey, className);
+                    } else {
+                        el.removeAttribute(attrKey);
                     }
                 });
+            });
+
+            // 🔹 Visibilité conditionnelle : <div data-cmw-visible="menu:key">
+            iframeDoc.querySelectorAll('[data-cmw-visible]').forEach(el => {
+                const [menuKey, valueKey] = el.getAttribute("data-cmw-visible").split(":");
+                const fullKey = `${menuKey}_${valueKey}`;
+                if (keyToUpdate && fullKey !== keyToUpdate) return;
+
+                const value = configValues[fullKey];
+                el.style.display = (value === "0" || value === "" || value === null) ? "none" : "";
+            });
+
+            // 🔹 Inline JS / JSON : const foo = "__CMW:menu:key__";
+            iframeDoc.querySelectorAll("script").forEach(script => {
+                if (!script.textContent.includes("__CMW:")) return;
+
+                const newContent = script.textContent.replace(/__CMW:([\w-]+):([\w-]+)__/g, (_, menuKey, valueKey) => {
+                    const fullKey = `${menuKey}_${valueKey}`;
+                    return configValues[fullKey] || "";
+                });
+
+                const newScript = iframeDoc.createElement("script");
+                newScript.textContent = newContent;
+                script.replaceWith(newScript);
             });
         }
 
