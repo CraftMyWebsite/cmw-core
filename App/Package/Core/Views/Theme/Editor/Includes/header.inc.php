@@ -215,7 +215,7 @@ $notifications = NotificationModel::getInstance()->getUnreadNotification();
                 <i class="fa-regular fa-circle-left"></i> Retour au menu
             </button>
             <p id="sectionTitle" class="text-center text-lg"></p>
-            <div id="sectionContent" class="mt-3 space-y-3 px-4"></div>
+            <div id="sectionContent" class="mt-3 space-y-3 px-1"></div>
         </div>
         <div id="allSections">
             <?php foreach ($themeMenus as $index => $package): ?>
@@ -243,7 +243,7 @@ function renderInput($value, $menuKey, $val)
     switch ($value->type) {
         case 'color':
             return <<<HTML
-<div>
+<div style="margin-bottom: 1rem; padding: .2rem .6rem .2rem .6rem; border-radius: 4px; border: dashed 1px #b5a5a5">
     <label for="{$inputId}">{$label}</label>
     <input type="color" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}">
 </div>
@@ -251,7 +251,7 @@ HTML;
 
         case 'number':
             return <<<HTML
-<div>
+<div style="margin-bottom: 1rem; padding: .2rem .6rem .2rem .6rem; border-radius: 4px; border: dashed 1px #b5a5a5">
     <label for="{$inputId}">{$label}</label>
     <input type="number" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}">
 </div>
@@ -259,7 +259,7 @@ HTML;
 
         case 'text':
             return <<<HTML
-<div>
+<div style="margin-bottom: 1rem; padding: .2rem .6rem .2rem .6rem; border-radius: 4px; border: dashed 1px #b5a5a5">
     <label for="{$inputId}">{$label}</label>
     <input type="text" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}" placeholder="Default">
 </div>
@@ -268,7 +268,7 @@ HTML;
         case 'textarea':
         case 'css':
             return <<<HTML
-<div>
+<div style="margin-bottom: 1rem; padding: .2rem .6rem .2rem .6rem; border-radius: 4px; border: dashed 1px #b5a5a5">
     <label for="{$inputId}">{$label}</label>
     <textarea id="{$inputId}" name="{$inputName}" class="textarea">{$valEscaped}</textarea>
 </div>
@@ -277,11 +277,13 @@ HTML;
         case 'boolean':
             $checked = ($val === "1" || ($val === null && $value->defaultValue === "1")) ? "checked" : "";
             return <<<HTML
-<label for="{$inputId}" class="toggle">
-    <p class="toggle-label">{$label}</p>
-    <input id="{$inputId}" name="{$inputName}" type="checkbox" class="toggle-input" {$checked}>
-    <div class="toggle-slider"></div>
-</label>
+<div style="margin-bottom: 1rem; padding: .2rem .6rem .2rem .6rem; border-radius: 4px; border: dashed 1px #b5a5a5">
+    <label for="{$inputId}" class="toggle">
+        <p class="toggle-label">{$label}</p>
+        <input id="{$inputId}" name="{$inputName}" type="checkbox" class="toggle-input" {$checked}>
+        <div class="toggle-slider"></div>
+    </label>
+</div>
 HTML;
 
         case 'select':
@@ -293,7 +295,7 @@ HTML;
                 $optionsHtml .= "<option value=\"{$optVal}\" {$selected}>{$optText}</option>";
             }
             return <<<HTML
-<div>
+<div style="margin-bottom: 1rem; padding: .2rem .6rem .2rem .6rem; border-radius: 4px; border: dashed 1px #b5a5a5">
     <label for="{$inputId}">{$label}</label>
     <select id="{$inputId}" name="{$inputName}" class="input">{$optionsHtml}</select>
 </div>
@@ -301,8 +303,10 @@ HTML;
 
         case 'image':
             return <<<HTML
-<label for="{$inputId}">{$label}</label>
-<input id="{$inputId}" name="{$inputName}" type="file" value="{$valEscaped}">
+<div style="margin-bottom: 1rem; padding: .2rem .6rem .2rem .6rem; border-radius: 4px; border: dashed 1px #b5a5a5">
+    <label for="{$inputId}">{$label}</label>
+    <input id="{$inputId}" name="{$inputName}" type="file" value="{$valEscaped}">
+</div>
 HTML;
 
         case 'range':
@@ -319,7 +323,7 @@ HTML;
             $suffix = htmlspecialchars($range->getSuffix());
 
             return <<<HTML
-<div>
+<div style="margin-bottom: 1rem; padding: .2rem .6rem .2rem .6rem; border-radius: 4px; border: dashed 1px #b5a5a5">
     <label for="{$inputId}">{$label} (<small id="preview_{$inputId}">{$prefix}{$valEscaped}{$suffix}</small>)</label>
     
     <div class="flex items-center gap-2">
@@ -339,7 +343,7 @@ HTML;
 
         default:
             return <<<HTML
-<div>
+<div style="margin-bottom: 1rem; padding: .2rem .6rem .2rem .6rem; border-radius: 4px; border: dashed 1px #b5a5a5">
     <label for="{$inputId}">{$label}</label>
     <input type="text" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}" placeholder="Default">
 </div>

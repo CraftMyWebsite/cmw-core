@@ -37,35 +37,10 @@ foreach ($themeMenus as $menu) {
     }
 }
 
-
-
 Website::setTitle(LangManager::translate('core.theme.manage.title', ['Theme' => ThemeManager::getInstance()->getCurrentTheme()->name()]));
 Website::setDescription(LangManager::translate('core.theme.manage.description'));
 
-//TODO Gérer les element visible ou non en js peut être un commentaire : <!-- CMW:IF:key1:key2--> jusqu'a <!-- CMW:ENDIF:key1:key2-->
 ?>
-<style>
-    input[type='color'] {
-        -webkit-appearance: none;
-        border: transparent;
-        width: 100%;
-        height: 20px;
-        cursor: pointer;
-        padding: 0;
-        border-radius: 6px;
-    }
-
-    input[type='color']::-webkit-color-swatch-wrapper {
-        padding: 0;
-    }
-    input[type='color']::-webkit-color-swatch {
-        border: none;
-    }
-    input[type='color']::-moz-color-swatch {
-        border: none;
-    }
-</style>
-
 <div class="preview-container">
     <iframe id="previewFrame" width="98%" style="height: 100%;" src="<?= Website::getUrl() ?>/?editor=1"></iframe>
 </div>

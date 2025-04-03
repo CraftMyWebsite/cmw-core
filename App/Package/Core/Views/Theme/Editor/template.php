@@ -24,6 +24,26 @@
     .mode-btn.active {
         color: #3d72dd; /* Couleur du bouton actif */
     }
+
+    input[type='color'] {
+        -webkit-appearance: none;
+        border: transparent;
+        width: 100%;
+        height: 20px;
+        cursor: pointer;
+        padding: 0;
+        border-radius: 6px;
+    }
+
+    input[type='color']::-webkit-color-swatch-wrapper {
+        padding: 0;
+    }
+    input[type='color']::-webkit-color-swatch {
+        border: none;
+    }
+    input[type='color']::-moz-color-swatch {
+        border: none;
+    }
 </style>
 <?php
 
