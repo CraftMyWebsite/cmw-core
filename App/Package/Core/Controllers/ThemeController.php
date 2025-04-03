@@ -161,14 +161,29 @@ class ThemeController extends AbstractController
         $currentTheme = ThemeManager::getInstance()->getCurrentTheme()->name();
         $themeConfigs = ThemeModel::getInstance()->fetchThemeConfigs($currentTheme);
         $configNames = array_column($themeConfigs, 'theme_config_name');
-
-        //TODO : il serais bien de verifier si dans un menu, plusieur theme key sont egal, si c'est le cas on warning ! dans le menu X vous avez plusieru clé egal (themeKey)
+        $menuKeys = [];
 
         foreach ($themeMenus as $themeMenu) {
             $menuKey = $themeMenu->getMenuKey();
 
+            // Warning si le menu est défini plusieurs fois
+            if (in_array($menuKey, $menuKeys)) {
+                Flash::send(Alert::ERROR, 'Editor - DEV', 'Attention le menu <b>' . $menuKey . '</b> est défini plusieurs fois !');
+            } else {
+                $menuKeys[] = $menuKey;
+            }
+
+            $themeKeys = [];
+
             foreach ($themeMenu->getValues() as $value) {
                 $key = $value->getThemeKey();
+
+                if (in_array($key, $themeKeys)) {
+                    Flash::send(Alert::ERROR, 'Editor - DEV', 'Attention la clé <b>' . $key . '</b> est présente plusieurs fois dans le menu <b>' . $menuKey . '</b> !');
+                } else {
+                    $themeKeys[] = $key;
+                }
+
                 $dbKey = $menuKey ? $menuKey . '_' . $key : $key;
 
                 if (!in_array($dbKey, $configNames)) {
@@ -182,6 +197,8 @@ class ThemeController extends AbstractController
                 }
             }
         }
+
+
 
         $view = new View();
         $view
