@@ -232,7 +232,7 @@ $notifications = NotificationModel::getInstance()->getUnreadNotification();
 </aside>
 
 <?php
-//TODO Ajouter des truc colle comme le fa picker, slider (avec prefix ou sufix min max step)
+//TODO Ajouter des truc colle comme le fa picker, et peut être d'autres trucs
 function renderInput($value, $menuKey, $val)
 {
     $inputName = $menuKey . '_' . $value->themeKey;
@@ -304,6 +304,38 @@ HTML;
 <label for="{$inputId}">{$label}</label>
 <input id="{$inputId}" name="{$inputName}" type="file" value="{$valEscaped}">
 HTML;
+
+        case 'range':
+            $range = $value->rangeOptions[0] ?? null;
+
+            if (!$range) {
+                return ''; // si mal configuré
+            }
+
+            $min = $range->getMin();
+            $max = $range->getMax();
+            $step = $range->getStep();
+            $prefix = htmlspecialchars($range->getPrefix());
+            $suffix = htmlspecialchars($range->getSuffix());
+
+            return <<<HTML
+<div>
+    <label for="{$inputId}">{$label}</label>
+    <div class="flex items-center gap-2">
+        <input type="range" 
+               id="{$inputId}" 
+               name="{$inputName}" 
+               min="{$min}" 
+               max="{$max}" 
+               step="{$step}" 
+               value="{$valEscaped}" 
+               class="w-full"
+               oninput="document.getElementById('preview_{$inputId}').innerText = '{$prefix}' + this.value + '{$suffix}'">
+        <span id="preview_{$inputId}">{$prefix}{$valEscaped}{$suffix}</span>
+    </div>
+</div>
+HTML;
+
 
         default:
             return <<<HTML

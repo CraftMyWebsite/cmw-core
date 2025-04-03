@@ -2,6 +2,7 @@
 
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Theme\Editor\EditorType;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Utils\Website;
 
@@ -19,12 +20,23 @@ $editorSettings = [];
 foreach ($themeMenus as $menu) {
     foreach ($menu->values as $value) {
         $key = $menu->key . '_' . $value->themeKey;
+
         $editorSettings[$key] = [
             'default' => $value->defaultValue,
             'type' => $value->type,
         ];
+
+        if ($value->type === EditorType::RANGE && isset($value->rangeOptions[0])) {
+            $range = $value->rangeOptions[0];
+            $editorSettings[$key]['prefix'] = $range->getPrefix();
+            $editorSettings[$key]['suffix'] = $range->getSuffix();
+            $editorSettings[$key]['min'] = $range->getMin();
+            $editorSettings[$key]['max'] = $range->getMax();
+            $editorSettings[$key]['step'] = $range->getStep();
+        }
     }
 }
+
 
 
 Website::setTitle(LangManager::translate('core.theme.manage.title', ['Theme' => ThemeManager::getInstance()->getCurrentTheme()->name()]));
@@ -173,16 +185,30 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
 
                     if (keyToUpdate && fullKey !== keyToUpdate) return;
 
-                    let value = configValues[fullKey] || "";
+                    let rawValue = configValues[fullKey] || "";
+                    const setting = editorSettings?.[fullKey] || {};
+                    const isSlider = setting.type === "slider";
+                    const suffix = setting.suffix || "";
+                    const prefix = setting.prefix || "";
 
-                    // 🔹 Propriétés CSS nécessitant une transformation en url(...)
+                    // Gestion image
                     const urlProps = ["background-image", "background", "list-style-image", "mask-image"];
+                    const lengthProps = [
+                        "width", "height", "top", "left", "right", "bottom", "margin", "padding", "font-size",
+                        "gap", "max-width", "min-width", "max-height", "min-height", "border-radius"
+                    ];
 
-                    if (urlProps.includes(cssProp) && !value.includes("url(")) {
-                        value = `url('${value}')`;
+                    let value = rawValue;
+
+                    if (urlProps.includes(cssProp) && !rawValue.includes("url(")) {
+                        value = `url('${rawValue}')`;
+                    } else if (isSlider || lengthProps.includes(cssProp)) {
+                        // Si slider ou propriété CSS numérique
+                        if (/^-?\d+(\.\d+)?$/.test(rawValue)) {
+                            value = `${prefix}${rawValue}${suffix}`;
+                        }
                     }
 
-                    // 🔹 Appliquer le style
                     el.style.setProperty(cssProp, value);
                 });
             });

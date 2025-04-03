@@ -11,6 +11,7 @@ class EditorValue
     public mixed $defaultValue;
     public string $type;
     public ?array $selectOptions;
+    public ?array $rangeOptions;
 
     /**
      * @param string $title
@@ -18,14 +19,16 @@ class EditorValue
      * @param mixed $defaultValue
      * @param string $type
      * @param EditorSelectOptions[]|null $selectOptions
+     * @param EditorRangeOptions[]|null $rangeOptions
      */
-    public function __construct(string $title, string $themeKey, mixed $defaultValue, #[ExpectedValues(flagsFromClass: EditorType::class)] string $type, array $selectOptions = [])
+    public function __construct(string $title, string $themeKey, mixed $defaultValue, #[ExpectedValues(flagsFromClass: EditorType::class)] string $type, array $selectOptions = [], array $rangeOptions = [])
     {
         $this->title = $title;
         $this->themeKey = $themeKey;
         $this->defaultValue = $defaultValue;
         $this->type = $type;
         $this->selectOptions = $selectOptions;
+        $this->rangeOptions = $rangeOptions;
     }
 
     /**
@@ -68,5 +71,11 @@ class EditorValue
         return $this->selectOptions;
     }
 
-
+    /**
+     * @return EditorRangeOptions[]|null
+     */
+    public function getRangeOptions(): ?array
+    {
+        return $this->rangeOptions;
+    }
 }

@@ -2,8 +2,6 @@
 
 namespace CMW\Manager\Theme\Editor;
 
-use JetBrains\PhpStorm\ExpectedValues;
-
 class EditorSelectOptions
 {
     public string $value;

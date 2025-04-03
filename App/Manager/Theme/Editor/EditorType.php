@@ -12,4 +12,5 @@ class EditorType
     public const TEXTAREA = 'textarea';
     public const BOOLEAN = 'boolean';
     public const SELECT = 'select';
+    public const RANGE = 'range';
 }
