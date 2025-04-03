@@ -301,7 +301,8 @@ HTML;
 
         case 'image':
             return <<<HTML
-<div class="drop-img-area" data-input-name="{$value->themeKey}" data-menu-key="{$menuKey}"></div>
+<label for="{$inputId}">{$label}</label>
+<input id="{$inputId}" name="{$inputName}" type="file" value="{$valEscaped}">
 HTML;
 
         default:

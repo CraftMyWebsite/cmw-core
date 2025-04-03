@@ -1,18 +1,32 @@
 <?php
 
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
-use CMW\Manager\Security\SecurityManager;
 use CMW\Manager\Theme\ThemeManager;
-use CMW\Model\Core\ThemeModel;
 use CMW\Utils\Website;
 
 /* @var array $themeConfigs */
+/* @var array $themeMenus */
 
 $formattedConfigs = [];
 
 foreach ($themeConfigs as $config) {
     $formattedConfigs[$config['theme_config_name']] = $config['theme_config_value'];
 }
+
+$editorSettings = [];
+
+foreach ($themeMenus as $menu) {
+    foreach ($menu->values as $value) {
+        $key = $menu->key . '_' . $value->themeKey;
+        $editorSettings[$key] = [
+            'default' => $value->defaultValue,
+            'type' => $value->type,
+        ];
+    }
+}
+
+
 Website::setTitle(LangManager::translate('core.theme.manage.title', ['Theme' => ThemeManager::getInstance()->getCurrentTheme()->name()]));
 Website::setDescription(LangManager::translate('core.theme.manage.description'));
 
@@ -91,8 +105,9 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
 
 <!--  MISES à JOUR EN LIVE DE L'IFRAME  -->
 <script>
-    let configValues = <?= json_encode($formattedConfigs) ?>;
-
+    const configValues = <?= json_encode($formattedConfigs) ?>;
+    const editorSettings = <?= json_encode($editorSettings) ?>;
+    const imagePreviews = {};
     document.addEventListener("DOMContentLoaded", () => {
         const iframe = document.getElementById("previewFrame");
 
@@ -125,10 +140,22 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
                     const fullKey = `${menuKey}_${valueKey}`;
                     if (keyToUpdate && fullKey !== keyToUpdate) return;
 
-                    const value = configValues[fullKey] || "";
+                    let value = configValues[fullKey] || "";
+
+                    // Récupère les infos du champ
+                    const setting = editorSettings?.[fullKey];
+                    const isImage = setting?.type === "image";
+                    const defaultValue = setting?.default;
+
+                    if (isImage) {
+                        const themeName = "<?= ThemeManager::getInstance()->getCurrentTheme()->name() ?>";
+                        value = getImageUrl(themeName, value, defaultValue);
+                    }
+
                     el.setAttribute(attrName, value);
                 });
             });
+
 
 
             // 🔹 Style CSS : <span data-cmw-style="color:menu:key">
@@ -210,6 +237,20 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
                 newScript.textContent = newContent;
                 script.replaceWith(newScript);
             });
+
+            // 🔁 Réinjecte les images temporaires non uploadées
+            Object.entries(imagePreviews).forEach(([fullKey, previewUrl]) => {
+                iframeDoc.querySelectorAll('[data-cmw-attr]').forEach(el => {
+                    const attrDefs = el.getAttribute("data-cmw-attr").trim().split(/\s+/);
+                    attrDefs.forEach(def => {
+                        const [attrName, menuKey, key] = def.split(":");
+                        const defKey = `${menuKey}_${key}`;
+                        if (defKey === fullKey && attrName === "src") {
+                            el.setAttribute("src", previewUrl);
+                        }
+                    });
+                });
+            });
         }
 
         // Écoute les modifications des inputs et met à jour uniquement l'élément concerné
@@ -220,14 +261,48 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
             updateThemePreview(valueKey);
         });
 
-        // Gère aussi les cases à cocher
+        // Gère aussi les cases à cocher / et les change
         document.getElementById("sectionContent").addEventListener("change", (event) => {
-            if (event.target.type === "checkbox") {
-                const valueKey = event.target.name;
-                if (!valueKey) return;
-                configValues[valueKey] = event.target.checked ? "1" : "0";
-                updateThemePreview(valueKey);
+            const target = event.target;
+            const valueKey = target.name;
+            if (!valueKey) return;
+
+            // ✅ Gestion des fichiers image (preview temporaire sans upload)
+            if (target.type === "file" && target.files.length > 0) {
+                const file = target.files[0];
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const previewUrl = e.target.result;
+
+                    imagePreviews[valueKey] = previewUrl; // ✅ sauvegarde locale
+
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    iframeDoc.querySelectorAll('[data-cmw-attr]').forEach(el => {
+                        const attrDefs = el.getAttribute("data-cmw-attr").trim().split(/\s+/);
+                        attrDefs.forEach(def => {
+                            const [attrName, menuKey, key] = def.split(":");
+                            const fullKey = `${menuKey}_${key}`;
+                            if (fullKey === valueKey && attrName === "src") {
+                                el.setAttribute("src", previewUrl);
+                            }
+                        });
+                    });
+                };
+
+
+                reader.readAsDataURL(file);
+                return; // Ne pas modifier configValues tant que pas uploadé
             }
+
+            // ✅ Gestion classique texte/checkbox
+            if (target.type === "checkbox") {
+                configValues[valueKey] = target.checked ? "1" : "0";
+            } else {
+                configValues[valueKey] = target.value.trim();
+            }
+
+            updateThemePreview(valueKey);
         });
     });
 </script>
@@ -261,6 +336,17 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
             return url1 === url2;
         }
     }
+
+    function getImageUrl(themeName, rawValue, defaultValue) {
+        const base = "<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>";
+
+        if (!rawValue || rawValue === defaultValue) {
+            return `${base}Public/Themes/${themeName}/${defaultValue}`;
+        }
+
+        return `${base}Public/Uploads/${themeName}/Img/${rawValue}`;
+    }
+
 </script>
 
 <!--  PROTEGE LES LIENS ET LES POSTS  -->
@@ -344,6 +430,13 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
             for (let pair of formData.entries()) {
                 console.log(pair[0], pair[1]);
             }
+
+            form.querySelectorAll('input[type="checkbox"]').forEach(input => {
+                if (!formData.has(input.name)) {
+                    formData.append(input.name, "0");
+                }
+            });
+
             try {
                 const response = await fetch(form.action, {
                     method: "POST",

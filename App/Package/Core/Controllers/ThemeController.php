@@ -198,8 +198,6 @@ class ThemeController extends AbstractController
             }
         }
 
-
-
         $view = new View();
         $view
             ->addVariableList(['themeMenus' => $themeMenus, 'themeConfigs' => $themeConfigs])
@@ -223,18 +221,13 @@ class ThemeController extends AbstractController
 
             $aresFiles = [];
 
-            //TODO : manage correctly images with db key
             foreach ($_FILES as $conf => $file) {
                 $aresFiles['__images__'][$conf] = true;
 
                 if ($file['name'] !== '') {
                     $imageName = ImagesManager::convertAndUpload($file, ThemeManager::getInstance()->getCurrentTheme()->name() . '/Img');
-                    $remoteImageValue = ThemeModel::getInstance()->getInstance()->fetchConfigValue($conf);
-                    $localImageValue = ThemeManager::getInstance()->getCurrentThemeConfigSetting($conf);
 
-                    if ($remoteImageValue !== $file && $remoteImageValue !== $localImageValue) {
-                        ImagesManager::deleteImage(ThemeManager::getInstance()->getCurrentTheme()->name() . "/Img/$remoteImageValue");
-                    }
+                    //TODO : delete old image
 
                     ThemeModel::getInstance()->getInstance()->updateThemeConfig($conf, $imageName, ThemeManager::getInstance()->getCurrentTheme()->name());
                 }
