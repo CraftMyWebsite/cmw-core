@@ -187,7 +187,7 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
 
                     let rawValue = configValues[fullKey] || "";
                     const setting = editorSettings?.[fullKey] || {};
-                    const isSlider = setting.type === "slider";
+                    const isSlider = setting.type === "range";
                     const suffix = setting.suffix || "";
                     const prefix = setting.prefix || "";
 
@@ -223,22 +223,33 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
                     const fullKey = `${menuKey}_${valueKey}`;
                     if (keyToUpdate && fullKey !== keyToUpdate) return;
 
-                    const className = (configValues[fullKey] || "").trim();
+                    const rawValue = configValues[fullKey] || "";
+                    const setting = editorSettings?.[fullKey] || {};
+
+                    let finalClass = rawValue;
+
+                    if (setting.type === "range") {
+                        const prefix = setting.prefix || "";
+                        const suffix = setting.suffix || "";
+                        finalClass = `${prefix}${rawValue}${suffix}`;
+                    }
+
                     const attrKey = `data-cmw-last-class-${fullKey}`;
 
                     // Supprimer l'ancienne classe
                     const oldClass = el.getAttribute(attrKey);
                     if (oldClass) el.classList.remove(oldClass);
 
-                    // Ajouter la nouvelle classe si elle existe
-                    if (className) {
-                        el.classList.add(className);
-                        el.setAttribute(attrKey, className);
+                    // Ajouter la nouvelle classe
+                    if (finalClass) {
+                        el.classList.add(finalClass);
+                        el.setAttribute(attrKey, finalClass);
                     } else {
                         el.removeAttribute(attrKey);
                     }
                 });
             });
+
 
             // 🔹 Visibilité conditionnelle : <div data-cmw-visible="menu:key">
             iframeDoc.querySelectorAll('[data-cmw-visible]').forEach(el => {

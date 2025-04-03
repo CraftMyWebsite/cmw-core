@@ -8,6 +8,8 @@ use CMW\Manager\Components\ComponentsManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\RouterException;
+use CMW\Manager\Theme\Editor\EditorRangeOptions;
+use CMW\Manager\Theme\Editor\EditorType;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Model\Core\ThemeModel;
 use CMW\Utils\Utils;
@@ -438,28 +440,137 @@ class View
 
     private function replaceThemeValues(string $html, bool $editorMode = false): string
     {
-        $html = preg_replace_callback(
-            '/\/\* CMW:([\w-]+):([\w-]+) \*\//',
-            function ($matches) use ($editorMode) {
-                if ($editorMode) {
-                    return '/* CMW:' . $matches[1] . ':' . $matches[2] . ' */';
-                }
-                return ThemeModel::getInstance()->fetchConfigValue($matches[1], $matches[2]);
-            },
-            $html
-        );
+        if ($editorMode) {
+            return $html;
+        }
 
-        return preg_replace_callback(
-            '/<!-- CMW:([\w-]+):([\w-]+) -->/',
-            function ($matches) use ($editorMode) {
-                if ($editorMode) {
-                    return '<!-- CMW:' . $matches[1] . ':' . $matches[2] . ' -->';
+        // data-cmw="menu:key"
+        $html = preg_replace_callback('/<([a-z0-9]+)([^>]*)data-cmw="([\w-]+):([\w-]+)"([^>]*)>(.*?)<\/\1>/si', function ($m) {
+            $tag = $m[1];
+            $before = $m[2];
+            $menu = $m[3];
+            $key = $m[4];
+            $after = $m[5];
+
+            $value = ThemeModel::getInstance()->fetchConfigValue($menu, $key);
+
+            return "<{$tag}{$before}{$after}>{$value}</{$tag}>";
+        }, $html);
+
+
+        // data-cmw-style="prop:menu:key[;...]"
+        $html = preg_replace_callback('/<([a-z0-9]+)([^>]*)data-cmw-style="([^"]+)"([^>]*)>/i', function ($m) {
+            $tag = $m[1];
+            $before = $m[2];
+            $cmwAttr = $m[3];
+            $after = $m[4];
+
+            // 🔍 Extraire le style déjà présent (avant ou après)
+            preg_match('/style="([^"]*)"/i', $before . $after, $existingStyleMatch);
+            $existingStyles = [];
+
+            if (isset($existingStyleMatch[1])) {
+                foreach (explode(';', $existingStyleMatch[1]) as $styleLine) {
+                    if (strpos($styleLine, ':') !== false) {
+                        [$k, $v] = explode(':', $styleLine, 2);
+                        $existingStyles[trim($k)] = trim($v);
+                    }
                 }
-                return ThemeModel::getInstance()->fetchConfigValue($matches[1], $matches[2]);
-            },
-            $html
-        );
+            }
+
+            // 🔁 Générer les styles dynamiques depuis data-cmw-style
+            $styles = explode(';', $cmwAttr);
+            foreach ($styles as $entry) {
+                [$prop, $menu, $key] = explode(':', $entry);
+                $val = ThemeModel::getInstance()->fetchConfigValue($menu, $key);
+                $editorType = ThemeManager::getInstance()->getEditorType($menu, $key);
+
+                if ($editorType === EditorType::RANGE) {
+                    $options = ThemeManager::getInstance()->getEditorRangeOptions($menu, $key);
+                    if ($options instanceof EditorRangeOptions) {
+                        $val = $options->getPrefix() . $val . $options->getSuffix();
+                    }
+                }
+
+                $existingStyles[trim($prop)] = $val;
+            }
+
+            // 🔄 Nettoyer style et reconstituer
+            $cleaned = preg_replace('/style="[^"]*"/i', '', $before . $after);
+            $finalStyle = implode('; ', array_map(fn($k, $v) => "$k: $v", array_keys($existingStyles), $existingStyles));
+
+            return "<{$tag} {$cleaned}style=\"{$finalStyle}\">";
+        }, $html);
+
+
+        // data-cmw-class="menu:key [...]"
+        $html = preg_replace_callback('/<([a-z0-9]+)([^>]*)data-cmw-class="([^"]+)"([^>]*)>/i', function ($m) {
+            $tag = $m[1];
+            $before = $m[2];
+            $cmwAttr = $m[3];
+            $after = $m[4];
+
+            // Récupérer les classes déjà présentes (dans before ou after)
+            preg_match('/class="([^"]*)"/i', $before . $after, $existingClassMatch);
+            $existingClasses = isset($existingClassMatch[1]) ? explode(' ', $existingClassMatch[1]) : [];
+
+            $refs = explode(' ', $cmwAttr);
+            $dynamicClasses = [];
+
+            foreach ($refs as $ref) {
+                [$menu, $key] = explode(':', $ref);
+                $val = ThemeModel::getInstance()->fetchConfigValue($menu, $key);
+                $editorType = ThemeManager::getInstance()->getEditorType($menu, $key);
+
+                if ($editorType === EditorType::RANGE) {
+                    $options = ThemeManager::getInstance()->getEditorRangeOptions($menu, $key);
+                    if ($options instanceof \CMW\Manager\Theme\Editor\EditorRangeOptions) {
+                        $val = $options->getPrefix() . $val . $options->getSuffix();
+                    }
+                }
+
+                if ($val) {
+                    $dynamicClasses[] = $val;
+                }
+            }
+
+            // Supprimer l'ancien class="..." du before et after
+            $cleaned = preg_replace('/class="[^"]*"/i', '', $before . $after);
+
+            // Fusion et reconstruction
+            $finalClasses = array_filter(array_merge($existingClasses, $dynamicClasses));
+            return "<{$tag} {$cleaned}class=\"" . implode(' ', $finalClasses) . "\">";
+        }, $html);
+
+
+        // data-cmw-visible="menu:key" → suppression de l’élément si valeur = 0
+        $html = preg_replace_callback('/<([a-z]+)([^>]+)data-cmw-visible="([\w-]+):([\w-]+)"([^>]*)>(.*?)<\/\1>/si', function ($m) {
+            $visible = ThemeModel::getInstance()->fetchConfigValue($m[3], $m[4]);
+            if (!$visible || $visible === '0') {
+                return ''; // supprimer l’élément entier
+            }
+
+            return "<{$m[1]}{$m[2]}{$m[5]}>{$m[6]}</{$m[1]}>";
+        }, $html);
+
+        // data-cmw-attr="attr:menu:key [...]"
+        $html = preg_replace_callback('/data-cmw-attr="([^"]+)"/', function ($m) {
+            $defs = explode(' ', $m[1]);
+            $attrs = [];
+
+            foreach ($defs as $def) {
+                [$attr, $menu, $key] = explode(':', $def);
+                $val = ThemeModel::getInstance()->fetchConfigValue($menu, $key);
+
+                $attrs[] = "{$attr}=\"{$val}\"";
+            }
+
+            return implode(' ', $attrs);
+        }, $html);
+
+        return $html;
     }
+
 
     /**
      * @param array $includes

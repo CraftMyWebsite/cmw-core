@@ -76,7 +76,7 @@ class ThemeModel extends AbstractModel
      * @param string $key
      * @return mixed|null
      */
-    private function getDefaultThemeValue(string $MenuKey, string $key) : string
+    public function getDefaultThemeValue(string $MenuKey, string $key) : string
     {
         $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
         $configPath = EnvManager::getInstance()->getValue('DIR') . "Public/Themes/{$themeName}/Config/config.settings.php";

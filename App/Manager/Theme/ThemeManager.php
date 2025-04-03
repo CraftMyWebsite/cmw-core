@@ -7,6 +7,7 @@ use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Manager\AbstractManager;
 use CMW\Manager\Theme\Editor\EditorMenu;
+use CMW\Manager\Theme\Editor\EditorRangeOptions;
 use CMW\Manager\Theme\Exceptions\ThemeNotFoundException;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\ThemeModel;
@@ -290,6 +291,25 @@ class ThemeManager extends AbstractManager
             }
         }
 
+        return null;
+    }
+
+    /**
+     * @param string $menuKey
+     * @param string $themeKey
+     * @return EditorRangeOptions|null
+     */
+    public function getEditorRangeOptions(string $menuKey, string $themeKey): ?EditorRangeOptions
+    {
+
+        foreach ($this->getThemeMenus() as $menu) {
+            if ($menu->key !== $menuKey) continue;
+            foreach ($menu->values as $val) {
+                if ($val->themeKey === $themeKey && isset($val->rangeOptions[0])) {
+                    return $val->rangeOptions[0];
+                }
+            }
+        }
         return null;
     }
 }

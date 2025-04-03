@@ -320,7 +320,8 @@ HTML;
 
             return <<<HTML
 <div>
-    <label for="{$inputId}">{$label}</label>
+    <label for="{$inputId}">{$label} (<small id="preview_{$inputId}">{$prefix}{$valEscaped}{$suffix}</small>)</label>
+    
     <div class="flex items-center gap-2">
         <input type="range" 
                id="{$inputId}" 
@@ -331,7 +332,6 @@ HTML;
                value="{$valEscaped}" 
                class="w-full"
                oninput="document.getElementById('preview_{$inputId}').innerText = '{$prefix}' + this.value + '{$suffix}'">
-        <span id="preview_{$inputId}">{$prefix}{$valEscaped}{$suffix}</span>
     </div>
 </div>
 HTML;
