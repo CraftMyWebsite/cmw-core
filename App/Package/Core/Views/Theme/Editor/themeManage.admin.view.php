@@ -317,6 +317,32 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
             updateThemePreview(valueKey);
         });
     });
+
+    //Effet UX :
+    document.getElementById("sectionContent").addEventListener("focusin", (event) => {
+        const input = event.target;
+        const fullKey = input.name;
+        if (!fullKey) return;
+
+        const iframe = document.getElementById("previewFrame");
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        if (!iframeDoc) return;
+
+        // 🔍 Cherche dans les data-cmw, data-cmw-style, etc.
+        const selector = [
+            `[data-cmw="${fullKey.replace('_', ':')}"]`,
+            `[data-cmw-style*=":${fullKey.replace('_', ':')}"]`,
+            `[data-cmw-class*=":${fullKey.replace('_', ':')}"]`,
+            `[data-cmw-attr*=":${fullKey.replace('_', ':')}"]`,
+            `[data-cmw-visible="${fullKey.replace('_', ':')}"]`
+        ].join(",");
+
+        const target = iframeDoc.querySelector(selector);
+        if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "center" });
+            flashTarget(target);
+        }
+    });
 </script>
 
 <!--  UTILITAIRES  -->
@@ -357,6 +383,40 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
         }
 
         return `${base}Public/Uploads/${themeName}/Img/${rawValue}`;
+    }
+
+    function flashTarget(target, duration = 1600, interval = 200) {
+        const originalTransition = target.style.transition;
+        const originalBoxShadow = target.style.boxShadow;
+        const originalBorderRadius = target.style.borderRadius;
+
+        let visible = false;
+        let elapsed = 0;
+
+        const toggle = () => {
+            if (visible) {
+                target.style.boxShadow = originalBoxShadow;
+                target.style.transition = originalTransition;
+            } else {
+                target.style.transition = "box-shadow 0.2s ease";
+                target.style.boxShadow = "0 0 0 4px rgba(59, 130, 246, 0.6)";
+                target.style.borderRadius = "9px";
+            }
+
+            visible = !visible;
+            elapsed += interval;
+
+            if (elapsed < duration) {
+                setTimeout(toggle, interval);
+            } else {
+                // Cleanup final
+                target.style.boxShadow = originalBoxShadow;
+                target.style.transition = originalTransition;
+                target.style.borderRadius = originalBorderRadius;
+            }
+        };
+
+        toggle(); // start
     }
 
 </script>
