@@ -157,17 +157,20 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
                     const menuKey = parts[1];
                     const valueKey = parts.slice(2).join(":");
                     const fullKey = `${menuKey}_${valueKey}`;
-
                     if (keyToUpdate && fullKey !== keyToUpdate) return;
 
                     let rawValue = configValues[fullKey] || "";
                     const setting = editorSettings?.[fullKey] || {};
                     const isSlider = setting.type === "range";
+                    const isImage = setting.type === "image";
                     const suffix = setting.suffix || "";
                     const prefix = setting.prefix || "";
+                    const defaultValue = setting.default || "";
 
-                    // Gestion image
-                    const urlProps = ["background-image", "background", "list-style-image", "mask-image"];
+                    const urlProps = [
+                        "background", "background-image", "list-style-image", "mask-image"
+                    ];
+
                     const lengthProps = [
                         "width", "height", "top", "left", "right", "bottom", "margin", "padding", "font-size",
                         "gap", "max-width", "min-width", "max-height", "min-height", "border-radius"
@@ -175,13 +178,19 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
 
                     let value = rawValue;
 
-                    if (urlProps.includes(cssProp) && !rawValue.includes("url(")) {
-                        value = `url('${rawValue}')`;
-                    } else if (isSlider || lengthProps.includes(cssProp)) {
-                        // Si slider ou propriété CSS numérique
-                        if (/^-?\d+(\.\d+)?$/.test(rawValue)) {
-                            value = `${prefix}${rawValue}${suffix}`;
-                        }
+                    if (isImage && urlProps.includes(cssProp)) {
+                        const themeName = "<?= ThemeManager::getInstance()->getCurrentTheme()->name() ?>";
+                        value = `url('${getImageUrl(themeName, rawValue, defaultValue)}')`;
+
+                        // ✅ Fusionne avec style existant sans l’écraser
+                        const current = el.style.getPropertyValue(cssProp) || "";
+                        const newVal = current.replace(/url\([^)]+\)/g, "").trim(); // supprime ancienne url
+                        el.style.setProperty(cssProp, (newVal + " " + value).trim());
+                        return;
+                    }
+
+                    if ((isSlider || lengthProps.includes(cssProp)) && /^-?\d+(\.\d+)?$/.test(rawValue)) {
+                        value = `${prefix}${rawValue}${suffix}`;
                     }
 
                     el.style.setProperty(cssProp, value);
@@ -279,17 +288,19 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
             const valueKey = target.name;
             if (!valueKey) return;
 
-            // ✅ Gestion des fichiers image (preview temporaire sans upload)
+            const iframe = document.getElementById("previewFrame");
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+            // ✅ Gestion image (fichier local sans upload)
             if (target.type === "file" && target.files.length > 0) {
                 const file = target.files[0];
-
                 const reader = new FileReader();
-                reader.onload = function(e) {
+
+                reader.onload = function (e) {
                     const previewUrl = e.target.result;
+                    imagePreviews[valueKey] = previewUrl;
 
-                    imagePreviews[valueKey] = previewUrl; // ✅ sauvegarde locale
-
-                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    // 🔁 Mise à jour dans les data-cmw-attr (src)
                     iframeDoc.querySelectorAll('[data-cmw-attr]').forEach(el => {
                         const attrDefs = el.getAttribute("data-cmw-attr").trim().split(/\s+/);
                         attrDefs.forEach(def => {
@@ -300,11 +311,29 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
                             }
                         });
                     });
+
+                    // 🔁 Mise à jour dans les styles dynamiques (background-image, etc.)
+                    iframeDoc.querySelectorAll('[data-cmw-style]').forEach(el => {
+                        const defs = el.getAttribute("data-cmw-style").split(";");
+                        defs.forEach(entry => {
+                            const parts = entry.split(":");
+                            if (parts.length < 3) return;
+                            const cssProp = parts[0].trim();
+                            const menuKey = parts[1];
+                            const key = parts.slice(2).join(":");
+                            const fullKey = `${menuKey}_${key}`;
+
+                            if (fullKey === valueKey && cssProp.includes("background")) {
+                                const current = el.style.getPropertyValue(cssProp) || "";
+                                const newVal = current.replace(/url\([^)]+\)/g, "").trim();
+                                el.style.setProperty(cssProp, (newVal + " url('" + previewUrl + "')").trim());
+                            }
+                        });
+                    });
                 };
 
-
                 reader.readAsDataURL(file);
-                return; // Ne pas modifier configValues tant que pas uploadé
+                return; // Pas de mise à jour de configValues ici
             }
 
             // ✅ Gestion classique texte/checkbox
@@ -316,6 +345,7 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
 
             updateThemePreview(valueKey);
         });
+
     });
 
     //Effet UX :

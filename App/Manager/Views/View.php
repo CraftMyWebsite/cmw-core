@@ -465,7 +465,6 @@ class View
             $cmwAttr = $m[3];
             $after = $m[4];
 
-            // 🔍 Extraire le style déjà présent (avant ou après)
             preg_match('/style="([^"]*)"/i', $before . $after, $existingStyleMatch);
             $existingStyles = [];
 
@@ -478,29 +477,34 @@ class View
                 }
             }
 
-            // 🔁 Générer les styles dynamiques depuis data-cmw-style
             $styles = explode(';', $cmwAttr);
             foreach ($styles as $entry) {
                 [$prop, $menu, $key] = explode(':', $entry);
-                $val = ThemeModel::getInstance()->fetchConfigValue($menu, $key);
+                $val = ThemeModel::getInstance()->fetchConfigValue($menu, $key); // 👈 déjà bien formaté
                 $editorType = ThemeManager::getInstance()->getEditorType($menu, $key);
 
                 if ($editorType === EditorType::RANGE) {
                     $options = ThemeManager::getInstance()->getEditorRangeOptions($menu, $key);
-                    if ($options instanceof EditorRangeOptions) {
+                    if ($options instanceof \CMW\Manager\Theme\Editor\EditorRangeOptions) {
                         $val = $options->getPrefix() . $val . $options->getSuffix();
                     }
+                }
+
+                // ✅ pour les images utilisées dans des styles CSS
+                $imageStyleProps = ['background', 'background-image', 'list-style-image', 'mask-image'];
+                if ($editorType === EditorType::IMAGE && in_array(trim($prop), $imageStyleProps)) {
+                    $val = "url('{$val}')";
                 }
 
                 $existingStyles[trim($prop)] = $val;
             }
 
-            // 🔄 Nettoyer style et reconstituer
             $cleaned = preg_replace('/style="[^"]*"/i', '', $before . $after);
             $finalStyle = implode('; ', array_map(fn($k, $v) => "$k: $v", array_keys($existingStyles), $existingStyles));
 
             return "<{$tag} {$cleaned}style=\"{$finalStyle}\">";
         }, $html);
+
 
 
         // data-cmw-class="menu:key [...]"
