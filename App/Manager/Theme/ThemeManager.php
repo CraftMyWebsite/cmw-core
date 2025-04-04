@@ -4,14 +4,17 @@ namespace CMW\Manager\Theme;
 
 use CMW\Controller\Core\PackageController;
 use CMW\Manager\Api\PublicAPI;
+use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Manager\AbstractManager;
 use CMW\Manager\Theme\Editor\EditorMenu;
 use CMW\Manager\Theme\Editor\EditorRangeOptions;
+use CMW\Manager\Theme\Editor\EditorValue;
 use CMW\Manager\Theme\Exceptions\ThemeNotFoundException;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\ThemeModel;
 use CMW\Utils\Directory;
+use PDO;
 
 class ThemeManager extends AbstractManager
 {
@@ -157,21 +160,75 @@ class ThemeManager extends AbstractManager
 
     /**
      * @param string $theme
+     * @desc Applique les paramètres d’un thème et écraser les valeurs existantes.
      * @return void
      */
     public function installThemeSettings(string $theme): void
     {
-        //TODO : theme editor auto install : Il faut que sa créer le clé comme ceci header_site_title au lieu de site_title
         $themeConfigFile = "Public/Themes/$theme/Config/config.settings.php";
 
         if (!file_exists($themeConfigFile)) {
             return;
         }
 
-        $content = include $themeConfigFile;
+        $menus = include $themeConfigFile;
 
-        foreach ($content as $config => $value) {
-            ThemeModel::getInstance()->getInstance()->storeThemeConfig($config, $value, $theme);
+        foreach ($menus as $menu) {
+            if (!($menu instanceof EditorMenu)) {
+                continue;
+            }
+
+            foreach ($menu->values as $value) {
+                if (!($value instanceof EditorValue)) {
+                    continue;
+                }
+
+                $configKey = $menu->key . '_' . $value->themeKey;
+                $defaultValue = $value->defaultValue;
+
+                ThemeModel::getInstance()->storeThemeConfig($configKey, $defaultValue, $theme);
+            }
+        }
+    }
+
+    /**
+     * @param string $theme
+     * @desc Met à jour les paramètres d’un thème sans écraser les valeurs existantes.
+     * @return void
+     */
+    public function updateThemeSettings(string $theme): void
+    {
+        $themeConfigFile = "Public/Themes/$theme/Config/config.settings.php";
+
+        if (!file_exists($themeConfigFile)) {
+            return;
+        }
+
+        $menus = include $themeConfigFile;
+
+        // Liste des clés déjà en base
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare('SELECT theme_config_name FROM cmw_theme_config WHERE theme_config_theme = :theme');
+        $req->execute(['theme' => $theme]);
+        $existingKeys = array_column($req->fetchAll(PDO::FETCH_ASSOC), 'theme_config_name');
+
+
+        foreach ($menus as $menu) {
+            if (!($menu instanceof EditorMenu)) {
+                continue;
+            }
+
+            foreach ($menu->values as $value) {
+                if (!($value instanceof EditorValue)) {
+                    continue;
+                }
+
+                $configKey = $menu->key . '_' . $value->themeKey;
+
+                if (!in_array($configKey, $existingKeys)) {
+                    ThemeModel::getInstance()->storeThemeConfig($configKey, $value->defaultValue, $theme);
+                }
+            }
         }
     }
 

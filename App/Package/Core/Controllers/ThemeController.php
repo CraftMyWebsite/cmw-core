@@ -15,7 +15,6 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Security\SecurityManager;
-use CMW\Manager\Theme\Editor\EditorMenu;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Theme\UninstallThemeType;
 use CMW\Manager\Updater\UpdatesManager;
@@ -97,10 +96,10 @@ class ThemeController extends AbstractController
 
         $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
         ThemeModel::getInstance()->getInstance()->deleteThemeConfig($themeName);
-        //ThemeManager::getInstance()->installThemeSettings($themeName);
+        ThemeManager::getInstance()->updateThemeSettings($themeName);
 
-        //$themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs($themeName);
-        //SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . $themeName);
+        $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs($themeName);
+        SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . $themeName);
 
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('core.toaster.theme.regenerate'));
@@ -138,7 +137,6 @@ class ThemeController extends AbstractController
         }
 
         // Install Theme settings
-        //TODO : On init les defaut value prendre en compte le menu_key et gérer le cache manager !
         ThemeManager::getInstance()->installThemeSettings($theme['name']);
         CoreModel::getInstance()->updateOption('theme', $theme['name']);
 
@@ -215,6 +213,7 @@ class ThemeController extends AbstractController
 
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.edit');
 
+        $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
         try {
             $newCsrfTokenId = bin2hex(random_bytes(8));
             $newCsrfToken = SecurityManager::getInstance()->getCSRFToken($newCsrfTokenId);
@@ -225,11 +224,12 @@ class ThemeController extends AbstractController
                 $aresFiles['__images__'][$conf] = true;
 
                 if ($file['name'] !== '') {
-                    $imageName = ImagesManager::convertAndUpload($file, ThemeManager::getInstance()->getCurrentTheme()->name() . '/Img');
+                    $imageName = ImagesManager::convertAndUpload($file, $themeName . '/Img');
 
-                    //TODO : delete old image
+                    $currentImage = ThemeModel::getInstance()->getConfigValue($conf);
+                    ImagesManager::deleteImage($themeName . "/Img/$currentImage");
 
-                    ThemeModel::getInstance()->getInstance()->updateThemeConfig($conf, $imageName, ThemeManager::getInstance()->getCurrentTheme()->name());
+                    ThemeModel::getInstance()->getInstance()->updateThemeConfig($conf, $imageName, $themeName);
                 }
             }
 
@@ -239,13 +239,12 @@ class ThemeController extends AbstractController
                 }
 
                 if (isset($_POST[$conf])) {
-                    ThemeModel::getInstance()->updateThemeConfig($conf, $_POST[$conf], ThemeManager::getInstance()->getCurrentTheme()->name());
+                    ThemeModel::getInstance()->updateThemeConfig($conf, $_POST[$conf], $themeName);
                 }
             }
 
-
-            /*$themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs(ThemeManager::getInstance()->getCurrentTheme()->name());
-            SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . ThemeManager::getInstance()->getCurrentTheme()->name());*/
+            $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs($themeName);
+            SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . $themeName);
 
             echo json_encode([
                 'success' => true,
@@ -307,6 +306,9 @@ class ThemeController extends AbstractController
                     }
                 }
             }
+
+            //Une fois que toutes les mises à jour sont terminé, on rajoute les nouvelles configs :
+            ThemeManager::getInstance()->updateThemeSettings($themeName);
 
             SimpleCacheManager::deleteSpecificCacheFile("config", "Themes/$themeName");
 

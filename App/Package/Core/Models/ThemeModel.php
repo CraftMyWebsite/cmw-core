@@ -19,7 +19,8 @@ use CMW\Manager\Theme\ThemeManager;
 class ThemeModel extends AbstractModel
 {
     /**
-     * @param string $config
+     * @param string $MenuKey
+     * @param string $themeKey
      * @param string|null $themeName
      * <p>
      * If empty, we take the current active Theme
@@ -33,16 +34,24 @@ class ThemeModel extends AbstractModel
             $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
         }
 
-        /* TODO rework
+        $type = ThemeManager::getInstance()->getEditorType($MenuKey, $themeKey);
+
         if (SimpleCacheManager::cacheExist('config', "Themes/$themeName")) {
             $data = SimpleCacheManager::getCache('config', "Themes/$themeName");
 
             foreach ($data as $conf) {
                 if ($conf['theme_config_name'] === $MenuKey. '_' .$themeKey) {
+                    if ($type === EditorType::IMAGE) {
+                        $default = $this->getDefaultThemeValue($MenuKey, $themeKey);
+                        if (!$conf['theme_config_value'] || $conf['theme_config_value'] === $default) {
+                            return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . "Public/Themes/{$themeName}/{$default}";
+                        }
+                        return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . "Public/Uploads/{$themeName}/Img/{$conf['theme_config_value']}";
+                    }
                     return $conf['theme_config_value'] ?? "UNDEFINED_$MenuKey. '_' .$themeKey";
                 }
             }
-        }*/
+        }
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config
@@ -54,8 +63,6 @@ class ThemeModel extends AbstractModel
         ]);
 
         $value = $req->fetch()['theme_config_value'] ?? null;
-
-        $type = ThemeManager::getInstance()->getEditorType($MenuKey, $themeKey);
 
         if ($type === EditorType::IMAGE) {
             $default = $this->getDefaultThemeValue($MenuKey, $themeKey);
@@ -221,5 +228,30 @@ class ThemeModel extends AbstractModel
         $req->execute(['themeName' => $themeName]);
 
         return $db;
+    }
+
+    /**
+     * @param string $config
+     * @param string|null $themeName
+     * @return string|null
+     * @desc Retourne simplement la valeur en DB par rapport à la clé complete
+     */
+    public function getConfigValue(string $config, string $themeName = null): ?string
+    {
+        if ($themeName === null) {
+            $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
+        }
+
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config WHERE theme_config_name = :config AND theme_config_theme = :theme');
+
+        $req->execute([
+            'config' => $config,
+            'theme' => $themeName
+        ]);
+
+        $value = $req->fetch()['theme_config_value'] ?? null;
+
+        return $value ?? '';
     }
 }
