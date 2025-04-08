@@ -60,10 +60,13 @@ class MailManager extends AbstractManager
             $mail->addAddress($receiver);
             $mail->addReplyTo($config?->getMailReply());
 
+            $emailTemplate = $config?->getBody() ?? '[MAIL_CONTENT]';
+            $finalBody = str_replace('[MAIL_CONTENT]', $body, $emailTemplate);
+
             // Content
             $mail->isHTML();
             $mail->Subject = $subject;
-            $mail->Body = $body . '<br>' . $config?->getFooter();
+            $mail->Body = $finalBody;
 
             // Send mail
             $status = $mail->send();
