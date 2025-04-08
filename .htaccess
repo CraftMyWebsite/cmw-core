@@ -56,6 +56,12 @@
     Require all denied
 </Files>
 
+# Deny access to docker files
+<FilesMatch "Dockerfile|compose\.yaml|\.dockerignore|README.Docker\.md">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
 #Cache images / scripts
 <IfModule mod_expires.c>
     ExpiresActive on

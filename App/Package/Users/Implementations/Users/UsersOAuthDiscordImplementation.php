@@ -46,7 +46,7 @@ class UsersOAuthDiscordImplementation implements IUsersOAuth
     public function methodeIconLink(): string
     {
         return EnvManager::getInstance()->getValue('PATH_URL')
-            . 'App/Package/Users/Implementations/Users/Assets/OAuth/discord.png';
+            . 'App/Package/Users/Implementations/Users/Assets/OAuth/discord.svg';
     }
 
     /**

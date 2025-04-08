@@ -89,10 +89,13 @@ class Redirect
             self::redirectToHome();
         }
 
-        $strParams = implode(', ', $params);
-
         http_response_code(302);
-        header('Location: ' . EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . $route->getUrl() . '/' . $strParams);
+
+        if ($params !== []){
+            header('Location: ' . EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/' . $url . $route->getUrl($params));
+        } else {
+            header('Location: ' . EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . $route->getUrl());
+        }
     }
 
     /**
