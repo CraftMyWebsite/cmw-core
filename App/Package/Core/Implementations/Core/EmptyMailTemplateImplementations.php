@@ -4,12 +4,13 @@ namespace CMW\Implementation\Core\Core;
 
 use CMW\Interface\Core\IMailTemplate;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Lang\LangManager;
 
 class EmptyMailTemplateImplementations implements IMailTemplate
 {
     public function getName(): string
     {
-        return 'Sans style';
+        return LangManager::translate('core.mail.implementations.emptyMail');
     }
 
     public function getVarName(): string

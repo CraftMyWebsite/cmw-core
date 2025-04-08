@@ -4,13 +4,14 @@ namespace CMW\Implementation\Core\Core;
 
 use CMW\Interface\Core\IMailTemplate;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Lang\LangManager;
 use CMW\Utils\Website;
 
 class RedMailTemplateImplementations implements IMailTemplate
 {
     public function getName(): string
     {
-        return 'Rouge avec carte centré';
+        return LangManager::translate('core.mail.implementations.redMail');
     }
 
     public function getVarName(): string

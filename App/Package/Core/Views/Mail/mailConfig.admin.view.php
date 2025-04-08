@@ -103,7 +103,7 @@ $description = LangManager::translate('core.mail.config.description');
                     </div>
                 </div>
                 <div>
-                    <label for="password"><?= LangManager::translate('core.mail.config.passwordSMTP') ?> SMTP :</label>
+                    <label for="password"><?= LangManager::translate('core.mail.config.passwordSMTP') ?> :</label>
                     <div class="input-group">
                         <i class="fa-solid fa-lock"></i>
                         <input type="password" id="password" name="password"
@@ -133,21 +133,21 @@ $description = LangManager::translate('core.mail.config.description');
     <div class="grid-2 mt-8">
         <div class="card">
             <div class="card-title">
-                <h6>Éditeur de mail (HTML)</h6>
+                <h6><?= LangManager::translate('core.mail.editor.title') ?></h6>
                 <div>
-                    <button data-modal-toggle="modal-template" class="btn-primary" type="button">Sélectionnez un template</button>
+                    <button data-modal-toggle="modal-template" class="btn-primary" type="button"><?= LangManager::translate('core.mail.editor.select') ?></button>
                     <button data-modal-toggle="modal-help" class="btn-primary" type="button"><i class="fa-solid fa-circle-question"></i></button>
                 </div>
                 <!--MODAL-TEMPLATE-->
                 <div id="modal-template" class="modal-container">
                     <div class="modal-lg">
                         <div class="modal-header">
-                            <h6>Sélectionnez un template</h6>
+                            <h6><?= LangManager::translate('core.mail.editor.select') ?></h6>
                             <button type="button" data-modal-hide="modal-template"><i class="fa-solid fa-xmark"></i></button>
                         </div>
                         <div class="modal-body">
                             <div class="alert-warning">
-                                <i class="fa-solid fa-triangle-exclamation"></i> La selection d'un template écrasera votre model actuel !
+                                <i class="fa-solid fa-triangle-exclamation"></i> <?= LangManager::translate('core.mail.editor.select_alert') ?>
                             </div>
                             <div class="radio-group grid-2 gap-8 mt-2">
                                 <?php foreach ($mailTemplates as $mailTemplate): ?>
@@ -160,8 +160,8 @@ $description = LangManager::translate('core.mail.config.description');
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button data-modal-hide="modal-template" id="applyTemplate" type="button" class="btn-primary">Appliquer</button>
-                            <button data-modal-hide="modal-template" type="button" class="btn-danger">Fermer</button>
+                            <button data-modal-hide="modal-template" id="applyTemplate" type="button" class="btn-primary"><?= LangManager::translate('core.mail.editor.apply_btn') ?></button>
+                            <button data-modal-hide="modal-template" type="button" class="btn-danger"><?= LangManager::translate('core.btn.close') ?></button>
                         </div>
                     </div>
                 </div>
@@ -169,13 +169,13 @@ $description = LangManager::translate('core.mail.config.description');
                 <div id="modal-help" class="modal-container">
                     <div class="modal">
                         <div class="modal-header">
-                            <h6>Bon à savoir</h6>
+                            <h6><?= LangManager::translate('core.mail.editor.modal_title') ?></h6>
                             <button type="button" data-modal-hide="modal-help"><i class="fa-solid fa-xmark"></i></button>
                         </div>
                         <div class="modal-body">
-                            <p>Cet éditeur vous permet de personnaliser l'apparence de vos e-Mails, vous devez comprendre que ce model est envoyé à chaque fois qu'un mail part peu importe le type de mail envoyé (shop, forum, newsletter, connexion, inscription...), gardez-bien cela a l'esprit quand vous configurez votre template.</p>
-                            <p>Il est impératif d'utiliser <code style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">[MAIL_CONTENT]</code> dans votre template, c'est ici que sera placé le message envoyé par le site<br></p>
-                            <p>Tips : Les police d'écriture pris en charge par défaut par la plupart des boites mails sont :<br>
+                            <p><?= LangManager::translate('core.mail.editor.modal_text_1') ?></p>
+                            <p><?= LangManager::translate('core.mail.editor.modal_text_2') ?></p>
+                            <p><?= LangManager::translate('core.mail.editor.modal_text_3') ?><br>
                                 <code style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Arial', sans-serif</code><br>
                                 <code style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Helvetica', sans-serif</code><br>
                                 <code style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Verdana', sans-serif</code><br>
@@ -189,7 +189,7 @@ $description = LangManager::translate('core.mail.config.description');
                                 <code style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Consolas', monospace</code><br></p>
                         </div>
                         <div class="modal-footer">
-                            <button data-modal-hide="modal-help" type="button" class="btn-danger">Fermer</button>
+                            <button data-modal-hide="modal-help" type="button" class="btn-danger"><?= LangManager::translate('core.btn.close') ?></button>
                         </div>
                     </div>
                 </div>
@@ -203,7 +203,7 @@ $description = LangManager::translate('core.mail.config.description');
                    value="<?= htmlspecialchars($config->getBody()) ?>">
         </div>
         <div class="card">
-            <h6>Rendu en direct des mails</h6>
+            <h6><?= LangManager::translate('core.mail.editor.render') ?></h6>
             <iframe class="border rounded-lg" style="height: 60vh" width="100%" id="preview"></iframe>
         </div>
     </div>
@@ -249,8 +249,8 @@ $description = LangManager::translate('core.mail.config.description');
     src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Admin/Resources/Vendors/Ace/Src/ext-language_tools.js' ?>"></script>
 
 <script>
-    let langTools = ace.require("ace/ext/language_tools");
-    let editor = ace.edit("editor", {
+    const langTools = ace.require("ace/ext/language_tools");
+    const editor = ace.edit("editor", {
         mode: "ace/mode/php",
         selectionStyle: "text",
     });
@@ -281,7 +281,7 @@ $description = LangManager::translate('core.mail.config.description');
     // Fonction pour mettre à jour le preview
     function updatePreview() {
         let previewContent = editor.getValue();
-        let renderedContent = previewContent.replace(/\[MAIL_CONTENT\]/g, "<p>[EXEMPLE]</p> <p>Ceci est un exemple de contenu de vos mails envoyés.</p> <p>Le message sera inséré automatiquement ici.</p> <p>[EXEMPLE]</p>");
+        let renderedContent = previewContent.replace(/\[MAIL_CONTENT\]/g, "<?= LangManager::translate('core.mail.editor.render_example') ?>");
 
         document.getElementById('preview').srcdoc = renderedContent;
         editorInput.value = editor.getValue()
@@ -298,7 +298,7 @@ $description = LangManager::translate('core.mail.config.description');
                     messageSize: '14',
                     icon: 'fa-solid fa-xmark',
                     title  : "Intervention",
-                    message: "Le contenu du mail doit contenir [MAIL_CONTENT] !",
+                    message: "<?= LangManager::translate('core.mail.editor.render_alert') ?>",
                     color: "#ab1b1b",
                     iconColor: '#ffffff',
                     titleColor: '#ffffff',

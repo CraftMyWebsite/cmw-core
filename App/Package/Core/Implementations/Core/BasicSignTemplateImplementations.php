@@ -4,13 +4,14 @@ namespace CMW\Implementation\Core\Core;
 
 use CMW\Interface\Core\IMailTemplate;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Lang\LangManager;
 use CMW\Utils\Website;
 
 class BasicSignTemplateImplementations implements IMailTemplate
 {
     public function getName(): string
     {
-        return 'Sans style - Avec signature';
+        return LangManager::translate('core.mail.implementations.basicSign');
     }
 
     public function getVarName(): string

@@ -67,7 +67,7 @@ class MailController extends AbstractController
         );
 
         if (!str_contains($body, '[MAIL_CONTENT]')) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), '[MAIL_CONTENT] doit être present dans votre template !');
+            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), LangManager::translate('core.mail.editor.render_alert'));
             Redirect::redirectPreviousRoute();
         }
 
