@@ -14,6 +14,7 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Mail\MailManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
+use CMW\Manager\Router\RouterException;
 use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Twofa\TwoFaManager;
@@ -23,6 +24,7 @@ use CMW\Model\Core\MailModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Users\UsersSettingsModel;
 use CMW\Type\Users\LoginStatus;
+use CMW\Utils\Date;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use CMW\Utils\Website;
@@ -41,14 +43,13 @@ use function time;
  * Class: @UsersLoginController
  * @package Users
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
- * @version 0.0.1
  */
 class UsersLoginController extends AbstractController
 {
     /**
      * @param string $mail <b>(Encrypted)</b>
      * @param string $password
-     * @return \CMW\Type\Users\LoginStatus
+     * @return LoginStatus
      * @desc Complete login user.
      */
     public function checkLogin(string $mail, string $password): LoginStatus
@@ -80,7 +81,7 @@ class UsersLoginController extends AbstractController
     }
 
     /**
-     * @param \CMW\Entity\Users\UserEntity $user
+     * @param UserEntity $user
      * @param bool $cookie
      * @return void
      */
@@ -93,6 +94,16 @@ class UsersLoginController extends AbstractController
         }
 
         UsersModel::getInstance()->updateLoggedTime($user->getId());
+
+        if ((UsersSettingsModel::getInstance()->getSetting('securityReinforced') === '1')) {
+            if (MailModel::getInstance()->getConfig() !== null && MailModel::getInstance()->getConfig()->isEnable()) {
+                $ip = $_SERVER['REMOTE_ADDR'];
+                $date = date('Y-m-d H:i:s');
+                $dateFormatted = Date::formatDate($date);
+                MailManager::getInstance()->sendMail($user->getMail(),Website::getWebsiteName() . LangManager::translate('users.security.connected.object'), LangManager::translate('users.security.connected.body', ['user_name' => $user->getPseudo(), 'website' => Website::getWebsiteName(), 'date' => $dateFormatted, 'ip' => $ip]));
+            }
+        }
+
         try {
             Emitter::send(LoginEvent::class, $user->getId());
         } catch (Exception) {
@@ -127,10 +138,6 @@ class UsersLoginController extends AbstractController
         $loginStatus = $this->checkLogin($encryptedMail, $password);
 
         switch ($loginStatus) {
-            case LoginStatus::NOT_FOUND:
-                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                    LangManager::translate('users.toaster.not_registered_account'));
-                Redirect::redirectPreviousRoute();
             case LoginStatus::NOT_MATCH:
                 Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
                     LangManager::translate('users.toaster.mail_pass_matching'));
@@ -148,7 +155,7 @@ class UsersLoginController extends AbstractController
                 }
                 $this->loginUser($user, $cookie);
                 if ($previousRoute) {
-                    Redirect::redirectPreviousRoute();
+                    Redirect::external($previousRoute);
                 }
 
                 Redirect::redirect('profile');
@@ -209,7 +216,7 @@ class UsersLoginController extends AbstractController
     }
 
     /**
-     * @throws \CMW\Manager\Router\RouterException
+     * @throws RouterException
      */
     #[Link('/login', Link::GET)]
     private function loginGet(): void

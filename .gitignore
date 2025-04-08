@@ -47,5 +47,5 @@ __MACOSX/
 /composer.json
 
 # Ignore node_modules files and folder
-/node_modules/
+**/node_modules/
 package-lock.json

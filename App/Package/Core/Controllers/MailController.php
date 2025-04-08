@@ -38,7 +38,7 @@ class MailController extends AbstractController
         View::createAdminView('Core', 'Mail/mailConfig')
             ->addStyle('Admin/Resources/Vendors/Izitoast/iziToast.min.css')
             ->addScriptBefore('Admin/Resources/Vendors/Tinymce/tinymce.min.js',
-                'Admin/Resources/Vendors/Tinymce/Config/full.js')
+                'App/Package/Core/Views/Mail/Resources/tinyMCEConfig.js')
             ->addScriptAfter('App/Package/Core/Views/Mail/Resources/sendMail.js',
                 'Admin/Resources/Vendors/Izitoast/iziToast.min.js')
             ->addVariableList(['config' => $config])

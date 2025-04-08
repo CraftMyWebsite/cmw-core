@@ -7,13 +7,20 @@ use InvalidArgumentException;
 use JsonException;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionNamedType;
 use ReflectionProperty;
 use RuntimeException;
+use function array_map;
+use function class_exists;
+use function is_array;
+use function is_object;
 use function json_decode;
 use function json_encode;
 use function json_last_error;
 use function json_last_error_msg;
+use function method_exists;
 use const JSON_ERROR_NONE;
+use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
 
 abstract class AbstractEntity
@@ -31,17 +38,44 @@ abstract class AbstractEntity
 
         $reflector = new ReflectionClass(static::class);
         $constructor = $reflector->getConstructor();
-        $parameters = $constructor?->getParameters();
+        $parameters = $constructor?->getParameters() ?? [];
 
         $arguments = [];
         foreach ($parameters as $parameter) {
             $name = $parameter->getName();
+            $type = $parameter->getType();
+
+            if (!$type instanceof ReflectionNamedType) {
+                throw new RuntimeException("The $name parameter must have a type. Entity: " . static::class);
+            }
+
+            $expectedType = $type->getName();
+
             if (isset($data[$name])) {
-                $arguments[] = $data[$name];
-            } else if ($parameter->isOptional()) {
+                $value = $data[$name];
+
+                if ($expectedType === 'array' && $parameter->getType()?->getName() === 'array') {
+                    $attributes = $parameter->getAttributes(EntityType::class);
+                    if (!empty($attributes)) {
+                        $entityClass = $attributes[0]->getArguments()[0];
+
+                        if (!class_exists($entityClass) || !method_exists($entityClass, 'toEntity')) {
+                            throw new RuntimeException("Unable to convert $name to entity. Entity: " . static::class);
+                        }
+
+                        $value = array_map([$entityClass, 'toEntity'], $value);
+                    }
+                } elseif (class_exists($expectedType) && method_exists($expectedType, 'toEntity')) {
+                    $value = $expectedType::toEntity($value);
+                }
+
+                $arguments[] = $value;
+            } elseif ($parameter->isOptional() || $parameter->isDefaultValueAvailable()) {
                 $arguments[] = $parameter->getDefaultValue();
+            } elseif ($parameter->allowsNull()) {
+                $arguments[] = null;
             } else {
-                throw new RuntimeException("Parameter $name is required");
+                throw new RuntimeException("The $name ($type) parameter is required. Entity: " . static::class);
             }
         }
 
@@ -127,7 +161,16 @@ abstract class AbstractEntity
 
         $data = [];
         foreach ($properties as $property) {
-            $data[$property->getName()] = $property->getValue($this);
+            $value = $property->getValue($this);
+            if (is_object($value) && method_exists($value, 'toArray')) {
+                $data[$property->getName()] = $value->toArray();
+            } elseif (is_array($value)) {
+                $data[$property->getName()] = array_map(static function ($item) {
+                    return is_object($item) && method_exists($item, 'toArray') ? $item->toArray() : $item;
+                }, $value);
+            } else {
+                $data[$property->getName()] = $value;
+            }
         }
 
         return $data;

@@ -254,6 +254,8 @@ CREATE TABLE IF NOT EXISTS `cmw_visits`
   COLLATE = utf8mb4_unicode_ci;
 
 CREATE INDEX idx_visits_date ON cmw_visits (visits_date);
+CREATE INDEX idx_visits_ip_partial ON cmw_visits (visits_ip(15));
+CREATE INDEX idx_visits_date_ip ON cmw_visits (visits_date, visits_ip);
 
 CREATE TABLE IF NOT EXISTS `cmw_maintenance`
 (

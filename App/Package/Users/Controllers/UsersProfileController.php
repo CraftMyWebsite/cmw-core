@@ -4,20 +4,19 @@ namespace CMW\Controller\Users;
 
 use CMW\Entity\Users\UserSettingsEntity;
 use CMW\Event\Users\DeleteUserAccountEvent;
+use CMW\Interface\Users\IUsersProfilePicture;
 use CMW\Manager\Events\Emitter;
 use CMW\Manager\Filter\FilterManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Loader\Loader;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Router\RouterException;
 use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Twofa\TwoFaManager;
-use CMW\Manager\Uploads\ImagesException;
-use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
-use CMW\Model\Users\UserPictureModel;
 use CMW\Model\Users\Users2FaModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Users\UsersSettingsModel;
@@ -86,26 +85,17 @@ class UsersProfileController extends AbstractController
             Redirect::redirectToHome();
         }
 
-        if (!empty($_FILES['pictureProfile']['name'])) {
-            $image = $_FILES['pictureProfile'];
-
-            try {
-                // Upload image on the server
-                $imageName = ImagesManager::convertAndUpload($image, 'Users');
-
-                if (!UserPictureModel::getInstance()->uploadImage($user->getId(), $imageName)) {
-                    Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                        LangManager::translate('core.errors.upload.image'));
-                    Redirect::redirectPreviousRoute();
-                }
-            } catch (ImagesException $e) {
-                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                    LangManager::translate('core.errors.upload.image') . " => $e");
-                Redirect::redirectPreviousRoute();
-            }
+        if (!isset($_FILES['pictureProfile']) || empty($_FILES['pictureProfile']['name'])) {
+            Flash::send(
+                Alert::ERROR,
+                LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.imageManager.error.emptyFile'),
+            );
+            Redirect::redirectPreviousRoute();
         }
 
-        Redirect::redirect('profile');
+        $image = $_FILES['pictureProfile'];
+        Loader::getHighestImplementation(IUsersProfilePicture::class)->changeMethod($image, $user->getId());
     }
 
     #[Link('/profile/:pseudo', Link::GET, ['pseudo' => '.*?'])]
@@ -140,7 +130,7 @@ class UsersProfileController extends AbstractController
             ->view();
     }
 
-    #[NoReturn] #[Link('/profile/delete/:id', Link::GET, ['id' => '[0-9]+'])]
+    #[NoReturn] #[Link('/account/delete/:id', Link::GET, ['id' => '[0-9]+'])]
     private function publicProfileDelete(int $id): void
     {
         // Check if this is the current user account
@@ -172,14 +162,20 @@ class UsersProfileController extends AbstractController
         $lastname = FilterManager::filterInputStringPost('lastname', orElse: '');
 
         if (!FilterManager::isEmail($mail)) {
-            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
-                LangManager::translate('users.toaster.invalid_mail'));
+            Flash::send(
+                Alert::ERROR,
+                LangManager::translate('users.toaster.error'),
+                LangManager::translate('users.toaster.invalid_mail'),
+            );
             Redirect::redirectPreviousRoute();
         }
 
         if (UsersSettingsModel::getInstance()->isPseudoBlacklisted($pseudo)) {
-            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'),
-                LangManager::translate('users.toaster.blacklisted_pseudo'));
+            Flash::send(
+                Alert::ERROR,
+                LangManager::translate('users.toaster.error'),
+                LangManager::translate('users.toaster.blacklisted_pseudo'),
+            );
             Redirect::redirectPreviousRoute();
         }
 
@@ -194,23 +190,35 @@ class UsersProfileController extends AbstractController
         $encryptedMail = EncryptManager::encrypt($mail);
 
         if (UsersModel::getInstance()->update($user?->getId(), $encryptedMail, $pseudo, $firstname, $lastname, $rolesId)) {
-            Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'), LangManager::translate('users.toaster.user_edited_self'));
+            Flash::send(
+                Alert::SUCCESS,
+                LangManager::translate('core.toaster.success'),
+                LangManager::translate('users.toaster.user_edited_self'),
+            );
         } else {
-            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'), LangManager::translate('users.toaster.user_edited_self_nop'));
+            Flash::send(
+                Alert::ERROR,
+                LangManager::translate('users.toaster.error'),
+                LangManager::translate('users.toaster.user_edited_self_nop'),
+            );
         }
 
-        $password = FilterManager::filterInputStringPost('password');
-        $passwordVerif = FilterManager::filterInputStringPost('passwordVerif');
+        $password = FilterManager::filterInputStringPost('password', orElse: '');
+        $passwordVerif = FilterManager::filterInputStringPost('passwordVerif', orElse: '');
 
-        if (!is_null($password)) {
+        if (!empty($password)) {
             if ($password === $passwordVerif) {
                 UsersModel::getInstance()->updatePass($user?->getId(), password_hash($password, PASSWORD_BCRYPT));
             } else {
-                // Todo Try to edit that
-                Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'), 'Je sais pas ?');
+                Flash::send(
+                    Alert::ERROR,
+                    LangManager::translate('users.toaster.error'),
+                    LangManager::translate('users.toaster.password_not_same'),
+                );
             }
         }
 
+        UsersSessionsController::getInstance()->updateStoredUser($user->getId());
         Redirect::redirectPreviousRoute();
     }
 

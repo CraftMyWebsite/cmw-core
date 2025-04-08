@@ -880,23 +880,23 @@ kbd {
 }
 
 .modal-container {
-    @apply hidden overflow-y-auto overflow-x-hidden fixed top-[8%] right-0 left-0 z-[600000] justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-[80vh];
+    @apply hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-[600000] justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] ;
 }
 
 .modal-sm {
-    @apply overflow-hidden relative w-full max-w-md max-h-full bg-light-primary rounded-lg shadow top-[8%] dark:bg-dark-third;
+    @apply overflow-hidden relative w-full max-w-md max-h-full bg-light-primary rounded-lg shadow dark:bg-dark-third;
 }
 
 .modal {
-    @apply relative w-full max-w-2xl max-h-full bg-light-primary rounded-lg shadow top-[8%] dark:bg-dark-third;
+    @apply relative w-full max-w-2xl max-h-full bg-light-primary rounded-lg shadow dark:bg-dark-third;
 }
 
 .modal-lg {
-    @apply overflow-hidden relative w-full max-w-4xl max-h-full bg-light-primary rounded-lg shadow top-[8%] dark:bg-dark-third;
+    @apply overflow-hidden relative w-full max-w-4xl max-h-full bg-light-primary rounded-lg shadow dark:bg-dark-third;
 }
 
 .modal-xl {
-    @apply overflow-hidden relative w-full max-w-7xl max-h-full bg-light-primary rounded-lg shadow top-[8%] dark:bg-dark-third;
+    @apply overflow-hidden relative w-full max-w-7xl max-h-full bg-light-primary rounded-lg shadow dark:bg-dark-third;
 }
 
 .modal-header {

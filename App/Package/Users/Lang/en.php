@@ -294,13 +294,17 @@ return [
         'captcha' => [
             'invalid' => 'invalid Captcha',
         ],
+        'connected' => [
+            'object' => ' - New login detected on your account',
+            'body' => 'Hello %user_name%. <br>We have detected a new login to your account on <b>%website%</b>.<br><br>📍 Login details:<br>- Date and time: %date%<br>- IP address: %ip%<br><br>If you initiated this login, you can ignore this message.<br><br><b>⚠️ If this login was not made by you, we strongly recommend that you:</b><br>- Immediately change your password from your personal account settings.<br>- Check your recent account activity for any suspicious actions.<br>- Enable two-factor authentication (2FA) if you haven’t already.',
+        ],
     ],
     'long_date' => [
         'setting' => [
             'label' => 'Strengthened user account security',
             'no' => 'No (not recommended)',
             'yes' => 'Yes',
-            'small' => 'For users who do not have 2Fa if they have not logged in for more than 90 days they receive an identity confirmation code by email. (the email must be functional)',
+            'small' => 'For users without 2FA, a confirmation code is sent by email if they haven\'t logged in for over 90 days (email delivery must be functional).<br>This setting also triggers an email for each login.',
         ],
         'toaster' => [
             'title' => 'Identity verification',
@@ -315,6 +319,19 @@ return [
             'body_1' => 'We need to verify your identity on ',
             'body_2' => 'Here is the CODE to verify that it is you:',
             'body_3' => 'If you are not the originator of this request, we advise you to change your password!',
+        ],
+    ],
+    'pages' => [
+        'settings' => [
+            'general' => [
+                'menu' => 'General',
+            ],
+            'security' => [
+                'menu' => 'Security',
+            ],
+            'blacklist' => [
+                'menu' => 'Blacklist',
+            ],
         ],
     ],
 ];
