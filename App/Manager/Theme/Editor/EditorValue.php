@@ -2,9 +2,11 @@
 
 namespace CMW\Manager\Theme\Editor;
 
+use CMW\Manager\Package\AbstractEntity;
+use CMW\Manager\Package\EntityType;
 use JetBrains\PhpStorm\ExpectedValues;
 
-class EditorValue
+class EditorValue extends AbstractEntity
 {
     public string $title;
     public string $themeKey;
@@ -21,7 +23,7 @@ class EditorValue
      * @param EditorSelectOptions[]|null $selectOptions
      * @param EditorRangeOptions[]|null $rangeOptions
      */
-    public function __construct(string $title, string $themeKey, mixed $defaultValue, #[ExpectedValues(flagsFromClass: EditorType::class)] string $type, array $selectOptions = [], array $rangeOptions = [])
+    public function __construct(string $title, string $themeKey, mixed $defaultValue, #[ExpectedValues(flagsFromClass: EditorType::class)] string $type, #[EntityType(EditorSelectOptions::class)] array $selectOptions = [], #[EntityType(EditorRangeOptions::class)] array $rangeOptions = [])
     {
         $this->title = $title;
         $this->themeKey = $themeKey;

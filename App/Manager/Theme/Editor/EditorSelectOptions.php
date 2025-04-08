@@ -2,7 +2,9 @@
 
 namespace CMW\Manager\Theme\Editor;
 
-class EditorSelectOptions
+use CMW\Manager\Package\AbstractEntity;
+
+class EditorSelectOptions extends AbstractEntity
 {
     public string $value;
     public string $text;

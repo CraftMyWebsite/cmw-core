@@ -2,7 +2,10 @@
 
 namespace CMW\Manager\Theme\Editor;
 
-class EditorMenu
+use CMW\Manager\Package\AbstractEntity;
+use CMW\Manager\Package\EntityType;
+
+class EditorMenu extends AbstractEntity
 {
     public string $title;
     public string $key;
@@ -18,7 +21,7 @@ class EditorMenu
      * @param string|null $requiredPackage
      * @param EditorValue[] $values
      */
-    public function __construct(string $title, string $key, ?string $scope, ?string $requiredPackage, array $values)
+    public function __construct(string $title, string $key, ?string $scope, ?string $requiredPackage, #[EntityType(EditorValue::class)] array $values)
     {
         $this->title = $title;
         $this->key = $key;

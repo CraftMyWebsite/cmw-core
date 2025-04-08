@@ -2,7 +2,9 @@
 
 namespace CMW\Manager\Theme\Editor;
 
-class EditorRangeOptions
+use CMW\Manager\Package\AbstractEntity;
+
+class EditorRangeOptions extends AbstractEntity
 {
     public float $min;
     public float $max;
@@ -14,10 +16,10 @@ class EditorRangeOptions
      * @param float $min
      * @param float $max
      * @param float $step
-     * @param string|null $prefix
-     * @param string|null $suffix
+     * @param string $prefix
+     * @param string $suffix
      */
-    public function __construct(float $min, float $max, float $step, ?string $prefix = "", ?string $suffix = "")
+    public function __construct(float $min, float $max, float $step, string $prefix = "", string $suffix = "")
     {
         $this->min = $min;
         $this->max = $max;
