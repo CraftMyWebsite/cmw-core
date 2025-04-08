@@ -303,35 +303,6 @@ class ThemeManager extends AbstractManager
     }
 
     /**
-     * @return array
-     */
-    public function getFlattenedThemeConfigSettings(): array
-    {
-        $themeName = $this->getCurrentTheme()->name();
-        $configPath = EnvManager::getInstance()->getValue('DIR') . "Public/Themes/{$themeName}/Config/config.settings.php";
-
-        if (!file_exists($configPath)) {
-            return [];
-        }
-
-        $menus = include $configPath;
-        $flat = [];
-
-        foreach ($menus as $menu) {
-            if (isset($menu->requiredPackage) && !PackageController::isInstalled($menu->requiredPackage)) {
-                continue;
-            }
-
-            foreach ($menu->values as $value) {
-                $key = $menu->key . '_' . $value->themeKey;
-                $flat[$key] = $value->defaultValue;
-            }
-        }
-
-        return $flat;
-    }
-
-    /**
      * @param string $menuKey
      * @param string $themeKey
      * @return string|null

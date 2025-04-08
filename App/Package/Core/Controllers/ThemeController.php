@@ -16,6 +16,7 @@ use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Manager\Theme\ThemeManager;
+use CMW\Manager\Theme\ThemeSettingsMapper;
 use CMW\Manager\Theme\UninstallThemeType;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
@@ -233,7 +234,7 @@ class ThemeController extends AbstractController
                 }
             }
 
-            foreach (ThemeManager::getInstance()->getFlattenedThemeConfigSettings() as $conf => $defaultValue) {
+            foreach (ThemeSettingsMapper::getFlattened($themeName) as $conf => $defaultValue) {
                 if (isset($aresFiles['__images__'][$conf])) {
                     continue;
                 }
