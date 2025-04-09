@@ -16,6 +16,7 @@ use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Manager\Theme\ThemeManager;
+use CMW\Manager\Theme\ThemeSettingsMapper;
 use CMW\Manager\Theme\UninstallThemeType;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
@@ -96,7 +97,7 @@ class ThemeController extends AbstractController
 
         $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
         ThemeModel::getInstance()->getInstance()->deleteThemeConfig($themeName);
-        ThemeManager::getInstance()->installThemeSettings($themeName);
+        ThemeManager::getInstance()->updateThemeSettings($themeName);
 
         $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs($themeName);
         SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . $themeName);
@@ -153,9 +154,56 @@ class ThemeController extends AbstractController
     private function adminThemeManage(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.edit');
-        View::createAdminView('Core', 'Theme/themeManage')
-            ->addScriptBefore('Admin/Resources/Vendors/Tinymce/tinymce.min.js', 'Admin/Resources/Vendors/Tinymce/Config/full.js', 'Admin/Resources/Vendors/PageLoader/main.js')
-            ->view();
+
+        //Vérifie si la valeur par défaut est en base de donnée si ce n'est pas le cas, on l'ajoute, cela permet aux mises à jour des thèmes de gérer les nouvelles valeurs :)
+        $themeMenus = ThemeManager::getInstance()->getThemeMenus();
+        $currentTheme = ThemeManager::getInstance()->getCurrentTheme()->name();
+        $themeConfigs = ThemeModel::getInstance()->fetchThemeConfigs($currentTheme);
+        $configNames = array_column($themeConfigs, 'theme_config_name');
+        $menuKeys = [];
+
+        foreach ($themeMenus as $themeMenu) {
+            $menuKey = $themeMenu->getMenuKey();
+
+            // Warning si le menu est défini plusieurs fois
+            if (in_array($menuKey, $menuKeys)) {
+                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.theme.editor.title'), LangManager::translate('core.toaster.theme.editor.multipleMenu', ['menukey' => $menuKey]));
+            } else {
+                $menuKeys[] = $menuKey;
+            }
+
+            $themeKeys = [];
+
+            foreach ($themeMenu->getValues() as $value) {
+                $key = $value->getThemeKey();
+
+                if (in_array($key, $themeKeys)) {
+                    Flash::send(Alert::ERROR, LangManager::translate('core.toaster.theme.editor.title'),  LangManager::translate('core.toaster.theme.editor.multipleMenuKey', ['key' => $key, 'menukey' => $menuKey]));
+                } else {
+                    $themeKeys[] = $key;
+                }
+
+                $dbKey = $menuKey ? $menuKey . '_' . $key : $key;
+
+                if (!in_array($dbKey, $configNames)) {
+                    ThemeModel::getInstance()->storeThemeConfig($dbKey, $value->getDefaultValue(), $currentTheme);
+                    // Ajoute ici aussi à $themeConfigs pour éviter de devoir reload
+                    $themeConfigs[] = [
+                        'theme_config_name' => $dbKey,
+                        'theme_config_value' => $value->getDefaultValue(),
+                        'theme_config_theme' => $currentTheme,
+                    ];
+                }
+            }
+        }
+
+        $view = new View();
+        $view
+            ->addVariableList(['themeMenus' => $themeMenus, 'themeConfigs' => $themeConfigs])
+            ->setCustomPath(EnvManager::getInstance()->getValue('DIR') . "App/Package/Core/Views/Theme/Editor/themeManage.admin.view.php")
+            ->setCustomTemplate(EnvManager::getInstance()->getValue('DIR') . 'App/Package/Core/Views/Theme/Editor/template.php');
+
+        $view->view();
     }
 
     #[NoReturn]
@@ -166,6 +214,7 @@ class ThemeController extends AbstractController
 
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.edit');
 
+        $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
         try {
             $newCsrfTokenId = bin2hex(random_bytes(8));
             $newCsrfToken = SecurityManager::getInstance()->getCSRFToken($newCsrfTokenId);
@@ -176,30 +225,27 @@ class ThemeController extends AbstractController
                 $aresFiles['__images__'][$conf] = true;
 
                 if ($file['name'] !== '') {
-                    $imageName = ImagesManager::convertAndUpload($file, ThemeManager::getInstance()->getCurrentTheme()->name() . '/Img');
-                    $remoteImageValue = ThemeModel::getInstance()->getInstance()->fetchConfigValue($conf);
-                    $localImageValue = ThemeManager::getInstance()->getCurrentThemeConfigSetting($conf);
+                    $imageName = ImagesManager::convertAndUpload($file, $themeName . '/Img');
 
-                    if ($remoteImageValue !== $file && $remoteImageValue !== $localImageValue) {
-                        ImagesManager::deleteImage(ThemeManager::getInstance()->getCurrentTheme()->name() . "/Img/$remoteImageValue");
-                    }
+                    $currentImage = ThemeModel::getInstance()->getConfigValue($conf);
+                    ImagesManager::deleteImage($themeName . "/Img/$currentImage");
 
-                    ThemeModel::getInstance()->getInstance()->updateThemeConfig($conf, $imageName, ThemeManager::getInstance()->getCurrentTheme()->name());
+                    ThemeModel::getInstance()->getInstance()->updateThemeConfig($conf, $imageName, $themeName);
                 }
             }
 
-            foreach (ThemeManager::getInstance()->getCurrentThemeConfigSettings() as $conf => $value) {
+            foreach (ThemeSettingsMapper::getFlattened($themeName) as $conf => $defaultValue) {
                 if (isset($aresFiles['__images__'][$conf])) {
                     continue;
                 }
 
-                if (!isset($_POST[$conf]) || !empty($_POST[$conf])) {
-                    ThemeModel::getInstance()->getInstance()->updateThemeConfig($conf, $_POST[$conf] ?? '0', ThemeManager::getInstance()->getCurrentTheme()->name());
+                if (isset($_POST[$conf])) {
+                    ThemeModel::getInstance()->updateThemeConfig($conf, $_POST[$conf], $themeName);
                 }
             }
 
-            $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs(ThemeManager::getInstance()->getCurrentTheme()->name());
-            SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . ThemeManager::getInstance()->getCurrentTheme()->name());
+            $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs($themeName);
+            SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . $themeName);
 
             echo json_encode([
                 'success' => true,
@@ -261,6 +307,9 @@ class ThemeController extends AbstractController
                     }
                 }
             }
+
+            //Une fois que toutes les mises à jour sont terminé, on rajoute les nouvelles configs :
+            ThemeManager::getInstance()->updateThemeSettings($themeName);
 
             SimpleCacheManager::deleteSpecificCacheFile("config", "Themes/$themeName");
 

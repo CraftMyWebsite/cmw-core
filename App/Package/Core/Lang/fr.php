@@ -145,6 +145,11 @@ return [
                     'delete_files' => 'Impossible de supprimer les fichiers du thème',
                 ],
             ],
+            'editor' => [
+                'title' => 'Editeur - DEV',
+                'multipleMenu' => 'Attention le menu <b>%menukey%</b> est défini plusieurs fois !',
+                'multipleMenuKey' => 'Attention la clé <b>%key%</b> est présente plusieurs fois dans le menu <b>%menukey%</b> !',
+            ],
         ],
         'package' => [
             'updateBeforeInstall' => 'Veuillez mettre à jour le CMS avant d\'installer ce package !',
@@ -197,7 +202,9 @@ return [
         "notVerified" => "Non verifié par CMW.",
         "active" => "Thème actif",
         "configure" => "Configurer",
-        "reset" => "Réinitialiser",
+        "reset" => "Réinitialiser %theme%",
+        "leave" => "Quitter l'éditeur",
+        "menu" => "MENU D'ÉDITION",
         "reinstall" => "Réinstaller",
         "description" => "Description : ",
         "update" => "Mise à jour disponible !",

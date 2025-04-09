@@ -128,7 +128,7 @@ return [
         'mail' => [
             'test' => 'Mail send to %mail%',
         ],
-        'Theme' => [
+        'theme' => [
             'regenerate' => 'Theme configuration regenerate',
             'installed' => '%theme% just installed and activated.',
             'reset' => 'Theme configuration reset',
@@ -144,6 +144,11 @@ return [
                     'delete_database' => 'Unable to delete the theme database',
                     'delete_files' => 'Unable to delete theme files',
                 ],
+            ],
+            'editor' => [
+                'title' => 'Editor - DEV',
+                'multipleMenu' => 'Warning: the menu <b>%menukey%</b> is defined multiple times!',
+                'multipleMenuKey' => 'Warning: the key <b>%key%</b> is present multiple times in the menu <b>%menukey%</b>!',
             ],
         ],
         'package' => [
@@ -197,7 +202,9 @@ return [
         'notVerified' => 'Not verified by CMW.',
         'active' => 'Active theme',
         'configure' => 'Configure',
-        'reset' => 'Reset',
+        'reset' => 'Reset %theme%',
+        "leave" => "Leave editor",
+        "menu" => "EDITOR MENU",
         'reinstall' => 'Reinstall',
         'description' => 'Description : ',
         'update' => 'An update is available !',
