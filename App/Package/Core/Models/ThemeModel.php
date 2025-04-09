@@ -9,6 +9,9 @@ use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Package\AbstractModel;
 use CMW\Manager\Theme\Editor\EditorType;
 use CMW\Manager\Theme\ThemeManager;
+use Exception;
+use PDO;
+use RuntimeException;
 
 /**
  * Class: @ThemeModel
@@ -254,4 +257,44 @@ class ThemeModel extends AbstractModel
 
         return $value ?? '';
     }
+
+    public function getExistingThemeConfigKeys(string $theme): array
+    {
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare('SELECT theme_config_name FROM cmw_theme_config WHERE theme_config_theme = :theme');
+        $req->execute(['theme' => $theme]);
+
+        return array_column($req->fetchAll(PDO::FETCH_ASSOC), 'theme_config_name');
+    }
+
+    public function storeThemeConfigBulk(array $configs, string $theme): bool
+    {
+        if (empty($configs)) return true;
+
+        $db = DatabaseManager::getInstance();
+        $db->beginTransaction();
+
+        try {
+            $stmt = $db->prepare('INSERT INTO cmw_theme_config (theme_config_name, theme_config_value, theme_config_theme) VALUES (:name, :value, :theme)');
+
+            foreach ($configs as $config) {
+                $data = [
+                    'name' => $config['name'],
+                    'value' => $config['value'],
+                    'theme' => $theme
+                ];
+
+                if (!$stmt->execute($data)) {
+                    throw new RuntimeException('Failed to insert config');
+                }
+            }
+
+            $db->commit();
+            return true;
+        } catch (Exception $e) {
+            $db->rollBack();
+            return false;
+        }
+    }
+
 }
