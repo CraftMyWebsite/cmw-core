@@ -163,11 +163,11 @@ $notifications = NotificationModel::getInstance()->getUnreadNotification();
 </nav>
 
 <aside id="logo-sidebar" class="aside-nav" aria-label="Sidebar">
-    <button id="submitButton" form="ThemeSettings" type="submit" class="w-full block px-4 py-2 text-success text-sm text-center hover:bg-gray-100 dark:hover:bg-gray-600">Sauvegarder</button>
+    <button id="submitButton" form="ThemeSettings" type="submit" class="w-full block px-4 py-2 text-success text-sm text-center hover:bg-gray-100 dark:hover:bg-gray-600"><?= LangManager::translate('core.btn.save') ?></button>
     <hr class="mt-0 mb-0">
-    <a data-modal-toggle="modal-reset" class="w-full block px-4 py-2 text-warning text-sm text-center hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer">Réinitialiser <?= ThemeManager::getInstance()->getCurrentTheme()->name() ?></a>
+    <a data-modal-toggle="modal-reset" class="w-full block px-4 py-2 text-warning text-sm text-center hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"><?= LangManager::translate('core.theme.reset', ['theme' => ThemeManager::getInstance()->getCurrentTheme()->name()]) ?></a>
     <hr class="mt-0 mb-0">
-    <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin" class="block px-4 py-2 text-sm text-red-400 text-center hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-600">Quitter l'éditeur</a>
+    <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin" class="block px-4 py-2 text-sm text-red-400 text-center hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-600"><?= LangManager::translate('core.theme.leave') ?></a>
     <hr class="mt-0 mb-0">
     <div class="flex justify-center gap-6 py-2">
         <button class="mode-btn" onclick="setIframeWidth('mobile', this)">
@@ -181,7 +181,7 @@ $notifications = NotificationModel::getInstance()->getUnreadNotification();
         </button>
     </div>
     <hr class="mt-0 mb-0">
-    <p class="text-center text-lg mt-2 font-bold">MENU D'ÉDITION</p>
+    <p class="text-center text-lg mt-2 font-bold"><?= LangManager::translate('core.theme.menu') ?></p>
     <form id="ThemeSettings" action="/cmw-admin/theme/manage" method="post" enctype="multipart/form-data">
         <?php SecurityManager::getInstance()->insertHiddenToken() ?>
         <div id="menuSections" class="h-full overflow-y-auto overflow-x-hidden pb-40 lg:pb-0">

@@ -167,7 +167,7 @@ class ThemeController extends AbstractController
 
             // Warning si le menu est défini plusieurs fois
             if (in_array($menuKey, $menuKeys)) {
-                Flash::send(Alert::ERROR, 'Editor - DEV', 'Attention le menu <b>' . $menuKey . '</b> est défini plusieurs fois !');
+                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.theme.editor.title'), LangManager::translate('core.toaster.theme.editor.multipleMenu', ['menukey' => $menuKey]));
             } else {
                 $menuKeys[] = $menuKey;
             }
@@ -178,7 +178,7 @@ class ThemeController extends AbstractController
                 $key = $value->getThemeKey();
 
                 if (in_array($key, $themeKeys)) {
-                    Flash::send(Alert::ERROR, 'Editor - DEV', 'Attention la clé <b>' . $key . '</b> est présente plusieurs fois dans le menu <b>' . $menuKey . '</b> !');
+                    Flash::send(Alert::ERROR, LangManager::translate('core.toaster.theme.editor.title'),  LangManager::translate('core.toaster.theme.editor.multipleMenuKey', ['key' => $key, 'menukey' => $menuKey]));
                 } else {
                     $themeKeys[] = $key;
                 }
