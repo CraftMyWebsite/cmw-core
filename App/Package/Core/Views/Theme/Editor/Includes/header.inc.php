@@ -260,6 +260,11 @@ HTML;
     <input type="text" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}" placeholder="Default">
 HTML;
 
+        case 'faPicker':
+            return <<<HTML
+<div class="icon-picker" data-id="for-{$inputId}" data-label="{$label}" data-name="{$inputName}" data-placeholder="Sélectionner un icon" data-value="{$valEscaped}"></div>
+HTML;
+
         case 'textarea':
         case 'css':
             return <<<HTML

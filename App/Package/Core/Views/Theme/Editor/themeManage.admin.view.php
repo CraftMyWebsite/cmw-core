@@ -222,12 +222,15 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
 
                     // Supprimer l'ancienne classe
                     const oldClass = el.getAttribute(attrKey);
-                    if (oldClass) el.classList.remove(oldClass);
+                    if (oldClass) {
+                        oldClass.split(/\s+/).forEach(cls => el.classList.remove(cls));
+                    }
 
                     // Ajouter la nouvelle classe
                     if (finalClass) {
-                        el.classList.add(finalClass);
-                        el.setAttribute(attrKey, finalClass);
+                        const classes = finalClass.trim().split(/\s+/); // ✅ multiple classes support
+                        classes.forEach(cls => el.classList.add(cls));
+                        el.setAttribute(attrKey, finalClass); // on garde l'ensemble pour pouvoir le retirer après
                     } else {
                         el.removeAttribute(attrKey);
                     }
