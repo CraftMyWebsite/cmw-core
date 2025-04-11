@@ -48,6 +48,11 @@ $notifications = NotificationModel::getInstance()->getUnreadNotification();
                 </div>
                 <?php CoreController::getInstance()->getPackagesTopBarElements(); ?>
             </div>
+            <div class="flex gap-6">
+                <button id="submitButton" form="ThemeSettings" type="submit" class="btn-success"><i class="fa-solid fa-cloud-arrow-up"></i> <?= LangManager::translate('core.btn.save') ?></button>
+                <a data-modal-toggle="modal-reset" class="btn-warning cursor-pointer"><i class="fa-solid fa-rotate-left"></i> <?= LangManager::translate('core.theme.reset', ['theme' => ThemeManager::getInstance()->getCurrentTheme()->name()]) ?></a>
+                <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin" class="btn-danger"><i class="fa-solid fa-arrow-right-from-bracket"></i> <?= LangManager::translate('core.theme.leave') ?></a>
+            </div>
             <div class="flex items-center">
                 <div>
                     <button type="button" class="relative  p-2.5" data-dropdown-toggle="dropdown-notification">
@@ -163,12 +168,6 @@ $notifications = NotificationModel::getInstance()->getUnreadNotification();
 </nav>
 
 <aside id="logo-sidebar" class="aside-nav" aria-label="Sidebar">
-    <button id="submitButton" form="ThemeSettings" type="submit" class="w-full block px-4 py-2 text-success text-sm text-center hover:bg-gray-100 dark:hover:bg-gray-600"><?= LangManager::translate('core.btn.save') ?></button>
-    <hr class="mt-0 mb-0">
-    <a data-modal-toggle="modal-reset" class="w-full block px-4 py-2 text-warning text-sm text-center hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"><?= LangManager::translate('core.theme.reset', ['theme' => ThemeManager::getInstance()->getCurrentTheme()->name()]) ?></a>
-    <hr class="mt-0 mb-0">
-    <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin" class="block px-4 py-2 text-sm text-red-400 text-center hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-600"><?= LangManager::translate('core.theme.leave') ?></a>
-    <hr class="mt-0 mb-0">
     <div class="flex justify-center gap-6 py-2">
         <button class="mode-btn" onclick="setIframeWidth('mobile', this)">
             <i class="fa-solid fa-mobile-screen-button"></i>
@@ -184,7 +183,7 @@ $notifications = NotificationModel::getInstance()->getUnreadNotification();
     <p class="text-center text-lg mt-2 font-bold"><?= LangManager::translate('core.theme.menu') ?></p>
     <form id="ThemeSettings" action="/cmw-admin/theme/manage" method="post" enctype="multipart/form-data">
         <?php SecurityManager::getInstance()->insertHiddenToken() ?>
-        <div id="menuSections" class="h-full overflow-y-auto overflow-x-hidden pb-40 lg:pb-0">
+        <div id="menuSections" style="max-height: calc(100vh - 7.3rem);" class="overflow-y-auto overflow-x-hidden">
             <ul style="border-bottom: 1px dashed #b5a5a5">
                 <?php foreach ($themeMenus as $index => $package): ?>
                     <li>
@@ -219,10 +218,12 @@ $notifications = NotificationModel::getInstance()->getUnreadNotification();
         </div>
         <div id="allSections">
             <?php foreach ($themeMenus as $index => $package): ?>
-                <div class="theme-section hidden" id="section_<?= $package->getMenuKey() ?>"
+                <div class="theme-section hidden overflow-y-auto overflow-x-hidden px-1" style="max-height: calc(100vh - 13.3rem);" id="section_<?= $package->getMenuKey() ?>"
                      data-scope="<?= $package->getScope() ?>">
                     <?php foreach ($package->values as $value): ?>
+                    <div style="padding: 1rem 0 1rem 0; border-top: dashed 2px #b5a5a5">
                         <?= renderInput($value, $package->getMenuKey(), $formattedConfigs[$package->getMenuKey().'_'.$value->themeKey] ?? $value->defaultValue ?? '') ?>
+                    </div>
                     <?php endforeach; ?>
                 </div>
             <?php endforeach; ?>
@@ -243,47 +244,37 @@ function renderInput($value, $menuKey, $val)
     switch ($value->type) {
         case 'color':
             return <<<HTML
-<div style="margin-bottom: 1rem; padding: .2rem .6rem .2rem .6rem; border-radius: 4px; border: dashed 1px #b5a5a5">
     <label for="{$inputId}">{$label}</label>
     <input type="color" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}">
-</div>
 HTML;
 
         case 'number':
             return <<<HTML
-<div style="margin-bottom: 1rem; padding: .2rem .6rem .2rem .6rem; border-radius: 4px; border: dashed 1px #b5a5a5">
     <label for="{$inputId}">{$label}</label>
     <input type="number" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}">
-</div>
 HTML;
 
         case 'text':
             return <<<HTML
-<div style="margin-bottom: 1rem; padding: .2rem .6rem .2rem .6rem; border-radius: 4px; border: dashed 1px #b5a5a5">
     <label for="{$inputId}">{$label}</label>
     <input type="text" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}" placeholder="Default">
-</div>
 HTML;
 
         case 'textarea':
         case 'css':
             return <<<HTML
-<div style="margin-bottom: 1rem; padding: .2rem .6rem .2rem .6rem; border-radius: 4px; border: dashed 1px #b5a5a5">
     <label for="{$inputId}">{$label}</label>
     <textarea id="{$inputId}" name="{$inputName}" class="textarea">{$valEscaped}</textarea>
-</div>
 HTML;
 
         case 'boolean':
             $checked = ($val === "1" || ($val === null && $value->defaultValue === "1")) ? "checked" : "";
             return <<<HTML
-<div style="margin-bottom: 1rem; padding: .2rem .6rem .2rem .6rem; border-radius: 4px; border: dashed 1px #b5a5a5">
     <label for="{$inputId}" class="toggle">
         <p class="toggle-label">{$label}</p>
         <input id="{$inputId}" name="{$inputName}" type="checkbox" class="toggle-input" {$checked}>
         <div class="toggle-slider"></div>
     </label>
-</div>
 HTML;
 
         case 'select':
@@ -295,18 +286,14 @@ HTML;
                 $optionsHtml .= "<option value=\"{$optVal}\" {$selected}>{$optText}</option>";
             }
             return <<<HTML
-<div style="margin-bottom: 1rem; padding: .2rem .6rem .2rem .6rem; border-radius: 4px; border: dashed 1px #b5a5a5">
     <label for="{$inputId}">{$label}</label>
     <select id="{$inputId}" name="{$inputName}" class="input">{$optionsHtml}</select>
-</div>
 HTML;
 
         case 'image':
             return <<<HTML
-<div style="margin-bottom: 1rem; padding: .2rem .6rem .2rem .6rem; border-radius: 4px; border: dashed 1px #b5a5a5">
     <label for="{$inputId}">{$label}</label>
     <input id="{$inputId}" name="{$inputName}" type="file" value="{$valEscaped}">
-</div>
 HTML;
 
         case 'range':
@@ -323,7 +310,6 @@ HTML;
             $suffix = htmlspecialchars($range->getSuffix());
 
             return <<<HTML
-<div style="margin-bottom: 1rem; padding: .2rem .6rem .2rem .6rem; border-radius: 4px; border: dashed 1px #b5a5a5">
     <label for="{$inputId}">{$label} (<small id="preview_{$inputId}">{$prefix}{$valEscaped}{$suffix}</small>)</label>
     
     <div class="flex items-center gap-2">
@@ -337,16 +323,13 @@ HTML;
                class="w-full"
                oninput="document.getElementById('preview_{$inputId}').innerText = '{$prefix}' + this.value + '{$suffix}'">
     </div>
-</div>
 HTML;
 
 
         default:
             return <<<HTML
-<div style="margin-bottom: 1rem; padding: .2rem .6rem .2rem .6rem; border-radius: 4px; border: dashed 1px #b5a5a5">
     <label for="{$inputId}">{$label}</label>
     <input type="text" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}" placeholder="Default">
-</div>
 HTML;
     }
 }
