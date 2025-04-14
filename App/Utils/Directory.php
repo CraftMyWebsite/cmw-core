@@ -92,7 +92,7 @@ class Directory
         return $arrayToReturn;
     }
 
-    public static function delete($dir): bool
+    public static function delete(string $dir): bool
     {
         if (!file_exists($dir)) {
             return true;

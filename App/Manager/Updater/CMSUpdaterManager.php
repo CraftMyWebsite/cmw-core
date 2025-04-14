@@ -8,13 +8,25 @@ use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Manager\AbstractManager;
+use CMW\Utils\Directory;
+use CMW\Utils\Log;
 use JsonException;
 use ZipArchive;
 
-class CMSUpdaterManager
+class CMSUpdaterManager extends AbstractManager
 {
-    private static string $archivePath = 'Public/Uploads/cmw.zip';
-    private static string $archiveUpdatePath = 'Public/Uploads/update.zip';
+    private readonly string $archivePath;
+    private readonly string $archiveUpdatePath;
+
+    private readonly string $dir;
+
+    public function __construct()
+    {
+        $this->dir = EnvManager::getInstance()->getValue('DIR');
+        $this->archivePath = $this->dir . 'Public/Uploads/cmw.zip';
+        $this->archiveUpdatePath = $this->dir . 'Public/Uploads/update.zip';
+    }
 
     /**
      * @param array $updateData
@@ -80,8 +92,7 @@ class CMSUpdaterManager
             return null;
         }
 
-        if (!file_put_contents(EnvManager::getInstance()->getValue('DIR') . self::$archivePath,
-            fopen($data, 'rb'))) {
+        if (!file_put_contents($this->archivePath, fopen($data, 'rb'))) {
             return false;
         }
         return true;
@@ -93,18 +104,27 @@ class CMSUpdaterManager
      */
     private function prepareArchive(): bool
     {
+        $isInstallationFolderExist = is_dir($this->dir . 'Installation');
+
         $archiveUpdate = new ZipArchive;
-        if ($archiveUpdate->open(EnvManager::getInstance()->getValue('DIR') . self::$archivePath) === TRUE) {
-            $archiveUpdate->extractTo(EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/');
+
+        if ($archiveUpdate->open($this->archivePath) === TRUE) {
+            $extractPath = $this->dir . 'Public/Uploads/';
+            $archiveUpdate->extractTo($extractPath);
             $archiveUpdate->close();
             // Delete download archive
-            unlink(EnvManager::getInstance()->getValue('DIR') . self::$archivePath);
+            unlink($this->archivePath);
 
-            if ($archiveUpdate->open(EnvManager::getInstance()->getValue('DIR') . self::$archiveUpdatePath) === TRUE) {
-                $archiveUpdate->extractTo(EnvManager::getInstance()->getValue('DIR'));
+            // Remove Installation files in Updated if the website doesn't use it
+            if (!$isInstallationFolderExist) {
+                $this->removeInstallationFolder($extractPath . 'Installation');
+            }
+
+            if ($archiveUpdate->open($this->archiveUpdatePath) === TRUE) {
+                $archiveUpdate->extractTo($this->dir);
                 $archiveUpdate->close();
                 // Delete download archive
-                unlink(EnvManager::getInstance()->getValue('DIR') . self::$archiveUpdatePath);
+                unlink($this->archiveUpdatePath);
                 return true;
             }
             return false;
@@ -113,12 +133,24 @@ class CMSUpdaterManager
     }
 
     /**
+     * @param string $installationPath
+     * @return void
+     * @desc Remove the Installation folder if exists
+     */
+    private function removeInstallationFolder(string $installationPath): void
+    {
+        if (is_dir($installationPath)) {
+            Directory::delete($installationPath);
+        }
+    }
+
+    /**
      * @return bool
      * @desc Delete files, based on delete_files.json
      */
     private function deletedFiles(): bool
     {
-        $filePath = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/delete_files.json';
+        $filePath = $this->dir . 'Public/Uploads/delete_files.json';
 
         if (!file_exists($filePath)) {
             return true;
@@ -130,7 +162,7 @@ class CMSUpdaterManager
             $json = json_decode($deletedFiles, true, 512, JSON_THROW_ON_ERROR);
 
             foreach ($json as $file) {
-                if (!unlink(EnvManager::getInstance()->getValue('DIR') . $file)) {
+                if (!unlink($this->dir . $file)) {
                     Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
                         LangManager::translate('core.updates.errors.deleteFile', ['file' => $file]));
                 }
@@ -148,7 +180,7 @@ class CMSUpdaterManager
      */
     private function sqlUpdate(): bool
     {
-        $filePath = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/sql_update.sql';
+        $filePath = $this->dir . 'Public/Uploads/sql_update.sql';
 
         if (!file_exists($filePath)) {
             return true;
