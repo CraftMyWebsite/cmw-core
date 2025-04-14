@@ -344,6 +344,19 @@ class ThemeManager extends AbstractManager
         return '';
     }
 
+    public function resolveImagePath(string $themeName, ?string $value, string $menuKey, string $themeKey): string
+    {
+        $default = $this->getDefaultThemeValue($menuKey, $themeKey);
+        $subfolder = EnvManager::getInstance()->getValue('PATH_SUBFOLDER');
+
+        if (!$value || $value === $default) {
+            return $subfolder . "Public/Themes/{$themeName}/{$default}";
+        }
+
+        return $subfolder . "Public/Uploads/{$themeName}/Img/{$value}";
+    }
+
+
 
     /*--EDITOR--*/
 

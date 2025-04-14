@@ -2,8 +2,6 @@
 
 namespace CMW\Model\Core;
 
-use CMW\Controller\Core\PackageController;
-use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Package\AbstractModel;
@@ -46,26 +44,17 @@ class ThemeModel extends AbstractModel
             return $cachedValue;
         }
 
+        $data = ['config' => $themeConfigNameFormatted, 'theme' => $themeName];
 
         $db = DatabaseManager::getInstance();
-        $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config
-                                    WHERE theme_config_name = :config AND theme_config_theme = :theme');
+        $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config WHERE theme_config_name = :config AND theme_config_theme = :theme');
 
-        $req->execute([
-            'config' => $themeConfigNameFormatted,
-            'theme' => $themeName
-        ]);
-
-        $value = $req->fetch()['theme_config_value'] ?? null;
+        if ($req->execute($data)) {
+            $value = $req->fetch()['theme_config_value'] ?? null;
+        }
 
         if ($type === EditorType::IMAGE) {
-            $default = ThemeManager::getInstance()->getDefaultThemeValue($menuKey, $themeKey);
-
-            if (!$value || $value === $default) {
-                return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . "Public/Themes/{$themeName}/{$default}";
-            }
-
-            return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . "Public/Uploads/{$themeName}/Img/{$value}";
+            return ThemeManager::getInstance()->resolveImagePath($themeName, $value ?? null, $menuKey, $themeKey);
         }
 
         return $value ?? ThemeManager::getInstance()->getDefaultThemeValue($menuKey, $themeKey);
