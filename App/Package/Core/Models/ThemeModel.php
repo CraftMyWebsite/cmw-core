@@ -220,10 +220,19 @@ class ThemeModel extends AbstractModel
     {
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT theme_config_name FROM cmw_theme_config WHERE theme_config_theme = :theme');
-        $req->execute(['theme' => $theme]);
 
-        return array_column($req->fetchAll(PDO::FETCH_ASSOC), 'theme_config_name');
+        if (!$req->execute(['theme' => $theme])) {
+            return [];
+        }
+
+        $results = $req->fetchAll(PDO::FETCH_ASSOC);
+        if (!is_array($results)) {
+            return [];
+        }
+
+        return array_column($results, 'theme_config_name');
     }
+
 
     public function storeThemeConfigBulk(array $configs, string $theme): bool
     {
