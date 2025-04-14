@@ -9,6 +9,7 @@ use CMW\Manager\Loader\Loader;
 use CMW\Manager\Notification\NotificationModel;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Manager\Theme\ThemeManager;
+use CMW\Manager\Theme\ThemeMapper;
 
 $currentUser = UsersSessionsController::getInstance()->getCurrentUser();
 $sideBarImplementations = Loader::loadImplementations(ISideBarElements::class);
@@ -236,7 +237,7 @@ $notifications = NotificationModel::getInstance()->getUnreadNotification();
 //TODO Ajouter des truc colle comme le fa picker, et peut être d'autres trucs
 function renderInput($value, $menuKey, $val)
 {
-    $inputName = $menuKey . '_' . $value->themeKey;
+    $inputName = ThemeMapper::mapConfigKey($menuKey, $value->themeKey);
     $inputId = htmlspecialchars($value->themeKey);
     $label = htmlspecialchars($value->title);
     $valEscaped = htmlspecialchars($val);

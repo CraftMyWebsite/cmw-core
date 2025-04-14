@@ -9,6 +9,7 @@ use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Package\AbstractModel;
 use CMW\Manager\Theme\Editor\EditorType;
 use CMW\Manager\Theme\ThemeManager;
+use CMW\Manager\Theme\ThemeMapper;
 use Exception;
 use PDO;
 use RuntimeException;
@@ -38,7 +39,7 @@ class ThemeModel extends AbstractModel
         }
 
         $type = ThemeManager::getInstance()->getEditorType($menuKey, $themeKey);
-        $themeConfigNameFormatted = $menuKey. '_' .$themeKey;
+        $themeConfigNameFormatted = ThemeMapper::mapConfigKey($menuKey, $themeKey);
 
         $cachedValue = ThemeManager::getInstance()->getConfigValueFromCache($themeName, $themeConfigNameFormatted, $menuKey, $themeKey, $type);
         if ($cachedValue !== null) {

@@ -23,7 +23,7 @@ class ThemeSettingsMapper
             }
 
             foreach ($menu->values as $value) {
-                $key = $menu->key . '_' . $value->themeKey;
+                $key = ThemeMapper::mapConfigKey($menu->key, $value->themeKey);
                 $flat[$key] = $value->defaultValue;
             }
         }

@@ -184,7 +184,7 @@ class ThemeManager extends AbstractManager
                     continue;
                 }
 
-                $configKey = $menu->key . '_' . $value->themeKey;
+                $configKey = ThemeMapper::mapConfigKey($menu->key, $value->themeKey);
                 $defaultValue = $value->defaultValue;
 
                 ThemeModel::getInstance()->storeThemeConfig($configKey, $defaultValue, $theme);
@@ -220,7 +220,7 @@ class ThemeManager extends AbstractManager
                     continue;
                 }
 
-                $configKey = $menu->key . '_' . $value->themeKey;
+                $configKey = ThemeMapper::mapConfigKey($menu->key, $value->themeKey);
 
                 $newConfigs = [];
 

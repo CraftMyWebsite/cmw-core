@@ -16,6 +16,7 @@ use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Manager\Theme\ThemeManager;
+use CMW\Manager\Theme\ThemeMapper;
 use CMW\Manager\Theme\ThemeSettingsMapper;
 use CMW\Manager\Theme\UninstallThemeType;
 use CMW\Manager\Updater\UpdatesManager;
@@ -183,7 +184,7 @@ class ThemeController extends AbstractController
                     $themeKeys[] = $key;
                 }
 
-                $dbKey = $menuKey ? $menuKey . '_' . $key : $key;
+                $dbKey = $menuKey ? ThemeMapper::mapConfigKey($menuKey, $key) : $key;
 
                 if (!in_array($dbKey, $configNames)) {
                     ThemeModel::getInstance()->storeThemeConfig($dbKey, $value->getDefaultValue(), $currentTheme);
