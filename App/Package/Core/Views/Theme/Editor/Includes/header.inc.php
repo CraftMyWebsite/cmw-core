@@ -211,7 +211,7 @@ $notifications = NotificationModel::getInstance()->getUnreadNotification();
         <!-- Section d'édition -->
         <div id="editorSection" class="hidden">
             <button type="button" onclick="backToMenu()" class="text-info mb-2 w-full p-2 hover:bg-gray-200 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600" style="text-align: left; border-bottom: 1px dashed #b5a5a5; border-top: 1px dashed #b5a5a5">
-                <i class="fa-regular fa-circle-left"></i> Retour au menu
+                <i class="fa-regular fa-circle-left"></i> <?= LangManager::translate('core.theme.backMenu') ?>
             </button>
             <p id="sectionTitle" class="text-center text-lg"></p>
             <div id="sectionContent" class="mt-3 space-y-3 px-1"></div>

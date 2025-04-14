@@ -205,6 +205,7 @@ return [
         'reset' => 'Reset %theme%',
         "leave" => "Leave editor",
         "menu" => "EDITOR MENU",
+        "backMenu" => "Back to menu",
         'reinstall' => 'Reinstall',
         'description' => 'Description : ',
         'update' => 'An update is available !',

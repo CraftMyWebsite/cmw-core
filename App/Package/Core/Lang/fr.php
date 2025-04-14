@@ -205,6 +205,7 @@ return [
         "reset" => "Réinitialiser %theme%",
         "leave" => "Quitter l'éditeur",
         "menu" => "MENU D'ÉDITION",
+        "backMenu" => "Retour au menu",
         "reinstall" => "Réinstaller",
         "description" => "Description : ",
         "update" => "Mise à jour disponible !",
