@@ -4,6 +4,7 @@ namespace CMW\Manager\Theme;
 
 use CMW\Controller\Core\PackageController;
 use CMW\Manager\Api\PublicAPI;
+use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Manager\AbstractManager;
 use CMW\Manager\Theme\Editor\EditorMenu;
@@ -284,6 +285,65 @@ class ThemeManager extends AbstractManager
 
         return UninstallThemeType::SUCCESS;
     }
+
+    public function getConfigValueFromCache(string $themeName, string $themeConfigNameFormatted, string $menuKey, string $themeKey, ?string $type): ?string
+    {
+        if (!SimpleCacheManager::cacheExist('config', "Themes/$themeName")) {
+            return null;
+        }
+
+        $data = SimpleCacheManager::getCache('config', "Themes/$themeName");
+
+        foreach ($data as $conf) {
+            if ($conf['theme_config_name'] === $themeConfigNameFormatted) {
+                if ($type === EditorType::IMAGE) {
+                    $default = $this->getDefaultThemeValue($menuKey, $themeKey);
+                    if (!$conf['theme_config_value'] || $conf['theme_config_value'] === $default) {
+                        return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . "Public/Themes/{$themeName}/{$default}";
+                    }
+                    return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . "Public/Uploads/{$themeName}/Img/{$conf['theme_config_value']}";
+                }
+                return $conf['theme_config_value'] ?? "UNDEFINED_$themeConfigNameFormatted";
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Récupère la valeur par défaut d'une clé de thème depuis le fichier de configuration.
+     *
+     * @param string $key
+     * @return mixed|null
+     */
+    public function getDefaultThemeValue(string $MenuKey, string $key) : string
+    {
+        $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
+        $configPath = EnvManager::getInstance()->getValue('DIR') . "Public/Themes/{$themeName}/Config/config.settings.php";
+
+        if (!file_exists($configPath)) {
+            return '';
+        }
+
+        $menus = include $configPath;
+
+        foreach ($menus as $menu) {
+            if (isset($menu->requiredPackage) && !PackageController::isInstalled($menu->requiredPackage)) {
+                continue;
+            }
+            if ($menu->key === $MenuKey) {
+                foreach ($menu->values as $value) {
+                    if ($value->themeKey === $key) {
+                        return $value->defaultValue;
+                    }
+                }
+            }
+
+        }
+
+        return '';
+    }
+
 
     /*--EDITOR--*/
 
