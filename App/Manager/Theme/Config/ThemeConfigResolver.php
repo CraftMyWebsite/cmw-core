@@ -10,17 +10,16 @@ use CMW\Manager\Theme\Editor\Entities\EditorRangeOptions;
 use CMW\Manager\Theme\Editor\Entities\EditorType;
 use CMW\Manager\Theme\Editor\ThemeEditorProcessor;
 use CMW\Manager\Theme\Loader\ThemeLoader;
-use CMW\Manager\Theme\ThemeManager;
 
 class ThemeConfigResolver extends AbstractManager
 {
     public function getConfigValueFromCache(string $themeName, string $themeConfigNameFormatted, string $menuKey, string $themeKey, ?string $type): ?string
     {
-        if (!SimpleCacheManager::cacheExist('config', "Themes/$themeName")) {
+        $data = SimpleCacheManager::getCache('config', "Themes/$themeName");
+
+        if (is_null($data)) {
             return null;
         }
-
-        $data = SimpleCacheManager::getCache('config', "Themes/$themeName");
 
         foreach ($data as $conf) {
             if ($conf['theme_config_name'] === $themeConfigNameFormatted) {

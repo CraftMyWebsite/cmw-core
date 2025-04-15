@@ -205,7 +205,7 @@ class ThemeModel extends AbstractModel
             $value = $req->fetch()['theme_config_value'] ?? null;
         }
 
-        return $value ?? '';
+        return $value ?? null;
     }
 
     public function getExistingThemeConfigKeys(string $theme): array

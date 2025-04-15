@@ -8,6 +8,7 @@ use CMW\Manager\Theme\Exceptions\ThemeNotFoundException;
 use CMW\Manager\Theme\IThemeConfig;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Model\Core\CoreModel;
+use CMW\Utils\Directory;
 
 class ThemeLoader extends AbstractManager
 {
@@ -55,15 +56,18 @@ class ThemeLoader extends AbstractManager
     {
         $toReturn = [];
         $themesFolder = 'Public/Themes';
-        $contentDirectory = array_diff(scandir("$themesFolder/"), ['..', '.']);
-        foreach ($contentDirectory as $theme) {
-            if (file_exists("$themesFolder/$theme/Theme.php") && !empty(file_get_contents("$themesFolder/$theme/Theme.php"))) {
+        $themeDirs = Directory::getFolders($themesFolder);
+
+        foreach ($themeDirs as $theme) {
+            $themeFile = "$themesFolder/$theme/Theme.php";
+            if (file_exists($themeFile) && !empty(file_get_contents($themeFile))) {
                 $toReturn[] = $this->getTheme($theme);
             }
         }
 
         return $toReturn;
     }
+
 
     /**
      * @param string $theme
