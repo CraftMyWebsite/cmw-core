@@ -15,9 +15,13 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Security\SecurityManager;
+use CMW\Manager\Theme\Config\ThemeMapper;
+use CMW\Manager\Theme\Config\ThemeSettingsMapper;
+use CMW\Manager\Theme\Editor\ThemeEditorProcessor;
+use CMW\Manager\Theme\File\ThemeFileManager;
+use CMW\Manager\Theme\Loader\ThemeLoader;
+use CMW\Manager\Theme\Market\ThemeMarketManager;
 use CMW\Manager\Theme\ThemeManager;
-use CMW\Manager\Theme\ThemeMapper;
-use CMW\Manager\Theme\ThemeSettingsMapper;
 use CMW\Manager\Theme\UninstallThemeType;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
@@ -44,9 +48,9 @@ class ThemeController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.market');
 
-        $currentTheme = ThemeManager::getInstance()->getCurrentTheme();
-        $installedThemes = ThemeManager::getInstance()->getInstalledThemes();
-        $themesList = ThemeManager::getInstance()->getMarketThemes();
+        $currentTheme = ThemeLoader::getInstance()->getCurrentTheme();
+        $installedThemes = ThemeLoader::getInstance()->getInstalledThemes();
+        $themesList = ThemeMarketManager::getInstance()->getMarketThemes();
 
         $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs($currentTheme->name());
         SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . $currentTheme->name());
@@ -62,9 +66,9 @@ class ThemeController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
 
-        $currentTheme = ThemeManager::getInstance()->getCurrentTheme();
-        $installedThemes = ThemeManager::getInstance()->getInstalledThemes();
-        $themesList = ThemeManager::getInstance()->getMarketThemes();
+        $currentTheme = ThemeLoader::getInstance()->getCurrentTheme();
+        $installedThemes = ThemeLoader::getInstance()->getInstalledThemes();
+        $themesList = ThemeMarketManager::getInstance()->getMarketThemes();
 
         $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs($currentTheme->name());
         SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . $currentTheme->name());
@@ -96,9 +100,9 @@ class ThemeController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.edit');
 
-        $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
+        $themeName = ThemeLoader::getInstance()->getCurrentTheme()->name();
         ThemeModel::getInstance()->getInstance()->deleteThemeConfig($themeName);
-        ThemeManager::getInstance()->updateThemeSettings($themeName);
+        ThemeFileManager::getInstance()->updateThemeSettings($themeName);
 
         $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs($themeName);
         SimpleCacheManager::storeCache($themeConfigs, 'config', 'Themes/' . $themeName);
@@ -139,7 +143,7 @@ class ThemeController extends AbstractController
         }
 
         // Install Theme settings
-        ThemeManager::getInstance()->installThemeSettings($theme['name']);
+        ThemeFileManager::getInstance()->installThemeSettings($theme['name']);
         CoreModel::getInstance()->updateOption('theme', $theme['name']);
 
         $themeConfigs = ThemeModel::getInstance()->getInstance()->fetchThemeConfigs($theme['name']);
@@ -157,8 +161,8 @@ class ThemeController extends AbstractController
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.edit');
 
         //Vérifie si la valeur par défaut est en base de donnée si ce n'est pas le cas, on l'ajoute, cela permet aux mises à jour des thèmes de gérer les nouvelles valeurs :)
-        $themeMenus = ThemeManager::getInstance()->getThemeMenus();
-        $currentTheme = ThemeManager::getInstance()->getCurrentTheme()->name();
+        $themeMenus = ThemeEditorProcessor::getInstance()->getThemeMenus();
+        $currentTheme = ThemeLoader::getInstance()->getCurrentTheme()->name();
         $themeConfigs = ThemeModel::getInstance()->fetchThemeConfigs($currentTheme);
         $configNames = array_column($themeConfigs, 'theme_config_name');
         $menuKeys = [];
@@ -215,7 +219,7 @@ class ThemeController extends AbstractController
 
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.edit');
 
-        $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
+        $themeName = ThemeLoader::getInstance()->getCurrentTheme()->name();
         try {
             $newCsrfTokenId = bin2hex(random_bytes(8));
             $newCsrfToken = SecurityManager::getInstance()->getCSRFToken($newCsrfTokenId);
@@ -310,7 +314,7 @@ class ThemeController extends AbstractController
             }
 
             //Une fois que toutes les mises à jour sont terminé, on rajoute les nouvelles configs :
-            ThemeManager::getInstance()->updateThemeSettings($themeName);
+            ThemeFileManager::getInstance()->updateThemeSettings($themeName);
 
             SimpleCacheManager::deleteSpecificCacheFile("config", "Themes/$themeName");
 
@@ -351,9 +355,9 @@ class ThemeController extends AbstractController
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
 
         $themeName = base64_decode($theme);
-        $currentTheme = ThemeManager::getInstance()->getCurrentTheme();
+        $currentTheme = ThemeLoader::getInstance()->getCurrentTheme();
 
-        switch (ThemeManager::getInstance()->uninstallLocalTheme($themeName)) {
+        switch (ThemeFileManager::uninstallLocalTheme($themeName)) {
             case UninstallThemeType::SUCCESS:
                 if ($themeName === $currentTheme->name()) {
                     CoreModel::getInstance()->updateOption('theme', ThemeManager::$defaultThemeName);

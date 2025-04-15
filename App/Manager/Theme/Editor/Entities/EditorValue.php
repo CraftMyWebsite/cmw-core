@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Manager\Theme\Editor;
+namespace CMW\Manager\Theme\Editor\Entities;
 
 use CMW\Manager\Package\AbstractEntity;
 use CMW\Manager\Package\EntityType;

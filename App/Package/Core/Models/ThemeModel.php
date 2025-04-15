@@ -5,9 +5,11 @@ namespace CMW\Model\Core;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Package\AbstractModel;
-use CMW\Manager\Theme\Editor\EditorType;
+use CMW\Manager\Theme\Config\ThemeConfigResolver;
+use CMW\Manager\Theme\Config\ThemeMapper;
+use CMW\Manager\Theme\Editor\Entities\EditorType;
+use CMW\Manager\Theme\Loader\ThemeLoader;
 use CMW\Manager\Theme\ThemeManager;
-use CMW\Manager\Theme\ThemeMapper;
 use Exception;
 use PDO;
 use RuntimeException;
@@ -33,13 +35,13 @@ class ThemeModel extends AbstractModel
     public function fetchConfigValue(string $menuKey, string $themeKey, string $themeName = null): ?string
     {
         if ($themeName === null) {
-            $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
+            $themeName = ThemeLoader::getInstance()->getCurrentTheme()->name();
         }
 
-        $type = ThemeManager::getInstance()->getEditorType($menuKey, $themeKey);
+        $type = ThemeConfigResolver::getInstance()->getEditorType($menuKey, $themeKey);
         $themeConfigNameFormatted = ThemeMapper::mapConfigKey($menuKey, $themeKey);
 
-        $cachedValue = ThemeManager::getInstance()->getConfigValueFromCache($themeName, $themeConfigNameFormatted, $menuKey, $themeKey, $type);
+        $cachedValue = ThemeConfigResolver::getInstance()->getConfigValueFromCache($themeName, $themeConfigNameFormatted, $menuKey, $themeKey, $type);
         if ($cachedValue !== null) {
             return $cachedValue;
         }
@@ -54,10 +56,10 @@ class ThemeModel extends AbstractModel
         }
 
         if ($type === EditorType::IMAGE) {
-            return ThemeManager::getInstance()->resolveImagePath($themeName, $value ?? null, $menuKey, $themeKey);
+            return ThemeConfigResolver::getInstance()->resolveImagePath($themeName, $value ?? null, $menuKey, $themeKey);
         }
 
-        return $value ?? ThemeManager::getInstance()->getDefaultThemeValue($menuKey, $themeKey);
+        return $value ?? ThemeConfigResolver::getInstance()->getDefaultThemeValue($menuKey, $themeKey);
     }
 
     /**
@@ -73,7 +75,7 @@ class ThemeModel extends AbstractModel
     public function fetchImageLink(string $configName, string $theme = null): ?string
     {
         if ($theme === null) {
-            $theme = ThemeManager::getInstance()->getCurrentTheme()->name();
+            $theme = ThemeLoader::getInstance()->getCurrentTheme()->name();
         }
 
         $db = DatabaseManager::getInstance();
@@ -105,7 +107,7 @@ class ThemeModel extends AbstractModel
     public function fetchVideoLink(string $configName, string $theme = null): ?string
     {
         if ($theme === null) {
-            $theme = ThemeManager::getInstance()->getCurrentTheme()->name();
+            $theme = ThemeLoader::getInstance()->getCurrentTheme()->name();
         }
 
         $db = DatabaseManager::getInstance();
@@ -187,14 +189,14 @@ class ThemeModel extends AbstractModel
      */
     public function getConfigValue(string $config, string $themeName = null): ?string
     {
+        if ($themeName === null) {
+            $themeName = ThemeLoader::getInstance()->getCurrentTheme()->name();
+        }
+
         $data = [
             'config' => $config,
             'theme' => $themeName
         ];
-
-        if ($themeName === null) {
-            $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
-        }
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config WHERE theme_config_name = :config AND theme_config_theme = :theme');

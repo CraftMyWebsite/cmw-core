@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Manager\Theme\Editor;
+namespace CMW\Manager\Theme\Editor\Entities;
 
 use CMW\Manager\Package\AbstractEntity;
 use CMW\Manager\Package\EntityType;
@@ -63,7 +63,7 @@ class EditorMenu extends AbstractEntity
     }
 
     /**
-     * @return \CMW\Manager\Theme\Editor\EditorValue[]
+     * @return \CMW\Manager\Theme\Editor\Entities\EditorValue[]
      */
     public function getValues(): array
     {

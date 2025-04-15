@@ -16,6 +16,7 @@ use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Router\RouterException;
 use CMW\Manager\Security\EncryptManager;
+use CMW\Manager\Theme\Loader\ThemeLoader;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Twofa\TwoFaManager;
 use CMW\Manager\Views\View;
@@ -236,7 +237,7 @@ class UsersLoginController extends AbstractController
     {
         $filePath = EnvManager::getInstance()->getValue('DIR')
             . 'Public/Themes/'
-            . ThemeManager::getInstance()->getCurrentTheme()->name()
+            . ThemeLoader::getInstance()->getCurrentTheme()->name()
             . '/Views/Users/2fa.view.php';
 
         if (!file_exists($filePath)) {

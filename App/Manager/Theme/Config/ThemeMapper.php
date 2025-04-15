@@ -1,8 +1,5 @@
 <?php
-namespace CMW\Manager\Theme;
-
-use CMW\Controller\Core\PackageController;
-use CMW\Manager\Env\EnvManager;
+namespace CMW\Manager\Theme\Config;
 
 class ThemeMapper
 {

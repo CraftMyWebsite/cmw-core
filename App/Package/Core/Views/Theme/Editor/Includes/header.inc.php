@@ -8,15 +8,16 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Loader\Loader;
 use CMW\Manager\Notification\NotificationModel;
 use CMW\Manager\Security\SecurityManager;
+use CMW\Manager\Theme\Config\ThemeMapper;
+use CMW\Manager\Theme\Loader\ThemeLoader;
 use CMW\Manager\Theme\ThemeManager;
-use CMW\Manager\Theme\ThemeMapper;
 
 $currentUser = UsersSessionsController::getInstance()->getCurrentUser();
 $sideBarImplementations = Loader::loadImplementations(ISideBarElements::class);
 $notificationNumber = NotificationModel::getInstance()->countUnreadNotification();
 $notifications = NotificationModel::getInstance()->getUnreadNotification();
 
-/* @var \CMW\Manager\Theme\Editor\EditorMenu[] $themeMenus */
+/* @var \CMW\Manager\Theme\Editor\Entities\EditorMenu[] $themeMenus */
 /* @var CoreController $coreAdmin */
 
 ?>
@@ -51,7 +52,7 @@ $notifications = NotificationModel::getInstance()->getUnreadNotification();
             </div>
             <div class="flex gap-6">
                 <button id="submitButton" form="ThemeSettings" type="submit" class="btn-success"><i class="fa-solid fa-cloud-arrow-up"></i> <?= LangManager::translate('core.btn.save') ?></button>
-                <a data-modal-toggle="modal-reset" class="btn-warning cursor-pointer"><i class="fa-solid fa-rotate-left"></i> <?= LangManager::translate('core.theme.reset', ['theme' => ThemeManager::getInstance()->getCurrentTheme()->name()]) ?></a>
+                <a data-modal-toggle="modal-reset" class="btn-warning cursor-pointer"><i class="fa-solid fa-rotate-left"></i> <?= LangManager::translate('core.theme.reset', ['theme' => ThemeLoader::getInstance()->getCurrentTheme()->name()]) ?></a>
                 <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin" class="btn-danger"><i class="fa-solid fa-arrow-right-from-bracket"></i> <?= LangManager::translate('core.theme.leave') ?></a>
             </div>
             <div class="flex items-center">

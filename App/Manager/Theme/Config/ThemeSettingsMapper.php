@@ -1,5 +1,5 @@
 <?php
-namespace CMW\Manager\Theme;
+namespace CMW\Manager\Theme\Config;
 
 use CMW\Controller\Core\PackageController;
 use CMW\Manager\Env\EnvManager;

@@ -8,6 +8,8 @@ use CMW\Manager\Components\ComponentsManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\RouterException;
+use CMW\Manager\Theme\Editor\ThemeEditorProcessor;
+use CMW\Manager\Theme\Loader\ThemeLoader;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\ArrayShape;
@@ -48,7 +50,7 @@ class View
         $this->needAdminControl = false;
         $this->isAdminFile = $isAdminFile;
         $this->isPublicView = false;
-        $this->themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
+        $this->themeName = ThemeLoader::getInstance()->getCurrentTheme()->name();
         $this->overrideBackendMode = false;
     }
 
@@ -422,13 +424,13 @@ class View
         if ($this->isPublicView) {
             $content = ob_get_clean();
             $editorMode = isset($_GET['editor']) && $_GET['editor'] == '1';
-            $content = ThemeManager::getInstance()->replaceThemeValues($content, $editorMode);
+            $content = ThemeEditorProcessor::getInstance()->replaceThemeValues($content, $editorMode);
 
             // bufferisation de template pour la gestion de replaceThemeValue
             ob_start();
             require_once($this->getTemplateFile());
             $templateContent = ob_get_clean();
-            $templateContent = ThemeManager::getInstance()->replaceThemeValues($templateContent, $editorMode);
+            $templateContent = ThemeEditorProcessor::getInstance()->replaceThemeValues($templateContent, $editorMode);
             echo $templateContent;
         } else {
             $content = ob_get_clean();

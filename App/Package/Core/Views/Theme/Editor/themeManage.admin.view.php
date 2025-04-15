@@ -2,7 +2,8 @@
 
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
-use CMW\Manager\Theme\Editor\EditorType;
+use CMW\Manager\Theme\Editor\Entities\EditorType;
+use CMW\Manager\Theme\Loader\ThemeLoader;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Utils\Website;
 
@@ -37,7 +38,7 @@ foreach ($themeMenus as $menu) {
     }
 }
 
-Website::setTitle(LangManager::translate('core.theme.manage.title', ['Theme' => ThemeManager::getInstance()->getCurrentTheme()->name()]));
+Website::setTitle(LangManager::translate('core.theme.manage.title', ['Theme' => ThemeLoader::getInstance()->getCurrentTheme()->name()]));
 Website::setDescription(LangManager::translate('core.theme.manage.description'));
 
 ?>
@@ -135,7 +136,7 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
                     const defaultValue = setting?.default;
 
                     if (isImage) {
-                        const themeName = "<?= ThemeManager::getInstance()->getCurrentTheme()->name() ?>";
+                        const themeName = "<?= ThemeLoader::getInstance()->getCurrentTheme()->name() ?>";
                         value = getImageUrl(themeName, value, defaultValue);
                     }
 
@@ -179,7 +180,7 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
                     let value = rawValue;
 
                     if (isImage && urlProps.includes(cssProp)) {
-                        const themeName = "<?= ThemeManager::getInstance()->getCurrentTheme()->name() ?>";
+                        const themeName = "<?= ThemeLoader::getInstance()->getCurrentTheme()->name() ?>";
                         value = `url('${getImageUrl(themeName, rawValue, defaultValue)}')`;
 
                         // ✅ Fusionne avec style existant sans l’écraser

@@ -1,6 +1,6 @@
 <?php
 
-namespace CMW\Manager\Theme\Editor;
+namespace CMW\Manager\Theme\Editor\Entities;
 
 class EditorType
 {
