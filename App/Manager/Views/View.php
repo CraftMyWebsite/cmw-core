@@ -308,6 +308,7 @@ class View
             return $publicPath;
         }
 
+        $this->isPublicView = true;
         return "App/Package/$this->package/Public/$this->viewFile.view.php";
     }
 
