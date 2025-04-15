@@ -8,6 +8,8 @@ use CMW\Manager\Components\ComponentsManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Router\RouterException;
+use CMW\Manager\Theme\Editor\ThemeEditorProcessor;
+use CMW\Manager\Theme\Loader\ThemeLoader;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Utils\Utils;
 use JetBrains\PhpStorm\ArrayShape;
@@ -30,6 +32,7 @@ class View
     private array $variables;
     private bool $needAdminControl;
     private bool $isAdminFile;
+    private bool $isPublicView;
     private string $themeName;
     private bool $overrideBackendMode;
 
@@ -46,7 +49,8 @@ class View
         $this->variables = [];
         $this->needAdminControl = false;
         $this->isAdminFile = $isAdminFile;
-        $this->themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
+        $this->isPublicView = false;
+        $this->themeName = ThemeLoader::getInstance()->getCurrentTheme()->name();
         $this->overrideBackendMode = false;
     }
 
@@ -69,7 +73,11 @@ class View
      */
     public static function createPublicView(string $package, string $viewFile): View
     {
-        return new self($package, $viewFile);
+        $view = new self($package, $viewFile);
+
+        $view->isPublicView = true;
+
+        return $view;
     }
 
     /**
@@ -302,6 +310,7 @@ class View
             return $publicPath;
         }
 
+        $this->isPublicView = true;
         return "App/Package/$this->package/Public/$this->viewFile.view.php";
     }
 
@@ -412,10 +421,23 @@ class View
         ob_start();
         require_once $path;
         echo $this->callAlerts();
-        $content = ob_get_clean();
+        if ($this->isPublicView) {
+            $content = ob_get_clean();
+            $editorMode = isset($_GET['editor']) && $_GET['editor'] == '1';
+            $content = ThemeEditorProcessor::getInstance()->replaceThemeValues($content, $editorMode);
 
-        require_once($this->getTemplateFile());
+            // bufferisation de template pour la gestion de replaceThemeValue
+            ob_start();
+            require_once($this->getTemplateFile());
+            $templateContent = ob_get_clean();
+            $templateContent = ThemeEditorProcessor::getInstance()->replaceThemeValues($templateContent, $editorMode);
+            echo $templateContent;
+        } else {
+            $content = ob_get_clean();
+            require_once($this->getTemplateFile());
+        }
     }
+
 
     /**
      * @param array $includes

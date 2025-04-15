@@ -1220,6 +1220,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 input.value = selectedIconClass;
                 selectedIcon.className = selectedIconClass;
                 iconListContainer.style.display = 'none';
+                input.dispatchEvent(new Event('change', { bubbles: true }));
             }
         });
 

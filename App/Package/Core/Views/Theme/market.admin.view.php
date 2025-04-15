@@ -1,6 +1,7 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Theme\Loader\ThemeLoader;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Utils\Website;
 
@@ -14,7 +15,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
 
 <div class="grid-4">
     <?php foreach ($themesList as $theme): ?>
-        <?php if (!ThemeManager::getInstance()->isThemeInstalled($theme['name'])): ?>
+        <?php if (!ThemeLoader::getInstance()->isThemeInstalled($theme['name'])): ?>
             <div class="card p-0 relative" style="overflow: hidden;">
                 <div class="flex justify-between px-2 pt-2">
                     <p class="font-bold"><?= $theme['name'] ?></p>

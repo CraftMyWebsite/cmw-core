@@ -6,6 +6,7 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\IPackageConfig;
 use CMW\Manager\Package\PackageMenuType;
 use CMW\Manager\Package\PackageSubMenuType;
+use CMW\Manager\Theme\Loader\ThemeLoader;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Updater\UpdatesManager;
 
@@ -101,7 +102,7 @@ class Package implements IPackageConfig
                 permission: null,
                 subMenus: [
                     new PackageSubMenuType(
-                        title: LangManager::translate('core.menu.themes.edit') . ThemeManager::getInstance()->getCurrentTheme()->name(),
+                        title: LangManager::translate('core.menu.themes.edit') . ThemeLoader::getInstance()->getCurrentTheme()->name(),
                         permission: 'core.themes.edit',
                         url: 'theme/manage',
                         subMenus: []

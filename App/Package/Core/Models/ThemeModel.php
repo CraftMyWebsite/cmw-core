@@ -2,11 +2,17 @@
 
 namespace CMW\Model\Core;
 
-use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Package\AbstractModel;
+use CMW\Manager\Theme\Config\ThemeConfigResolver;
+use CMW\Manager\Theme\Config\ThemeMapper;
+use CMW\Manager\Theme\Editor\Entities\EditorType;
+use CMW\Manager\Theme\Loader\ThemeLoader;
 use CMW\Manager\Theme\ThemeManager;
+use Exception;
+use PDO;
+use RuntimeException;
 
 /**
  * Class: @ThemeModel
@@ -17,7 +23,8 @@ use CMW\Manager\Theme\ThemeManager;
 class ThemeModel extends AbstractModel
 {
     /**
-     * @param string $config
+     * @param string $menuKey
+     * @param string $themeKey
      * @param string|null $themeName
      * <p>
      * If empty, we take the current active Theme
@@ -25,30 +32,34 @@ class ThemeModel extends AbstractModel
      * @return string|null
      * @desc Fetch config data
      */
-    public function fetchConfigValue(string $config, string $themeName = null): ?string
+    public function fetchConfigValue(string $menuKey, string $themeKey, string $themeName = null): ?string
     {
         if ($themeName === null) {
-            $themeName = ThemeManager::getInstance()->getCurrentTheme()->name();
+            $themeName = ThemeLoader::getInstance()->getCurrentTheme()->name();
         }
 
-        // TODO Add a toggle ?
-        if (SimpleCacheManager::cacheExist('config', "Themes/$themeName")) {
-            $data = SimpleCacheManager::getCache('config', "Themes/$themeName");
+        $type = ThemeConfigResolver::getInstance()->getEditorType($menuKey, $themeKey);
+        $themeConfigNameFormatted = ThemeMapper::mapConfigKey($menuKey, $themeKey);
 
-            foreach ($data as $conf) {
-                if ($conf['theme_config_name'] === $config) {
-                    return $conf['theme_config_value'] ?? "UNDEFINED_$config";
-                }
-            }
+        $cachedValue = ThemeConfigResolver::getInstance()->getConfigValueFromCache($themeName, $themeConfigNameFormatted, $menuKey, $themeKey, $type);
+        if ($cachedValue !== null) {
+            return $cachedValue;
         }
+
+        $data = ['config' => $themeConfigNameFormatted, 'theme' => $themeName];
 
         $db = DatabaseManager::getInstance();
-        $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config
-                                    WHERE theme_config_name = :config AND theme_config_theme = :theme');
+        $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config WHERE theme_config_name = :config AND theme_config_theme = :theme');
 
-        $req->execute(['config' => $config, 'theme' => $themeName]);
+        if ($req->execute($data)) {
+            $value = $req->fetch()['theme_config_value'] ?? null;
+        }
 
-        return $req->fetch()['theme_config_value'] ?? '';
+        if ($type === EditorType::IMAGE) {
+            return ThemeConfigResolver::getInstance()->resolveImagePath($themeName, $value ?? null, $menuKey, $themeKey);
+        }
+
+        return $value ?? ThemeConfigResolver::getInstance()->getDefaultThemeValue($menuKey, $themeKey);
     }
 
     /**
@@ -59,11 +70,12 @@ class ThemeModel extends AbstractModel
      * </p>
      * @return string|null
      * @desc Fetch config data
+     * @deprecated Sera supprimé en alpha-10 gérer nativement dans fetchConfigValue
      */
     public function fetchImageLink(string $configName, string $theme = null): ?string
     {
         if ($theme === null) {
-            $theme = ThemeManager::getInstance()->getCurrentTheme()->name();
+            $theme = ThemeLoader::getInstance()->getCurrentTheme()->name();
         }
 
         $db = DatabaseManager::getInstance();
@@ -90,11 +102,12 @@ class ThemeModel extends AbstractModel
      * </p>
      * @return string|null
      * @desc Fetch config data
+     * @deprecated Sera supprimé en alpha-10 gérer nativement dans fetchConfigValue
      */
     public function fetchVideoLink(string $configName, string $theme = null): ?string
     {
         if ($theme === null) {
-            $theme = ThemeManager::getInstance()->getCurrentTheme()->name();
+            $theme = ThemeLoader::getInstance()->getCurrentTheme()->name();
         }
 
         $db = DatabaseManager::getInstance();
@@ -113,6 +126,10 @@ class ThemeModel extends AbstractModel
         return EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Public/Uploads/' . $theme . '/Videos/' . $value;
     }
 
+    /**
+     * @param string $theme
+     * @return array
+     */
     public function fetchThemeConfigs(string $theme): array
     {
         $db = DatabaseManager::getInstance();
@@ -163,4 +180,80 @@ class ThemeModel extends AbstractModel
 
         return $db;
     }
+
+    /**
+     * @param string $config
+     * @param string|null $themeName
+     * @return string|null
+     * @desc Retourne simplement la valeur en DB par rapport à la clé complete
+     */
+    public function getConfigValue(string $config, string $themeName = null): ?string
+    {
+        if ($themeName === null) {
+            $themeName = ThemeLoader::getInstance()->getCurrentTheme()->name();
+        }
+
+        $data = [
+            'config' => $config,
+            'theme' => $themeName
+        ];
+
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare('SELECT theme_config_value FROM cmw_theme_config WHERE theme_config_name = :config AND theme_config_theme = :theme');
+
+        if ($req->execute($data)) {
+            $value = $req->fetch()['theme_config_value'] ?? null;
+        }
+
+        return $value ?? null;
+    }
+
+    public function getExistingThemeConfigKeys(string $theme): array
+    {
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare('SELECT theme_config_name FROM cmw_theme_config WHERE theme_config_theme = :theme');
+
+        if (!$req->execute(['theme' => $theme])) {
+            return [];
+        }
+
+        $results = $req->fetchAll(PDO::FETCH_ASSOC);
+        if (!is_array($results)) {
+            return [];
+        }
+
+        return array_column($results, 'theme_config_name');
+    }
+
+
+    public function storeThemeConfigBulk(array $configs, string $theme): bool
+    {
+        if (empty($configs)) return true;
+
+        $db = DatabaseManager::getInstance();
+        $db->beginTransaction();
+
+        try {
+            $stmt = $db->prepare('INSERT INTO cmw_theme_config (theme_config_name, theme_config_value, theme_config_theme) VALUES (:name, :value, :theme)');
+
+            foreach ($configs as $config) {
+                $data = [
+                    'name' => $config['name'],
+                    'value' => $config['value'],
+                    'theme' => $theme
+                ];
+
+                if (!$stmt->execute($data)) {
+                    throw new RuntimeException('Failed to insert config');
+                }
+            }
+
+            $db->commit();
+            return true;
+        } catch (Exception $e) {
+            $db->rollBack();
+            return false;
+        }
+    }
+
 }

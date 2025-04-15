@@ -4,6 +4,7 @@ use CMW\Controller\Core\PackageController;
 use CMW\Controller\Core\ThemeController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Theme\Loader\ThemeLoader;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Updater\UpdatesManager;
 
@@ -22,7 +23,7 @@ use CMW\Manager\Updater\UpdatesManager;
                     <b><?= UpdatesManager::getVersion() ?></b>
                 </li>
                 <li><?= LangManager::translate('Installation.finish.Theme') ?>
-                    <b><?= ThemeManager::getInstance()->getCurrentTheme()->name() . ' - v' . ThemeManager::getInstance()->getCurrentTheme()->version() ?></b>
+                    <b><?= ThemeLoader::getInstance()->getCurrentTheme()->name() . ' - v' . ThemeLoader::getInstance()->getCurrentTheme()->version() ?></b>
                 </li>
                 <li><?= LangManager::translate('Installation.finish.package') ?>
                     <ul style="list-style: inside;">

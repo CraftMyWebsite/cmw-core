@@ -4,6 +4,7 @@ namespace CMW\Manager\Error;
 
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Permission\PermissionManager;
+use CMW\Manager\Theme\Loader\ThemeLoader;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Views\View;
 use DateTime;
@@ -184,7 +185,7 @@ class ErrorManager
         // Here, we get data page we don't want to redirect user, just show him an error.
         // Route /error get error file : $errorCode.view.php, if that file don't exist, we call Default.view.php (from errors package)
 
-        $currentTheme = ThemeManager::getInstance()->getCurrentTheme()->name();
+        $currentTheme = ThemeLoader::getInstance()->getCurrentTheme()->name();
         $defaultErrorFile = EnvManager::getInstance()->getValue('DIR') . "Public/Themes/$currentTheme/Views/Errors/default.view.php";
         $errorFile = EnvManager::getInstance()->getValue('DIR') . "Public/Themes/$currentTheme/Views/Errors/$errorCode.view.php";
 
