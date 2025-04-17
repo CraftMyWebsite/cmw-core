@@ -93,7 +93,7 @@ class UpdatesController extends AbstractController
         $versions = PublicAPI::postData('cms/update', ['current_version' => UpdatesManager::getVersion()]);
 
         foreach ($versions as $version) {
-            (new CMSUpdaterManager())->doUpdate($version);
+            CMSUpdaterManager::getInstance()->doUpdate($version);
         }
 
         SimpleCacheManager::deleteAllFiles();
