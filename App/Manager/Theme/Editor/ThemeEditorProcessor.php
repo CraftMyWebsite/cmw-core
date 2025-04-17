@@ -6,11 +6,11 @@ use CMW\Controller\Core\PackageController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Manager\AbstractManager;
 use CMW\Manager\Theme\Config\ThemeConfigResolver;
+use CMW\Manager\Theme\Config\ThemeMapper;
 use CMW\Manager\Theme\Editor\Entities\EditorMenu;
 use CMW\Manager\Theme\Editor\Entities\EditorRangeOptions;
 use CMW\Manager\Theme\Editor\Entities\EditorType;
 use CMW\Manager\Theme\Loader\ThemeLoader;
-use CMW\Manager\Theme\ThemeManager;
 use CMW\Model\Core\ThemeModel;
 
 class ThemeEditorProcessor extends AbstractManager
@@ -175,5 +175,127 @@ class ThemeEditorProcessor extends AbstractManager
         return array_filter($menus, function ($menu) {
             return !isset($menu->requiredPackage) || PackageController::isInstalled($menu->requiredPackage);
         });
+    }
+
+    /**
+     * @param $value
+     * @param $menuKey
+     * @param $val
+     * @return string
+     * @description render input by EditorType in builder menu
+     */
+    public function renderInput($value, $menuKey, $val) :string
+    {
+        $inputName = ThemeMapper::mapConfigKey($menuKey, $value->themeKey);
+        $inputId = htmlspecialchars($value->themeKey);
+        $label = htmlspecialchars($value->title);
+        $valEscaped = htmlspecialchars($val);
+
+        switch ($value->type) {
+            case 'color':
+                return <<<HTML
+    <label for="{$inputId}">{$label}</label>
+    <input type="color" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}">
+HTML;
+
+            case 'number':
+                return <<<HTML
+    <label for="{$inputId}">{$label}</label>
+    <input type="number" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}">
+HTML;
+
+            case 'text':
+                return <<<HTML
+    <label for="{$inputId}">{$label}</label>
+    <input type="text" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}" placeholder="Default">
+HTML;
+
+            case 'html':
+                return <<<HTML
+<label for="{$inputId}">{$label}</label>
+<div class="border rounded-lg html-editor-container" style="height: 15vh;" data-name="{$inputName}">
+    <div id="editor-{$inputId}" class="html-editor">{$valEscaped}</div>
+</div>
+<input type="hidden" name="{$inputName}" id="input-{$inputId}" value="{$valEscaped}">
+HTML;
+
+
+            case 'faPicker':
+                return <<<HTML
+<div class="icon-picker" data-id="for-{$inputId}" data-label="{$label}" data-name="{$inputName}" data-placeholder="Sélectionner un icon" data-value="{$valEscaped}"></div>
+HTML;
+
+            case 'textarea':
+            case 'css':
+                return <<<HTML
+    <label for="{$inputId}">{$label}</label>
+    <textarea id="{$inputId}" name="{$inputName}" class="textarea">{$valEscaped}</textarea>
+HTML;
+
+            case 'boolean':
+                $checked = ($val === "1" || ($val === null && $value->defaultValue === "1")) ? "checked" : "";
+                return <<<HTML
+    <label for="{$inputId}" class="toggle">
+        <p class="toggle-label">{$label}</p>
+        <input id="{$inputId}" name="{$inputName}" type="checkbox" class="toggle-input" {$checked}>
+        <div class="toggle-slider"></div>
+    </label>
+HTML;
+
+            case 'select':
+                $optionsHtml = '';
+                foreach ($value->selectOptions ?? [] as $option) {
+                    $selected = ($val === $option->value || ($val === null && $value->defaultValue === $option->value)) ? 'selected' : '';
+                    $optVal = htmlspecialchars($option->value);
+                    $optText = htmlspecialchars($option->text);
+                    $optionsHtml .= "<option value=\"{$optVal}\" {$selected}>{$optText}</option>";
+                }
+                return <<<HTML
+    <label for="{$inputId}">{$label}</label>
+    <select id="{$inputId}" name="{$inputName}" class="input">{$optionsHtml}</select>
+HTML;
+
+            case 'image':
+                return <<<HTML
+    <label for="{$inputId}">{$label}</label>
+    <input id="{$inputId}" name="{$inputName}" type="file" value="{$valEscaped}">
+HTML;
+
+            case 'range':
+                $range = $value->rangeOptions[0] ?? null;
+
+                if (!$range) {
+                    return ''; // si mal configuré
+                }
+
+                $min = $range->getMin();
+                $max = $range->getMax();
+                $step = $range->getStep();
+                $prefix = htmlspecialchars($range->getPrefix());
+                $suffix = htmlspecialchars($range->getSuffix());
+
+                return <<<HTML
+    <label for="{$inputId}">{$label} (<small id="preview_{$inputId}">{$prefix}{$valEscaped}{$suffix}</small>)</label>
+    
+    <div class="flex items-center gap-2">
+        <input type="range" 
+               id="{$inputId}" 
+               name="{$inputName}" 
+               min="{$min}" 
+               max="{$max}" 
+               step="{$step}" 
+               value="{$valEscaped}" 
+               class="w-full"
+               oninput="document.getElementById('preview_{$inputId}').innerText = '{$prefix}' + this.value + '{$suffix}'">
+    </div>
+HTML;
+
+
+            default:
+                return <<<HTML
+    <label for="{$inputId}">{$label}</label>
+    <input type="text" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}" placeholder="Default">
+HTML;
+        }
     }
 }

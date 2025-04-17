@@ -14,4 +14,5 @@ class EditorType
     public const SELECT = 'select';
     public const RANGE = 'range';
     public const FONTAWESOMEPICKER = 'faPicker';
+    public const HTML = 'html';
 }

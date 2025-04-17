@@ -96,6 +96,7 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
     const configValues = <?= json_encode($formattedConfigs) ?>;
     const editorSettings = <?= json_encode($editorSettings) ?>;
     const imagePreviews = {};
+    let updateThemePreview = () => {};
     document.addEventListener("DOMContentLoaded", () => {
         const iframe = document.getElementById("previewFrame");
 
@@ -103,11 +104,11 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
             updateThemePreview();
         };
 
-        function updateThemePreview(keyToUpdate = null) {
+        updateThemePreview = function (keyToUpdate = null) {
             const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
             if (!iframeDoc) return;
 
-            // 🔹 Texte brut : <span data-cmw="menu:key">
+            // Texte ou HTML : <span data-cmw="menu:key">
             iframeDoc.querySelectorAll('[data-cmw]').forEach(el => {
                 const ref = el.getAttribute("data-cmw");
                 if (!ref || !ref.includes(":")) return;
@@ -116,7 +117,14 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
                 const fullKey = `${menuKey}_${valueKey}`;
                 if (keyToUpdate && fullKey !== keyToUpdate) return;
 
-                el.textContent = configValues[fullKey] || "";
+                const raw = configValues[fullKey] || "";
+                const setting = editorSettings?.[fullKey] || {};
+
+                if (setting.type === "html") {
+                    el.innerHTML = sanitizeHtml(raw);
+                } else {
+                    el.textContent = raw;
+                }
             });
 
             // 🔹 Attributs : <span data-cmw-attr="src:menu:key">
@@ -452,6 +460,24 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
 
         toggle(); // start
     }
+
+    function sanitizeHtml(input) {
+        const div = document.createElement("div");
+        div.innerHTML = input;
+
+        // Supprime les balises <script>
+        div.querySelectorAll("script").forEach(script => script.remove());
+
+        // Supprime les attributs on* (onclick, onerror, etc.)
+        div.querySelectorAll("*").forEach(el => {
+            [...el.attributes].forEach(attr => {
+                if (/^on/i.test(attr.name)) el.removeAttribute(attr.name);
+            });
+        });
+
+        return div.innerHTML;
+    }
+
 
 </script>
 

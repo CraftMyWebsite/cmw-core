@@ -8,9 +8,8 @@ use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Loader\Loader;
 use CMW\Manager\Notification\NotificationModel;
 use CMW\Manager\Security\SecurityManager;
-use CMW\Manager\Theme\Config\ThemeMapper;
+use CMW\Manager\Theme\Editor\ThemeEditorProcessor;
 use CMW\Manager\Theme\Loader\ThemeLoader;
-use CMW\Manager\Theme\ThemeManager;
 
 $currentUser = UsersSessionsController::getInstance()->getCurrentUser();
 $sideBarImplementations = Loader::loadImplementations(ISideBarElements::class);
@@ -224,7 +223,7 @@ $notifications = NotificationModel::getInstance()->getUnreadNotification();
                      data-scope="<?= $package->getScope() ?>">
                     <?php foreach ($package->values as $value): ?>
                     <div style="padding: 1rem 0 1rem 0; border-top: dashed 2px #b5a5a5">
-                        <?= renderInput($value, $package->getMenuKey(), $formattedConfigs[$package->getMenuKey().'_'.$value->themeKey] ?? $value->defaultValue ?? '') ?>
+                        <?= ThemeEditorProcessor::getInstance()->renderInput($value, $package->getMenuKey(), $formattedConfigs[$package->getMenuKey().'_'.$value->themeKey] ?? $value->defaultValue ?? '') ?>
                     </div>
                     <?php endforeach; ?>
                 </div>
@@ -233,115 +232,6 @@ $notifications = NotificationModel::getInstance()->getUnreadNotification();
 
     </form>
 </aside>
-
-<?php
-//TODO Ajouter des truc colle comme le fa picker, et peut être d'autres trucs
-function renderInput($value, $menuKey, $val)
-{
-    $inputName = ThemeMapper::mapConfigKey($menuKey, $value->themeKey);
-    $inputId = htmlspecialchars($value->themeKey);
-    $label = htmlspecialchars($value->title);
-    $valEscaped = htmlspecialchars($val);
-
-    switch ($value->type) {
-        case 'color':
-            return <<<HTML
-    <label for="{$inputId}">{$label}</label>
-    <input type="color" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}">
-HTML;
-
-        case 'number':
-            return <<<HTML
-    <label for="{$inputId}">{$label}</label>
-    <input type="number" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}">
-HTML;
-
-        case 'text':
-            return <<<HTML
-    <label for="{$inputId}">{$label}</label>
-    <input type="text" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}" placeholder="Default">
-HTML;
-
-        case 'faPicker':
-            return <<<HTML
-<div class="icon-picker" data-id="for-{$inputId}" data-label="{$label}" data-name="{$inputName}" data-placeholder="Sélectionner un icon" data-value="{$valEscaped}"></div>
-HTML;
-
-        case 'textarea':
-        case 'css':
-            return <<<HTML
-    <label for="{$inputId}">{$label}</label>
-    <textarea id="{$inputId}" name="{$inputName}" class="textarea">{$valEscaped}</textarea>
-HTML;
-
-        case 'boolean':
-            $checked = ($val === "1" || ($val === null && $value->defaultValue === "1")) ? "checked" : "";
-            return <<<HTML
-    <label for="{$inputId}" class="toggle">
-        <p class="toggle-label">{$label}</p>
-        <input id="{$inputId}" name="{$inputName}" type="checkbox" class="toggle-input" {$checked}>
-        <div class="toggle-slider"></div>
-    </label>
-HTML;
-
-        case 'select':
-            $optionsHtml = '';
-            foreach ($value->selectOptions ?? [] as $option) {
-                $selected = ($val === $option->value || ($val === null && $value->defaultValue === $option->value)) ? 'selected' : '';
-                $optVal = htmlspecialchars($option->value);
-                $optText = htmlspecialchars($option->text);
-                $optionsHtml .= "<option value=\"{$optVal}\" {$selected}>{$optText}</option>";
-            }
-            return <<<HTML
-    <label for="{$inputId}">{$label}</label>
-    <select id="{$inputId}" name="{$inputName}" class="input">{$optionsHtml}</select>
-HTML;
-
-        case 'image':
-            return <<<HTML
-    <label for="{$inputId}">{$label}</label>
-    <input id="{$inputId}" name="{$inputName}" type="file" value="{$valEscaped}">
-HTML;
-
-        case 'range':
-            $range = $value->rangeOptions[0] ?? null;
-
-            if (!$range) {
-                return ''; // si mal configuré
-            }
-
-            $min = $range->getMin();
-            $max = $range->getMax();
-            $step = $range->getStep();
-            $prefix = htmlspecialchars($range->getPrefix());
-            $suffix = htmlspecialchars($range->getSuffix());
-
-            return <<<HTML
-    <label for="{$inputId}">{$label} (<small id="preview_{$inputId}">{$prefix}{$valEscaped}{$suffix}</small>)</label>
-    
-    <div class="flex items-center gap-2">
-        <input type="range" 
-               id="{$inputId}" 
-               name="{$inputName}" 
-               min="{$min}" 
-               max="{$max}" 
-               step="{$step}" 
-               value="{$valEscaped}" 
-               class="w-full"
-               oninput="document.getElementById('preview_{$inputId}').innerText = '{$prefix}' + this.value + '{$suffix}'">
-    </div>
-HTML;
-
-
-        default:
-            return <<<HTML
-    <label for="{$inputId}">{$label}</label>
-    <input type="text" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}" placeholder="Default">
-HTML;
-    }
-}
-
-?>
 
 <script>
     document.getElementById('toggleSidebar').addEventListener('click', function () {

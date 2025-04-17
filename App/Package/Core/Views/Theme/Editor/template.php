@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+
 <style>
     .main-content {
         padding: 0 !important;
