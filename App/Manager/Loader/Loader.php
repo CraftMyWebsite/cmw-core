@@ -2,6 +2,7 @@
 
 namespace CMW\Manager\Loader;
 
+use Closure;
 use CMW\Controller\Core\PackageController;
 use CMW\Controller\Installer\InstallerController;
 use CMW\Manager\Class\PackageManager;
@@ -237,11 +238,30 @@ class Loader
         }
     }
 
+    /**
+     * @param string $path
+     * @param string $fileName
+     * @param string $package
+     * @param string|null $name
+     * @param int $weight
+     * @return void
+     */
     public static function createSimpleRoute(string $path, string $fileName, string $package, ?string $name = null, int $weight = 2): void
     {
         Router::getInstance()->get($path, function () use ($package, $fileName) {
             View::basicPublicView($package, $fileName);
         }, $name, $weight);
+    }
+
+    /**
+     * @param string $path
+     * @param Closure $callable
+     * @param int $weight
+     * @return void
+     */
+    public static function createSimpleRouteCallable(string $path, Closure $callable, int $weight = 2): void
+    {
+        Router::getInstance()->get($path, $callable, $path, $weight);
     }
 
     public static function listAttributes(string $file): void
