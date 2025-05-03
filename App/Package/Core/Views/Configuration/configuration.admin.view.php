@@ -1,4 +1,5 @@
 <?php
+
 use CMW\Controller\Core\CoreController;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
@@ -91,7 +92,8 @@ $description = LangManager::translate('core.config.desc');
                     <img width="16px"
                          src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Public/Uploads/Favicon/favicon.ico">
                 </div>
-                <div class="drop-img-area" data-input-name="favicon" data-img-accept="image/x-icon"></div>
+                <div class="drop-img-area" data-input-name="favicon"
+                     data-img-accept="image/x-icon,image/vnd.microsoft.icon"></div>
                 <p><small>*<?= LangManager::translate('core.config.favicon_tips') ?></small></p>
             </div>
 
