@@ -16,7 +16,7 @@ use function str_starts_with;
  */
 class CoreModel extends AbstractModel
 {
-    public function fetchOption(string $option): string
+    public function fetchOption(string $option): ?string
     {
         //        TODO Le cache ne fonctionne pas et du coup ralenti le chargement des page
         /*if (SimpleCacheManager::cacheExist('options', "Options")){
@@ -31,8 +31,16 @@ class CoreModel extends AbstractModel
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT option_value FROM cmw_core_options WHERE option_name = ?');
-        $req->execute([$option]);
+
+        if (!$req->execute([$option])){
+            return null;
+        }
+
         $option = $req->fetch();
+
+        if (!$option){
+            return null;
+        }
 
         return $option['option_value'];
     }
