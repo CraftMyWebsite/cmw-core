@@ -1,15 +1,16 @@
 <?php
 
+use CMW\Entity\Core\MailConfigEntity;
+use CMW\Interface\Core\IMailTemplate;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
-use CMW\Utils\Website;
 
 $title = LangManager::translate('core.mail.config.title');
 $description = LangManager::translate('core.mail.config.description');
 
-/* @var \CMW\Entity\Core\MailConfigEntity $config */
-/* @var \CMW\Interface\Core\IMailTemplate[] $mailTemplates */
+/* @var MailConfigEntity $config */
+/* @var IMailTemplate[] $mailTemplates */
 
 ?>
 <style>
@@ -44,106 +45,111 @@ $description = LangManager::translate('core.mail.config.description');
 
 <div class="page-title">
     <h3><i class="fa-solid fa-envelope"></i> SMTP & Mailing</h3>
-    <button form="smtpConfig" type="submit" id="submitButton" class="btn-primary"><?= LangManager::translate('core.btn.save') ?></button>
+    <button form="smtpConfig" type="submit" id="submitButton" class="btn-primary">
+        <?= LangManager::translate('core.btn.save') ?>
+    </button>
 </div>
 
 <form id="smtpConfig" action="" method="post">
     <?php SecurityManager::getInstance()->insertHiddenToken() ?>
-        <div class="card">
+    <div class="card">
+        <div>
+            <label class="toggle">
+                <h6 class="toggle-label">SMTP</h6>
+                <input type="checkbox" class="toggle-input" id="enableSMTP" name="enableSMTP"
+                       value="<?= $config?->isEnable() ?>" <?= $config?->isEnable() ? 'checked' : '' ?>>
+                <div class="toggle-slider"></div>
+            </label>
+        </div>
+        <div class="grid-2">
             <div>
-                <label class="toggle">
-                    <h6 class="toggle-label">SMTP</h6>
-                    <input type="checkbox" class="toggle-input" id="enableSMTP" name="enableSMTP"
-                           value="<?= $config?->isEnable() ?>" <?= $config?->isEnable() ? 'checked' : '' ?>>
-                    <div class="toggle-slider"></div>
-                </label>
-            </div>
-            <div class="grid-2">
-                <div>
-                    <label for="mail"><?= LangManager::translate('core.mail.config.senderMail') ?> :</label>
-                    <div class="input-group">
-                        <i class="fa-solid fa-at"></i>
-                        <input type="text" id="mail" name="mail"
-                               value="<?= $config?->getMail() ?>"
-                               placeholder="contact@monsite.fr" required>
-                    </div>
-                </div>
-                <div>
-                    <label for="mailReply"><?= LangManager::translate('core.mail.config.replyMail') ?> :</label>
-                    <div class="input-group">
-                        <i class="fa-solid fa-at"></i>
-                        <input type="text" id="mailReply" name="mailReply" value="<?= $config?->getMailReply() ?>"
-                               placeholder="reply@monsite.fr" required>
-                    </div>
+                <label for="mail"><?= LangManager::translate('core.mail.config.senderMail') ?> :</label>
+                <div class="input-group">
+                    <i class="fa-solid fa-at"></i>
+                    <input type="text" id="mail" name="mail"
+                           value="<?= $config?->getMail() ?>"
+                           placeholder="contact@monsite.fr" required>
                 </div>
             </div>
-            <div class="grid-4">
-                <div>
-                    <label for="addressSMTP"><?= LangManager::translate('core.mail.config.serverSMTP') ?> :</label>
-                    <div class="input-group">
-                        <i class="fa-solid fa-server"></i>
-                        <input type="text" id="addressSMTP" name="addressSMTP"
-                               value="<?= $config?->getAddressSMTP() ?>" placeholder="smtp.google.com" required>
-                    </div>
+            <div>
+                <label for="mailReply"><?= LangManager::translate('core.mail.config.replyMail') ?> :</label>
+                <div class="input-group">
+                    <i class="fa-solid fa-at"></i>
+                    <input type="text" id="mailReply" name="mailReply" value="<?= $config?->getMailReply() ?>"
+                           placeholder="reply@monsite.fr" required>
                 </div>
-                <div>
-                    <label for="port"><?= LangManager::translate('core.mail.config.portSMTP') ?> :</label>
-                    <div class="input-group">
-                        <i class="fa-solid fa-network-wired"></i>
-                        <input type="number" id="port" name="port"
-                               value="<?= $config?->getPort() ?>" placeholder="587" required>
-                    </div>
-                </div>
-                <div>
-                    <label for="user"><?= LangManager::translate('core.mail.config.userSMTP') ?> :</label>
-                    <div class="input-group">
-                        <i class="fa-solid fa-user"></i>
-                        <input type="text" id="user" name="user"
-                               value="<?= $config?->getUser() ?>" placeholder="admin@monsite.fr" required>
-                    </div>
-                </div>
-                <div>
-                    <label for="password"><?= LangManager::translate('core.mail.config.passwordSMTP') ?> :</label>
-                    <div class="input-group">
-                        <i class="fa-solid fa-lock"></i>
-                        <input type="password" id="password" name="password"
-                               value="<?= $config?->getPassword() ?>" placeholder="••••" required>
-                    </div>
-                </div>
-            </div>
-            <div class="flex justify-between items-end">
-                <div>
-                    <label><?= LangManager::translate('core.mail.config.protocol') ?></label>
-                    <div class="flex items-center gap-2">
-                        <input id="flexRadioDefault1" class="form-check-input" type="radio" name="protocol"
-                               value="tls" <?= $config?->getProtocol() === 'tls' ? 'checked' : '' ?>>
-                        <label class="form-check-label" for="flexRadioDefault1">TLS</label>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <input id="flexRadioDefault2" type="radio" value="ssl"
-                               name="protocol" <?= $config?->getProtocol() === 'ssl' ? 'checked' : '' ?>>
-                        <label class="form-check-label" for="flexRadioDefault2">SSL</label>
-                    </div>
-                </div>
-                <button data-modal-toggle="modal" class="btn-warning h-fit"
-                        type="button"><?= LangManager::translate('core.mail.config.test.btn') ?></button>
             </div>
         </div>
+        <div class="grid-4">
+            <div>
+                <label for="addressSMTP"><?= LangManager::translate('core.mail.config.serverSMTP') ?> :</label>
+                <div class="input-group">
+                    <i class="fa-solid fa-server"></i>
+                    <input type="text" id="addressSMTP" name="addressSMTP"
+                           value="<?= $config?->getAddressSMTP() ?>" placeholder="smtp.google.com" required>
+                </div>
+            </div>
+            <div>
+                <label for="port"><?= LangManager::translate('core.mail.config.portSMTP') ?> :</label>
+                <div class="input-group">
+                    <i class="fa-solid fa-network-wired"></i>
+                    <input type="number" id="port" name="port"
+                           value="<?= $config?->getPort() ?>" placeholder="587" required>
+                </div>
+            </div>
+            <div>
+                <label for="user"><?= LangManager::translate('core.mail.config.userSMTP') ?> :</label>
+                <div class="input-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="user" name="user"
+                           value="<?= $config?->getUser() ?>" placeholder="admin@monsite.fr" required>
+                </div>
+            </div>
+            <div>
+                <label for="password"><?= LangManager::translate('core.mail.config.passwordSMTP') ?> :</label>
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="password" name="password"
+                           value="<?= $config?->getPassword() ?>" placeholder="••••" required>
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-between items-end">
+            <div>
+                <label><?= LangManager::translate('core.mail.config.protocol') ?></label>
+                <div class="flex items-center gap-2">
+                    <input id="flexRadioDefault1" class="form-check-input" type="radio" name="protocol"
+                           value="tls" <?= $config?->getProtocol() === 'tls' ? 'checked' : '' ?>>
+                    <label class="form-check-label" for="flexRadioDefault1">TLS</label>
+                </div>
+                <div class="flex items-center gap-2">
+                    <input id="flexRadioDefault2" type="radio" value="ssl"
+                           name="protocol" <?= $config?->getProtocol() === 'ssl' ? 'checked' : '' ?>>
+                    <label class="form-check-label" for="flexRadioDefault2">SSL</label>
+                </div>
+            </div>
+            <button data-modal-toggle="modal" class="btn-warning h-fit"
+                    type="button"><?= LangManager::translate('core.mail.config.test.btn') ?></button>
+        </div>
+    </div>
 
     <div class="grid-2 mt-8">
         <div class="card">
             <div class="card-title">
                 <h6><?= LangManager::translate('core.mail.editor.title') ?></h6>
                 <div>
-                    <button data-modal-toggle="modal-template" class="btn-primary" type="button"><?= LangManager::translate('core.mail.editor.select') ?></button>
-                    <button data-modal-toggle="modal-help" class="btn-primary" type="button"><i class="fa-solid fa-circle-question"></i></button>
+                    <button data-modal-toggle="modal-template" class="btn-primary"
+                            type="button"><?= LangManager::translate('core.mail.editor.select') ?></button>
+                    <button data-modal-toggle="modal-help" class="btn-primary" type="button"><i
+                            class="fa-solid fa-circle-question"></i></button>
                 </div>
                 <!--MODAL-TEMPLATE-->
                 <div id="modal-template" class="modal-container">
                     <div class="modal-lg">
                         <div class="modal-header">
                             <h6><?= LangManager::translate('core.mail.editor.select') ?></h6>
-                            <button type="button" data-modal-hide="modal-template"><i class="fa-solid fa-xmark"></i></button>
+                            <button type="button" data-modal-hide="modal-template"><i class="fa-solid fa-xmark"></i>
+                            </button>
                         </div>
                         <div class="modal-body">
                             <div class="alert-warning">
@@ -153,15 +159,20 @@ $description = LangManager::translate('core.mail.config.description');
                                 <?php foreach ($mailTemplates as $mailTemplate): ?>
                                     <label>
                                         <?= $mailTemplate->getName() ?>
-                                        <input data-code="<?= htmlspecialchars($mailTemplate->getCode(), ENT_QUOTES, 'UTF-8') ?>" type="radio" name="preview" value="<?= $mailTemplate->getVarName() ?>">
-                                        <img src="<?= $mailTemplate->getPreviewImg() ?>" alt="Preview - <?= $mailTemplate->getName() ?>">
+                                        <input
+                                            data-code="<?= htmlspecialchars($mailTemplate->getCode(), ENT_QUOTES, 'UTF-8') ?>"
+                                            type="radio" name="preview" value="<?= $mailTemplate->getVarName() ?>">
+                                        <img src="<?= $mailTemplate->getPreviewImg() ?>"
+                                             alt="Preview - <?= $mailTemplate->getName() ?>">
                                     </label>
                                 <?php endforeach; ?>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button data-modal-hide="modal-template" id="applyTemplate" type="button" class="btn-primary"><?= LangManager::translate('core.mail.editor.apply_btn') ?></button>
-                            <button data-modal-hide="modal-template" type="button" class="btn-danger"><?= LangManager::translate('core.btn.close') ?></button>
+                            <button data-modal-hide="modal-template" id="applyTemplate" type="button"
+                                    class="btn-primary"><?= LangManager::translate('core.mail.editor.apply_btn') ?></button>
+                            <button data-modal-hide="modal-template" type="button"
+                                    class="btn-danger"><?= LangManager::translate('core.btn.close') ?></button>
                         </div>
                     </div>
                 </div>
@@ -170,26 +181,51 @@ $description = LangManager::translate('core.mail.config.description');
                     <div class="modal">
                         <div class="modal-header">
                             <h6><?= LangManager::translate('core.mail.editor.modal_title') ?></h6>
-                            <button type="button" data-modal-hide="modal-help"><i class="fa-solid fa-xmark"></i></button>
+                            <button type="button" data-modal-hide="modal-help"><i class="fa-solid fa-xmark"></i>
+                            </button>
                         </div>
                         <div class="modal-body">
                             <p><?= LangManager::translate('core.mail.editor.modal_text_1') ?></p>
                             <p><?= LangManager::translate('core.mail.editor.modal_text_2') ?></p>
                             <p><?= LangManager::translate('core.mail.editor.modal_text_3') ?><br>
-                                <code style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Arial', sans-serif</code><br>
-                                <code style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Helvetica', sans-serif</code><br>
-                                <code style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Verdana', sans-serif</code><br>
-                                <code style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Tahoma', sans-serif</code><br>
-                                <code style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Trebuchet MS', sans-serif</code><br>
-                                <code style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Times New Roman', serif</code><br>
-                                <code style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Georgia', serif</code><br>
-                                <code style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Garamond', serif</code><br>
-                                <code style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Courier New', monospace</code><br>
-                                <code style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Lucida Console', monospace</code><br>
-                                <code style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Consolas', monospace</code><br></p>
+                                <code
+                                    style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Arial',
+                                    sans-serif</code><br>
+                                <code
+                                    style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Helvetica',
+                                    sans-serif</code><br>
+                                <code
+                                    style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Verdana',
+                                    sans-serif</code><br>
+                                <code
+                                    style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Tahoma',
+                                    sans-serif</code><br>
+                                <code
+                                    style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Trebuchet
+                                    MS', sans-serif</code><br>
+                                <code
+                                    style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Times
+                                    New Roman', serif</code><br>
+                                <code
+                                    style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Georgia',
+                                    serif</code><br>
+                                <code
+                                    style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Garamond',
+                                    serif</code><br>
+                                <code
+                                    style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Courier
+                                    New', monospace</code><br>
+                                <code
+                                    style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Lucida
+                                    Console', monospace</code><br>
+                                <code
+                                    style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">'Consolas',
+                                    monospace</code><br></p>
                         </div>
                         <div class="modal-footer">
-                            <button data-modal-hide="modal-help" type="button" class="btn-danger"><?= LangManager::translate('core.btn.close') ?></button>
+                            <button data-modal-hide="modal-help" type="button" class="btn-danger">
+                                <?= LangManager::translate('core.btn.close') ?>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -200,7 +236,7 @@ $description = LangManager::translate('core.mail.config.description');
                 </div>
             </div>
             <input type="hidden" name="body" id="editorTemplate"
-                   value="<?= htmlspecialchars($config->getBody()) ?>">
+                   value="<?= htmlspecialchars($config?->getBody() ?? '') ?>">
         </div>
         <div class="card">
             <h6><?= LangManager::translate('core.mail.editor.render') ?></h6>
@@ -297,7 +333,7 @@ $description = LangManager::translate('core.mail.config.description');
                     titleSize: '16',
                     messageSize: '14',
                     icon: 'fa-solid fa-xmark',
-                    title  : "Intervention",
+                    title: "Intervention",
                     message: "<?= LangManager::translate('core.mail.editor.render_alert') ?>",
                     color: "#ab1b1b",
                     iconColor: '#ffffff',
@@ -320,7 +356,7 @@ $description = LangManager::translate('core.mail.config.description');
     editor.session.on('change', updatePreview);
 
     // Recupération du CODE actuel
-    editor.setValue(`<?= $config->getBody() ?>`, -1);
+    editor.setValue(`<?= $config?->getBody() ?? '' ?>`, -1);
 
     // Mettre à jour le preview au chargement initial
     updatePreview();
