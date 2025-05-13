@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "tw-core": "npx tailwindcss -i Admin/Tailwind/tailwindInput.css -o Admin/Resources/Assets/Css/style.css --config ./Admin/Tailwind/tailwind-dashboard.config.js --watch --minify",
-    "vite": "vite"
   },
   "repository": {
     "type": "git",
@@ -24,7 +23,6 @@
     "tailwindcss": "^3.2.2"
   },
   "dependencies": {
-    "@inertiajs/vue3": "^2.0.8",
     "flowbite": "^1.6.3"
   }
 }
