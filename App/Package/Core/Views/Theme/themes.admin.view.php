@@ -71,7 +71,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                             <a href="manage"
                                class="btn btn-sm btn-primary"><?= LangManager::translate('core.theme.configure') ?></a>
                             <a href="market/regenerate"
-                               class="btn btn-sm btn-warning"><?= LangManager::translate('core.theme.reset') ?></a>
+                               class="btn btn-sm btn-warning"><?= LangManager::translate('core.theme.reset', ['theme' => $theme->name()]) ?></a>
                         </div>
                     </div>
                     <div class="modal-body grid-2">
@@ -188,7 +188,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                             <a href="manage"
                                class="btn-primary"><?= LangManager::translate('core.theme.configure') ?></a>
                             <a href="market/regenerate"
-                               class="btn-warning"><?= LangManager::translate('core.theme.reset') ?></a>
+                               class="btn-warning"><?= LangManager::translate('core.theme.reset', ['theme' => $theme['name']]) ?></a>
                             <a href="install/<?= $theme['id'] ?>"
                                class="btn-danger"><?= LangManager::translate('core.theme.reinstall') ?></a>
                         </div>
