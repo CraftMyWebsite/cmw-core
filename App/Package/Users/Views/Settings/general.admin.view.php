@@ -25,7 +25,7 @@ $description = LangManager::translate('users.settings.desc');
             <div class="card-title">
                 <h6><?= LangManager::translate('users.settings.default_picture') ?></h6>
                 <a href="general/image/reset" class="btn-warning">
-                    <?= LangManager::translate('core.theme.reset') ?>
+                    <?= LangManager::translate('core.btn.reset') ?>
                 </a>
             </div>
             <div class="grid-2">

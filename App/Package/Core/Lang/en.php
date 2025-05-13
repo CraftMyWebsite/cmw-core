@@ -450,6 +450,7 @@ return [
         'disable' => 'Disable',
         'disabled' => 'Disabled',
         'saving' => 'Saving ...',
+        'reset' => 'Reset',
     ],
     'months' => [
         'list' => '["January","February","March","April","May","June","July","August","September","October","November","December"]',

@@ -453,6 +453,7 @@ return [
         'disable' => 'Désactiver',
         'disabled' => 'Désactivée',
         'saving' => 'Sauvegarde ...',
+        'reset' => 'Réinitialiser',
     ],
     'months' => [
         'list' => '["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"]',
