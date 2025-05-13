@@ -55,4 +55,18 @@ class File
 
         return file($path);
     }
+
+    /**
+     * <p>Get the file size</p>
+     * @param string $path
+     * @return int|false
+     */
+    public static function size(string $path): int|false
+    {
+        if (!is_readable($path)) {
+            return false;
+        }
+
+        return filesize($path);
+    }
 }

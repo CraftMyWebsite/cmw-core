@@ -63,7 +63,9 @@ class BaseRouterImplementation implements IRouter
     private function registerGetRoute(Link $link, ReflectionMethod $method): Route
     {
         return $this->get($link->getPath(), function (...$values) use ($method) {
-            $request = new Request(url: $this->url, method: 'GET',
+            $request = new Request(
+                url: $this->url,
+                method: HttpMethodsType::GET,
                 params: $this->getRouteByUrl($this->url)?->getParams() ?? [],
                 data: $_GET ?? [],
                 emitUrl: $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
@@ -88,7 +90,7 @@ class BaseRouterImplementation implements IRouter
 
             $request = new Request(
                 url: $this->url,
-                method: 'POST',
+                method: HttpMethodsType::POST,
                 params: $this->getRouteByUrl($this->url)?->getParams() ?? [],
                 data: $_POST ?? [],
                 emitUrl: $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],

@@ -7,19 +7,19 @@ use JetBrains\PhpStorm\ExpectedValues;
 class Request
 {
     private string $url;
-    private string $method;
+    private HttpMethodsType $method;
     private array $params;
     private array $data;
     private string $emitUrl;
 
     /**
      * @param string $url
-     * @param string $method
+     * @param HttpMethodsType $method
      * @param array $params
      * @param array $data
      * @param string $emitUrl
      */
-    public function __construct(string $url, #[ExpectedValues(['GET', 'POST'])] string $method, array $params,
+    public function __construct(string $url, HttpMethodsType $method, array $params,
         array $data, string $emitUrl)
     {
         $this->url = $url;
@@ -38,9 +38,9 @@ class Request
     }
 
     /**
-     * @return string
+     * @return HttpMethodsType
      */
-    public function getMethod(): string
+    public function getMethod(): HttpMethodsType
     {
         return $this->method;
     }
