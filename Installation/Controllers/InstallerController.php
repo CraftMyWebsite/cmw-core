@@ -178,7 +178,7 @@ class InstallerController extends AbstractController
     {
         $lang = EnvManager::getInstance()->getValue('locale') ?? 'fr';
 
-        $view = new View();
+        $view = new View('Installation', '');
         $view
             ->setCustomPath(EnvManager::getInstance()->getValue('DIR') . "Installation/Views/$filename.view.php")
             ->setCustomTemplate(EnvManager::getInstance()->getValue('DIR') . 'Installation/Views/template.php')
