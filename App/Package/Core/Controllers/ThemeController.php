@@ -202,12 +202,11 @@ class ThemeController extends AbstractController
             }
         }
 
-        $view = new View();
+        $view = new View('Core', 'Editor/themeManage');
         $view
             ->addVariableList(['themeMenus' => $themeMenus, 'themeConfigs' => $themeConfigs])
             ->setCustomPath(EnvManager::getInstance()->getValue('DIR') . "App/Package/Core/Views/Theme/Editor/themeManage.admin.view.php")
             ->setCustomTemplate(EnvManager::getInstance()->getValue('DIR') . 'App/Package/Core/Views/Theme/Editor/template.php');
-
         $view->view();
     }
 

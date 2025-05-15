@@ -12,6 +12,8 @@ use CMW\Manager\Theme\Editor\Entities\EditorRangeOptions;
 use CMW\Manager\Theme\Editor\Entities\EditorType;
 use CMW\Manager\Theme\Loader\ThemeLoader;
 use CMW\Model\Core\ThemeModel;
+use DOMDocument;
+use DOMXPath;
 
 class ThemeEditorProcessor extends AbstractManager
 {
@@ -23,36 +25,93 @@ class ThemeEditorProcessor extends AbstractManager
      */
     public function replaceThemeValues(string $html, bool $editorMode = false): string
     {
-        if ($editorMode) {
-            return $html;
+        if ($editorMode) return $html;
+
+        libxml_use_internal_errors(true);
+        $dom = new DOMDocument();
+        $dom->loadHTML('<?xml encoding="utf-8" ?>' . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+        $xpath = new DOMXPath($dom);
+
+        $this->processCmwVisible($xpath);
+        $this->processCmwText($xpath);
+        $this->processCmwStyle($xpath);
+        $this->processCmwClass($xpath);
+        $this->processCmwAttr($xpath);
+
+        return $dom->saveHTML();
+    }
+
+    /**
+     * @param \DOMXPath $xpath
+     * @return void
+     */
+    private function processCmwVisible(DOMXPath $xpath): void
+    {
+        $elements = $xpath->query('//*[@data-cmw-visible]');
+        foreach ($elements as $element) {
+            $data = $element->getAttribute('data-cmw-visible');
+
+            if (preg_match('/^([\w-]+):([\w-]+)$/', $data, $matches)) {
+                $menu = $matches[1];
+                $key = $matches[2];
+                $visible = ThemeModel::getInstance()->fetchConfigValue($menu, $key);
+
+                if (!$visible || $visible === '0') {
+                    $element->parentNode?->removeChild($element);
+                } else {
+                    $element->removeAttribute('data-cmw-visible');
+                }
+            }
         }
+    }
 
-        // data-cmw="menu:key"
-        $html = preg_replace_callback('/<([a-z0-9]+)([^>]*)data-cmw="([\w-]+):([\w-]+)"([^>]*)>(.*?)<\/\1>/si', function ($m) {
-            $tag = $m[1];
-            $before = $m[2];
-            $menu = $m[3];
-            $key = $m[4];
-            $after = $m[5];
+    /**
+     * @param \DOMXPath $xpath
+     * @return void
+     */
+    private function processCmwText(DOMXPath $xpath): void
+    {
+        $nodes = $xpath->query('//*[@data-cmw]');
+        foreach ($nodes as $node) {
+            if (preg_match('/^([\w-]+):([\w-]+)$/', $node->getAttribute('data-cmw'), $m)) {
+                $menu = $m[1];
+                $key = $m[2];
+                $val = ThemeModel::getInstance()->fetchConfigValue($menu, $key);
+                $editorType = ThemeConfigResolver::getInstance()->getEditorType($menu, $key);
 
-            $value = ThemeModel::getInstance()->fetchConfigValue($menu, $key);
+                while ($node->firstChild) {
+                    $node->removeChild($node->firstChild);
+                }
 
-            return "<{$tag}{$before}{$after}>{$value}</{$tag}>";
-        }, $html);
+                if ($editorType === EditorType::HTML) {
+                    $tmpDoc = new DOMDocument();
+                    $tmpDoc->loadHTML('<?xml encoding="utf-8" ?><div>' . $val . '</div>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                    foreach ($tmpDoc->documentElement->childNodes as $child) {
+                        $node->appendChild($node->ownerDocument->importNode($child, true));
+                    }
+                } else {
+                    $node->appendChild($node->ownerDocument->createTextNode($val));
+                }
 
+                $node->removeAttribute('data-cmw');
+            }
+        }
+    }
 
-        // data-cmw-style="prop:menu:key[;...]"
-        $html = preg_replace_callback('/<([a-z0-9]+)([^>]*)data-cmw-style="([^"]+)"([^>]*)>/i', function ($m) {
-            $tag = $m[1];
-            $before = $m[2];
-            $cmwAttr = $m[3];
-            $after = $m[4];
-
-            preg_match('/style="([^"]*)"/i', $before . $after, $existingStyleMatch);
+    /**
+     * @param \DOMXPath $xpath
+     * @return void
+     */
+    private function processCmwStyle(DOMXPath $xpath): void
+    {
+        $nodes = $xpath->query('//*[@data-cmw-style]');
+        foreach ($nodes as $node) {
+            $styleAttr = $node->getAttribute('style');
             $existingStyles = [];
 
-            if (isset($existingStyleMatch[1])) {
-                foreach (explode(';', $existingStyleMatch[1]) as $styleLine) {
+            if ($styleAttr) {
+                foreach (explode(';', $styleAttr) as $styleLine) {
                     if (strpos($styleLine, ':') !== false) {
                         [$k, $v] = explode(':', $styleLine, 2);
                         $existingStyles[trim($k)] = trim($v);
@@ -60,101 +119,86 @@ class ThemeEditorProcessor extends AbstractManager
                 }
             }
 
-            $styles = explode(';', $cmwAttr);
-            foreach ($styles as $entry) {
-                [$prop, $menu, $key] = explode(':', $entry);
-                $val = ThemeModel::getInstance()->fetchConfigValue($menu, $key);
-                $editorType = ThemeConfigResolver::getInstance()->getEditorType($menu, $key);
+            $rules = explode(';', $node->getAttribute('data-cmw-style'));
+            foreach ($rules as $rule) {
+                if (count(explode(':', $rule)) === 3) {
+                    [$prop, $menu, $key] = explode(':', $rule);
 
-                if ($editorType === EditorType::RANGE) {
-                    $options = ThemeConfigResolver::getInstance()->getEditorRangeOptions($menu, $key);
-                    if ($options instanceof EditorRangeOptions) {
-                        $val = $options->getPrefix() . $val . $options->getSuffix();
+                    $val = ThemeModel::getInstance()->fetchConfigValue($menu, $key);
+                    $editorType = ThemeConfigResolver::getInstance()->getEditorType($menu, $key);
+
+                    if ($editorType === EditorType::RANGE) {
+                        $opts = ThemeConfigResolver::getInstance()->getEditorRangeOptions($menu, $key);
+                        $val = $opts->getPrefix() . $val . $opts->getSuffix();
                     }
-                }
 
-                // pour les images utilisées dans des styles CSS
-                $imageStyleProps = ['background', 'background-image', 'list-style-image', 'mask-image'];
-                if ($editorType === EditorType::IMAGE && in_array(trim($prop), $imageStyleProps)) {
-                    $val = "url('{$val}')";
-                }
+                    if ($editorType === EditorType::IMAGE && in_array(trim($prop), ['background', 'background-image', 'list-style-image', 'mask-image'])) {
+                        $val = "url('{$val}')";
+                    }
 
-                $existingStyles[trim($prop)] = $val;
+                    $existingStyles[trim($prop)] = $val;
+                }
             }
 
-            $cleaned = preg_replace('/style="[^"]*"/i', '', $before . $after);
             $finalStyle = implode('; ', array_map(fn($k, $v) => "$k: $v", array_keys($existingStyles), $existingStyles));
+            $node->setAttribute('style', $finalStyle);
+            $node->removeAttribute('data-cmw-style');
+        }
+    }
 
-            return "<{$tag} {$cleaned}style=\"{$finalStyle}\">";
-        }, $html);
+    /**
+     * @param \DOMXPath $xpath
+     * @return void
+     */
+    private function processCmwClass(DOMXPath $xpath): void
+    {
+        $nodes = $xpath->query('//*[@data-cmw-class]');
+        foreach ($nodes as $node) {
+            $refs = explode(' ', $node->getAttribute('data-cmw-class'));
 
-
-        // data-cmw-class="menu:key [...]"
-        $html = preg_replace_callback('/<([a-z0-9]+)([^>]*)data-cmw-class="([^"]+)"([^>]*)>/i', function ($m) {
-            $tag = $m[1];
-            $before = $m[2];
-            $cmwAttr = $m[3];
-            $after = $m[4];
-
-            // Récupérer les classes déjà présentes (dans before ou after)
-            preg_match('/class="([^"]*)"/i', $before . $after, $existingClassMatch);
-            $existingClasses = isset($existingClassMatch[1]) ? explode(' ', $existingClassMatch[1]) : [];
-
-            $refs = explode(' ', $cmwAttr);
             $dynamicClasses = [];
-
             foreach ($refs as $ref) {
                 [$menu, $key] = explode(':', $ref);
                 $val = ThemeModel::getInstance()->fetchConfigValue($menu, $key);
-                $editorType = ThemeConfigResolver::getInstance()->getEditorType($menu, $key);
 
+                $editorType = ThemeConfigResolver::getInstance()->getEditorType($menu, $key);
                 if ($editorType === EditorType::RANGE) {
-                    $options = ThemeConfigResolver::getInstance()->getEditorRangeOptions($menu, $key);
-                    if ($options instanceof EditorRangeOptions) {
-                        $val = $options->getPrefix() . $val . $options->getSuffix();
+                    $opts = ThemeConfigResolver::getInstance()->getEditorRangeOptions($menu, $key);
+                    if ($opts instanceof EditorRangeOptions) {
+                        $val = $opts->getPrefix() . $val . $opts->getSuffix();
                     }
                 }
 
                 if ($val) {
-                    $dynamicClasses[] = $val;
+                    $dynamicClasses[] = trim($val);
                 }
             }
 
-            // Supprimer l'ancien class="..." du before et after
-            $cleaned = preg_replace('/class="[^"]*"/i', '', $before . $after);
-
-            // Fusion et reconstruction
+            $existingClasses = explode(' ', $node->getAttribute('class') ?? '');
             $finalClasses = array_filter(array_merge($existingClasses, $dynamicClasses));
-            return "<{$tag} {$cleaned}class=\"" . implode(' ', $finalClasses) . "\">";
-        }, $html);
+            $node->setAttribute('class', implode(' ', $finalClasses));
+            $node->removeAttribute('data-cmw-class');
+        }
+    }
 
-
-        // data-cmw-visible="menu:key" → suppression de l’élément si valeur = 0
-        $html = preg_replace_callback('/<([a-z]+)([^>]+)data-cmw-visible="([\w-]+):([\w-]+)"([^>]*)>(.*?)<\/\1>/si', function ($m) {
-            $visible = ThemeModel::getInstance()->fetchConfigValue($m[3], $m[4]);
-            if (!$visible || $visible === '0') {
-                return ''; // supprimer l’élément entier
-            }
-
-            return "<{$m[1]}{$m[2]}{$m[5]}>{$m[6]}</{$m[1]}>";
-        }, $html);
-
-        // data-cmw-attr="attr:menu:key [...]"
-        $html = preg_replace_callback('/data-cmw-attr="([^"]+)"/', function ($m) {
-            $defs = explode(' ', $m[1]);
-            $attrs = [];
+    /**
+     * @param \DOMXPath $xpath
+     * @return void
+     */
+    private function processCmwAttr(DOMXPath $xpath): void
+    {
+        $nodes = $xpath->query('//*[@data-cmw-attr]');
+        foreach ($nodes as $node) {
+            $defs = explode(' ', $node->getAttribute('data-cmw-attr'));
 
             foreach ($defs as $def) {
                 [$attr, $menu, $key] = explode(':', $def);
                 $val = ThemeModel::getInstance()->fetchConfigValue($menu, $key);
-
-                $attrs[] = "{$attr}=\"{$val}\"";
+                $node->setAttribute($attr, $val);
             }
 
-            return implode(' ', $attrs);
-        }, $html);
-
-        return $html;
+            $node->removeAttribute('data-cmw-attr');
+        }
     }
 
     /**
