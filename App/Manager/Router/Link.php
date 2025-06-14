@@ -4,6 +4,7 @@ namespace CMW\Manager\Router;
 
 use JetBrains\PhpStorm\ExpectedValues;
 use Attribute;
+use function str_contains;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 class Link
@@ -92,5 +93,14 @@ class Link
     public function isSecure(): bool
     {
         return $this->secure;
+    }
+
+    /**
+     * <p>Check if the route contains 'cmw-admin'</p>
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return str_contains($this->path, 'cmw-admin') || str_contains($this->scope, 'cmw-admin');
     }
 }
