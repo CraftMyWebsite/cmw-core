@@ -35,6 +35,10 @@ class Redirect
     #[NoReturn]
     public static function redirect(string $url, array $params = []): void
     {
+        if (!Website::isCurrentRouteAdmin() && EnvManager::getInstance()->getValue('ENABLE_BACKEND_MODE') === 'true') {
+            die();
+        }
+
         $route = self::getRouteByUrl($url);
 
         if (is_null($route)) {
@@ -91,7 +95,7 @@ class Redirect
 
         http_response_code(302);
 
-        if ($params !== []){
+        if ($params !== []) {
             header('Location: ' . EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/' . $url . $route->getUrl($params));
         } else {
             header('Location: ' . EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . $route->getUrl());
@@ -106,6 +110,10 @@ class Redirect
     #[NoReturn]
     public static function errorPage(int $code): void
     {
+        if (!Website::isCurrentRouteAdmin() && EnvManager::getInstance()->getValue('ENABLE_BACKEND_MODE') === 'true') {
+            die();
+        }
+
         http_response_code($code);
         header('Location: ' . EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . $code);
         die();
@@ -118,6 +126,10 @@ class Redirect
     #[NoReturn]
     public static function redirectToHome(): void
     {
+        if (EnvManager::getInstance()->getValue('ENABLE_BACKEND_MODE') === 'true') {
+            die();
+        }
+
         http_response_code(302);
         // use self::redirect ??
         header('Location: ' . EnvManager::getInstance()->getValue('PATH_SUBFOLDER'));
@@ -142,6 +154,10 @@ class Redirect
     #[NoReturn]
     public static function redirectPreviousRoute(): void
     {
+        if (!Website::isCurrentRouteAdmin() && EnvManager::getInstance()->getValue('ENABLE_BACKEND_MODE') === 'true') {
+            die();
+        }
+
         http_response_code(302);
         // use self::redirect ??
         header('Location: ' . $_SERVER['HTTP_REFERER']);

@@ -16,10 +16,18 @@ use CMW\Utils\Directory;
 use ReflectionClass;
 use function array_diff;
 use function class_exists;
+use function date_default_timezone_set;
 use function file_exists;
+use function in_array;
+use function is_array;
 use function is_dir;
+use function is_file;
+use function is_null;
+use function is_subclass_of;
+use function method_exists;
 use function pathinfo;
 use function scandir;
+use function ucfirst;
 use const PATHINFO_FILENAME;
 
 class Loader
@@ -123,7 +131,11 @@ class Loader
                     continue;
                 }
 
-                $instance = $namespace::getInstance();
+                if (method_exists($namespace, 'getInstance')) {
+                    $instance = $namespace::getInstance();
+                } else {
+                    $instance = new $namespace();
+                }
 
                 if (!($instance instanceof $interface)) {
                     continue;
