@@ -157,7 +157,7 @@ class HttpManager extends AbstractManager
      */
     public static function get(string $url, array $params = []): static
     {
-        $options = array_merge(['method' => 'GET', 'data' => []], $params);
+        $options = ['method' => 'GET', 'data' => $params];
         $query = http_build_query($options['data']);
 
         if (!empty($query)) {
