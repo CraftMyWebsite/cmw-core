@@ -130,7 +130,7 @@ class UsersRegisterController extends AbstractController
     private function basicChecks(string $pseudo, string $mail, string $encryptedMail): void
     {
         //Check if pseudo is already used
-        if (UsersModel::getInstance()->checkPseudo($pseudo) > 0) {
+        if (empty($pseudo) || UsersModel::getInstance()->checkPseudo($pseudo) > 0) {
             Flash::send(
                 Alert::ERROR,
                 LangManager::translate('users.toaster.error'),
