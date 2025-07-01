@@ -11,10 +11,46 @@ use CurlHandle;
 use JsonException;
 use RuntimeException;
 use stdClass;
+use function array_merge;
+use function array_shift;
+use function curl_close;
+use function curl_errno;
+use function curl_error;
+use function curl_exec;
+use function curl_getinfo;
+use function curl_init;
+use function curl_setopt_array;
+use function fopen;
 use function http_build_query;
+use function implode;
 use function is_array;
+use function is_callable;
 use function is_object;
+use function is_string;
 use function json_decode;
+use function str_replace;
+use function strlen;
+use function strtoupper;
+use const CURLOPT_AUTOREFERER;
+use const CURLOPT_CONNECTTIMEOUT;
+use const CURLOPT_CUSTOMREQUEST;
+use const CURLOPT_ENCODING;
+use const CURLOPT_FOLLOWLOCATION;
+use const CURLOPT_HEADER;
+use const CURLOPT_HEADERFUNCTION;
+use const CURLOPT_HTTPHEADER;
+use const CURLOPT_INFILE;
+use const CURLOPT_INFILESIZE;
+use const CURLOPT_MAXREDIRS;
+use const CURLOPT_NOBODY;
+use const CURLOPT_NOPROGRESS;
+use const CURLOPT_POST;
+use const CURLOPT_POSTFIELDS;
+use const CURLOPT_PROGRESSFUNCTION;
+use const CURLOPT_RETURNTRANSFER;
+use const CURLOPT_TIMEOUT;
+use const CURLOPT_URL;
+use const CURLOPT_USERAGENT;
 use const JSON_THROW_ON_ERROR;
 
 /**
@@ -89,7 +125,7 @@ class HttpManager extends AbstractManager
         ];
 
         // Set Progress
-        if (is_callable($this->options['progress']) === true) {
+        if (isset($this->options['progress']) && is_callable($this->options['progress'])) {
             $this->curlOpt[CURLOPT_NOPROGRESS] = false;
             $this->curlOpt[CURLOPT_PROGRESSFUNCTION] = $this->options['progress'];
         }
@@ -115,10 +151,6 @@ class HttpManager extends AbstractManager
 
         // Prepare for specific methods
         $this->prepareCurlOptions();
-
-        if ($this->options['test'] === true) {
-            return $this;
-        }
 
         // Start curl request
         $this->curl = curl_init();
