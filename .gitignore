@@ -1,5 +1,6 @@
 # Exclude environment variables
 .env
+.env.**
 
 # Exclude .cmw-version, it's a generated file.
 .cmw-version
