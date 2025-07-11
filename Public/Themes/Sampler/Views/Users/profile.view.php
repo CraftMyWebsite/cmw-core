@@ -11,121 +11,117 @@ Website::setDescription("Découvrez le profil de l'utilisateur " . $user->getPse
 
 ?>
 
+<section class="hero-gradiant">
+    <div class="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
+        <div class="mr-auto place-self-center lg:col-span-7">
+            <h1 class="max-w-2xl mb-8 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl">Bonjour <?= $user->getPseudo() ?></h1>
+        </div>
+    </div>
+</section>
 
-<section class="page-section" id="contact">
-    <div class="container px-4 px-lg-5">
-        <h1 class="text-center"><?= $user->getPseudo() ?></h1>
-        <div class="row">
-            <div class="col-lg-6 p-2">
-                <div class="card p-2">
-                    <h4 class="text-center">Informations personnel</h4>
-                    <form class="space-y-6" action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'profile/update' ?>" method="post">
+<section class="page-section bg-[#121212] text-white py-8">
+    <div class="lg:grid grid-cols-2 px-4 px-lg-5 gap-8">
+            <!-- Infos personnelles -->
+
+                <div class="bg-[#1E1E1E] rounded-xl p-5 shadow-md">
+                    <h4 class="text-center text-xl font-semibold mb-4">Informations personnelles</h4>
+                    <form action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'profile/update' ?>" method="post" class="space-y-4">
                         <?php SecurityManager::getInstance()->insertHiddenToken() ?>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-floating mb-3">
-                                    <input class="form-control" name="login_email" type="email"
-                                           value="<?= $user->getMail() ?>" required>
-                                    <label for="name">E-Mail</label>
-                                </div>
-                                <div class="form-floating mb-3">
-                                    <input class="form-control" name="login_email" type="password" required>
-                                    <label for="name">Mot de passe</label>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-floating mb-3">
-                                    <input class="form-control" name="login_email" type="text"
-                                           value="<?= $user->getPseudo() ?>" required>
-                                    <label for="name">Pseudo</label>
-                                </div>
-                                <div class="form-floating mb-3">
-                                    <input class="form-control" name="login_email" type="password" required>
-                                    <label for="name">Confirmation</label>
-                                </div>
-                            </div>
 
+                        <div class="row">
+                            <div class="col-md-6 space-y-3">
+                                <div>
+                                    <label class="block text-sm mb-1">E-Mail</label>
+                                    <input class="w-full px-3 py-2 bg-[#2A2A2A] text-white rounded" name="login_email" type="email" value="<?= $user->getMail() ?>" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm mb-1">Mot de passe</label>
+                                    <input class="w-full px-3 py-2 bg-[#2A2A2A] text-white rounded" name="login_email" type="password" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6 space-y-3">
+                                <div>
+                                    <label class="block text-sm mb-1">Pseudo</label>
+                                    <input class="w-full px-3 py-2 bg-[#2A2A2A] text-white rounded" name="login_email" type="text" value="<?= $user->getPseudo() ?>" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm mb-1">Confirmation</label>
+                                    <input class="w-full px-3 py-2 bg-[#2A2A2A] text-white rounded" name="login_email" type="password" required>
+                                </div>
+                            </div>
                         </div>
-                        <div class="text-center">
-                            <button class="btn btn-primary btn" type="submit">Appliquer les modifications</button>
+
+                        <div class="text-center pt-2">
+                            <button class="px-5 py-2 rounded bg-[#E63A5C] hover:bg-[#c22d4c] transition text-white">Appliquer les modifications</button>
                         </div>
                     </form>
                 </div>
 
-                <div class="card p-2 mt-2">
-                    <h4 class="text-center">Sécurité :
-                        <small>
-                            <?php if ($user->get2Fa()->isEnabled()): ?>
-                                <span style="color: green">Actif !</span>
-                            <?php else: ?>
-                                <span style="color: red">Inactif !</span>
-                            <?php endif; ?>
-                        </small>
-                    </h4>
+                <!-- 2FA -->
+                <div class="bg-[#1E1E1E] rounded-xl p-5 shadow-md mt-4">
+                    <h4 class="text-center text-xl font-semibold mb-2">Sécurité :</h4>
+                    <p class="text-center text-sm">
+                        <?php if ($user->get2Fa()->isEnabled()): ?>
+                            <span class="text-green-400">Actif ✅</span>
+                        <?php else: ?>
+                            <span class="text-red-500">Inactif ❌</span>
+                        <?php endif; ?>
+                    </p>
+
                     <?php if (!$user->get2Fa()->isEnabled()): ?>
-                        <p>Pour activer l'authentification à double facteur scannez le QR code dans une application
-                            d'authentification (GoogleAuthenticator, Aegis ...)</p>
+                        <p class="text-sm mt-2 text-center">Scannez ce QR code dans Google Authenticator, Aegis, etc.</p>
                     <?php endif; ?>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="text-center">
-                                <img height="50%" width="50%" src='<?= $user->get2Fa()->getQrCode(250) ?>'
-                                     alt="QR Code double authentification">
-                                <span><?= $user->get2Fa()->get2FaSecretDecoded() ?></span>
-                            </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-6 text-center">
+                            <img src="<?= $user->get2Fa()->getQrCode(250) ?>" alt="QR Code 2FA" class="mx-auto mb-2" width="140">
+                            <span class="text-sm"><?= $user->get2Fa()->get2FaSecretDecoded() ?></span>
                         </div>
-                        <div class="col-lg-6 text-center mt-4">
-                            <form class="space-y-6"
-                                  action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile/2fa/toggle"
-                                  method="post">
+                        <div class="col-md-6 text-center">
+                            <form action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile/2fa/toggle" method="post" class="space-y-3">
                                 <?php SecurityManager::getInstance()->insertHiddenToken() ?>
-                                <div class="form-floating mb-3">
-                                    <input class="form-control" name="secret" type="number" maxlength="7" required>
-                                    <label for="name">Code d'authentification</label>
-                                </div>
-                                <button class="btn btn-primary btn" type="submit">
+                                <input class="w-full px-3 py-2 bg-[#2A2A2A] text-white rounded" name="secret" type="number" maxlength="7" required placeholder="Code d'authentification">
+                                <button class="w-full py-2 bg-[#E63A5C] hover:bg-[#c22d4c] text-white rounded">
                                     <?= $user->get2Fa()->isEnabled() ? 'Désactiver' : 'Activer' ?>
                                 </button>
                             </form>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-6 p-2">
-                <div class="card p-2">
-                    <h4 class="text-center">Identité visuel</h4>
+
+
+            <!-- Image de profil -->
+            <div class="">
+                <div class="bg-[#1E1E1E] rounded-xl p-5 shadow-md">
+                    <h4 class="text-center text-xl font-semibold mb-4">Identité visuelle</h4>
+
                     <?php if (!is_null($user->getUserPicture()?->getImage())): ?>
-                        <!--RECUPERER L'iMAGE-->
-                        <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Votre image :</label>
-                        <img class="mx-auto rounded-lg border border-gray-300 shadow-xl"
-                             src="<?= $user->getUserPicture()->getImage() ?>"
-                             height="50%" width="50%" alt="Image de profil de <?= $user->getPseudo() ?>">
-                    <?php endif; ?>
-                    <form action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile/update/picture" method="post"
-                          enctype="multipart/form-data">
-                        <?php SecurityManager::getInstance()->insertHiddenToken() ?>
-                        <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Changer votre image
-                            :</label>
-                        <div class="flex">
-                            <input type="file" id="pictureProfile" name="pictureProfile"
-                                   accept=".png, .jpg, .jpeg, .webp, .gif" required>
-                            <button class="btn btn-primary" type="submit">Sauvegarder</button>
+                        <div class="text-center mb-4">
+                            <img class="mx-auto rounded-lg border border-gray-600 shadow-xl" src="<?= $user->getUserPicture()->getImage() ?>" width="150" alt="Image de profil de <?= $user->getPseudo() ?>">
                         </div>
-                        <p id="file_input_help">PNG, JPG, JPEG, WEBP, GIF (MAX. 400px400px).</p>
+                    <?php endif; ?>
+
+                    <form action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile/update/picture" method="post" enctype="multipart/form-data" class="space-y-4">
+                        <?php SecurityManager::getInstance()->insertHiddenToken() ?>
+                        <div>
+                            <input type="file" id="pictureProfile" name="pictureProfile" accept=".png, .jpg, .jpeg, .webp, .gif" class="text-sm" required>
+                            <p class="text-xs mt-1 text-gray-400">PNG, JPG, JPEG, WEBP, GIF (MAX. 400x400px).</p>
+                        </div>
+                        <button class="px-5 py-2 rounded bg-[#E63A5C] hover:bg-[#c22d4c] text-white">Sauvegarder</button>
                     </form>
                 </div>
             </div>
 
-            <div class="card text-center">
-
-                <h2>Vous nous quittez ?</h2>
-
-                <p class="mb-2">Nous somme triste de vous voir partir !</p>
-                <a style="margin: auto"
-                   href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile/delete/<?= $user->getId() ?>"
-                   class="btn btn-primary">Supprimer mon compte</a>
+            <!-- Supprimer compte -->
+            <div class="mt-4">
+                <div class="bg-[#1E1E1E] text-center p-6 rounded-xl shadow-md">
+                    <h2 class="text-xl font-semibold mb-2">Vous nous quittez ?</h2>
+                    <p class="text-sm text-gray-400 mb-4">Nous sommes tristes de vous voir partir !</p>
+                    <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile/delete/<?= $user->getId() ?>"
+                       class="px-5 py-2 rounded bg-red-600 hover:bg-red-700 text-white transition">
+                        Supprimer mon compte
+                    </a>
+                </div>
             </div>
-        </div>
     </div>
 </section>
-

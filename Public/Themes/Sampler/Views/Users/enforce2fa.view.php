@@ -10,36 +10,41 @@ use CMW\Utils\Website;
 Website::setTitle('Double facteur obligatoire');
 Website::setDescription("Merci d'activer le 2fa !");
 ?>
+<section class="hero-gradiant">
+    <div class="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
+        <div class="mr-auto place-self-center lg:col-span-7">
+            <h1 class="max-w-2xl mb-8 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl">Double facteur</h1>
+        </div>
+    </div>
+</section>
 
-<section class="page-section" id="contact">
-    <div class="container px-4 px-lg-5">
-        <div class="row gx-4 gx-lg-5 justify-content-center">
-            <div class="col-lg-8 col-xl-6 text-center">
-                <h2 class="mt-0">Double facteur</h2>
-                <hr class="divider">
-            </div>
+<section class=" flex items-center justify-center text-white py-8">
+    <div class="w-full max-w-md bg-[#1E1E1E] p-8 rounded-xl shadow-md">
+        <h2 class="text-xl font-semibold text-center mb-6">Double authentification requise</h2>
+        <p class="text-sm text-center text-gray-300 mb-6">
+            <b>Veuillez activer le double facteur pour pouvoir vous connecter</b>
+        </p>
+
+        <div class="text-center mb-6">
+            <img src="<?= $user->get2Fa()->getQrCode(250) ?>" alt="QR Code double authentification" class="mx-auto w-48 mb-2">
+            <p class="text-sm text-gray-400"><?= $user->get2Fa()->get2FaSecretDecoded() ?></p>
         </div>
-        <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
-            <div class="py-6 px-6 lg:px-8">
-                <p class="mb-4 text-center"><b>Veuillez activer le double facteur pour pouvoir vous connecter</b></p>
-                <div class="text-center">
-                    <img class="mx-auto" width="50%" src='<?= $user->get2Fa()->getQrCode(250) ?>'
-                         alt="QR Code double authentification">
-                    <span><?= $user->get2Fa()->get2FaSecretDecoded() ?></span>
-                </div>
-                <form class="space-y-6" action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile/2fa/toggle" method="post">
-                    <?php SecurityManager::getInstance()->insertHiddenToken() ?>
-                    <input type="text" hidden="" name="enforce_mail" value="<?= $user->getMail() ?>">
-                    <div>
-                        <label for="code" class="block mb-2 text-sm font-medium">Code d'authentification</label>
-                        <input type="text" name="secret" id="secret" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
-                    </div>
-                    <button type="submit"
-                            class="bg-blue-900 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                        Activer
-                    </button>
-                </form>
+
+        <form action="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile/2fa/toggle" method="post" class="space-y-5">
+            <?php SecurityManager::getInstance()->insertHiddenToken() ?>
+            <input type="hidden" name="enforce_mail" value="<?= $user->getMail() ?>">
+
+            <div>
+                <label for="secret" class="block mb-1 text-sm">Code d'authentification</label>
+                <input type="text" name="secret" id="secret" required
+                       class="w-full px-4 py-2 bg-[#2A2A2A] text-white rounded focus:ring-2 focus:ring-[#E63A5C] focus:outline-none"
+                       placeholder="Entrez le code à 6 chiffres">
             </div>
-        </div>
+
+            <button type="submit"
+                    class="w-full bg-[#E63A5C] hover:bg-[#c22d4c] transition text-white font-semibold py-2 rounded">
+                Activer
+            </button>
+        </form>
     </div>
 </section>

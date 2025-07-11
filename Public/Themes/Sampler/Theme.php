@@ -14,12 +14,12 @@ class Theme implements IThemeConfig
 
     public function version(): string
     {
-        return '0.0.1';
+        return '0.0.2';
     }
 
     public function cmwVersion(): string
     {
-        return 'alpha-01';
+        return 'alpha-09';
     }
 
     public function author(): ?string
@@ -38,10 +38,6 @@ class Theme implements IThemeConfig
             'Core',
             'Pages',
             'Users',
-            'Faq',
-            'News',
-            'Votes',
-            'Wiki',
         ];
     }
 
@@ -52,6 +48,6 @@ class Theme implements IThemeConfig
 
     public function imageLink(): ?string
     {
-        return EnvManager::getInstance()->getValue('PATH_SUBFOLDER'). 'Public/Themes/Sampler/Resources/default.jpg';
+        return EnvManager::getInstance()->getValue('PATH_SUBFOLDER'). 'Public/Themes/Sampler/Resources/default.png';
     }
 }

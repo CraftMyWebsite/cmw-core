@@ -7,14 +7,12 @@ Website::setTitle('Hello World');
 Website::setDescription('CraftMyWebsite is wonderful.');
 ?>
 
-<section class="page-section">
-   <div class="container">
-       <div class="text-center">
-           <h1>Hello World !!</h1>
-           <img src="<?= EnvManager::getInstance()->getValue('PATH_URL') . 'Admin/Resources/Assets/Img/logo_dark.png' ?>"
-                alt="CraftMyWebsite Logo" class="img-fluid mt-5">
-       </div>
-   </div>
+<section class="hero-gradiant">
+    <div class="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
+        <div class="mr-auto place-self-center lg:col-span-7">
+            <h1 class="max-w-2xl mb-8 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl">Hello !</h1>
+        </div>
+    </div>
 </section>
 
 <script>
