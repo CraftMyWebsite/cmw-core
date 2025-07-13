@@ -33,11 +33,12 @@ class Flash
     {
         $implementations = Loader::loadManagerImplementations(IFlash::class, 'Flash');
 
-        return array_reduce($implementations, static function (?IFlash $highest, IFlash $current) {
+        $highest = array_reduce($implementations, static function (?IFlash $highest, IFlash $current) {
             return ($highest === null || $current->weight() > $highest->weight()) ? $current : $highest;
         });
-    }
 
+        return $highest ?? new BaseFlashImplementation();
+    }
 
     /**
      * @return Alert[]
