@@ -239,7 +239,7 @@ class ThemeEditorProcessor extends AbstractManager
             case 'color':
                 return <<<HTML
     <label for="{$inputId}">{$label}</label>
-    <input type="color" id="{$inputId}" name="{$inputName}" class="input" value="{$valEscaped}">
+    <input type="color" id="{$inputId}" name="{$inputName}" class="input" style="border: #bababa 1px solid" value="{$valEscaped}">
 HTML;
 
             case 'number':
