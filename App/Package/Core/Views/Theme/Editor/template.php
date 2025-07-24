@@ -89,7 +89,7 @@ View::loadInclude($includes, 'afterScript');
                 iframe.style.height = '667px';
                 break;
             case 'desktop':
-                iframe.style.width = '98%';
+                iframe.style.width = '100%';
                 iframe.style.height = '100%';
                 break;
         }

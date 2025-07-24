@@ -43,7 +43,7 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
 
 ?>
 <div class="preview-container">
-    <iframe id="previewFrame" width="98%" style="height: 100%;" src="<?= Website::getUrl() ?>/?editor=1"></iframe>
+    <iframe id="previewFrame" width="100%" style="height: 100%;" src="<?= Website::getUrl() ?>/?editor=1"></iframe>
 </div>
 
 <!--  MENU ET NAVIGATION DYNAMIQUE  -->
@@ -284,6 +284,21 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
                     });
                 });
             });
+
+            // 🔹 Variables CSS dynamiques : <div data-cmw-var="--varname:menu:key">
+            iframeDoc.querySelectorAll('[data-cmw-var]').forEach(el => {
+                const defs = el.getAttribute("data-cmw-var").trim().split(/\s+/);
+
+                defs.forEach(def => {
+                    const [cssVar, menuKey, valueKey] = def.split(":");
+                    const fullKey = `${menuKey}_${valueKey}`;
+                    if (keyToUpdate && fullKey !== keyToUpdate) return;
+
+                    const rawValue = configValues[fullKey] || "";
+                    el.style.setProperty(cssVar, rawValue);
+                });
+            });
+
         }
 
         // Écoute les modifications des inputs et met à jour uniquement l'élément concerné

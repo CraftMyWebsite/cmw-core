@@ -38,6 +38,7 @@ class ThemeEditorProcessor extends AbstractManager
         $this->processCmwStyle($xpath);
         $this->processCmwClass($xpath);
         $this->processCmwAttr($xpath);
+        $this->processCmwVar($xpath);
 
         return $dom->saveHTML();
     }
@@ -200,6 +201,23 @@ class ThemeEditorProcessor extends AbstractManager
             $node->removeAttribute('data-cmw-attr');
         }
     }
+
+    private function processCmwVar(DOMXPath $xpath): void
+    {
+        $nodes = $xpath->query('//*[@data-cmw-var]');
+        foreach ($nodes as $node) {
+            $defs = explode(' ', $node->getAttribute('data-cmw-var'));
+
+            foreach ($defs as $def) {
+                [$varName, $menu, $key] = explode(':', $def);
+                $val = ThemeModel::getInstance()->fetchConfigValue($menu, $key);
+                $node->setAttribute('style', $node->getAttribute('style') . "; $varName: $val");
+            }
+
+            $node->removeAttribute('data-cmw-var');
+        }
+    }
+
 
     /**
      * @return EditorMenu[]
