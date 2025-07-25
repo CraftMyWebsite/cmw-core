@@ -299,6 +299,27 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
                 });
             });
 
+            // 🔹 CSS <style> tag avec commentaires /*cmw:menu:key*/
+            iframeDoc.querySelectorAll("style").forEach(styleTag => {
+                let css = styleTag.textContent;
+
+                css = css.replace(/:.*?\/\*cmw:([\w-]+):([\w-]+)\*\//g, (_, menuKey, valueKey) => {
+                    const fullKey = `${menuKey}_${valueKey}`;
+                    const setting = editorSettings?.[fullKey];
+                    const raw = configValues[fullKey] || "";
+
+                    if (!setting) return `: /*cmw:${menuKey}:${valueKey}*/`;
+
+                    const prefix = setting.prefix || "";
+                    const suffix = setting.suffix || "";
+                    const value = `${prefix}${raw}${suffix}`;
+
+                    return `: ${value} /*cmw:${menuKey}:${valueKey}*/`;
+                });
+
+                styleTag.textContent = css;
+            });
+
         }
 
         // Écoute les modifications des inputs et met à jour uniquement l'élément concerné

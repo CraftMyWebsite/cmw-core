@@ -39,6 +39,7 @@ class ThemeEditorProcessor extends AbstractManager
         $this->processCmwClass($xpath);
         $this->processCmwAttr($xpath);
         $this->processCmwVar($xpath);
+        $this->processCmwStyleComments($xpath);
 
         return $dom->saveHTML();
     }
@@ -215,6 +216,31 @@ class ThemeEditorProcessor extends AbstractManager
             }
 
             $node->removeAttribute('data-cmw-var');
+        }
+    }
+
+    private function processCmwStyleComments(DOMXPath $xpath): void
+    {
+        $styleTags = $xpath->query('//style');
+
+        foreach ($styleTags as $styleTag) {
+            $css = $styleTag->textContent;
+
+            $css = preg_replace_callback('/\/\*cmw:([\w-]+):([\w-]+)\*\//', function ($matches) {
+                [$full, $menu, $key] = $matches;
+                $val = ThemeModel::getInstance()->fetchConfigValue($menu, $key);
+
+                $editorType = ThemeConfigResolver::getInstance()->getEditorType($menu, $key);
+
+                if ($editorType === EditorType::RANGE) {
+                    $opts = ThemeConfigResolver::getInstance()->getEditorRangeOptions($menu, $key);
+                    $val = $opts->getPrefix() . $val . $opts->getSuffix();
+                }
+
+                return $val . " /*cmw:$menu:$key*/";
+            }, $css);
+
+            $styleTag->textContent = $css;
         }
     }
 
