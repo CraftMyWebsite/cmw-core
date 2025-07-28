@@ -32,7 +32,7 @@ Website::setDescription("page d'accueil de CraftMyWebsite");
     </div>
 </section>
 
-<section class="bg-[#1b1f23] py-16 text-center">
+<section style="background-color: var(--bg-color);" class=" py-16 text-center">
     <h2 class="text-3xl font-bold mb-12">Que faire maintenant ?</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
 
@@ -57,7 +57,7 @@ Website::setDescription("page d'accueil de CraftMyWebsite");
     </div>
 </section>
 
-<section class="py-16 bg-[#14171a] text-white text-center">
+<section data-cmw-style="background:global:bg-color-secondary" class="py-16  text-center">
     <h2 class="text-3xl font-bold mb-12">Commencer avec CraftMyWebsite</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
 
@@ -83,7 +83,7 @@ Website::setDescription("page d'accueil de CraftMyWebsite");
 </section>
 
 
-<section class="py-16 bg-[#1b1f23] text-white text-center">
+<section style="background-color: var(--bg-color);" class="py-16 text-center">
     <h2 class="text-3xl font-bold mb-12">Contribue à l'écosystème</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
 

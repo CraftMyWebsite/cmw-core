@@ -12,11 +12,11 @@ use CMW\Utils\Website;
 $menus = MenusModel::getInstance();
 ?>
 
-<nav class="bg-gray-900 border-gray-700">
+<nav data-cmw-style="background:header:bg-bandeau" class="border-gray-700">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>" class="flex items-center space-x-3 rtl:space-x-reverse">
-            <img data-cmw-attr="src:header:site_image" data-cmw-style="width:header:site_image_width" alt="CMW Logo" />
-            <span class="self-center text-2xl font-semibold whitespace-nowrap text-white"><?= Website::getWebsiteName() ?></span>
+            <img data-cmw-visible="header:header_active_logo" data-cmw-attr="src:header:site_image" data-cmw-style="width:header:site_image_width" alt="CMW Logo" />
+            <span data-cmw-visible="header:header_active_title" class="self-center text-2xl font-semibold whitespace-nowrap text-white"><?= Website::getWebsiteName() ?></span>
         </a>
         <button data-collapse-toggle="navbar-multi-level" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-multi-level" aria-expanded="false">
             <span class="sr-only">Open main menu</span>

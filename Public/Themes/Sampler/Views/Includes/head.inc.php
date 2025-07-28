@@ -106,9 +106,14 @@ $siteName = Website::getWebsiteName();
         @font-face {  font-family: quicksand;  src:url("<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Public/Themes/<?= ThemeLoader::getInstance()->getCurrentTheme()->name() ?>/Assets/Webfonts/Quicksand-Regular.ttf");  }
         @font-face {  font-family: satisfy;  src:url("<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Public/Themes/<?= ThemeLoader::getInstance()->getCurrentTheme()->name() ?>/Assets/Webfonts/Satisfy-Regular.ttf");  }
         @font-face {  font-family: silkscreen;  src:url("<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Public/Themes/<?= ThemeLoader::getInstance()->getCurrentTheme()->name() ?>/Assets/Webfonts/Silkscreen-Regular.ttf");  }
+
+        :root {
+            --bg-color: /*cmw:global:bg-color*/;
+        }
+
     </style>
 
-<body data-cmw-class="global:main_font" class="bg-[#1b1f23] text-white flex flex-col min-h-screen">
+<body data-cmw-class="global:main_font" style="background-color: var(--bg-color);" class="text-white flex flex-col min-h-screen">
 
 <?php
 View::loadInclude($includes, 'beforeScript');

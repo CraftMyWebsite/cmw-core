@@ -63,6 +63,18 @@ return [
                     new EditorSelectOptions(value: 'font-silkscreen', text: 'silkscreen'),
                 ]
             ),
+            new EditorValue(
+                title: 'Couleur du fond',
+                themeKey: 'bg-color',
+                defaultValue: '#1b1f23',
+                type: EditorType::COLOR,
+            ),
+            new EditorValue(
+                title: 'Couleur du fond secondaire',
+                themeKey: 'bg-color-secondary',
+                defaultValue: '#14171a',
+                type: EditorType::COLOR,
+            ),
         ]
     ),
     new EditorMenu(
@@ -71,6 +83,18 @@ return [
         scope: null,
         requiredPackage: null,
         values: [
+            new EditorValue(
+                title: 'Afficher les titre',
+                themeKey: 'header_active_title',
+                defaultValue: '1',
+                type: EditorType::BOOLEAN,
+            ),
+            new EditorValue(
+                title: 'Afficher le logo',
+                themeKey: 'header_active_logo',
+                defaultValue: '1',
+                type: EditorType::BOOLEAN,
+            ),
             new EditorValue(
                 title: 'Logo',
                 themeKey: 'site_image',
@@ -85,6 +109,12 @@ return [
                 rangeOptions: [
                     new EditorRangeOptions(min: 0, max: 256,step: 1,suffix: 'px')
                 ]
+            ),
+            new EditorValue(
+                title: 'Couleur du bandeau',
+                themeKey: 'bg-bandeau',
+                defaultValue: '#14171a',
+                type: EditorType::COLOR,
             ),
         ]
     ),
