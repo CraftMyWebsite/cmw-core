@@ -55,11 +55,7 @@ class RedMailTemplateImplementations implements IMailTemplate
             line-height: 1.6;
         }
         a {
-            display: inline-block;
-            padding: 12px 20px;
-            margin: 20px 0;
-            background-color: #E63A5C;
-            color: white;
+            color: #E63A5C;
             text-decoration: none;
             border-radius: 5px;
             font-size: 16px;

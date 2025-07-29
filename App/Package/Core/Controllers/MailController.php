@@ -99,7 +99,7 @@ class MailController extends AbstractController
         }
 
         $receiver = FilterManager::filterInputStringPost('receiver');
-        $status = MailManager::getInstance()->sendMail($receiver, 'Test CraftMyWebsite - MAILS', '<p>Hello World !</p>');
+        $status = MailManager::getInstance()->sendMail($receiver, '✅ Test d’envoi d’email CraftMyWebsite', '<p>Bonjour,</p><p>Ce message a été envoyé automatiquement pour vérifier le bon fonctionnement du système d’envoi d’emails de votre site.</p><p>Si vous avez bien reçu ce message, cela signifie que tout est configuré correctement.</p><p>Merci d’utiliser CraftMyWebsite ! 🚀</p>');
 
         if ($status) {
             http_response_code(204);
