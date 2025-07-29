@@ -316,6 +316,10 @@ return [
                 'receiverMailPlaceholder' => 'Enter your mail',
             ],
         ],
+        'test' => [
+            'object' => '✅ CraftMyWebsite Email Sending Test',
+            'body' => '<p>Hello,</p><p>This message was sent automatically to verify that the email sending system on your site is working properly.</p><p>If you received this message, it means everything is configured correctly.</p><p>Thank you for using CraftMyWebsite! 🚀</p></p>',
+        ],
         'editor' => [
             'title' => 'Mail Editor (HTML)',
             'select' => 'Select a template',
