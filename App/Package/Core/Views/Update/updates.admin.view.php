@@ -49,6 +49,14 @@ $description = LangManager::translate('core.updates.description');
             <?= LangManager::translate('core.updates.availableFrom') ?>
             <?= Date::formatDate($latestVersion['date_upload']) ?>
         </p>
+        <?php if ($latestVersion['notes']): ?>
+            <hr>
+            <h6>À noter sur cette mise à jour :</h6>
+            <div class="alert-warning">
+                <?= $latestVersion['notes'] ?>
+            </div>
+        <?php endif; ?>
+        <hr>
         <h6><?= LangManager::translate('core.updates.lastNote') ?></h6>
         <?php foreach ($latestVersionChangelogGroup as $groupedType): ?>
             <?php if ($groupedType[0]['content']): ?>
