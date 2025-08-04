@@ -29,7 +29,7 @@ Liens utiles :
 
 - **Discord**: https://craftmywebsite.fr/discord
 - **Doc**: https://craftmywebsite.fr/docs
-- **Twitter**: https://twitter.com/CraftMyWebsite
+- **Twitter**: https://x.com/CraftMyWebsite
 
 Nos partenaires
 ------------
@@ -45,4 +45,4 @@ Fondé(e) sur une œuvre à [https://craftmywebsite.fr/download](http://craftmyw
 autorisations au-delà du champ de cette licence peuvent être obtenues
 à [https://craftmywebsite.fr/cgu](https://craftmywebsite.fr/cgu).
 
-Copyright © CraftMyWebsite 2014-2024
+Copyright © CraftMyWebsite 2014-2025
