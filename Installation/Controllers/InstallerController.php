@@ -14,6 +14,8 @@ use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Router\LinkStorage;
 use CMW\Manager\Security\EncryptManager;
+use CMW\Manager\Theme\File\ThemeFileManager;
+use CMW\Manager\Theme\Loader\ThemeLoader;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Views\View;
 use CMW\Manager\Xml\SitemapManager;
@@ -176,7 +178,7 @@ class InstallerController extends AbstractController
     {
         $lang = EnvManager::getInstance()->getValue('locale') ?? 'fr';
 
-        $view = new View();
+        $view = new View('Installation', '');
         $view
             ->setCustomPath(EnvManager::getInstance()->getValue('DIR') . "Installation/Views/$filename.view.php")
             ->setCustomTemplate(EnvManager::getInstance()->getValue('DIR') . 'Installation/Views/template.php')
@@ -311,7 +313,7 @@ class InstallerController extends AbstractController
         InstallerModel::initDatabase($host, $db, $username, $password, $port);
 
         // Install the Default Theme settings
-        ThemeManager::getInstance()->installThemeSettings(ThemeManager::getInstance()->getCurrentTheme()->name());
+        ThemeFileManager::getInstance()->installThemeSettings(ThemeLoader::getInstance()->getCurrentTheme()->name());
         // Init Default routes
         (new LinkStorage())->storeDefaultRoutes();
 
@@ -378,7 +380,7 @@ class InstallerController extends AbstractController
             }
 
             if ($type === 'Theme') {
-                (new ThemeManager())->installThemeSettings($resource['name']);
+                ThemeFileManager::getInstance()->installThemeSettings($resource['name']);
                 CoreModel::getInstance()->updateOption('theme', $resource['name']);
             }
         }
@@ -427,7 +429,7 @@ class InstallerController extends AbstractController
             return;
         }
 
-        (new ThemeManager())->installThemeSettings($theme['name']);
+        ThemeFileManager::getInstance()->installThemeSettings($theme['name']);
         CoreModel::getInstance()->updateOption('theme', $theme['name']);
 
         EnvManager::getInstance()->editValue('installStep', 6);

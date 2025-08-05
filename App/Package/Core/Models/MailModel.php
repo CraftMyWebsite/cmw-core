@@ -17,17 +17,17 @@ class MailModel extends AbstractModel
      * @param string $password
      * @param int $port
      * @param string $protocol
-     * @param string $footer
+     * @param string $body
      * @param int $enable
      * @return \CMW\Entity\Core\MailConfigEntity|null
      * @desc Create or edit a config (only 1 config is allowed)
      */
-    public function create(string $mail, string $mailReply, string $addressSMTP, string $user, string $password, int $port, string $protocol, string $footer, int $enable): ?MailConfigEntity
+    public function create(string $mail, string $mailReply, string $addressSMTP, string $user, string $password, int $port, string $protocol, string $body, int $enable): ?MailConfigEntity
     {
         if ($this->configExist() && !is_null($this->getConfig())) {
             $id = $this->getConfig()?->getId();
 
-            return $this->update($id, $mail, $mailReply, $addressSMTP, $user, $password, $port, $protocol, $footer, $enable);
+            return $this->update($id, $mail, $mailReply, $addressSMTP, $user, $password, $port, $protocol, $body, $enable);
         }
 
         $var = array(
@@ -103,6 +103,7 @@ class MailModel extends AbstractModel
             EnvManager::getInstance()->getValue('SMTP_PASSWORD') ?? '',
             $res['mail_config_port'] ?? '',
             $res['mail_config_protocol'] ?? '',
+                $res['mail_config_body'] ?? '',
             $res['mail_config_footer'] ?? '',
             $res['mail_config_enable'] ?? ''
         );
@@ -117,12 +118,12 @@ class MailModel extends AbstractModel
      * @param string $password
      * @param int $port
      * @param string $protocol
-     * @param string $footer
+     * @param string $body
      * @param int $enable
      * @return \CMW\Entity\Core\MailConfigEntity|null
      * @desc Update the current config
      */
-    public function update(int $id, string $mail, string $mailReply, string $addressSMTP, string $user, string $password, int $port, string $protocol, string $footer, int $enable): ?MailConfigEntity
+    public function update(int $id, string $mail, string $mailReply, string $addressSMTP, string $user, string $password, int $port, string $protocol, string $body, int $enable): ?MailConfigEntity
     {
         $var = array(
             'id' => $id,
@@ -132,13 +133,13 @@ class MailModel extends AbstractModel
             'user' => $user,
             'port' => $port,
             'protocol' => $protocol,
-            'footer' => $footer,
+            'body' => $body,
             'enable' => $enable
         );
 
         $sql = 'UPDATE cmw_mail_config_smtp SET mail_config_mail = :mail, mail_config_mail_reply = :mailReply, 
                 mail_config_address_smtp = :addressSMTP, mail_config_user = :user, mail_config_port = :port, 
-                mail_config_protocol = :protocol, mail_config_footer = :footer, mail_config_enable = :enable
+                mail_config_protocol = :protocol, mail_config_body = :body, mail_config_enable = :enable
                 WHERE mail_config_id = :id';
 
         $db = DatabaseManager::getInstance();

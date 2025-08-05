@@ -128,7 +128,7 @@ return [
         'mail' => [
             'test' => 'Mail send to %mail%',
         ],
-        'Theme' => [
+        'theme' => [
             'regenerate' => 'Theme configuration regenerate',
             'installed' => '%theme% just installed and activated.',
             'reset' => 'Theme configuration reset',
@@ -144,6 +144,11 @@ return [
                     'delete_database' => 'Unable to delete the theme database',
                     'delete_files' => 'Unable to delete theme files',
                 ],
+            ],
+            'editor' => [
+                'title' => 'Editor - DEV',
+                'multipleMenu' => 'Warning: the menu <b>%menukey%</b> is defined multiple times!',
+                'multipleMenuKey' => 'Warning: the key <b>%key%</b> is present multiple times in the menu <b>%menukey%</b>!',
             ],
         ],
         'package' => [
@@ -197,7 +202,10 @@ return [
         'notVerified' => 'Not verified by CMW.',
         'active' => 'Active theme',
         'configure' => 'Configure',
-        'reset' => 'Reset',
+        'reset' => 'Reset %theme%',
+        "leave" => "Leave editor",
+        "menu" => "EDITOR MENU",
+        "backMenu" => "Back to menu",
         'reinstall' => 'Reinstall',
         'description' => 'Description : ',
         'update' => 'An update is available !',
@@ -292,7 +300,7 @@ return [
             'replyMail' => 'Email reply',
             'serverSMTP' => 'SMTP address',
             'userSMTP' => 'SMTP user',
-            'passwordSMTP' => 'Password',
+            'passwordSMTP' => 'Password SMTP',
             'portSMTP' => 'Port SMTP',
             'protocol' => 'Sending protocol',
             'footer' => 'Mails footer',
@@ -307,6 +315,28 @@ return [
                 'receiverMail' => 'Recipient address',
                 'receiverMailPlaceholder' => 'Enter your mail',
             ],
+        ],
+        'test' => [
+            'object' => '✅ CraftMyWebsite Email Sending Test',
+            'body' => '<p>Hello,</p><p>This message was sent automatically to verify that the email sending system on your site is working properly.</p><p>If you received this message, it means everything is configured correctly.</p><p>Thank you for using CraftMyWebsite! 🚀</p></p>',
+        ],
+        'editor' => [
+            'title' => 'Mail Editor (HTML)',
+            'select' => 'Select a template',
+            'select_alert' => 'Selecting a template will overwrite your current model!',
+            'apply_btn' => 'Apply',
+            'modal_title' => 'Good to know',
+            'modal_text_1' => 'This editor allows you to customize the appearance of your emails. You must understand that this template is used every time an email is sent, regardless of its type (shop, forum, newsletter, login, registration...), so keep that in mind when configuring your template.',
+            'modal_text_2' => 'It is essential to use <code style="color: #2b2929; background: #efa1a1; border-radius: 5px; padding: 0 .2rem 0 .2rem">[MAIL_CONTENT]</code> in your template. This is where the message sent by the site will be placed.',
+            'modal_text_3' => 'Tip: The fonts supported by most email clients by default are:',
+            'render' => 'Live email preview',
+            'render_example' => '<p>[EXAMPLE]</p> <p>This is an example of your email content.</p> <p>The message will be automatically inserted here.</p> <p>[EXAMPLE]</p>',
+            'render_alert' => 'The email content must contain [MAIL_CONTENT]!',
+        ],
+        'implementations' => [
+            'basicSign' => 'No style - With signature',
+            'emptyMail' => 'No style',
+            'redMail' => 'Red with centered card',
         ],
     ],
     'downloads' => [
@@ -424,6 +454,7 @@ return [
         'disable' => 'Disable',
         'disabled' => 'Disabled',
         'saving' => 'Saving ...',
+        'reset' => 'Reset',
     ],
     'months' => [
         'list' => '["January","February","March","April","May","June","July","August","September","October","November","December"]',

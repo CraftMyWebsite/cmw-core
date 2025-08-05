@@ -15,7 +15,6 @@ $description = LangManager::translate('users.manage.desc');
 
 <h3><i class="fa-solid fa-sliders"></i> <?= LangManager::translate('users.manage.title') ?></h3>
 
-
 <div class="card">
     <div class="flex justify-between">
         <h6><?= LangManager::translate('users.manage.card_title_add') ?></h6>
@@ -42,12 +41,12 @@ $description = LangManager::translate('users.manage.desc');
         <div>
             <label for="password"><?= LangManager::translate('users.users.password') ?> :</label>
             <div class="input-btn">
-                <input type="password" id="password" name="password" placeholder="" required/>
+                <input type="password" id="password" name="password" placeholder="••••••" required/>
                 <button onclick="generatePassword('password')" type="button"><i class="fa-solid fa-rotate"></i></button>
             </div>
         </div>
         <div>
-            <label for="roles"><?= LangManager::translate('users.users.role') ?> :</label>
+            <label for="roles"><?= LangManager::translate('users.users.roles') ?> :</label>
             <select id="roles" class="choices choices__list--multiple" name="roles[]" multiple required>
                 <?php foreach ($roles as $role): ?>
                     <option <?= $role->isDefault() ? 'selected' : '' ?> value="<?= $role->getId() ?>"><?= $role->getName() ?></option>

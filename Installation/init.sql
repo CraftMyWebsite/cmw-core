@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS `cmw_mail_config_smtp`
     `mail_config_user`         VARCHAR(255) NOT NULL,
     `mail_config_port`         INT(5)       NOT NULL,
     `mail_config_protocol`     VARCHAR(50)  NOT NULL,
+    `mail_config_body`         LONGTEXT     NOT NULL DEFAULT '[MAIL_CONTENT]',
     `mail_config_footer`       MEDIUMTEXT   NULL,
     `mail_config_enable`       TINYINT(1)   NOT NULL DEFAULT 1
 ) ENGINE = InnoDB

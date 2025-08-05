@@ -41,6 +41,13 @@
     Require all denied
 </Files>
 
+# Deny access to all .json files
+<Files "*.json">
+    Order allow,deny
+    Deny from all
+    satisfy all
+</Files>
+
 # Deny access to cmw file
 <Files cmw>
     Require all denied

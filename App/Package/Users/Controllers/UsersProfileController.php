@@ -4,6 +4,7 @@ namespace CMW\Controller\Users;
 
 use CMW\Entity\Users\UserSettingsEntity;
 use CMW\Event\Users\DeleteUserAccountEvent;
+use CMW\Event\Users\UpdateUserProfileEvent;
 use CMW\Interface\Users\IUsersProfilePicture;
 use CMW\Manager\Events\Emitter;
 use CMW\Manager\Filter\FilterManager;
@@ -219,6 +220,9 @@ class UsersProfileController extends AbstractController
         }
 
         UsersSessionsController::getInstance()->updateStoredUser($user->getId());
+
+        Emitter::send(UpdateUserProfileEvent::class, $user->getId());
+
         Redirect::redirectPreviousRoute();
     }
 

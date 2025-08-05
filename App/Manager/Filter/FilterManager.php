@@ -7,6 +7,7 @@ use function filter_var;
 use function html_entity_decode;
 use function is_null;
 use function mb_substr;
+use function preg_match;
 use function preg_replace;
 use function trim;
 use const ENT_QUOTES;
@@ -62,12 +63,53 @@ class FilterManager
      * @param string $data
      * @param int|null $maxLength
      * @param mixed|null $orElse
+     * @param bool $allowScript
      * @return mixed
-     * @desc Securely filter data with maxlength parameter => optimized for strings.
-     * <p>If <b>orElse</b> parameter is used, you can return anything you want if value is not set or null.</p>
-     * <p>If $maxLength is NULL, we are ignoring this parameter.</p>
+     * <div>
+     *  <p>Securely filter data with maxlength parameter => optimized for strings.</p>
+     *  <p>If <b>orElse</b> parameter is used, you can return anything you want if value is not set or null.</p>
+     *  <p>If $maxLength is NULL, we are ignoring this parameter.</p>
+     *  <p>If $allowScript is true, we are removing all the data inside script tag.</p>
+     * </div>
      */
-    public static function filterInputStringPost(string $data, ?int $maxLength = 255, mixed $orElse = false): mixed
+    public static function filterInputStringPost(
+        string $data,
+        ?int   $maxLength = 255,
+        mixed  $orElse = false,
+        bool   $allowScript = false,
+    ): mixed
+    {
+        if ((!$orElse) && !isset($_POST[$data]) && !is_null($_POST[$data])) {
+            return $orElse;
+        }
+
+        $formattedData = trim(filter_input(INPUT_POST, $data, FILTER_UNSAFE_RAW));
+
+        if (!$allowScript) {
+            $formattedData = preg_replace('#<script\b[^>]*>(.*?)</script>#is', '', $formattedData);
+        }
+
+        if (!is_null($maxLength)) {
+            $formattedData = mb_substr($formattedData, 0, $maxLength);
+        }
+
+        return $formattedData;
+    }
+
+
+    /**
+     * @param string $data
+     * @param int|null $maxLength
+     * @param mixed|null $orElse
+     * @return mixed
+     * <div>
+     *  <p>Securely filter data with maxlength parameter => optimized for strings with strict validation.</p>
+     *  <p><b>Strict validation</b> means that we are checking if the string contains only alphanumeric characters, underscores, and dashes.</p>
+     *  <p>If <b>orElse</b> parameter is used, you can return anything you want if value is not set or null.</p>
+     *  <p>If $maxLength is NULL, we are ignoring this parameter.</p>
+     * </div>
+     */
+    public static function filterInputStringPostStrict(string $data, ?int $maxLength = 255, mixed $orElse = false): mixed
     {
         if ((!$orElse) && !isset($_POST[$data]) && !is_null($_POST[$data])) {
             return $orElse;
@@ -79,7 +121,7 @@ class FilterManager
             return mb_substr($formattedData, 0, $maxLength);
         }
 
-        return $formattedData;
+        return preg_replace('/^[a-zA-Z0-9_-]+$/u', '', $formattedData);
     }
 
     /**
@@ -129,6 +171,34 @@ class FilterManager
 
         return mb_substr(trim(filter_input(INPUT_GET, $data, FILTER_SANITIZE_NUMBER_INT)), 0, $maxLength);
     }
+
+
+    /**
+     * @param string $data
+     * @param string $pattern
+     * @param int|null $maxLength
+     * @param mixed $orElse
+     * @return mixed
+     */
+    public static function filterInputPostWithPattern(string $data, string $pattern, ?int $maxLength = 255, mixed $orElse = false): mixed
+    {
+        if ((!$orElse) && !isset($_POST[$data]) && !is_null($_POST[$data])) {
+            return $orElse;
+        }
+
+        $formattedData = trim(filter_input(INPUT_POST, $data, FILTER_UNSAFE_RAW));
+
+        if (!is_null($maxLength)) {
+            $formattedData = mb_substr($formattedData, 0, $maxLength);
+        }
+
+        if (!preg_match($pattern, $formattedData)) {
+            return $orElse;
+        }
+
+        return $formattedData;
+    }
+
 
     /**
      * @param string $mail

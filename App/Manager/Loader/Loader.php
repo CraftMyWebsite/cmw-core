@@ -2,6 +2,7 @@
 
 namespace CMW\Manager\Loader;
 
+use Closure;
 use CMW\Controller\Core\PackageController;
 use CMW\Controller\Installer\InstallerController;
 use CMW\Manager\Class\PackageManager;
@@ -15,10 +16,18 @@ use CMW\Utils\Directory;
 use ReflectionClass;
 use function array_diff;
 use function class_exists;
+use function date_default_timezone_set;
 use function file_exists;
+use function in_array;
+use function is_array;
 use function is_dir;
+use function is_file;
+use function is_null;
+use function is_subclass_of;
+use function method_exists;
 use function pathinfo;
 use function scandir;
+use function ucfirst;
 use const PATHINFO_FILENAME;
 
 class Loader
@@ -122,7 +131,11 @@ class Loader
                     continue;
                 }
 
-                $instance = $namespace::getInstance();
+                if (method_exists($namespace, 'getInstance')) {
+                    $instance = $namespace::getInstance();
+                } else {
+                    $instance = new $namespace();
+                }
 
                 if (!($instance instanceof $interface)) {
                     continue;
@@ -237,11 +250,30 @@ class Loader
         }
     }
 
+    /**
+     * @param string $path
+     * @param string $fileName
+     * @param string $package
+     * @param string|null $name
+     * @param int $weight
+     * @return void
+     */
     public static function createSimpleRoute(string $path, string $fileName, string $package, ?string $name = null, int $weight = 2): void
     {
         Router::getInstance()->get($path, function () use ($package, $fileName) {
             View::basicPublicView($package, $fileName);
         }, $name, $weight);
+    }
+
+    /**
+     * @param string $path
+     * @param Closure $callable
+     * @param int $weight
+     * @return void
+     */
+    public static function createSimpleRouteCallable(string $path, Closure $callable, int $weight = 2): void
+    {
+        Router::getInstance()->get($path, $callable, $path, $weight);
     }
 
     public static function listAttributes(string $file): void

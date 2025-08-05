@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+}
+.bg-main {
+    background: var(--bg-color);
+}
+.text-color {
+    color: var(--text-color);
+}
+h1 {
+    font-size: 3em;
+}
+h2 {
+    font-size: 2.5em;
+}
+h3 {
+    font-size: 2em;
+}
+h4 {
+    font-size: 1.5em;
+}
+h5 {
+    font-size: 1em;
+}
+.hero-gradiant {
+    background: #FE1F89;
+    background: -webkit-linear-gradient(157deg, rgba(254, 31, 137, 1) 0%, rgba(254, 31, 137, 1) 34%, rgba(0, 0, 0, 1) 100%);
+    background: -moz-linear-gradient(157deg, rgba(254, 31, 137, 1) 0%, rgba(254, 31, 137, 1) 34%, rgba(0, 0, 0, 1) 100%);
+    background: linear-gradient(157deg, rgba(254, 31, 137, 1) 0%, rgba(254, 31, 137, 1) 34%, rgba(0, 0, 0, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#FE1F89", endColorstr="#000000", GradientType=0);
+}

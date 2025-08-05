@@ -3,7 +3,10 @@
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
+use CMW\Manager\Theme\File\ThemeFileManager;
 use CMW\Manager\Theme\IThemeConfig;
+use CMW\Manager\Theme\Loader\ThemeLoader;
+use CMW\Manager\Theme\Market\ThemeMarketManager;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Utils\Website;
 
@@ -21,7 +24,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
     <!------------------------------------
     -----Listage des thèmes local ACTIF---
     -------------------------------------->
-    <?php foreach (ThemeManager::getInstance()->getLocalThemes() as $theme): ?>
+    <?php foreach (ThemeMarketManager::getInstance()->getLocalThemes() as $theme): ?>
         <?php if ($theme->name() === $currentTheme->name()): ?>
             <div class="card p-0 relative" style="overflow: hidden;">
                 <div class="flex justify-between px-2 pt-2">
@@ -43,7 +46,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                         </div>
                     <?php endif; ?>
                     <img style="height: 200px; width: 100%; object-fit: cover"
-                         src="<?= $theme->imageLink() ?? ThemeManager::getInstance()->defaultImageLink() ?>"
+                         src="<?= $theme->imageLink() ?? ThemeFileManager::getInstance()->defaultImageLink() ?>"
                          loading="lazy"
                          alt="img">
                 </div>
@@ -68,13 +71,13 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                             <a href="manage"
                                class="btn btn-sm btn-primary"><?= LangManager::translate('core.theme.configure') ?></a>
                             <a href="market/regenerate"
-                               class="btn btn-sm btn-warning"><?= LangManager::translate('core.theme.reset') ?></a>
+                               class="btn btn-sm btn-warning"><?= LangManager::translate('core.theme.reset', ['theme' => $theme->name()]) ?></a>
                         </div>
                     </div>
                     <div class="modal-body grid-2">
                         <div style="height:20rem">
                             <img style="height: 100%; width: 100%;"
-                                 src="<?= $theme->imageLink() ?? ThemeManager::getInstance()->defaultImageLink() ?>"
+                                 src="<?= $theme->imageLink() ?? ThemeFileManager::getInstance()->defaultImageLink() ?>"
                                  loading="lazy"
                                  alt="img">
                         </div>
@@ -133,7 +136,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
     -------------------------------------------------->
     <?php foreach ($themesList as $theme): ?>
         <?php if ($theme['name'] === $currentTheme->name()): ?>
-            <?php $localTheme = ThemeManager::getInstance()->getTheme($theme['name']); ?>
+            <?php $localTheme = ThemeLoader::getInstance()->getTheme($theme['name']); ?>
             <div class="card p-0 relative" style="overflow: hidden;">
                 <div class="flex justify-between px-2 pt-2">
                     <p class="font-bold"><?= $theme['name'] ?></p>
@@ -185,7 +188,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                             <a href="manage"
                                class="btn-primary"><?= LangManager::translate('core.theme.configure') ?></a>
                             <a href="market/regenerate"
-                               class="btn-warning"><?= LangManager::translate('core.theme.reset') ?></a>
+                               class="btn-warning"><?= LangManager::translate('core.theme.reset', ['theme' => $theme['name']]) ?></a>
                             <a href="install/<?= $theme['id'] ?>"
                                class="btn-danger"><?= LangManager::translate('core.theme.reinstall') ?></a>
                         </div>
@@ -277,7 +280,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
     <!--------------------------------------
     -----Listage des thèmes locaux inactif---
     ---------------------------------------->
-    <?php foreach (ThemeManager::getInstance()->getLocalThemes() as $theme): ?>
+    <?php foreach (ThemeMarketManager::getInstance()->getLocalThemes() as $theme): ?>
         <?php if ($theme->name() !== $currentTheme->name()): ?>
             <div class="card p-0 relative" style="overflow: hidden;">
                 <div class="flex justify-between px-2 pt-2">
@@ -299,7 +302,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                         </div>
                     <?php endif; ?>
                     <img class="rounded-bottom" style="height: 200px; width: 100%; object-fit: cover"
-                         src="<?= $theme->imageLink() ?? ThemeManager::getInstance()->defaultImageLink() ?>"
+                         src="<?= $theme->imageLink() ?? ThemeFileManager::getInstance()->defaultImageLink() ?>"
                          loading="lazy"
                          alt="im">
                 </div>
@@ -329,7 +332,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                     <div class="grid-2 modal-body">
                         <div style="height:20rem">
                             <img style="height: 100%; width: 100%;"
-                                 src="<?= $theme->imageLink() ?? ThemeManager::getInstance()->defaultImageLink() ?>"
+                                 src="<?= $theme->imageLink() ?? ThemeFileManager::getInstance()->defaultImageLink() ?>"
                                  loading="lazy"
                                  alt="img">
                         </div>
@@ -386,8 +389,8 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
     -----Listage des thèmes API installé et inactif---
     -------------------------------------------------->
     <?php foreach ($themesList as $theme): ?>
-        <?php if ($theme['name'] !== $currentTheme->name() && ThemeManager::getInstance()->isThemeInstalled($theme['name'])): ?>
-            <?php $localTheme = ThemeManager::getInstance()->getTheme($theme['name']); ?>
+        <?php if ($theme['name'] !== $currentTheme->name() && ThemeLoader::getInstance()->isThemeInstalled($theme['name'])): ?>
+            <?php $localTheme = ThemeLoader::getInstance()->getTheme($theme['name']); ?>
             <div class="card p-0 relative" style="overflow: hidden;">
                 <div class="flex justify-between px-2 pt-2">
                     <p class="font-bold"><?= $theme['name'] ?></p>

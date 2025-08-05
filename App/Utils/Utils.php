@@ -114,6 +114,7 @@ class Utils
      * @param string $data
      * @return string
      * @desc Replace CamelCase to snake_case. Ex: blaBla => bla_bla
+     * @deprecated use Str::camelToSnakeCase()
      */
     public static function camelToSnakeCase(string $data): string
     {
@@ -124,6 +125,7 @@ class Utils
      * @param string $data
      * @return string
      * @desc Replace snake_case to CamelCase. Ex: bla_bla => blaBla
+     * @deprecated use Str::snakeToCamelCase()
      */
     public static function snakeToCamelCase(string $data): string
     {

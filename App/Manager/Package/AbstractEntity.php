@@ -175,4 +175,17 @@ abstract class AbstractEntity
 
         return $data;
     }
+
+    /**
+     * @param static[] $data
+     * @return array
+     */
+    public static function fromEntitiesToArray(array $data): array
+    {
+        $toReturn = [];
+        foreach ($data as $item) {
+            $toReturn[] = $item->toArray();
+        }
+        return $toReturn;
+    }
 }

@@ -14,6 +14,7 @@ class MailConfigEntity extends AbstractEntity
     private ?string $password;
     private ?int $port;
     private ?string $protocol;
+    private ?string $body;
     private ?string $footer;
     private ?int $enable;
 
@@ -26,11 +27,12 @@ class MailConfigEntity extends AbstractEntity
      * @param string|null $password
      * @param int|null $port
      * @param string|null $protocol
+     * @param string|null $body
      * @param string|null $footer
      * @param int|null $enable
      */
     public function __construct(?int    $id, ?string $mail, ?string $mailReply, ?string $addressSMTP, ?string $user,
-                                ?string $password, ?int $port, ?string $protocol, ?string $footer, ?int $enable)
+                                ?string $password, ?int $port, ?string $protocol, ?string $body, ?string $footer, ?int $enable)
     {
         $this->id = $id;
         $this->mail = $mail;
@@ -40,6 +42,7 @@ class MailConfigEntity extends AbstractEntity
         $this->password = $password;
         $this->port = $port;
         $this->protocol = $protocol;
+        $this->body = $body;
         $this->footer = $footer;
         $this->enable = $enable;
     }
@@ -106,6 +109,14 @@ class MailConfigEntity extends AbstractEntity
     public function getProtocol(): ?string
     {
         return $this->protocol;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getBody(): ?string
+    {
+        return $this->body;
     }
 
     /**

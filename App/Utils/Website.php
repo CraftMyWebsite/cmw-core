@@ -5,6 +5,16 @@ namespace CMW\Utils;
 use CMW\Manager\Env\EnvManager;
 use CMW\Model\Core\CoreModel;
 use JetBrains\PhpStorm\ExpectedValues;
+use function explode;
+use function filter_var;
+use function header;
+use function htmlspecialchars_decode;
+use function in_array;
+use function str_contains;
+use function substr;
+use const ENT_HTML5;
+use const ENT_QUOTES;
+use const FILTER_VALIDATE_IP;
 
 class Website
 {
@@ -130,6 +140,16 @@ class Website
     {
         $path = explode('/', $_SERVER['REQUEST_URI']);
         return in_array($targetUrl, $path);
+    }
+
+    public static function isCurrentRouteAdmin(): bool
+    {
+        return self::isRouteAdmin($_GET['url'] ?? '');
+    }
+
+    public static function isRouteAdmin(?string $path): bool
+    {
+        return str_contains($path, 'cmw-admin');
     }
 
     /**

@@ -2,9 +2,11 @@
 
 namespace CMW\Model\Core;
 
-use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Package\AbstractModel;
+use function get_defined_constants;
+use function mb_strtoupper;
+use function str_starts_with;
 
 /**
  * Class: @coreController
@@ -14,7 +16,7 @@ use CMW\Manager\Package\AbstractModel;
  */
 class CoreModel extends AbstractModel
 {
-    public function fetchOption(string $option): string
+    public function fetchOption(string $option): ?string
     {
         //        TODO Le cache ne fonctionne pas et du coup ralenti le chargement des page
         /*if (SimpleCacheManager::cacheExist('options', "Options")){
@@ -29,8 +31,16 @@ class CoreModel extends AbstractModel
 
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT option_value FROM cmw_core_options WHERE option_name = ?');
-        $req->execute(array($option));
+
+        if (!$req->execute([$option])){
+            return null;
+        }
+
         $option = $req->fetch();
+
+        if (!$option){
+            return null;
+        }
 
         return $option['option_value'];
     }
@@ -45,7 +55,7 @@ class CoreModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT option_value FROM cmw_core_options WHERE option_name = ?');
 
-        return ($req->execute(array($option))) ? $req->fetch()['option_value'] : '';
+        return ($req->execute([$option])) ? $req->fetch()['option_value'] : '';
     }
 
     public function fetchOptions(): array
@@ -60,22 +70,18 @@ class CoreModel extends AbstractModel
         return ($req->execute()) ? $req->fetchAll() : [];
     }
 
+    /**
+     * @param string $option_name
+     * @param string $option_value
+     * @return bool
+     */
     public function updateOption(string $option_name, string $option_value): bool
     {
+        $sql = 'INSERT INTO cmw_core_options (option_name, option_value, option_updated) 
+                VALUES (:option_name, :option_value, NOW()) 
+                ON DUPLICATE KEY UPDATE option_value=VALUES(option_value), option_updated=NOW()';
         $db = DatabaseManager::getInstance();
-        $req = $db->prepare('UPDATE cmw_core_options SET option_value=:option_value, option_updated=NOW() WHERE option_name=:option_name');
-        return $req->execute(array('option_name' => $option_name, 'option_value' => $option_value));
-    }
 
-    public static function getLanguages(string $prefix): array|string
-    {
-        foreach (get_defined_constants(false) as $key => $value) {
-            if (str_starts_with($key, mb_strtoupper($prefix, 'UTF-8'))) {
-                $dump[$key] = $value;
-            }
-        }
-
-        // Todo Error Manager.
-        return !empty($dump) ? $dump : "Error: No Constants found with prefix '" . $prefix . "'";
+        return $db->prepare($sql)->execute(['option_name' => $option_name, 'option_value' => $option_value]);
     }
 }

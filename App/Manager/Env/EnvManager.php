@@ -2,13 +2,36 @@
 
 namespace CMW\Manager\Env;
 
+use Closure;
 use CMW\Manager\Error\ErrorManager;
 use CMW\Utils\Utils;
-use Closure;
 use Exception;
-
+use function array_key_exists;
+use function bin2hex;
+use function count;
+use function dirname;
+use function explode;
+use function fclose;
+use function file;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
+use function fopen;
+use function fwrite;
+use function is_file;
 use function is_readable;
 use function is_writable;
+use function mb_strtoupper;
+use function openssl_random_pseudo_bytes;
+use function putenv;
+use function random_int;
+use function str_replace;
+use function str_starts_with;
+use function trim;
+use function unlink;
+use const FILE_IGNORE_NEW_LINES;
+use const FILE_SKIP_EMPTY_LINES;
+use const PHP_EOL;
 
 /**
  * Class: @EnvManager
@@ -20,7 +43,7 @@ class EnvManager
 {
     private static EnvManager $_instance;
 
-    private string $envFileName = '.env';
+    private string $envFileName;
     private string $envPath;
     private string $path;
     private string $absPath;
@@ -32,6 +55,7 @@ class EnvManager
     public function __construct()
     {
         $this->absPath = dirname(__DIR__, 3) . '/';
+        $this->setFileName();
         $this->envPath = $this->absPath;
         $this->path = $this->envPath . $this->envFileName;
         $this->apiURL = 'https://apiv2.craftmywebsite.fr';
@@ -43,7 +67,7 @@ class EnvManager
         if (!$this->hasReadPerms()) {
             ErrorManager::showCustomErrorPage(
                 'Permission error:',
-                'The file .env is not readable. Please check the permissions of the file.',
+                "The file $this->envFileName is not readable. Please check the permissions of the file.",
             );
         }
 
@@ -66,6 +90,16 @@ class EnvManager
     public function __isset(string $key)
     {
         return $this->valueExist($key);
+    }
+
+    private function setFileName(): void
+    {
+        if (isset($GLOBALS['CMW_ENV']) && $GLOBALS['CMW_ENV'] === 'standalone') {
+            $this->envFileName = '.env.standalone';
+            return;
+        }
+
+        $this->envFileName = '.env';
     }
 
     private function doWithFile(Closure $fn): void
