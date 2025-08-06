@@ -53,7 +53,7 @@ $description = LangManager::translate('core.updates.description');
             <hr>
             <h6>À noter sur cette mise à jour :</h6>
             <div class="alert-warning">
-                <?= $latestVersion['notes'] ?>
+                <?= html_entity_decode($latestVersion['notes']) ?>
             </div>
         <?php endif; ?>
         <hr>

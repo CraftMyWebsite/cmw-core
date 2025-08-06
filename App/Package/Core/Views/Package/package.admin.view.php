@@ -27,7 +27,7 @@ foreach ($packagesList as $pkg) {
 }
 
 
-function renderCard($name, $image, $description, $author = null, $version = null, $id = null, $notVerified = false, $updateBadge = false, $downloads = null, $versionCMW = null, $releaseDate = null) {
+function renderCard($name, $image, $description, $author = null, $versionTarget = null, $version = null, $id = null, $notVerified = false, $updateBadge = false, $downloads = null, $versionCMW = null, $releaseDate = null) {
     $uniqueId = $id ?? $name;
     ?>
     <div class="card relative h-full" style="overflow: hidden;">
@@ -37,12 +37,19 @@ function renderCard($name, $image, $description, $author = null, $version = null
                 <div class="flex justify-between">
                     <h6><?= $name ?></h6>
                     <div>
-                        <button data-modal-toggle="delete-<?= $uniqueId ?>" class="btn-danger-sm" type="button">
-                            <?= LangManager::translate('core.Package.delete') ?>
-                        </button>
-                        <button data-modal-toggle="modal-<?= $uniqueId ?>" class="btn-primary-sm" type="button">
-                            <?= LangManager::translate('core.Package.details') ?>
-                        </button>
+                        <?php if ($updateBadge): ?>
+                            <a class="btn-warning" type="button"
+                               href="update/<?= $id ?>/<?= $version ?>/<?= $name ?>">
+                                <?= LangManager::translate('core.Package.update') ?>
+                            </a>
+                        <?php else: ?>
+                            <button data-modal-toggle="delete-<?= $uniqueId ?>" class="btn-danger-sm" type="button">
+                                <?= LangManager::translate('core.Package.delete') ?>
+                            </button>
+                            <button data-modal-toggle="modal-<?= $uniqueId ?>" class="btn-primary-sm" type="button">
+                                <?= LangManager::translate('core.Package.details') ?>
+                            </button>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <div>
@@ -70,6 +77,13 @@ function renderCard($name, $image, $description, $author = null, $version = null
                     <?= LangManager::translate('core.Package.notVerified') ?>
                 </div>
             </div>
+        <?php endif; ?>
+
+        <?php if ($updateBadge): ?>
+        <div class="alert-warning text-center">
+            <?= LangManager::translate('core.theme.manage.theme_need_update',
+                ['version' => $version, 'target' => $versionTarget]) ?>
+        </div>
         <?php endif; ?>
 
         <?php if ($downloads !== null && $versionCMW): ?>
@@ -162,6 +176,7 @@ function renderModalDelete($id, $name) {
             $pkg['icon'],
             mb_strimwidth($pkg['description_short'], 0, 280, '...'),
             $pkg['author_pseudo'],
+            $pkg['version_name'],
             $local->version(),
             $pkg['id'],
             false,
@@ -193,6 +208,7 @@ function renderModalDelete($id, $name) {
             $pkg['icon'],
             mb_strimwidth($pkg['description_short'], 0, 280, '...'),
             $pkg['author_pseudo'],
+            $pkg['version_name'],
             $local->version(),
             $pkg['id'],
             false,
