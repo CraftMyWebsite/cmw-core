@@ -385,7 +385,7 @@ VALUES ('defaultImage', 'defaultImage.jpg'),
        ('listEnforcedToggle', '0'),
        ('profilePage', '1'),
        ('securityReinforced', '0'),
-       ('needTerms', '0')
+       ('needTerms', '0'),
        ('needTextTerms', 'J’accepte les <a target="_blank" href="/all_terms">Termes et Conditions</a>');
 
 INSERT INTO `cmw_maintenance` (maintenance_is_enable, maintenance_title, maintenance_description, maintenance_type,
