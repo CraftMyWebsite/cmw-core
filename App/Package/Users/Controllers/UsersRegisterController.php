@@ -4,6 +4,7 @@ namespace CMW\Controller\Users;
 
 use CMW\Controller\Core\SecurityController;
 use CMW\Entity\Users\UserEntity;
+use CMW\Entity\Users\UserSettingsEntity;
 use CMW\Event\Users\RegisterEvent;
 use CMW\Manager\Events\Emitter;
 use CMW\Manager\Filter\FilterManager;
@@ -18,6 +19,7 @@ use CMW\Model\Users\UsersModel;
 use CMW\Model\Users\UsersSettingsModel;
 use CMW\Type\Users\LoginStatus;
 use CMW\Utils\Redirect;
+use CMW\Utils\Utils;
 use Exception;
 use JetBrains\PhpStorm\NoReturn;
 use function error_log;
@@ -46,9 +48,11 @@ class UsersRegisterController extends AbstractController
         }
 
         $oAuths = UsersOAuthController::getInstance()->getEnabledImplementations();
+        $needTextTerms = UserSettingsEntity::getInstance()->getNeedTextTerms();
+        $needTerms = UserSettingsEntity::getInstance()->getNeedTerms();
 
         View::createPublicView('Users', 'register')
-            ->addVariableList(['oAuths' => $oAuths])
+            ->addVariableList(['oAuths' => $oAuths, 'needTextTerms' => $needTextTerms, 'needTerms' => $needTerms])
             ->view();
     }
 
@@ -78,6 +82,13 @@ class UsersRegisterController extends AbstractController
         $password = FilterManager::filterInputStringPost('register_password');
         $passwordVerify = FilterManager::filterInputStringPost('register_password_verify');
 
+        [$acceptTerms] = Utils::filterInput('acceptTerms');
+        $acceptTerms = is_null($acceptTerms) ? 0 : 1;
+
+        if (!$acceptTerms && UserSettingsEntity::getInstance()->getNeedTerms()) {
+            Flash::send(Alert::WARNING, LangManager::translate('users.terms.toaster.title'), LangManager::translate('users.terms.toaster.accept'));
+            Redirect::redirectPreviousRoute();
+        }
 
         //Check if pseudo and mail are correct
         $this->basicChecks($pseudo, $mail, $encryptedMail);
@@ -106,6 +117,11 @@ class UsersRegisterController extends AbstractController
 
         //Define password
         $this->definePassword($user, $password);
+
+        if ($acceptTerms && UserSettingsEntity::getInstance()->getNeedTerms()) {
+            UsersModel::getInstance()->markTermsAccepted($user->getId());
+            $user = UsersModel::getInstance()->getUserById($user->getId());
+        }
 
         //Send RegisterEvent
         try {

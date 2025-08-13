@@ -25,17 +25,19 @@ CREATE TABLE IF NOT EXISTS `cmw_mail_config_smtp`
 
 CREATE TABLE IF NOT EXISTS `cmw_users`
 (
-    `user_id`        INT(11)      NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `user_email`     VARCHAR(500) NOT NULL,
-    `user_pseudo`    VARCHAR(255)          DEFAULT NULL,
-    `user_firstname` VARCHAR(255)          DEFAULT NULL,
-    `user_lastname`  VARCHAR(255)          DEFAULT NULL,
-    `user_password`  VARCHAR(255)          DEFAULT NULL,
-    `user_state`     TINYINT(1)   NOT NULL DEFAULT '1',
-    `user_key`       VARCHAR(255) NOT NULL,
-    `user_created`   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `user_updated`   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `user_logged`    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `user_id`                       INT(11)      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_email`                    VARCHAR(500) NOT NULL,
+    `user_pseudo`                   VARCHAR(255)          DEFAULT NULL,
+    `user_firstname`                VARCHAR(255)          DEFAULT NULL,
+    `user_lastname`                 VARCHAR(255)          DEFAULT NULL,
+    `user_password`                 VARCHAR(255)          DEFAULT NULL,
+    `user_state`                    TINYINT(1)   NOT NULL DEFAULT '1',
+    `user_key`                      VARCHAR(255) NOT NULL,
+    `user_terms_accepted`           TINYINT(1) NOT NULL DEFAULT 0,
+    `user_terms_accepted_at`        DATETIME NULL,
+    `user_created`                  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `user_updated`                  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `user_logged`                   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY `user_email` (`user_email`),
     UNIQUE KEY `user_pseudo` (`user_pseudo`)
 ) ENGINE = InnoDB
@@ -202,17 +204,25 @@ CREATE TABLE IF NOT EXISTS `cmw_menus_groups_allowed`
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS `cmw_core_condition`
+CREATE TABLE IF NOT EXISTS cmw_core_terms
 (
-    `condition_id`          INT(11)    NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `condition_content`     LONGTEXT   NOT NULL,
-    `condition_state`       TINYINT(1) NOT NULL DEFAULT '1',
-    `condition_updated`     TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `condition_last_editor` INT(11)             DEFAULT NULL,
-    KEY `condition_author` (`condition_last_editor`),
-    KEY `condition_last_editor` (`condition_last_editor`),
-    CONSTRAINT `cmw_core_condition_ibfk_1` FOREIGN KEY (`condition_last_editor`)
-        REFERENCES `cmw_users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE
+    term_id                 INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    term_type               ENUM('terms_of_service','terms_of_sale','privacy_policy','legal_notice','cookie_policy','acceptable_use','license','refund_policy') NOT NULL,
+    term_content            LONGTEXT NOT NULL,
+    term_requires_accept    TINYINT(1) NOT NULL DEFAULT 1,
+    term_published_at       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    term_last_editor        INT(11) DEFAULT NULL,
+    INDEX idx_type_pub (term_type, term_published_at),
+    CONSTRAINT `cmw_core_terms_ibfk_1` FOREIGN KEY (`term_last_editor`)
+    REFERENCES `cmw_users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS cmw_core_terms_settings (
+    term_type   ENUM('terms_of_service','terms_of_sale','privacy_policy','legal_notice','cookie_policy','acceptable_use','license','refund_policy') NOT NULL PRIMARY KEY,
+    is_active   TINYINT(1) NOT NULL DEFAULT 1,
+    updated_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
@@ -326,10 +336,26 @@ CREATE TABLE IF NOT EXISTS cmw_notification_refused_package
   COLLATE = utf8mb4_unicode_ci;
 
 /* INSERT AREA */
+INSERT INTO cmw_core_terms (term_type, term_content, term_requires_accept)
+VALUES ('terms_of_service', 'Write your ToS here', 1),
+        ('terms_of_sale', 'Write your ToS (sales) here', 1),
+        ('privacy_policy', 'Write your privacy policy here', 1),
+        ('legal_notice', 'Write your legal notice here', 0),
+        ('cookie_policy', 'Write your cookie policy here', 0),
+        ('acceptable_use', 'Write your acceptable use guidelines here', 0),
+        ('license', 'Write your license here', 0),
+        ('refund_policy', 'Write your refund policy here', 0);
 
-INSERT INTO `cmw_core_condition` (`condition_content`)
-VALUES ('Veuillez écrire vos CGV !'),
-       ('Veuillez écrire vos CGU !');
+INSERT INTO cmw_core_terms_settings (term_type, is_active)
+VALUES ('terms_of_service', 1),
+        ('privacy_policy',   1),
+        ('legal_notice',     1),
+        ('cookie_policy',    1),
+        ('terms_of_sale',    0),
+        ('acceptable_use',   0),
+        ('license',          0),
+        ('refund_policy',    0)
+    ON DUPLICATE KEY UPDATE is_active = VALUES(is_active);
 
 INSERT INTO `cmw_core_options` (`option_name`, `option_value`, `option_updated`)
 VALUES ('theme', 'Sampler', NOW()),
@@ -358,7 +384,9 @@ VALUES ('defaultImage', 'defaultImage.jpg'),
        ('resetPasswordMethod', '1'),
        ('listEnforcedToggle', '0'),
        ('profilePage', '1'),
-       ('securityReinforced', '0');
+       ('securityReinforced', '0'),
+       ('needTerms', '0')
+       ('needTextTerms', 'J’accepte les <a target="_blank" href="/all_terms">Termes et Conditions</a>');
 
 INSERT INTO `cmw_maintenance` (maintenance_is_enable, maintenance_title, maintenance_description, maintenance_type,
                                maintenance_target_date)

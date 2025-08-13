@@ -167,7 +167,8 @@ return [
         "weight" => "Poids",
         "creation" => "Date de création",
         "last_edit" => "Date de modification",
-        "last_connection" => "Dernière connexion au site",
+        "last_connection" => "Dernière connexion",
+        'terms' => 'Termes Accepté',
         "role_description" => "Description",
         "role_name" => "Nom",
         "password" => "Mot de passe",
@@ -333,6 +334,12 @@ return [
             'blacklist' => [
                 'menu' => 'Blacklist',
             ],
+        ],
+    ],
+    'terms' => [
+        'toaster' => [
+            'title' => 'Termes et conditions',
+            'accept' => 'Vous devez accepter les termes et conditions pour pouvoir créer un compte.',
         ],
     ],
 ];

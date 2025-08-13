@@ -14,6 +14,8 @@ class UserEntity extends AbstractEntity
     private string $userFirstName;
     private string $userLastName;
     private int $userState;
+    private ?int $userTermsAccepted;
+    private ?string $userTermsAcceptedAt;
     private string $userKey;
     private User2FaEntity $user2Fa;
     private string $userLastConnection;
@@ -32,6 +34,8 @@ class UserEntity extends AbstractEntity
      * @param string $userFirstName
      * @param string $userLastName
      * @param int $userState
+     * @param ?int $userTermsAccepted
+     * @param ?string $userTermsAcceptedAt
      * @param string $userKey
      * @param \CMW\Entity\Users\User2FaEntity $user2Fa
      * @param string $userLastConnection
@@ -42,7 +46,7 @@ class UserEntity extends AbstractEntity
      * @param \CMW\Entity\Users\UserPictureEntity|null $userPicture
      * @param string|null $loginMethode
      */
-    public function __construct(int $userId, string $userMail, string $userPseudo, string $userFirstName, string $userLastName, int $userState, string $userKey, User2FaEntity $user2Fa, string $userLastConnection, array $userRoles, ?RoleEntity $userHighestRole, string $userCreated, string $userUpdated, ?UserPictureEntity $userPicture, null|string $loginMethode)
+    public function __construct(int $userId, string $userMail, string $userPseudo, string $userFirstName, string $userLastName, int $userState, ?int $userTermsAccepted, ?string $userTermsAcceptedAt, string $userKey, User2FaEntity $user2Fa, string $userLastConnection, array $userRoles, ?RoleEntity $userHighestRole, string $userCreated, string $userUpdated, ?UserPictureEntity $userPicture, null|string $loginMethode)
     {
         $this->userId = $userId;
         $this->userMail = $userMail;
@@ -50,6 +54,8 @@ class UserEntity extends AbstractEntity
         $this->userFirstName = $userFirstName;
         $this->userLastName = $userLastName;
         $this->userState = $userState;
+        $this->userTermsAccepted = $userTermsAccepted;
+        $this->userTermsAcceptedAt = $userTermsAcceptedAt;
         $this->userKey = $userKey;
         $this->user2Fa = $user2Fa;
         $this->userLastConnection = $userLastConnection;
@@ -107,6 +113,33 @@ class UserEntity extends AbstractEntity
     public function getState(): int
     {
         return $this->userState;
+    }
+
+    /**
+     * @return ?int
+     */
+    public function getTermsAccepted(): ?int
+    {
+        return $this->userTermsAccepted;
+    }
+
+    /**
+     * @return ?string
+     */
+    public function getTermsAcceptedAtUnformatted(): ?string
+    {
+        return $this->userTermsAcceptedAt;
+    }
+
+    /**
+     * @return ?string
+     */
+    public function getTermsAcceptedAt(): ?string
+    {
+        if ($this->userTermsAcceptedAt) {
+            return Date::formatDate($this->userTermsAcceptedAt);
+        }
+        return null;
     }
 
     /**

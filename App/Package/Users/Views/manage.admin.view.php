@@ -2,6 +2,7 @@
 
 use CMW\Entity\Users\RoleEntity;
 use CMW\Entity\Users\UserEntity;
+use CMW\Entity\Users\UserSettingsEntity;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
@@ -61,26 +62,32 @@ $description = LangManager::translate('users.manage.desc');
     <div class="table-container table-container-striped">
         <table id="table1" data-load-per-page="20">
             <thead>
-            <tr>
+            <tr class="text-center">
                 <th><?= LangManager::translate('users.users.mail') ?></th>
                 <th><?= LangManager::translate('users.users.pseudo') ?></th>
                 <th><?= LangManager::translate('users.users.role') ?></th>
                 <th><?= LangManager::translate('users.users.creation') ?></th>
                 <th><?= LangManager::translate('users.users.last_connection') ?></th>
+                <?php if (UserSettingsEntity::getInstance()->getNeedTerms()):?>
+                <th><?= LangManager::translate('users.users.terms') ?></th>
+                <?php endif; ?>
                 <th><?= LangManager::translate('users.users.login_methode') ?></th>
                 <th class="text-center">2fa</th>
-                <th class="text-center"><?= LangManager::translate('core.btn.edit') ?></th>
+                <th class="text-center"></th>
             </tr>
             </thead>
             <tbody>
             <?php foreach ($userList as $user): ?>
                 <tr class="<?= !$user->getState() ? 'line-through' : '' ?>">
                     <td><?= $user->getMail() ?></td>
-                    <td><?= $user->getPseudo() ?></td>
-                    <td><?= $user->getHighestRole()?->getName() ?></td>
-                    <td><?= $user->getCreated() ?></td>
-                    <td><?= $user->getLastConnection() ?></td>
-                    <td><?= ucfirst($user->getLoginMethode()) ?></td>
+                    <td class="text-center"><?= $user->getPseudo() ?></td>
+                    <td class="text-center"><?= $user->getHighestRole()?->getName() ?></td>
+                    <td class="text-center"><?= $user->getCreated() ?></td>
+                    <td class="text-center"><?= $user->getLastConnection() ?></td>
+                    <?php if (UserSettingsEntity::getInstance()->getNeedTerms()):?>
+                    <td class="text-center"><?= $user->getTermsAccepted() ? '<i class="text-success fa-solid fa-check fa-lg"></i>' : '<i class="text-danger fa-solid fa-xmark fa-lg"></i>' ?> <?= $user->getTermsAcceptedAt() ? ' - ' . $user->getTermsAcceptedAt() : '' ?></td>
+                    <?php endif; ?>
+                    <td class="text-center"><?= ucfirst($user->getLoginMethode()) ?></td>
                     <td class="text-center"><?php if ($user->get2Fa()->isEnabled()): ?> <i
                             class="text-success fa-solid fa-check fa-lg"></i> <?php else: ?> <i
                             class="text-danger fa-solid fa-xmark fa-lg"></i> <?php endif; ?></td>

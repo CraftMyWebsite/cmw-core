@@ -72,7 +72,7 @@ class Package implements IPackageConfig
                     new PackageSubMenuType(
                         title: LangManager::translate('core.menu.setting.cg'),
                         permission: 'core.settings.conditions',
-                        url: 'condition',
+                        url: 'terms',
                         subMenus: []
                     ),
                     new PackageSubMenuType(

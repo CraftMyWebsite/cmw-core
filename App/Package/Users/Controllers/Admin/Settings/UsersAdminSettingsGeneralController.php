@@ -15,6 +15,7 @@ use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Users\UsersSettingsModel;
 use CMW\Utils\Redirect;
+use CMW\Utils\Utils;
 use JetBrains\PhpStorm\NoReturn;
 
 /**
@@ -31,6 +32,7 @@ class UsersAdminSettingsGeneralController extends AbstractController
 
         View::createAdminView('Users', 'Settings/general')
             ->addVariableList(['settings' => UserSettingsEntity::getInstance()])
+            ->addScriptBefore('Admin/Resources/Vendors/Tinymce/tinymce.min.js', 'Admin/Resources/Vendors/Tinymce/Config/full.js')
             ->view();
     }
 
@@ -40,9 +42,14 @@ class UsersAdminSettingsGeneralController extends AbstractController
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'users.settings');
 
         $profilePage = FilterManager::filterInputStringPost('profile_page');
+        $needTextTerms = FilterManager::filterInputStringPost('needTextTerms');
+        [$needTerms] = Utils::filterInput('needTerms');
+        $needTerms = is_null($needTerms) ? 0 : 1;
 
         $settingsStatus = UsersSettingsModel::getInstance()->bulkUpdateSettings(
             new BulkSettingsEntity('profilePage', $profilePage),
+            new BulkSettingsEntity('needTextTerms', $needTextTerms),
+            new BulkSettingsEntity('needTerms', $needTerms),
         );
 
         if (!$settingsStatus) {

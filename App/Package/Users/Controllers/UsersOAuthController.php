@@ -2,6 +2,8 @@
 
 namespace CMW\Controller\Users;
 
+use CMW\Entity\Users\UserEntity;
+use CMW\Entity\Users\UserSettingsEntity;
 use CMW\Event\Users\LoginEvent;
 use CMW\Event\Users\RegisterEvent;
 use CMW\Interface\Users\IUsersOAuth;
@@ -14,6 +16,7 @@ use CMW\Manager\Loader\Loader;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Views\View;
+use CMW\Model\Core\TermsModel;
 use CMW\Model\Users\UsersModel;
 use CMW\Model\Users\UsersOAuthModel;
 use CMW\Type\Users\OAuthLoginStatus;
@@ -112,47 +115,36 @@ class UsersOAuthController extends AbstractController
         $status = $iImplementation->register();
 
         switch ($status) {
-            case OAuthLoginStatus::INVALID_CODE || OAuthLoginStatus::INVALID_TOKEN:
-                Flash::send(
-                    Alert::ERROR,
-                    LangManager::translate('core.toaster.error'),
-                    LangManager::translate('users.oauth.flash.accessDenied')
-                );
+            case OAuthLoginStatus::INVALID_CODE:
+            case OAuthLoginStatus::INVALID_TOKEN:
+                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), LangManager::translate('users.oauth.flash.accessDenied'));
                 break;
             case OAuthLoginStatus::INVALID_USER_INFO:
-                Flash::send(
-                    Alert::ERROR,
-                    LangManager::translate('core.toaster.error'),
-                    LangManager::translate('users.oauth.flash.userInfo')
-                );
+                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), LangManager::translate('users.oauth.flash.userInfo'));
                 break;
             case OAuthLoginStatus::EMAIL_ALREADY_EXIST:
-                Flash::send(
-                    Alert::WARNING,
-                    LangManager::translate('core.toaster.error'),
-                    LangManager::translate('users.oauth.flash.emailUsed')
-                );
+                Flash::send(Alert::WARNING, LangManager::translate('core.toaster.error'), LangManager::translate('users.oauth.flash.emailUsed'));
                 break;
             case OAuthLoginStatus::UNABLE_TO_CREATE_USER:
-                Flash::send(
-                    Alert::ERROR,
-                    LangManager::translate('core.toaster.error'),
-                    LangManager::translate('users.oauth.flash.userCreate')
-                );
+                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), LangManager::translate('users.oauth.flash.userCreate'));
                 break;
             case OAuthLoginStatus::UNABLE_TO_CREATE_OAUTH_USER:
-                Flash::send(
-                    Alert::ERROR,
-                    LangManager::translate('core.toaster.error'),
-                    LangManager::translate('users.oauth.flash.userOauthCreate')
-                );
+                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), LangManager::translate('users.oauth.flash.userOauthCreate'));
                 break;
             case OAuthLoginStatus::SUCCESS_REGISTER:
                 Emitter::send(RegisterEvent::class, UsersSessionsController::getInstance()->getCurrentUser()?->getId());
+                // NEW: terms gate
+                $uid = UsersSessionsController::getInstance()->getCurrentUser()?->getId();
+                if ($uid) { $this->enforceTermsOrFinalize($uid); }
                 Redirect::redirect('profile');
+                break;
             case OAuthLoginStatus::SUCCESS_LOGIN:
                 Emitter::send(LoginEvent::class, UsersSessionsController::getInstance()->getCurrentUser()?->getId());
+                // NEW: terms gate
+                $uid = UsersSessionsController::getInstance()->getCurrentUser()?->getId();
+                if ($uid) { $this->enforceTermsOrFinalize($uid); }
                 Redirect::redirect('profile');
+                break;
         }
 
         Redirect::redirect('login');
@@ -217,5 +209,58 @@ class UsersOAuthController extends AbstractController
         }
 
         return null;
+    }
+
+    /**
+     * @throws \DateMalformedStringException
+     */
+    private function shouldForceTerms(UserEntity $user): bool
+    {
+        if (!UserSettingsEntity::getInstance()->getNeedTerms()) return false;
+
+        $model = TermsModel::getInstance();
+        $activeTypes = $model->getActiveTypes();
+        if (empty($activeTypes)) return false;
+
+        if (!$user->getTermsAccepted() || !$user->getTermsAcceptedAtUnformatted()) {
+            return true;
+        }
+
+        $acceptedAt = new \DateTimeImmutable($user->getTermsAcceptedAtUnformatted());
+
+        foreach ($model->getOutdatedTypesSince($acceptedAt) as $t) {
+            if (in_array($t, $activeTypes, true)) {
+                return true;
+            }
+        }
+
+        if (method_exists($model, 'getActivationOutdatedTypesSince')) {
+            foreach ($model->getActivationOutdatedTypesSince($acceptedAt) as $t) {
+                if (in_array($t, $activeTypes, true)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    #[NoReturn] private function enforceTermsOrFinalize(int $userId): void
+    {
+        $user = UsersModel::getInstance()->getUserById($userId);
+        if (!$user) { Redirect::redirect('login'); }
+
+        if ($this->shouldForceTerms($user)) {
+            // sortir du “vrai” login → basculer en semi-login
+            unset($_SESSION['cmwUser']);
+            setcookie('cmw_cookies_user_id', '', time() - 3600, '/', true, true);
+
+            $_SESSION['cmw_temp_user_id']     = $user->getId();
+            $_SESSION['cmw_temp_use_cookies'] = 1;
+            $_SESSION['return_to']            = 'profile';
+
+            Redirect::redirect('/terms/accept');
+        }
+
+        Redirect::redirect('profile');
     }
 }

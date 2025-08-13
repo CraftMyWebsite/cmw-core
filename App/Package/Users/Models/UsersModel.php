@@ -105,6 +105,8 @@ class UsersModel extends AbstractModel
             $res['user_firstname'] ?? '',
             $res['user_lastname'] ?? '',
             $res['user_state'],
+            $res['user_terms_accepted'] ?? null,
+            $res['user_terms_accepted_at'] ?? null,
             $res['user_key'],
             new User2FaEntity(
                 $res['user_id'],
@@ -803,4 +805,12 @@ class UsersModel extends AbstractModel
 
         return $res['methode'];
     }
+
+    public function markTermsAccepted(int $userId): bool
+    {
+        $db = DatabaseManager::getInstance();
+        $stmt = $db->prepare("UPDATE cmw_users SET user_terms_accepted=1, user_terms_accepted_at=NOW() WHERE user_id=:id");
+        return $stmt->execute(['id' => $userId]);
+    }
+
 }
