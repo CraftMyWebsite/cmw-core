@@ -2,6 +2,7 @@
 
 namespace CMW\Utils;
 
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Model\Core\CoreModel;
 use function array_reverse;
@@ -16,11 +17,63 @@ class Date
     /**
      * @param string $date
      * @return string
-     * @desc Convert DateTime into formatted Date.
+     * @desc Convert DateTime into formatted Date respecting locale.
      */
     public static function formatDate(string $date): string
     {
-        return date(CoreModel::getInstance()->fetchOption('dateFormat'), strtotime($date));
+        $formatted = date(CoreModel::getInstance()->fetchOption('dateFormat'), strtotime($date));
+
+        switch (EnvManager::getInstance()->getValue('LOCALE')) {
+            case 'fr':
+                $months = [
+                    'January' => 'janvier', 'February' => 'février', 'March' => 'mars',
+                    'April' => 'avril', 'May' => 'mai', 'June' => 'juin',
+                    'July' => 'juillet', 'August' => 'août', 'September' => 'septembre',
+                    'October' => 'octobre', 'November' => 'novembre', 'December' => 'décembre'
+                ];
+                break;
+
+            case 'zh': // Chinois simplifié
+                $months = [
+                    'January' => '一月', 'February' => '二月', 'March' => '三月',
+                    'April' => '四月', 'May' => '五月', 'June' => '六月',
+                    'July' => '七月', 'August' => '八月', 'September' => '九月',
+                    'October' => '十月', 'November' => '十一月', 'December' => '十二月'
+                ];
+                break;
+
+            case 'ja': // Japonais
+                $months = [
+                    'January' => '1月', 'February' => '2月', 'March' => '3月',
+                    'April' => '4月', 'May' => '5月', 'June' => '6月',
+                    'July' => '7月', 'August' => '8月', 'September' => '9月',
+                    'October' => '10月', 'November' => '11月', 'December' => '12月'
+                ];
+                break;
+
+            case 'es': // Espagnol
+                $months = [
+                    'January' => 'enero', 'February' => 'febrero', 'March' => 'marzo',
+                    'April' => 'abril', 'May' => 'mayo', 'June' => 'junio',
+                    'July' => 'julio', 'August' => 'agosto', 'September' => 'septiembre',
+                    'October' => 'octubre', 'November' => 'noviembre', 'December' => 'diciembre'
+                ];
+                break;
+
+            case 'de': // Allemand
+                $months = [
+                    'January' => 'Januar', 'February' => 'Februar', 'March' => 'März',
+                    'April' => 'April', 'May' => 'Mai', 'June' => 'Juni',
+                    'July' => 'Juli', 'August' => 'August', 'September' => 'September',
+                    'October' => 'Oktober', 'November' => 'November', 'December' => 'Dezember'
+                ];
+                break;
+
+            default:
+                return $formatted;
+        }
+
+        return strtr($formatted, $months);
     }
 
     /**
