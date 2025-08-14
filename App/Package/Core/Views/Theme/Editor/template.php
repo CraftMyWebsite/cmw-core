@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 
+<script>
+    localStorage.setItem('color-theme', 'light');
+    document.documentElement.classList.remove('dark');
+</script>
+<style>
+    #theme-toggle { pointer-events: none; opacity: .5; cursor: not-allowed; }
+</style>
+
 <style>
     .main-content {
         padding: 0 !important;
