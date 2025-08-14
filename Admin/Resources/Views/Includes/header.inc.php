@@ -84,7 +84,7 @@ function renderSubSubMenu(array $subMenus, $currentUser): string
                 </div>
                 <div class="ml-2">
                     <div class="px-3">
-                        <a href="<?= EnvManager::getInstance()->getValue('PATH_URL') ?>" target="_blank"><i
+                        <a id="shepherd-website"  href="<?= EnvManager::getInstance()->getValue('PATH_URL') ?>" target="_blank"><i
                                 class="fa-solid fa-arrow-up-right-from-square"></i></a>
                     </div>
                 </div>
@@ -92,7 +92,7 @@ function renderSubSubMenu(array $subMenus, $currentUser): string
             </div>
             <div class="flex items-center">
                 <div>
-                    <button type="button" class="relative  p-2.5" data-dropdown-toggle="dropdown-notification">
+                    <button id="shepherd-notification" type="button" class="relative  p-2.5" data-dropdown-toggle="dropdown-notification">
                         <i class="fa-solid fa-bell fa-lg"></i>
                         <?php if ($notificationNumber): ?>
                             <div
@@ -148,6 +148,7 @@ function renderSubSubMenu(array $subMenus, $currentUser): string
                         </a>
                     </div>
                 </div>
+                <li><button type="button" onclick="window.CMW_startAdminTour()">Relancer le guidage</button></li>
                 <div>
                     <button id="theme-toggle" type="button" class="p-2.5">
                         <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-gray-800" fill="currentColor"
@@ -211,14 +212,14 @@ function renderSubSubMenu(array $subMenus, $currentUser): string
         endforeach; ?>
 
         <ul class="space-y-1">
-            <li class="mt-4">
+            <li class="mt-4" id="shepherd-dashboard">
                 <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/dashboard"
                    class="a-side-nav <?= MenusController::getInstance()->isActiveNavbarItem('dashboard') ? 'side-nav-active' : '' ?>">
                     <i class="fa-solid fa-chart-pie"></i>
                     <span class="span-side-nav"><?= LangManager::translate('core.dashboard.title') ?></span>
                 </a>
             </li>
-            <?php foreach (PackageController::getCorePackages() as $package): ?>
+            <?php $shepherdMenu = 0; foreach (PackageController::getCorePackages() as $package): ?>
                 <?php foreach ($package->menus() as $menu): ?>
                     <?php
                     // Vérifier si le menu a des sous-menus visibles
@@ -232,7 +233,7 @@ function renderSubSubMenu(array $subMenus, $currentUser): string
 
                     // Si le menu n'a pas d'URL et a des sous-menus visibles
                     if (is_null($menu->getUrl()) && $hasVisibleSubMenu): ?>
-                        <li>
+                        <li id="shepherd-menu-<?= $shepherdMenu++ ?>">
                             <button type="button"
                                     class="a-side-nav <?= MenusController::getInstance()->isActiveNavbar($menu->getSubMenus()) ? 'side-nav-active' : '"' ?>"
                                     onclick="toggleSubMenu(this)">
@@ -244,9 +245,9 @@ function renderSubSubMenu(array $subMenus, $currentUser): string
                                 <?php foreach ($menu->getSubMenus() as $submenu): ?>
                                     <?php if (UsersModel::hasPermission($currentUser, $submenu->getPermission())): ?>
                                         <?php if (empty($submenu->getUrl()) && !empty($submenu->getSubMenus())): ?>
-                                            <li>
+                                            <li id="shepherd-sub-menu-<?= $shepherdMenu++ ?>">
                                                 <div
-                                                    class="a-side-nav-drop-sub flex justify-between items-center cursor-pointer">
+                                                  class="a-side-nav-drop-sub flex justify-between items-center cursor-pointer">
                                                     <span
                                                         class="a-side-nav-drop-sub-title"><?= $submenu->getTitle() ?></span>
                                                     <i class="fa-xs fa-solid fa-chevron-down"></i>
@@ -254,7 +255,7 @@ function renderSubSubMenu(array $subMenus, $currentUser): string
                                                 <?= renderSubSubMenu($submenu->getSubMenus(), $currentUser) ?>
                                             </li>
                                         <?php else: ?>
-                                            <li>
+                                            <li id="shepherd-sub-menu-<?= $shepherdMenu++ ?>">
                                                 <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/<?= $submenu->getUrl() ?>"
                                                    class="a-side-nav-drop <?= MenusController::getInstance()->isActiveNavbarItem($submenu->getUrl()) ? 'side-nav-drop-active' : '' ?>">
                                                     <?= $submenu->getTitle() ?>
@@ -266,7 +267,7 @@ function renderSubSubMenu(array $subMenus, $currentUser): string
                             </ul>
                         </li>
                     <?php elseif (!is_null($menu->getUrl()) && UsersModel::hasPermission($currentUser, $menu->getPermission())): ?>
-                        <li>
+                        <li id="shepherd-menu-<?= $shepherdMenu++ ?>">
                             <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>cmw-admin/<?= $menu->getUrl() ?>"
                                class="a-side-nav <?= MenusController::getInstance()->isActiveNavbarItem($menu->getUrl()) ? 'side-nav-active' : '' ?>">
                                 <i class="<?= $menu->getIcon() ?>"></i>

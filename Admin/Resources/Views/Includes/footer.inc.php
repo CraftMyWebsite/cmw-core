@@ -69,3 +69,9 @@ $isUpToDate = UpdatesManager::checkNewUpdateAvailable()
 <?php
 require_once ('Admin/Resources/Assets/Php/imageDropper.php');
 ?>
+
+<!--- GUIDAGE ---!>
+<script src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Vendors/Popper/popper.min.js"></script>
+<script src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Vendors/Shepherd/shepherd.min.js"></script>
+<link rel="stylesheet" href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Vendors/Shepherd/shepherd.css">
+<script src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Assets/Js/admin-tour.js"></script>
