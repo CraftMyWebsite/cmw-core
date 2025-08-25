@@ -32,7 +32,29 @@ class Utils
         return false;
     }
 
+
+    /**
+     * @param string|null ...$values
+     * @return bool
+     * @deprecated Use hasNull() instead
+     */
     public static function containsNullValue(?string ...$values): bool
+    {
+        foreach ($values as $value) {
+            if (is_null($value)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * <p>Check if we have null values</p>
+     * @param mixed ...$values
+     * @return bool
+     */
+    public static function hasNull(mixed ...$values): bool
     {
         foreach ($values as $value) {
             if (is_null($value)) {
@@ -136,21 +158,5 @@ class Utils
     public static function snakeToCamelCase(string $data): string
     {
         return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $data))));
-    }
-
-    /**
-     * <p>Check if we have null values</p>
-     * @param mixed ...$values
-     * @return bool
-     */
-    public static function hasNull(mixed ...$values): bool
-    {
-        foreach ($values as $value) {
-            if (is_null($value)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
