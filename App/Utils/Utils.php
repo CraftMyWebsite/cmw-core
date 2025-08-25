@@ -67,6 +67,11 @@ class Utils
         }
     }
 
+    /**
+     * @param string ...$values
+     * @return array
+     * @deprecated Fonction insécurisée : Utiliser FilterManager qui applique les correctifs nécessaires XSS, Typage ... (filterInput ne sera pas supprimé)
+     */
     public static function filterInput(string ...$values): array
     {
         $toReturn = [];
