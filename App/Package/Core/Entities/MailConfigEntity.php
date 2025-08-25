@@ -116,10 +116,7 @@ class MailConfigEntity extends AbstractEntity
      */
     public function getBody(): ?string
     {
-        if (!isset($this->body) || !is_null($this->body)) {
-            return null;
-        }
-        return $this->body;
+        return $this->body !== '' ? $this->body : null;
     }
 
     /**
