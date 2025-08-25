@@ -69,5 +69,18 @@ class TermsEntity extends AbstractEntity
         return $this->lastEditor;
     }
 
+    public function getSlug(): string
+    {
+        return match ($this->type) {
+            TermType::TERMS_OF_SERVICE => 'terms_of_service',
+            TermType::TERMS_OF_SALE    => 'terms_of_sale',
+            TermType::PRIVACY_POLICY   => 'privacy_policy',
+            TermType::LEGAL_NOTICE     => 'legal_notice',
+            TermType::COOKIE_POLICY    => 'cookie_policy',
+            TermType::ACCEPTABLE_USE   => 'acceptable_use',
+            TermType::LICENSE          => 'terms_of_license',
+            TermType::REFUND_POLICY    => 'refund_policy',
+        };
+    }
 
 }

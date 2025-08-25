@@ -1,6 +1,7 @@
 <?php
 
 use CMW\Entity\Core\TermsEntity;
+use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Model\Core\TermsModel;
@@ -42,6 +43,7 @@ $model = TermsModel::getInstance();
             /** @var \CMW\Entity\Core\TermsEntity|null $entity */
             $entity   = $terms[$key] ?? null;
             $content  = $entity?->getContent() ?? '';
+            $slug     = $entity->getSlug() ?? '';
             $requires = $entity?->getRequireAccept() ?? true;
             $published= $entity?->getPublishedAt() ?? '—';
             $editor   = $entity?->getLastEditor()?->getPseudo() ?? '—';
@@ -50,7 +52,10 @@ $model = TermsModel::getInstance();
             ?>
             <div class="card">
                 <div class="card-header">
-                    <h6><?= htmlspecialchars(type_label($type)) ?></h6>
+                    <div class="flex justify-between align-center">
+                        <h6><?= htmlspecialchars(type_label($type)) ?></h6>
+                        <?php if ($isActive): ?><a class="btn-primary" target="_blank" href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . $slug ?>"><i class="fa-solid fa-eye"></i></a><?php endif;?>
+                    </div>
                     <small>
                         <?= LangManager::translate('core.terms.last_published') ?> <?= htmlspecialchars($published) ?> ·
                         <?= LangManager::translate('core.terms.last_editor') ?> <?= htmlspecialchars($editor) ?>
