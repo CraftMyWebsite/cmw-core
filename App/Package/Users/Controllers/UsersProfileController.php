@@ -142,8 +142,16 @@ class UsersProfileController extends AbstractController
 
         Emitter::send(DeleteUserAccountEvent::class, $id);
 
-        UsersSessionsController::getInstance()->logOut();
-        UsersModel::getInstance()->delete($id);
+        if (UsersModel::getInstance()->delete($id)) {
+            UsersSessionsController::getInstance()->logOut();
+        } else {
+            Flash::send(
+                Alert::ERROR,
+                LangManager::translate('users.toaster.error'),
+                LangManager::translate('users.toaster.user_delete_nop'),
+            );
+            Redirect::redirectPreviousRoute();
+        }
 
         Redirect::redirectToHome();
     }
