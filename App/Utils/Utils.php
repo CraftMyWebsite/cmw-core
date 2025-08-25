@@ -3,6 +3,7 @@
 namespace CMW\Utils;
 
 use function implode;
+use function is_null;
 use function lcfirst;
 use function preg_replace;
 use function str_replace;
@@ -135,5 +136,21 @@ class Utils
     public static function snakeToCamelCase(string $data): string
     {
         return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $data))));
+    }
+
+    /**
+     * <p>Check if we have null values</p>
+     * @param mixed ...$values
+     * @return bool
+     */
+    public static function hasNull(mixed ...$values): bool
+    {
+        foreach ($values as $value) {
+            if (is_null($value)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
