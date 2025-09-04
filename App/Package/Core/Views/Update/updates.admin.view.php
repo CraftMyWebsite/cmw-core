@@ -17,6 +17,10 @@ $description = LangManager::translate('core.updates.description');
 
 <h3><i class="fas fa-arrows-rotate"></i> <?= LangManager::translate('core.updates.pageTitle') ?></h3>
 
+<?php if (UpdatesManager::isTestAPI()):?>
+    <h6 class="text-warning mb-2">Votre site est en mode test API.</h6>
+<?php endif; ?>
+
 <div class="grid-2">
     <div class="card">
         <div class="flex justify-between">

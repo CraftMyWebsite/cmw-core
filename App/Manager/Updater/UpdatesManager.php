@@ -8,6 +8,15 @@ use CMW\Manager\Env\EnvManager;
 class UpdatesManager
 {
     /**
+     * @return bool
+     * @desc Return if the website can test update
+     */
+    public static function isTestAPI(): bool
+    {
+        return (bool)EnvManager::getInstance()->getValue('TEST_API_UPDATE');
+    }
+
+    /**
      * @return string
      * @desc Return the local CMW version
      */
@@ -23,6 +32,9 @@ class UpdatesManager
      */
     public static function getCmwLatest(): mixed
     {
+        if (self::isTestAPI()) {
+            return PublicAPI::getData('cms/latest/test');
+        }
         return PublicAPI::getData('cms/latest');
     }
 
