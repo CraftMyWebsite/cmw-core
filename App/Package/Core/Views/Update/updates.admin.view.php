@@ -32,8 +32,12 @@ $description = LangManager::translate('core.updates.description');
                         title="<?= LangManager::translate('core.updates.warningUpdate') ?>"
                         class="text-danger fa-solid fa-heart-crack fa-beat-fade"></i>
                 </h3>
+                <?php if ($latestVersion['value'] === "empty" && UpdatesManager::isTestAPI()):?>
+                    <p><i class="fa-solid fa-circle-check text-success"></i> Aucune version en test actuellement.</p>
+                <?php else: ?>
                 <p><?= LangManager::translate('core.updates.updateTo') ?> <b
                         class="text-success"><?= $latestVersion['value'] ?></b> !</p>
+                <?php endif; ?>
             </div>
             <?php else: ?>
             <div>
@@ -45,8 +49,11 @@ $description = LangManager::translate('core.updates.description');
                 </h3>
             </div>
             <?php endif; ?>
-            <?php if (UpdatesManager::checkNewUpdateAvailable()): ?>
-                <a href="cms/update" class="btn-success h-fit"><?= LangManager::translate('core.updates.updateButton') ?></a>
+            <?php if ($latestVersion['value'] === "empty" && UpdatesManager::isTestAPI()):?>
+            <?php else: ?>
+                <?php if (UpdatesManager::checkNewUpdateAvailable()): ?>
+                    <a href="cms/update" class="btn-success h-fit"><?= LangManager::translate('core.updates.updateButton') ?></a>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
         <p>
