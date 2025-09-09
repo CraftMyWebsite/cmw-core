@@ -2,6 +2,11 @@
 
 namespace CMW\Manager\Package;
 
+
+/**
+ * @deprecated
+ * @desc Update your packages quickly will be completely removed in beta-03
+ */
 interface IPackageConfig
 {
     public function name(): string;
