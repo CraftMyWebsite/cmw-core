@@ -6,7 +6,7 @@ use CMW\Manager\Notification\NotificationModel;
 use CMW\Manager\Security\SecurityManager;
 
 /* @var \CMW\Manager\Notification\NotificationEntity[] $notifications */
-/* @var \CMW\Manager\Package\IPackageConfig[] $packages */
+/* @var \CMW\Manager\Package\IPackageConfigV2[] $packages */
 /* @var string $showOnDiscord */
 /* @var string $webhookDiscord */
 /* @var string $sendMail */

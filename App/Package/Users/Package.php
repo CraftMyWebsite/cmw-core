@@ -3,11 +3,11 @@
 namespace CMW\Package\Users;
 
 use CMW\Manager\Lang\LangManager;
-use CMW\Manager\Package\IPackageConfig;
+use CMW\Manager\Package\IPackageConfigV2;
 use CMW\Manager\Package\PackageMenuType;
 use CMW\Manager\Package\PackageSubMenuType;
 
-class Package implements IPackageConfig
+class Package implements IPackageConfigV2
 {
     public function name(): string
     {
@@ -17,6 +17,21 @@ class Package implements IPackageConfig
     public function version(): string
     {
         return '1.0.0';
+    }
+
+    public function cmwVersion(): string
+    {
+        return "2.0";
+    }
+
+    public function imageLink(): ?string
+    {
+        return null;
+    }
+
+    public function author(): ?string
+    {
+        return "Zomb";
     }
 
     public function authors(): array
@@ -89,6 +104,11 @@ class Package implements IPackageConfig
                 ],
             ),
         ];
+    }
+
+    public function compatiblesPackages(): array
+    {
+        return ["Core"];
     }
 
     public function requiredPackages(): array

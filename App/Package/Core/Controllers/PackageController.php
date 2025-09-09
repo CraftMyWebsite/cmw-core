@@ -10,8 +10,11 @@ use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Notice\WarningManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Package\IPackageConfig;
+use CMW\Manager\Package\IPackageConfigV2;
+use CMW\Manager\Package\Adapter\LegacyPackageAdapter;
 use CMW\Manager\Router\Link;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Views\View;
@@ -40,7 +43,7 @@ class PackageController extends AbstractController
     public static array $corePackages = ['Core', 'Users', 'Pages'];
 
     /**
-     * @return IPackageConfig[]
+     * @return IPackageConfigV2[]
      * @desc Return packages they are not natives, like Core and Users
      */
     public static function getInstalledPackages(): array
@@ -62,7 +65,7 @@ class PackageController extends AbstractController
     }
 
     /**
-     * @return IPackageConfig[]
+     * @return IPackageConfigV2[]
      * @desc Return natives packages (core, users) => self::$corePackages
      */
     public static function getCorePackages(): array
@@ -79,7 +82,7 @@ class PackageController extends AbstractController
     }
 
     /**
-     * @return IPackageConfig[]
+     * @return IPackageConfigV2[]
      * @desc Return getCorePackages() and getInstalledPackages()
      */
     public static function getAllPackages(): array
@@ -87,7 +90,7 @@ class PackageController extends AbstractController
         return array_merge(self::getCorePackages(), self::getInstalledPackages());
     }
 
-    public static function getPackage(string $packageName): ?IPackageConfig
+    public static function getPackage(string $packageName): ?IPackageConfigV2
     {
         $namespace = 'CMW\\Package\\' . $packageName . '\Package';
 
@@ -97,11 +100,17 @@ class PackageController extends AbstractController
 
         $classInstance = new $namespace();
 
-        if (!is_subclass_of($classInstance, IPackageConfig::class)) {
-            return null;
+        if ($classInstance instanceof IPackageConfigV2) {
+            return $classInstance;
         }
 
-        return $classInstance;
+        if ($classInstance instanceof IPackageConfig) {
+            WarningManager::addError("Le package <b>{$packageName}</b> utilise l'ancienne interface <code>IPackageConfig</code>. Migre vers <code>IPackageConfigV2</code> ou met à jour le package pour rester compatible.<br><code>IPackageConfig</code> ne sera plus disponnible en beta-03");
+            error_log("[CMW] Package '$packageName' Uses IPackageConfig (deprecated removed in beta-03). Consider migrating to IPackageConfigV2. or update the package if you haven't already!");
+            return new LegacyPackageAdapter($classInstance);
+        }
+
+        return null;
     }
 
     public static function isInstalled(string $package): bool
@@ -119,7 +128,7 @@ class PackageController extends AbstractController
     }
 
     /**
-     * @return IPackageConfig[]
+     * @return IPackageConfigV2[]
      * @desc Return all packages local (remove packages get from the public market)
      */
     public static function getLocalPackages(): array
