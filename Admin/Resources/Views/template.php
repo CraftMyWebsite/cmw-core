@@ -13,6 +13,8 @@ View::loadInclude($includes, 'styles');
 
 include_once ('Includes/header.inc.php');
 
+include_once ('_notices.php');
+
 echo $content;
 
 include_once ('Includes/footer.inc.php');
