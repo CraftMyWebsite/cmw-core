@@ -17,6 +17,15 @@ class UpdatesManager
     }
 
     /**
+     * @return bool
+     * @desc Return if the website is in recette env
+     */
+    public static function isRecette(): bool
+    {
+        return (bool)EnvManager::getInstance()->getValue('IS_RECETTE');
+    }
+
+    /**
      * @return string
      * @desc Return the local CMW version
      */
