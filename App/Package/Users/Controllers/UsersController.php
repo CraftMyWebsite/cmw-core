@@ -248,6 +248,11 @@ class UsersController extends AbstractController
             Redirect::redirectPreviousRoute();
         }
 
+        if (UsersSessionsController::getInstance()->getCurrentUser()?->getHighestRole()?->getId() === 5) {
+            Flash::send(Alert::ERROR, LangManager::translate('users.toaster.error'), LangManager::translate('users.toaster.user_delete_is_admin'));
+            Redirect::redirectPreviousRoute();
+        }
+
         Emitter::send(DeleteUserAccountEvent::class, $id);
 
         UsersModel::getInstance()->delete($id);
