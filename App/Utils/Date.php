@@ -79,6 +79,7 @@ class Date
     /**
      * @param int $date
      * @return string
+     * @deprecated Please use timestampToTime()
      */
     public static function formatDateTime(int $date): string
     {
