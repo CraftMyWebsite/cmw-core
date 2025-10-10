@@ -86,6 +86,15 @@ class Date
     }
 
     /**
+     * @param int $date
+     * @return string
+     */
+    public static function timestampToTime(int $date): string
+    {
+        return date(CoreModel::getInstance()->fetchOption('dateFormat'), $date);
+    }
+
+    /**
      * @param int $seconds
      * @return string
      * @desc Convert seconds to time format.
