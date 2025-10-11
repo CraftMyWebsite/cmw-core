@@ -302,7 +302,7 @@ $description = LangManager::translate('core.mail.config.description');
         enableSnippets: false
     })
 
-    if (localStorage.getItem('theme') === 'theme-dark') {
+    if (localStorage.getItem('color-theme') === 'dark') {
         editor.setTheme("ace/theme/cmw_dark");
     } else {
         editor.setTheme("ace/theme/cmw_light");
