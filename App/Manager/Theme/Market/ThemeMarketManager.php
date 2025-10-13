@@ -4,7 +4,7 @@ namespace CMW\Manager\Theme\Market;
 
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Manager\AbstractManager;
-use CMW\Manager\Theme\IThemeConfig;
+use CMW\Manager\Theme\IThemeConfigV2;
 use CMW\Manager\Theme\Loader\ThemeLoader;
 
 class ThemeMarketManager extends AbstractManager
@@ -19,7 +19,7 @@ class ThemeMarketManager extends AbstractManager
     }
 
     /**
-     * @return IThemeConfig[]
+     * @return IThemeConfigV2[]
      * @desc Return all themes local (remove thème get from the public market)
      */
     public function getLocalThemes(): array

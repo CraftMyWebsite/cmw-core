@@ -4,15 +4,18 @@ namespace CMW\Manager\Theme\Loader;
 
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Manager\AbstractManager;
+use CMW\Manager\Notice\WarningManager;
 use CMW\Manager\Theme\Exceptions\ThemeNotFoundException;
 use CMW\Manager\Theme\IThemeConfig;
+use CMW\Manager\Theme\IThemeConfigV2;
+use CMW\Manager\Theme\Adapter\LegacyThemeAdapter;
 use CMW\Manager\Theme\ThemeManager;
 use CMW\Model\Core\CoreModel;
 use CMW\Utils\Directory;
 
 class ThemeLoader extends AbstractManager
 {
-    public function getCurrentTheme(): IThemeConfig
+    public function getCurrentTheme(): IThemeConfigV2
     {
         $currentThemeName = ThemeManager::$defaultThemeName;
         $isInstallation = EnvManager::getInstance()->getValue('INSTALLSTEP') !== '-1';
@@ -30,9 +33,9 @@ class ThemeLoader extends AbstractManager
 
     /**
      * @param string $themeName
-     * @return IThemeConfig|null
+     * @return IThemeConfigV2|null
      */
-    public function getTheme(string $themeName): ?IThemeConfig
+    public function getTheme(string $themeName): ?IThemeConfigV2
     {
         $namespace = 'CMW\\Theme\\' . $themeName . '\Theme';
 
@@ -42,15 +45,21 @@ class ThemeLoader extends AbstractManager
 
         $classInstance = new $namespace();
 
-        if (!is_subclass_of($classInstance, IThemeConfig::class)) {
-            return null;
+        if ($classInstance instanceof IThemeConfigV2) {
+            return $classInstance;
         }
 
-        return $classInstance;
+        if ($classInstance instanceof IThemeConfig) {
+            WarningManager::addError("Le thème <b>{$themeName}</b> utilise l'ancienne interface <code>IThemeConfig</code>. Migre vers <code>IThemeConfigV2</code> ou mets à jour le thème pour rester compatible.<br><code>IThemeConfig</code> sera supprimé en beta-03.");
+            error_log("[CMW] Theme '$themeName' uses IThemeConfig (deprecated, removed in beta-03). Migrate to IThemeConfigV2 or update your theme.");
+            return new LegacyThemeAdapter($classInstance);
+        }
+
+        return null;
     }
 
     /**
-     * @return IThemeConfig[]
+     * @return IThemeConfigV2[]
      */
     public function getInstalledThemes(): array
     {

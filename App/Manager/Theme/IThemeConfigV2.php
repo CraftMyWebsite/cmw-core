@@ -3,10 +3,9 @@
 namespace CMW\Manager\Theme;
 
 /**
- * @deprecated
- * @desc Update your themes quickly will be completely removed in beta-03
+ * @desc Use this interface only for theme configuration
  */
-interface IThemeConfig
+interface IThemeConfigV2
 {
     /**
      * @return string
@@ -31,12 +30,6 @@ interface IThemeConfig
      * @desc Return the image link of the theme (optional). Return null if not exist.
      */
     public function imageLink(): ?string;
-
-    /**
-     * @return string|null
-     * @desc The theme author.
-     */
-    public function author(): ?string;
 
     /**
      * @return string[]

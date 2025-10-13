@@ -3,9 +3,9 @@
 namespace CMW\Theme\Sampler;
 
 use CMW\Manager\Env\EnvManager;
-use CMW\Manager\Theme\IThemeConfig;
+use CMW\Manager\Theme\IThemeConfigV2;
 
-class Theme implements IThemeConfig
+class Theme implements IThemeConfigV2
 {
     public function name(): string
     {
@@ -22,14 +22,9 @@ class Theme implements IThemeConfig
         return 'alpha-09';
     }
 
-    public function author(): ?string
-    {
-        return 'CraftMyWebsite';
-    }
-
     public function authors(): array
     {
-        return [];
+        return ['CraftMyWebsite'];
     }
 
     public function compatiblesPackages(): array
