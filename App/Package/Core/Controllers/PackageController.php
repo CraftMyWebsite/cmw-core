@@ -29,7 +29,6 @@ use function file_exists;
 use function file_get_contents;
 use function in_array;
 use function is_null;
-use function is_subclass_of;
 use function scandir;
 
 /**

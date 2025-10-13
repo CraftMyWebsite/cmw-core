@@ -15,7 +15,6 @@ final class LegacyPackageAdapter implements IPackageConfigV2
 
     public function cmwVersion(): string         { return UpdatesManager::getCmwLatest(); }
     public function imageLink(): ?string         { return null; }
-    public function author(): ?string            { return null; }
     public function authors(): array             { return $this->v1->authors(); }
     public function isGame(): bool               { return $this->v1->isGame(); }
     public function isCore(): bool               { return $this->v1->isCore(); }
