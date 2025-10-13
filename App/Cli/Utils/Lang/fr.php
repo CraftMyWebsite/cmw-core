@@ -7,7 +7,9 @@ const CLI_EMPTY_ARGS = "Pour obtenir plus d'aide → LIENS DU WIKI CLI
                         
  > cmw theme-init => Lancez le constructeur de thèmes
                         
- > cmw package-init => Lancez le constructeur de packages";
+ > cmw package-init => Lancez le constructeur de packages
+ 
+ > cmw ai-copilot => Lancez le constructeur de context AI Copilot";
 
 const CLI_THEME_BUILDER_NAME = 'Entrez le nom du thème';
 const CLI_THEME_BUILDER_VERSION = 'Entrez la version du thème';

@@ -50,3 +50,6 @@ __MACOSX/
 # Ignore node_modules files and folder
 **/node_modules/
 package-lock.json
+
+# Ignore .copilot context files
+.copilot/

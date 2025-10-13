@@ -7,7 +7,9 @@ const CLI_EMPTY_ARGS = 'For mor helps → LIENS DU WIKI CLI
                         
  > cmw theme-init => Launch the theme Builder
                         
- > cmw package-init => Launch the package Builder';
+ > cmw package-init => Launch the package Builder
+ 
+ > cmw ai-copilot => Launch the AI Copilot context Builder';
 
 const CLI_THEME_BUILDER_NAME = 'Enter the Theme name';
 const CLI_THEME_BUILDER_VERSION = 'Enter the Theme version';
