@@ -1,5 +1,6 @@
 <?php
 
+use CMW\Manager\Updater\UpdatesManager;
 use CMW\Utils\Date;
 use CMW\Controller\Core\PackageController;
 use CMW\Manager\Lang\LangManager;
@@ -12,6 +13,10 @@ $description = LangManager::translate('core.Package.desc');
 
 <h3><i class="fa-solid fa-puzzle-piece"></i> <?= LangManager::translate('core.Package.market') ?></h3>
 
+<?php if (UpdatesManager::isTestAPI()):?>
+    <h6 class="text-warning mb-2">Votre site est en mode test API.</h6>
+<?php endif; ?>
+
 <div class="grid-2">
     <?php foreach ($packagesList as $apiPackages): ?>
         <?php if (!PackageController::isInstalled($apiPackages['name'])): ?>
@@ -22,15 +27,22 @@ $description = LangManager::translate('core.Package.desc');
                          alt="img">
                     <div class="pl-4 w-full">
                         <div class="flex justify-between">
-                            <h6><?= $apiPackages['name'] ?></h6>
+                            <h6><?= ($apiPackages['version_status']) === 1 && UpdatesManager::isTestAPI() ? '<span class="text-warning">En attente : </span>' : '' ?><?= $apiPackages['name'] ?></h6>
                             <div>
-                                <button data-modal-toggle="modal-<?= $apiPackages['id'] ?>" class="btn-primary-sm"
-                                        type="button"><?= LangManager::translate('core.Package.details') ?></button>
-                                <button
-                                    onclick="this.disabled = true; window.location = 'install/<?= $apiPackages['id'] ?>'"
-                                    class="btn-success-sm">
-                                    <i class="fa-solid fa-download"></i> <?= LangManager::translate('core.Package.install') ?>
-                                </button>
+                                <?php if ($apiPackages['version_status'] === 1 && UpdatesManager::isTestAPI()): ?>
+                                    <a href="install/<?= $apiPackages['id'] ?>/online" onclick="this.disabled = true" class="btn-success-sm mr-2">
+                                        <i class="fa-solid fa-download"></i> <?= LangManager::translate('core.Package.install') ?>
+                                    </a>
+                                    <a href="install/<?= $apiPackages['id'] ?>/test" onclick="this.disabled = true" class="btn-warning-sm">
+                                        <i class="fa-solid fa-download"></i> <?= LangManager::translate('core.Package.install') ?> <?= $apiPackages['version_name'] ?>
+                                    </a>
+                                <?php else: ?>
+                                    <button data-modal-toggle="modal-<?= $apiPackages['id'] ?>" class="btn-primary-sm"
+                                            type="button"><?= LangManager::translate('core.Package.details') ?></button>
+                                    <a href="install/<?= $apiPackages['id'] ?>/online" onclick="this.disabled = true" class="btn-success-sm">
+                                        <i class="fa-solid fa-download"></i> <?= LangManager::translate('core.Package.install') ?>
+                                    </a>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div>

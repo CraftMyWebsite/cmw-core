@@ -1,5 +1,6 @@
 <?php
 
+use CMW\Manager\Updater\UpdatesManager;
 use CMW\Utils\Date;
 use CMW\Controller\Core\PackageController;
 use CMW\Manager\Env\EnvManager;
@@ -10,24 +11,37 @@ use CMW\Manager\Lang\LangManager;
 $title = LangManager::translate('core.Package.title');
 $description = LangManager::translate('core.Package.desc');
 
-
 $packagesToUpdate = [];
 $packagesUpToDate = [];
+
+$testMode = UpdatesManager::isTestAPI();
 
 foreach ($packagesList as $pkg) {
     if (!PackageController::isInstalled($pkg['name'])) {
         continue;
     }
     $local = PackageController::getPackage($pkg['name']);
-    if ($pkg['version_status'] === 0 && $local->version() !== $pkg['version_name']) {
+    $needsUpdate = false;
+
+    // Mode normal: uniquement versions stables
+    if (!$testMode && $pkg['version_status'] === 0 && $local->version() !== $pkg['version_name']) {
+        $needsUpdate = true;
+    }
+
+    // Mode test: on autorise aussi les versions en attente
+    if ($testMode && $local->version() !== $pkg['version_name']) {
+        $needsUpdate = true;
+    }
+
+    if ($needsUpdate) {
         $packagesToUpdate[] = $pkg;
     } else {
         $packagesUpToDate[] = $pkg;
     }
 }
 
-
-function renderCard($name, $image, $description, $author = null, $versionTarget = null, $version = null, $id = null, $notVerified = false, $updateBadge = false, $downloads = null, $versionCMW = null, $releaseDate = null) {
+function renderCard($name, $image, $description, $author = null, $versionStatus = null, $versionTarget = null, $version = null, $id = null, $notVerified = false, $updateBadge = false, $downloads = null, $versionCMW = null, $releaseDate = null, $targetStatusSlug = 'online'
+) {
     $uniqueId = $id ?? $name;
     ?>
     <div class="card relative h-full" style="overflow: hidden;">
@@ -35,11 +49,11 @@ function renderCard($name, $image, $description, $author = null, $versionTarget 
             <img class="rounded-lg" style="height: 140px; width: 140px;" src="<?= $image ?>" alt="img">
             <div class="pl-4 w-full">
                 <div class="flex justify-between">
-                    <h6><?= $name ?></h6>
+                    <h6><?= ($versionStatus) === 1  && UpdatesManager::isTestAPI() ? '<span class="text-warning">En attente : </span>' : '' ?><?= $name ?></h6>
                     <div>
                         <?php if ($updateBadge): ?>
                             <a class="btn-warning" type="button"
-                               href="update/<?= $id ?>/<?= $version ?>/<?= $name ?>">
+                               href="update/<?= $id ?>/<?= $version ?>/<?= $name ?>/<?= $targetStatusSlug ?>">
                                 <?= LangManager::translate('core.Package.update') ?>
                             </a>
                         <?php else: ?>
@@ -68,7 +82,7 @@ function renderCard($name, $image, $description, $author = null, $versionTarget 
         <?php if ($updateBadge): ?>
             <div class="absolute" style="transform: rotate(-45deg); left: -4.3em; top: 3.3em; z-index: 10">
                 <div class="bg-warning text-center px-16" style="opacity: .85">
-                    <?= LangManager::translate('core.theme.update') ?>
+                    <?= (UpdatesManager::isTestAPI() && $versionStatus === 1) ? 'MAJ de TEST dispo' : LangManager::translate('core.theme.update') ?>
                 </div>
             </div>
         <?php elseif ($notVerified): ?>
@@ -80,10 +94,10 @@ function renderCard($name, $image, $description, $author = null, $versionTarget 
         <?php endif; ?>
 
         <?php if ($updateBadge): ?>
-        <div class="alert-warning text-center">
-            <?= LangManager::translate('core.theme.manage.theme_need_update',
-                ['version' => $version, 'target' => $versionTarget]) ?>
-        </div>
+            <div class="alert-warning text-center">
+                <?= LangManager::translate('core.theme.manage.theme_need_update',
+                    ['version' => $version, 'target' => $versionTarget]) ?>
+            </div>
         <?php endif; ?>
 
         <?php if ($downloads !== null && $versionCMW): ?>
@@ -166,16 +180,24 @@ function renderModalDelete($id, $name) {
 
 <h3><i class="fa-solid fa-puzzle-piece"></i> <?= LangManager::translate('core.Package.my_packages') ?></h3>
 
+<?php if ($testMode):?>
+    <h6 class="text-warning mb-2">Votre site est en mode test API.</h6>
+<?php endif; ?>
+
 <div class="grid-2">
     <!-- Packages API - à mettre à jour -->
     <?php foreach ($packagesToUpdate as $pkg): ?>
         <?php
         $local = PackageController::getPackage($pkg['name']);
+        // Si mode test et version en attente -> proposer update sur flux test
+        $targetStatusSlug = ($testMode && $pkg['version_status'] === 1) ? 'test' : 'online';
+
         renderCard(
             $pkg['name'],
             $pkg['icon'],
             mb_strimwidth($pkg['description_short'], 0, 280, '...'),
             $pkg['author_pseudo'],
+            $pkg['version_status'],
             $pkg['version_name'],
             $local->version(),
             $pkg['id'],
@@ -183,7 +205,8 @@ function renderModalDelete($id, $name) {
             true,
             $pkg['downloads'],
             $pkg['version_cmw'],
-            $pkg['date_release']
+            $pkg['date_release'],
+            $targetStatusSlug
         );
         renderModalDetails(
             $pkg['id'],
@@ -208,6 +231,7 @@ function renderModalDelete($id, $name) {
             $pkg['icon'],
             mb_strimwidth($pkg['description_short'], 0, 280, '...'),
             $pkg['author_pseudo'],
+            $pkg['version_status'],
             $pkg['version_name'],
             $local->version(),
             $pkg['id'],

@@ -123,6 +123,9 @@ class PackageController extends AbstractController
      */
     public static function getMarketPackages(): array
     {
+        if (UpdatesManager::isTestAPI()) {
+            return PublicAPI::getData('market/resources/all/states');
+        }
         return PublicAPI::getData('market/resources/filtered/1');
     }
 
@@ -178,9 +181,9 @@ class PackageController extends AbstractController
             ->view();
     }
 
-    #[Link('/install/:id', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/packages')]
     #[NoReturn]
-    private function adminPackageInstallation(int $id): void
+    #[Link('/install/:id/:status', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/packages')]
+    private function adminPackageInstallation(int $id, string $status): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.market');
 
@@ -192,7 +195,82 @@ class PackageController extends AbstractController
             }
         }
 
-        $package = PublicAPI::putData("market/resources/install/$id");
+        if ($status === 'online') {
+            $status = 0;
+        } else {
+            $status = 1;
+        }
+
+        // Check market dependencies
+        $thisPackage = PublicAPI::getData("market/resources/$id");
+
+        $missing = [];
+        if (!empty($thisPackage['dependencies'])) {
+            foreach ($thisPackage['dependencies'] as $dep) {
+                if (is_null(PackageController::getPackage($dep['market_name'] ?? $dep['name'] ?? null))) {
+                    $missing[] = '<b>'.($dep['market_name'] ?? $dep['name']).'</b>';
+                }
+            }
+
+            if (!empty($missing)) {
+                $count = count($missing);
+                $list  = $count > 1
+                    ? implode(', ', array_slice($missing, 0, -1)).' et '.end($missing)
+                    : $missing[0];
+
+                $label = $count > 1 ? 'les packages ' : 'le package ';
+
+                Flash::send(
+                    Alert::WARNING,
+                    'Packages',
+                    'Veuillez installer '.$label.$list.' avant d\'installer <b>'.$thisPackage['market_name'].
+                    '</b> car il en a besoin pour fonctionner.'
+                );
+                Redirect::redirectPreviousRoute();
+            }
+
+            // Check versions of installed dependencies update before install
+            $blocking = [];
+            foreach ($thisPackage['dependencies'] as $dep) {
+                // Récup local
+                $local = PackageController::getPackage($dep['market_name'] ?? $dep['name'] ?? null);
+                if ($local === null) {
+                    continue;
+                }
+
+                $depIdOrSlug = $dep['id'] ?? ($dep['name'] ?? null);
+                $depApi = $depIdOrSlug ? PublicAPI::getData("market/resources/{$depIdOrSlug}") : null;
+                if (!is_array($depApi) || empty($depApi['version_name'])) {
+                    $blocking[] = "<b>".($dep['market_name'] ?? $dep['name'])."</b> (version distante inconnue)";
+                    continue;
+                }
+
+                $remote = ltrim((string)$depApi['version_name'], "vV");
+                $localV = ltrim((string)$local->version(), "vV");
+
+                if (version_compare($localV, $remote, '<')) {
+                    $blocking[] = "<b>".($dep['market_name'] ?? $dep['name'])."</b> {$localV} ➜ {$remote}";
+                }
+            }
+
+            if (!empty($blocking)) {
+                $count = count($blocking);
+                $list  = $count > 1
+                    ? implode(', ', array_slice($blocking, 0, -1)).' et '.end($blocking)
+                    : $blocking[0];
+
+                $label = $count > 1 ? 'les packages ' : 'le package ';
+
+                Flash::send(
+                    Alert::WARNING,
+                    'Packages',
+                    "Veuillez d'abord mettre à jour {$label}{$list} avant d'installer <b>{$thisPackage['market_name']}</b>."
+                );
+                Redirect::redirectPreviousRoute();
+            }
+        }
+
+        $package = PublicAPI::putData("market/resources/install/$id/$status");
 
         if (empty($package)) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
@@ -233,9 +311,9 @@ class PackageController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link('/update/:id/:actualVersion/:packageName', Link::GET, ['id' => '[0-9]+', 'actualVersion' => '.*?', 'packageName' => '.*?'], '/cmw-admin/packages')]
+    #[Link('/update/:id/:actualVersion/:packageName/:status', Link::GET, ['id' => '[0-9]+', 'actualVersion' => '.*?', 'packageName' => '.*?'], '/cmw-admin/packages')]
     #[NoReturn]
-    private function adminPackageUpdate(int $id, string $actualVersion, string $packageName): void
+    private function adminPackageUpdate(int $id, string $actualVersion, string $packageName, string $status): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.manage');
 
@@ -247,7 +325,53 @@ class PackageController extends AbstractController
             }
         }
 
-        $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion");
+        $statusInt = ($status === 'test') ? 1 : 0;
+
+        //Check if dependencies have update before update this
+        $current = PublicAPI::getData("market/resources/$id");
+        $blocking = [];
+
+        if (!empty($current['dependencies'])) {
+            foreach ($current['dependencies'] as $dep) {
+                $local = PackageController::getPackage($dep['market_name']);
+                if ($local === null) {
+                    $blocking[] = "<b>{$dep['market_name']}</b> (non installé)";
+                    continue;
+                }
+
+                $depApi = PublicAPI::getData("market/resources/{$dep['id']}");
+                if (!is_array($depApi) || empty($depApi['version_name'])) {
+                    $blocking[] = "<b>{$dep['market_name']}</b> (version distante inconnue)";
+                    continue;
+                }
+
+                $remote = ltrim((string)$depApi['version_name'], "vV");
+                $localV = ltrim((string)$local->version(), "vV");
+
+                if (version_compare($localV, $remote, '<')) {
+                    $blocking[] = "<b>{$dep['market_name']}</b> {$localV} ➜ {$remote}";
+                }
+            }
+
+            if (!empty($blocking)) {
+                $count = count($blocking);
+                $list  = $count > 1
+                    ? implode(', ', array_slice($blocking, 0, -1)).' et '.end($blocking)
+                    : $blocking[0];
+
+                $label = $count > 1 ? 'les packages ' : 'le package ';
+
+                Flash::send(
+                    Alert::WARNING,
+                    'Packages',
+                    "Veuillez d'abord mettre à jour {$label}{$list} avant d'actualiser <b>{$packageName}</b>."
+                );
+                Redirect::redirectPreviousRoute();
+            }
+        }
+
+
+        $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion/$statusInt");
 
         if (empty($updates)) {
             Flash::send(
