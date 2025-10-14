@@ -19,12 +19,10 @@ use CMW\Utils\Utils;
 class RolesModel extends AbstractModel
 {
     private PermissionsModel $permissionsModel;
-    private static UsersModel $usersModel;
 
     public function __construct()
     {
         $this->permissionsModel = new PermissionsModel();
-        self::$usersModel = new UsersModel();
     }
 
     public function getRoleById($id): ?RoleEntity
@@ -263,7 +261,7 @@ class RolesModel extends AbstractModel
 
     public static function playerHasRole(int $userId, int $roleId): bool
     {
-        $user = self::$usersModel->getUserById($userId);
+        $user = UsersModel::getInstance()->getUserById($userId);
 
         if (is_null($user)) {
             return false;
