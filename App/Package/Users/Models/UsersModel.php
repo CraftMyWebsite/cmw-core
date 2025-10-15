@@ -367,6 +367,43 @@ class UsersModel extends AbstractModel
     }
 
     /**
+     * @param int $roleId
+     * @param int $userId
+     * @return bool
+     */
+    public function removeSpecificRoleByIdForUserId(int $roleId, int $userId): bool
+    {
+        $var = [
+            'role_id' => $roleId,
+            'user_id' => $userId,
+        ];
+
+        $sql = 'DELETE FROM cmw_users_roles WHERE user_id = :user_id AND role_id = :role_id';
+
+        $db = DatabaseManager::getInstance();
+
+        return $db->prepare($sql)->execute($var);
+    }
+
+    /**
+     * @param int $roleId
+     * @param int $userId
+     * @return bool
+     */
+    public function addSpecificRoleByIdForUserId(int $roleId, int $userId): bool
+    {
+        $var = [
+            'role_id' => $roleId,
+            'user_id' => $userId,
+        ];
+        $sql = 'INSERT INTO cmw_users_roles (user_id, role_id) VALUES (:user_id, :role_id)';
+
+        $db = DatabaseManager::getInstance();
+
+        return $db->prepare($sql)->execute($var);
+    }
+
+    /**
      * @param int $id
      * @param string $password
      * @return bool
