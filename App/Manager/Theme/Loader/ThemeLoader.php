@@ -21,7 +21,7 @@ class ThemeLoader extends AbstractManager
         $isInstallation = EnvManager::getInstance()->getValue('INSTALLSTEP') !== '-1';
 
         if (!$isInstallation) {
-            $currentThemeName = CoreModel::getInstance()->fetchOption('Theme');
+            $currentThemeName = CoreModel::getInstance()->fetchOption('theme');
         }
 
         if (!$this::getInstance()->isLocalThemeExist($currentThemeName)) {

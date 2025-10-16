@@ -36,7 +36,7 @@ class CoreController extends AbstractController
 
     public static function getThemePath(): string
     {
-        self::$themeName = CoreModel::getInstance()->fetchOption('Theme');
+        self::$themeName = CoreModel::getInstance()->fetchOption('theme');
         return (empty($themeName = self::$themeName)) ? '' : "./Public/Themes/$themeName/";
     }
 

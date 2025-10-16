@@ -2,47 +2,58 @@
 
 namespace CMW\Model\Core;
 
+use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Package\AbstractModel;
-use function get_defined_constants;
-use function mb_strtoupper;
-use function str_starts_with;
 
 /**
  * Class: @coreController
  * @package Core
  * @author CraftMyWebsite Team <contact@craftmywebsite.fr>
- * @version 1.0
  */
 class CoreModel extends AbstractModel
 {
+    private const string CACHE_KEY = 'options';
+    private const string CACHE_SUBFOLDER = 'Core';
+
     public function fetchOption(string $option): ?string
     {
-        //        TODO Le cache ne fonctionne pas et du coup ralenti le chargement des page
-        /*if (SimpleCacheManager::cacheExist('options', "Options")){
-            $data = SimpleCacheManager::getCache('options', "Options");
+        // Check cache
+        if (SimpleCacheManager::checkCache(self::CACHE_KEY, self::CACHE_SUBFOLDER)) {
+            $cachedOptions = SimpleCacheManager::getCache(self::CACHE_KEY, self::CACHE_SUBFOLDER);
 
-            foreach ($data as $conf) {
-                if ($conf['option_name'] === $option){
-                    return $conf['option_value'] ?? "UNDEFINED_$option";
+            // Search in cached data
+            if (\is_array($cachedOptions)) {
+                foreach ($cachedOptions as $conf) {
+                    if (($conf['option_name'] === $option) && isset($conf['option_value'])) {
+                        return $conf['option_value'];
+                    }
                 }
             }
-        }*/
+        }
 
         $db = DatabaseManager::getInstance();
-        $req = $db->prepare('SELECT option_value FROM cmw_core_options WHERE option_name = ?');
+        $req = $db->prepare('SELECT option_name, option_value FROM cmw_core_options');
 
-        if (!$req->execute([$option])){
+        if (!$req->execute()) {
             return null;
         }
 
-        $option = $req->fetch();
+        $allOptions = $req->fetchAll();
 
-        if (!$option){
-            return null;
+        // Store in cache
+        if (!empty($allOptions)) {
+            SimpleCacheManager::storeCache($allOptions, self::CACHE_KEY, self::CACHE_SUBFOLDER);
         }
 
-        return $option['option_value'];
+        // Find and return the requested option
+        foreach ($allOptions as $conf) {
+            if ($conf['option_name'] === $option) {
+                return $conf['option_value'] ?? null;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -71,17 +82,63 @@ class CoreModel extends AbstractModel
     }
 
     /**
-     * @param string $option_name
-     * @param string $option_value
+     * @param string $optionName
+     * @param string $optionValue
      * @return bool
      */
-    public function updateOption(string $option_name, string $option_value): bool
+    public function updateOption(string $optionName, string $optionValue): bool
     {
-        $sql = 'INSERT INTO cmw_core_options (option_name, option_value, option_updated) 
-                VALUES (:option_name, :option_value, NOW()) 
+        $sql = 'INSERT INTO cmw_core_options (option_name, option_value, option_updated)
+                VALUES (:option_name, :option_value, NOW())
                 ON DUPLICATE KEY UPDATE option_value=VALUES(option_value), option_updated=NOW()';
         $db = DatabaseManager::getInstance();
 
-        return $db->prepare($sql)->execute(['option_name' => $option_name, 'option_value' => $option_value]);
+        $result = $db->prepare($sql)->execute(['option_name' => $optionName, 'option_value' => $optionValue]);
+
+        //Update cache
+        if ($result) {
+            $this->updateOptionCacheValue($optionName, $optionValue);
+        }
+
+        return $result;
+    }
+
+    /**
+     * <p>Update the option value in the cache only.</p>
+     * @param string $optionName
+     * @param string $optionValue
+     * @return void
+     */
+    private function updateOptionCacheValue(string $optionName, string $optionValue): void
+    {
+        if (SimpleCacheManager::cacheExist(self::CACHE_KEY, self::CACHE_SUBFOLDER)) {
+            $cachedOptions = SimpleCacheManager::getCache(self::CACHE_KEY, self::CACHE_SUBFOLDER);
+
+            if (\is_array($cachedOptions)) {
+                foreach ($cachedOptions as &$conf) {
+                    if ($conf['option_name'] === $optionName) {
+                        $conf['option_value'] = $optionValue;
+                        SimpleCacheManager::storeCache($cachedOptions, self::CACHE_KEY, self::CACHE_SUBFOLDER);
+                        return;
+                    }
+                }
+                unset($conf);
+
+                // If not found, add it
+                $cachedOptions[] = ['option_name' => $optionName, 'option_value' => $optionValue];
+                SimpleCacheManager::storeCache($cachedOptions, self::CACHE_KEY, self::CACHE_SUBFOLDER);
+            }
+        }
+    }
+
+    /**
+     * <p>Clear the options cache</p>
+     * @return void
+     */
+    public function clearOptionsCache(): void
+    {
+        if (SimpleCacheManager::cacheExist(self::CACHE_KEY, self::CACHE_SUBFOLDER)) {
+            SimpleCacheManager::deleteSpecificCacheFile(self::CACHE_KEY, self::CACHE_SUBFOLDER);
+        }
     }
 }
