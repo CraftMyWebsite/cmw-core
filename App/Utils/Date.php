@@ -96,6 +96,23 @@ class Date
     }
 
     /**
+     * @param string $date
+     * @return string
+     */
+    public static function dateToTimestamp(string $date): string
+    {
+        return (string)strtotime($date);
+    }
+
+    /**
+     * @return int
+     */
+    public static function getCurrentTimestamp(): int
+    {
+        return time();
+    }
+
+    /**
      * @param int $seconds
      * @return string
      * @desc Convert seconds to time format.
