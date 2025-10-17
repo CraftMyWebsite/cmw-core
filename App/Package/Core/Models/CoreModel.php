@@ -104,6 +104,25 @@ class CoreModel extends AbstractModel
     }
 
     /**
+     * @param string $optionName
+     * @return bool
+     */
+    public function deleteOption(string $optionName): bool
+    {
+        $sql = 'DELETE FROM cmw_core_options WHERE option_name = :option_name';
+        $db = DatabaseManager::getInstance();
+
+        $result = $db->prepare($sql)->execute(['option_name' => $optionName]);
+
+        //Update cache
+        if ($result) {
+            $this->updateOptionCacheValue($optionName, '');
+        }
+
+        return $result;
+    }
+
+    /**
      * <p>Update the option value in the cache only.</p>
      * @param string $optionName
      * @param string $optionValue
