@@ -56,7 +56,10 @@ class PackageController extends AbstractController
             }
 
             if (file_exists("$packagesFolder/$package/Package.php") && !in_array($package, self::$corePackages, true)) {
-                $toReturn[] = self::getPackage($package);
+                $packageInstance = self::getPackage($package);
+                if ($packageInstance !== null) {
+                    $toReturn[] = $packageInstance;
+                }
             }
         }
 
@@ -73,7 +76,10 @@ class PackageController extends AbstractController
         $packagesFolder = 'App/Package/';
         foreach (self::$corePackages as $package) {
             if (file_exists("$packagesFolder/$package/Package.php")) {
-                $toReturn[] = self::getPackage($package);
+                $packageInstance = self::getPackage($package);
+                if ($packageInstance !== null) {
+                    $toReturn[] = $packageInstance;
+                }
             }
         }
 

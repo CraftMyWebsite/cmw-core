@@ -46,7 +46,7 @@ class Arr
      */
     public static function contains(array $array, mixed $value, bool $strict = true): bool
     {
-        return in_array($value, $array, $strict);
+        return \in_array($value, $array, $strict);
     }
 
 

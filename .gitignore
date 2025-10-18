@@ -53,3 +53,5 @@ package-lock.json
 
 # Ignore .copilot context files
 .copilot/
+
+.ignored_packages

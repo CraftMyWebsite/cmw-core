@@ -8,27 +8,15 @@ use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Error\ErrorManager;
 use CMW\Utils\Website;
 use UnhandledMatchError;
-use function array_pop;
-use function array_slice;
-use function count;
-use function dirname;
-use function explode;
-use function get_declared_classes;
-use function implode;
-use function in_array;
-use function ini_set;
-use function is_file;
-use function session_start;
-use function session_status;
-use function spl_autoload_register;
-use function str_replace;
-use function ucfirst;
 use const DIRECTORY_SEPARATOR;
 use const PHP_SESSION_ACTIVE;
 
 class AutoLoad
 {
     public static array $findNameSpace = [];
+
+    /* Cache for ignored packages */
+    private static ?array $ignoredPackagesCache = null;
 
     private static function isEnvValid(): bool
     {
@@ -40,7 +28,7 @@ class AutoLoad
 
     private static function updateEnv(): void
     {
-        EnvManager::getInstance()->setOrEditValue('DIR', dirname(__DIR__, 2) . '/');
+        EnvManager::getInstance()->setOrEditValue('DIR', \dirname(__DIR__, 2) . '/');
         EnvManager::getInstance()->setOrEditValue('PATH_URL', Website::getUrl());
     }
 
@@ -49,7 +37,7 @@ class AutoLoad
         spl_autoload_register(static function (string $class) {
             $classPart = explode('\\', $class);
 
-            if (in_array($class, get_declared_classes())) {
+            if (\in_array($class, get_declared_classes())) {
                 return false;
             }
 
@@ -57,7 +45,7 @@ class AutoLoad
                 return false;
             }
 
-            if ((count($classPart) >= 4) && $classPart[2] === 'Installer') {
+            if ((\count($classPart) >= 4) && $classPart[2] === 'Installer') {
                 return match (ucfirst($classPart[1])) {
                     'Controller' => self::callPackage($classPart, 'Installation/', '/Controllers/'),
                     'Model' => self::callPackage($classPart, 'Installation/', '/Models/'),
@@ -158,17 +146,22 @@ class AutoLoad
 
     private static function callPackage(array $classPart, string $startDir, string $folderPackage = ''): bool
     {
-        if (empty($startDir) || count($classPart) < 4) {
+        if (empty($startDir) || \count($classPart) < 4) {
             return false;
         }
 
         $namespace = implode('\\', $classPart);
         $packageName = $classPart[2];
-        $fileName = $classPart[count($classPart) - 1] . '.php';
+        $fileName = $classPart[\count($classPart) - 1] . '.php';
+
+        // Check if package is ignored
+        if (\in_array($packageName, self::getIgnoredPackages(), true)) {
+            return false;
+        }
 
         $subFolderFile = '';
-        if (count($classPart) > 4) {
-            $subFolderFile = implode('\\', array_slice($classPart, 3, -1)) . '\\';
+        if (\count($classPart) > 4) {
+            $subFolderFile = implode('\\', \array_slice($classPart, 3, -1)) . '\\';
         }
 
         $dir = EnvManager::getInstance()->getValue('DIR');
@@ -188,21 +181,21 @@ class AutoLoad
 
     private static function callPackageImplementations(array $classPart, string $startDir, string $folderPackage = ''): bool
     {
-        if (empty($startDir) || count($classPart) !== 5) {
+        if (empty($startDir) || \count($classPart) !== 5) {
             return false;
         }
 
         $namespace = implode('\\', $classPart);
         $packageName = $classPart[2];
-        $fileName = $classPart[count($classPart) - 1] . '.php';
+        $fileName = $classPart[\count($classPart) - 1] . '.php';
 
         if (!PackageController::isInstalled($classPart[3])) {
             return false;
         }
 
         $subFolderFile = '';
-        if (count($classPart) > 4) {
-            $subFolderFile = implode('\\', array_slice($classPart, 3, -1)) . '\\';
+        if (\count($classPart) > 4) {
+            $subFolderFile = implode('\\', \array_slice($classPart, 3, -1)) . '\\';
         }
 
         $dir = EnvManager::getInstance()->getValue('DIR');
@@ -222,17 +215,17 @@ class AutoLoad
 
     private static function callCoreClass(array $classPart, string $startDir): bool
     {
-        if (count($classPart) < 3) {
+        if (\count($classPart) < 3) {
             return false;
         }
 
         $namespace = implode('\\', $classPart);
 
-        $classPart = array_slice($classPart, 2);
+        $classPart = \array_slice($classPart, 2);
 
         $fileName = array_pop($classPart) . '.php';
 
-        $subFolderFile = count($classPart) ? implode('/', $classPart) . '/' : '';
+        $subFolderFile = \count($classPart) ? implode('/', $classPart) . '/' : '';
 
         $filePath = EnvManager::getInstance()->getValue('DIR') . $startDir . $subFolderFile . $fileName;
 
@@ -244,6 +237,35 @@ class AutoLoad
 
         require_once($filePath);
         return true;
+    }
+
+    /**
+     * @return array
+     */
+    private static function getIgnoredPackages(): array
+    {
+        if (self::$ignoredPackagesCache !== null) {
+            return self::$ignoredPackagesCache;
+        }
+
+        $path = EnvManager::getInstance()->getValue('DIR') . DIRECTORY_SEPARATOR . '.ignored_packages';
+
+        if (!is_file($path) || !is_readable($path)) {
+            self::$ignoredPackagesCache = [];
+            return self::$ignoredPackagesCache;
+        }
+
+        $file = file_get_contents($path);
+
+        if (!$file) {
+            self::$ignoredPackagesCache = [];
+            return self::$ignoredPackagesCache;
+        }
+
+        $lines = explode("\n", $file);
+        self::$ignoredPackagesCache = array_map(static fn($line) => trim($line), $lines);
+
+        return self::$ignoredPackagesCache;
     }
 
     public static function load(): void
