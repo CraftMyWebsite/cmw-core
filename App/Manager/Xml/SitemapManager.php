@@ -5,7 +5,6 @@ namespace CMW\Manager\Xml;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Manager\AbstractManager;
 use CMW\Utils\File;
-use CMW\Utils\Log;
 use function str_starts_with;
 
 class SitemapManager extends AbstractManager
@@ -101,7 +100,6 @@ class SitemapManager extends AbstractManager
         $loc = $this->getLocation($slug);
 
         foreach ($content->url as $url) {
-            Log::debug($url);
             if ((string)$url->loc === $loc) {
 
                 $url->lastmod = date('c');
