@@ -18,13 +18,13 @@ use CMW\Manager\Router\Link;
 use CMW\Manager\Router\RouterException;
 use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Theme\Loader\ThemeLoader;
-use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Twofa\TwoFaManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\MailModel;
 use CMW\Model\Core\TermsModel;
 use CMW\Model\Users\UsersModel;
+use CMW\Model\Users\UsersRememberTokensModel;
 use CMW\Model\Users\UsersSettingsModel;
 use CMW\Type\Users\LoginStatus;
 use CMW\Utils\Date;
@@ -95,15 +95,22 @@ class UsersLoginController extends AbstractController
 
     /**
      * @param UserEntity $user
-     * @param bool $cookie
+     * @param bool $rememberMe
      * @return void
+     * @description Log in user with optional remember-me functionality
      */
-    public function loginUser(UserEntity $user, bool $cookie): void
+    public function loginUser(UserEntity $user, bool $rememberMe): void
     {
         $_SESSION['cmwUser'] = $user;
 
-        if ($cookie) {
-            setcookie('cmw_cookies_user_id', $user->getId(), time() + 60 * 60 * 24 * 30, '/', true, true);
+        // Handle remember-me with secure token system
+        if ($rememberMe) {
+            $tokenModel = UsersRememberTokensModel::getInstance();
+            $tokenData = $tokenModel->generateToken();
+
+            if ($tokenModel->storeToken($user->getId(), $tokenData['selector'], $tokenData['token'])) {
+                $this->setRememberMeCookie($tokenData['selector'], $tokenData['token']);
+            }
         }
 
         UsersModel::getInstance()->updateLoggedTime($user->getId());
@@ -113,7 +120,7 @@ class UsersLoginController extends AbstractController
                 $ip = $_SERVER['REMOTE_ADDR'];
                 $date = date('Y-m-d H:i:s');
                 $dateFormatted = Date::formatDate($date);
-                MailManager::getInstance()->sendMail($user->getMail(),Website::getWebsiteName() . LangManager::translate('users.security.connected.object'), LangManager::translate('users.security.connected.body', ['user_name' => $user->getPseudo(), 'website' => Website::getWebsiteName(), 'date' => $dateFormatted, 'ip' => $ip]));
+                MailManager::getInstance()->sendMail($user->getMail(), Website::getWebsiteName() . LangManager::translate('users.security.connected.object'), LangManager::translate('users.security.connected.body', ['user_name' => $user->getPseudo(), 'website' => Website::getWebsiteName(), 'date' => $dateFormatted, 'ip' => $ip]));
             }
         }
 
@@ -122,6 +129,31 @@ class UsersLoginController extends AbstractController
         } catch (Exception) {
             error_log('Error while sending login event.');
         }
+    }
+
+    /**
+     * @param string $selector Token selector
+     * @param string $token Token secret
+     * @return void
+     * @description Set secure remember-me cookie
+     */
+    private function setRememberMeCookie(string $selector, string $token): void
+    {
+        $cookieValue = $selector . ':' . $token;
+        $expires = time() + (30 * 24 * 60 * 60); // 30 days
+
+        setcookie(
+            'cmw_remember_token',
+            $cookieValue,
+            [
+                'expires' => $expires,
+                'path' => '/',
+                'domain' => '',
+                'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on',
+                'httponly' => true,
+                'samesite' => 'Lax',
+            ]
+        );
     }
 
     #[Link('/login', Link::POST)]
@@ -177,13 +209,13 @@ class UsersLoginController extends AbstractController
                 $user = UsersModel::getInstance()->getUserWithMail($encryptedMail);
                 if (is_null($user)) {
                     Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                    LangManager::translate('core.toaster.internalError'));
+                        LangManager::translate('core.toaster.internalError'));
                     Redirect::redirectPreviousRoute();
                 }
 
-                $_SESSION['cmw_temp_user_id']     = $user->getId();
+                $_SESSION['cmw_temp_user_id'] = $user->getId();
                 $_SESSION['cmw_temp_use_cookies'] = $cookie;
-                $_SESSION['return_to']            = $previousRoute ?: 'profile';
+                $_SESSION['return_to'] = $previousRoute ?: 'profile';
 
                 Redirect::redirect('/terms/accept');
                 break;
@@ -434,14 +466,14 @@ class UsersLoginController extends AbstractController
     public function sendLongDateCodeByMail(string $email, string $code): void
     {
         $body = '
-        <b>'. LangManager::translate('users.long_date.mail.body_1') . Website::getWebsiteName() .'</b><br>
-        <p>'. LangManager::translate('users.long_date.mail.body_2') .'</p>
-        <h2 style="text-align: center">'.  $code  .'</h2>
-        <p>'. LangManager::translate('users.long_date.mail.body_3') .'</p>
+        <b>' . LangManager::translate('users.long_date.mail.body_1') . Website::getWebsiteName() . '</b><br>
+        <p>' . LangManager::translate('users.long_date.mail.body_2') . '</p>
+        <h2 style="text-align: center">' . $code . '</h2>
+        <p>' . LangManager::translate('users.long_date.mail.body_3') . '</p>
         ';
 
         MailManager::getInstance()->sendMail($email, LangManager::translate('users.long_date.mail.object',
-            ['site_name' => CoreModel::getInstance()->fetchOption('name')]),$body);
+            ['site_name' => CoreModel::getInstance()->fetchOption('name')]), $body);
     }
 
     public function isCodeOlderThan15Minutes(string $email): bool
@@ -495,7 +527,7 @@ class UsersLoginController extends AbstractController
         $acceptedAt = new \DateTimeImmutable($user->getTermsAcceptedAtUnformatted());
         $outdated = $model->getOutdatedTypesSince($acceptedAt);
         foreach ($outdated as $t) {
-            if (in_array($t, $activeTypes, true)) {
+            if (\in_array($t, $activeTypes, true)) {
                 return true;
             }
         }

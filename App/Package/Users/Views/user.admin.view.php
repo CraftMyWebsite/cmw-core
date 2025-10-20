@@ -2,13 +2,16 @@
 
 use CMW\Entity\Users\RoleEntity;
 use CMW\Entity\Users\UserEntity;
+use CMW\Entity\Users\UserTokenEntity;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Model\Users\RolesModel;
+use CMW\Utils\Date;
 
 /** @var UserEntity $user */
 /** @var RoleEntity[] $roles */
+/** @var UserTokenEntity[] $tokens */
 
 $title = LangManager::translate('users.edit.title', ['pseudo' => $user->getPseudo()]);
 $description = LangManager::translate('users.edit.desc');
@@ -141,12 +144,12 @@ $description = LangManager::translate('users.edit.desc');
         <div class="card">
             <div class="flex flex-col w-1/2">
                 <?php if (!$user->get2Fa()->isEnabled()): ?>
-                    <b>2FA  <?= LangManager::translate('core.btn.disabled') ?></b>
+                    <b>2FA <?= LangManager::translate('core.btn.disabled') ?></b>
                     <a href="../2fa/status/toggle/<?= $user->getId() ?>" class="btn-danger mt-2">
                         <?= LangManager::translate('core.btn.enable') ?>
                     </a>
                 <?php else: ?>
-                    <b>2FA  <?= LangManager::translate('core.btn.enabled') ?></b>
+                    <b>2FA <?= LangManager::translate('core.btn.enabled') ?></b>
                     <a href="../2fa/status/toggle/<?= $user->getId() ?>" class="btn-danger mt-2">
                         <?= LangManager::translate('core.btn.disable') ?>
                     </a>
@@ -157,8 +160,92 @@ $description = LangManager::translate('users.edit.desc');
             </div>
         </div>
     </div>
-</div>
 
+    <div class="col-span-3">
+        <h4><?= LangManager::translate('users.tokens.title') ?></h4>
+        <div class="card">
+            <?php if (empty($tokens)): ?>
+                <div class="alert alert-info">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <?= LangManager::translate('users.tokens.no_active_sessions') ?>
+                </div>
+            <?php else: ?>
+                <div class="alert alert-info mb-4">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <?= LangManager::translate('users.tokens.info', ['count' => count($tokens)]) ?>
+                </div>
+
+                <div class="space-y-3">
+                    <?php foreach ($tokens as $token): ?>
+                        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div class="flex items-start justify-between gap-4">
+                                <!-- Device Info -->
+                                <div class="flex items-start gap-3 flex-1">
+                                    <div class="text-2xl text-blue-600 dark:text-blue-400 mt-1">
+                                        <i class="fa-solid fa-<?= $token->getDeviceIcon() ?>"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="font-semibold text-gray-900 dark:text-gray-100">
+                                            <?= $token->getDeviceName() ?>
+                                        </div>
+                                        <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                            <i class="fa-solid fa-network-wired mr-1"></i>
+                                            <code class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded text-xs">
+                                                <?= htmlspecialchars($token->getIpAddress()) ?>
+                                            </code>
+                                        </div>
+                                        <div
+                                            class="grid grid-cols-1 md:grid-cols-3 gap-2 mt-3 text-xs text-gray-600 dark:text-gray-400">
+                                            <div>
+                                                <i class="fa-solid fa-clock mr-1"></i>
+                                                <span
+                                                    class="font-medium"><?= LangManager::translate('users.tokens.table.created') ?>:</span>
+                                                <span
+                                                    class="block ml-5 mt-1"><?= Date::formatDate($token->getCreatedAt()) ?></span>
+                                            </div>
+                                            <div>
+                                                <i class="fa-solid fa-history mr-1"></i>
+                                                <span
+                                                    class="font-medium"><?= LangManager::translate('users.tokens.table.last_used') ?>:</span>
+                                                <span
+                                                    class="block ml-5 mt-1"><?= Date::formatDate($token->getLastUsedAt()) ?></span>
+                                            </div>
+                                            <div>
+                                                <i class="fa-solid fa-hourglass-end mr-1"></i>
+                                                <span
+                                                    class="font-medium"><?= LangManager::translate('users.tokens.table.expires') ?>:</span>
+                                                <span
+                                                    class="block ml-5 mt-1"><?= Date::formatDate($token->getExpiresAt()) ?></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Action Button -->
+                                <div class="flex-shrink-0">
+                                    <a href="../tokens/revoke/<?= $user->getId() ?>/<?= $token->getTokenId() ?>"
+                                       class="btn btn-sm btn-danger"
+                                       onclick="return confirm('<?= LangManager::translate('users.tokens.confirm_revoke') ?>')">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+                <div class="flex justify-end mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <a href="../tokens/revoke-all/<?= $user->getId() ?>"
+                       class="btn btn-danger"
+                       onclick="return confirm('<?= LangManager::translate('users.tokens.confirm_revoke_all', ['pseudo' => $user->getPseudo()]) ?>')">
+                        <i class="fa-solid fa-power-off"></i>
+                        <?= LangManager::translate('users.tokens.revoke_all') ?>
+                    </a>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
 
 <script>
     const showPassword = (type) => {

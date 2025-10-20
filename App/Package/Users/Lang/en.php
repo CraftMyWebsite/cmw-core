@@ -344,4 +344,31 @@ return [
             'accept' => 'You must accept the terms and conditions to create an account.',
         ],
     ],
+    'tokens' => [
+        'title' => 'Active sessions (Remember Me)',
+        'no_active_sessions' => 'No active sessions for this user.',
+        'info' => 'This user has %count% active session(s).',
+        'table' => [
+            'device' => 'Device',
+            'ip' => 'IP Address',
+            'created' => 'Created on',
+            'last_used' => 'Last used',
+            'expires' => 'Expires on',
+            'actions' => 'Actions',
+        ],
+        'revoke' => 'Revoke',
+        'revoke_all' => 'Disconnect all devices',
+        'confirm_revoke' => 'Are you sure you want to revoke this session?',
+        'confirm_revoke_all' => 'Are you sure you want to disconnect %pseudo% from all devices? This action is irreversible.',
+        'toaster' => [
+            'revoke' => [
+                'success' => 'Session successfully revoked.',
+                'error' => 'Unable to revoke this session.',
+            ],
+            'revoke_all' => [
+                'success' => 'All sessions for %pseudo% have been revoked.',
+                'error' => 'Unable to revoke sessions.',
+            ],
+        ],
+    ],
 ];

@@ -26,12 +26,12 @@ use CMW\Model\Core\CoreModel;
 use CMW\Model\Users\RolesModel;
 use CMW\Model\Users\Users2FaModel;
 use CMW\Model\Users\UsersModel;
+use CMW\Model\Users\UsersRememberTokensModel;
 use CMW\Model\Users\UsersSettingsModel;
 use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use CMW\Utils\Website;
 use Exception;
-use http\Client\Curl\User;
 use JetBrains\PhpStorm\NoReturn;
 use JsonException;
 use function is_null;
@@ -148,13 +148,16 @@ class UsersController extends AbstractController
         self::redirectIfNotHavePermissions('core.dashboard', 'users.manage.edit');
 
         $userEntity = UsersModel::getInstance()->getUserById($id);
-
         $roles = RolesModel::getInstance()->getRoles();
+
+        // Get user's active remember-me tokens
+        $tokens = UsersRememberTokensModel::getInstance()->getUserTokens($id);
 
         View::createAdminView('Users', 'user')
             ->addVariableList([
                 'user' => $userEntity,
                 'roles' => $roles,
+                'tokens' => $tokens,
             ])
             ->view();
     }
@@ -341,7 +344,74 @@ class UsersController extends AbstractController
 
         Redirect::redirectPreviousRoute();
     }
-    
+
+    #[NoReturn]
+    #[Link('/tokens/revoke/:userId/:tokenId', Link::GET, ['userId' => '[0-9]+', 'tokenId' => '[0-9]+'], '/cmw-admin/users/manage')]
+    private function adminRevokeToken(int $userId, int $tokenId): void
+    {
+        self::redirectIfNotHavePermissions('core.dashboard', 'users.manage.edit');
+
+        $user = UsersModel::getInstance()->getUserById($userId);
+
+        if (is_null($user)) {
+            Redirect::errorPage(404);
+        }
+
+        if (UsersRememberTokensModel::getInstance()->revokeToken($tokenId, $userId)) {
+            Flash::send(
+                Alert::SUCCESS,
+                LangManager::translate('core.toaster.success'),
+                LangManager::translate('users.tokens.toaster.revoke.success')
+            );
+        } else {
+            Flash::send(
+                Alert::ERROR,
+                LangManager::translate('core.toaster.error'),
+                LangManager::translate('users.tokens.toaster.revoke.error')
+            );
+        }
+
+        Redirect::redirectPreviousRoute();
+    }
+
+    #[NoReturn]
+    #[Link('/tokens/revoke-all/:userId', Link::GET, ['userId' => '[0-9]+'], '/cmw-admin/users/manage')]
+    private function adminRevokeAllTokens(int $userId): void
+    {
+        self::redirectIfNotHavePermissions('core.dashboard', 'users.manage.edit');
+
+        $user = UsersModel::getInstance()->getUserById($userId);
+
+        if (is_null($user)) {
+            Redirect::errorPage(404);
+        }
+
+        $currentUserId = UsersSessionsController::getInstance()->getCurrentUser()?->getId();
+        $isRevokingOwnTokens = ($currentUserId === $userId);
+
+        if (UsersRememberTokensModel::getInstance()->deleteAllUserTokens($userId)) {
+            Flash::send(
+                Alert::SUCCESS,
+                LangManager::translate('core.toaster.success'),
+                LangManager::translate('users.tokens.toaster.revoke_all.success', ['pseudo' => $user->getPseudo()])
+            );
+
+            // If admin is revoking their own tokens, destroy the session and redirect to login
+            if ($isRevokingOwnTokens) {
+                UsersSessionsController::getInstance()->logOut();
+                Redirect::redirect('login');
+            }
+        } else {
+            Flash::send(
+                Alert::ERROR,
+                LangManager::translate('core.toaster.error'),
+                LangManager::translate('users.tokens.toaster.revoke_all.error')
+            );
+        }
+
+        Redirect::redirectPreviousRoute();
+    }
+
 
     // PUBLIC SECTION
 
@@ -512,19 +582,19 @@ class UsersController extends AbstractController
     public function sendResetLinkPassword(string $email, string $link): void
     {
         $decryptedMail = EncryptManager::decrypt($email);
-        $fullLink = EnvManager::getInstance()->getValue('PATH_URL') . 'resetPassword/'.$link;
+        $fullLink = EnvManager::getInstance()->getValue('PATH_URL') . 'resetPassword/' . $link;
 
         $body = '
-        <b>'. LangManager::translate('users.toaster.reset_link_body_mail_1') . Website::getWebsiteName() .'</b><br>
-        <p>'. LangManager::translate('users.toaster.reset_link_body_mail_2') .'</p>
-        <p>'. LangManager::translate('users.toaster.reset_link_body_mail_3') .'</p>
-        <a href="'. $fullLink .'">'. LangManager::translate('users.toaster.reset_link_body_mail_4') .'</a>
+        <b>' . LangManager::translate('users.toaster.reset_link_body_mail_1') . Website::getWebsiteName() . '</b><br>
+        <p>' . LangManager::translate('users.toaster.reset_link_body_mail_2') . '</p>
+        <p>' . LangManager::translate('users.toaster.reset_link_body_mail_3') . '</p>
+        <a href="' . $fullLink . '">' . LangManager::translate('users.toaster.reset_link_body_mail_4') . '</a>
         <br><br>
-        <p>'. LangManager::translate('users.toaster.reset_link_body_mail_5') .'</p>
+        <p>' . LangManager::translate('users.toaster.reset_link_body_mail_5') . '</p>
         ';
 
         MailManager::getInstance()->sendMail($decryptedMail, LangManager::translate('users.login.forgot_password.mail.object_link',
-            ['site_name' => (new CoreModel())->fetchOption('name')]),$body);
+            ['site_name' => (new CoreModel())->fetchOption('name')]), $body);
     }
 
     /**
