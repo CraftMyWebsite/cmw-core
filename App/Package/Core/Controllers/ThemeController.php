@@ -114,8 +114,8 @@ class ThemeController extends AbstractController
     }
 
     #[NoReturn]
-    #[Link('/install/:id', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/theme')]
-    private function adminThemeInstallation(int $id): void
+    #[Link('/install', Link::POST, [], '/cmw-admin/theme')]
+    private function adminThemeInstallation(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
 
@@ -127,19 +127,110 @@ class ThemeController extends AbstractController
             }
         }
 
-        $theme = PublicAPI::putData("market/resources/install/$id");
+        $id = FilterManager::filterInputIntPost('resId');
+        $status = FilterManager::filterInputStringPost('status');
+        $activationKey = FilterManager::filterInputStringPost('activationKey');
 
-        if (empty($theme)) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                LangManager::translate('core.toaster.internalError') . ' (API)');
-            Redirect::redirectPreviousRoute();
+        if ($status === 'online') {
+            $status = 0;
+        } else {
+            $status = 1;
         }
 
-        if (!DownloadManager::installPackageWithLink($theme['file'], 'Theme', $theme['name'])) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                LangManager::translate('core.downloads.errors.internalError',
-                    ['name' => $theme['name'], 'version' => $theme['version_name']]));
+        // Check market dependencies
+        $thisTheme = PublicAPI::getData("market/resources/$id");
+
+        $missing = [];
+        if (!empty($thisTheme['dependencies'])) {
+            foreach ($thisTheme['dependencies'] as $dep) {
+                if (is_null(PackageController::getPackage($dep['market_name'] ?? $dep['name'] ?? null))) {
+                    $missing[] = '<b>'.($dep['market_name'] ?? $dep['name']).'</b>';
+                }
+            }
+
+            if (!empty($missing)) {
+                $count = count($missing);
+                $list  = $count > 1
+                    ? implode(', ', array_slice($missing, 0, -1)).' et '.end($missing)
+                    : $missing[0];
+
+                $label = $count > 1 ? 'les packages ' : 'le package ';
+
+                Flash::send(
+                    Alert::WARNING,
+                    'Packages',
+                    'Veuillez installer '.$label.$list.' avant d\'installer <b>'.$thisTheme['market_name'].
+                    '</b> car il en a besoin pour fonctionner.'
+                );
+                Redirect::redirectPreviousRoute();
+            }
+
+            // Check versions of installed dependencies update before install
+            $blocking = [];
+            foreach ($thisTheme['dependencies'] as $dep) {
+                // Récup local
+                $local = self::getPackage($dep['market_name'] ?? $dep['name'] ?? null);
+                if ($local === null) {
+                    continue;
+                }
+
+                $depIdOrSlug = $dep['id'] ?? ($dep['name'] ?? null);
+                $depApi = $depIdOrSlug ? PublicAPI::getData("market/resources/{$depIdOrSlug}") : null;
+                if (!is_array($depApi) || empty($depApi['version_name'])) {
+                    $blocking[] = "<b>".($dep['market_name'] ?? $dep['name'])."</b> (version distante inconnue)";
+                    continue;
+                }
+
+                $remote = ltrim((string)$depApi['version_name'], "vV");
+                $localV = ltrim((string)$local->version(), "vV");
+
+                if (version_compare($localV, $remote, '<')) {
+                    $blocking[] = "<b>".($dep['market_name'] ?? $dep['name'])."</b> {$localV} ➜ {$remote}";
+                }
+            }
+
+            if (!empty($blocking)) {
+                $count = count($blocking);
+                $list  = $count > 1
+                    ? implode(', ', array_slice($blocking, 0, -1)).' et '.end($blocking)
+                    : $blocking[0];
+
+                $label = $count > 1 ? 'les packages ' : 'le package ';
+
+                Flash::send(
+                    Alert::WARNING,
+                    'Packages',
+                    "Veuillez d'abord mettre à jour {$label}{$list} avant d'installer <b>{$thisTheme['market_name']}</b>."
+                );
+                Redirect::redirectPreviousRoute();
+            }
+        }
+
+        $data = [
+            'resId' => $id,
+            'status' => $status,
+            'activationKey' => $activationKey,
+        ];
+
+        $theme = PublicAPI::postData("market/resources/install" , $data);
+
+        if (isset($theme['error'])) {
+            $code = $theme['error']['code'] ?? 'UNKNOWN';
+            $desc = $theme['error']['description']['Description']
+                ?? $theme['error']['description']['description']
+                ?? ($theme['error']['info'] ?? 'Erreur inconnue');
+
+            Flash::send(Alert::ERROR, "Erreur ".$code, $desc);
             Redirect::redirectPreviousRoute();
+        } elseif (!empty($theme['file'])) {
+            if (!DownloadManager::installPackageWithLink($theme['file'], 'Theme', $theme['name'])) {
+                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                    LangManager::translate('core.downloads.errors.internalError',
+                        ['name' => $theme['name'], 'version' => $theme['version_name']]));
+                Redirect::redirectPreviousRoute();
+            }
+        } else {
+            Flash::send(Alert::ERROR, "Erreur", "Une erreur est survenue sur l'API, contacte le support de CraftMyWebsite.");
         }
 
         // Install Theme settings

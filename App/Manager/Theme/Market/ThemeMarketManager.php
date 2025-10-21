@@ -6,6 +6,7 @@ use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Manager\AbstractManager;
 use CMW\Manager\Theme\IThemeConfigV2;
 use CMW\Manager\Theme\Loader\ThemeLoader;
+use CMW\Manager\Updater\UpdatesManager;
 
 class ThemeMarketManager extends AbstractManager
 {
@@ -15,6 +16,9 @@ class ThemeMarketManager extends AbstractManager
      */
     public function getMarketThemes(): array
     {
+        if (UpdatesManager::isTestAPI()) {
+            return PublicAPI::getData('market/resources/all/states/0');
+        }
         return PublicAPI::getData('market/resources/filtered/0');
     }
 

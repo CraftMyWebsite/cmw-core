@@ -7,6 +7,7 @@ use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Filter\FilterManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
@@ -130,7 +131,7 @@ class PackageController extends AbstractController
     public static function getMarketPackages(): array
     {
         if (UpdatesManager::isTestAPI()) {
-            return PublicAPI::getData('market/resources/all/states');
+            return PublicAPI::getData('market/resources/all/states/1');
         }
         return PublicAPI::getData('market/resources/filtered/1');
     }
@@ -188,8 +189,8 @@ class PackageController extends AbstractController
     }
 
     #[NoReturn]
-    #[Link('/install/:id/:status', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/packages')]
-    private function adminPackageInstallation(int $id, string $status): void
+    #[Link('/install', Link::POST, [], '/cmw-admin/packages')]
+    private function adminPackageInstallation(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.market');
 
@@ -200,6 +201,10 @@ class PackageController extends AbstractController
                 Redirect::redirect('cmw-admin/updates/cms');
             }
         }
+
+        $id = FilterManager::filterInputIntPost('resId');
+        $status = FilterManager::filterInputStringPost('status');
+        $activationKey = FilterManager::filterInputStringPost('activationKey');
 
         if ($status === 'online') {
             $status = 0;
@@ -239,7 +244,7 @@ class PackageController extends AbstractController
             $blocking = [];
             foreach ($thisPackage['dependencies'] as $dep) {
                 // Récup local
-                $local = PackageController::getPackage($dep['market_name'] ?? $dep['name'] ?? null);
+                $local = self::getPackage($dep['market_name'] ?? $dep['name'] ?? null);
                 if ($local === null) {
                     continue;
                 }
@@ -276,23 +281,34 @@ class PackageController extends AbstractController
             }
         }
 
-        $package = PublicAPI::putData("market/resources/install/$id/$status");
+        $data = [
+            'resId' => $id,
+            'status' => $status,
+            'activationKey' => $activationKey,
+        ];
 
-        if (empty($package)) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                LangManager::translate('core.toaster.internalError') . ' (API)');
+        $package = PublicAPI::postData("market/resources/install" , $data);
+
+        if (isset($package['error'])) {
+            $code = $package['error']['code'] ?? 'UNKNOWN';
+            $desc = $package['error']['description']['Description']
+                ?? $package['error']['description']['description']
+                ?? ($package['error']['info'] ?? 'Erreur inconnue');
+
+            Flash::send(Alert::ERROR, "Erreur ".$code, $desc);
             Redirect::redirectPreviousRoute();
+        } elseif (!empty($package['file'])) {
+            if (!DownloadManager::installPackageWithLink($package['file'], 'package', $package['name'])) {
+                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                    LangManager::translate('core.downloads.errors.internalError',
+                        ['name' => $package['name'], 'version' => $package['version_name']]));
+                Redirect::redirectPreviousRoute();
+            }
+            Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+                LangManager::translate('core.Package.toasters.install.success', ['package' => $package['name']]));
+        } else {
+            Flash::send(Alert::ERROR, "Erreur", "Une erreur est survenue sur l'API, contacte le support de CraftMyWebsite.");
         }
-
-        if (!DownloadManager::installPackageWithLink($package['file'], 'package', $package['name'])) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                LangManager::translate('core.downloads.errors.internalError',
-                    ['name' => $package['name'], 'version' => $package['version_name']]));
-            Redirect::redirectPreviousRoute();
-        }
-
-        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-            LangManager::translate('core.Package.toasters.install.success', ['package' => $package['name']]));
 
         Redirect::redirectPreviousRoute();
     }
