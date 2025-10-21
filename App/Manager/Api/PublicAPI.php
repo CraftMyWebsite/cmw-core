@@ -57,6 +57,7 @@ class PublicAPI
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/x-www-form-urlencoded',
             "Adminkey: $adminKey",
+            'X-Origin: ' . $_SERVER['HTTP_HOST'],
         ]);
 
         $response = curl_exec($ch);
@@ -93,6 +94,7 @@ class PublicAPI
                 'ignore_errors' => true,
                 'header' => [
                     'Adminkey: ' . UsersSessionsController::getInstance()->getCurrentUser()?->getUserKey(),
+                    'X-Origin: ' . $_SERVER['HTTP_HOST'],
                 ],
             ],
         ];
@@ -124,6 +126,7 @@ class PublicAPI
                 'ignore_errors' => true,
                 'header' => [
                     'Adminkey: ' . UsersSessionsController::getInstance()->getCurrentUser()?->getUserKey(),
+                    'X-Origin: ' . $_SERVER['HTTP_HOST'],
                 ],
             ],
         ];
