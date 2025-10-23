@@ -248,22 +248,23 @@ class AutoLoad
             return self::$ignoredPackagesCache;
         }
 
+        $ignored = [];
+
+        $envValue = EnvManager::getInstance()->getValue('DISABLED_PACKAGE');
+        if ($envValue) {
+            $ignored = array_map('trim', explode(',', $envValue));
+        }
+
         $path = EnvManager::getInstance()->getValue('DIR') . DIRECTORY_SEPARATOR . '.ignored_packages';
-
-        if (!is_file($path) || !is_readable($path)) {
-            self::$ignoredPackagesCache = [];
-            return self::$ignoredPackagesCache;
+        if (is_file($path) && is_readable($path)) {
+            $file = file_get_contents($path);
+            if ($file) {
+                $lines = array_map('trim', explode("\n", $file));
+                $ignored = array_merge($ignored, $lines);
+            }
         }
 
-        $file = file_get_contents($path);
-
-        if (!$file) {
-            self::$ignoredPackagesCache = [];
-            return self::$ignoredPackagesCache;
-        }
-
-        $lines = explode("\n", $file);
-        self::$ignoredPackagesCache = array_map(static fn($line) => trim($line), $lines);
+        self::$ignoredPackagesCache = array_unique(array_filter($ignored));
 
         return self::$ignoredPackagesCache;
     }
