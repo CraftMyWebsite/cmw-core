@@ -20,7 +20,6 @@ $description = LangManager::translate('core.Package.desc');
 
 <div class="grid-2">
     <?php foreach ($packagesList as $apiPackages): ?>
-        <?php if (!PackageController::isInstalled($apiPackages['name'])): ?>
             <div class="card relative h-full" style="overflow: hidden;">
                 <div class="flex justify-between">
                     <img class="rounded-lg" style="height: 140px; width: 140px;"
@@ -187,6 +186,5 @@ $description = LangManager::translate('core.Package.desc');
                     </div>
                 </div>
             </div>
-        <?php endif; ?>
     <?php endforeach; ?>
 </div>

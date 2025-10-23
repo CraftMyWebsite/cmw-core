@@ -41,6 +41,7 @@ use function scandir;
 class PackageController extends AbstractController
 {
     public static array $corePackages = ['Core', 'Users', 'Pages'];
+    private static ?array $ignoredEnvCache = null;
 
     /**
      * @return IPackageConfigV2[]
@@ -98,6 +99,12 @@ class PackageController extends AbstractController
 
     public static function getPackage(string $packageName): ?IPackageConfigV2
     {
+        if (self::isDisabled($packageName)) {
+            error_log("[CMW] Package '$packageName' USER RUN PACKAGE BUT API CMW NOT ALLOW THIS ON THIS DOMAIN : {$_SERVER['SERVER_NAME']}, SUPPORT D'ONT HELP THIS USER AND NOTIFY ADMIN QUICKLY !");
+            WarningManager::addError("Le package <b>{$packageName}</b> a été désactivé. CraftMyWebsite a remarqué une tentative d'installation en contournant la vérification.<br>Votre domaine <b>{$_SERVER['SERVER_NAME']}</b> n'est pas autorisé pour <b>{$packageName}</b>.<br>Veuillez corriger cela rapidement sous peine de prendre des sanctions (blacklistage de votre site sur l'api de craftmywebsite.fr)");
+            return null;
+        }
+
         $namespace = 'CMW\\Package\\' . $packageName . '\Package';
 
         if (!class_exists($namespace)) {
@@ -122,6 +129,29 @@ class PackageController extends AbstractController
     public static function isInstalled(string $package): bool
     {
         return self::getPackage($package) !== null;
+    }
+
+    private static function getIgnoredPackages(): array
+    {
+        if (self::$ignoredEnvCache !== null) {
+            return self::$ignoredEnvCache;
+        }
+
+        $env = EnvManager::getInstance()->getValue('DISABLED_PACKAGE') ?: '';
+        $list = array_filter(array_map('trim', explode(',', $env)));
+        self::$ignoredEnvCache = array_values(array_unique($list));
+
+        return self::$ignoredEnvCache;
+    }
+
+    public static function isDisabled(string $package): bool
+    {
+        foreach (self::getIgnoredPackages() as $p) {
+            if (strcasecmp($p, $package) === 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -168,7 +198,9 @@ class PackageController extends AbstractController
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.market');
 
         $installedPackages = self::getInstalledPackages();
-        $packagesList = self::getMarketPackages();
+        $packagesList = array_filter(self::getMarketPackages(), static function ($pkg) {
+            return !self::isInstalled($pkg['name']) && !self::isDisabled($pkg['name']);
+        });
 
         View::createAdminView('Core', 'Package/market')
             ->addVariableList(['installedPackages' => $installedPackages, 'packagesList' => $packagesList])
