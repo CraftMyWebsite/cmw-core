@@ -102,6 +102,7 @@ class UsersLoginController extends AbstractController
     public function loginUser(UserEntity $user, bool $rememberMe): void
     {
         $_SESSION['cmwUser'] = $user;
+        $_SESSION['cmw_session_created_at'] = time();
 
         // Handle remember-me with secure token system
         if ($rememberMe) {

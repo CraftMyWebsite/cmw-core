@@ -44,11 +44,17 @@ class UsersSessionImplementation implements IUsersSession
 
             // If admin revoked all tokens, force logout the user
             if (empty($userTokens)) {
-                // Clear the cookie too
-                $this->clearRememberMeCookie();
-                // Force logout
-                $this->logOut();
-                return null;
+                $sessionCreatedAt = $_SESSION['cmw_session_created_at'] ?? null;
+                $timeSinceCreation = $sessionCreatedAt ? (time() - $sessionCreatedAt) : PHP_INT_MAX;
+
+                // Allow sessions without tokens for 30 minutes (1800 seconds) after login
+                if ($timeSinceCreation > 1800) {
+                    // Clear the cookie too
+                    $this->clearRememberMeCookie();
+                    // Force logout
+                    $this->logOut();
+                    return null;
+                }
             }
 
             // Mark session as validated
@@ -120,6 +126,7 @@ class UsersSessionImplementation implements IUsersSession
 
         // Restore session
         $_SESSION['cmwUser'] = $user;
+        $_SESSION['cmw_session_created_at'] = time();
 
         return $user;
     }
@@ -144,6 +151,7 @@ class UsersSessionImplementation implements IUsersSession
 
         // Restore session
         $_SESSION['cmwUser'] = $user;
+        $_SESSION['cmw_session_created_at'] = time();
     }
 
     /**
