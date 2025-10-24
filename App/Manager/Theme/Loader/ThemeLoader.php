@@ -114,7 +114,7 @@ class ThemeLoader extends AbstractManager
         return file_exists("Public/Themes/$name/Theme.php");
     }
 
-    private static function getIgnoredThemes(): array
+    public static function getIgnoredThemes(): array
     {
         if (self::$ignoredThemesCache !== null) {
             return self::$ignoredThemesCache;

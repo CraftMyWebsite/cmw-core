@@ -131,7 +131,7 @@ class PackageController extends AbstractController
         return self::getPackage($package) !== null;
     }
 
-    private static function getIgnoredPackages(): array
+    public static function getIgnoredPackages(): array
     {
         if (self::$ignoredEnvCache !== null) {
             return self::$ignoredEnvCache;
