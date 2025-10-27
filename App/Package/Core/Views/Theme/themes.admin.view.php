@@ -6,6 +6,7 @@ use CMW\Manager\Theme\File\ThemeFileManager;
 use CMW\Manager\Theme\IThemeConfigV2;
 use CMW\Manager\Theme\Loader\ThemeLoader;
 use CMW\Manager\Theme\Market\ThemeMarketManager;
+use CMW\Manager\Updater\UpdatesManager;
 use CMW\Utils\Website;
 
 /* @var $currentTheme IThemeConfigV2 */
@@ -17,6 +18,10 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
 ?>
 
 <h3><i class="fa-solid fa-palette"></i> <?= LangManager::translate('core.theme.myThemes') ?></h3>
+
+<?php if (UpdatesManager::isTestAPI()):?>
+    <h6 class="text-warning mb-2">Votre site est en mode test API.</h6>
+<?php endif; ?>
 
 <div class="grid-4 mb-24">
     <!------------------------------------

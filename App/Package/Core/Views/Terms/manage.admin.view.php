@@ -34,7 +34,11 @@ $model = TermsModel::getInstance();
     <button form="terms" type="submit" class="btn-primary"><?= LangManager::translate('core.btn.save') ?></button>
 </div>
 
-<form id="terms" action="" method="post" enctype="multipart/form-data">
+<div class="alert-info mb-4">
+    <p>Pour obliger les utilisateurs à accepter les conditions avant de créer un compte ou de se connecter, rendez-vous dans <a class="link" href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER')?>cmw-admin/users/settings/general" target="_blank">les paramètres des utilisateurs</a> et activez cette option.</p>
+</div>
+
+<form id="terms" action="" method="post" enctype="multipart/form-data" class="mt-4">
     <?php SecurityManager::getInstance()->insertHiddenToken() ?>
 
     <div class="grid-2">

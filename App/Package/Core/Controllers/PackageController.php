@@ -2,6 +2,7 @@
 
 namespace CMW\Controller\Core;
 
+use CMW\Controller\Core\Api\External\CheckerController;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Database\DatabaseManager;
@@ -17,8 +18,10 @@ use CMW\Manager\Package\IPackageConfig;
 use CMW\Manager\Package\IPackageConfigV2;
 use CMW\Manager\Package\Adapter\LegacyPackageAdapter;
 use CMW\Manager\Router\Link;
+use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Views\View;
+use CMW\Model\Core\ActivatedModel;
 use CMW\Utils\Directory;
 use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
@@ -196,6 +199,7 @@ class PackageController extends AbstractController
     private function adminPackageManage(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.market');
+        CheckerController::getInstance()->checkActivationAPI();
 
         $installedPackages = self::getInstalledPackages();
         $packagesList = array_filter(self::getMarketPackages(), static function ($pkg) {
@@ -211,6 +215,7 @@ class PackageController extends AbstractController
     private function adminMyPackage(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.manage');
+        CheckerController::getInstance()->checkActivationAPI();
 
         $installedPackages = self::getInstalledPackages();
         $packagesList = self::getMarketPackages();
@@ -336,6 +341,9 @@ class PackageController extends AbstractController
                         ['name' => $package['name'], 'version' => $package['version_name']]));
                 Redirect::redirectPreviousRoute();
             }
+            if (!empty($activationKey)) {
+                ActivatedModel::getInstance()->addActivation(EncryptManager::encrypt($activationKey), $thisPackage['id'], $thisPackage['name']);
+            }
             Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
                 LangManager::translate('core.Package.toasters.install.success', ['package' => $package['name']]));
         } else {
@@ -361,7 +369,7 @@ class PackageController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('core.Package.toasters.delete.success',
                 ['package' => $package]));
-
+        ActivatedModel::getInstance()->removeActivationByResName($package);
         Redirect::redirectPreviousRoute();
     }
 
@@ -387,7 +395,7 @@ class PackageController extends AbstractController
 
         if (!empty($current['dependencies'])) {
             foreach ($current['dependencies'] as $dep) {
-                $local = PackageController::getPackage($dep['market_name']);
+                $local = self::getPackage($dep['market_name']);
                 if ($local === null) {
                     $blocking[] = "<b>{$dep['market_name']}</b> (non installé)";
                     continue;

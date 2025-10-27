@@ -2,6 +2,7 @@
 
 namespace CMW\Controller\Core;
 
+use CMW\Controller\Core\Api\External\CheckerController;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Cache\SimpleCacheManager;
@@ -14,6 +15,7 @@ use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
+use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Manager\Theme\Config\ThemeMapper;
 use CMW\Manager\Theme\Config\ThemeSettingsMapper;
@@ -26,6 +28,7 @@ use CMW\Manager\Theme\UninstallThemeType;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
+use CMW\Model\Core\ActivatedModel;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\ThemeModel;
 use CMW\Utils\Directory;
@@ -47,6 +50,7 @@ class ThemeController extends AbstractController
     private function adminThemeMarket(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.market');
+        CheckerController::getInstance()->checkActivationAPI();
 
         $currentTheme = ThemeLoader::getInstance()->getCurrentTheme();
         $installedThemes = ThemeLoader::getInstance()->getInstalledThemes();
@@ -65,6 +69,7 @@ class ThemeController extends AbstractController
     private function adminThemeConfiguration(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
+        CheckerController::getInstance()->checkActivationAPI();
 
         $currentTheme = ThemeLoader::getInstance()->getCurrentTheme();
         $installedThemes = ThemeLoader::getInstance()->getInstalledThemes();
@@ -169,7 +174,7 @@ class ThemeController extends AbstractController
             $blocking = [];
             foreach ($thisTheme['dependencies'] as $dep) {
                 // Récup local
-                $local = self::getPackage($dep['market_name'] ?? $dep['name'] ?? null);
+                $local = ThemeLoader::getInstance()->getTheme($dep['name'] ?? null);
                 if ($local === null) {
                     continue;
                 }
@@ -233,6 +238,9 @@ class ThemeController extends AbstractController
             Flash::send(Alert::ERROR, "Erreur", "Une erreur est survenue sur l'API, contacte le support de CraftMyWebsite.");
         }
 
+        if (!empty($activationKey)) {
+            ActivatedModel::getInstance()->addActivation(EncryptManager::encrypt($activationKey), $thisTheme['id'], $thisTheme['name']);
+        }
         // Install Theme settings
         ThemeFileManager::getInstance()->installThemeSettings($theme['name']);
         CoreModel::getInstance()->updateOption('theme', $theme['name']);
@@ -250,6 +258,7 @@ class ThemeController extends AbstractController
     private function adminThemeManage(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.edit');
+        CheckerController::getInstance()->checkActivationAPI();
 
         //Vérifie si la valeur par défaut est en base de donnée si ce n'est pas le cas, on l'ajoute, cela permet aux mises à jour des thèmes de gérer les nouvelles valeurs :)
         $themeMenus = ThemeEditorProcessor::getInstance()->getThemeMenus();
@@ -456,6 +465,7 @@ class ThemeController extends AbstractController
                     LangManager::translate('core.toaster.success'),
                     LangManager::translate('core.toaster.theme.delete.success', ['theme' => $themeName]),
                 );
+                ActivatedModel::getInstance()->removeActivationByResName($themeName);
                 break;
             case UninstallThemeType::ERROR_THEME_NOT_FOUND:
                 Flash::send(Alert::ERROR,

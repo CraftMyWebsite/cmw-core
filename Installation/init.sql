@@ -355,6 +355,17 @@ CREATE TABLE IF NOT EXISTS cmw_notification_refused_package
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS cmw_actived_resources
+(
+    activated_resource_id   INT AUTO_INCREMENT PRIMARY KEY,
+    resource_key            VARCHAR(255) NOT NULL,
+    resource_id             INT NOT NULL,
+    resource_name           VARCHAR(80) NULL,
+    resource_activate_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE = InnoDB
+    CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_unicode_ci;
+
 /* INSERT AREA */
 INSERT INTO cmw_core_terms (term_type, term_content, term_requires_accept)
 VALUES ('terms_of_service', 'Write your ToS here', 1),
