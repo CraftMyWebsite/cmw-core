@@ -4,6 +4,7 @@ namespace CMW\Manager\Xml;
 
 
 use CMW\Manager\Package\AbstractEntity;
+use function base64_encode;
 
 class SitemapItemEntity extends AbstractEntity
 {
@@ -11,6 +12,7 @@ class SitemapItemEntity extends AbstractEntity
     private string $lastmod;
     private float $priority;
     private string $slug;
+    private string $slugEncoded;
 
     /**
      * @param string $loc
@@ -24,6 +26,8 @@ class SitemapItemEntity extends AbstractEntity
         $this->lastmod = $lastmod;
         $this->priority = $priority;
         $this->slug = $slug;
+
+        $this->slugEncoded = base64_encode($this->slug);
     }
 
     /**
@@ -56,5 +60,14 @@ class SitemapItemEntity extends AbstractEntity
     public function getSlug(): string
     {
         return $this->slug;
+    }
+
+    /**
+     * <p>Base64 encoded slug</p>
+     * @return string
+     */
+    public function getSlugEncoded(): string
+    {
+        return $this->slugEncoded;
     }
 }
