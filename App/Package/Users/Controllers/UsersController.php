@@ -213,7 +213,11 @@ class UsersController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('users.toaster.success_add', ['pseudo' => $pseudo]));
 
-        Emitter::send(RegisterEvent::class, $userId);
+        try {
+            Emitter::send(RegisterEvent::class, $userId);
+        } catch (Exception) {
+            error_log('Error while sending RegisterEvent');
+        }
 
         Redirect::redirectPreviousRoute();
     }
