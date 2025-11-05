@@ -430,14 +430,7 @@ return [
             'title' => 'Réglages',
             'targetDateTitle' => 'Se termine le',
             'useMyCode' => 'Utiliser mon code',
-            'loginRegister' => [
-                'title' => 'Connexions / Inscriptions',
-                'type' => [
-                    0 => 'Tout désactiver',
-                    1 => 'Activer les connexions / inscriptions',
-                    2 => 'Activer uniquement les connexions',
-                ],
-            ],
+            'neRegister' => 'Désactiver les inscriptions',
             'maintenanceTitle' => [
                 'label' => 'Titre',
                 'placeholder' => 'Nous revenons très vite !',

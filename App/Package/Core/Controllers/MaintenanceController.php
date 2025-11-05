@@ -3,6 +3,7 @@
 namespace CMW\Controller\Core;
 
 use CMW\Controller\Users\UsersController;
+use CMW\Manager\Filter\FilterManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
@@ -47,7 +48,11 @@ class MaintenanceController extends AbstractController
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.settings.maintenance');
 
-        [$title, $description, $targetDate, $type, $overrideThemeCode] = Utils::filterInput('title', 'description', 'target-date', 'type', 'overrideThemeCode');
+        $title = FilterManager::filterInputStringPost('title');
+        $description = FilterManager::filterInputStringPost('description');
+        $targetDate = FilterManager::filterInputStringPost('target-date');
+        $type = FilterManager::filterInputIntPost('noRegister');
+        $overrideThemeCode = FilterManager::filterInputIntPost('overrideThemeCode');
 
         $isEnable = isset($_POST['isEnable']) ? 1 : 0;
         $noEnd = isset($_POST['noEnd']) ? 1 : 0;
@@ -114,12 +119,12 @@ class MaintenanceController extends AbstractController
         }
 
         // /// Login checks
-        if ($maintenance->getType() === 1 &&
+        if ($maintenance->getType() === 0 &&
                 (Website::isCurrentPage('login') || Website::isCurrentPage('register') || Website::isCurrentPage('login/forgot') || Website::isCurrentPage('login/validate/tfa'))) {
             return;
         }
 
-        if ($maintenance->getType() === 2 &&
+        if ($maintenance->getType() === 1 &&
                 (Website::isCurrentPage('login') || Website::isCurrentPage('login/forgot') || Website::isCurrentPage('login/validate/tfa'))) {
             return;
         }
