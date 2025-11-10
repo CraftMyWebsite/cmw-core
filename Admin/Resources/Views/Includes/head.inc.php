@@ -54,42 +54,45 @@ use CMW\Utils\Website;
 
 <style>
     :root {
+        /* Light mode colors */
         --light-primary: #ffffff;
-        --light-secondary: #f5f5f6;
-        --light-third: #cbd5e1;
-        --light-fourth: #e2e8f0;
-        --light-text-primary: #334155;
-        --light-text-secondary: #9ca3af;
-        --light-input-bg: #f9fafb;
-        --light-scrollbar : #94a3b8;
-        --light-scrollbar-hover : #64748b;
-        --light-scrollbar-bg : #e2e8f0;
+        --light-secondary: #f8f9fa;
+        --light-third: #e9ecef;
+        --light-fourth: #dee2e6;
+        --light-text-primary: #212529;
+        --light-text-secondary: #6c757d;
+        --light-input-bg: #ffffff;
+        --light-scrollbar: #adb5bd;
+        --light-scrollbar-hover: #6c757d;
+        --light-scrollbar-bg: #f1f3f5;
 
-        --dark-primary: #0d1220; /* (previous) #030712 */
-        --dark-secondary: #111828; /* (previous) #111827 */
-        --dark-third: #334155;
-        --dark-fourth: #1e293b;
-        --dark-text-primary: #e5e7eb;
-        --dark-text-secondary: #4b5563;
-        --dark-input-bg: #374151;
-        --dark-scrollbar : #334155;
-        --dark-scrollbar-hover : #1e293b;
-        --dark-scrollbar-bg : #94a3b8;
+        /* Dark mode colors */
+        --dark-primary: #0d1117;
+        --dark-secondary: #161b22;
+        --dark-third: #21262d;
+        --dark-fourth: #30363d;
+        --dark-text-primary: #e3e4e8;
+        --dark-text-secondary: #8b949e;
+        --dark-input-bg: #21262d;
+        --dark-scrollbar: #484f58;
+        --dark-scrollbar-hover: #656c76;
+        --dark-scrollbar-bg: #161b22;
 
-        --nav-sky : #435EBE;
-        --nav-sky-light : #f2f2f3;
-        --nav-sky-dark : #1e293b;
-        --nav-sky-text-dark : #435EBE;
+        /* Accent colors */
+        --nav-sky: #0969da;
+        --nav-sky-light: #dbeafe;
+        --nav-sky-dark: #21262d;
+        --nav-sky-text-dark: #58a6ff;
     }
 
-    .text-success {color: #0ab312}
-    .text-info {color: #1C64F2}
-    .text-danger {color: #f3182b}
-    .text-warning {color: #f3b518}
-    .bg-success {background-color: #0ab312}
-    .bg-info {background-color: #1C64F2}
-    .bg-danger {background-color: #f3182b}
-    .bg-warning {background-color: #f3b518}
+    .text-success {color: #1a7f37}
+    .text-info {color: #0969da}
+    .text-danger {color: #cf222e}
+    .text-warning {color: #bf8700}
+    .bg-success {background-color: #1a7f37}
+    .bg-info {background-color: #0969da}
+    .bg-danger {background-color: #cf222e}
+    .bg-warning {background-color: #bf8700}
 </style>
 
 <body>
