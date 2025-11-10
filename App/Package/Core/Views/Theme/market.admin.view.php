@@ -1,8 +1,9 @@
 <?php
 
 use CMW\Manager\Lang\LangManager;
+use CMW\Manager\Security\SecurityManager;
 use CMW\Manager\Theme\Loader\ThemeLoader;
-use CMW\Manager\Theme\ThemeManager;
+use CMW\Manager\Updater\UpdatesManager;
 use CMW\Utils\Website;
 
 /* @var $themesList */
@@ -13,12 +14,16 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
 
 <h3><i class="fa-solid fa-palette"></i> <?= LangManager::translate('core.theme.market') ?></h3>
 
+<?php if (UpdatesManager::isTestAPI()):?>
+    <h6 class="text-warning mb-2">Votre site est en mode test API.</h6>
+<?php endif; ?>
+
 <div class="grid-4">
     <?php foreach ($themesList as $theme): ?>
         <?php if (!ThemeLoader::getInstance()->isThemeInstalled($theme['name'])): ?>
             <div class="card p-0 relative" style="overflow: hidden;">
                 <div class="flex justify-between px-2 pt-2">
-                    <p class="font-bold"><?= $theme['name'] ?></p>
+                    <p class="font-bold"><?= ($theme['version_status']) === 1 && UpdatesManager::isTestAPI() ? '<span class="text-warning">En attente : </span>' : '' ?><?= $theme['name'] ?></p>
                     <button data-modal-toggle="modal-<?= $theme['id'] ?>" class="btn-primary-sm" type="button"><?= LangManager::translate('core.theme.details') ?></button>
                 </div>
                 <div class="relative">
@@ -26,23 +31,105 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                          alt="Icon <?= $theme['name'] ?>">
                 </div>
 
-                <div class="text-center pb-2">
-                    <button onclick="this.disabled = true; window.location = 'install/<?= $theme['id'] ?>'"
-                            class="btn btn-sm btn-primary-sm"><i
-                            class="fa-solid fa-download"></i> <?= LangManager::translate('core.theme.install') ?>
-                    </button>
+                <div class="pb-2">
+                    <?php if ((float)$theme['price'] === 0.0): ?>
+                        <?php if ($theme['version_status'] === 1 && UpdatesManager::isTestAPI()): ?>
+                            <div class="flex justify-center gap-2">
+                                <form action="install" method="post" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
+                                    <?php SecurityManager::getInstance()->insertHiddenToken() ?>
+                                    <input type="hidden" name="resId" value="<?= $theme['id'] ?>">
+                                    <input type="hidden" name="status" value="online">
+                                    <button type="submit" class="btn-success-sm"><i class="fa-solid fa-download"></i> <?= LangManager::translate('core.theme.install') ?></button>
+                                </form>
+                                <form action="install" method="post" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
+                                    <?php SecurityManager::getInstance()->insertHiddenToken() ?>
+                                    <input type="hidden" name="resId" value="<?= $theme['id'] ?>">
+                                    <input type="hidden" name="status" value="test">
+                                    <button type="submit" class="btn-warning-sm"><i class="fa-solid fa-download"></i> <?= LangManager::translate('core.theme.install') ?> <?= $theme['version_name'] ?></button>
+                                </form>
+                            </div>
+                        <?php else: ?>
+                            <div class="flex justify-center gap-2">
+                                <form action="install" method="post" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
+                                    <?php SecurityManager::getInstance()->insertHiddenToken() ?>
+                                    <input type="hidden" name="resId" value="<?= $theme['id'] ?>">
+                                    <input type="hidden" name="status" value="online">
+                                    <button type="submit" class="btn-success-sm"><i class="fa-solid fa-download"></i> <?= LangManager::translate('core.theme.install') ?></button>
+                                </form>
+                            </div>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <?php if ($theme['version_status'] === 1 && UpdatesManager::isTestAPI()): ?>
+                            <div class="flex justify-center  gap-2">
+                                <button data-modal-toggle="modal-install-<?= $theme['id'] ?>" class="btn-success-sm" type="button"><i class="fa-solid fa-download"></i> <?= LangManager::translate('core.theme.install') ?></button>
+                                <button data-modal-toggle="modal-install-<?= $theme['id'] ?>-test" class="btn-warning-sm" type="button"><i class="fa-solid fa-download"></i> <?= LangManager::translate('core.theme.install') ?> <?= $apiPackages['version_name'] ?></button>
+                            </div>
+                        <?php else: ?>
+                            <div class="flex justify-center  gap-2">
+                                <button data-modal-toggle="modal-install-<?= $theme['id'] ?>" class="btn-success-sm" type="button"><i class="fa-solid fa-download"></i> <?= LangManager::translate('core.theme.install') ?></button>
+                            </div>
+                        <?php endif; ?>
+                        <div id="modal-install-<?= $theme['id'] ?>" class="modal-container">
+                            <div class="modal">
+                                <div class="modal-header">
+                                    <h6>Installation de <?= $theme['name'] ?></h6>
+                                    <button type="button" data-modal-hide="modal-install-<?= $theme['id'] ?>"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
+                                <form action="install" autocomplete="off" method="post" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
+                                    <div class="modal-body">
+                                        <p><?= $theme['name'] ?> est un thème payant, pour l'installer, vous devez l'avoir acheté</p>
+                                        <p>Si vous l'avez déjà acheter rendez-vous sur <a target="_blank" class="link" href="https://craftmywebsite.fr/market/manage/purchases">craftmywebsite.fr</a> pour récupérer votre clé d'achat<br>
+                                            Assurez-vous d'avoir bien enregistré le domaine <b><?= $_SERVER['SERVER_NAME'] ?></b> pour l'activer ici !</p>
+                                        <p>Si vous ne l'avez pas encore acheter vous pouvez le faire en vous rendant sur la <a class="link" target="_blank" href="https://craftmywebsite.fr/market/details/<?= $theme['name'] ?>">page de l'article</a></p>
+                                        <?php SecurityManager::getInstance()->insertHiddenToken() ?>
+                                        <input type="hidden" name="resId" value="<?= $theme['id'] ?>">
+                                        <input type="hidden" name="status" value="online">
+                                        <label for="input-group">Clé d'activation :</label>
+                                        <div class="input-group">
+                                            <i class="fa-solid fa-key"></i>
+                                            <input type="text" id="input-group" name="activationKey" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn-success"><i class="fa-solid fa-download"></i> <?= LangManager::translate('core.Package.install') ?></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div id="modal-install-<?= $theme['id'] ?>-test" class="modal-container">
+                            <div class="modal">
+                                <div class="modal-header">
+                                    <h6>Installation de <?= $theme['name'] ?></h6>
+                                    <button type="button" data-modal-hide="modal-install-<?= $theme['id'] ?>-test"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
+                                <form action="install" autocomplete="off" method="post" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
+                                    <div class="modal-body">
+                                        <p><?= $theme['name'] ?> est un package payant, pour l'installer, vous devez l'avoir acheté</p>
+                                        <p>Si vous l'avez déjà acheter rendez-vous sur <a target="_blank" class="link" href="https://craftmywebsite.fr/market/manage/purchases">craftmywebsite.fr</a> pour récupérer votre clé d'achat<br>
+                                            Assurez-vous d'avoir bien enregistré le domaine <b><?= $_SERVER['SERVER_NAME'] ?></b> pour l'activer ici !</p>
+                                        <p>Si vous ne l'avez pas encore acheter vous pouvez le faire en vous rendant sur la <a class="link" target="_blank" href="https://craftmywebsite.fr/market/details/<?= $theme['name'] ?>">page de l'article</a></p>
+                                        <?php SecurityManager::getInstance()->insertHiddenToken() ?>
+                                        <input type="hidden" name="resId" value="<?= $theme['id'] ?>">
+                                        <input type="hidden" name="status" value="test">
+                                        <label for="input-group">Clé d'activation :</label>
+                                        <div class="input-group">
+                                            <i class="fa-solid fa-key"></i>
+                                            <input type="text" id="input-group" name="activationKey" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn-success"><i class="fa-solid fa-download"></i> <?= LangManager::translate('core.Package.install') ?></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
             <div id="modal-<?= $theme['id'] ?>" class="modal-container">
                 <div class="modal-xl overflow-auto">
                     <div class="modal-header">
                         <h6><?= $theme['name'] ?></h6>
-                        <div>
-                            <button onclick="this.disabled = true; window.location = 'install/<?= $theme['id'] ?>'"
-                                    class="btn-primary"><i
-                                    class="fa-solid fa-download"></i> <?= LangManager::translate('core.theme.install') ?>
-                            </button>
-                        </div>
                     </div>
                     <div class="modal-body grid-2">
                         <div style="height:20rem">

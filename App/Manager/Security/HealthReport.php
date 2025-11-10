@@ -58,6 +58,10 @@ class HealthReport
         foreach (PackageController::getInstalledPackages() as $package) {
             $packages .= '      - ' . $package->name() . ' @' . $package->version() . " \n ";
         }
+        $ignoredPackages = '';
+        foreach (PackageController::getIgnoredPackages() as $ignoredPackage) {
+            $ignoredPackages .= '      - ?!' . $ignoredPackage .  "!? \n ";
+        }
 
         // Themes
         $themes = '';
@@ -69,6 +73,10 @@ class HealthReport
             $themes .= $isActiveTheme ? ' [ACTIVE]' : '';
 
             $themes .= " \n ";
+        }
+        $ignoredThemes = '';
+        foreach (ThemeLoader::getIgnoredThemes() as $ignoredTheme) {
+            $ignoredThemes .= '      - ?!' . $ignoredTheme .  "!? \n ";
         }
 
         // CMS
@@ -108,10 +116,12 @@ class HealthReport
              ----- PACKAGES -----
                 => Packages:
              $packages
+             $ignoredPackages
                  
              ----- THEMES -----
                 => Themes:
              $themes
+             $ignoredThemes
                  
              ----- CMS -----
                  => Version: $cmsVersion

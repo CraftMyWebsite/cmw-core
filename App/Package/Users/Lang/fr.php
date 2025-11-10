@@ -345,4 +345,31 @@ return [
             'accept' => 'Vous devez accepter les termes et conditions pour pouvoir créer un compte.',
         ],
     ],
+    'tokens' => [
+        'title' => 'Sessions actives (Remember Me)',
+        'no_active_sessions' => 'Aucune session active pour cet utilisateur.',
+        'info' => 'Cet utilisateur possède %count% session(s) active(s).',
+        'table' => [
+            'device' => 'Appareil',
+            'ip' => 'Adresse IP',
+            'created' => 'Créé le',
+            'last_used' => 'Dernière utilisation',
+            'expires' => 'Expire le',
+            'actions' => 'Actions',
+        ],
+        'revoke' => 'Révoquer',
+        'revoke_all' => 'Déconnecter tous les appareils',
+        'confirm_revoke' => 'Êtes-vous sûr de vouloir révoquer cette session ?',
+        'confirm_revoke_all' => 'Êtes-vous sûr de vouloir déconnecter %pseudo% de tous ses appareils ? Cette action est irréversible.',
+        'toaster' => [
+            'revoke' => [
+                'success' => 'Session révoquée avec succès.',
+                'error' => 'Impossible de révoquer cette session.',
+            ],
+            'revoke_all' => [
+                'success' => 'Toutes les sessions de %pseudo% ont été révoquées.',
+                'error' => 'Impossible de révoquer les sessions.',
+            ],
+        ],
+    ],
 ];

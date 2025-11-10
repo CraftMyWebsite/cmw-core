@@ -428,14 +428,7 @@ return [
             'title' => 'Settings',
             'targetDateTitle' => 'Target date',
             'useMyCode' => 'Use my code',
-            'loginRegister' => [
-                'title' => 'Login / Registers',
-                'type' => [
-                    0 => 'All disabled',
-                    1 => 'Enable logins / registers',
-                    2 => 'Only enable logins',
-                ],
-            ],
+            'neRegister' => 'Disable register',
             'maintenanceTitle' => [
                 'label' => 'Title',
                 'placeholder' => 'We are coming soon !',

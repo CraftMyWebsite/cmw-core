@@ -433,28 +433,38 @@ function renderSubSubMenu(array $subMenus, $currentUser): string
 </aside>
 
 <script>
+    //handle sidebar state
+    const STORAGE_KEY_SIDEBAR_COLLAPSED = 'cmw_dash_collapse_sidebar';
+
+    function applySidebarState(collapsed) {
+        document.body.classList.toggle('sidebar-collapsed', collapsed);
+        const icon = document.getElementById('toggleIcon');
+        icon.classList.remove('fa-expand', 'fa-bars', 'fa-lg');
+        icon.classList.add(collapsed ? 'fa-bars' : 'fa-expand', 'fa-lg');
+    }
+
+    // initial state from localStorage
+    const isSidebarCollapsed = localStorage.getItem(STORAGE_KEY_SIDEBAR_COLLAPSED) === 'true';
+    applySidebarState(isSidebarCollapsed);
+
     document.getElementById('toggleSidebar').addEventListener('click', function () {
+        // toggle immediately for responsiveness
         document.body.classList.toggle('sidebar-collapsed');
 
-        // Récupérer l'élément de l'icône
-        let icon = document.getElementById('toggleIcon');
-
-        // Ajouter la classe flip pour l'effet de rotation
+        // animation class
+        const icon = document.getElementById('toggleIcon');
         icon.classList.add('flip');
 
-        // Vérifier si la sidebar est masquée et basculer l'icône
         setTimeout(function () {
-            if (document.body.classList.contains('sidebar-collapsed')) {
-                icon.classList.remove('fa-expand', 'fa-lg');
-                icon.classList.add('fa-bars', 'fa-lg');
-            } else {
-                icon.classList.remove('fa-bars', 'fa-lg');
-                icon.classList.add('fa-expand', 'fa-lg');
-            }
+            const collapsed = document.body.classList.contains('sidebar-collapsed');
+            applySidebarState(collapsed);
 
-            // Retirer l'effet de flip après le changement
+            // store state
+            localStorage.setItem(STORAGE_KEY_SIDEBAR_COLLAPSED, collapsed ? 'true' : 'false');
+
+            // remove animation class
             icon.classList.remove('flip');
-        }, 300); // Attendez un peu pour l'effet avant de changer l'icône
+        }, 300); // wait for flip effect
     });
 
     function toggleSubMenu(button) {

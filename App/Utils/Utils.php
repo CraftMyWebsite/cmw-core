@@ -65,6 +65,50 @@ class Utils
         return false;
     }
 
+    /**
+     * <p>Check if we have empty values</p>
+     * @param mixed ...$values
+     * @return bool
+     */
+    public static function hasEmpty(mixed ...$values): bool
+    {
+        foreach ($values as $value) {
+            if (empty($value)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * <p>Check if we have false values</p>
+     * @param mixed ...$values
+     * @return bool
+     */
+    public static function hasFalse(mixed ...$values): bool
+    {
+        if (\in_array(false, $values, true)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * <p>Check if we have true values</p>
+     * @param mixed ...$values
+     * @return bool
+     */
+    public static function hasTrue(mixed ...$values): bool
+    {
+        if (\in_array(true, $values, true)) {
+            return true;
+        }
+
+        return false;
+    }
+
     public static function normalizeForSlug($text, $encode = 'UTF-8'): string
     {
         $text = mb_strtolower(trim(self::removeAccents($text, $encode)));

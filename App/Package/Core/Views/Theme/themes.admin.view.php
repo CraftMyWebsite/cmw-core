@@ -1,17 +1,16 @@
 <?php
 
-use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Manager\Theme\File\ThemeFileManager;
-use CMW\Manager\Theme\IThemeConfig;
+use CMW\Manager\Theme\IThemeConfigV2;
 use CMW\Manager\Theme\Loader\ThemeLoader;
 use CMW\Manager\Theme\Market\ThemeMarketManager;
-use CMW\Manager\Theme\ThemeManager;
+use CMW\Manager\Updater\UpdatesManager;
 use CMW\Utils\Website;
 
-/* @var $currentTheme IThemeConfig */
-/* @var $installedThemes IThemeConfig[] */
+/* @var $currentTheme IThemeConfigV2 */
+/* @var $installedThemes IThemeConfigV2[] */
 /* @var $themesList */
 
 Website::setTitle(LangManager::translate('core.theme.config.title'));
@@ -19,6 +18,10 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
 ?>
 
 <h3><i class="fa-solid fa-palette"></i> <?= LangManager::translate('core.theme.myThemes') ?></h3>
+
+<?php if (UpdatesManager::isTestAPI()):?>
+    <h6 class="text-warning mb-2">Votre site est en mode test API.</h6>
+<?php endif; ?>
 
 <div class="grid-4 mb-24">
     <!------------------------------------
@@ -94,7 +97,10 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                             <p class="small">
                                 <?= LangManager::translate('core.theme.author') ?><a
                                     href=""
-                                    target="_blank"><?= $theme->author() ?? $theme->authors() ?>
+                                    target="_blank">
+                                    <?php foreach ($theme->authors() as $author): ?>
+                                    <?= $author ?>
+                                    <?php endforeach;?>
                                 </a>
                             </p>
                             <p class="small">
@@ -349,7 +355,10 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                             <p class="small">
                                 <?= LangManager::translate('core.theme.author') ?><a
                                     href=""
-                                    target="_blank"><?= $theme->author() ?? $theme->authors() ?>
+                                    target="_blank">
+                                    <?php foreach ($theme->authors() as $author): ?>
+                                        <?= $author ?>
+                                    <?php endforeach;?>
                                 </a>
                             </p>
                             <p class="small">

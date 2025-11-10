@@ -46,6 +46,26 @@ CREATE TABLE IF NOT EXISTS `cmw_users`
 
 CREATE INDEX idx_registration_date ON cmw_users (user_created);
 
+CREATE TABLE IF NOT EXISTS `cmw_users_remember_tokens`
+(
+    `token_id`       INT AUTO_INCREMENT PRIMARY KEY,
+    `user_id`        INT          NOT NULL,
+    `token_selector` VARCHAR(64)  NOT NULL,
+    `token_hash`     VARCHAR(255) NOT NULL,
+    `user_agent`     VARCHAR(512) DEFAULT NULL,
+    `ip_address`     VARCHAR(45)  DEFAULT NULL,
+    `created_at`     TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    `last_used_at`   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `expires_at`     TIMESTAMP    NOT NULL,
+    INDEX `idx_user_id` (`user_id`),
+    INDEX `idx_token_selector` (`token_selector`),
+    INDEX `idx_expires_at` (`expires_at`),
+    FOREIGN KEY (`user_id`) REFERENCES `cmw_users` (`user_id`) ON DELETE CASCADE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci COMMENT ='Secure remember-me tokens for persistent authentication';
+
+
 CREATE TABLE IF NOT EXISTS `cmw_users_2fa`
 (
     `users_2fa_user_id`     INT(11)      NOT NULL PRIMARY KEY,
@@ -334,6 +354,17 @@ CREATE TABLE IF NOT EXISTS cmw_notification_refused_package
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS cmw_actived_resources
+(
+    activated_resource_id   INT AUTO_INCREMENT PRIMARY KEY,
+    resource_key            VARCHAR(255) NOT NULL,
+    resource_id             INT NOT NULL,
+    resource_name           VARCHAR(80) NULL,
+    resource_activate_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE = InnoDB
+    CHARACTER SET = utf8mb4
+    COLLATE = utf8mb4_unicode_ci;
 
 /* INSERT AREA */
 INSERT INTO cmw_core_terms (term_type, term_content, term_requires_accept)

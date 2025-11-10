@@ -2,11 +2,13 @@
 
 namespace CMW\Controller\Core;
 
+use CMW\Controller\Core\Api\External\CheckerController;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Env\EnvManager;
+use CMW\Manager\Filter\FilterManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
@@ -16,8 +18,10 @@ use CMW\Manager\Package\IPackageConfig;
 use CMW\Manager\Package\IPackageConfigV2;
 use CMW\Manager\Package\Adapter\LegacyPackageAdapter;
 use CMW\Manager\Router\Link;
+use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Views\View;
+use CMW\Model\Core\ActivatedModel;
 use CMW\Utils\Directory;
 use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
@@ -29,7 +33,6 @@ use function file_exists;
 use function file_get_contents;
 use function in_array;
 use function is_null;
-use function is_subclass_of;
 use function scandir;
 
 /**
@@ -41,6 +44,7 @@ use function scandir;
 class PackageController extends AbstractController
 {
     public static array $corePackages = ['Core', 'Users', 'Pages'];
+    private static ?array $ignoredEnvCache = null;
 
     /**
      * @return IPackageConfigV2[]
@@ -57,7 +61,10 @@ class PackageController extends AbstractController
             }
 
             if (file_exists("$packagesFolder/$package/Package.php") && !in_array($package, self::$corePackages, true)) {
-                $toReturn[] = self::getPackage($package);
+                $packageInstance = self::getPackage($package);
+                if ($packageInstance !== null) {
+                    $toReturn[] = $packageInstance;
+                }
             }
         }
 
@@ -74,7 +81,10 @@ class PackageController extends AbstractController
         $packagesFolder = 'App/Package/';
         foreach (self::$corePackages as $package) {
             if (file_exists("$packagesFolder/$package/Package.php")) {
-                $toReturn[] = self::getPackage($package);
+                $packageInstance = self::getPackage($package);
+                if ($packageInstance !== null) {
+                    $toReturn[] = $packageInstance;
+                }
             }
         }
 
@@ -92,6 +102,12 @@ class PackageController extends AbstractController
 
     public static function getPackage(string $packageName): ?IPackageConfigV2
     {
+        if (self::isDisabled($packageName)) {
+            error_log("[CMW] Package '$packageName' USER RUN PACKAGE BUT API CMW NOT ALLOW THIS ON THIS DOMAIN : {$_SERVER['SERVER_NAME']}, SUPPORT D'ONT HELP THIS USER AND NOTIFY ADMIN QUICKLY !");
+            WarningManager::addError("Le package <b>{$packageName}</b> a été désactivé. CraftMyWebsite a remarqué une tentative d'installation en contournant la vérification.<br>Votre domaine <b>{$_SERVER['SERVER_NAME']}</b> n'est pas autorisé pour <b>{$packageName}</b>.<br>Veuillez corriger cela rapidement sous peine de prendre des sanctions (blacklistage de votre site sur l'api de craftmywebsite.fr)");
+            return null;
+        }
+
         $namespace = 'CMW\\Package\\' . $packageName . '\Package';
 
         if (!class_exists($namespace)) {
@@ -118,12 +134,38 @@ class PackageController extends AbstractController
         return self::getPackage($package) !== null;
     }
 
+    public static function getIgnoredPackages(): array
+    {
+        if (self::$ignoredEnvCache !== null) {
+            return self::$ignoredEnvCache;
+        }
+
+        $env = EnvManager::getInstance()->getValue('DISABLED_PACKAGE') ?: '';
+        $list = array_filter(array_map('trim', explode(',', $env)));
+        self::$ignoredEnvCache = array_values(array_unique($list));
+
+        return self::$ignoredEnvCache;
+    }
+
+    public static function isDisabled(string $package): bool
+    {
+        foreach (self::getIgnoredPackages() as $p) {
+            if (strcasecmp($p, $package) === 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * @return array
      * @desc Return the list of public packages from our market
      */
     public static function getMarketPackages(): array
     {
+        if (UpdatesManager::isTestAPI()) {
+            return PublicAPI::getData('market/resources/all/states/1');
+        }
         return PublicAPI::getData('market/resources/filtered/1');
     }
 
@@ -157,9 +199,12 @@ class PackageController extends AbstractController
     private function adminPackageManage(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.market');
+        CheckerController::getInstance()->checkActivationAPI();
 
         $installedPackages = self::getInstalledPackages();
-        $packagesList = self::getMarketPackages();
+        $packagesList = array_filter(self::getMarketPackages(), static function ($pkg) {
+            return !self::isInstalled($pkg['name']) && !self::isDisabled($pkg['name']);
+        });
 
         View::createAdminView('Core', 'Package/market')
             ->addVariableList(['installedPackages' => $installedPackages, 'packagesList' => $packagesList])
@@ -170,6 +215,7 @@ class PackageController extends AbstractController
     private function adminMyPackage(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.manage');
+        CheckerController::getInstance()->checkActivationAPI();
 
         $installedPackages = self::getInstalledPackages();
         $packagesList = self::getMarketPackages();
@@ -179,9 +225,9 @@ class PackageController extends AbstractController
             ->view();
     }
 
-    #[Link('/install/:id', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/packages')]
     #[NoReturn]
-    private function adminPackageInstallation(int $id): void
+    #[Link('/install', Link::POST, [], '/cmw-admin/packages')]
+    private function adminPackageInstallation(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.market');
 
@@ -193,23 +239,116 @@ class PackageController extends AbstractController
             }
         }
 
-        $package = PublicAPI::putData("market/resources/install/$id");
+        $id = FilterManager::filterInputIntPost('resId');
+        $status = FilterManager::filterInputStringPost('status');
+        $activationKey = FilterManager::filterInputStringPost('activationKey');
 
-        if (empty($package)) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                LangManager::translate('core.toaster.internalError') . ' (API)');
-            Redirect::redirectPreviousRoute();
+        if ($status === 'online') {
+            $status = 0;
+        } else {
+            $status = 1;
         }
 
-        if (!DownloadManager::installPackageWithLink($package['file'], 'package', $package['name'])) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                LangManager::translate('core.downloads.errors.internalError',
-                    ['name' => $package['name'], 'version' => $package['version_name']]));
-            Redirect::redirectPreviousRoute();
+        // Check market dependencies
+        $thisPackage = PublicAPI::getData("market/resources/$id");
+
+        $missing = [];
+        if (!empty($thisPackage['dependencies'])) {
+            foreach ($thisPackage['dependencies'] as $dep) {
+                if (is_null(PackageController::getPackage($dep['market_name'] ?? $dep['name'] ?? null))) {
+                    $missing[] = '<b>'.($dep['market_name'] ?? $dep['name']).'</b>';
+                }
+            }
+
+            if (!empty($missing)) {
+                $count = count($missing);
+                $list  = $count > 1
+                    ? implode(', ', array_slice($missing, 0, -1)).' et '.end($missing)
+                    : $missing[0];
+
+                $label = $count > 1 ? 'les packages ' : 'le package ';
+
+                Flash::send(
+                    Alert::WARNING,
+                    'Packages',
+                    'Veuillez installer '.$label.$list.' avant d\'installer <b>'.$thisPackage['market_name'].
+                    '</b> car il en a besoin pour fonctionner.'
+                );
+                Redirect::redirectPreviousRoute();
+            }
+
+            // Check versions of installed dependencies update before install
+            $blocking = [];
+            foreach ($thisPackage['dependencies'] as $dep) {
+                // Récup local
+                $local = self::getPackage($dep['market_name'] ?? $dep['name'] ?? null);
+                if ($local === null) {
+                    continue;
+                }
+
+                $depIdOrSlug = $dep['id'] ?? ($dep['name'] ?? null);
+                $depApi = $depIdOrSlug ? PublicAPI::getData("market/resources/{$depIdOrSlug}") : null;
+                if (!is_array($depApi) || empty($depApi['version_name'])) {
+                    $blocking[] = "<b>".($dep['market_name'] ?? $dep['name'])."</b> (version distante inconnue)";
+                    continue;
+                }
+
+                $remote = ltrim((string)$depApi['version_name'], "vV");
+                $localV = ltrim((string)$local->version(), "vV");
+
+                if (version_compare($localV, $remote, '<')) {
+                    $blocking[] = "<b>".($dep['market_name'] ?? $dep['name'])."</b> {$localV} ➜ {$remote}";
+                }
+            }
+
+            if (!empty($blocking)) {
+                $count = count($blocking);
+                $list  = $count > 1
+                    ? implode(', ', array_slice($blocking, 0, -1)).' et '.end($blocking)
+                    : $blocking[0];
+
+                $label = $count > 1 ? 'les packages ' : 'le package ';
+
+                Flash::send(
+                    Alert::WARNING,
+                    'Packages',
+                    "Veuillez d'abord mettre à jour {$label}{$list} avant d'installer <b>{$thisPackage['market_name']}</b>."
+                );
+                Redirect::redirectPreviousRoute();
+            }
         }
 
-        Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-            LangManager::translate('core.Package.toasters.install.success', ['package' => $package['name']]));
+        $data = [
+            'resId' => $id,
+            'status' => $status,
+            'activationKey' => $activationKey,
+        ];
+
+        $package = PublicAPI::postData("market/resources/install" , $data);
+
+        if (isset($package['error'])) {
+            $code = $package['error']['code'] ?? 'UNKNOWN';
+            $desc = $package['error']['description']['Description']
+                ?? $package['error']['description']['description']
+                ?? ($package['error']['info'] ?? 'Erreur inconnue');
+
+            Flash::send(Alert::ERROR, "Erreur ".$code, $desc);
+            Redirect::redirectPreviousRoute();
+        } elseif (!empty($package['file'])) {
+            if (!DownloadManager::installPackageWithLink($package['file'], 'package', $package['name'])) {
+                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
+                    LangManager::translate('core.downloads.errors.internalError',
+                        ['name' => $package['name'], 'version' => $package['version_name']]));
+                Redirect::redirectPreviousRoute();
+            }
+            if (!empty($activationKey)) {
+                ActivatedModel::getInstance()->addActivation(EncryptManager::encrypt($activationKey), $thisPackage['id'], $thisPackage['name']);
+            }
+            Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
+                LangManager::translate('core.Package.toasters.install.success', ['package' => $package['name']]));
+        } else {
+            Flash::send(Alert::ERROR, "Erreur", "Une erreur est survenue sur l'API, contacte le support de CraftMyWebsite.");
+        }
 
         Redirect::redirectPreviousRoute();
     }
@@ -230,13 +369,13 @@ class PackageController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('core.Package.toasters.delete.success',
                 ['package' => $package]));
-
+        ActivatedModel::getInstance()->removeActivationByResName($package);
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link('/update/:id/:actualVersion/:packageName', Link::GET, ['id' => '[0-9]+', 'actualVersion' => '.*?', 'packageName' => '.*?'], '/cmw-admin/packages')]
+    #[Link('/update/:id/:actualVersion/:packageName/:status', Link::GET, ['id' => '[0-9]+', 'actualVersion' => '.*?', 'packageName' => '.*?'], '/cmw-admin/packages')]
     #[NoReturn]
-    private function adminPackageUpdate(int $id, string $actualVersion, string $packageName): void
+    private function adminPackageUpdate(int $id, string $actualVersion, string $packageName, string $status): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.manage');
 
@@ -248,7 +387,53 @@ class PackageController extends AbstractController
             }
         }
 
-        $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion");
+        $statusInt = ($status === 'test') ? 1 : 0;
+
+        //Check if dependencies have update before update this
+        $current = PublicAPI::getData("market/resources/$id");
+        $blocking = [];
+
+        if (!empty($current['dependencies'])) {
+            foreach ($current['dependencies'] as $dep) {
+                $local = self::getPackage($dep['market_name']);
+                if ($local === null) {
+                    $blocking[] = "<b>{$dep['market_name']}</b> (non installé)";
+                    continue;
+                }
+
+                $depApi = PublicAPI::getData("market/resources/{$dep['id']}");
+                if (!is_array($depApi) || empty($depApi['version_name'])) {
+                    $blocking[] = "<b>{$dep['market_name']}</b> (version distante inconnue)";
+                    continue;
+                }
+
+                $remote = ltrim((string)$depApi['version_name'], "vV");
+                $localV = ltrim((string)$local->version(), "vV");
+
+                if (version_compare($localV, $remote, '<')) {
+                    $blocking[] = "<b>{$dep['market_name']}</b> {$localV} ➜ {$remote}";
+                }
+            }
+
+            if (!empty($blocking)) {
+                $count = count($blocking);
+                $list  = $count > 1
+                    ? implode(', ', array_slice($blocking, 0, -1)).' et '.end($blocking)
+                    : $blocking[0];
+
+                $label = $count > 1 ? 'les packages ' : 'le package ';
+
+                Flash::send(
+                    Alert::WARNING,
+                    'Packages',
+                    "Veuillez d'abord mettre à jour {$label}{$list} avant d'actualiser <b>{$packageName}</b>."
+                );
+                Redirect::redirectPreviousRoute();
+            }
+        }
+
+
+        $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion/$statusInt");
 
         if (empty($updates)) {
             Flash::send(

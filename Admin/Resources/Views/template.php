@@ -3,23 +3,25 @@
 use CMW\Manager\Views\View;
 use CMW\Utils\Website;
 
-include_once ('Includes/head.inc.php');
+include_once('Includes/head.inc.php');
 
 /* INCLUDE SCRIPTS / STYLES */
 /* @var $includes */
 /* @var $content */
 View::loadInclude($includes, 'beforeScript');
+View::loadInclude($includes, 'beforePhp');
 View::loadInclude($includes, 'styles');
 
-include_once ('Includes/header.inc.php');
+include_once('Includes/header.inc.php');
 
-include_once ('_notices.php');
+include_once('_notices.php');
 
 echo $content;
 
-include_once ('Includes/footer.inc.php');
+include_once('Includes/footer.inc.php');
 
 /* INCLUDE SCRIPTS */
+View::loadInclude($includes, 'afterPhp');
 View::loadInclude($includes, 'afterScript');
 ?>
 

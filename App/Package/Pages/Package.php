@@ -27,14 +27,9 @@ class Package implements IPackageConfigV2
         return null;
     }
 
-    public function author(): ?string
-    {
-        return "Zomb";
-    }
-
     public function authors(): array
     {
-        return ['CraftMyWebsiteTeam'];
+        return ['CraftMyWebsite'];
     }
 
     public function isGame(): bool

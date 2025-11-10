@@ -1,31 +1,41 @@
 <?php
 
-// Get the command choice
+use CMW\Cli\Builder\AI\Copilot\AICopilotContextBuilder;
 use CMW\Cli\Builder\Package\PackageBuilder;
 use CMW\Cli\Builder\Theme\ThemeBuilder;
 use CMW\Cli\CliBuilder;
 use CMW\Manager\Env\EnvManager;
 
+// Set the environment to standalone
+$GLOBALS['CMW_ENV'] = 'standalone';
+
+// Get the command choice
 $command = $argv[1] ?? null;
 
 // Include the EnvManager
-include_once ('App/Manager/Env/EnvManager.php');
+include_once('App/Manager/Env/EnvManager.php');
 
 // If we don't have selected any option...
 if ($command === null) {
-    require_once (EnvManager::getInstance()->getValue('DIR') . 'App/Cli/CliBuilder.php');
+    require_once(EnvManager::getInstance()->getValue('DIR') . 'App/Cli/CliBuilder.php');
     $builder = new CliBuilder();
     $builder->emptyArgs();
 }
 
 // Theme Builder
 if ($command === 'theme-init') {
-    require_once (EnvManager::getInstance()->getValue('DIR') . 'App/Cli/Builder/Theme/ThemeBuilder.php');
+    require_once(EnvManager::getInstance()->getValue('DIR') . 'App/Cli/Builder/Theme/ThemeBuilder.php');
     new ThemeBuilder();
 }
 
 // Package Builder
 if ($command === 'package-init') {
-    require_once (EnvManager::getInstance()->getValue('DIR') . 'App/Cli/Builder/Package/PackageBuilder.php');
+    require_once(EnvManager::getInstance()->getValue('DIR') . 'App/Cli/Builder/Package/PackageBuilder.php');
     new PackageBuilder();
+}
+
+// Create / Update github copilot context
+if ($command === 'ai-copilot') {
+    require_once(EnvManager::getInstance()->getValue('DIR') . 'App/Cli/Builder/AI/Copilot/AICopilotContextBuilder.php');
+    new AICopilotContextBuilder();
 }

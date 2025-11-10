@@ -29,12 +29,6 @@ interface IPackageConfigV2
     public function imageLink(): ?string;
 
     /**
-     * @return string|null
-     * @desc The theme author.
-     */
-    public function author(): ?string;
-
-    /**
      * @return array
      * @desc <p>Ex: ['Teyir', 'Zomb']</p>.
      */

@@ -5,7 +5,6 @@ namespace CMW\Manager\Xml;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Manager\AbstractManager;
 use CMW\Utils\File;
-use CMW\Utils\Log;
 use function str_starts_with;
 
 class SitemapManager extends AbstractManager
@@ -101,7 +100,6 @@ class SitemapManager extends AbstractManager
         $loc = $this->getLocation($slug);
 
         foreach ($content->url as $url) {
-            Log::debug($url);
             if ((string)$url->loc === $loc) {
 
                 $url->lastmod = date('c');
@@ -196,5 +194,92 @@ class SitemapManager extends AbstractManager
         }
 
         return $pathUrl . $slug;
+    }
+
+    /**
+     * @return SitemapItemEntity[]
+     * @desc Get all URLs from sitemap
+     */
+    public function getAll(): array
+    {
+        $file = EnvManager::getInstance()->getValue('DIR') . 'sitemap.xml';
+
+        if (!file_exists($file)) {
+            return [];
+        }
+
+        $content = XmlManager::getInstance()->read($file);
+
+        if (!$content) {
+            return [];
+        }
+
+        $toReturn = [];
+        foreach ($content->url as $url) {
+            $toReturn[] = new SitemapItemEntity(
+                (string)$url->loc,
+                (string)$url->lastmod,
+                (float)$url->priority,
+                $this->getSlugFromLocation((string)$url->loc)
+            );
+        }
+
+        return $toReturn;
+    }
+
+    /**
+     * @param string $slug
+     * @return SitemapItemEntity|null
+     * @desc Get specific URL by slug
+     */
+    public function getBySlug(string $slug): ?SitemapItemEntity
+    {
+        $file = EnvManager::getInstance()->getValue('DIR') . 'sitemap.xml';
+
+        if (!file_exists($file)) {
+            return null;
+        }
+
+        $content = XmlManager::getInstance()->read($file);
+
+        if (!$content) {
+            return null;
+        }
+
+        $loc = $this->getLocation($slug);
+
+        foreach ($content->url as $url) {
+            if ((string)$url->loc === $loc) {
+                return new SitemapItemEntity(
+                    (string)$url->loc,
+                    (string)$url->lastmod,
+                    (float)$url->priority,
+                    $this->getSlugFromLocation((string)$url->loc)
+                );
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $location
+     * @return string
+     */
+    private function getSlugFromLocation(string $location): string
+    {
+        $pathUrl = EnvManager::getInstance()->getValue('PATH_URL');
+
+        if (str_starts_with($location, $pathUrl)) {
+            $slug = str_replace($pathUrl, '', $location);
+        } else {
+            $slug = $location;
+        }
+
+        if (str_starts_with($slug, '/')) {
+            $slug = substr($slug, 1);
+        }
+
+        return $slug === '' ? '/' : $slug;
     }
 }

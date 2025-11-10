@@ -75,6 +75,7 @@ class MaintenanceEntity extends AbstractEntity
 
     /**
      * @return int|null
+     * @desc 0 = Register / 1 = No Register
      */
     public function getType(): ?int
     {
