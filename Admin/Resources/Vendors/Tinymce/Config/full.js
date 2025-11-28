@@ -38,6 +38,23 @@ document.addEventListener("DOMContentLoaded", function () {
         xhr.send(formData);
     });
 
+    function applyTinyCustomClasses(node) {
+        if (!node || !node.nodeName || !node.classList) return;
+
+        const tag = node.nodeName.toLowerCase();
+        const className = `${tag}-tmce`;
+
+        Array.from(node.classList).forEach(cls => {
+            if (cls.endsWith('-tmce') && cls !== className) {
+                node.classList.remove(cls);
+            }
+        });
+
+        if (!node.classList.contains(className)) {
+            node.classList.add(className);
+        }
+    }
+
     function initTinyMCE(skin) {
         tinymce.init({
             selector: `.tinymce`,
@@ -72,6 +89,25 @@ document.addEventListener("DOMContentLoaded", function () {
                     const textarea = editor.getElement();
                     const minHeight = textarea.getAttribute('data-tiny-height') || 350;
                     editor.editorContainer.style.minHeight = `${minHeight}px`;
+                });
+
+                editor.on('NodeChange', function(e) {
+                    if (e.element) {
+                        applyTinyCustomClasses(e.element);
+                    }
+                });
+
+                editor.on('BeforeSetContent', function(e) {
+                    if (e.content) {
+                        const div = document.createElement('div');
+                        div.innerHTML = e.content;
+
+                        div.querySelectorAll('*').forEach(function(el) {
+                            applyTinyCustomClasses(el);
+                        });
+
+                        e.content = div.innerHTML;
+                    }
                 });
             }
         });
