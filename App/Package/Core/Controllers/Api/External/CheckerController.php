@@ -24,7 +24,6 @@ class CheckerController extends AbstractController
      */
     public function checkActivationAPI(): void
     {
-        //TODO notifymanager !
         $rows = ActivatedModel::getInstance()->getActivations();
         if (!$rows) return;
 

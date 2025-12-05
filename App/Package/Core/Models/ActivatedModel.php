@@ -36,6 +36,26 @@ class ActivatedModel extends AbstractModel
     }
 
     /**
+     * @param int $resId
+     * @return ?array
+     */
+    public function getActivationByResId(int $resId): ?array
+    {
+        $sql = "SELECT * FROM cmw_actived_resources WHERE resource_id = :resource_id ORDER BY activated_resource_id DESC LIMIT 1";
+        $db = DatabaseManager::getInstance();
+
+        $req = $db->prepare($sql);
+
+        if (!$req->execute(['resource_id' => $resId])) {
+            return null;
+        }
+
+        $row = $req->fetch();
+
+        return $row ?: null;
+    }
+
+    /**
      * @param string $activationKey
      * @param int $ressourceId
      * @param string $resName

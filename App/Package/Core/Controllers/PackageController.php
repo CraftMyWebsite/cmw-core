@@ -432,8 +432,32 @@ class PackageController extends AbstractController
             }
         }
 
+        $activation = ActivatedModel::getInstance()->getActivationByResId($id);
+        $activationKey = $activation['resource_key'] ?? null;
+        if ($activationKey) {
+            $decryptedActivationKey = EncryptManager::decrypt($activationKey);
+        } else {
+            $decryptedActivationKey = null;
+        }
 
-        $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion/$statusInt");
+        $data = [
+            'resId'         => $id,
+            'version'       => $actualVersion,
+            'status'        => $statusInt,
+            'activationKey' => $decryptedActivationKey,
+        ];
+
+        $updates = PublicAPI::postData("market/resources/updates", $data);
+
+        if (isset($updates['error'])) {
+            $code = $updates['error']['code'] ?? 'UNKNOWN';
+            $desc = $updates['error']['description']['Description']
+                ?? $updates['error']['description']['description']
+                ?? ($updates['error']['info'] ?? 'Erreur inconnue');
+
+            Flash::send(Alert::ERROR, "Erreur ".$code, $desc);
+            Redirect::redirectPreviousRoute();
+        }
 
         if (empty($updates)) {
             Flash::send(
@@ -441,11 +465,6 @@ class PackageController extends AbstractController
                 LangManager::translate('core.toaster.error'),
                 "No updates available for this package",
             );
-            Redirect::redirectPreviousRoute();
-        }
-
-        if (isset($updates['error'])) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'), $updates['error']['code']);
             Redirect::redirectPreviousRoute();
         }
 
@@ -492,7 +511,7 @@ class PackageController extends AbstractController
             LangManager::translate('core.Package.toasters.update.success', ['package' => $packageName]));
 
         //Reload too fast redirect not refresh correctly
-        sleep(1);
+        sleep(5);
 
         Redirect::redirectPreviousRoute();
     }
