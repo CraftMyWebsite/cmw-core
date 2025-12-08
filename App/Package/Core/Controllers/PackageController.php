@@ -355,6 +355,8 @@ class PackageController extends AbstractController
             Flash::send(Alert::ERROR, "Erreur", "Une erreur est survenue sur l'API, contacte le support de CraftMyWebsite.");
         }
 
+        sleep(2);
+
         Redirect::redirectPreviousRoute();
     }
 
@@ -378,9 +380,9 @@ class PackageController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
-    #[Link('/update/:id/:actualVersion/:packageName/:status', Link::GET, ['id' => '[0-9]+', 'actualVersion' => '.*?', 'packageName' => '.*?'], '/cmw-admin/packages')]
+    #[Link('/update', Link::POST, [], '/cmw-admin/packages')]
     #[NoReturn]
-    private function adminPackageUpdate(int $id, string $actualVersion, string $packageName, string $status): void
+    private function adminPackageUpdate(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.packages.manage');
 
@@ -391,6 +393,11 @@ class PackageController extends AbstractController
                 Redirect::redirect('cmw-admin/updates/cms');
             }
         }
+
+        $id = FilterManager::filterInputIntPost('resId');
+        $actualVersion = FilterManager::filterInputStringPost('localVersion');
+        $packageName = FilterManager::filterInputStringPost('packageName');
+        $status = FilterManager::filterInputStringPost('status');
 
         $statusInt = ($status === 'test') ? 1 : 0;
 
@@ -478,7 +485,7 @@ class PackageController extends AbstractController
             Flash::send(
                 Alert::ERROR,
                 LangManager::translate('core.toaster.error'),
-                "Unable to delete folder " . EnvManager::getInstance()->getValue('DIR') . "App/Package/$packageName",
+                LangManager::translate('core.toaster.theme.unableDeleteFolder') . EnvManager::getInstance()->getValue('DIR') . "App/Package/$packageName",
             );
             Redirect::redirectPreviousRoute();
         }

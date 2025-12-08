@@ -256,6 +256,8 @@ class ThemeController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('core.toaster.theme.installed', ['theme' => $theme['name']]));
 
+        sleep(2);
+
         Redirect::redirect('cmw-admin/theme/manage');
     }
 
@@ -371,9 +373,9 @@ class ThemeController extends AbstractController
         }
     }
 
-    #[Link('/update/:id/:actualVersion/:themeName', Link::GET, ['id' => '[0-9]+', 'actualVersion' => '.*?', 'themeName' => '.*?'], '/cmw-admin/theme')]
+    #[Link('/update', Link::POST, [], '/cmw-admin/theme')]
     #[NoReturn]
-    private function adminThemeUpdate(int $id, string $actualVersion, string $themeName, string $status): void
+    private function adminThemeUpdate(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
 
@@ -384,6 +386,11 @@ class ThemeController extends AbstractController
                 Redirect::redirect('cmw-admin/updates/cms');
             }
         }
+
+        $id = FilterManager::filterInputIntPost('resId');
+        $actualVersion = FilterManager::filterInputStringPost('localVersion');
+        $themeName = FilterManager::filterInputStringPost('themeName');
+        $status = FilterManager::filterInputStringPost('status');
 
         $statusInt = ($status === 'test') ? 1 : 0;
 
@@ -502,12 +509,12 @@ class ThemeController extends AbstractController
             Redirect::redirectPreviousRoute();
         }
 
-        if (!Directory::delete(EnvManager::getInstance()->getValue('DIR') . "Public/Theme/$themeName")) {
+        if (!Directory::delete(EnvManager::getInstance()->getValue('DIR') . "Public/Themes/$themeName")) {
             Flash::send(
                 Alert::ERROR,
                 LangManager::translate('core.toaster.error'),
                 LangManager::translate('core.toaster.theme.unableDeleteFolder')
-                . EnvManager::getInstance()->getValue('DIR') . "Public/Theme/$themeName",
+                . EnvManager::getInstance()->getValue('DIR') . "Public/Themes/$themeName",
             );
             Redirect::redirectPreviousRoute();
         }
@@ -551,6 +558,8 @@ class ThemeController extends AbstractController
             LangManager::translate('core.toaster.success'),
             LangManager::translate('core.theme.toasters.update.success', ['theme' => $themeName])
         );
+
+        sleep(2);
 
         Redirect::redirectPreviousRoute();
     }

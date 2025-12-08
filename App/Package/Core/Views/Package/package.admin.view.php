@@ -1,5 +1,6 @@
 <?php
 
+use CMW\Manager\Security\SecurityManager;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Utils\Date;
 use CMW\Controller\Core\PackageController;
@@ -52,10 +53,14 @@ function renderCard($name, $image, $description, $author = null, $versionStatus 
                     <h6><?= ($versionStatus) === 1  && UpdatesManager::isTestAPI() ? '<span class="text-warning">En attente : </span>' : '' ?><?= $name ?></h6>
                     <div>
                         <?php if ($updateBadge): ?>
-                            <a class="btn-warning" type="button"
-                               href="update/<?= $id ?>/<?= $version ?>/<?= $name ?>/<?= $targetStatusSlug ?>">
-                                <?= LangManager::translate('core.Package.update') ?>
-                            </a>
+                            <form action="update" method="post" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
+                                <?php SecurityManager::getInstance()->insertHiddenToken() ?>
+                                <input type="hidden" name="resId" value="<?= $id ?>">
+                                <input type="hidden" name="localVersion" value="<?= $version ?>">
+                                <input type="hidden" name="packageName" value="<?= $name ?>">
+                                <input type="hidden" name="status" value="<?= $targetStatusSlug ?>">
+                                <button type="submit" class="btn-warning-sm"><?= LangManager::translate('core.Package.update') ?></button>
+                            </form>
                         <?php else: ?>
                             <button data-modal-toggle="delete-<?= $uniqueId ?>" class="btn-danger-sm" type="button">
                                 <?= LangManager::translate('core.Package.delete') ?>
@@ -267,3 +272,23 @@ function renderModalDelete($id, $name) {
         <?php endif; ?>
     <?php endforeach; ?>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const buttons = document.querySelectorAll('button[type="submit"]');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const form = this.closest('form');
+
+                buttons.forEach(b => b.disabled = true);
+
+                this.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Veuillez patienter';
+
+                form.submit();
+            });
+        });
+    });
+</script>

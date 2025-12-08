@@ -183,3 +183,23 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
         <?php endif; ?>
     <?php endforeach; ?>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const buttons = document.querySelectorAll('button[type="submit"]');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const form = this.closest('form');
+
+                buttons.forEach(b => b.disabled = true);
+
+                this.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Installation en cours';
+
+                form.submit();
+            });
+        });
+    });
+</script>
