@@ -2,6 +2,7 @@
 
 namespace CMW\Controller\Installer;
 
+use CMW\Exception\Core\Download\DownloadException;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Download\DownloadManager;
 use CMW\Manager\Env\EnvManager;
@@ -373,9 +374,14 @@ class InstallerController extends AbstractController
         foreach ($resources as $resource) {
             $type = $resource['type'] === 1 ? 'package' : 'Theme';
 
-            if (!DownloadManager::installPackageWithLink($resource['file'], $type, $resource['name'])) {
-                LangManager::translate('core.downloads.errors.internalError',
-                    ['name' => $resource['name'], 'version' => $resource['version_name']]);
+            try {
+                DownloadManager::installPackageWithLink($resource['file'], $type, $resource['name']);
+            } catch (DownloadException $e) {
+                Flash::send(
+                    Alert::WARNING,
+                    LangManager::translate('core.toaster.error'),
+                    LangManager::translate('core.toaster.theme.unableUpdate') . $e->getMessage(),
+                );
                 continue;
             }
 
@@ -400,10 +406,15 @@ class InstallerController extends AbstractController
 
             $type = $package['type'] === 1 ? 'package' : 'Theme';
 
-            if (!DownloadManager::installPackageWithLink($package['file'], $type, $package['name'])) {
-                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                    LangManager::translate('core.downloads.errors.internalError',
-                        ['name' => $package['name'], 'version' => $package['version_name']]));
+            try {
+                DownloadManager::installPackageWithLink($package['file'], $type, $package['name']);
+            } catch (DownloadException $e) {
+                Flash::send(
+                    Alert::WARNING,
+                    LangManager::translate('core.toaster.error'),
+                    LangManager::translate('core.toaster.theme.unableUpdate') . $e->getMessage(),
+                );
+                continue;
             }
         }
 
@@ -421,11 +432,14 @@ class InstallerController extends AbstractController
 
         $theme = PublicAPI::putData("market/resources/install/$id");
 
-        if (!DownloadManager::installPackageWithLink($theme['file'], 'Theme', $theme['name'])) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                LangManager::translate('core.downloads.errors.internalError',
-                    ['name' => $theme['name'], 'version' => $theme['version_name']]));
-
+        try {
+            DownloadManager::installPackageWithLink($theme['file'], 'Theme', $theme['name']);
+        } catch (DownloadException $e) {
+            Flash::send(
+                Alert::ERROR,
+                LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.toaster.theme.unableUpdate') . $e->getMessage(),
+            );
             return;
         }
 

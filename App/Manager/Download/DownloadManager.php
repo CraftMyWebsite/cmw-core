@@ -2,6 +2,7 @@
 
 namespace CMW\Manager\Download;
 
+use CMW\Exception\Core\Download\DownloadException;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Permission\PermissionManager;
@@ -15,40 +16,49 @@ class DownloadManager
      * @param string $url
      * @param string $type
      * @param string $name
-     * @return bool
+     * @return void
      * @desc Download and install package with api return link, ex: "/Public/market/Resources/forum.zip"
+     * @throws DownloadException
      */
-    public static function installPackageWithLink(string $url, #[ExpectedValues(['package', 'Theme'])] string $type, string $name): bool
+    public static function installPackageWithLink(string $url, #[ExpectedValues(['package', 'Theme'])] string $type, string $name): void
     {
-        if (!in_array($type, ['package', 'Theme'])) {
-            return false;
+        if (!in_array($type, ['package', 'Theme'], true)) {
+            throw new DownloadException('Type invalide');
         }
 
-        file_put_contents(EnvManager::getInstance()->getValue('DIR') . 'Public/resource.zip',
-            fopen($url, 'rb'));
+        $baseDir = EnvManager::getInstance()->getValue('DIR');
+        $zipPath = $baseDir . 'Public/resource.zip';
 
-        $archiveUpdate = new ZipArchive;
-        if ($archiveUpdate->open(EnvManager::getInstance()->getValue('DIR') . 'Public/resource.zip') === TRUE) {
-            if ($type === 'package') {
-                $archiveUpdate->extractTo(EnvManager::getInstance()->getValue('DIR') . 'App/Package');
-            } else {
-                $archiveUpdate->extractTo(EnvManager::getInstance()->getValue('DIR') . 'Public/Themes');
-            }
+        $stream = @fopen($url, 'rb');
+        if ($stream === false) {
+            throw new DownloadException('Impossible de télécharger le fichier distant (API)');
+        }
 
+        $bytes = @file_put_contents($zipPath, $stream);
+        if ($bytes === false) {
+            throw new DownloadException('Impossible d\'écrire le fichier ZIP sur le disque');
+        }
+
+        $archiveUpdate = new ZipArchive();
+        $openResult = $archiveUpdate->open($zipPath);
+
+        if ($openResult !== true) {
+            throw new DownloadException('Impossible d\'ouvrir l\'archive ZIP (code: ' . $openResult . ')');
+        }
+
+        $targetDir = $type === 'package' ? $baseDir . 'App/Package' : $baseDir . 'Public/Themes';
+
+        if (!$archiveUpdate->extractTo($targetDir)) {
             $archiveUpdate->close();
-
-            // Delete download archive
-            unlink(EnvManager::getInstance()->getValue('DIR') . 'Public/resource.zip');
-
-            // INSTALL INIT FOLDER
-            if ($type === 'package') {
-                self::initPackages($name);
-            }
-
-            return true;
+            throw new DownloadException('Erreur lors de l\'extraction de l\'archive ZIP (Permissions ou Espace disque)');
         }
 
-        return false;
+        $archiveUpdate->close();
+        @unlink($zipPath);
+
+        if ($type === 'package') {
+            self::initPackages($name);
+        }
     }
 
     public static function initPackages(string ...$packages): void

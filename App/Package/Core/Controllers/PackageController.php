@@ -4,6 +4,7 @@ namespace CMW\Controller\Core;
 
 use CMW\Controller\Core\Api\External\CheckerController;
 use CMW\Controller\Users\UsersController;
+use CMW\Exception\Core\Download\DownloadException;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Download\DownloadManager;
@@ -335,10 +336,14 @@ class PackageController extends AbstractController
             Flash::send(Alert::ERROR, "Erreur ".$code, $desc);
             Redirect::redirectPreviousRoute();
         } elseif (!empty($package['file'])) {
-            if (!DownloadManager::installPackageWithLink($package['file'], 'package', $package['name'])) {
-                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                    LangManager::translate('core.downloads.errors.internalError',
-                        ['name' => $package['name'], 'version' => $package['version_name']]));
+            try {
+                DownloadManager::installPackageWithLink($package['file'], 'package', $package['name']);
+            } catch (DownloadException $e) {
+                Flash::send(
+                    Alert::ERROR,
+                    LangManager::translate('core.toaster.error'),
+                    LangManager::translate('core.toaster.theme.unableUpdate') . $e->getMessage(),
+                );
                 Redirect::redirectPreviousRoute();
             }
             if (!empty($activationKey)) {
@@ -496,11 +501,13 @@ class PackageController extends AbstractController
             }
 
             if ($i === $lastUpdateIndex) {
-                if (!DownloadManager::installPackageWithLink($update['file'], 'package', $packageName)) {
+                try {
+                    DownloadManager::installPackageWithLink($update['file'], 'package', $packageName);
+                } catch (DownloadException $e) {
                     Flash::send(
                         Alert::ERROR,
                         LangManager::translate('core.toaster.error'),
-                        "Unable to install the package update " . $update['title'],
+                        LangManager::translate('core.toaster.theme.unableUpdate') . $e->getMessage(),
                     );
                     Redirect::redirectPreviousRoute();
                 }

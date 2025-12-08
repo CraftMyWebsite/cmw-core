@@ -4,6 +4,7 @@ namespace CMW\Controller\Core;
 
 use CMW\Controller\Core\Api\External\CheckerController;
 use CMW\Controller\Users\UsersController;
+use CMW\Exception\Core\Download\DownloadException;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Database\DatabaseManager;
@@ -228,10 +229,14 @@ class ThemeController extends AbstractController
             Flash::send(Alert::ERROR, "Erreur ".$code, $desc);
             Redirect::redirectPreviousRoute();
         } elseif (!empty($theme['file'])) {
-            if (!DownloadManager::installPackageWithLink($theme['file'], 'Theme', $theme['name'])) {
-                Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                    LangManager::translate('core.downloads.errors.internalError',
-                        ['name' => $theme['name'], 'version' => $theme['version_name']]));
+            try {
+                DownloadManager::installPackageWithLink($theme['file'], 'Theme', $theme['name']);
+            } catch (DownloadException $e) {
+                Flash::send(
+                    Alert::ERROR,
+                    LangManager::translate('core.toaster.error'),
+                    LangManager::translate('core.toaster.theme.unableUpdate') . $e->getMessage(),
+                );
                 Redirect::redirectPreviousRoute();
             }
         } else {
@@ -525,11 +530,13 @@ class ThemeController extends AbstractController
             }
 
             if ($i === $lastUpdateIndex) {
-                if (!DownloadManager::installPackageWithLink($update['file'], 'Theme', $themeName)) {
+                try {
+                    DownloadManager::installPackageWithLink($update['file'], 'Theme', $themeName);
+                } catch (DownloadException $e) {
                     Flash::send(
                         Alert::ERROR,
                         LangManager::translate('core.toaster.error'),
-                        LangManager::translate('core.toaster.theme.unableUpdate') . $update['title'],
+                        LangManager::translate('core.toaster.theme.unableUpdate') . $e->getMessage(),
                     );
                     Redirect::redirectPreviousRoute();
                 }

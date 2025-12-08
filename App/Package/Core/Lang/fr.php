@@ -157,7 +157,7 @@ return [
             'reset' => 'Configuration du thème réinitialisée',
             'updateBeforeInstall' => 'Veuillez mettre à jour le CMS avant d\'installer ce thème !',
             'updateBeforeUpdate' => 'Veuillez mettre à jour le CMS avant de mettre à jour vos thèmes !',
-            'unableUpdate' => 'Impossible d\'installer la mises à jour du thème : ',
+            'unableUpdate' => 'Impossible d\'installer : ',
             'unableDeleteFolder' => 'Impossible du supprimer le dossier : ',
             'delete' => [
                 'success' => 'Theme %theme% supprimé avec succès',
