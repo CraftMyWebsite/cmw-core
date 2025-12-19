@@ -2,6 +2,7 @@
 
 namespace CMW\Controller\Core;
 
+use CMW\Controller\Core\Api\External\CheckerController;
 use CMW\Controller\Users\UsersController;
 use CMW\Interface\Core\IDashboardElements;
 use CMW\Interface\Core\ITopBarElements;
@@ -36,7 +37,7 @@ class CoreController extends AbstractController
 
     public static function getThemePath(): string
     {
-        self::$themeName = CoreModel::getInstance()->fetchOption('Theme');
+        self::$themeName = CoreModel::getInstance()->fetchOption('theme');
         return (empty($themeName = self::$themeName)) ? '' : "./Public/Themes/$themeName/";
     }
 
@@ -54,7 +55,7 @@ class CoreController extends AbstractController
     private function adminDashboard(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard');
-
+        CheckerController::getInstance()->checkActivationAPI();
         // Redirect to the dashboard
         if ($_GET['url'] === 'cmw-admin') {
             Redirect::redirect(EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/dashboard');

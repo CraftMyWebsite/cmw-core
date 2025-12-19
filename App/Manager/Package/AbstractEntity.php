@@ -2,7 +2,7 @@
 
 namespace CMW\Manager\Package;
 
-use CMW\Utils\Utils;
+use CMW\Utils\Str;
 use InvalidArgumentException;
 use JsonException;
 use ReflectionClass;
@@ -33,7 +33,7 @@ abstract class AbstractEntity
         // Replace snake_case to camelCase
         $data = [];
         foreach ($brutData as $key => $value) {
-            $data[Utils::snakeToCamelCase($key)] = $value;
+            $data[Str::snakeToCamelCase($key)] = $value;
         }
 
         $reflector = new ReflectionClass(static::class);
@@ -188,4 +188,32 @@ abstract class AbstractEntity
         }
         return $toReturn;
     }
+
+    /**
+     * <p>This method check if required fields are presents.</p>
+     * <p>If $fromDb is true, it means that the data comes from the database, so we translate field names from snake_case to camelCase.</p>
+     * @param array $data
+     * @param bool $fromDb
+     * @return bool
+     */
+    public static function validateFields(array $data, bool $fromDb = true): bool
+    {
+        $reflector = new ReflectionClass(static::class);
+        $constructor = $reflector->getConstructor();
+        $parameters = $constructor?->getParameters() ?? [];
+
+        foreach ($parameters as $parameter) {
+            $name = $parameter->getName();
+            if ($fromDb) {
+                $name = Str::camelToSnakeCase($name);
+            }
+
+            if (!\array_key_exists($name, $data) && !$parameter->isOptional() && !$parameter->allowsNull() && !$parameter->isDefaultValueAvailable()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }

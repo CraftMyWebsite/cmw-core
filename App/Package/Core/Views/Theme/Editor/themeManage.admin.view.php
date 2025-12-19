@@ -48,11 +48,11 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
 
 <!--  MENU ET NAVIGATION DYNAMIQUE  -->
 <script>
-    function showSection(index) {
-        const button = document.querySelectorAll("#menuSections ul li button")[index];
+    function showSection(menuKey) {
+        const button = document.querySelector(`button[data-menukey="${menuKey}"]`);
+        if (!button) return;
         const title = button.getAttribute("data-title");
         const scope = button.getAttribute("data-scope");
-        const menuKey = button.getAttribute("data-menukey");
 
         document.getElementById("menuSections").classList.add("hidden");
         document.getElementById("editorSection").classList.remove("hidden");
@@ -67,11 +67,12 @@ Website::setDescription(LangManager::translate('core.theme.manage.description'))
 
         // afficher la bonne
         const section = document.getElementById(`section_${menuKey}`);
-        section.classList.remove("hidden");
+        if (section) {
+            section.classList.remove("hidden");
 
-        // déplacer dans le container d'édition
-        document.getElementById("sectionContent").innerHTML = "";
-        document.getElementById("sectionContent").appendChild(section);
+            document.getElementById("sectionContent").innerHTML = "";
+            document.getElementById("sectionContent").appendChild(section);
+        }
     }
 
     function backToMenu() {

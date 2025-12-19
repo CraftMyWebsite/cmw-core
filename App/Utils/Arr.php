@@ -46,6 +46,22 @@ class Arr
      */
     public static function contains(array $array, mixed $value, bool $strict = true): bool
     {
-        return in_array($value, $array, $strict);
+        return \in_array($value, $array, $strict);
+    }
+
+
+    /**
+     * <p>Check if array has null values</p>
+     * @param array $array
+     * @return bool
+     */
+    public static function hasNullValues(array $array): bool
+    {
+        foreach ($array as $key => $value) {
+            if ($value === null) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -113,7 +113,6 @@ class InstallerModel
             'role_id' => 5,  // Default administrator id is 5
         ]);
 
-        self::initCondition($userId);
 
         $tfaSecret = EncryptManager::encrypt((new TwoFaManager())->generateSecret());
         Users2FaModel::getInstance()->create($userId, $tfaSecret);
@@ -127,17 +126,6 @@ class InstallerModel
         }
 
         UsersLoginController::getInstance()->loginUser($user, 1);
-    }
-
-    public static function initCondition(int $userId): void
-    {
-        $sql = 'UPDATE cmw_core_condition SET condition_last_editor = :id';
-
-        $db = self::loadDatabaseWithoutParams();
-
-        $req = $db->prepare($sql);
-
-        $req->execute(['id' => $userId]);
     }
 
     public static function initConfig($name, $description): void

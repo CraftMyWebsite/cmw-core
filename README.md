@@ -8,6 +8,7 @@ ses joueurs une plateforme web performante et pertinente.
 
 [![License](https://img.shields.io/badge/License-GNU%20GPL-%239f9f9f)](https://www.gnu.org/licenses/gpl-3.0.fr.html)
 [![Latest release](https://img.shields.io/badge/v2.0.0-alpha?color=%23FB2388)](https://github.com/CraftMyWebsite/cmw-core)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/CraftMyWebsite/cmw-core)
 
 Contributions
 ------------

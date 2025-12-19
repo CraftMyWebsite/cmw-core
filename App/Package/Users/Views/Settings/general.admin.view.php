@@ -16,6 +16,9 @@ $description = LangManager::translate('users.settings.desc');
         <i class="fa-solid fa-gears"></i> <?= LangManager::translate('users.settings.title') ?>
         - <?= LangManager::translate('users.pages.settings.general.menu') ?>
     </h3>
+    <button form="general" type="submit" class="btn btn-primary">
+        <?= LangManager::translate('core.btn.save') ?>
+    </button>
 </div>
 
 <div class="grid-2">
@@ -43,30 +46,38 @@ $description = LangManager::translate('users.settings.desc');
         </form>
     </div>
 
-    <div class="card">
-        <form method="post" id="general">
-            <?php SecurityManager::getInstance()->insertHiddenToken() ?>
+    <form method="post" id="general">
+        <div class="card">
 
-            <label><?= LangManager::translate('users.settings.profile_view.label') ?></label>
-            <select class="form-select" id="basicSelect" name="profile_page" required>
-                <option value="0" <?= $settings->getProfilePageStatus() === 0 ? 'selected' : '' ?>>
-                    <?= LangManager::translate('users.settings.profile_view.options.0') ?>
-                </option>
+                <?php SecurityManager::getInstance()->insertHiddenToken() ?>
 
-                <option value="1" <?= $settings->getProfilePageStatus() === 1 ? 'selected' : '' ?>>
-                    <?= LangManager::translate('users.settings.profile_view.options.1') ?>
-                </option>
+                <label><?= LangManager::translate('users.settings.profile_view.label') ?></label>
+                <select class="form-select" id="basicSelect" name="profile_page" required>
+                    <option value="0" <?= $settings->getProfilePageStatus() === 0 ? 'selected' : '' ?>>
+                        <?= LangManager::translate('users.settings.profile_view.options.0') ?>
+                    </option>
 
-                <option value="2" <?= $settings->getProfilePageStatus() === 2 ? 'selected' : '' ?>>
-                    <?= LangManager::translate('users.settings.profile_view.options.2') ?>
-                </option>
-            </select>
+                    <option value="1" <?= $settings->getProfilePageStatus() === 1 ? 'selected' : '' ?>>
+                        <?= LangManager::translate('users.settings.profile_view.options.1') ?>
+                    </option>
 
-            <div class="pt-2 float-end">
-                <button form="general" type="submit" class="btn btn-primary">
-                    <?= LangManager::translate('core.btn.save') ?>
-                </button>
+                    <option value="2" <?= $settings->getProfilePageStatus() === 2 ? 'selected' : '' ?>>
+                        <?= LangManager::translate('users.settings.profile_view.options.2') ?>
+                    </option>
+                </select>
+        </div>
+        <div class="card mt-4">
+            <div class="mb-2">
+                <label class="toggle">
+                    <input type="checkbox" name="needTerms" <?= $settings->getNeedTerms() ? 'checked' : '' ?> class="toggle-input">
+                    <div class="toggle-slider"></div>
+                    <p class="toggle-label">Les utilisateurs doivent accepter les termes et conditions</p>
+                </label>
             </div>
-        </form>
-    </div>
+            <div>
+                <label for="needTextTerms">Texte de validation des termes :</label>
+                <textarea id="needTextTerms" name="needTextTerms" class="tinymce" data-tiny-height="200px"><?= $settings->getNeedTextTerms() ?></textarea>
+            </div>
+        </div>
+    </form>
 </div>

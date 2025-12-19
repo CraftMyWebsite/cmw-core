@@ -34,6 +34,29 @@ return [
         'updateby' => 'Mis à jour par %author%',
         'on' => 'le %date%',
     ],
+    'terms' => [
+        'title' => 'Terms et conditions',
+        'requires_accept' => 'Les utilisateurs doivent l\'accepter à nouveau ?',
+        'mandatory' => 'Ce terme est obligatoire (RGPD / CCPA / PIPEDA / LPRPDE / UK GDPR / APPI ...)',
+        'use' => 'Actif',
+        'requires_accept_explain' => 'Oblige les utilisateurs à revalider <b>%type%</b> à leur prochaine connexion. Recommandé pour les changements majeurs afin de rester conforme à la loi.',
+        'last_published' => "Dernière mise à jour :",
+        'last_editor' => 'Auteur :',
+        'type' => [
+            'TERMS_OF_SERVICE' => 'Condition d\'utilisation',
+            'TERMS_OF_SALE' => 'Condition de ventes',
+            'PRIVACY_POLICY' => 'Politique de confidentialité',
+            'LEGAL_NOTICE' => 'Mentions légales',
+            'COOKIE_POLICY' => 'Politique relative aux cookies',
+            'ACCEPTABLE_USE' => 'Code de conduite',
+            'LICENSE' => 'Propriété intellectuelle',
+            'REFUND_POLICY' => 'Politique de remboursement',
+        ],
+        'toaster' => [
+            'savedN' => 'Configuration enregistrée — %d élément(s) mis à jour.',
+            'noChange' => 'Aucun changement.',
+        ],
+    ],
     'dashboard' => [
         'title' => 'Tableau de bord',
         'desc' => "Bienvenue sur votre panneau d'administration !",
@@ -53,7 +76,7 @@ return [
         'days' => 'Jours',
         'weeks' => 'Semaines',
         'months' => 'Mois',
-        'alpha' => 'Veuillez noter que CraftMyWebsite2 est actuellement en phase alpha et n\'est pas encore achevé. <br>Son utilisation en environnement de production est fortement déconseillée. Des fonctionnalités clés peuvent manquer ou ne pas fonctionner comme prévu. <br><b>Pendant cette phase, des réinstallations complètes du système pourront être nécessaires.</b> <br>Nous vous remercions de votre compréhension et de votre patience pendant que nous travaillons sur CraftMyWebsite.',
+        'alpha' => 'Veuillez noter que CraftMyWebsite2 est actuellement en phase BETA et n\'est pas encore achevé. <br>Son utilisation en environnement de production est fortement déconseillée. Des fonctionnalités clés peuvent manquer ou ne pas fonctionner comme prévu. <br><b>Pendant cette phase, des réinstallations complètes du système pourront être nécessaires.</b> <br>Nous vous remercions de votre compréhension et de votre patience pendant que nous travaillons sur CraftMyWebsite.',
         'updateWarning' => '<strong>Attention :</strong> La version actuelle de votre CMS n\'est pas la dernière disponible.Il est fortement conseillé de <a class="link" href="updates/cms">mettre à jour</a> votre CMS pour bénéficier des derniers correctifs de sécurité ainsi que des nouvelles fonctionnalités ajoutées.',
     ],
     'menus' => [
@@ -134,7 +157,7 @@ return [
             'reset' => 'Configuration du thème réinitialisée',
             'updateBeforeInstall' => 'Veuillez mettre à jour le CMS avant d\'installer ce thème !',
             'updateBeforeUpdate' => 'Veuillez mettre à jour le CMS avant de mettre à jour vos thèmes !',
-            'unableUpdate' => 'Impossible d\'installer la mises à jour du thème : ',
+            'unableUpdate' => 'Impossible d\'installer : ',
             'unableDeleteFolder' => 'Impossible du supprimer le dossier : ',
             'delete' => [
                 'success' => 'Theme %theme% supprimé avec succès',
@@ -407,14 +430,7 @@ return [
             'title' => 'Réglages',
             'targetDateTitle' => 'Se termine le',
             'useMyCode' => 'Utiliser mon code',
-            'loginRegister' => [
-                'title' => 'Connexions / Inscriptions',
-                'type' => [
-                    0 => 'Tout désactiver',
-                    1 => 'Activer les connexions / inscriptions',
-                    2 => 'Activer uniquement les connexions',
-                ],
-            ],
+            'neRegister' => 'Désactiver les inscriptions',
             'maintenanceTitle' => [
                 'label' => 'Titre',
                 'placeholder' => 'Nous revenons très vite !',
@@ -529,7 +545,7 @@ return [
             'settings' => 'Réglages du site',
             'maintenance' => 'Mode maintenance',
             'mail' => 'SMTP et mails',
-            'cg' => 'Conditions générales',
+            'cg' => 'Termes et Conditions',
             'security' => 'Sécurité',
         ],
         'update' => 'Mises à jour',

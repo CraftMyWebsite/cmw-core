@@ -105,6 +105,8 @@ class UsersModel extends AbstractModel
             $res['user_firstname'] ?? '',
             $res['user_lastname'] ?? '',
             $res['user_state'],
+            $res['user_terms_accepted'] ?? null,
+            $res['user_terms_accepted_at'] ?? null,
             $res['user_key'],
             new User2FaEntity(
                 $res['user_id'],
@@ -365,6 +367,43 @@ class UsersModel extends AbstractModel
     }
 
     /**
+     * @param int $roleId
+     * @param int $userId
+     * @return bool
+     */
+    public function removeSpecificRoleByIdForUserId(int $roleId, int $userId): bool
+    {
+        $var = [
+            'role_id' => $roleId,
+            'user_id' => $userId,
+        ];
+
+        $sql = 'DELETE FROM cmw_users_roles WHERE user_id = :user_id AND role_id = :role_id';
+
+        $db = DatabaseManager::getInstance();
+
+        return $db->prepare($sql)->execute($var);
+    }
+
+    /**
+     * @param int $roleId
+     * @param int $userId
+     * @return bool
+     */
+    public function addSpecificRoleByIdForUserId(int $roleId, int $userId): bool
+    {
+        $var = [
+            'role_id' => $roleId,
+            'user_id' => $userId,
+        ];
+        $sql = 'INSERT INTO cmw_users_roles (user_id, role_id) VALUES (:user_id, :role_id)';
+
+        $db = DatabaseManager::getInstance();
+
+        return $db->prepare($sql)->execute($var);
+    }
+
+    /**
      * @param int $id
      * @param string $password
      * @return bool
@@ -422,9 +461,9 @@ class UsersModel extends AbstractModel
 
     /**
      * @param int $id
-     * @return void
+     * @return bool
      */
-    public function delete(int $id): void
+    public function delete(int $id): bool
     {
         $var = [
             'user_id' => $id,
@@ -432,8 +471,7 @@ class UsersModel extends AbstractModel
         $sql = 'DELETE FROM cmw_users WHERE user_id=:user_id';
 
         $db = DatabaseManager::getInstance();
-        $req = $db->prepare($sql);
-        $req->execute($var);
+        return $db->prepare($sql)->execute($var);
     }
 
     /**
@@ -615,7 +653,7 @@ class UsersModel extends AbstractModel
     {
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT secret_link FROM cmw_users_reset_password_link WHERE secret_link = ?');
-        $req->execute(array($secret));
+        $req->execute([$secret]);
         $option = $req->fetch();
 
         return $option['secret_link'] ?? null;
@@ -629,7 +667,7 @@ class UsersModel extends AbstractModel
     {
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT users_mail FROM cmw_users_reset_password_link WHERE secret_link = ?');
-        $req->execute(array($secret));
+        $req->execute([$secret]);
         $option = $req->fetch();
 
         return $option['users_mail'] ?? null;
@@ -659,7 +697,7 @@ class UsersModel extends AbstractModel
     {
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT users_mail FROM cmw_users_reset_password_link WHERE users_mail = ?');
-        $req->execute(array($email));
+        $req->execute([$email]);
         $option = $req->fetch();
 
         return $option['users_mail'] ?? null;
@@ -673,7 +711,7 @@ class UsersModel extends AbstractModel
     {
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT secret_date FROM cmw_users_reset_password_link WHERE users_mail = ?');
-        $req->execute(array($email));
+        $req->execute([$email]);
         $option = $req->fetch();
 
         return $option['secret_date'] ?? null;
@@ -732,7 +770,7 @@ class UsersModel extends AbstractModel
         $req->execute($var);
         $option = $req->fetch();
 
-        if (!$option){
+        if (!$option) {
             return null;
         }
 
@@ -747,10 +785,10 @@ class UsersModel extends AbstractModel
     {
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT long_date_date FROM cmw_users_long_date_code WHERE users_mail = ?');
-        $req->execute(array($email));
+        $req->execute([$email]);
         $option = $req->fetch();
 
-        if (!$option){
+        if (!$option) {
             return null;
         }
 
@@ -803,4 +841,12 @@ class UsersModel extends AbstractModel
 
         return $res['methode'];
     }
+
+    public function markTermsAccepted(int $userId): bool
+    {
+        $db = DatabaseManager::getInstance();
+        $stmt = $db->prepare("UPDATE cmw_users SET user_terms_accepted=1, user_terms_accepted_at=NOW() WHERE user_id=:id");
+        return $stmt->execute(['id' => $userId]);
+    }
+
 }

@@ -1,17 +1,16 @@
 <?php
 
-use CMW\Manager\Env\EnvManager;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Manager\Theme\File\ThemeFileManager;
-use CMW\Manager\Theme\IThemeConfig;
+use CMW\Manager\Theme\IThemeConfigV2;
 use CMW\Manager\Theme\Loader\ThemeLoader;
 use CMW\Manager\Theme\Market\ThemeMarketManager;
-use CMW\Manager\Theme\ThemeManager;
+use CMW\Manager\Updater\UpdatesManager;
 use CMW\Utils\Website;
 
-/* @var $currentTheme IThemeConfig */
-/* @var $installedThemes IThemeConfig[] */
+/* @var $currentTheme IThemeConfigV2 */
+/* @var $installedThemes IThemeConfigV2[] */
 /* @var $themesList */
 
 Website::setTitle(LangManager::translate('core.theme.config.title'));
@@ -19,6 +18,10 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
 ?>
 
 <h3><i class="fa-solid fa-palette"></i> <?= LangManager::translate('core.theme.myThemes') ?></h3>
+
+<?php if (UpdatesManager::isTestAPI()):?>
+    <h6 class="text-warning mb-2">Votre site est en mode test API.</h6>
+<?php endif; ?>
 
 <div class="grid-4 mb-24">
     <!------------------------------------
@@ -94,7 +97,10 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                             <p class="small">
                                 <?= LangManager::translate('core.theme.author') ?><a
                                     href=""
-                                    target="_blank"><?= $theme->author() ?? $theme->authors() ?>
+                                    target="_blank">
+                                    <?php foreach ($theme->authors() as $author): ?>
+                                    <?= $author ?>
+                                    <?php endforeach;?>
                                 </a>
                             </p>
                             <p class="small">
@@ -153,12 +159,27 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                          alt="Icon <?= $theme['name'] ?>">
                 </div>
 
-                <div class="text-center pb-2">
-                    <?php if ($theme['version_status'] === 0 && $localTheme->version() !== $theme['version_name']): ?>
-                        <a class="btn-warning-sm" type="button"
-                           href="update/<?= $theme['id'] ?>/<?= $localTheme->version() ?>/<?= $localTheme->name() ?>">
-                            <?= LangManager::translate('core.Package.update') ?>
-                        </a>
+                <div class="pb-2 inline-flex w-full justify-center items-center mx-auto gap-2">
+                    <?php if ($localTheme->version() !== $theme['version_name']): ?>
+                        <?php if ($theme['version_status'] === 1 && UpdatesManager::isTestAPI()): ?>
+                            <form action="update" method="post" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
+                                <?php SecurityManager::getInstance()->insertHiddenToken() ?>
+                                <input type="hidden" name="resId" value="<?= $theme['id'] ?>">
+                                <input type="hidden" name="localVersion" value="<?= $localTheme->version() ?>">
+                                <input type="hidden" name="themeName" value="<?= $localTheme->name() ?>">
+                                <input type="hidden" name="status" value="test">
+                                <button type="submit" class="btn-danger-sm"><?= LangManager::translate('core.Package.update') ?> <?= $theme['version_name'] ?></button>
+                            </form>
+                        <?php elseif ($theme['version_status'] === 0): ?>
+                            <form action="update" method="post" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
+                                <?php SecurityManager::getInstance()->insertHiddenToken() ?>
+                                <input type="hidden" name="resId" value="<?= $theme['id'] ?>">
+                                <input type="hidden" name="localVersion" value="<?= $localTheme->version() ?>">
+                                <input type="hidden" name="themeName" value="<?= $localTheme->name() ?>">
+                                <input type="hidden" name="status" value="online">
+                                <button type="submit" class="btn-warning-sm"><?= LangManager::translate('core.Package.update') ?></button>
+                            </form>
+                        <?php endif; ?>
                     <?php endif; ?>
                     <a href="manage" type="button"
                        class="btn-primary-sm"><?= LangManager::translate('core.theme.configure') ?></a>
@@ -349,7 +370,10 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                             <p class="small">
                                 <?= LangManager::translate('core.theme.author') ?><a
                                     href=""
-                                    target="_blank"><?= $theme->author() ?? $theme->authors() ?>
+                                    target="_blank">
+                                    <?php foreach ($theme->authors() as $author): ?>
+                                        <?= $author ?>
+                                    <?php endforeach;?>
                                 </a>
                             </p>
                             <p class="small">
@@ -408,11 +432,35 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                 </div>
 
                 <div class="text-center pb-2">
-                    <?php if ($theme['version_status'] === 0 && $localTheme->version() !== $theme['version_name']): ?>
-                        <a class="btn-warning-sm" type="button"
-                           href="update/<?= $theme['id'] ?>/<?= $localTheme->version() ?>/<?= $localTheme->name() ?>">
-                            <?= LangManager::translate('core.Package.update') ?>
-                        </a>
+                    <?php if ($localTheme->version() !== $theme['version_name']): ?>
+                        <?php if ($theme['version_status'] === 1 && UpdatesManager::isTestAPI()): ?>
+                            <form action="update" method="post" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
+                                <?php SecurityManager::getInstance()->insertHiddenToken() ?>
+                                <input type="hidden" name="resId" value="<?= $theme['id'] ?>">
+                                <input type="hidden" name="localVersion" value="<?= $localTheme->version() ?>">
+                                <input type="hidden" name="themeName" value="<?= $localTheme->name() ?>">
+                                <input type="hidden" name="status" value="test">
+                                <button type="submit" class="btn-danger-sm"><?= LangManager::translate('core.Package.update') ?> <?= $theme['version_name'] ?></button>
+                            </form>
+                        <?php elseif ($theme['version_status'] === 0): ?>
+                            <form action="update" method="post" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
+                                <?php SecurityManager::getInstance()->insertHiddenToken() ?>
+                                <input type="hidden" name="resId" value="<?= $theme['id'] ?>">
+                                <input type="hidden" name="localVersion" value="<?= $localTheme->version() ?>">
+                                <input type="hidden" name="themeName" value="<?= $localTheme->name() ?>">
+                                <input type="hidden" name="status" value="online">
+                                <button type="submit" class="btn-warning-sm"><?= LangManager::translate('core.Package.update') ?></button>
+                            </form>
+                        <?php else: ?>
+                            <form action="" method="post">
+                                <?php SecurityManager::getInstance()->insertHiddenToken() ?>
+                                <input hidden type="text" name="theme"
+                                       value="<?= $theme['name'] ?>">
+                                <button type="submit"
+                                        class="btn-success-sm"><?= LangManager::translate('core.theme.activate') ?>
+                                </button>
+                            </form>
+                        <?php endif; ?>
                     <?php else: ?>
                         <form action="" method="post">
                             <?php SecurityManager::getInstance()->insertHiddenToken() ?>
@@ -533,3 +581,23 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
         <?php endif; ?>
     <?php endforeach; ?>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const buttons = document.querySelectorAll('button[type="submit"]');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const form = this.closest('form');
+
+                buttons.forEach(b => b.disabled = true);
+
+                this.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Veuillez patienter';
+
+                form.submit();
+            });
+        });
+    });
+</script>

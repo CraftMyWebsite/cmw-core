@@ -186,11 +186,11 @@ $notifications = NotificationModel::getInstance()->getUnreadNotification();
         <?php SecurityManager::getInstance()->insertHiddenToken() ?>
         <div id="menuSections" style="max-height: calc(100vh - 7.3rem);" class="overflow-y-auto overflow-x-hidden">
             <ul style="border-bottom: 1px dashed #b5a5a5">
-                <?php foreach ($themeMenus as $index => $package): ?>
+                <?php foreach ($themeMenus as $package): ?>
                     <li>
                         <button type="button"
                             class="text-info w-full p-2 hover:bg-gray-200 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600" style="text-align: left; border-top: 1px dashed #b5a5a5"
-                            onclick="showSection(<?= $index ?>)"
+                            onclick="showSection('<?= $package->getMenuKey() ?>')"
                                 data-title="<?= htmlspecialchars($package->title) ?>"
                                 data-values='<?= json_encode(array_map(fn($v) => [
                                     'title' => $v->title,

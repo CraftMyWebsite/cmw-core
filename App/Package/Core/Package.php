@@ -3,18 +3,17 @@
 namespace CMW\Package\Core;
 
 use CMW\Manager\Lang\LangManager;
-use CMW\Manager\Package\IPackageConfig;
+use CMW\Manager\Package\IPackageConfigV2;
 use CMW\Manager\Package\PackageMenuType;
 use CMW\Manager\Package\PackageSubMenuType;
 use CMW\Manager\Theme\Loader\ThemeLoader;
-use CMW\Manager\Theme\ThemeManager;
 use CMW\Manager\Updater\UpdatesManager;
 
 /**
  * @var $isUpToDate bool
  */
 
-class Package implements IPackageConfig
+class Package implements IPackageConfigV2
 {
     public function name(): string
     {
@@ -26,9 +25,19 @@ class Package implements IPackageConfig
         return '1.0.0';
     }
 
+    public function cmwVersion(): string
+    {
+        return "2.0";
+    }
+
+    public function imageLink(): ?string
+    {
+        return null;
+    }
+
     public function authors(): array
     {
-        return ['CraftMyWebsiteTeam'];
+        return ['CraftMyWebsite'];
     }
 
     public function isGame(): bool
@@ -72,7 +81,7 @@ class Package implements IPackageConfig
                     new PackageSubMenuType(
                         title: LangManager::translate('core.menu.setting.cg'),
                         permission: 'core.settings.conditions',
-                        url: 'condition',
+                        url: 'terms',
                         subMenus: []
                     ),
                     new PackageSubMenuType(
@@ -142,6 +151,11 @@ class Package implements IPackageConfig
                 ],
             ),
         ];
+    }
+
+    public function compatiblesPackages(): array
+    {
+        return ["Core"];
     }
 
     public function requiredPackages(): array

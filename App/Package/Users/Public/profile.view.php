@@ -92,6 +92,6 @@ Website::setDescription('Éditez votre profil');
 <div style="border: solid 1px #b4aaaa; border-radius: 5px; padding: 9px; margin-top: 20px">
     <h5>Vous nous quittez ?</h5>
     <p class="mb-2">Nous sommes triste de vous voir partir !</p>
-    <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile/delete/<?= $user->getId() ?>" style="color: red">Supprimer mon compte</a>
+    <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>account/delete/<?= $user->getId() ?>" style="color: red">Supprimer mon compte</a>
 </div>
 </section>

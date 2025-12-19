@@ -42,6 +42,14 @@ $description = LangManager::translate('core.maintenance.description');
             </div>
             <div class="card">
                 <h6><?= LangManager::translate('core.maintenance.settings.title') ?></h6>
+                <div>
+                    <label class="toggle">
+                        <p class="toggle-label"><?= LangManager::translate('core.maintenance.settings.neRegister') ?></p>
+                        <input type="checkbox" id="noRegister" name="noRegister" <?= $maintenance->getType() ? 'checked' : '' ?>
+                               class="toggle-input">
+                        <div class="toggle-slider"></div>
+                    </label>
+                </div>
                 <label class="toggle">
                     <p class="toggle-label"><?= LangManager::translate('core.maintenance.settings.noEnd') ?></p>
                     <input type="checkbox" id="noEnd" name="noEnd" <?= $maintenance->noEnd() ? 'checked' : '' ?>
@@ -55,20 +63,6 @@ $description = LangManager::translate('core.maintenance.description');
                             <input type="datetime-local" id="target-date" name="target-date"
                                    value="<?= $maintenance->getTargetDate() ?>" required>
                         </div>
-                    </div>
-                    <div>
-                        <label for="type"><?= LangManager::translate('core.maintenance.settings.loginRegister.title') ?> :</label>
-                        <select id="type" name="type" required>
-                            <option value="0" <?= $maintenance->getType() === 0 ? 'selected' : '' ?>>
-                                <?= LangManager::translate('core.maintenance.settings.loginRegister.type.0') ?>
-                            </option>
-                            <option value="1" <?= $maintenance->getType() === 1 ? 'selected' : '' ?>>
-                                <?= LangManager::translate('core.maintenance.settings.loginRegister.type.1') ?>
-                            </option>
-                            <option value="2" <?= $maintenance->getType() === 2 ? 'selected' : '' ?>>
-                                <?= LangManager::translate('core.maintenance.settings.loginRegister.type.2') ?>
-                            </option>
-                        </select>
                     </div>
             </div>
         </div>

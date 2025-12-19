@@ -2,7 +2,9 @@
 
 namespace CMW\Controller\Core;
 
+use CMW\Controller\Core\Api\External\CheckerController;
 use CMW\Controller\Users\UsersController;
+use CMW\Exception\Core\Download\DownloadException;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Database\DatabaseManager;
@@ -14,6 +16,7 @@ use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Package\AbstractController;
 use CMW\Manager\Router\Link;
+use CMW\Manager\Security\EncryptManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Manager\Theme\Config\ThemeMapper;
 use CMW\Manager\Theme\Config\ThemeSettingsMapper;
@@ -26,6 +29,7 @@ use CMW\Manager\Theme\UninstallThemeType;
 use CMW\Manager\Updater\UpdatesManager;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
+use CMW\Model\Core\ActivatedModel;
 use CMW\Model\Core\CoreModel;
 use CMW\Model\Core\ThemeModel;
 use CMW\Utils\Directory;
@@ -47,6 +51,7 @@ class ThemeController extends AbstractController
     private function adminThemeMarket(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.market');
+        CheckerController::getInstance()->checkActivationAPI();
 
         $currentTheme = ThemeLoader::getInstance()->getCurrentTheme();
         $installedThemes = ThemeLoader::getInstance()->getInstalledThemes();
@@ -65,6 +70,7 @@ class ThemeController extends AbstractController
     private function adminThemeConfiguration(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
+        CheckerController::getInstance()->checkActivationAPI();
 
         $currentTheme = ThemeLoader::getInstance()->getCurrentTheme();
         $installedThemes = ThemeLoader::getInstance()->getInstalledThemes();
@@ -114,8 +120,8 @@ class ThemeController extends AbstractController
     }
 
     #[NoReturn]
-    #[Link('/install/:id', Link::GET, ['id' => '[0-9]+'], '/cmw-admin/theme')]
-    private function adminThemeInstallation(int $id): void
+    #[Link('/install', Link::POST, [], '/cmw-admin/theme')]
+    private function adminThemeInstallation(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
 
@@ -127,21 +133,119 @@ class ThemeController extends AbstractController
             }
         }
 
-        $theme = PublicAPI::putData("market/resources/install/$id");
+        $id = FilterManager::filterInputIntPost('resId');
+        $status = FilterManager::filterInputStringPost('status');
+        $activationKey = FilterManager::filterInputStringPost('activationKey');
 
-        if (empty($theme)) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                LangManager::translate('core.toaster.internalError') . ' (API)');
-            Redirect::redirectPreviousRoute();
+        if ($status === 'online') {
+            $status = 0;
+        } else {
+            $status = 1;
         }
 
-        if (!DownloadManager::installPackageWithLink($theme['file'], 'Theme', $theme['name'])) {
-            Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
-                LangManager::translate('core.downloads.errors.internalError',
-                    ['name' => $theme['name'], 'version' => $theme['version_name']]));
-            Redirect::redirectPreviousRoute();
+        // Check market dependencies
+        $thisTheme = PublicAPI::getData("market/resources/$id");
+
+        $missing = [];
+        if (!empty($thisTheme['dependencies'])) {
+            foreach ($thisTheme['dependencies'] as $dep) {
+                if (is_null(PackageController::getPackage($dep['market_name'] ?? $dep['name'] ?? null))) {
+                    $missing[] = '<b>'.($dep['market_name'] ?? $dep['name']).'</b>';
+                }
+            }
+
+            if (!empty($missing)) {
+                $count = count($missing);
+                $list  = $count > 1
+                    ? implode(', ', array_slice($missing, 0, -1)).' et '.end($missing)
+                    : $missing[0];
+
+                $label = $count > 1 ? 'les packages ' : 'le package ';
+
+                Flash::send(
+                    Alert::WARNING,
+                    'Packages',
+                    'Veuillez installer '.$label.$list.' avant d\'installer <b>'.$thisTheme['market_name'].
+                    '</b> car il en a besoin pour fonctionner.'
+                );
+                Redirect::redirectPreviousRoute();
+            }
+
+            // Check versions of installed dependencies update before install
+            $blocking = [];
+            foreach ($thisTheme['dependencies'] as $dep) {
+                // Récup local
+                $local = ThemeLoader::getInstance()->getTheme($dep['name'] ?? null);
+                if ($local === null) {
+                    continue;
+                }
+
+                $depIdOrSlug = $dep['id'] ?? ($dep['name'] ?? null);
+                $depApi = $depIdOrSlug ? PublicAPI::getData("market/resources/{$depIdOrSlug}") : null;
+                if (!is_array($depApi) || empty($depApi['version_name'])) {
+                    $blocking[] = "<b>".($dep['market_name'] ?? $dep['name'])."</b> (version distante inconnue)";
+                    continue;
+                }
+
+                $remote = ltrim((string)$depApi['version_name'], "vV");
+                $localV = ltrim((string)$local->version(), "vV");
+
+                if (version_compare($localV, $remote, '<')) {
+                    $blocking[] = "<b>".($dep['market_name'] ?? $dep['name'])."</b> {$localV} ➜ {$remote}";
+                }
+            }
+
+            if (!empty($blocking)) {
+                $count = count($blocking);
+                $list  = $count > 1
+                    ? implode(', ', array_slice($blocking, 0, -1)).' et '.end($blocking)
+                    : $blocking[0];
+
+                $label = $count > 1 ? 'les packages ' : 'le package ';
+
+                Flash::send(
+                    Alert::WARNING,
+                    'Packages',
+                    "Veuillez d'abord mettre à jour {$label}{$list} avant d'installer <b>{$thisTheme['market_name']}</b>."
+                );
+                Redirect::redirectPreviousRoute();
+            }
         }
 
+        $data = [
+            'resId' => $id,
+            'status' => $status,
+            'activationKey' => $activationKey,
+        ];
+
+        $theme = PublicAPI::postData("market/resources/install" , $data);
+
+        if (isset($theme['error'])) {
+            $code = $theme['error']['code'] ?? 'UNKNOWN';
+            $desc = $theme['error']['description']['Description']
+                ?? $theme['error']['description']['description']
+                ?? ($theme['error']['info'] ?? 'Erreur inconnue');
+
+            Flash::send(Alert::ERROR, "Erreur ".$code, $desc);
+            Redirect::redirectPreviousRoute();
+        } elseif (!empty($theme['file'])) {
+            try {
+                DownloadManager::installPackageWithLink($theme['file'], 'Theme', $theme['name']);
+            } catch (DownloadException $e) {
+                Flash::send(
+                    Alert::ERROR,
+                    LangManager::translate('core.toaster.error'),
+                    LangManager::translate('core.toaster.theme.unableUpdate') . $e->getMessage(),
+                );
+                Redirect::redirectPreviousRoute();
+            }
+        } else {
+            Flash::send(Alert::ERROR, "Erreur", "Une erreur est survenue sur l'API, contacte le support de CraftMyWebsite.");
+        }
+
+        if (!empty($activationKey)) {
+            ActivatedModel::getInstance()->addActivation(EncryptManager::encrypt($activationKey), $thisTheme['id'], $thisTheme['name']);
+        }
         // Install Theme settings
         ThemeFileManager::getInstance()->installThemeSettings($theme['name']);
         CoreModel::getInstance()->updateOption('theme', $theme['name']);
@@ -152,6 +256,8 @@ class ThemeController extends AbstractController
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
             LangManager::translate('core.toaster.theme.installed', ['theme' => $theme['name']]));
 
+        sleep(2);
+
         Redirect::redirect('cmw-admin/theme/manage');
     }
 
@@ -159,6 +265,7 @@ class ThemeController extends AbstractController
     private function adminThemeManage(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.edit');
+        CheckerController::getInstance()->checkActivationAPI();
 
         //Vérifie si la valeur par défaut est en base de donnée si ce n'est pas le cas, on l'ajoute, cela permet aux mises à jour des thèmes de gérer les nouvelles valeurs :)
         $themeMenus = ThemeEditorProcessor::getInstance()->getThemeMenus();
@@ -266,9 +373,9 @@ class ThemeController extends AbstractController
         }
     }
 
-    #[Link('/update/:id/:actualVersion/:themeName', Link::GET, ['id' => '[0-9]+', 'actualVersion' => '.*?', 'themeName' => '.*?'], '/cmw-admin/theme')]
+    #[Link('/update', Link::POST, [], '/cmw-admin/theme')]
     #[NoReturn]
-    private function adminThemeUpdate(int $id, string $actualVersion, string $themeName): void
+    private function adminThemeUpdate(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.themes.manage');
 
@@ -280,52 +387,179 @@ class ThemeController extends AbstractController
             }
         }
 
-        $updates = PublicAPI::getData("market/resources/updates/$id/$actualVersion");
+        $id = FilterManager::filterInputIntPost('resId');
+        $actualVersion = FilterManager::filterInputStringPost('localVersion');
+        $themeName = FilterManager::filterInputStringPost('themeName');
+        $status = FilterManager::filterInputStringPost('status');
 
-        if (Directory::delete(EnvManager::getInstance()->getValue('DIR') . "Public/Theme/$themeName")) {
-            $lastUpdateIndex = count($updates) - 1;
-            foreach ($updates as $i => $update) {
-                if (!empty($update['sql_updater'])) {
-                    $file = file_get_contents($update['sql_updater']);
+        $statusInt = ($status === 'test') ? 1 : 0;
 
-                    if (!$file) {
-                        Flash::send(
-                            Alert::ERROR,
-                            LangManager::translate('core.toaster.error'),
-                            $update['sql_updater'],
-                        );
-                        Redirect::redirectPreviousRoute();
-                    }
+        $current = PublicAPI::getData("market/resources/$id");
 
-                    DatabaseManager::getLiteInstance()->query($file);
-                }
+        if (isset($current['error'])) {
+            $code = $current['error']['code'] ?? 'UNKNOWN';
+            $desc = $current['error']['description']['Description']
+                ?? $current['error']['description']['description']
+                ?? ($current['error']['info'] ?? 'Erreur inconnue');
 
-                if ($i === $lastUpdateIndex) {
-                    if (!DownloadManager::installPackageWithLink($update['file'], 'Theme', $themeName)) {
-                        Flash::send(
-                            Alert::ERROR,
-                            LangManager::translate('core.toaster.error'),
-                            LangManager::translate('core.toaster.theme.unableUpdate') . $update['title'],
-                        );
-                        Redirect::redirectPreviousRoute();
-                    }
+            Flash::send(Alert::ERROR, "Erreur ".$code, $desc);
+            Redirect::redirectPreviousRoute();
+        }
+
+        $blocking = [];
+
+        if (!empty($current['dependencies'])) {
+            $missing = [];
+            foreach ($current['dependencies'] as $dep) {
+                if (is_null(PackageController::getPackage($dep['market_name'] ?? $dep['name'] ?? null))) {
+                    $missing[] = '<b>'.($dep['market_name'] ?? $dep['name']).'</b>';
                 }
             }
 
-            //Une fois que toutes les mises à jour sont terminé, on rajoute les nouvelles configs :
-            ThemeFileManager::getInstance()->updateThemeSettings($themeName);
+            if (!empty($missing)) {
+                $count = count($missing);
+                $list  = $count > 1
+                    ? implode(', ', array_slice($missing, 0, -1)) . ' et ' . end($missing)
+                    : $missing[0];
 
-            SimpleCacheManager::deleteSpecificCacheFile("config", "Themes/$themeName");
+                $label = $count > 1 ? 'les packages ' : 'le package ';
 
-            Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-                LangManager::translate('core.theme.toasters.update.success', ['theme' => $themeName]));
+                Flash::send(
+                    Alert::WARNING,
+                    'Packages',
+                    'Veuillez installer '.$label.$list.
+                    ' avant de mettre à jour <b>'.$current['market_name'].'</b> car il en a besoin pour fonctionner.'
+                );
+                Redirect::redirectPreviousRoute();
+            }
+
+            foreach ($current['dependencies'] as $dep) {
+                // Ici tu avais ThemeLoader::getInstance()->getTheme(), je garde la logique
+                $local = ThemeLoader::getInstance()->getTheme($dep['name'] ?? null);
+                if ($local === null) {
+                    continue;
+                }
+
+                $depIdOrSlug = $dep['id'] ?? ($dep['name'] ?? null);
+                $depApi = $depIdOrSlug ? PublicAPI::getData("market/resources/{$depIdOrSlug}") : null;
+
+                if (!is_array($depApi) || empty($depApi['version_name'])) {
+                    $blocking[] = "<b>".($dep['market_name'] ?? $dep['name'])."</b> (version distante inconnue)";
+                    continue;
+                }
+
+                $remote = ltrim((string)$depApi['version_name'], "vV");
+                $localV = ltrim((string)$local->version(), "vV");
+
+                if (version_compare($localV, $remote, '<')) {
+                    $blocking[] = "<b>".($dep['market_name'] ?? $dep['name'])."</b> {$localV} ➜ {$remote}";
+                }
+            }
+
+            if (!empty($blocking)) {
+                $count = count($blocking);
+                $list  = $count > 1
+                    ? implode(', ', array_slice($blocking, 0, -1)) . ' et ' . end($blocking)
+                    : $blocking[0];
+
+                $label = $count > 1 ? 'les packages ' : 'le package ';
+
+                Flash::send(
+                    Alert::WARNING,
+                    'Packages',
+                    "Veuillez d'abord mettre à jour {$label}{$list} avant d'actualiser <b>{$themeName}</b>."
+                );
+                Redirect::redirectPreviousRoute();
+            }
+        }
+
+        $activation = ActivatedModel::getInstance()->getActivationByResId($id);
+        $activationKey = $activation['resource_key'] ?? null;
+        if ($activationKey) {
+            $decryptedActivationKey = EncryptManager::decrypt($activationKey);
         } else {
+            $decryptedActivationKey = null;
+        }
+
+        $data = [
+            'resId'         => $id,
+            'version'       => $actualVersion,
+            'status'        => $statusInt,
+            'activationKey' => $decryptedActivationKey,
+        ];
+
+        $updates = PublicAPI::postData("market/resources/updates", $data);
+
+        if (isset($updates['error'])) {
+            $code = $updates['error']['code'] ?? 'UNKNOWN';
+            $desc = $updates['error']['description']['Description']
+                ?? $updates['error']['description']['description']
+                ?? ($updates['error']['info'] ?? 'Erreur inconnue');
+
+            Flash::send(Alert::ERROR, "Erreur ".$code, $desc);
+            Redirect::redirectPreviousRoute();
+        }
+
+        if (empty($updates)) {
             Flash::send(
                 Alert::ERROR,
                 LangManager::translate('core.toaster.error'),
-                LangManager::translate('core.toaster.theme.unableDeleteFolder') . EnvManager::getInstance()->getValue('DIR') . "Public/Theme/$themeName",
+                "No updates available for this theme",
             );
+            Redirect::redirectPreviousRoute();
         }
+
+        if (!Directory::delete(EnvManager::getInstance()->getValue('DIR') . "Public/Themes/$themeName")) {
+            Flash::send(
+                Alert::ERROR,
+                LangManager::translate('core.toaster.error'),
+                LangManager::translate('core.toaster.theme.unableDeleteFolder')
+                . EnvManager::getInstance()->getValue('DIR') . "Public/Themes/$themeName",
+            );
+            Redirect::redirectPreviousRoute();
+        }
+
+        $lastUpdateIndex = count($updates) - 1;
+        foreach ($updates as $i => $update) {
+            if (!empty($update['sql_updater'])) {
+                $file = file_get_contents($update['sql_updater']);
+
+                if (!$file) {
+                    Flash::send(
+                        Alert::ERROR,
+                        LangManager::translate('core.toaster.error'),
+                        $update['sql_updater'],
+                    );
+                    Redirect::redirectPreviousRoute();
+                }
+
+                DatabaseManager::getLiteInstance()->query($file);
+            }
+
+            if ($i === $lastUpdateIndex) {
+                try {
+                    DownloadManager::installPackageWithLink($update['file'], 'Theme', $themeName);
+                } catch (DownloadException $e) {
+                    Flash::send(
+                        Alert::ERROR,
+                        LangManager::translate('core.toaster.error'),
+                        LangManager::translate('core.toaster.theme.unableUpdate') . $e->getMessage(),
+                    );
+                    Redirect::redirectPreviousRoute();
+                }
+            }
+        }
+
+        ThemeFileManager::getInstance()->updateThemeSettings($themeName);
+        SimpleCacheManager::deleteSpecificCacheFile("config", "Themes/$themeName");
+
+        Flash::send(
+            Alert::SUCCESS,
+            LangManager::translate('core.toaster.success'),
+            LangManager::translate('core.theme.toasters.update.success', ['theme' => $themeName])
+        );
+
+        sleep(2);
 
         Redirect::redirectPreviousRoute();
     }
@@ -365,6 +599,7 @@ class ThemeController extends AbstractController
                     LangManager::translate('core.toaster.success'),
                     LangManager::translate('core.toaster.theme.delete.success', ['theme' => $themeName]),
                 );
+                ActivatedModel::getInstance()->removeActivationByResName($themeName);
                 break;
             case UninstallThemeType::ERROR_THEME_NOT_FOUND:
                 Flash::send(Alert::ERROR,

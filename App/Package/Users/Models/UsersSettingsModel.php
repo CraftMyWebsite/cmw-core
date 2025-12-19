@@ -5,6 +5,7 @@ namespace CMW\Model\Users;
 use CMW\Entity\Users\BlacklistedPseudoEntity;
 use CMW\Entity\Users\Settings\BulkSettingsEntity;
 use CMW\Entity\Users\UserEnforced2FaEntity;
+use CMW\Manager\Cache\SimpleCacheManager;
 use CMW\Manager\Database\DatabaseManager;
 use CMW\Manager\Flash\Alert;
 use CMW\Manager\Flash\Flash;
@@ -20,26 +21,69 @@ use RuntimeException;
  */
 class UsersSettingsModel extends AbstractModel
 {
+    private const string CACHE_KEY = 'settings';
+    private const string CACHE_SUBFOLDER = 'Users';
+
     public function getSetting(string $settingName): string
     {
-        $db = DatabaseManager::getInstance();
-        $req = $db->prepare('SELECT users_settings_value FROM cmw_users_settings WHERE users_settings_name = ?');
-        $req->execute([$settingName]);
-        $option = $req->fetch();
+        if (SimpleCacheManager::checkCache(self::CACHE_KEY, self::CACHE_SUBFOLDER)) {
+            $cachedSettings = SimpleCacheManager::getCache(self::CACHE_KEY, self::CACHE_SUBFOLDER);
 
-        return $option['users_settings_value'];
+            if (\is_array($cachedSettings)) {
+                foreach ($cachedSettings as $setting) {
+                    if (($setting['users_settings_name'] === $settingName) && isset($setting['users_settings_value'])) {
+                        return $setting['users_settings_value'];
+                    }
+                }
+            }
+        }
+
+        $db = DatabaseManager::getInstance();
+        $req = $db->prepare('SELECT users_settings_name, users_settings_value FROM cmw_users_settings');
+
+        if (!$req->execute()) {
+            return '';
+        }
+
+        $allSettings = $req->fetchAll();
+
+        if (!empty($allSettings)) {
+            SimpleCacheManager::storeCache($allSettings, self::CACHE_KEY, self::CACHE_SUBFOLDER);
+        }
+
+        foreach ($allSettings as $setting) {
+            if ($setting['users_settings_name'] === $settingName) {
+                return $setting['users_settings_value'] ?? '';
+            }
+        }
+
+        return '';
     }
 
     public function getSettings(): array
     {
+        if (SimpleCacheManager::checkCache(self::CACHE_KEY, self::CACHE_SUBFOLDER)) {
+            $cachedSettings = SimpleCacheManager::getCache(self::CACHE_KEY, self::CACHE_SUBFOLDER);
+
+            if (\is_array($cachedSettings)) {
+                return $cachedSettings;
+            }
+        }
+
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('SELECT * FROM cmw_users_settings');
 
-        if ($req->execute()) {
-            return $req->fetchAll();
+        if (!$req->execute()) {
+            return [];
         }
 
-        return ($req->execute()) ? $req->fetchAll() : [];
+        $allSettings = $req->fetchAll();
+
+        if (!empty($allSettings)) {
+            SimpleCacheManager::storeCache($allSettings, self::CACHE_KEY, self::CACHE_SUBFOLDER);
+        }
+
+        return $allSettings;
     }
 
     /**
@@ -51,7 +95,13 @@ class UsersSettingsModel extends AbstractModel
     {
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('UPDATE cmw_users_settings SET users_settings_value=:settingValue, users_settings_updated=now() WHERE users_settings_name=:settingName');
-        return $req->execute(['settingName' => $settingName, 'settingValue' => $settingValue]);
+        $result = $req->execute(['settingName' => $settingName, 'settingValue' => $settingValue]);
+
+        if ($result) {
+            $this->updateSettingCacheValue($settingName, $settingValue);
+        }
+
+        return $result;
     }
 
     /**
@@ -76,6 +126,9 @@ class UsersSettingsModel extends AbstractModel
             }
 
             $db->commit();
+
+            $this->clearSettingsCache();
+
             return true;
         } catch (Exception $e) {
             $db->rollBack();
@@ -86,9 +139,11 @@ class UsersSettingsModel extends AbstractModel
     public function addSetting(string $settingName, string $settingValue): void
     {
         $db = DatabaseManager::getInstance();
-        $req = $db->prepare('INSERT INTO cmw_users_settings (users_settings_value, users_settings_updated, users_settings_name) 
+        $req = $db->prepare('INSERT INTO cmw_users_settings (users_settings_value, users_settings_updated, users_settings_name)
                                     VALUES (:settingValue, now(), :settingName)');
         $req->execute(['settingName' => $settingName, 'settingValue' => $settingValue]);
+
+        $this->clearSettingsCache();
     }
 
     public function bulkAddSettings(BulkSettingsEntity ...$bulkSettings): bool
@@ -118,6 +173,8 @@ class UsersSettingsModel extends AbstractModel
         $db = DatabaseManager::getInstance();
         $req = $db->prepare('DELETE FROM cmw_users_settings where users_settings_name = :settingName');
         $req->execute(['settingName' => $settingName]);
+
+        $this->updateSettingCacheValue($settingName, '');
     }
 
     /**
@@ -231,7 +288,7 @@ class UsersSettingsModel extends AbstractModel
             return false;
         }
 
-        return count($res) >= 1;
+        return \count($res) >= 1;
     }
 
     /**
@@ -293,9 +350,47 @@ class UsersSettingsModel extends AbstractModel
 
     private function addEnforcedRoles($roleId): bool
     {
-        $sql = 'INSERT INTO cmw_users_enforced2fa_roles (enforced2fa_roles) 
+        $sql = 'INSERT INTO cmw_users_enforced2fa_roles (enforced2fa_roles)
                 VALUES (:enforced2fa_roles)';
         $db = DatabaseManager::getInstance();
         return $db->prepare($sql)->execute(['enforced2fa_roles' => $roleId]);
+    }
+
+    /**
+     * <p>Update the setting value in the cache only.</p>
+     * @param string $settingName
+     * @param string $settingValue
+     * @return void
+     */
+    private function updateSettingCacheValue(string $settingName, string $settingValue): void
+    {
+        if (SimpleCacheManager::cacheExist(self::CACHE_KEY, self::CACHE_SUBFOLDER)) {
+            $cachedSettings = SimpleCacheManager::getCache(self::CACHE_KEY, self::CACHE_SUBFOLDER);
+
+            if (\is_array($cachedSettings)) {
+                foreach ($cachedSettings as &$setting) {
+                    if ($setting['users_settings_name'] === $settingName) {
+                        $setting['users_settings_value'] = $settingValue;
+                        SimpleCacheManager::storeCache($cachedSettings, self::CACHE_KEY, self::CACHE_SUBFOLDER);
+                        return;
+                    }
+                }
+                unset($setting);
+
+                $cachedSettings[] = ['users_settings_name' => $settingName, 'users_settings_value' => $settingValue];
+                SimpleCacheManager::storeCache($cachedSettings, self::CACHE_KEY, self::CACHE_SUBFOLDER);
+            }
+        }
+    }
+
+    /**
+     * <p>Clear the settings cache</p>
+     * @return void
+     */
+    public function clearSettingsCache(): void
+    {
+        if (SimpleCacheManager::cacheExist(self::CACHE_KEY, self::CACHE_SUBFOLDER)) {
+            SimpleCacheManager::deleteSpecificCacheFile(self::CACHE_KEY, self::CACHE_SUBFOLDER);
+        }
     }
 }

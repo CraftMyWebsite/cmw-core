@@ -3,6 +3,7 @@
 namespace CMW\Utils;
 
 use function implode;
+use function is_null;
 use function lcfirst;
 use function preg_replace;
 use function str_replace;
@@ -31,12 +32,78 @@ class Utils
         return false;
     }
 
+
+    /**
+     * @param string|null ...$values
+     * @return bool
+     * @deprecated Use hasNull() instead
+     */
     public static function containsNullValue(?string ...$values): bool
     {
         foreach ($values as $value) {
             if (is_null($value)) {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    /**
+     * <p>Check if we have null values</p>
+     * @param mixed ...$values
+     * @return bool
+     */
+    public static function hasNull(mixed ...$values): bool
+    {
+        foreach ($values as $value) {
+            if (is_null($value)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * <p>Check if we have empty values</p>
+     * @param mixed ...$values
+     * @return bool
+     */
+    public static function hasEmpty(mixed ...$values): bool
+    {
+        foreach ($values as $value) {
+            if (empty($value)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * <p>Check if we have false values</p>
+     * @param mixed ...$values
+     * @return bool
+     */
+    public static function hasFalse(mixed ...$values): bool
+    {
+        if (\in_array(false, $values, true)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * <p>Check if we have true values</p>
+     * @param mixed ...$values
+     * @return bool
+     */
+    public static function hasTrue(mixed ...$values): bool
+    {
+        if (\in_array(true, $values, true)) {
+            return true;
         }
 
         return false;
@@ -67,6 +134,11 @@ class Utils
         }
     }
 
+    /**
+     * @param string ...$values
+     * @return array
+     * @deprecated Fonction insécurisée : Utiliser FilterManager qui applique les correctifs nécessaires XSS, Typage ... (filterInput ne sera pas supprimé)
+     */
     public static function filterInput(string ...$values): array
     {
         $toReturn = [];

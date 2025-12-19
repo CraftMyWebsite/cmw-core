@@ -34,6 +34,29 @@ return [
         'updateby' => 'Updated by %author%',
         'on' => 'on %date%',
     ],
+    'terms' => [
+        'title' => 'Terms and Conditions',
+        'requires_accept' => 'Users must accept them again?',
+        'mandatory' => 'This term is mandatory (GDPR / CCPA / PIPEDA / UK GDPR / APPI ...)',
+        'use' => 'Active',
+        'requires_accept_explain' => 'Requires users to revalidate <b>%type%</b> at their next login. Recommended for major changes to remain compliant with the law.',
+        'last_published' => "Last updated:",
+        'last_editor' => 'Author:',
+        'type' => [
+            'TERMS_OF_SERVICE' => 'Terms of Service',
+            'TERMS_OF_SALE' => 'Terms of Sale',
+            'PRIVACY_POLICY' => 'Privacy Policy',
+            'LEGAL_NOTICE' => 'Legal Notice',
+            'COOKIE_POLICY' => 'Cookie Policy',
+            'ACCEPTABLE_USE' => 'Code of Conduct',
+            'LICENSE' => 'Intellectual Property',
+            'REFUND_POLICY' => 'Refund Policy',
+        ],
+        'toaster' => [
+            'savedN' => 'Configuration saved — %d item(s) updated.',
+            'noChange' => 'No changes.',
+        ],
+    ],
     'dashboard' => [
         'title' => 'Dashboard',
         'desc' => 'Welcome to your administration panel!',
@@ -53,7 +76,7 @@ return [
         'days' => 'Days',
         'weeks' => 'Weeks',
         'months' => 'Months',
-        'alpha' => 'Please note that CraftMyWebsite2 is currently in alpha phase and is not yet complete. <br>Its use in a production environment is strongly discouraged. Key features may be missing or may not work as expected. <br><b>During this phase, complete system reinstalls may be required.</b> <br>We appreciate your understanding and patience while we work on CraftMyWebsite.',
+        'alpha' => 'Please note that CraftMyWebsite2 is currently in BETA phase and is not yet complete. <br>Its use in a production environment is strongly discouraged. Key features may be missing or may not work as expected. <br><b>During this phase, complete system reinstalls may be required.</b> <br>We appreciate your understanding and patience while we work on CraftMyWebsite.',
         'updateWarning' => '<strong>Attention :</strong>The current version of your CMS is not the latest available. It is strongly recommended to <a class="link" href="updates/cms">update your CMS</a> to benefit from the latest security fixes as well as new features added.',
     ],
     'menus' => [
@@ -134,7 +157,7 @@ return [
             'reset' => 'Theme configuration reset',
             'updateBeforeInstall' => 'Please update CMS before installing this theme!',
             'updateBeforeUpdate' => 'Please update the CMS before updating your themes!',
-            'unableUpdate' => 'Unable to install this theme! : ',
+            'unableUpdate' => 'Unable to install : ',
             'unableDeleteFolder' => 'Unable to remove folder : ',
             'delete' => [
                 'success' => 'Theme %theme% deleted successfully',
@@ -405,14 +428,7 @@ return [
             'title' => 'Settings',
             'targetDateTitle' => 'Target date',
             'useMyCode' => 'Use my code',
-            'loginRegister' => [
-                'title' => 'Login / Registers',
-                'type' => [
-                    0 => 'All disabled',
-                    1 => 'Enable logins / registers',
-                    2 => 'Only enable logins',
-                ],
-            ],
+            'neRegister' => 'Disable register',
             'maintenanceTitle' => [
                 'label' => 'Title',
                 'placeholder' => 'We are coming soon !',
@@ -526,7 +542,7 @@ return [
             'settings' => 'Site Settings',
             'maintenance' => 'Maintenance mode',
             'mail' => 'SMTP and mails',
-            'cg' => 'General conditions',
+            'cg' => 'Termes & Conditions',
             'security' => 'Security',
         ],
         'update' => 'CMW Updates',

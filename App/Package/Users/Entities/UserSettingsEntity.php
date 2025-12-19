@@ -12,6 +12,8 @@ class UserSettingsEntity extends AbstractEntity
     private int $profilePageStatus;
     private int $resetPasswordMethod;
 
+    private int $needTerms;
+    private string $needTextTerms;
     private static UserSettingsEntity $_instance;
 
     public function __construct()
@@ -19,6 +21,8 @@ class UserSettingsEntity extends AbstractEntity
         $this->defaultImage = UsersSettingsModel::getInstance()->getSetting('defaultImage');
         $this->profilePageStatus = (int)UsersSettingsModel::getInstance()->getSetting('profilePage');
         $this->resetPasswordMethod = (int)UsersSettingsModel::getInstance()->getSetting('resetPasswordMethod');
+        $this->needTerms = (int)UsersSettingsModel::getInstance()->getSetting('needTerms');
+        $this->needTextTerms = UsersSettingsModel::getInstance()->getSetting('needTextTerms');
     }
 
     public static function getInstance(): self
@@ -75,5 +79,21 @@ class UserSettingsEntity extends AbstractEntity
             1 => Redirect::redirect("profile/$pseudo"),
             2 => Redirect::redirectToHome(),
         };
+    }
+
+    /**
+     * @return int
+     */
+    public function getNeedTerms(): int
+    {
+        return $this->needTerms;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNeedTextTerms(): string
+    {
+        return $this->needTextTerms;
     }
 }

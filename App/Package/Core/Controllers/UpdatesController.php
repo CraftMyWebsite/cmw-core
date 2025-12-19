@@ -2,6 +2,7 @@
 
 namespace CMW\Controller\Core;
 
+use CMW\Controller\Core\Api\External\CheckerController;
 use CMW\Controller\Users\UsersController;
 use CMW\Manager\Api\PublicAPI;
 use CMW\Manager\Cache\SimpleCacheManager;
@@ -62,6 +63,7 @@ class UpdatesController extends AbstractController
     private function adminUpdates(): void
     {
         UsersController::redirectIfNotHavePermissions('core.dashboard', 'core.update');
+        CheckerController::getInstance()->checkActivationAPI();
 
         $latestVersion = UpdatesManager::getCmwLatest();
         $latestVersionChangelogGroup = self::groupBy('type', $latestVersion['changelog']);
