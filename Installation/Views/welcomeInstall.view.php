@@ -66,9 +66,12 @@ foreach ($results as $status) {
         <tr class="text-center">
             <th>PHP<span class="required">*</span></th>
             <th>HTTPS</th>
-            <th>PDO<span class="required">*</span></th>
-            <th>ZIP<span class="required">*</span></th>
+            <th>XML<span class="required">*</span></th>
+            <th>GD<span class="required">*</span></th>
             <th>CURL<span class="required">*</span></th>
+            <th>PDO<span class="required">*</span></th>
+            <th>MBSTRING<span class="required">*</span></th>
+            <th>ZIP<span class="required">*</span></th>
         </tr>
         </thead>
         <tbody>
@@ -82,13 +85,22 @@ foreach ($results as $status) {
                 <?= InstallerController::hasRequiredFormatted('https') ?>
             </td>
             <td>
-                <?= InstallerController::hasRequiredFormatted('pdo') ?>
+                <?= InstallerController::hasRequiredFormatted('xml') ?>
             </td>
             <td>
-                <?= InstallerController::hasRequiredFormatted('zip') ?>
+                <?= InstallerController::hasRequiredFormatted('gd') ?>
             </td>
             <td>
                 <?= InstallerController::hasRequiredFormatted('curl') ?>
+            </td>
+            <td>
+                <?= InstallerController::hasRequiredFormatted('pdo') ?>
+            </td>
+            <td>
+                <?= InstallerController::hasRequiredFormatted('mbstring') ?>
+            </td>
+            <td>
+                <?= InstallerController::hasRequiredFormatted('zip') ?>
             </td>
         </tr>
         </tbody>
@@ -100,9 +112,7 @@ foreach ($results as $status) {
     <div class="form-control">
         <label class="label cursor-pointer">
             <input id="cgu" name="cgu" type="checkbox" class="checkbox checkbox-primary checkbox-xs"/>
-            <span class=""><a
-                    class="text-gray-400 hover:text-primary" target="_blank"
-                    href="https://craftmywebsite.fr/cgu"><?= LangManager::translate('Installation.welcome.readaccept') ?> <i></a></i></span>
+            <span class=""><?= LangManager::translate('Installation.welcome.readaccept') ?></span>
         </label>
     </div>
     <div class="card-actions justify-end">

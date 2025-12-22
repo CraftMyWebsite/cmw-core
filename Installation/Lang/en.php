@@ -13,10 +13,11 @@ return [
                         before continuing with the Installation.</p>
                         <p>If you request support from CMW, these informations may be useful to determine your environment. Please write down any information that you do not know.</p>
                         <p>Now let's move on to setting up your new site ...</p>",
-        'readaccept' => 'I have read and agreed to the general terms and conditions of use (of CMW)',
+        'readaccept' => "I have read and agreed to the <a class='text-primary' href='https://craftmywebsite.fr/all_terms' target='_blank'>general terms and conditions of use (of CMW)</a>",
         'cgu' => 'General Conditions of Use',
         'error' => [
-            'cgu' => 'Please accept the CGU before installing your CraftMyWebsite site'
+            'cgu' => 'Please accept the CGU before installing your CraftMyWebsite site',
+            'extension' => 'You are missing essential extensions for the CMS to function properly!'
         ],
         'folder_check_fix_it' => 'Please fix access issues to ensure CraftMyWebsite works properly!',
         'folder_check_button' => 'Check access',

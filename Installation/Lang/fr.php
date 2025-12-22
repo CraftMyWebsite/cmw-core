@@ -14,10 +14,11 @@ return [
                       <p>En cas de demande de support auprès de CraftMyWebsite ces informations peuvent nous être utiles pour déterminer
                       l'environnement dans lequel vous êtes. Merci de bien vouloir noter les informations que vous ne connaissez pas.</p>
                       <p>Passons maintenant à l'installation de votre nouveau site ...</p>",
-        "readaccept" => "J'ai lu et j'accepte les conditions générales d'utilisations",
+        "readaccept" => "J'ai lu et j'accepte les <a class='text-primary' href='https://craftmywebsite.fr/all_terms' target='_blank'>conditions générales d'utilisations</a>",
         "cgu" => "Conditions Générales d'Utilisation",
         "error" => [
-            "cgu" => "Merci d'accepter les CGU avant de procéder à l'installation de votre site CraftMyWebsite"
+            "cgu" => "Merci d'accepter les CGU avant de procéder à l'installation de votre site CraftMyWebsite",
+            "extension" => "Il vous manque des extension indispensable au bon fonctionnement du CMS !"
         ],
         'folder_check_fix_it' => 'Veuillez corriger les problèmes d\'accès pour garantir le bon fonctionnement de CraftMyWebsite !',
         'folder_check_button' => 'Verifier les droits d\'accès',
