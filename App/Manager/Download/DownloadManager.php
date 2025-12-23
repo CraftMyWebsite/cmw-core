@@ -20,7 +20,7 @@ class DownloadManager
      * @desc Download and install package with api return link, ex: "/Public/market/Resources/forum.zip"
      * @throws DownloadException
      */
-    public static function installPackageWithLink(string $url, #[ExpectedValues(['package', 'Theme'])] string $type, string $name): void
+    public static function installPackageWithLink(string $url, #[ExpectedValues(['package', 'Theme'])] string $type, string $name, bool $runInit = true): void
     {
         if (!in_array($type, ['package', 'Theme'], true)) {
             throw new DownloadException('Type invalide');
@@ -56,7 +56,7 @@ class DownloadManager
         $archiveUpdate->close();
         @unlink($zipPath);
 
-        if ($type === 'package') {
+        if ($type === 'package' && $runInit) {
             self::initPackages($name);
         }
     }

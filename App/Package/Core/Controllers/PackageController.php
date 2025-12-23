@@ -509,7 +509,7 @@ class PackageController extends AbstractController
 
             if ($i === $lastUpdateIndex) {
                 try {
-                    DownloadManager::installPackageWithLink($update['file'], 'package', $packageName);
+                    DownloadManager::installPackageWithLink($update['file'], 'package', $packageName, false);
                 } catch (DownloadException $e) {
                     Flash::send(
                         Alert::ERROR,
