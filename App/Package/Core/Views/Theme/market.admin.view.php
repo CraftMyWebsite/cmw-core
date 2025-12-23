@@ -1,5 +1,6 @@
 <?php
 
+use CMW\Controller\Core\PackageController;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Security\SecurityManager;
 use CMW\Manager\Theme\Loader\ThemeLoader;
@@ -23,7 +24,7 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
         <?php if (!ThemeLoader::getInstance()->isThemeInstalled($theme['name'])): ?>
             <div class="card p-0 relative" style="overflow: hidden;">
                 <div class="flex justify-between px-2 pt-2">
-                    <p class="font-bold"><?= ($theme['version_status']) === 1 && UpdatesManager::isTestAPI() ? '<span class="text-warning">En attente : </span>' : '' ?><?= $theme['name'] ?></p>
+                    <p class="font-bold"><?= ($theme['version_status']) === 1 && UpdatesManager::isTestAPI() ? '<span class="text-warning">En attente : </span>' : '' ?><?= $theme['market_name'] ?></p>
                     <button data-modal-toggle="modal-<?= $theme['id'] ?>" class="btn-primary-sm" type="button"><?= LangManager::translate('core.theme.details') ?></button>
                 </div>
                 <div class="relative">
@@ -72,12 +73,12 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                         <div id="modal-install-<?= $theme['id'] ?>" class="modal-container">
                             <div class="modal">
                                 <div class="modal-header">
-                                    <h6>Installation de <?= $theme['name'] ?></h6>
+                                    <h6>Installation de <?= $theme['market_name'] ?></h6>
                                     <button type="button" data-modal-hide="modal-install-<?= $theme['id'] ?>"><i class="fa-solid fa-xmark"></i></button>
                                 </div>
                                 <form action="install" autocomplete="off" method="post" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
                                     <div class="modal-body">
-                                        <p><?= $theme['name'] ?> est un thème payant, pour l'installer, vous devez l'avoir acheté</p>
+                                        <p><?= $theme['market_name'] ?> est un thème payant, pour l'installer, vous devez l'avoir acheté</p>
                                         <p>Si vous l'avez déjà acheter rendez-vous sur <a target="_blank" class="link" href="https://craftmywebsite.fr/market/manage/purchases">craftmywebsite.fr</a> pour récupérer votre clé d'achat<br>
                                             Assurez-vous d'avoir bien enregistré le domaine <b><?= $_SERVER['SERVER_NAME'] ?></b> pour l'activer ici !</p>
                                         <p>Si vous ne l'avez pas encore acheter vous pouvez le faire en vous rendant sur la <a class="link" target="_blank" href="https://craftmywebsite.fr/market/details/<?= $theme['name'] ?>">page de l'article</a></p>
@@ -99,12 +100,12 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
                         <div id="modal-install-<?= $theme['id'] ?>-test" class="modal-container">
                             <div class="modal">
                                 <div class="modal-header">
-                                    <h6>Installation de <?= $theme['name'] ?></h6>
+                                    <h6>Installation de <?= $theme['market_name'] ?></h6>
                                     <button type="button" data-modal-hide="modal-install-<?= $theme['id'] ?>-test"><i class="fa-solid fa-xmark"></i></button>
                                 </div>
                                 <form action="install" autocomplete="off" method="post" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
                                     <div class="modal-body">
-                                        <p><?= $theme['name'] ?> est un package payant, pour l'installer, vous devez l'avoir acheté</p>
+                                        <p><?= $theme['market_name'] ?> est un package payant, pour l'installer, vous devez l'avoir acheté</p>
                                         <p>Si vous l'avez déjà acheter rendez-vous sur <a target="_blank" class="link" href="https://craftmywebsite.fr/market/manage/purchases">craftmywebsite.fr</a> pour récupérer votre clé d'achat<br>
                                             Assurez-vous d'avoir bien enregistré le domaine <b><?= $_SERVER['SERVER_NAME'] ?></b> pour l'activer ici !</p>
                                         <p>Si vous ne l'avez pas encore acheter vous pouvez le faire en vous rendant sur la <a class="link" target="_blank" href="https://craftmywebsite.fr/market/details/<?= $theme['name'] ?>">page de l'article</a></p>
@@ -129,50 +130,54 @@ Website::setDescription(LangManager::translate('core.theme.config.description'))
             <div id="modal-<?= $theme['id'] ?>" class="modal-container">
                 <div class="modal-xl overflow-auto">
                     <div class="modal-header">
-                        <h6><?= $theme['name'] ?></h6>
+                        <h6><?= $theme['market_name'] ?></h6>
                     </div>
                     <div class="modal-body grid-2">
                         <div style="height:20rem">
                             <img style="height: 100%; width: 100%;"
                                  src="<?= $theme['icon'] ?>"
                                  alt="img <?= $theme['name'] ?>">
+                            <div>
+                                <p><?= PackageController::getInstance()->renderStars($theme['rate']) ?> <?= $theme['rate'] ? $theme['rate'] . '/5' : '' ?></p>
+                                <p class="small">
+                                    <?= LangManager::translate('core.theme.author') ?>
+                                    <a
+                                        href="https://craftmywebsite.fr/market/user/<?= $theme['author_pseudo'] ?>"
+                                        target="_blank" class="link"><?= $theme['author_pseudo'] ?>
+                                    </a>
+                                </p>
+                                <p>
+                                    <?= LangManager::translate('core.theme.downloads') ?>
+                                    <i><b><?= PackageController::getInstance()->formatDownloads((int) $theme['downloads']) ?></b></i>
+                                </p>
+                                <p>
+                                </p>
+                                <p class="small">
+                                    <?= LangManager::translate('core.theme.themeVersion') ?>
+                                    <i><b><?= $theme['version_name'] ?></b></i><br>
+                                    <?= LangManager::translate('core.theme.CMWVersion') ?>
+                                    <i><b><?= $theme['version_cmw'] ?></b></i>
+                                </p>
+                                <div class="flex gap-3">
+                                    <?php if (isset($theme['demo'])): ?>
+                                        <a class="btn-primary-sm"
+                                           href="<?= $theme['demo'] ?>" target="_blank"><i
+                                                class="fa-solid fa-arrow-up-right-from-square"></i> <?= LangManager::translate('core.theme.demo') ?>
+                                        </a>
+                                    <?php endif; ?>
+                                    <?php if ($theme['code_link']): ?>
+                                        <a class="btn-primary-sm"
+                                           href="<?= $theme['code_link'] ?>" target="_blank"><i
+                                                class="fa-brands fa-github"></i> GitHub</a>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
                         </div>
                         <div>
                             <p class="">
                                 <b><?= LangManager::translate('core.theme.description') ?></b>
                             </p>
                             <?= htmlspecialchars_decode($theme['description']) ?>
-                            <hr>
-                            <p class="small">
-                                <?= LangManager::translate('core.theme.author') ?>
-                                <a
-                                    href="https://craftmywebsite.fr/market/user/<?= $theme['author_pseudo'] ?>"
-                                    target="_blank" class="link"><?= $theme['author_pseudo'] ?>
-                                </a>
-                            </p>
-                            <p>
-                                <?= LangManager::translate('core.theme.downloads') ?>
-                                <i><b><?= $theme['downloads'] ?></b></i>
-                            </p>
-                            <p class="small">
-                                <?= LangManager::translate('core.theme.themeVersion') ?>
-                                <i><b><?= $theme['version_name'] ?></b></i><br>
-                                <?= LangManager::translate('core.theme.CMWVersion') ?>
-                                <i><b><?= $theme['version_cmw'] ?></b></i>
-                            </p>
-                            <div class="flex gap-3">
-                                <?php if (isset($theme['demo'])): ?>
-                                    <a class="btn-primary-sm"
-                                       href="<?= $theme['demo'] ?>" target="_blank"><i
-                                            class="fa-solid fa-arrow-up-right-from-square"></i> <?= LangManager::translate('core.theme.demo') ?>
-                                    </a>
-                                <?php endif; ?>
-                                <?php if ($theme['code_link']): ?>
-                                    <a class="btn-primary-sm"
-                                       href="<?= $theme['code_link'] ?>" target="_blank"><i
-                                            class="fa-brands fa-github"></i> GitHub</a>
-                                <?php endif; ?>
-                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">

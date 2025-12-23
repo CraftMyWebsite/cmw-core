@@ -573,4 +573,42 @@ class PackageController extends AbstractController
         // Uninstall package:
         return Directory::delete(EnvManager::getInstance()->getValue('DIR') . "App/Package/$packageName");
     }
+
+    // HELPER
+    public function formatDownloads(int $value): string
+    {
+        if ($value >= 1_000_000_000) {
+            return floor($value / 1_000_000_000) . 'B+';
+        }
+
+        if ($value >= 1_000_000) {
+            return floor($value / 1_000_000) . 'M+';
+        }
+
+        if ($value >= 1000) {
+            return floor($value / 1000) . 'k+';
+        }
+
+        return (string) $value;
+    }
+
+    public function renderStars(?string $rate): string
+    {
+        $value = (float) ($rate ?? 0);
+        $html = '';
+
+        for ($i = 1; $i <= 5; $i++) {
+            if ($value >= 1) {
+                $html .= '<i class="fa-solid fa-star" style="color:#FFD43B;"></i>';
+                $value -= 1;
+            } elseif ($value === 0.5) {
+                $html .= '<i class="fa-solid fa-star-half-stroke" style="color:#FFD43B;"></i>';
+                $value = 0;
+            } else {
+                $html .= '<i class="fa-regular fa-star"></i>';
+            }
+        }
+
+        return $html;
+    }
 }

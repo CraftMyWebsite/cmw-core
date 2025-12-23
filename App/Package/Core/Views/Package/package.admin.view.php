@@ -41,7 +41,7 @@ foreach ($packagesList as $pkg) {
     }
 }
 
-function renderCard($name, $image, $description, $author = null, $versionStatus = null, $versionTarget = null, $version = null, $id = null, $notVerified = false, $updateBadge = false, $downloads = null, $versionCMW = null, $releaseDate = null, $targetStatusSlug = 'online'
+function renderCard($marketName, $name, $image, $description, $author = null, $versionStatus = null, $versionTarget = null, $version = null, $id = null, $notVerified = false, $updateBadge = false, $downloads = null, $versionCMW = null, $releaseDate = null, $rate = null, $targetStatusSlug = 'online'
 ) {
     $uniqueId = $id ?? $name;
     ?>
@@ -50,7 +50,7 @@ function renderCard($name, $image, $description, $author = null, $versionStatus 
             <img class="rounded-lg" style="height: 140px; width: 140px;" src="<?= $image ?>" alt="img">
             <div class="pl-4 w-full">
                 <div class="flex justify-between">
-                    <h6><?= ($versionStatus) === 1  && UpdatesManager::isTestAPI() ? '<span class="text-warning">En attente : </span>' : '' ?><?= $name ?></h6>
+                    <h6><?= ($versionStatus) === 1  && UpdatesManager::isTestAPI() ? '<span class="text-warning">En attente : </span>' : '' ?><?= $marketName ?></h6>
                     <div>
                         <?php if ($updateBadge): ?>
                             <form action="update" method="post" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
@@ -108,14 +108,12 @@ function renderCard($name, $image, $description, $author = null, $versionStatus 
         <?php if ($downloads !== null && $versionCMW): ?>
             <hr>
             <div class="flex justify-between">
-                <p>Téléchargé <b><?= $downloads ?></b> fois</p>
+                <p>Téléchargé <b><?= PackageController::getInstance()->formatDownloads((int) $downloads) ?></b> fois</p>
                 <p>Compatible avec <b><?= $versionCMW ?></b></p>
             </div>
             <div class="flex justify-between">
                 <p>
-                    <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
-                    <i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
-                    <i class="fa-regular fa-star"></i> (0)
+                    <?= PackageController::getInstance()->renderStars($rate) ?> <?= $rate ? $rate . '/5' : '' ?>
                 </p>
                 <p><?= Date::formatDate($releaseDate) ?></p>
             </div>
@@ -124,12 +122,12 @@ function renderCard($name, $image, $description, $author = null, $versionStatus 
     <?php
 }
 
-function renderModalDetails($id, $name, $image, $description, $author = null, $localVersion = null, $onlineVersion = null, $versionStatus = null) {
+function renderModalDetails($id, $marketName, $name, $image, $description, $author = null, $localVersion = null, $onlineVersion = null, $versionStatus = null) {
     ?>
     <div id="modal-<?= $id ?>" class="modal-container">
         <div class="modal-lg">
             <div class="modal-header">
-                <h6><?= $name ?></h6>
+                <h6><?= $marketName ?></h6>
                 <button type="button" data-modal-hide="modal-<?= $id ?>"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
@@ -198,6 +196,7 @@ function renderModalDelete($id, $name) {
         $targetStatusSlug = ($testMode && $pkg['version_status'] === 1) ? 'test' : 'online';
 
         renderCard(
+            $pkg['market_name'],
             $pkg['name'],
             $pkg['icon'],
             mb_strimwidth($pkg['description_short'], 0, 280, '...'),
@@ -211,10 +210,12 @@ function renderModalDelete($id, $name) {
             $pkg['downloads'],
             $pkg['version_cmw'],
             $pkg['date_release'],
+            $pkg['rate'],
             $targetStatusSlug
         );
         renderModalDetails(
             $pkg['id'],
+            $pkg['market_name'],
             $pkg['name'],
             $pkg['icon'],
             html_entity_decode($pkg['description']),
@@ -232,6 +233,7 @@ function renderModalDelete($id, $name) {
         <?php
         $local = PackageController::getPackage($pkg['name']);
         renderCard(
+            $pkg['market_name'],
             $pkg['name'],
             $pkg['icon'],
             mb_strimwidth($pkg['description_short'], 0, 280, '...'),
@@ -244,10 +246,12 @@ function renderModalDelete($id, $name) {
             false,
             $pkg['downloads'],
             $pkg['version_cmw'],
-            $pkg['date_release']
+            $pkg['date_release'],
+            $pkg['rate'],
         );
         renderModalDetails(
             $pkg['id'],
+            $pkg['market_name'],
             $pkg['name'],
             $pkg['icon'],
             html_entity_decode($pkg['description']),
@@ -265,8 +269,8 @@ function renderModalDelete($id, $name) {
         <?php if ($pkg->name() !== 'Pages'): ?>
             <?php
             $img = EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'Admin/Resources/Assets/Img/local-theme.jpg';
-            renderCard($pkg->name(), $img, LangManager::translate('core.Package.descriptionNotAvailable'), null, $pkg->version(), null, true);
-            renderModalDetails($pkg->name(), $pkg->name(), $img, LangManager::translate('core.Package.descriptionNotAvailable'));
+            renderCard($pkg->name(), $pkg->name(), $img, LangManager::translate('core.Package.descriptionNotAvailable'), null, $pkg->version(), null, true);
+            renderModalDetails($pkg->name(), $pkg->name(), $pkg->name(), $img, LangManager::translate('core.Package.descriptionNotAvailable'));
             renderModalDelete($pkg->name(), $pkg->name());
             ?>
         <?php endif; ?>
