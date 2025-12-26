@@ -77,7 +77,15 @@ return [
         'weeks' => 'Semaines',
         'months' => 'Mois',
         'alpha' => 'Veuillez noter que CraftMyWebsite2 est actuellement en phase BETA et n\'est pas encore achevé. <br>Son utilisation en environnement de production est fortement déconseillée. Des fonctionnalités clés peuvent manquer ou ne pas fonctionner comme prévu. <br><b>Pendant cette phase, des réinstallations complètes du système pourront être nécessaires.</b> <br>Nous vous remercions de votre compréhension et de votre patience pendant que nous travaillons sur CraftMyWebsite.',
-        'updateWarning' => '<strong>Attention :</strong> La version actuelle de votre CMS n\'est pas la dernière disponible.Il est fortement conseillé de <a class="link" href="updates/cms">mettre à jour</a> votre CMS pour bénéficier des derniers correctifs de sécurité ainsi que des nouvelles fonctionnalités ajoutées.',
+        'updateWarningTitle' => 'Votre CMS n\'est pas à jour !',
+        'updateWarning' => 'Attention : La version actuellement installée de votre CMS n’est pas à jour.<br>
+Continuer à utiliser une version obsolète peut exposer votre site à des failles de sécurité, à des problèmes de compatibilité ou à des dysfonctionnements avec certains packages et thèmes.<br>
+Nous vous recommandons vivement d’effectuer la <a class="link" href="updates/cms">mise à jour du CMS</a> afin de bénéficier des derniers correctifs de sécurité, d’améliorations de performances, d’une meilleure stabilité globale et des nouvelles fonctionnalités récemment ajoutées.<br>
+Mettre à jour régulièrement votre CMS permet de garantir un environnement fiable, sécurisé et conforme aux évolutions techniques.',
+        'updateResTitle' => 'Requiert votre attention',
+        'updateResWaiting' => 'à une mise à jour en attente !',
+        'updateResFrom' => 'Depuis le ',
+        'updateResBtn' => 'Mettre à jour',
     ],
     'menus' => [
         'title' => 'Menus',
