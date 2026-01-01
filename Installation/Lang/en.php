@@ -25,9 +25,9 @@ return [
         'folder_check_not_found' => 'Not found',
     ],
     'bundle' => [
-        'custom' => 'Custom',
-        'includes' => 'This bundle includes the packages:',
-        'customText' => '<p>Customize your Installation yourself.</p><p>This does not mean that it is not possible to customize it with other bundles.</p>',
+        'custom' => 'No bundle',
+        'includes' => 'This bundle will install automatically:',
+        'customText' => '<p>Do not install a bundle</p><p>You prefer to install the packages and themes yourself.</p><p>If you install a bundle, you can later uninstall the packages and themes it includes.</p>',
     ],
     'password' => [
         'strenght' => 'Password strength :',
@@ -101,13 +101,11 @@ return [
         'goToMySite' => 'Go to my site',
     ],
     'steps' => [
-        0 => 'Welcome',
-        1 => 'Configuration',
-        2 => 'Details',
-        3 => 'Bundles',
-        4 => 'Packages',
-        5 => 'Themes',
-        6 => 'Administrator',
-        7 => 'Finish',
+        0 => 'Welcome <br><small>Summary</small>',
+        1 => 'Configuration <br><small>Database</small>',
+        2 => 'WebSite <br><small>Name & desc</small>',
+        3 => 'Bundles <br><small>Auto config</small>',
+        4 => 'Administrator <br><small>Master account</small>',
+        5 => 'Finish',
     ],
 ];

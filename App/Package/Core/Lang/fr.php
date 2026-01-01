@@ -188,8 +188,8 @@ Mettre à jour régulièrement votre CMS permet de garantir un environnement fia
         ],
         'db' => [
             'config' => [
-                'success' => 'Configuration fonctionnelle',
-                'error' => 'Configuration invalide',
+                'success' => 'Connexion avec la base de donnée fonctionnel !',
+                'error' => 'Impossible de se connecter à la base de données',
                 'alreadyInstalled' => 'Base de données déjà installée !',
             ],
             'missing_inputs' => 'Merci de remplir tous les champs !',

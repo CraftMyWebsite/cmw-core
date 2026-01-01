@@ -188,8 +188,8 @@ Keeping your CMS up to date ensures a reliable, secure, and future-proof environ
         ],
         'db' => [
             'config' => [
-                'success' => 'Good configuration',
-                'error' => 'Configuration error',
+                'success' => 'Connection to the database is working!',
+                'error' => 'Unable to connect to the database!',
                 'alreadyInstalled' => 'Data base already installed !',
             ],
             'missing_inputs' => 'Please fill all inputs !',
