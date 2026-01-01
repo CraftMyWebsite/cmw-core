@@ -59,7 +59,7 @@ class Loader
         $packages = PackageController::getAllPackages();
 
         foreach ($packages as $package) {
-            $implementationsFolder = EnvManager::getInstance()->getValue('dir') . "App/Package/{$package->name()}/Implementations";
+            $implementationsFolder = EnvManager::getInstance()->getValue('DIR') . "App/Package/{$package->name()}/Implementations";
 
             if (!is_dir($implementationsFolder)) {
                 continue;

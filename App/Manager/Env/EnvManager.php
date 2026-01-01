@@ -209,27 +209,14 @@ class EnvManager
         $key = mb_strtoupper(trim($key));
 
         if (!$this->valueExistInFile($key)) {
-            $path = $this->envPath . $this->envFileName;
+            $file = fopen($this->envPath . $this->envFileName, 'ab');
+            $textToSet = static function (string $key, ?string $value) {
+                return $key . '=' . trim($value ?? 'UNDEFINED') . PHP_EOL;
+            };
 
-            $file = fopen($path, 'cb+');
-            if ($file === false) {
-                ErrorManager::showCustomErrorPage('IO error', 'Unable to open .env');
-            }
-            $needsNewline = false;
-            $size = filesize($path);
-            if ($size > 0) {
-                fseek($file, -1, SEEK_END);
-                $lastChar = fgetc($file);
-                $needsNewline = ($lastChar !== "\n");
-                fseek($file, 0, SEEK_END);
-            }
+            $res = $textToSet($key, $value);
+            fwrite($file, $res);
 
-            if ($needsNewline) {
-                fwrite($file, PHP_EOL);
-            }
-
-            $line = $key . '=' . trim($value ?? '') . PHP_EOL;
-            fwrite($file, $line);
             fclose($file);
 
             $this->load();

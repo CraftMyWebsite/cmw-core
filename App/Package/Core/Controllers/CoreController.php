@@ -18,6 +18,7 @@ use CMW\Manager\Uploads\ImagesException;
 use CMW\Manager\Uploads\ImagesManager;
 use CMW\Manager\Views\View;
 use CMW\Model\Core\CoreModel;
+use CMW\Model\Core\UpdateCheckerModel;
 use CMW\Utils\Redirect;
 use JetBrains\PhpStorm\NoReturn;
 use function date;
@@ -61,8 +62,10 @@ class CoreController extends AbstractController
             Redirect::redirect(EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'cmw-admin/dashboard');
         }
 
+        $outdatedResources = UpdateCheckerModel::getInstance()->getOutdatedResources();
+
         View::createAdminView('Core', 'Dashboard/dashboard')
-            ->addVariableList([])
+            ->addVariableList(['outdatedResources' => $outdatedResources])
             ->addScriptBefore('Admin/Resources/Vendors/Apexcharts/Js/apexcharts.js')
             ->view();
     }

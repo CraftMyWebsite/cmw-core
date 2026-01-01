@@ -27,7 +27,7 @@ $description = LangManager::translate('core.Package.desc');
                          alt="img">
                     <div class="pl-4 w-full">
                         <div class="flex justify-between">
-                            <h6><?= ($apiPackages['version_status']) === 1 && UpdatesManager::isTestAPI() ? '<span class="text-warning">En attente : </span>' : '' ?><?= $apiPackages['name'] ?></h6>
+                            <h6><?= ($apiPackages['version_status']) === 1 && UpdatesManager::isTestAPI() ? '<span class="text-warning">En attente : </span>' : '' ?><?= $apiPackages['market_name'] ?></h6>
                             <div>
                                 <?php if ((float)$apiPackages['price'] === 0.0): ?>
                                     <?php if ($apiPackages['version_status'] === 1 && UpdatesManager::isTestAPI()): ?>
@@ -71,15 +71,15 @@ $description = LangManager::translate('core.Package.desc');
                                     <div id="modal-install-<?= $apiPackages['id'] ?>" class="modal-container">
                                         <div class="modal">
                                             <div class="modal-header">
-                                                <h6>Installation de <?= $apiPackages['name'] ?></h6>
+                                                <h6>Installation de <?= $apiPackages['market_name'] ?></h6>
                                                 <button type="button" data-modal-hide="modal-install-<?= $apiPackages['id'] ?>"><i class="fa-solid fa-xmark"></i></button>
                                             </div>
                                             <form action="install" autocomplete="off" method="post" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
                                             <div class="modal-body">
-                                                <p><?= $apiPackages['name'] ?> est un package payant, pour l'installer, vous devez l'avoir acheté</p>
+                                                <p><?= $apiPackages['market_name'] ?> est un package payant, pour l'installer, vous devez l'avoir acheté</p>
                                                 <p>Si vous l'avez déjà acheter rendez-vous sur <a target="_blank" class="link" href="https://craftmywebsite.fr/market/manage/purchases">craftmywebsite.fr</a> pour récupérer votre clé d'achat<br>
                                                     Assurez-vous d'avoir bien enregistré le domaine <b><?= $_SERVER['SERVER_NAME'] ?></b> pour l'activer ici !</p>
-                                                <p>Si vous ne l'avez pas encore acheter vous pouvez le faire en vous rendant sur la <a class="link" target="_blank" href="https://craftmywebsite.fr/market/details/<?= $apiPackages['name'] ?>">page de l'article</a></p>
+                                                <p>Si vous ne l'avez pas encore acheter vous pouvez le faire en vous rendant sur la <a class="link" target="_blank" href="https://craftmywebsite.fr/market/details/<?= $apiPackages['slug'] ?>">page de l'article</a></p>
                                                 <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                                                 <input type="hidden" name="resId" value="<?= $apiPackages['id'] ?>">
                                                 <input type="hidden" name="status" value="online">
@@ -98,15 +98,15 @@ $description = LangManager::translate('core.Package.desc');
                                     <div id="modal-install-<?= $apiPackages['id'] ?>-test" class="modal-container">
                                         <div class="modal">
                                             <div class="modal-header">
-                                                <h6>Installation de <?= $apiPackages['name'] ?></h6>
+                                                <h6>Installation de <?= $apiPackages['market_name'] ?></h6>
                                                 <button type="button" data-modal-hide="modal-install-<?= $apiPackages['id'] ?>-test"><i class="fa-solid fa-xmark"></i></button>
                                             </div>
                                             <form action="install" autocomplete="off" method="post" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
                                                 <div class="modal-body">
-                                                    <p><?= $apiPackages['name'] ?> est un package payant, pour l'installer, vous devez l'avoir acheté</p>
+                                                    <p><?= $apiPackages['market_name'] ?> est un package payant, pour l'installer, vous devez l'avoir acheté</p>
                                                     <p>Si vous l'avez déjà acheter rendez-vous sur <a target="_blank" class="link" href="https://craftmywebsite.fr/market/manage/purchases">craftmywebsite.fr</a> pour récupérer votre clé d'achat<br>
                                                         Assurez-vous d'avoir bien enregistré le domaine <b><?= $_SERVER['SERVER_NAME'] ?></b> pour l'activer ici !</p>
-                                                    <p>Si vous ne l'avez pas encore acheter vous pouvez le faire en vous rendant sur la <a class="link" target="_blank" href="https://craftmywebsite.fr/market/details/<?= $apiPackages['name'] ?>">page de l'article</a></p>
+                                                    <p>Si vous ne l'avez pas encore acheter vous pouvez le faire en vous rendant sur la <a class="link" target="_blank" href="https://craftmywebsite.fr/market/details/<?= $apiPackages['slug'] ?>">page de l'article</a></p>
                                                     <?php SecurityManager::getInstance()->insertHiddenToken() ?>
                                                     <input type="hidden" name="resId" value="<?= $apiPackages['id'] ?>">
                                                     <input type="hidden" name="status" value="test">
@@ -141,14 +141,13 @@ $description = LangManager::translate('core.Package.desc');
                 </div>
                 <hr>
                 <div class="flex justify-between">
-                    <p><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i
-                            class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i
-                            class="fa-regular fa-star"></i> (0)
-                    </p>
+                    <p><?= PackageController::getInstance()->renderStars($apiPackages['rate']) ?> <?= $apiPackages['rate'] ? $apiPackages['rate'] . '/5' : '' ?></p>
                     <p><?= Date::formatDate($apiPackages['date_release']) ?></p>
                 </div>
                 <div class="flex justify-between">
-                    <p>Téléchargé <b><?= $apiPackages['downloads'] ?></b> fois</p>
+                    <p>
+                        Téléchargé <b><?= PackageController::getInstance()->formatDownloads((int) $apiPackages['downloads']) ?></b> fois
+                    </p>
                     <p>Compatible avec <b><?= $apiPackages['version_cmw'] ?></b></p>
                 </div>
             </div>
@@ -156,7 +155,7 @@ $description = LangManager::translate('core.Package.desc');
             <div id="modal-<?= $apiPackages['id'] ?>" class="modal-container">
                 <div class="modal-xl">
                     <div class="modal-header">
-                        <h6><?= $apiPackages['name'] ?></h6>
+                        <h6><?= $apiPackages['market_name'] ?></h6>
                     </div>
                     <div class="modal-body">
                         <div class="flex justify-between">

@@ -9,20 +9,43 @@ use CMW\Utils\Website;
 Website::setTitle(LangManager::translate('core.dashboard.title'));
 Website::setDescription(LangManager::translate('core.dashboard.desc'));
 
+/* @var \CMW\Entity\Core\UpdateCheckerEntity[] $outdatedResources */
+
 $needUpdate = UpdatesManager::checkNewUpdateAvailable();
 ?>
-<div class="space-y-2">
-    <div class="alert-warning">
-        <?= LangManager::translate('core.dashboard.alpha') ?>
-    </div>
 
-    <?php if ($needUpdate): ?>
+<?php if ($needUpdate): ?>
+    <div class="mb-4">
+        <h3><i class="fa-solid fa-heart-crack fa-beat text-danger"></i> <?= LangManager::translate('core.dashboard.updateWarningTitle') ?></h3>
         <div class="alert-danger">
             <?= LangManager::translate('core.dashboard.updateWarning') ?>
         </div>
-    <?php endif; ?>
-</div>
+    </div>
+<hr>
+<?php endif; ?>
 
+<?php if (!empty($outdatedResources)) : ?>
+    <div class="mb-4">
+        <h3><i class="fa-solid fa-arrows-to-eye"></i> <?= LangManager::translate('core.dashboard.updateResTitle') ?></h3>
+        <div class="grid-4 gap-6">
+            <?php foreach ($outdatedResources as $resource): ?>
+                <div class="alert-warning">
+                    <p><b><i class="fa-solid <?= $resource->type() === 'theme' ? 'fa-palette' : 'fa-puzzle-piece' ?>"></i>
+                            <?= $resource->marketName() ?></b> <?= LangManager::translate('core.dashboard.updateResWaiting') ?></p>
+                    <p><b><?= $resource->localVersion()?></b> ➔ <b><?= $resource->remoteVersion()?></b></p>
+                    <p><?= LangManager::translate('core.dashboard.updateResFrom') ?> <?= $resource->dateRelease()?></p>
+                    <a class="link" href="<?= $resource->type() === 'theme' ? 'theme/theme' : 'packages/package' ?>"><?= LangManager::translate('core.dashboard.updateResBtn') ?></a>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+<hr>
+<?php endif; ?>
+
+<div class="alert-warning">
+    <?= LangManager::translate('core.dashboard.alpha') ?>
+</div>
+<hr>
 
 <h3><i class="fa-solid fa-chart-pie"></i> <?= LangManager::translate('core.dashboard.title') ?></h3>
 

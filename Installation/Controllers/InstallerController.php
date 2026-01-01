@@ -59,10 +59,9 @@ class InstallerController extends AbstractController
 {
     static public float $minPhpVersion = 8.3;
     static public int $minPhpVersionId = 80300;
-    static public array $requiredSettings = ['php', 'zip', 'curl', 'pdo'];
+    static public array $requiredSettings = ['php', 'xml', 'mysql', 'gd', 'curl', 'pdo', 'mbstring', 'zip'];
 
-    static public array $installSteps = [0 => 'welcome', 1 => 'config', 2 => 'details', 3 => 'bundle', 4 => 'packages',
-        5 => 'themes', 6 => 'admin', 7 => 'finish'];
+    static public array $installSteps = [0 => 'welcome', 1 => 'config', 2 => 'details', 3 => 'bundle', 4 => 'admin', 5 => 'finish'];
 
     /**
      * @return bool
@@ -89,9 +88,13 @@ class InstallerController extends AbstractController
         return match ($value) {
             'php' => PHP_VERSION_ID >= self::$minPhpVersionId,
             'https' => Website::getProtocol() === 'https',
-            'zip' => extension_loaded('zip'),
+            'xml' => extension_loaded('xml'),
+            'mysql' => extension_loaded('mysql'),
+            'gd' => extension_loaded('gd'),
             'curl' => extension_loaded('curl'),
             'pdo' => extension_loaded('pdo'),
+            'mbstring' => extension_loaded('mbstring'),
+            'zip' => extension_loaded('zip'),
         };
     }
 
@@ -103,8 +106,8 @@ class InstallerController extends AbstractController
     public static function hasRequiredFormatted(string $value): string
     {
         return self::hasRequired($value)
-            ? "<i class='text-green-500 fa-solid fa-check'></i>"
-            : "<i class='text-red-500 fa-solid fa-xmark'></i>";
+            ? "<i class='text-green-500 fa-solid fa-check fa-lg'></i>"
+            : "<i class='text-red-500 fa-solid fa-xmark fa-xl fa-beat'></i>";
     }
 
     public static function loadLang(): ?array
@@ -157,14 +160,12 @@ class InstallerController extends AbstractController
         }
 
         $value = match (self::getInstallationStep()) {
-            1 => 'firstInstall',
-            2 => 'secondInstall',
-            3 => 'thirdInstall',
-            4 => 'fourthInstall',
-            5 => 'fifthInstall',
-            6 => 'sixInstall',
-            7 => 'finishInstall',
-            default => 'welcomeInstall'
+            1 => '1_Database',
+            2 => '2_Website',
+            3 => '3_Bundle',
+            4 => '4_AdminAccount',
+            5 => '5_Finish',
+            default => '0_Welcome'
         };
 
         $this->loadView($value);
@@ -172,7 +173,7 @@ class InstallerController extends AbstractController
 
     public static function getInstallationStep(): int
     {
-        return EnvManager::getInstance()->getValue('installStep');
+        return EnvManager::getInstance()->getValue('INSTALLSTEP');
     }
 
     private function loadView(string $filename): void
@@ -196,13 +197,11 @@ class InstallerController extends AbstractController
     private function postInstallPage(): void
     {
         $value = match (self::getInstallationStep()) {
-            1 => 'firstInstallPost',
-            2 => 'secondInstallPost',
-            3 => 'thirdInstallPost',
-            4 => 'fourthInstallPost',
-            5 => 'fifthInstallPost',
-            6 => 'sixInstallPost',
-            default => 'welcomeInstallPost'
+            1 => 'dataBaseInstallPost',
+            2 => 'webSiteInstallPost',
+            3 => 'bundleInstallPost',
+            4 => 'adminAccountInstallPost',
+            default => 'welcomePost'
         };
 
         $this->$value();
@@ -210,7 +209,7 @@ class InstallerController extends AbstractController
         Redirect::redirectPreviousRoute();
     }
 
-    private function welcomeInstallPost(): void
+    private function welcomePost(): void
     {
         if (!isset($_POST['cgu'])) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
@@ -242,7 +241,7 @@ class InstallerController extends AbstractController
             Website::refresh();
         }
 
-        EnvManager::getInstance()->editValue('installStep', 1);
+        EnvManager::getInstance()->editValue('INSTALLSTEP', 1);
     }
 
     /**
@@ -272,7 +271,7 @@ class InstallerController extends AbstractController
         }
     }
 
-    private function firstInstallPost(): void
+    private function dataBaseInstallPost(): void
     {
         if (Utils::isValuesEmpty($_POST, 'bdd_name', 'bdd_login', 'bdd_address', 'bdd_port', 'install_folder')) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
@@ -318,7 +317,7 @@ class InstallerController extends AbstractController
         // Init Default routes
         (new LinkStorage())->storeDefaultRoutes();
 
-        EnvManager::getInstance()->editValue('installStep', 2);
+        EnvManager::getInstance()->editValue('INSTALLSTEP', 2);
     }
 
     private function firstInstallSetDatabase(string $host, string $db, string $username, string $password, int $port): void
@@ -337,7 +336,7 @@ class InstallerController extends AbstractController
         EnvManager::getInstance()->setOrEditValue('DEVMODE', $devMode);
     }
 
-    private function secondInstallPost(): void
+    private function webSiteInstallPost(): void
     {
         if (Utils::isValuesEmpty($_POST, 'config_name', 'config_description')) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
@@ -350,10 +349,10 @@ class InstallerController extends AbstractController
 
         InstallerModel::initConfig($name, $description);
 
-        EnvManager::getInstance()->editValue('installStep', 3);
+        EnvManager::getInstance()->editValue('INSTALLSTEP', 3);
     }
 
-    private function thirdInstallPost(): void
+    private function bundleInstallPost(): void
     {
         $isCustom = false;
 
@@ -363,7 +362,7 @@ class InstallerController extends AbstractController
 
         // If custom bundle is select, we skip this step
         if ($isCustom) {
-            EnvManager::getInstance()->editValue('installStep', 4);
+            EnvManager::getInstance()->editValue('INSTALLSTEP', 4);
             return;
         }
 
@@ -391,65 +390,10 @@ class InstallerController extends AbstractController
             }
         }
 
-        EnvManager::getInstance()->editValue('installStep', 6);
+        EnvManager::getInstance()->editValue('INSTALLSTEP', 4);
     }
 
-    private function fourthInstallPost(): void
-    {
-        if (!isset($_POST['packages'])) {
-            EnvManager::getInstance()->editValue('installStep', 5);
-            return;
-        }
-
-        foreach ($_POST['packages'] as $id) {
-            $package = PublicAPI::putData("market/resources/install/$id");
-
-            $type = $package['type'] === 1 ? 'package' : 'Theme';
-
-            try {
-                DownloadManager::installPackageWithLink($package['file'], $type, $package['name']);
-            } catch (DownloadException $e) {
-                Flash::send(
-                    Alert::WARNING,
-                    LangManager::translate('core.toaster.error'),
-                    LangManager::translate('core.toaster.theme.unableUpdate') . $e->getMessage(),
-                );
-                continue;
-            }
-        }
-
-        EnvManager::getInstance()->editValue('installStep', 5);
-    }
-
-    private function fifthInstallPost(): void
-    {
-        if (!isset($_POST['theme'])) {
-            EnvManager::getInstance()->editValue('installStep', 6);
-            return;
-        }
-
-        $id = filter_input(INPUT_POST, 'theme');
-
-        $theme = PublicAPI::putData("market/resources/install/$id");
-
-        try {
-            DownloadManager::installPackageWithLink($theme['file'], 'Theme', $theme['name']);
-        } catch (DownloadException $e) {
-            Flash::send(
-                Alert::ERROR,
-                LangManager::translate('core.toaster.error'),
-                LangManager::translate('core.toaster.theme.unableUpdate') . $e->getMessage(),
-            );
-            return;
-        }
-
-        ThemeFileManager::getInstance()->installThemeSettings($theme['name']);
-        CoreModel::getInstance()->updateOption('theme', $theme['name']);
-
-        EnvManager::getInstance()->editValue('installStep', 6);
-    }
-
-    private function sixInstallPost(): void
+    private function adminAccountInstallPost(): void
     {
         if (Utils::isValuesEmpty($_POST, 'email', 'pseudo', 'password') || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
@@ -465,7 +409,7 @@ class InstallerController extends AbstractController
 
         InstallerModel::initAdmin($encryptedMail, $pseudo, $password);
 
-        EnvManager::getInstance()->editValue('installStep', 7);
+        EnvManager::getInstance()->editValue('INSTALLSTEP', 5);
     }
 
     #[NoReturn]
@@ -474,7 +418,7 @@ class InstallerController extends AbstractController
     {
         // Reset to Default settings (with dev mode or not)
         ErrorManager::enableErrorDisplays();
-        EnvManager::getInstance()->editValue('installStep', -1);
+        EnvManager::getInstance()->editValue('INSTALLSTEP', -1);
 
         if (EnvManager::getInstance()->getValue('DEVMODE') === '0') {
             if (!Directory::delete(EnvManager::getInstance()->getValue('DIR') . 'Installation')) {

@@ -117,7 +117,7 @@ Website::setDescription("Découvrez le profil de l'utilisateur " . $user->getPse
                 <div class="bg-[#1E1E1E] text-center p-6 rounded-xl shadow-md">
                     <h2 class="text-xl font-semibold mb-2">Vous nous quittez ?</h2>
                     <p class="text-sm text-gray-400 mb-4">Nous sommes tristes de vous voir partir !</p>
-                    <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>profile/delete/<?= $user->getId() ?>"
+                    <a href="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>account/delete/<?= $user->getId() ?>"
                        class="px-5 py-2 rounded bg-red-600 hover:bg-red-700 text-white transition">
                         Supprimer mon compte
                     </a>

@@ -77,7 +77,15 @@ return [
         'weeks' => 'Weeks',
         'months' => 'Months',
         'alpha' => 'Please note that CraftMyWebsite2 is currently in BETA phase and is not yet complete. <br>Its use in a production environment is strongly discouraged. Key features may be missing or may not work as expected. <br><b>During this phase, complete system reinstalls may be required.</b> <br>We appreciate your understanding and patience while we work on CraftMyWebsite.',
-        'updateWarning' => '<strong>Attention :</strong>The current version of your CMS is not the latest available. It is strongly recommended to <a class="link" href="updates/cms">update your CMS</a> to benefit from the latest security fixes as well as new features added.',
+        'updateWarningTitle' => 'Your CMS is not up to date!',
+        'updateWarning' => 'Warning: The currently installed version of your CMS is not up to date.<br>
+Continuing to use an outdated version may expose your website to security vulnerabilities, compatibility issues, or unexpected malfunctions with certain modules and themes.<br>
+We strongly recommend performing the <a class="link" href="updates/cms">CMS update</a> to benefit from the latest security patches, performance improvements, enhanced stability, and newly added features.<br>
+Keeping your CMS up to date ensures a reliable, secure, and future-proof environment.',
+        'updateResTitle'   => 'Requires your attention',
+        'updateResWaiting' => ' has a pending update!',
+        'updateResFrom'    => 'Since ',
+        'updateResBtn'     => 'Update',
     ],
     'menus' => [
         'title' => 'Menus',
@@ -180,8 +188,8 @@ return [
         ],
         'db' => [
             'config' => [
-                'success' => 'Good configuration',
-                'error' => 'Configuration error',
+                'success' => 'Connection to the database is working!',
+                'error' => 'Unable to connect to the database!',
                 'alreadyInstalled' => 'Data base already installed !',
             ],
             'missing_inputs' => 'Please fill all inputs !',

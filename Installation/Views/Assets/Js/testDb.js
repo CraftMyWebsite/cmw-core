@@ -23,13 +23,31 @@ const testDb = async () => {
 
   const response = await request.json();
 
-  sendToaster(response['status'], response['content'])
+  sendToaster(response['status'], response['content'], response['title'])
 }
 
-function sendToaster(status, content) {
+function sendToaster(status, content, title) {
   iziToast.show(
       {
-        message: content,
-        color: status === 1 ? "green" : "red"
+          message: content,
+          theme: 'dark',
+          backgroundColor: status === 0 ? 'rgba(255, 92, 92, 0.12)' : 'rgba(76, 175, 80, 0.12)',
+          color: '#ffffff',
+          icon: 'fa-solid fa-check',
+          iconColor: status === 0 ? '#ff5c5c' : '#4caf50',
+          titleSize: '17',
+          messageSize: '14',
+          titleColor: '#ffffff',
+          messageColor: '#d1d1d1',
+          progressBarColor: status === 0 ? '#ff5c5c' : '#4caf50',
+          close: true,
+          pauseOnHover: true,
+          position: 'topRight',
+          timeout: 6000,
+          animateInside: true,
+          transitionIn: 'fadeInDown',
+          transitionOut: 'fadeOutUp',
+          class: 'iziToast-dark-success',
+          layout: 2,
       });
 }

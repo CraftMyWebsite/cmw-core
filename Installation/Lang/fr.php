@@ -14,10 +14,11 @@ return [
                       <p>En cas de demande de support auprès de CraftMyWebsite ces informations peuvent nous être utiles pour déterminer
                       l'environnement dans lequel vous êtes. Merci de bien vouloir noter les informations que vous ne connaissez pas.</p>
                       <p>Passons maintenant à l'installation de votre nouveau site ...</p>",
-        "readaccept" => "J'ai lu et j'accepte les conditions générales d'utilisations",
+        "readaccept" => "J'ai lu et j'accepte les <a class='text-primary' href='https://craftmywebsite.fr/all_terms' target='_blank'>conditions générales d'utilisations</a>",
         "cgu" => "Conditions Générales d'Utilisation",
         "error" => [
-            "cgu" => "Merci d'accepter les CGU avant de procéder à l'installation de votre site CraftMyWebsite"
+            "cgu" => "Merci d'accepter les CGU avant de procéder à l'installation de votre site CraftMyWebsite",
+            "extension" => "Il vous manque des extension indispensable au bon fonctionnement du CMS !"
         ],
         'folder_check_fix_it' => 'Veuillez corriger les problèmes d\'accès pour garantir le bon fonctionnement de CraftMyWebsite !',
         'folder_check_button' => 'Verifier les droits d\'accès',
@@ -25,9 +26,9 @@ return [
         'folder_check_not_found' => 'Non trouvé',
     ],
     "bundle" => [
-        "custom" => "Personnalisé",
-        "includes" => "Ce bundle inclut les packages :",
-        "customText" => "<p>Personnalisez votre installation vous-même.</p><p>Ceci ne veut pas dire qu'il n'est pas possible de le personnaliser avec d'autres bundle.</p>",
+        "custom" => "Pas de bundle",
+        "includes" => "Ce bundle installera automatiquement :",
+        "customText" => "<p>Ne pas installer de bundle</p><p>Vous préférez installer vous-même les packages et thèmes.</p><p>Si vous installez un bundle vous pourrez plus tard désinstaller les packages et thèmes qu'il inclut</p>",
     ],
     'password' => [
         'strenght' => 'Force du mot de passe :',
@@ -99,13 +100,11 @@ return [
         'goToMySite' => 'Aller sur mon site',
     ],
     'steps' => [
-        0 => 'Bienvenue',
-        1 => 'Configuration',
-        2 => 'Détails',
-        3 => 'Bundles',
-        4 => 'Packages',
-        5 => 'Thèmes',
-        6 => 'Administrateur',
-        7 => 'Terminé',
+        0 => 'Bienvenue <br><small>Récap</small>',
+        1 => 'Configuration <br><small>Base de données</small>',
+        2 => 'Site <br><small>Nom et description</small>',
+        3 => 'Bundles <br><small>Config auto</small>',
+        4 => 'Administrateur <br><small>Compte maître</small>',
+        5 => 'Terminé',
     ],
 ];

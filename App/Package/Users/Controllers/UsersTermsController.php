@@ -88,7 +88,7 @@ class UsersTermsController extends AbstractController
         unset($_SESSION['cmw_temp_user_id'], $_SESSION['cmw_temp_use_cookies']);
 
         $returnTo = $_SESSION['return_to'] ?? null;
-        header('Location: ' . ($returnTo ? EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . $returnTo : EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'profile'));
+        header('Location: ' . ($returnTo ?? EnvManager::getInstance()->getValue('PATH_SUBFOLDER') . 'profile'));
         unset($_SESSION['return_to']);
         exit;
     }

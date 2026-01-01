@@ -47,16 +47,10 @@
             </label>
         </div>
     </div>
-    <div class="mt-2"><?= LangManager::translate('Installation.password.strenght') ?>
         <div class="">
-            <progress class="w-64 min-h-6" max="100" value="0" id="meter"></progress>
-            <div class="flex justify-between w-64 mt-1">
-                <i class="fa-regular fa-thumbs-down"></i>
-                <i class="fa-regular fa-thumbs-up"></i>
-            </div>
+            <progress class="w-64" style="height: 10px; margin-left: 50px" max="100" value="0" id="meter"></progress>
         </div>
-    </div>
-    <div class="mt-2" id="passwordTextAlert"></div>
+    <div id="passwordTextAlert"></div>
     <div class="card-actions justify-end">
         <button id="formBtn" type="submit" class="btn btn-primary" disabled>
             <?= LangManager::translate('core.btn.next') ?>
@@ -84,70 +78,57 @@
         }
     }
 
-    function checkPasswordIsSame() {
-        let textAlert = document.getElementById("passwordTextAlert");
-        let pass1 = document.forms["mainForm"]["password"].value;
-        let pass2 = document.forms["mainForm"]["passwordCheck"].value;
+    const formBtn = document.getElementById("formBtn");
+    const textAlert = document.getElementById("passwordTextAlert");
+
+    const pass1Input = document.getElementById("password");
+    const pass2Input = document.getElementById("passwordCheck");
+
+    const strengthbar = document.getElementById("meter");
+
+    /**
+     * Vérifie si les mots de passe sont identiques
+     */
+    function checkPasswordsMatch() {
+        const pass1 = pass1Input.value;
+        const pass2 = pass2Input.value;
+
         textAlert.style.display = 'none';
-        if (pass2) {
+        formBtn.disabled = true;
+
+        if (!pass2) return;
+
+        if (pass1 === pass2) {
+            formBtn.disabled = false;
+        } else {
             textAlert.style.display = 'inline-block';
-            if (pass1 === pass2) {
-                textAlert.style.display = 'none';
-                document.getElementById("formBtn").disabled = false;
-            } else {
-                textAlert.innerHTML = "<p class='text-cmw-pink'><?= LangManager::translate('Installation.password.notmatch') ?></p>";
-                document.getElementById("formBtn").disabled = true;
-            }
+            textAlert.innerHTML = "<p class='text-cmw-pink'><?= LangManager::translate('Installation.password.notmatch') ?></p>";
         }
     }
 
-    //Check password strenght
-
-    let code = document.getElementById("password");
-
-    let strengthbar = document.getElementById("meter");
-
-    code.addEventListener("keyup", function () {
-        checkpassword(code.value)
-
-    })
-
-    function checkpassword(password) {
+    /**
+     * Vérifie la force du mot de passe
+     */
+    function checkPasswordStrength(password) {
         let strength = 0;
-        if (password.match(/[a-z]+/)) {
-            strength += 1;
-        }
-        if (password.match(/[A-Z]+/)) {
-            strength += 1;
-        }
-        if (password.match(/[0-9]+/)) {
-            strength += 1;
-        }
-        if (password.match(/[$@#&!]+/)) {
-            strength += 1;
 
-        }
-        switch (strength) {
-            case 0:
-                strengthbar.value = 0;
-                break;
+        if (/[a-z]/.test(password)) strength++;
+        if (/[A-Z]/.test(password)) strength++;
+        if (/[0-9]/.test(password)) strength++;
+        if (/[$@#&!]/.test(password)) strength++;
 
-            case 1:
-                strengthbar.value = 15;
-                break;
-
-            case 2:
-                strengthbar.value = 35;
-                break;
-
-            case 3:
-                strengthbar.value = 70;
-                break;
-
-            case 4:
-                strengthbar.value = 100;
-                break;
-        }
+        const values = [0, 15, 35, 70, 100];
+        strengthbar.value = values[strength] ?? 0;
     }
+
+    /**
+     * Événements
+     */
+    pass1Input.addEventListener("input", () => {
+        checkPasswordStrength(pass1Input.value);
+        checkPasswordsMatch();
+    });
+
+    pass2Input.addEventListener("input", checkPasswordsMatch);
 
 </script>
