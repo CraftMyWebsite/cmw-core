@@ -10,22 +10,16 @@ use CMW\Manager\Flash\Flash;
 use CMW\Manager\Lang\LangManager;
 use CMW\Manager\Manager\AbstractManager;
 use CMW\Utils\Directory;
-use CMW\Utils\Log;
 use JsonException;
 use ZipArchive;
 
 class CMSUpdaterManager extends AbstractManager
 {
-    private readonly string $archivePath;
-    private readonly string $archiveUpdatePath;
-
     private readonly string $dir;
 
     public function __construct()
     {
         $this->dir = EnvManager::getInstance()->getValue('DIR');
-        $this->archivePath = $this->dir . 'Public/Uploads/cmw.zip';
-        $this->archiveUpdatePath = $this->dir . 'Public/Uploads/update.zip';
     }
 
     /**
@@ -55,19 +49,19 @@ class CMSUpdaterManager extends AbstractManager
             return;
         }
 
-        if (!$this->prepareArchive()) {
+        if (!$this->prepareArchive($updateData['value'])) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
                 LangManager::translate('core.updates.errors.prepareArchive'));
             return;
         }
 
-        if (!$this->deletedFiles()) {
+        if (!$this->deletedFiles($updateData['value'])) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
                 LangManager::translate('core.updates.errors.deletedFiles'));
             return;
         }
 
-        if (!$this->sqlUpdate()) {
+        if (!$this->sqlUpdate($updateData['value'])) {
             Flash::send(Alert::ERROR, LangManager::translate('core.toaster.error'),
                 LangManager::translate('core.updates.errors.sqlUpdate'));
             return;
@@ -76,7 +70,7 @@ class CMSUpdaterManager extends AbstractManager
         $this->updateVersionName($updateData['value']);
 
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-            LangManager::translate('core.updates.success'));
+            LangManager::translate('core.updates.success', ['versionName' => $updateData['value']]));
     }
 
     /**
@@ -86,13 +80,19 @@ class CMSUpdaterManager extends AbstractManager
      */
     private function downloadUpdateFile(mixed $data): ?bool
     {
+        $versionName = $data['value'];
         $data = $data['file_update'];
 
         if ($data === null) {
             return null;
         }
 
-        if (!file_put_contents($this->archivePath, fopen($data, 'rb'))) {
+        $updateDir = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/UpdateCMS/' . $versionName;
+        if (!file_exists($updateDir) && !mkdir($updateDir, 0777, true) && !is_dir($updateDir)) {
+            throw new \RuntimeException(sprintf('Update directory "%s" was not created', $updateDir));
+        }
+
+        if (!file_put_contents($updateDir . '/cmw.zip', fopen($data, 'rb'))) {
             return false;
         }
         return true;
@@ -102,29 +102,31 @@ class CMSUpdaterManager extends AbstractManager
      * @return bool
      * @desc Unzip maine archives
      */
-    private function prepareArchive(): bool
+    private function prepareArchive(string $versionName): bool
     {
         $isInstallationFolderExist = is_dir($this->dir . 'Installation');
 
+        $updateDir = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/UpdateCMS/' . $versionName;
+
         $archiveUpdate = new ZipArchive;
 
-        if ($archiveUpdate->open($this->archivePath) === TRUE) {
-            $extractPath = $this->dir . 'Public/Uploads/';
+        if ($archiveUpdate->open($updateDir . '/cmw.zip') === TRUE) {
+            $extractPath = $updateDir;
             $archiveUpdate->extractTo($extractPath);
             $archiveUpdate->close();
             // Delete download archive
-            unlink($this->archivePath);
+            unlink($updateDir . '/cmw.zip');
 
             // Remove Installation files in Updated if the website doesn't use it
             if (!$isInstallationFolderExist) {
-                $this->removeInstallationFolder($extractPath . 'Installation');
+                $this->removeInstallationFolder($extractPath . '/Installation');
             }
 
-            if ($archiveUpdate->open($this->archiveUpdatePath) === TRUE) {
+            if ($archiveUpdate->open($updateDir . '/update.zip') === TRUE) {
                 $archiveUpdate->extractTo($this->dir);
                 $archiveUpdate->close();
                 // Delete download archive
-                unlink($this->archiveUpdatePath);
+                unlink($updateDir . '/update.zip');
                 return true;
             }
             return false;
@@ -148,9 +150,9 @@ class CMSUpdaterManager extends AbstractManager
      * @return bool
      * @desc Delete files, based on delete_files.json
      */
-    private function deletedFiles(): bool
+    private function deletedFiles(string $versionName): bool
     {
-        $filePath = $this->dir . 'Public/Uploads/delete_files.json';
+        $filePath = $this->dir . 'Public/Uploads/UpdateCMS/' . $versionName . '/delete_files.json';
 
         if (!file_exists($filePath)) {
             return true;
@@ -178,9 +180,9 @@ class CMSUpdaterManager extends AbstractManager
      * @return bool
      * @desc Update database if file exist
      */
-    private function sqlUpdate(): bool
+    private function sqlUpdate(string $versionName): bool
     {
-        $filePath = $this->dir . 'Public/Uploads/sql_update.sql';
+        $filePath = $this->dir . 'Public/Uploads/UpdateCMS/' . $versionName . '/sql_update.sql';
 
         if (!file_exists($filePath)) {
             return true;
@@ -195,6 +197,8 @@ class CMSUpdaterManager extends AbstractManager
         }
 
         $req->closeCursor();
+
+        @unlink($filePath);
 
         return true;
     }

@@ -396,7 +396,7 @@ Mettre à jour régulièrement votre CMS permet de garantir un environnement fia
             "sqlUpdate" => "Impossible de mettre à jour la base de données.",
             'devVersion' => 'Vous utilisez une version de développement de CraftMyWebsite, impossible de mettre à jour.',
         ],
-        'success' => 'Mise à jour de votre site réussie',
+        'success' => 'Mise à jour de votre site vers la version %versionName% réussie',
     ],
     'security' => [
         'title' => 'Sécurité',

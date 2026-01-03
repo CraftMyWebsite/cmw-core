@@ -396,7 +396,7 @@ Keeping your CMS up to date ensures a reliable, secure, and future-proof environ
             'sqlUpdate' => 'Unable to update your database.',
             'devVersion' => 'You are using a development version of CraftMyWebsite, updates are not available.',
         ],
-        'success' => 'Website update with success',
+        'success' => 'Website update with success to %versionName%',
     ],
     'security' => [
         'title' => 'Security',
