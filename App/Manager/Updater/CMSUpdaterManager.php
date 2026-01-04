@@ -70,7 +70,7 @@ class CMSUpdaterManager extends AbstractManager
         $this->updateVersionName($updateData['value']);
 
         Flash::send(Alert::SUCCESS, LangManager::translate('core.toaster.success'),
-            LangManager::translate('core.updates.success', ['versionName' => $updateData['value']]));
+            LangManager::translate('core.updates.success', ['version' => $updateData['value']]));
     }
 
     /**
