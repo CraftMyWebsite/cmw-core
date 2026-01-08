@@ -43,5 +43,21 @@ server {
         include fastcgi_params;
     }
 
+    location ^~ /Public/Uploads/ {
+        autoindex off;
+
+        location ~* ^/Public/Uploads/.*\.(php|phtml|phar|cgi|pl|asp|aspx|js|html?|shtml)$ {
+            deny all;
+            return 403;
+        }
+
+        location ~* ^/Public/Uploads/.*\.(png|jpe?g|gif|webp|ico|svg|pdf|txt|csv|docx|xlsx|pptx|odt|ods|odp|psd|ai|indd|zip|tar|rar|mp4|webm|ogv|mp3|ogg|wav|weba)$ {
+            add_header X-Content-Type-Options nosniff always;
+            try_files $uri =404;
+        }
+
+        return 403;
+    }
+
     fastcgi_param PHP_VALUE "session.cookie_lifetime=600480 \n session.gc_maxlifetime=600480";
 }
