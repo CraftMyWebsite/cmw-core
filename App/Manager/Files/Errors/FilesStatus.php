@@ -1,0 +1,21 @@
+<?php
+
+namespace CMW\Manager\Files\Errors;
+
+enum FilesStatus
+{
+    case ERROR_INVALID_FILE_DEFINITION;
+    case ERROR_FOLDER_DONT_EXIST;
+    case ERROR_EMPTY_FILE;
+    case ERROR_FILE_TOO_LARGE;
+    case ERROR_FILE_NOT_ALLOWED;
+    case ERROR_CANT_MOVE_FILE;
+    case ERROR_CANT_DOWNLOAD_FILE;
+    case ERROR_CANT_CREATE_FOLDER;
+    case ERROR_INVALID_FILE_TARGET;
+    case ERROR_INVALID_SECURE;
+    case ERROR_FILE_NOT_FOUND;
+    case ERROR_CANT_OPEN_FILE;
+    case ERROR_ZIP_NOT_FOUND;
+    case ERROR_CANT_DELETE_FILE;
+}

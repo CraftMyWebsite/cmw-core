@@ -131,5 +131,5 @@ $isUpToDate = UpdatesManager::checkNewUpdateAvailable()
 
 
 <?php
-require_once ('Admin/Resources/Assets/Php/imageDropper.php');
+require_once ('Admin/Resources/Assets/Php/fileDropper.php');
 ?>

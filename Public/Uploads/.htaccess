@@ -1,6 +1,47 @@
-RewriteEngine on
-#If the file is not an image we return 403
-RewriteCond %{REQUEST_URI} !\.(png|jpg|jpeg|gif|webp|ico|svg)$
-RewriteRule .*$ - [F]
-
+RewriteEngine On
 Options -Indexes
+
+# ------------------------------------------------------------------
+# 1) INTERDIRE TOUT CE QUI PEUT ÊTRE EXÉCUTÉ
+# ------------------------------------------------------------------
+
+# Désactiver PHP complètement
+RemoveHandler .php .phtml .php3 .php4 .php5 .phar
+RemoveType .php .phtml .php3 .php4 .php5 .phar
+php_flag engine off
+
+# Bloquer toute exécution de scripts
+<FilesMatch "\.(php|phtml|phar|cgi|pl|asp|aspx|js|html|htm)$">
+    Require all denied
+</FilesMatch>
+
+# ------------------------------------------------------------------
+# 2) AUTORISER UNIQUEMENT LES EXTENSIONS VALIDÉES PAR LE CMS
+# ------------------------------------------------------------------
+
+# Images
+RewriteCond %{REQUEST_URI} !\.(png|jpg|jpeg|gif|webp|ico|svg)$ [NC]
+
+# Documents
+RewriteCond %{REQUEST_URI} !\.(pdf|txt|csv)$ [NC]
+
+# Microsoft Office
+RewriteCond %{REQUEST_URI} !\.(docx|xlsx|pptx)$ [NC]
+
+# LibreOffice / OpenDocument
+RewriteCond %{REQUEST_URI} !\.(odt|ods|odp)$ [NC]
+
+# Design / sources graphiques (download only)
+RewriteCond %{REQUEST_URI} !\.(psd|ai|indd)$ [NC]
+
+# Archives
+RewriteCond %{REQUEST_URI} !\.(zip|tar|rar)$ [NC]
+
+# Vidéos
+RewriteCond %{REQUEST_URI} !\.(mp4|webm|ogv)$ [NC]
+
+# Audio
+RewriteCond %{REQUEST_URI} !\.(mp3|ogg|wav|weba)$ [NC]
+
+# Si aucune extension autorisée → BLOQUER
+RewriteRule .*$ - [F,L]

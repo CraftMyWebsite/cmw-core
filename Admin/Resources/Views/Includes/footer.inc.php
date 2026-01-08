@@ -67,5 +67,5 @@ $isUpToDate = UpdatesManager::checkNewUpdateAvailable()
 <script src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Vendors/Fontawesome-picker/main.js"></script>
 <script src="<?= EnvManager::getInstance()->getValue('PATH_SUBFOLDER') ?>Admin/Resources/Vendors/Izitoast/iziToast.min.js"></script>
 <?php
-require_once ('Admin/Resources/Assets/Php/imageDropper.php');
+require_once ('Admin/Resources/Assets/Php/fileDropper.php');
 ?>
