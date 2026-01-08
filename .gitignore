@@ -30,7 +30,6 @@ __MACOSX/
 !/App/Package/Core
 !/App/Package/Users
 !/App/Package/Pages
-!/App/Package/Media
 
 # Exclude all other views, only if view refer to a core package (Core, Users, Menus...)
 /Public/Themes/*
