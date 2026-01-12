@@ -746,18 +746,76 @@ class FilesManager
         return self::$returnName;
     }
 
-    // ----- HELPER -----
     /**
      * @param string $dirName
      * @return bool
      * @Desc Create directory on the upload folder
      */
-    private static function createDirectory(string $dirName): bool
+    public static function createDirectory(string $dirName): bool
     {
+        if (str_contains($dirName, '..') || str_contains($dirName, '\\')) {
+            return false;
+        }
+
         if (!file_exists(EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName) && !mkdir($concurrentDirectory = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName, 0777, true) && !is_dir($concurrentDirectory)) {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Supprime un dossier dans Public/Uploads (récursif)
+     * Exemple : Media/Test/Test1 → supprime uniquement "Test1"
+     *
+     * @param string $dirName
+     * @return bool
+     */
+    public static function deleteDirectory(string $dirName): bool
+    {
+        if ($dirName === '' || str_contains($dirName, '..') || str_contains($dirName, '\\'))
+        {
+            return false;
+        }
+
+        $dirName = trim($dirName, '/');
+
+        $basePath = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/';
+        $fullPath = $basePath . $dirName;
+
+        if (!is_dir($fullPath) || !str_starts_with(realpath($fullPath), realpath($basePath))) {
+            return false;
+        }
+
+        self::deleteDirectoryRecursive($fullPath);
+
+        return true;
+    }
+
+    // ----- HELPER -----
+
+    /**
+     * Suppression récursive d'un dossier
+     *
+     * @param string $path
+     * @return void
+     */
+    private static function deleteDirectoryRecursive(string $path): void
+    {
+        foreach (scandir($path) as $item) {
+            if ($item === '.' || $item === '..') {
+                continue;
+            }
+
+            $itemPath = $path . '/' . $item;
+
+            if (is_dir($itemPath)) {
+                self::deleteDirectoryRecursive($itemPath);
+            } else {
+                unlink($itemPath);
+            }
+        }
+
+        rmdir($path);
     }
 
     /**
