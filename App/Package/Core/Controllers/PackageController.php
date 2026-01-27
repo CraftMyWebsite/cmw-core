@@ -256,7 +256,7 @@ class PackageController extends AbstractController
         $missing = [];
         if (!empty($thisPackage['dependencies'])) {
             foreach ($thisPackage['dependencies'] as $dep) {
-                if (is_null(PackageController::getPackage($dep['market_name'] ?? $dep['name'] ?? null))) {
+                if (is_null(self::getPackage($dep['name'] ?? null))) {
                     $missing[] = '<b>'.($dep['market_name'] ?? $dep['name']).'</b>';
                 }
             }
@@ -282,7 +282,7 @@ class PackageController extends AbstractController
             $blocking = [];
             foreach ($thisPackage['dependencies'] as $dep) {
                 // Récup local
-                $local = self::getPackage($dep['market_name'] ?? $dep['name'] ?? null);
+                $local = self::getPackage($dep['name'] ?? null);
                 if ($local === null) {
                     continue;
                 }
