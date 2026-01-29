@@ -627,6 +627,8 @@ Mettre à jour régulièrement votre CMS permet de garantir un environnement fia
         'fileDrop' => 'Glissez & Déposez vos fichiers ici',
         'fileSize' => 'max autorisé !',
         'fileFormat' => 'Format non autorisé.',
+        'maxFilesReached' => 'Nombre maximum d\'images atteint',
+        'filesSelected' => 'image(s) sélectionnée(s)',
     ],
     'themeNotFoundException' => [
         'title' => 'Erreur - Thème introuvable',

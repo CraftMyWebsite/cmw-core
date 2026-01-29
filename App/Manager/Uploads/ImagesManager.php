@@ -13,6 +13,7 @@ use CMW\Utils\Redirect;
 use CMW\Utils\Utils;
 use function array_key_exists;
 use function copy;
+use function count;
 use function fclose;
 use function file_exists;
 use function file_get_contents;
@@ -54,6 +55,7 @@ use const PATHINFO_EXTENSION;
 use const PATHINFO_FILENAME;
 use const PREG_OFFSET_CAPTURE;
 use const SEEK_CUR;
+use const UPLOAD_ERR_OK;
 
 class ImagesManager
 {
@@ -385,4 +387,21 @@ class ImagesManager
         return $newFileName;
     }
 
+    public static function normalizeFilesArray(array $filesArray): array
+    {
+        $files = [];
+        $fileCount = count($filesArray['name']);
+        for ($i = 0; $i < $fileCount; $i++) {
+            if ($filesArray['error'][$i] === UPLOAD_ERR_OK) {
+                $files[] = [
+                    'name' => $filesArray['name'][$i],
+                    'type' => $filesArray['type'][$i],
+                    'tmp_name' => $filesArray['tmp_name'][$i],
+                    'error' => $filesArray['error'][$i],
+                    'size' => $filesArray['size'][$i],
+                ];
+            }
+        }
+        return $files;
+    }
 }

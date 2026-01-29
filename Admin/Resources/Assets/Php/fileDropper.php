@@ -381,3 +381,199 @@ $maxFileSize = getMaxFileSizeInBytes();
         }
     }
 </script>
+
+<script>
+    /*
+    * IMAGE DROPPER MULTIPLE
+    * */
+    document.querySelectorAll('.drop-img-area-multiple').forEach(initDropAreaMultiple);
+
+    function initDropAreaMultiple(dropArea) {
+        const inputName = dropArea.getAttribute('data-input-name') || 'images';
+        const imgAccept = dropArea.getAttribute('data-img-accept') || 'image/*';
+        const maxFiles = parseInt(dropArea.getAttribute('data-max-files')) || 0;
+        const maxFileSize = <?= $maxFileSize ?>;
+
+        dropArea.classList.add('relative', 'border-4', 'border-dashed', 'border-gray-300', 'rounded-lg', 'py-4', 'px-2', 'flex', 'flex-col', 'items-center', 'justify-center', 'cursor-pointer', 'min-h-[200px]');
+
+        const previewContainer = document.createElement('div');
+        previewContainer.className = 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 w-full mb-4';
+        previewContainer.id = `preview-container-${inputName}`;
+        dropArea.appendChild(previewContainer);
+
+        const dropZone = document.createElement('div');
+        dropZone.className = 'flex flex-col items-center justify-center py-4';
+        dropZone.id = `drop-zone-${inputName}`;
+        dropArea.appendChild(dropZone);
+
+        const defaultIcon = document.createElement('i');
+        defaultIcon.className = 'text-6xl fa-solid fa-cloud-arrow-up mb-2 text-gray-400';
+        dropZone.appendChild(defaultIcon);
+
+        const instructionText = document.createElement('p');
+        instructionText.className = 'text-gray-500';
+        instructionText.textContent = "<?= LangManager::translate('core.imageDropper.fileDrop') ?>";
+        dropZone.appendChild(instructionText);
+
+        const fileCountText = document.createElement('p');
+        fileCountText.className = 'text-sm text-gray-400 mt-1';
+        fileCountText.id = `file-count-${inputName}`;
+        dropZone.appendChild(fileCountText);
+
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'text-red-600 hidden mt-2 text-center';
+        errorMessage.id = `error-message-${inputName}`;
+        dropArea.appendChild(errorMessage);
+
+        let filesCollection = new DataTransfer();
+
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = imgAccept;
+        fileInput.name = `${inputName}[]`;
+        fileInput.multiple = true;
+        fileInput.hidden = true;
+        dropArea.appendChild(fileInput);
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaultsMultiple, false);
+        });
+
+        function preventDefaultsMultiple(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => {
+                dropArea.classList.add('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => {
+                dropArea.classList.remove('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+            }, false);
+        });
+
+        dropArea.addEventListener('click', (e) => {
+            if (e.target.closest('.preview-item-multiple')) return;
+            fileInput.click();
+        });
+
+        dropArea.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            handleFilesMultiple(dt.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFilesMultiple(e.target.files);
+        });
+
+        function handleFilesMultiple(files) {
+            errorMessage.classList.add('hidden');
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+
+                if (maxFiles > 0 && filesCollection.files.length >= maxFiles) {
+                    errorMessage.textContent = "<?= LangManager::translate('core.imageDropper.maxFilesReached') ?>";
+                    errorMessage.classList.remove('hidden');
+                    break;
+                }
+
+                if (file.size > maxFileSize) {
+                    errorMessage.textContent = "<?= ini_get('upload_max_filesize') ?>o <?= LangManager::translate('core.imageDropper.fileSize') ?>";
+                    errorMessage.classList.remove('hidden');
+                    continue;
+                }
+
+                if (!file.type.startsWith('image/') || !checkFileAcceptMultiple(file, imgAccept)) {
+                    errorMessage.textContent = "<?= LangManager::translate('core.imageDropper.fileFormat') ?>";
+                    errorMessage.classList.remove('hidden');
+                    continue;
+                }
+
+                filesCollection.items.add(file);
+                addPreviewMultiple(file, filesCollection.files.length - 1, inputName);
+            }
+
+            fileInput.files = filesCollection.files;
+            updateFileCountMultiple(inputName, filesCollection.files.length, maxFiles);
+        }
+
+        function checkFileAcceptMultiple(file, accept) {
+            if (accept === 'image/*') return true;
+            const acceptedTypes = accept.split(',').map(type => type.trim());
+            return acceptedTypes.includes(file.type);
+        }
+
+        function addPreviewMultiple(file, index, inputName) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function() {
+                const previewItem = document.createElement('div');
+                previewItem.className = 'preview-item-multiple relative group';
+                previewItem.dataset.index = index;
+
+                const img = document.createElement('img');
+                img.src = reader.result;
+                img.className = 'w-full h-24 object-cover rounded-lg border border-gray-200 dark:border-gray-700';
+                img.alt = 'Preview';
+                previewItem.appendChild(img);
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.type = 'button';
+                deleteBtn.className = 'absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm opacity-0 group-hover:opacity-100 transition-opacity';
+                deleteBtn.innerHTML = '&times;';
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    removeImageMultiple(previewItem, inputName);
+                });
+                previewItem.appendChild(deleteBtn);
+
+                const fileName = document.createElement('p');
+                fileName.className = 'text-xs text-gray-500 truncate mt-1';
+                fileName.textContent = file.name;
+                previewItem.appendChild(fileName);
+
+                previewContainer.appendChild(previewItem);
+            };
+        }
+
+        function removeImageMultiple(previewItem, inputName) {
+            const container = document.getElementById(`preview-container-${inputName}`);
+            const dropArea = container.closest('.drop-img-area-multiple');
+            const fileInput = dropArea.querySelector('input[type="file"]');
+
+            const index = parseInt(previewItem.dataset.index);
+
+            const newDT = new DataTransfer();
+            const currentFiles = Array.from(filesCollection.files);
+            currentFiles.forEach((file, i) => {
+                if (i !== index) {
+                    newDT.items.add(file);
+                }
+            });
+
+            filesCollection = newDT;
+            fileInput.files = filesCollection.files;
+
+            previewItem.remove();
+            container.querySelectorAll('.preview-item-multiple').forEach((item, i) => {
+                item.dataset.index = i;
+            });
+
+            updateFileCountMultiple(inputName, filesCollection.files.length, maxFiles);
+        }
+
+        function updateFileCountMultiple(inputName, count, maxFiles) {
+            const countEl = document.getElementById(`file-count-${inputName}`);
+            if (maxFiles > 0) {
+                countEl.textContent = `${count} / ${maxFiles} images`;
+            } else {
+                countEl.textContent = count > 0 ? `${count} <?= LangManager::translate('core.imageDropper.filesSelected') ?>` : '';
+            }
+        }
+    }
+</script>

@@ -619,6 +619,8 @@ Keeping your CMS up to date ensures a reliable, secure, and future-proof environ
         'fileDrop' => 'Drag & Drop your images here',
         'fileSize' => 'max allowed!',
         'fileFormat' => 'Format not allowed.',
+        'maxFilesReached' => 'Maximum number of images reached',
+        'filesSelected' => 'image(s) selected',
     ],
     'themeNotFoundException' => [
         'title' => 'Error - Theme Not Found',
