@@ -14,6 +14,7 @@ use CMW\Utils\Utils;
 use function array_key_exists;
 use function copy;
 use function count;
+use function exif_read_data;
 use function fclose;
 use function file_exists;
 use function file_get_contents;
@@ -25,6 +26,7 @@ use function finfo_open;
 use function fopen;
 use function fread;
 use function fseek;
+use function function_exists;
 use function fwrite;
 use function getimagesize;
 use function imagealphablending;
@@ -35,6 +37,7 @@ use function imagejpeg;
 use function imagepalettetotruecolor;
 use function imagepng;
 use function imagesavealpha;
+use function imagerotate;
 use function imagewebp;
 use function ini_get;
 use function is_dir;
@@ -331,6 +334,14 @@ class ImagesManager
      */
     public static function convertAndUpload(array $file, string $dirName = '', ImagesFormat $targetFormat = ImagesFormat::WEBP, int $quality = 80, bool $keepName = false, string $customName = ''): string
     {
+        $orientation = 1;
+        if (function_exists('exif_read_data')) {
+            $exif = @exif_read_data($file['tmp_name']);
+            if ($exif && isset($exif['Orientation'])) {
+                $orientation = (int) $exif['Orientation'];
+            }
+        }
+
         $originalFileName = self::upload($file, $dirName, $keepName, $customName);
 
         $path = EnvManager::getInstance()->getValue('DIR') . 'Public/Uploads/' . $dirName;
@@ -349,6 +360,8 @@ class ImagesManager
             ImagesException::handleConverterError(ImagesConvertedStatus::ERROR_CONVERTING_IMAGE);
             return $originalFileName;
         }
+
+        $image = self::applyExifOrientation($image, $orientation);
 
         switch ($targetFormat) {
             case ImagesFormat::JPEG:
@@ -385,6 +398,23 @@ class ImagesManager
         }
 
         return $newFileName;
+    }
+
+    private static function applyExifOrientation(\GdImage $image, int $orientation): \GdImage
+    {
+        $rotated = match ($orientation) {
+            3 => imagerotate($image, 180, 0),
+            6 => imagerotate($image, -90, 0),
+            8 => imagerotate($image, 90, 0),
+            default => null,
+        };
+
+        if ($rotated !== null) {
+            imagedestroy($image);
+            return $rotated;
+        }
+
+        return $image;
     }
 
     public static function normalizeFilesArray(array $filesArray): array
