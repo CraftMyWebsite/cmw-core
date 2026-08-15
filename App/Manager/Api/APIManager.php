@@ -45,7 +45,7 @@ class APIManager
         return self::hashPassword($password);
     }
 
-    private static function generateHeader(string $url, $secure, bool $isPost = false, string $cmwlToken = null): CurlHandle|bool
+    private static function generateHeader(string $url, $secure, bool $isPost = false, ?string $cmwlToken = null): CurlHandle|bool
     {
         $curlHandle = curl_init($url);
         $passwordAccess = self::getPassword();
@@ -63,7 +63,7 @@ class APIManager
         return $curlHandle;
     }
 
-    public static function postRequest(string $url, array $data = [], $secure = true, string $cmwlToken = null): string|false
+    public static function postRequest(string $url, array $data = [], $secure = true, ?string $cmwlToken = null): string|false
     {
         // todo verif if url is real URL.
 
@@ -82,7 +82,7 @@ class APIManager
         return $response;
     }
 
-    public static function getRequest(string $url, $secure = true, string $cmwlToken = null): string|false
+    public static function getRequest(string $url, $secure = true, ?string $cmwlToken = null): string|false
     {
         // todo verif if url is real URL.
 
@@ -96,7 +96,7 @@ class APIManager
         return $response;
     }
 
-    public static function createResponse(string $message = '', int $code = 200, array $data = [], $secure = true, string $cmwlToken = null): bool|string
+    public static function createResponse(string $message = '', int $code = 200, array $data = [], $secure = true, ?string $cmwlToken = null): bool|string
     {
         header('Content-Type: application/json; charset=UTF-8');
         if ($secure && !is_null($cmwlToken)) {

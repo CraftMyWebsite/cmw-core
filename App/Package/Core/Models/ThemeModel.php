@@ -32,7 +32,7 @@ class ThemeModel extends AbstractModel
      * @return string|null
      * @desc Fetch config data
      */
-    public function fetchConfigValue(string $menuKey, string $themeKey, string $themeName = null): ?string
+    public function fetchConfigValue(string $menuKey, string $themeKey, ?string $themeName = null): ?string
     {
         if ($themeName === null) {
             $themeName = ThemeLoader::getInstance()->getCurrentTheme()->name();
@@ -72,7 +72,7 @@ class ThemeModel extends AbstractModel
      * @desc Fetch config data
      * @deprecated Sera supprimé en alpha-10 gérer nativement dans fetchConfigValue
      */
-    public function fetchImageLink(string $configName, string $theme = null): ?string
+    public function fetchImageLink(string $configName, ?string $theme = null): ?string
     {
         if ($theme === null) {
             $theme = ThemeLoader::getInstance()->getCurrentTheme()->name();
@@ -104,7 +104,7 @@ class ThemeModel extends AbstractModel
      * @desc Fetch config data
      * @deprecated Sera supprimé en alpha-10 gérer nativement dans fetchConfigValue
      */
-    public function fetchVideoLink(string $configName, string $theme = null): ?string
+    public function fetchVideoLink(string $configName, ?string $theme = null): ?string
     {
         if ($theme === null) {
             $theme = ThemeLoader::getInstance()->getCurrentTheme()->name();
@@ -187,7 +187,7 @@ class ThemeModel extends AbstractModel
      * @return string|null
      * @desc Retourne simplement la valeur en DB par rapport à la clé complete
      */
-    public function getConfigValue(string $config, string $themeName = null): ?string
+    public function getConfigValue(string $config, ?string $themeName = null): ?string
     {
         if ($themeName === null) {
             $themeName = ThemeLoader::getInstance()->getCurrentTheme()->name();

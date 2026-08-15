@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM php:8.3.12-apache
+FROM php:8.4-apache
 
 COPY . /var/www/html
 
