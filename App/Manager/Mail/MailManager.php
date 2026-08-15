@@ -26,7 +26,7 @@ class MailManager extends AbstractManager
      * @Param string $subject -> subject of mail
      * @Param string $body -> html content with data
      */
-    public function sendMailSMTP(string $receiver, string $subject, string $body, ?string $senderMail, ?string $senderName): bool
+    public function sendMailSMTP(string $receiver, string $subject, string $body, ?string $senderMail, ?string $senderName, ?string $replyTo = null): bool
     {
         $config = MailModel::getInstance()->getConfig();
 
@@ -58,7 +58,7 @@ class MailManager extends AbstractManager
             // Receiver config
             $mail->setFrom($sender, $name);
             $mail->addAddress($receiver);
-            $mail->addReplyTo($config?->getMailReply());
+            $mail->addReplyTo($replyTo ?? $config?->getMailReply());
 
             $emailTemplate = $config?->getBody() ?? '[MAIL_CONTENT]';
             $finalBody = str_replace('[MAIL_CONTENT]', $body, $emailTemplate);
