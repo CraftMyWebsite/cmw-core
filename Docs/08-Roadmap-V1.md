@@ -66,7 +66,7 @@
 | Runner `windows-2019` | ✅ Passé en `windows-latest` (le runner 2019 a été retiré par GitHub) |
 | Dockerfile en `php:8.3.12-apache` | ✅ Passé en `php:8.4-apache` |
 | Dépréciations 8.4 dans le code | ✅ **9 corrigées** — paramètres implicitement nullable |
-| Doc « PHP 8.3 ou supérieur » | ⬜ **Reste à faire** dans `cmw-doc` (`[01]Commencer/[02]Prerequis.md`) |
+| Doc « PHP 8.3 ou supérieur » | ✅ **Fait** dans `cmw-doc` (5 fichiers FR + EN) le 15/08/2026 |
 
 ### Détail des dépréciations corrigées
 

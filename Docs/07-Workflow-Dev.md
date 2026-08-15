@@ -14,7 +14,7 @@
 > composants depuis le menu `New`. Voir [11-Extension-JetBrains.md](11-Extension-JetBrains.md)
 > et https://plugins.jetbrains.com/plugin/26003-craftmywebsite.
 
-> ⬜ La doc publique (`cmw-doc`) annonce encore « PHP 8.3 ou supérieur » — à passer à 8.4.
+> La doc publique (dépôt `cmw-doc`) a été alignée sur 8.4 le 15/08/2026.
 
 ## 2. Environnement local
 
@@ -148,7 +148,7 @@ Templates d'issues : `.github/ISSUE_TEMPLATE/{bugReport,featureRequests}.md`.
 ## 7. Règles de collaboration avec l'assistant IA
 
 - **Toujours répondre en français.**
-- **Ne jamais gérer l'upload ni le monitoring** — demander systématiquement à Thomas de s'en charger.
+- **Ne jamais gérer l'upload ni le monitoring** — demander systématiquement à l'utilisateur de s'en charger.
 - Vérifier le dépôt cible avant tout commit.
 - Consulter `.copilot/Technical/` ou https://apiv2.craftmywebsite.fr/v1/docs/schem avant d'inventer un
   pattern.

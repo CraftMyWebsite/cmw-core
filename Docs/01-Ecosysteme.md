@@ -133,9 +133,13 @@ tous deux présents en local.
 
 | Contenu | Dépôt |
 |---|---|
-| Doc publique (FR/EN, Technical + Users) | `CraftMyWebsite/cmw-doc` |
+| Doc publique (FR/EN, Technical + Users) | `CraftMyWebsite/cmw-doc` — à cloner à côté du Core |
 
 **Règle : toute modification fonctionnelle doit être répercutée dans `cmw-doc`.**
+
+Structure : `FR/` et `EN/`, chacun avec `Technical/` et `Users/`, plus `Assets/` (images).
+Les dossiers sont préfixés `[01]`, `[02]`… pour l'ordre d'affichage. 75 fichiers `.md` au total —
+l'anglais est très en retard sur le français (2 pages contre 73).
 
 L'API expose le schéma complet de la doc :
 `GET https://apiv2.craftmywebsite.fr/v1/docs/schem`
