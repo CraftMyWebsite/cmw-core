@@ -24,7 +24,7 @@
 docker compose up -d
 ```
 
-Services : `server` (PHP 8.3 + Apache, port 80), `db` (MariaDB, port 3306), `phpmyadmin` (port 8090).
+Services : `server` (PHP 8.4 + Apache, port 80), `db` (MariaDB, port 3306), `phpmyadmin` (port 8090).
 
 ### Sans Docker
 

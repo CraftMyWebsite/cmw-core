@@ -2,7 +2,7 @@
 
 > Contexte : le projet a été laissé de côté un moment, tourne déjà en production sur plusieurs sites,
 > et l'objectif est désormais de **sortir la première version stable**.
-> Constats relevés dans le code au 14/08/2026 ; décisions actées avec Thomas le 14/08/2026.
+> Constats relevés dans le code au 14/08/2026 ; décisions actées le 14/08/2026.
 
 ---
 
@@ -167,7 +167,7 @@ Composer étant écarté par choix, les libs sont copiées dans le dépôt :
 
 ## F bis. Outillage développeur obsolète ★
 
-> **Constat validé par Thomas le 15/08/2026 : le CLI et l'extension JetBrains sont tous deux
+> **Constat validé le 15/08/2026 : le CLI et l'extension JetBrains sont tous deux
 > très en retard sur le CMS.** À traiter comme **un seul chantier « outillage »**, pas comme deux
 > corrections isolées — les deux outils font le même travail et doivent converger.
 

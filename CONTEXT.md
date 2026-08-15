@@ -236,7 +236,7 @@ php cmw ai-copilot     # (re)génère le contexte GitHub Copilot
 ## 7. Règles de travail avec l'assistant
 
 - **Réponses en français.**
-- **L'upload et le monitoring ne sont jamais gérés par l'assistant** — toujours demander à Thomas de s'en charger.
+- **L'upload et le monitoring ne sont jamais gérés par l'assistant** — toujours demander à l'utilisateur de s'en charger.
 - Vérifier le **repo cible** avant tout commit (Core vs package vs thème).
 - La doc technique détaillée locale est dans `.copilot/Technical/` (gitignorée) — la consulter avant
   d'inventer un pattern.
